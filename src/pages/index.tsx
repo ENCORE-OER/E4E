@@ -30,7 +30,7 @@ import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SearchBarDiscover from '../components/SearchBar/SearchBarNoButtonEncore';
 import SideBar from '../components/SideBar/SideBar';
 import { APIV2 } from '../data/api';
-import icon_infocircle from '../public/icons/icon_infocircle.svg';
+import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
 //import VennDiagramUpset from '../components/VennDiagram/VennDiagramUpsetJS';
 //import dynamic from 'next/dynamic';
