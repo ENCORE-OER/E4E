@@ -17,13 +17,11 @@ import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
 
 type ReourceCardProps = {
   idOer: any;
-  dataOerString?: string;
   description: string;
   authors: string[];
   title: string;
@@ -35,7 +33,6 @@ type ReourceCardProps = {
 
 export default function SingleResourceCard({
   idOer,
-  dataOerString,
   description,
   authors,
   lastUpdate,
@@ -47,28 +44,20 @@ ReourceCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
-  const { addResource, addCollection } = useCollectionsContext();
+  //const { addResource, addCollection } = useCollectionsContext();
   const [isSaved, setIsSaved] = useState(false);
 
   // TRY CollectionsContext
-  const idCollection = 1;
+  /*const idCollection = 1;
   const nameCollection = 'Food';
   const skills = ['ciao'];
   const concepts = ['prova'];
-  const oer = { idOer, title, description, skills, concepts };
+  const oer = { idOer, title, description, skills, concepts };*/
   //
 
   const digital = 'Digital';
   const entr = 'Entrepreneurship';
   const green = 'Green';
-
-  /*try {
-    const oer_json = JSON.parse(dataOerString);
-    setDescription(oer_json.description);
-    console.log(description);
-  } catch (error) {
-    console.error('Error parsing JSON:', error);
-  }*/
 
   useEffect(() => {
     try {

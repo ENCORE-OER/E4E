@@ -29,12 +29,12 @@ const Home = () => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const [searchValue, setSearchValue] = useState<string[]>([]);
   //const [suggestions, setSuggestions] = useState<string[]>([]);
-  const suggestions: string[] = [];
+  //const suggestions: string[] = [];
 
   //const optionsText = selectedOptions.join(', ');
   const { user } = useUser();
   //const [data, setData] = useState<any[]>([]) || undefined;
-  const data: any[] = [];
+  //const data: any[] = [];
   //let data_list: string[] = [];
 
   const { searchData } = router.query;

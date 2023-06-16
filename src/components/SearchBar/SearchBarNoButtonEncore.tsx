@@ -7,7 +7,7 @@ import {
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction } from 'react';
 
-type SearchItems = any[];
+//type SearchItems = any[];
 
 type SearchBarProps = {
   inputValue: string[];

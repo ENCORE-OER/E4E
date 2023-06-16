@@ -185,7 +185,7 @@ export class APIV2 {
     }
   }
 
-  async getSkillsLabel(page = 1, allSkills: any[] = []): Promise<any[]> {
+  async getSkillsLabel(): Promise<any[]> {
     try {
       const temp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/skills/labels/`

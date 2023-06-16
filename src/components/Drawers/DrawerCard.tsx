@@ -18,7 +18,6 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import AddCollectionModal from '../Modals/AddCollectionModal';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -31,14 +30,9 @@ type DrawerCardProps = {
   drawerRef: RefObject<HTMLDivElement>;
 };
 
-export default function DrawerCard({
-  isOpen,
-  onClose,
-  oer,
-  drawerRef,
-}: DrawerCardProps) {
+export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
   const btnRef = useRef<HTMLDivElement>(null);
-  const [domainOer, setDomainOer] = useState<any[]>([]);
+  //const [domainOer, setDomainOer] = useState<any[]>([]);
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
@@ -49,7 +43,7 @@ export default function DrawerCard({
   const [publishers, setPublishers] = useState<any[]>([]);
   const [contributors, setContributors] = useState<any[]>([]);
 
-  const { collections, addCollection } = useCollectionsContext();
+  //const { collections, addCollection } = useCollectionsContext();
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
   const digital = 'Digital';

@@ -48,7 +48,7 @@ const Home = (props: DiscoverPageProps) => {
   //const suggestions: string[] = [];
   const [page, setPage] = useState(true);
   //  const [dataSkills, setDataSkills] = useState<any[]>([]);
-  const [dataOers, setDataOers] = useState<any[]>([]);
+  //const [dataOers, setDataOers] = useState<any[]>([]);
   const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   const [oerById, setOerById] = useState<any[]>([]);
   const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);
@@ -63,7 +63,7 @@ const Home = (props: DiscoverPageProps) => {
     []
   );
   const [selectedAudience, setSelectedAudience] = useState<string[]>([]);
-  const [audienceCard, setAudienceCard] = useState<string[]>([]);
+  //const [audienceCard, setAudienceCard] = useState<string[]>([]);
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');
   const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
@@ -136,8 +136,9 @@ const Home = (props: DiscoverPageProps) => {
       setPage(!page);
     } else if (searchValue.length < 0) {
       const oers = await api.getOERs();
-      console.log(oers);
-      setDataOers(oers);
+      //console.log(oers);
+
+      //setDataOers(oers);
 
       /*const oersSkills = oers.map((oer: any) => oer.skills);
       console.log(oersSkills);
@@ -578,6 +579,7 @@ const Home = (props: DiscoverPageProps) => {
                 <VStack>
                   {respSearchOers?.map((oer: any) => (
                     <Box
+                      key={oer.id}
                       onClick={async (e: any) => {
                         e.preventDefault();
                         onOpen();

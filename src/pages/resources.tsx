@@ -34,8 +34,7 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { collections, addCollection, deleteCollection } =
-    useCollectionsContext();
+  const { collections, deleteCollection } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<any[]>([]);
@@ -57,7 +56,7 @@ const Home = (props: DiscoverPageProps) => {
   const [collectionIndex, setCollectionIndex] = useState<number>(0);
   const [prevCollectionIndex, setPrevCollectionIndex] =
     useState<number>(9999999999999);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen } = useDisclosure();
 
   /*const handleAddCollection = () => {
     const nameCollection = 'Food';
@@ -261,6 +260,7 @@ const Home = (props: DiscoverPageProps) => {
                 <VStack>
                   {oersById?.map((oer: any) => (
                     <SingleResourceCard
+                      key={oer?.id}
                       idOer={oer?.id}
                       domain={
                         oer?.skills?.flatMap((skill: any) =>

@@ -19,7 +19,6 @@ export default function DropDownMenuItem({
   optionsObj,
   selectedOptions,
   setSelectedOptions,
-  selectedOptionIds,
   setSelectedOptionIds,
 }: DropDownMenuItemProps) {
   // to handle when we click on the checkbox

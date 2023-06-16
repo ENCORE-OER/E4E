@@ -78,6 +78,7 @@ export default function AddCollectionModal({
               >
                 {collections?.map((collection: any) => (
                   <Text
+                    key={collection.id}
                     _hover={{ bg: 'gray.200' }}
                     onClick={(e) => {
                       e.preventDefault();
