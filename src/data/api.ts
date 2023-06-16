@@ -187,23 +187,33 @@ export class APIV2 {
 
   async getSkillsLabel(page = 1, allSkills: any[] = []): Promise<any[]> {
     try {
-      const resp = await axiosNoCookie.get(
-        `https://encore-db.grial.eu/api/skills/labels/?page=${page}`
+      const temp = await axiosNoCookie.get(
+        `https://encore-db.grial.eu/api/skills/labels/`
       );
 
-      const labelsPage =
-        resp.data?.data?.map((skill: any) => ({
-          id: skill.id,
-          label: skill.label,
-        })) || [];
-      const updatedSkills = [...allSkills, ...labelsPage];
+      const recordsTotal = temp.data?.recordsTotal;
+      const num_pages = Math.ceil(recordsTotal / 10);
+      console.log('NUM PAGES: ' + num_pages);
 
-      if (labelsPage.length === 10) {
-        return this.getSkillsLabel(page + 1, updatedSkills);
+      let updatedSkills: any[] = [];
+
+      for (let i = 1; i < num_pages + 1; i++) {
+        const resp = await axiosNoCookie.get(
+          `https://encore-db.grial.eu/api/skills/labels/?page=${i}`
+        );
+
+        const labelsPage =
+          resp.data?.data?.map((skill: any) => ({
+            id: skill.id,
+            label: skill.label,
+          })) || [];
+        updatedSkills = [...updatedSkills, ...labelsPage];
       }
 
-      //const labels = updatedSkills; // extract only "label" fields from every object
       return updatedSkills;
+
+      //const labels = updatedSkills; // extract only "label" fields from every object
+      // return updatedSkills;
     } catch (error) {
       throw error;
     }

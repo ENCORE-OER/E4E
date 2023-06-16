@@ -47,7 +47,7 @@ const Home = (props: DiscoverPageProps) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   //const suggestions: string[] = [];
   const [page, setPage] = useState(true);
-  const [dataSkills, setDataSkills] = useState<any[]>([]);
+  //  const [dataSkills, setDataSkills] = useState<any[]>([]);
   const [dataOers, setDataOers] = useState<any[]>([]);
   const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   const [oerById, setOerById] = useState<any[]>([]);
@@ -325,10 +325,10 @@ const Home = (props: DiscoverPageProps) => {
     // nella useEffect le funzioni async fanno fatte così, è sbagliato mettere async subito la prima
     (async () => {
       try {
-        const skills = await api.getAllSkills();
+        //const skills = await api.getAllSkills();
         //const skills = respSkills.data?.data || [];
         // const labels = skills.map((skill: any) => skill.label); // extract only "label" fields from every object
-        setDataSkills(skills);
+        //setDataSkills(skills);
 
         const labels = await api.getAllSkillsLabel();
         console.log('skill labels: ' + labels);
@@ -362,9 +362,9 @@ const Home = (props: DiscoverPageProps) => {
     })();
   }, [user]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log(dataSkills);
-  }, [dataSkills]);
+  }, [dataSkills]);*/
 
   useEffect(() => {
     console.log('SELECTED DOMAINS: ' + selectedDomain);
