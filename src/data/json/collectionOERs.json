@@ -1,0 +1,52 @@
+{
+  "data": {
+    "id": 1,
+    "collection_name": "name of the collection",
+    "oers": [
+      {
+        "id": 12345,
+        "title": "title",
+        "description": "description",
+        "skills": [
+          {
+            "id": 21691,
+            "domain": [
+              { "id": 25, "name": "Digital", "description": "" },
+              { "id": 26, "name": "Green", "description": "" },
+              { "id": 27, "name": "Entrepreneurship", "description": "" }
+            ],
+            "label": "economics",
+            "description": "Economic principles and practices, financial and commodity markets, banking and the analysis of financial data.",
+            "alt_label": "economics; banking; finances; financial data; economic practices; economy; financials; economic principles",
+            "relevance": 1026
+          },
+          {
+            "id": 21796,
+            "domain": [
+              { "id": 25, "name": "Digital", "description": "" },
+              { "id": 26, "name": "Green", "description": "" },
+              { "id": 27, "name": "Entrepreneurship", "description": "" }
+            ],
+            "label": "electricity",
+            "description": "Understand the principles of electricity and electrical power circuits, as well as the associated risks.",
+            "alt_label": "electricity",
+            "relevance": 83
+          },
+          {
+            "id": 21839,
+            "domain": [
+              { "id": 25, "name": "Digital", "description": "" },
+              { "id": 26, "name": "Green", "description": "" },
+              { "id": 27, "name": "Entrepreneurship", "description": "" }
+            ],
+            "label": "energy",
+            "description": "Power capacity in the form of mechanical, electrical, heat, potential, or other energy from chemical or physical resources, which can be used to drive a physical system.",
+            "alt_label": "fuel",
+            "relevance": 112
+          }
+        ],
+        "concepts": [{ "id": 124, "name": "concept 1", "skill_id": 21691 }]
+      }
+    ]
+  }
+}

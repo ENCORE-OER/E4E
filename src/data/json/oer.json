@@ -1,0 +1,111 @@
+{
+  "id": 1195042,
+  "plain_text_summary": "",
+  "creator": [
+    {
+      "id": 702981,
+      "full_name": "Indy Johar",
+      "first_name": "Indy",
+      "last_name": "Johar",
+      "entity_type": null,
+      "organization_name": null
+    },
+    {
+      "id": 702981,
+      "full_name": "Indy Johar",
+      "first_name": "Indy",
+      "last_name": "Johar",
+      "entity_type": null,
+      "organization_name": null
+    }
+  ],
+  "publisher": [],
+  "contributor": [],
+  "coverage": [
+    {
+      "id": 227,
+      "name": "College General Ed"
+    },
+    {
+      "id": 231,
+      "name": "College Lower Division"
+    },
+    {
+      "id": 232,
+      "name": "College Upper Division"
+    }
+  ],
+  "skills": [
+    {
+      "id": 21691,
+      "domain": [
+        {
+          "id": 25,
+          "name": "Digital",
+          "description": ""
+        },
+        {
+          "id": 26,
+          "name": "Green",
+          "description": ""
+        }
+      ],
+      "label": "economics",
+      "description": "Economic principles and practices, financial and commodity markets, banking and the analysis of financial data.",
+      "alt_label": "economics; banking; finances; financial data; economic practices; economy; financials; economic principles",
+      "relevance": 1026
+    }
+  ],
+  "media_type": [
+    {
+      "id": 1160,
+      "name": "Presentation"
+    }
+  ],
+  "resource_format": [
+    {
+      "id": 1201,
+      "name": "Video"
+    }
+  ],
+  "subject": [
+    {
+      "id": 18459,
+      "name": "Arts/Design"
+    },
+    {
+      "id": 17397,
+      "name": "Arts/Architecture"
+    }
+  ],
+  "oer_url": [
+    {
+      "id": 759537,
+      "url": "http://videolectures.net/institutionalact2013_johar_organisation/",
+      "source_roer_url": "https://www.merlot.org/merlot/viewMaterial.htm?id=966433",
+      "status_code": "200"
+    }
+  ],
+  "source_roer": [
+    {
+      "id": 77,
+      "name": "merlot",
+      "url": ""
+    }
+  ],
+  "title": "00:/, London, United Kingdom",
+  "description": "This video was recorded at MAO Architecture Conference: The Institutional Act, Ljubljana 2013. 00:/ is a London based strategy & design practice. With a foundation in delivering award-winning architecture and commissioned research into the built environment, we are driven by an aspiration to create genuinely sustainable places founded on evidenced social, economic, and environmental principles",
+  "publisher_source": "",
+  "publication_date": "2015-02-10",
+  "retrieval_date": "2022-11-22",
+  "source": "",
+  "language": "English",
+  "related_to": null,
+  "rights": "Attribution-NonCommercial-NoDerivs 3.0 United States",
+  "table_of_contents": "",
+  "detailed_subject": "videolectures; ocwc; oec",
+  "completeness_score": 8,
+  "authority_score": 0,
+  "readability_score": null,
+  "overall_score": 8
+}
