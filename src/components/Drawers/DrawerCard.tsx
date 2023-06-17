@@ -27,7 +27,7 @@ type DrawerCardProps = {
   isOpen: boolean;
   onClose: () => void;
   oer: any;
-  drawerRef: RefObject<HTMLDivElement>;
+  drawerRef?: RefObject<HTMLDivElement>;
 };
 
 export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {

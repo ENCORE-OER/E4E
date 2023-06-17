@@ -4,11 +4,6 @@ import {
   Flex,
   Heading,
   HStack,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
   Text,
   Tooltip,
   useDisclosure,
@@ -20,7 +15,7 @@ import Image from 'next/image';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 //import { VennDiagram } from 'reaviz';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
 import SingleResourceCard from '../components/Card/SingleResourceCard';
@@ -29,6 +24,7 @@ import Navbar from '../components/NavBars/NavBarEncore';
 import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SearchBarDiscover from '../components/SearchBar/SearchBarNoButtonEncore';
 import SideBar from '../components/SideBar/SideBar';
+import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
@@ -72,7 +68,14 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const drawerRef = useRef<HTMLDivElement>(null);
+
+  // README!
+  // The skill should be set based on the oers selected
+  // this function should be executed when a selection oer event is triggered
+  //setSkill('circular economy');
+  const [skill /*, setSkill*/] = useState<string>('circular economy');
+
+  // const drawerRef = useRef<HTMLDivElement>(null);
 
   /*const d: Types.Data[] = [
     { id: 1, name: 'Digital', size: 500, fillColor: 'ligthnlue' },
@@ -608,7 +611,10 @@ const Home = (props: DiscoverPageProps) => {
               )}
             </Box>
 
-            <Box
+            <DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />
+
+            <EncoreTab
+              skill={skill}
               flex="1" // "flex='1'" fill the rest of the page
               py="30px"
               px="30px"
@@ -618,34 +624,7 @@ const Home = (props: DiscoverPageProps) => {
               borderLeft="0.5px"
               borderLeftColor={'secondary'}
               borderLeftStyle={'solid'}
-            >
-              <Box ref={drawerRef}>
-                <DrawerCard
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  drawerRef={drawerRef}
-                  oer={oerById}
-                />
-              </Box>
-              <Tabs>
-                <TabList>
-                  <Tab>Domains</Tab>
-                  <Tab>Map of concepts</Tab>
-                  <Tab>Types of Resources</Tab>
-                </TabList>
-                <TabPanels>
-                  <TabPanel pt="3%">
-                    <Text align="center">Domains</Text>
-                  </TabPanel>
-                  <TabPanel pt="3%">
-                    <Text align="center">Map of concepts</Text>
-                  </TabPanel>
-                  <TabPanel pt="3%">
-                    <Text align="center">Types of Resources</Text>
-                  </TabPanel>
-                </TabPanels>
-              </Tabs>
-            </Box>
+            />
           </Flex>
         )}
       </>

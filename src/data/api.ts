@@ -5,6 +5,7 @@ import axiosCreate, {
   AxiosResponse,
 } from 'axios';
 import Router from 'next/router';
+import { EncoreConceptMap } from '../types/encore';
 import { GeneralMetadata, Metadata } from '../types/metadata';
 import {
   polyglotEdgeComponentMapping,
@@ -175,6 +176,28 @@ export class APIV2 {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getConceptMapOers(
+    extracted_concepts: string[]
+  ): Promise<AxiosResponse<EncoreConceptMap>> {
+    return this.axios.post(
+      `${process.env.POLYGLOT_URL}/api/concepts/genGraphExt`,
+      {
+        extracted_concepts: extracted_concepts,
+      }
+    );
+  }
+
+  async getConceptMapSkill(
+    skill: string
+  ): Promise<AxiosResponse<EncoreConceptMap>> {
+    return this.axios.post(
+      `${process.env.POLYGLOT_URL}/api/concepts/genGraphSkill`,
+      {
+        skill: skill,
+      }
+    );
   }
 
   async getAllSkills(): Promise<any[]> {

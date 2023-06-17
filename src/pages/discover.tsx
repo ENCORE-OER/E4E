@@ -1,17 +1,7 @@
 /* This page is NOT USED */
 /* View the "index.tsx" page, it is all there*/
 
-import {
-  Box,
-  Flex,
-  Heading,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -20,6 +10,7 @@ import Navbar from '../components/NavBars/NavBarEncore';
 //import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SearchBar from '../components/SearchBar/SearchBarNoButtonEncore';
 import SideBar from '../components/SideBar/SideBar';
+import { EncoreTab } from '../components/Tabs/EncoreTab';
 
 /*type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -39,6 +30,9 @@ const Home = () => {
 
   const { searchData } = router.query;
   console.log('Search Data: ' + searchData);
+
+  // the skill should be extracted from the oers
+  const [skill] = useState('circular economy');
 
   {
     /*const searchCallback = async () => {
@@ -95,7 +89,8 @@ const Home = () => {
           </Box>
         </Box>
 
-        <Box
+        <EncoreTab
+          skill={skill}
           flex="1" // "flex='1'" fill the rest of the page
           py="30px"
           px="30px"
@@ -104,26 +99,7 @@ const Home = () => {
           borderLeft="0.5px"
           borderLeftColor={'secondary'}
           borderLeftStyle={'solid'}
-        >
-          <Tabs>
-            <TabList>
-              <Tab>Domains</Tab>
-              <Tab>Map of concepts</Tab>
-              <Tab>Types of Resources</Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel pt="3%">
-                <Text align="center">Domains</Text>
-              </TabPanel>
-              <TabPanel pt="3%">
-                <Text align="center">Map of concepts</Text>
-              </TabPanel>
-              <TabPanel pt="3%">
-                <Text align="center">Types of Resources</Text>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </Box>
+        />
       </Flex>
     </>
   );
