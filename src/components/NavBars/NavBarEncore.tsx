@@ -2,7 +2,6 @@ import { UserProfile } from '@auth0/nextjs-auth0/client';
 import { Button, HStack, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import brandLogo from '../../public/logo_encore.png';
-import themeEncore from '../../styles/theme';
 import Nav from '../Layout/NavBarEncore';
 
 type NavBarProps = {
@@ -17,24 +16,14 @@ export default function Navbar({ user }: NavBarProps) {
           src={brandLogo.src}
           className="mr-3"
           alt="Encore Logo"
-          height="43.046356201171875px"
+          height="43px" // with Image from next/image don't use px
           width="100px"
-          left="50px"
-          top="8px"
+          //ml="50px"
+          //mt="8px"
           border-radius="0px"
         />
 
-        <Text
-          fontFamily={themeEncore.fonts.text}
-          fontSize="14px"
-          fontWeight="300"
-          lineHeight="19px"
-          letterSpacing="0em"
-          textAlign="left"
-          color="grey"
-        >
-          Discover
-        </Text>
+        <Text variant="navbar_label">Discover</Text>
       </HStack>
       <HStack>
         {!user ? (

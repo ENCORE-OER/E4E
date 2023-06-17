@@ -92,6 +92,14 @@ const config = {
           textAlign: 'left',
           color: 'grey',
         },
+        navbar_label: {
+          fontSize: '14px',
+          fontWeight: '300',
+          lineHeight: '19px',
+          letterSpacing: '0em',
+          textAlign: 'left',
+          color: 'grey',
+        },
         text_field_label: {
           fontSize: '12px',
           fontWeight: '600',

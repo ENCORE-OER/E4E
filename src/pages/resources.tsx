@@ -38,7 +38,7 @@ const Home = (props: DiscoverPageProps) => {
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<any[]>([]);
-  const hydrated = useHasHydrated();
+  const hydrated = useHasHydrated(); // used to avoid hydration failed
   /*const [description, setDescription] = useState<any>();
   const [title, setTitle] = useState<any>();
   const [idOer, setIdOer] = useState<any>();
@@ -92,6 +92,13 @@ const Home = (props: DiscoverPageProps) => {
     console.log('2: ' + collectionClicked);
     console.log('2 index: ' + collectionIndex);
     console.log('2 prev index: ' + prevCollectionIndex);
+  };
+
+  const handleDeleteCollection = (idCol: number) => {
+    if (collectionClicked) {
+      setCollectionClicked(false);
+    }
+    deleteCollection(idCol);
   };
 
   const getDataOerById = async (id_oer: any) => {
@@ -160,137 +167,144 @@ const Home = (props: DiscoverPageProps) => {
   }, []);*/
 
   return (
-    <>
+    <Flex w="100%" h="100%">
       <Navbar user={user} />
       <SideBar pagePath={router.pathname} />
+      <>
+        <Box ml="200px" py="115px" pl="40px" w="full" h="100vh" bg="background">
+          <Flex
+            w="100%"
+            justifyContent="left"
+            //justify="space-between"
+          >
+            <Heading>Your resources</Heading>
+          </Flex>
 
-      <Box ml="200px" my="70px" pl="40px">
-        <Flex
-          w="100%"
-          justifyContent="left"
-          //justify="space-between"
-        >
-          <Heading>Your resources</Heading>
-        </Flex>
-
-        <Flex w="100%" h="100vh" my="30px" gap={3}>
-          <Box borderRight="2px" borderRightColor="secondary" w="22%" p="25px">
-            <HStack mb="3">
-              <Heading fontSize="25px">Collections</Heading>
-              <Spacer />
-              <Button
-                variant="ghost"
-                _hover={{ bg: 'white' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  /*const id = Math.random();
+          <Flex w="full" h="full" my="30px" gap={3}>
+            <Box
+              borderRight="2px"
+              borderRightColor="secondary"
+              w="22%"
+              p="25px"
+              h="full"
+            >
+              <HStack mb="3">
+                <Heading fontSize="25px">Collections</Heading>
+                <Spacer />
+                <Button
+                  variant="ghost"
+                  _hover={{ bg: 'backgound' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    /*const id = Math.random();
                   addCollection(id, nameCollection);
                   console.log('id collection: ' + id);
                   //setIdCollection(idCollection + 1);*/
-                  handleOpenAddCollectionModal();
-                }}
-              >
-                <Icon as={FcFolder} w="30px" h="30px" />
-              </Button>
-            </HStack>
-            <Box>
-              {hydrated &&
-                collections?.map((collection: any, index: number) => (
-                  <HStack
-                    ref={collectionRef}
-                    key={collection.id}
-                    mb="3"
-                    w="100%"
-                  >
-                    <Flex
+                    handleOpenAddCollectionModal();
+                  }}
+                >
+                  <Icon as={FcFolder} w="30px" h="30px" />
+                </Button>
+              </HStack>
+              <Box>
+                {hydrated &&
+                  collections?.map((collection: any, index: number) => (
+                    <HStack
+                      ref={collectionRef}
+                      key={collection.id}
+                      mb="3"
                       w="100%"
-                      _hover={{ bg: 'gray.200' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCollectionIndex(index);
-                        handleCollectionClick();
-                      }}
-                      cursor={'pointer'}
                     >
-                      <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                      <Heading
-                        fontSize="22px"
-                        fontWeight="semibold"
-                        noOfLines={1}
+                      <Flex
+                        w="100%"
+                        _hover={{ bg: 'gray.200' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCollectionIndex(index);
+                          handleCollectionClick();
+                        }}
+                        cursor={'pointer'}
                       >
-                        {collection.name}
-                      </Heading>
-                    </Flex>
-                    <Spacer />
-                    <Button
-                      variant="ghost"
-                      _hover={{ bg: 'white' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        deleteCollection(collection.id);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </HStack>
-                ))}
-            </Box>
-          </Box>
-
-          <Box p="25px">
-            {collectionClicked && (
-              <Box minW="550px">
-                <HStack w="100%" mb="3">
-                  <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                  <Heading fontSize="22px" fontWeight="semibold">
-                    {collections[collectionIndex].name}
-                  </Heading>
-                  <Spacer />
-                  <DownloadButton
-                    data={collections[collectionIndex]}
-                    fileName={collections[collectionIndex].name}
-                  />
-                </HStack>
-                <Text
-                  fontWeight="light"
-                  fontSize="small"
-                  color="grey"
-                  mb="3"
-                >{`${collections[collectionIndex].oers.length} resources`}</Text>
-                <VStack>
-                  {oersById?.map((oer: any) => (
-                    <SingleResourceCard
-                      key={oer?.id}
-                      idOer={oer?.id}
-                      domain={
-                        oer?.skills?.flatMap((skill: any) =>
-                          skill.domain?.map((domain: any) => domain.name)
-                        ) || []
-                      }
-                      title={oer?.title}
-                      authors={
-                        oer?.creator?.map((item: any) => item.full_name) || []
-                      }
-                      description={oer?.description}
-                      lastUpdate={oer?.retrieval_date}
-                      resourceType={
-                        oer?.media_type?.map((item: any) => item.name) || []
-                      }
-                    />
+                        <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                        <Heading
+                          fontSize="22px"
+                          fontWeight="semibold"
+                          noOfLines={1}
+                        >
+                          {collection.name}
+                        </Heading>
+                      </Flex>
+                      <Spacer />
+                      <Button
+                        variant="ghost"
+                        _hover={{ bg: 'background' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDeleteCollection(collection.id);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </HStack>
                   ))}
-                </VStack>
               </Box>
-            )}
-          </Box>
-        </Flex>
-      </Box>
+            </Box>
+
+            <Box p="25px">
+              {collectionClicked && (
+                <Box minW="550px">
+                  <HStack w="100%" mb="3">
+                    <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                    <Heading fontSize="22px" fontWeight="semibold">
+                      {collections[collectionIndex].name}
+                    </Heading>
+                    <Spacer />
+                    <DownloadButton
+                      data={collections[collectionIndex]}
+                      fileName={collections[collectionIndex].name}
+                    />
+                  </HStack>
+                  <Text
+                    fontWeight="light"
+                    fontSize="small"
+                    color="grey"
+                    mb="3"
+                  >{`${collections[collectionIndex].oers.length} resources`}</Text>
+                  <VStack>
+                    {oersById?.map((oer: any) => (
+                      <SingleResourceCard
+                        key={oer?.id}
+                        idOer={oer?.id}
+                        domain={
+                          oer?.skills?.flatMap((skill: any) =>
+                            skill.domain?.map((domain: any) => domain.name)
+                          ) || []
+                        }
+                        title={oer?.title}
+                        authors={
+                          oer?.creator?.map((item: any) => item.full_name) || []
+                        }
+                        description={oer?.description}
+                        lastUpdate={oer?.retrieval_date}
+                        resourceType={
+                          oer?.media_type?.map((item: any) => item.name) || []
+                        }
+                      />
+                    ))}
+                  </VStack>
+                </Box>
+              )}
+            </Box>
+          </Flex>
+        </Box>
+      </>
       {isAddCollectionModalOpen && (
         <AddCollectionModal
           isOpen={isOpen}
           onClose={handleCloseCollectionModal}
         />
       )}
-    </>
+    </Flex>
   );
 };
 

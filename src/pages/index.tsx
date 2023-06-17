@@ -73,6 +73,7 @@ const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const drawerRef = useRef<HTMLDivElement>(null);
+
   /*const d: Types.Data[] = [
     { id: 1, name: 'Digital', size: 500, fillColor: 'ligthnlue' },
     { id: 2, name: 'Entrepreneurship', size: 500, fillColor: 'ligthyellow' },
@@ -90,9 +91,9 @@ const Home = (props: DiscoverPageProps) => {
     { key: ['Digital', 'Entrepreneurship', 'Green'], data: 1 },
   ];*/
 
-  //const [data, setData] = React.useState<Types.Data[]>(d.slice(1, 10));
-
-  //let data_list: string[] = [];
+  //const dataVennDiagram = [10, 20, 30]; // examples data for vennDiagram
+  //const widthVennDiagram = 400;
+  //const heightVennDiagram = 400;
 
   //console.log('query: ' + router.query);
 
@@ -428,13 +429,13 @@ const Home = (props: DiscoverPageProps) => {
   }*/
 
   return (
-    <>
+    <Flex w="100%" h="100%">
       <Navbar user={user} />
       <SideBar pagePath={router.pathname} />
-      <div>
+      <>
         {page && (
-          <Box h="100vh" ml="200px" mt="60px" py="50px" bg="background">
-            <VStack spacing="24px" mx="170px">
+          <Box w="full" h="100vh" ml="200px" bg="background" pt="60px">
+            <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
               <Flex
                 w="100%"
                 justifyContent="center"
@@ -443,7 +444,7 @@ const Home = (props: DiscoverPageProps) => {
                 <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
               </Flex>
 
-              <Box w="100%">
+              <Box w="full">
                 <HStack>
                   <Text variant="label" my="6px">
                     Keywords
@@ -520,23 +521,19 @@ const Home = (props: DiscoverPageProps) => {
                   </Button>
                 </Flex>
               </div>
-              {/*<BubbleChart
-            bubblesData={data}
-            width={1000}
-            height={1000}
-            textFillColor="darkgrey"
-            minValue={1}
-            maxValue={150}
-            backgroundColor="white"
-          />*/}
-              {/*<VennDiagram data={d} />*/}
+
+              {/*<VennDiagram
+                data={dataVennDiagram}
+                height={heightVennDiagram}
+                width={widthVennDiagram}
+                  />*/}
             </VStack>
           </Box>
         )}
 
         {!page && (
-          <Flex ml="200px" h="100vh" mt="60px">
-            <Box flex="1" py="30px" px="30px" h="100%">
+          <Flex ml="200px" h="100vh" pt="60px" w="full">
+            <Box flex="1" py="30px" px="30px" h="full" w="full">
               <Flex
                 w="100%"
                 justifyContent="left"
@@ -615,7 +612,8 @@ const Home = (props: DiscoverPageProps) => {
               flex="1" // "flex='1'" fill the rest of the page
               py="30px"
               px="30px"
-              h="100vh"
+              w="full"
+              h="full"
               backgroundColor="background"
               borderLeft="0.5px"
               borderLeftColor={'secondary'}
@@ -650,8 +648,8 @@ const Home = (props: DiscoverPageProps) => {
             </Box>
           </Flex>
         )}
-      </div>
-    </>
+      </>
+    </Flex>
   );
 };
 

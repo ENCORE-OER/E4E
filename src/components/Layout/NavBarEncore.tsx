@@ -1,5 +1,4 @@
 import { Flex } from '@chakra-ui/react';
-import themeEncore from '../../styles/theme';
 
 type NavProps = {
   children?: React.ReactNode;
@@ -15,7 +14,7 @@ export default function Nav({ children, p, bg, color, justify }: NavProps) {
       as="nav"
       //align="center"
       justify={justify || 'space-between'}
-      wrap="wrap"
+      //wrap="wrap"
       p={p || 4}
       bg={bg || 'white'}
       color={color || 'black'}
@@ -26,8 +25,8 @@ export default function Nav({ children, p, bg, color, justify }: NavProps) {
       zIndex="sticky"
       position="fixed"
       borderBottom="0.5px"
-      borderBottomColor={themeEncore.colors.secondary}
-      borderBottomStyle={'solid'}
+      borderBottomColor="secondary"
+      borderBottomStyle="solid"
     >
       {children}
     </Flex>
