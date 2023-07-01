@@ -6,9 +6,11 @@ import { ReactFlowNodeProps } from '../ReactFlowNode';
 
 type ReactFlowConceptNodeProps = ReactFlowNodeProps & ConceptNode;
 
-const ReactFlowConceptNode = ({ id,data}: ReactFlowConceptNodeProps) => {
-  
+const ReactFlowConceptNode = ({ data }: ReactFlowConceptNodeProps) => {
+
   const theme = useTheme();
+
+  const { label, numOfResources } = data;
 
   return (
     <Card
@@ -18,10 +20,10 @@ const ReactFlowConceptNode = ({ id,data}: ReactFlowConceptNodeProps) => {
         background: `${theme.palette.orangeLight}08`,
       }}
     >
-      {data ?.label}
-      <div>{data ?.numOfResources}</div>
-      <Handle type="source" position={Position.Right} />
-      <Handle type="target" position={Position.Left} />
+      {label}
+      <div>{numOfResources}</div>
+      <Handle type="source" position={Position.Right} style={{ opacity: 0 }} />
+      <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
     </Card>
   );
 };
