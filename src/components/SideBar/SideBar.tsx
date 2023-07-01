@@ -18,8 +18,8 @@ interface LinkItemProps {
   link: string;
 }
 const LinkItems: Array<LinkItemProps> = [
-  { name: 'Dashboard', icon: IconDashboard, link: '/dashboard' },
-  { name: 'Discover', icon: IconTelescope, link: '/' },
+  { name: 'Dashboard', icon: IconDashboard, link: '/' },
+  { name: 'Discover', icon: IconTelescope, link: '/discover' },
   { name: 'Your resources', icon: IconBookmarkCheck, link: '/resources' },
   { name: 'Plan', icon: IconPathEdit, link: '/flows' },
 ];

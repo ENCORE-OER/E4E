@@ -33,6 +33,7 @@ export default function AddCollectionModal({
   //const [idCollection, setIdCollection] = useState<any>(0);
   const { addCollection, addResource, collections } = useCollectionsContext();
   const [isNewCollection, setIsNewCollection] = useState<boolean>(false);
+console.log(isNewCollection);
 
   const newOer = {
     idOer: oerToSave?.id,
@@ -62,7 +63,7 @@ export default function AddCollectionModal({
   return (
     <>
       {!isNewCollection && (
-        <Modal isOpen={isOpen} onClose={handleCloseCollectionModal}>
+        <Modal isOpen={true} onClose={handleCloseCollectionModal}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>Select Collection</ModalHeader>
@@ -109,7 +110,7 @@ export default function AddCollectionModal({
       )}
 
       {isNewCollection && (
-        <Modal isOpen={isOpen} onClose={handleCloseCollectionModal}>
+        <Modal isOpen={true} onClose={handleCloseCollectionModal}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>New Collection</ModalHeader>
@@ -131,7 +132,7 @@ export default function AddCollectionModal({
               <HStack>
                 <Button
                   mr={3}
-                  disabled={true}
+                  disabled={false}
                   onClick={(e) => {
                     e.preventDefault();
                     handleSaveResource();

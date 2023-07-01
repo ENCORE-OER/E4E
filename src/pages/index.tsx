@@ -7,37 +7,44 @@ import {
   Text,
   Tooltip,
   useDisclosure,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
 
 import Image from 'next/image';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { asSets, ISetLike, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-//import { VennDiagram } from 'reaviz';
+import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
-import SingleResourceCard from '../components/Card/SingleResourceCard';
-import DrawerCard from '../components/Drawers/DrawerCard';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SearchBar from '../components/SearchBar/SearchBarEncore';
-import SearchBarDiscover from '../components/SearchBar/SearchBarNoButtonEncore';
 import SideBar from '../components/SideBar/SideBar';
-import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
-//import VennDiagramUpset from '../components/VennDiagram/VennDiagramUpsetJS';
-//import dynamic from 'next/dynamic';
+import { useHasHydrated } from '../utils/utils';
 
-//const ChartComponent = dynamic(() => import('../components/VennDiagram/VennDiagramAmCharts'), { ssr: false });
+
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
+
+
+const baseSets = [
+  { name: 'DIGITAL', elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], domainId: "25" },
+  { name: 'GREEN', elems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23], domainId: "26" },
+  { name: 'ENTERPRENEURSHIP', elems: [1, 11, 12, 4, 5, 24, 25, 26, 27, 28, 29, 30], domainId: "27" },
+];
+
+
+
+
 const Home = (props: DiscoverPageProps) => {
+  const hydrated = useHasHydrated();
   const [searchValue, setSearchValue] = useState<string[]>([]);
   //let searchValue: string[] = [];
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -68,37 +75,25 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
 
-  // README!
-  // The skill should be set based on the oers selected
-  // this function should be executed when a selection oer event is triggered
-  //setSkill('circular economy');
-  const [skill /*, setSkill*/] = useState<string>('circular economy');
+  const [checkboxAll, setCheckboxAll] = useState(false);
+  const [checkboxOr, setCheckboxOr] = useState(false);
 
-  // const drawerRef = useRef<HTMLDivElement>(null);
 
-  /*const d: Types.Data[] = [
-    { id: 1, name: 'Digital', size: 500, fillColor: 'ligthnlue' },
-    { id: 2, name: 'Entrepreneurship', size: 500, fillColor: 'ligthyellow' },
-    { id: 3, name: 'Green', size: 500, fillColor: 'ligthgreen' },
-  ];*/
+  const api = new APIV2(props.accessToken);
 
-  // data for reaviz venn diagram
-  /*const d = [
-    { key: ['Digital'], data: 12 },
-    { key: ['Entrepreneurship'], data: 12 },
-    { key: ['Green'], data: 12 },
-    { key: ['Digital', 'Entrepreneurship'], data: 2 },
-    { key: ['Entrepreneurship', 'Green'], data: 2 },
-    { key: ['Digital', 'Green'], data: 2 },
-    { key: ['Digital', 'Entrepreneurship', 'Green'], data: 1 },
-  ];*/
+  // retrieve all the OERs and create the 3 sets divided for Green, Digital and Ent
 
-  //const dataVennDiagram = [10, 20, 30]; // examples data for vennDiagram
-  //const widthVennDiagram = 400;
-  //const heightVennDiagram = 400;
 
-  //console.log('query: ' + router.query);
+  const sets = useMemo(() => {
+    const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
+    return asSets(baseSets.map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
+  }, []);
+  const combinations = useMemo(() => ({ mergeColors }), []);
+
+
+
 
   const handleDomainFromDropDownMenu = (data: any[]) => {
     setSelectedDomain(data);
@@ -116,29 +111,36 @@ const Home = (props: DiscoverPageProps) => {
     setSelectedAudience(data);
   };
 
-  const searchCallback = async (
-    skillIds: any[],
-    domainIds: any[],
-    subjectIds: any[],
-    resourceTypeIds: any[],
-    audienceIds: any[]
-  ) => {
+
+
+
+  const searchCallback1 = async () => {
+    if (selectedSkillIds.length == 0) return;
+    router.push({
+      pathname: '/discover',
+      query: { skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr }
+    });
+  };
+
+
+  const searchCallback = async (domainIds: String[], resourceTypeIds?: String[]) => {
     const api = new APIV2(props.accessToken);
-    console.log('CIAOOOO');
+
 
     if (searchValue.length >= 0) {
       const oers = await api.searchOers(
-        skillIds,
-        domainIds,
-        subjectIds,
-        resourceTypeIds,
-        audienceIds
+        selectedSkillIds,
+        domainIds ?? selectedDomain,
+        selectedSubject,
+        resourceTypeIds ?? selectedResourceTypes,
+        selectedAudience
       );
 
-      console.log(oers);
+      // console.log(oers);
       setRespSearchOers(oers);
-      setPage(!page);
+      setPage(false);
     } else if (searchValue.length < 0) {
+
       const oers = await api.getOERs();
       //console.log(oers);
 
@@ -295,7 +297,7 @@ const Home = (props: DiscoverPageProps) => {
     setSubject(oersSubjects);
   };*/
 
-  const getDataOerById = async (id_oer: any) => {
+  /*const getDataOerById = async (id_oer: any) => {
     const api = new APIV2(props.accessToken);
 
     try {
@@ -305,6 +307,7 @@ const Home = (props: DiscoverPageProps) => {
       throw error;
     }
   };
+  */
 
   const handleAdvanceSearchClick = (e: any) => {
     e.preventDefault();
@@ -324,21 +327,12 @@ const Home = (props: DiscoverPageProps) => {
   }, [oerById]);
 
   useEffect(() => {
-    console.log('ciao');
     const api = new APIV2(props.accessToken);
 
     // nella useEffect le funzioni async fanno fatte così, è sbagliato mettere async subito la prima
     (async () => {
       try {
-        //const skills = await api.getAllSkills();
-        //const skills = respSkills.data?.data || [];
-        // const labels = skills.map((skill: any) => skill.label); // extract only "label" fields from every object
-        //setDataSkills(skills);
 
-        const labels = await api.getAllSkillsLabel();
-        console.log('skill labels: ' + labels);
-        setSuggestions(labels);
-        //console.log(suggestions);
         //api getDomains()
         const resp_dom = await api.getDomains();
         //const domName = resp_dom?.map((item: any) => item.name);
@@ -360,16 +354,9 @@ const Home = (props: DiscoverPageProps) => {
       } catch (error) {
         console.error(error);
       }
-      /*const respOers = await api.getOERs();
-      const oers = respOers.data?.data || [];
-      console.log(oers);
-      setDataOers(oers);*/
+
     })();
   }, [user]);
-
-  /*useEffect(() => {
-    console.log(dataSkills);
-  }, [dataSkills]);*/
 
   useEffect(() => {
     console.log('SELECTED DOMAINS: ' + selectedDomain);
@@ -392,12 +379,21 @@ const Home = (props: DiscoverPageProps) => {
   }, [subject]);
 
   useEffect(() => {
-    console.log('SEARCH VALUE: ' + searchValue);
+    if (searchValue.length > 0) {
+      const api = new APIV2(props.accessToken);
+      (async () => {
+        try {
+          const skills = await api.getSkillsByText(searchValue.toString());
+          setSuggestions(skills);
+        } catch (error) {
+          console.error(error);
+        }
+
+      })();
+    }
   }, [searchValue]);
 
-  /*useEffect(() => {
-    console.log('dataOers: ' + dataOers);
-  }, [dataOers]);*/
+
 
   useEffect(() => {
     if (dataSearching.length === 0) console.log('No result!');
@@ -415,34 +411,44 @@ const Home = (props: DiscoverPageProps) => {
     respSearchOers?.map((oer: any) => {
       const temp_aut = oer.media_type?.name;
       const authorsOer = temp_aut?.length !== 0 ? temp_aut : ['Unknown'];
-      console.log('authorsOer: ' + authorsOer);
+      // console.log('authorsOer: ' + authorsOer);
       //const domain = item.domains.map((obj: any) => obj.full_name);
     });
   }, [respSearchOers, page]);
 
-  /*if (typeof window !== 'undefined') {
-    try {
-      router.push({
-        pathname: '/',
-        query: { respSearchOers },
-      });
-    } catch (error) {
-      throw error;
-    }
-  }*/
+
+
+
+  const handleCheckboxAllChange = () => {
+    setCheckboxAll(true);
+    setCheckboxOr(false);
+  };
+
+  const handleCheckboxOrChange = () => {
+    setCheckboxAll(false);
+    setCheckboxOr(true);
+  };
+
+  const RoundCheckboxIcon = () => (
+    <svg viewBox="0 0 24 24" width="16px" height="16px" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  );
+
+
 
   return (
     <Flex w="100%" h="100%">
       <Navbar user={user} />
       <SideBar pagePath={router.pathname} />
       <>
-        {page && (
+        {
           <Box w="full" h="100vh" ml="200px" bg="background" pt="60px">
             <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
               <Flex
                 w="100%"
                 justifyContent="center"
-                //justify="space-between"
               >
                 <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
               </Flex>
@@ -475,23 +481,48 @@ const Home = (props: DiscoverPageProps) => {
                   setInputValue={setSearchValue}
                   inputValueIds={selectedSkillIds}
                   setInputValueIds={setSelectedSkillIds}
-                  domainIds={selectedDomain}
-                  subjectIds={selectedSubject}
-                  resourceTypeIds={selectedResourceTypes}
-                  audienceIds={selectedAudience}
                   items={suggestions}
-                  onSearchCallback={searchCallback}
-                  placeholder="Search resources..."
+                  domainIds={domain}
+                  onSearchCallback={searchCallback1}
+                  placeholder="Search resources"
                 />
               </Box>
+
+
+              <Box w="100%"
+                px="5px">
+                <HStack>
+
+                  <Flex w="100%" justifyContent="center">
+                    <Text variant="text_searchFor"><span>Search for:</span></Text>
+
+                    <input
+                      type="radio"
+                      id="checkboxAll"
+                      checked={checkboxAll}
+                      onChange={handleCheckboxAllChange}
+                    />
+
+                    <Text variant="text_searchFor_secondary">All keywords</Text>
+                    <input
+                      type="radio"
+                      id="checkboxOr"
+                      checked={checkboxOr}
+                      onChange={handleCheckboxOrChange}
+
+                    />
+                    <Text variant="text_searchFor_secondary">Any keyword</Text>
+                  </Flex>
+
+                </HStack>
+              </Box>
+
 
               <div>
                 {showBox && (
                   <Box
                     w="100%"
                     px="5px"
-                    //flex="1"
-                    //display="none"
                   >
                     <AdvancedSearch
                       domain={domain}
@@ -513,8 +544,6 @@ const Home = (props: DiscoverPageProps) => {
                 <Flex justifyContent="center" mt={isClicked ? '70px' : '5px'}>
                   <Button
                     variant="link"
-                    //color="grey"
-                    //textDecoration="underline"
                     rightIcon={
                       !isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />
                     }
@@ -524,112 +553,35 @@ const Home = (props: DiscoverPageProps) => {
                   </Button>
                 </Flex>
               </div>
+              <Text variant="text_before_venn">Search among 118.000 resources</Text>
+              <div>
+                {hydrated ? (
+                  <VennDiagram
+                    sets={sets}
+                    width={550}
+                    height={450}
+                    selection={selection}
+                    onHover={setSelection}
+                    combinations={combinations}
+                    hasSelectionOpacity={0.2}
+                    selectionColor=""
+                  />
+                ) : "loading..."}
 
-              {/*<VennDiagram
-                data={dataVennDiagram}
-                height={heightVennDiagram}
-                width={widthVennDiagram}
-                  />*/}
+              </div >
+
+
+
+
+
             </VStack>
           </Box>
-        )}
-
-        {!page && (
-          <Flex ml="200px" h="100vh" pt="60px" w="full">
-            <Box flex="1" py="30px" px="30px" h="full" w="full">
-              <Flex
-                w="100%"
-                justifyContent="left"
-                //justify="space-between"
-              >
-                <Heading fontFamily="title">
-                  <Text>Discover</Text>
-                </Heading>
-              </Flex>
-              <Box w="100%" mb="5">
-                <Text variant="label" my="6px">
-                  Keywords
-                </Text>
-
-                <SearchBarDiscover
-                  inputValue={searchValue}
-                  setInputValue={setSearchValue}
-                  placeholder="Search resources..."
-                />
-              </Box>
-
-              {
-                <Button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setPage(!page);
-                  }}
-                >
-                  BACK
-                </Button>
-              }
-
-              <HStack mb="5">
-                <Text fontWeight="light" color="grey">
-                  {`${respSearchOers.length} resources`}
-                </Text>
-              </HStack>
-
-              {respSearchOers && (
-                <VStack>
-                  {respSearchOers?.map((oer: any) => (
-                    <Box
-                      key={oer.id}
-                      onClick={async (e: any) => {
-                        e.preventDefault();
-                        onOpen();
-
-                        setOerById(await getDataOerById(oer.id));
-                      }}
-                      as="button"
-                    >
-                      <SingleResourceCard
-                        idOer={oer.id}
-                        domain={
-                          oer.skills?.flatMap((skill: any) =>
-                            skill.domain?.map((domain: any) => domain.name)
-                          ) || []
-                        }
-                        title={oer.title}
-                        authors={
-                          oer.creator?.map((item: any) => item.full_name) || []
-                        }
-                        description={oer.description}
-                        lastUpdate={oer.retrieval_date}
-                        resourceType={
-                          oer.media_type?.map((item: any) => item.name) || []
-                        }
-                      />
-                    </Box>
-                  ))}
-                </VStack>
-              )}
-            </Box>
-
-            <DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />
-
-            <EncoreTab
-              skill={skill}
-              flex="1" // "flex='1'" fill the rest of the page
-              py="30px"
-              px="30px"
-              w="full"
-              h="full"
-              backgroundColor="background"
-              borderLeft="0.5px"
-              borderLeftColor={'secondary'}
-              borderLeftStyle={'solid'}
-            />
-          </Flex>
-        )}
+        }
       </>
-    </Flex>
+    </Flex >
   );
 };
 
 export default Home;
+
+

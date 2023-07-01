@@ -21,11 +21,15 @@ import SideBar from '../components/SideBar/SideBar';
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
+import { LuFolderPlus } from 'react-icons/Lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
 import SingleResourceCard from '../components/Card/SingleResourceCard';
 import AddCollectionModal from '../components/Modals/AddCollectionModal';
 import { APIV2 } from '../data/api';
 import { useHasHydrated } from '../utils/utils';
+
+
+
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -67,8 +71,9 @@ const Home = (props: DiscoverPageProps) => {
     useState<boolean>(false);
 
   const handleOpenAddCollectionModal = () => {
+
     setAddCollectionModalOpen(true);
-    console.log(isAddCollectionModalOpen);
+    console.log("eccolo: " + isAddCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
@@ -175,7 +180,7 @@ const Home = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Your resources</Heading>
           </Flex>
@@ -203,7 +208,8 @@ const Home = (props: DiscoverPageProps) => {
                     handleOpenAddCollectionModal();
                   }}
                 >
-                  <Icon as={FcFolder} w="30px" h="30px" />
+
+                  <Icon as={LuFolderPlus} w="30px" h="30px" />
                 </Button>
               </HStack>
               <Box>

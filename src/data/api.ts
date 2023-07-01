@@ -8,9 +8,9 @@ import Router from 'next/router';
 import { EncoreConceptMap } from '../types/encore';
 import { GeneralMetadata, Metadata } from '../types/metadata';
 import {
-  polyglotEdgeComponentMapping,
   PolyglotFlow,
   PolyglotFlowInfo,
+  polyglotEdgeComponentMapping,
   polyglotNodeComponentMapping,
 } from '../types/polyglotElements';
 import { User } from '../types/user';
@@ -178,13 +178,65 @@ export class APIV2 {
     }
   }
 
+
+ // API to retrieve the Skills from a free text - even partial written text in the search bar
+ //without pagination
+ async getSkillsByText(skill_text: string): Promise<any> {
+  try {
+    const resp = await axiosNoCookie.get(
+      `https://encore-db.grial.eu/api/skills/label_search/?search=${skill_text}`
+    );
+    return resp.data?.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+ // API to retrieve the Skills from a free text - even partial written text in the search bar
+ //with pagination
+async getSkillsByTextWithPages(page = 1, skill_text: string, allSkills: any[] = []): Promise<any[]> {
+  try {
+    const respSkills = await axiosNoCookie.get(
+      `https://encore-db.grial.eu/api/skills/label_search/?page=${page}&search=${skill_text}`
+    );
+    const skills = respSkills.data?.data || [];
+    const updatedSkills = [...allSkills, ...skills]; // to create a new array combining two other array
+
+    if (skills.length === 10) {
+      return this.getSkills(page + 1, updatedSkills);
+    }
+
+    return updatedSkills;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+//api to retrieve the graph of concepts using generative AI 
+// starting from the OERs_ID
+
+async getConceptMapOersAI(
+  oers_ids: any[]
+): Promise<AxiosResponse<EncoreConceptMap>> {
+  alert("OERs ID per API GPT:"+JSON.stringify(oers_ids));
+  return this.axios.post(
+    `${process.env.POLYGLOT_URL}/api/concepts/genGraphOers`,
+    {
+      oers_ids:oers_ids,
+    }
+  );
+}
+
+
   async getConceptMapOers(
-    extracted_concepts: string[]
+    filteredOers: any
   ): Promise<AxiosResponse<EncoreConceptMap>> {
     return this.axios.post(
       `${process.env.POLYGLOT_URL}/api/concepts/genGraphExt`,
       {
-        extracted_concepts: extracted_concepts,
+        oers: filteredOers,
       }
     );
   }
@@ -207,6 +259,8 @@ export class APIV2 {
       throw error;
     }
   }
+
+ 
 
   async getSkillsLabel(): Promise<any[]> {
     try {
@@ -259,7 +313,7 @@ export class APIV2 {
     return axiosNoCookie.get('https://encore-db.grial.eu/api/oers/?page=1');
   }*/
 
-  async getOERs(page = 1, allOers: any[] = [], stop = 10): Promise<any[]> {
+  async getOERs(page = 1, allOers: any[] = [], stop = 100): Promise<any[]> {
     try {
       const respOers = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/oers/?page=${page}`
@@ -274,7 +328,7 @@ export class APIV2 {
       }*/
 
       if (stop > 0) {
-        console.log(page);
+        console.log("PAGINA DI OERS: "+page);
         return this.getOERs(page + 1, updatedOers, stop - 1);
       }
 
@@ -298,6 +352,22 @@ export class APIV2 {
       throw error;
     }
   }
+
+
+
+  async getDigitalOer(): Promise<any> {
+    try {
+      const resp_oer = await axios.get(' https://encore-db.grial.eu/api/oers/?green={false}&digital={true}&entrepreneurhip={false}');
+
+      const oer = resp_oer.data;
+
+      return oer;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
 
   async getOer(): Promise<any> {
     try {
@@ -523,8 +593,47 @@ export class APIV2 {
     //return axios.get('http://localhost:3000/api/encore/domains');
   }*/
 
-  async searchOers(
-    //page = 1,
+
+async searhOERbySkillNoPages(
+  skillIds: any[]
+): Promise<any[]> { 
+  try{
+    const queryParams = new URLSearchParams();
+
+    skillIds?.forEach((skillId: any) => {
+      queryParams.append('skills', skillId);
+    });
+    
+    // add the logic to retrieve all the available pages
+    const temp = await axiosNoCookie.get(
+      `https://encore-db.grial.eu/api/oers/?${queryParams}`
+      );
+alert("URL: "+temp);
+
+    const recordsTotal = temp.data?.recordsTotal;
+    const num_pages = Math.ceil(recordsTotal / 10);
+
+    let updatedOERs: any[] = [];
+
+    for (let i = 1; i < num_pages + 1; i++) {
+      const url =  `https://encore-db.grial.eu/api/oers/?page=${i}&${queryParams}`;
+      const resp = await axiosNoCookie.get(url);
+
+      const oers = resp.data?.data || [];
+      updatedOERs = [...updatedOERs, ...oers]; // to create a new array combining two other array
+    }
+    
+
+    return updatedOERs;
+
+  }catch (error){
+    throw error;
+  }
+};
+
+
+async searchOers(
+    //page = 1,fn
     skillIds: any[],
     domainIds: any[],
     subjectIds: any[],
@@ -568,8 +677,8 @@ export class APIV2 {
         });
       }
 
-      const url = `https://encore-db.grial.eu/api/oers/?${queryParams.toString()}`;
-      console.log(url);
+      const url = `https://encore-db.grial.eu/api/oers/?${queryParams}`;
+      alert("url to search OERS: "+url);
 
       const resp = await axiosNoCookie.get(url);
 

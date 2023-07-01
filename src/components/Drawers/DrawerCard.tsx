@@ -52,7 +52,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
   const handleViewResource = () => {
     if (linkOer) {
-      window.open(linkOer, '_blank');
+      window?.open(linkOer, '_blank');
     }
   };
 
@@ -94,7 +94,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       const domain = oer?.skills?.flatMap((skill: any) =>
         skill?.domain?.map((item: any) => item.name)
       );
-      console.log(domain);
       setShowTagDigital(false);
       setShowTagEntrepreneurial(false);
       setShowTagGreen(false);
@@ -172,8 +171,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-        //container={drawerRef.current}
-        //getContainer={drawerRef.current}
+      //container={drawerRef.current}
+      //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />
@@ -195,13 +194,13 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
                   e.preventDefault();
                   handleOpenAddCollectionModal();
                 }}
-                /*onClick={(e) => {
-                  e.preventDefault();
-                  const id = Math.random();
-                  addCollection(id, 'Drink');
-                  console.log('id collection: ' + id);
-                  //onOpen();
-                }}*/
+              /*onClick={(e) => {
+                e.preventDefault();
+                const id = Math.random();
+                addCollection(id, 'Drink');
+                console.log('id collection: ' + id);
+                //onOpen();
+              }}*/
               >
                 Save Resource
               </Button>

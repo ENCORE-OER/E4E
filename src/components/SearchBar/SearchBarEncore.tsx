@@ -16,22 +16,13 @@ type SearchBarProps = {
   setInputValue: Dispatch<SetStateAction<string[]>>;
   inputValueIds: any[];
   setInputValueIds: Dispatch<SetStateAction<any[]>>;
-  domainIds: any[];
-  subjectIds: any[];
-  resourceTypeIds: any[];
-  audienceIds: any[];
   placeholder?: string;
   items: SearchItems;
+  domainIds: any[];
   px?: SpaceProps['px'];
   py?: SpaceProps['py'];
   pb?: SpacerProps['pb'];
-  onSearchCallback: (
-    skillIds: any[],
-    domainIds: any[],
-    subjectIds: any[],
-    resourceTypeIds: any[],
-    audienceIds: any[]
-  ) => void;
+  onSearchCallback: (domainIds: any[]) => Promise<void>;
 };
 
 /* For multi selected tag see https://github.com/anubra266/choc-autocomplete#multi-select-with-tags */
@@ -41,12 +32,9 @@ export default function SearchBar({
   setInputValue,
   inputValueIds,
   setInputValueIds,
-  domainIds,
-  subjectIds,
-  resourceTypeIds,
-  audienceIds,
   placeholder,
   items,
+  domainIds,
   px, // padding orizonal
   py, //padding vertical
   pb, // padding bottom
@@ -65,14 +53,13 @@ export default function SearchBar({
       <AutoComplete
         openOnFocus
         multiple
-        value={inputValue}
+        //value={inputValue}
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
           const selectedValueId = items.find(
             (item: any) => item.label === selectedValue
           ).id;
 
-          //console.log('SELECTED VALUE SEARCH: ' + selectedValue);
           setInputValue((prevInputValues) => {
             const updatedValues = prevInputValues.filter(
               // to avoid duplicate
@@ -84,6 +71,7 @@ export default function SearchBar({
             const updatedValueIds = prev.filter(
               (value: any) => value !== selectedValueId
             );
+
             return [...updatedValueIds, selectedValueId];
           });
         }}
@@ -95,7 +83,7 @@ export default function SearchBar({
             placeholder={placeholder || 'Search...'}
             onChange={(e) => {
               e.preventDefault();
-              //setInputValue(e.currentTarget.value);
+              setInputValue([e.currentTarget.value]);
             }}
           >
             {({ tags }) =>
@@ -125,6 +113,7 @@ export default function SearchBar({
               ))
             }
           </AutoCompleteInput>
+
         </Flex>
         <AutoCompleteList>
           {items.map((item) => (
@@ -140,20 +129,8 @@ export default function SearchBar({
       </AutoComplete>
       <div
         onClick={() => {
-          onSearchCallback(
-            inputValueIds,
-            domainIds,
-            subjectIds,
-            resourceTypeIds,
-            audienceIds
-          );
-          console.log(
-            inputValueIds,
-            domainIds,
-            subjectIds,
-            resourceTypeIds,
-            audienceIds
-          );
+          onSearchCallback(domainIds);
+
         }}
       >
         {/*<Link href="/discover">*/}

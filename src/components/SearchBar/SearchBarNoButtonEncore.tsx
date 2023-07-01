@@ -36,7 +36,6 @@ export default function SearchBar({
         value={inputValue}
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
-          //console.log('SELECTED VALUE SEARCH: ' + selectedValue);
           setInputValue((prevInputValues) => {
             const updatedValues = prevInputValues.filter(
               // to avoid duplicate

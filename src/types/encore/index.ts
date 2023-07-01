@@ -1,3 +1,4 @@
+
 export type EncoreConceptMapNode = {
   node_id: number;
   name: string;
@@ -9,6 +10,18 @@ export type EncoreConceptMapEdge = {
 };
 
 export type EncoreConceptMap = {
-  nodes: EncoreConceptMapEdge[];
-  edges: EncoreConceptMapEdge[];
+  nodes: any[];
+  edges: any[];
 };
+
+export type EncoreOer = {
+ id: any;
+ skills: any;
+ title: string;
+ domain: string;
+ media_type: string;
+}
+
+export type ConceptNode = {
+  data: {numOfResources?: number};
+ }

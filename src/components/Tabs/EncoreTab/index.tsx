@@ -5,15 +5,18 @@ import {
   CustomTabStyleProps,
 } from '../../Layout/CustomTab';
 import { TabMapOfConcepts } from './TabMapOfConcepts';
+import { TabTypesOfResources } from './TabTypesOfResources';
+
 
 // TODO: find correct icon
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
+import { EncoreOer } from '../../../types/encore';
+import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
-  // TODO: add type EncoreOers
-  selected_oers?: any[];
-  skill?: string;
+  oers: EncoreOer[]; domains: String[];
+  searchCallBack: (domainIds: any[]) => Promise<void>;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {
@@ -23,8 +26,8 @@ export type EncoreTabLabelProps = {
 };
 
 export const EncoreTab = (props: EncoreTabProps) => {
-  const { skill, ...other } = props;
-  const config = getConfig(skill);
+  const { oers, domains, searchCallBack, ...other } = props;
+  const config = getConfig(oers, domains, searchCallBack);
 
   return (
     <CustomTab
@@ -41,13 +44,26 @@ export const EncoreTab = (props: EncoreTabProps) => {
   );
 };
 
-const getConfig = (skill?: string) => {
+const getConfig = (oers: EncoreOer[], domains: String[], searchCallBack: (domainIds: String[]) => Promise<void>) => {
+
+  const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
+
+  /* const baseSets = [
+     { name: 'DIGITAL', elems: digitalIdsoers, domainId: "Digital" },
+     { name: 'GREEN', elems: digitalIdsoers, domainId: "Green" },
+     { name: 'ENTERPRENEURIAL', elems: digitalIdsoers, domainId: "Enterpreneurial" },
+   ];
+ 
+ */
+
   const config: CustomTabConfigProps = [
     {
       label: (
-        <EncoreTabLabel iconSrc={typeResIcon.src} spacing={2} name="Domain" />
+        <EncoreTabLabel
+          iconSrc={typeResIcon.src}
+          spacing={2} name="Domain" />
       ),
-      child: <Text align="center">Domains</Text>,
+      child: <TabDomains oers={oers} />,
       pt: '3%',
     },
     {
@@ -58,7 +74,7 @@ const getConfig = (skill?: string) => {
           name="Map Of Concepts"
         />
       ),
-      child: <TabMapOfConcepts skill={skill} />,
+      child: <TabMapOfConcepts oers={oers} />,
       pt: '3%',
     },
     {
@@ -69,7 +85,9 @@ const getConfig = (skill?: string) => {
           name=" Types of Resources"
         />
       ),
-      child: <Text align="center">Types of Resources</Text>,
+      child: <TabTypesOfResources oers={oers} searchCallBack={
+        searchCallBack
+      } />,
       pt: '3%',
     },
   ];

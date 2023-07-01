@@ -40,7 +40,7 @@ export default function SingleResourceCard({
   title,
   domain,
 }: //dataOer
-ReourceCardProps) {
+  ReourceCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
@@ -120,6 +120,7 @@ ReourceCardProps) {
                   }}
                   variant="ghost"
                   onClick={(e) => {
+                    console.log("pippo");
                     e.preventDefault();
                     setIsSaved(!isSaved);
                     /*addCollection(idCollection, nameCollection);
