@@ -14,7 +14,7 @@ import Image from 'next/image';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { asSets, ISetLike, mergeColors, VennDiagram } from '@upsetjs/react';
+import { asSets, ISetLike, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
@@ -35,7 +35,7 @@ type DiscoverPageProps = {
 
 
 const baseSets = [
-  { name: 'DIGITAL', elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], domainId: "25" },
+  { name: 'DIGITAL', elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], domainId: "25", label: 'Digital Set' },
   { name: 'GREEN', elems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23], domainId: "26" },
   { name: 'ENTERPRENEURSHIP', elems: [1, 11, 12, 4, 5, 24, 25, 26, 27, 28, 29, 30], domainId: "27" },
 ];
@@ -90,7 +90,19 @@ const Home = (props: DiscoverPageProps) => {
     const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
     return asSets(baseSets.map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
   }, []);
-  const combinations = useMemo(() => ({ mergeColors }), []);
+  //  const combinations = useMemo(() => ({ mergeColors }), []);
+
+  const combinations: { sets: string[]; size: number }[] = [
+    { sets: ['DIGITAL'], size: 163 },
+    { sets: ['GREEN'], size: 1220 },
+    { sets: ['ENTREPRENEURSHIP'], size: 280 },
+    { sets: ['DIGITAL', 'GREEN'], size: 254 },
+    { sets: ['GREEN', 'ENTREPRENEURSHIP'], size: 452 },
+    { sets: ['DIGITAL', 'ENTREPRENEURSHIP'], size: 4567 },
+    { sets: ['DIGITAL', 'GREEN', 'ENTREPRENEURSHIP'], size: 97585 },
+  ];
+
+
 
 
 
@@ -125,6 +137,9 @@ const Home = (props: DiscoverPageProps) => {
 
   const searchCallback = async (domainIds: String[], resourceTypeIds?: String[]) => {
     const api = new APIV2(props.accessToken);
+
+
+
 
 
     if (searchValue.length >= 0) {
@@ -560,9 +575,9 @@ const Home = (props: DiscoverPageProps) => {
                     sets={sets}
                     width={550}
                     height={450}
-                    selection={selection}
-                    onHover={setSelection}
-                    combinations={combinations}
+                    // selection={selection}
+                    // onHover={setSelection}
+                    // combinations={combinations}
                     hasSelectionOpacity={0.2}
                     selectionColor=""
                   />

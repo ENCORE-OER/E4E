@@ -59,95 +59,36 @@ const Discover = (props: DiscoverPageProps) => {
 
         //case 1 - only one skill
         if (!isArray) {
-            alert("solo una skill da cercare");
             const oers = await api.searhOERbySkillNoPages(
                 [skills],
-                // domainIds ?? selectedDomain,
-                // selectedSubject,
-                // resourceTypeIds ?? selectedResourceTypes,
-                // selectedAudience
             );
             setRespSearchOers(oers);
         }
 
         //case 2 - more than one skill we check if all skills must be used or at least one
-
         else if (andOption === "true") {
-            alert("molte skills da cercare in AND");
-            const oers = await api.searhOERbySkillNoPages(
-                [skills],
-                // domainIds ?? selectedDomain,
-                // selectedSubject,
-                // resourceTypeIds ?? selectedResourceTypes,
-                // selectedAudience
+            const oers = await api.getOersInAND(
+                skills,
             );
             setRespSearchOers(oers);
-
         }
-
         else if (orOption === "true") {
-            alert("molte skills da cercare in OR");
-            const oers = await api.searhOERbySkillNoPages(
-                [skills],
-                // domainIds ?? selectedDomain,
-                // selectedSubject,
-                // resourceTypeIds ?? selectedResourceTypes,
-                // selectedAudience
+            const oers = await api.getOersInOR(
+                skills,
             );
             setRespSearchOers(oers);
         }
         else if ((orOption === "false") && (andOption === "false")) {
-            alert("molte skills con caso default - OR");
-            const oers = await api.searhOERbySkillNoPages(
-                [skills],
-                // domainIds ?? selectedDomain,
-                // selectedSubject,
-                // resourceTypeIds ?? selectedResourceTypes,
-                // selectedAudience
+            const oers = await api.getOersInOR(
+                skills,
             );
             setRespSearchOers(oers);
 
         }
+        else {
+            console.log("case not managed");
+        }
 
-        /*
-                else if ([skills].length == 0) {
-                    alert("SKILLS NON INSERITA");
-        
-                    const oers = await api.getOERs();
-        
-                    const oersSkillsLabel = oers?.flatMap((oer: any) => {
-                        if (oer.skills?.length > 0) {
-                            return oer.skills?.map((skill: any) => ({
-                                id_oer: oer.id,
-                                skillLabel: skill.label,
-                            }));
-                        } else {
-                            return {
-                                id_oer: oer.id,
-                                skillLabel: '',
-                            };
-                        }
-                    });
-        
-                    const labels = oersSkillsLabel?.map((element: any) => element.skillLabel);
-                    console.log('labels: ' + labels);
-        
-                    const filteredOers = oersSkillsLabel.filter((oer: any) =>
-                        searchValue.includes(oer.skillLabel)
-                    );
-                    const formattedOers = filteredOers.map((oer: any) => ({
-                        id_oer: oer.id_oer,
-                        skillLabel: oer.skillLabel,
-                    }));
-        
-        
-                    setDataSearching(
-                        filteredOers.map((oer) => oers.find((item) => item.id === oer.id_oer))
-                    );
-                    alert("OER TROVATE: " + oers.length);
-        
-                } else alert('Write Something!');
-        */
         setIsLoading(false);
     };
 

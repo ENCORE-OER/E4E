@@ -48,13 +48,6 @@ const getConfig = (oers: EncoreOer[], domains: String[], searchCallBack: (domain
 
   const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
-  /* const baseSets = [
-     { name: 'DIGITAL', elems: digitalIdsoers, domainId: "Digital" },
-     { name: 'GREEN', elems: digitalIdsoers, domainId: "Green" },
-     { name: 'ENTERPRENEURIAL', elems: digitalIdsoers, domainId: "Enterpreneurial" },
-   ];
- 
- */
 
   const config: CustomTabConfigProps = [
     {
