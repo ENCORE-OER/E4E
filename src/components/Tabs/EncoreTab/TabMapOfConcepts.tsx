@@ -1,5 +1,5 @@
 import { CircularProgress, Flex, Stack, Text } from '@chakra-ui/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -17,6 +17,7 @@ import { ReactFlowConceptNode } from '../../ReactFlowNode';
 
 import ELK from 'elkjs';
 import { v4 } from 'uuid';
+import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 
 export type TabMapOfConceptsProps = {
@@ -45,7 +46,7 @@ export type TabMapOfConceptsProps = {
 // ];
 
 export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
-  const { oers } = props;
+  // const { oers } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();
   const API = useMemo(() => new APIV2(undefined), []);
@@ -57,7 +58,7 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
 
   const onConnect = useCallback((params: any) => setEdges((els) => addEdge(params, els)), []);
 
@@ -68,20 +69,22 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
     in this case API and selected_oers
   */
   useEffect(() => {
-    if (!oers) return;
+    if (!filtered) return;
 
     (async () => {
       setLoading(true);
       try {
 
         const oers_ids: any[] = [];
-        oers?.forEach(oer => oers_ids.push(oer.id));
+        filtered?.forEach((oer: { id: any; }) => oers_ids.push(oer.id));
 
-        const resp = await API.getConceptMapOersAI(oers_ids);
+        const respAI = await API.getConceptMapOersNLP(oers_ids);
 
-        const { nodes, edges } = resp.data;
+
+        const { nodes, edges } = respAI.data;
 
         const elk = new ELK();
+
 
         // you can change algorithm: view https://www.eclipse.org/elk/reference/algorithms.html
         const graph = {
@@ -102,8 +105,8 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
           })),
         };
 
-        console.log("nodes: " + JSON.stringify(resp.data.nodes));
-        console.log("edges:" + JSON.stringify(resp.data.edges));
+        console.log("nodes AI: " + JSON.stringify(respAI.data.nodes));
+        console.log("edges AI :" + JSON.stringify(respAI.data.edges));
 
         const elkGraph = await elk.layout(graph);
         if (elkGraph.edges) {
@@ -142,7 +145,7 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
         alert("ERRORE ESTRAZIONE CONCETTI:" + err);
       }
     })();
-  }, [API, oers, setEdges, setNodes]);
+  }, [API, filtered, setEdges, setNodes]);
 
 
 
@@ -160,6 +163,7 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
           concept indicate the number of resources addressing that concept.
         </Text>
       </Stack>
+
 
 
       <ReactFlowProvider>
@@ -190,5 +194,6 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
         </Flex>
       </ReactFlowProvider>
     </>
+
   );
 };

@@ -68,26 +68,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
     setAddCollectionModalOpen(false);
   };
 
-  /*useEffect(() => {
-    try {
-      const domain = oer.skills?.flatMap((skill: any) =>
-        skill.domain?.map((item: any) => item.name)
-      );
-      console.log(domain);
-      setDomainOer(domain);
-      if (domain?.includes(digital)) {
-        setShowTagDigital(true);
-      }
-      if (domain?.includes(entr)) {
-        setShowTagEntrepreneurial(true);
-      }
-      if (domain?.includes(green)) {
-        setShowTagGreen(true);
-      }
-    } catch (error) {
-      throw error;
-    }
-  }, [domainOer]);*/
 
   useEffect(() => {
     try {
@@ -107,17 +87,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         setShowTagGreen(true);
       }
 
-      /*for (let i = 0; i < domain?.length; i++) {
-        if (domain[i] === digital) {
-          setShowTagDigital(true);
-        } else if (domain[i] === entr) {
-          setShowTagEntrepreneurial(true);
-        } else if (domain[i] === green) {
-          setShowTagGreen(true);
-        }
-      }*/
-
-      console.log('/////////////////////////////');
 
       const temp_auth = oer.creator?.map(
         (creator_name: any) => creator_name.full_name
@@ -135,6 +104,10 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
       setPublishers(oer.publisher?.map((item: any) => item.name) || []);
       setContributors(oer.contributor?.map((item: any) => item.name) || []);
+
+      console.log(JSON.stringify(oer));
+
+
 
       console.log(authors);
       console.log(linkOer);

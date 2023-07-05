@@ -9,6 +9,8 @@ import { TabTypesOfResources } from './TabTypesOfResources';
 
 
 // TODO: find correct icon
+import { useContext } from 'react';
+import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
 import { EncoreOer } from '../../../types/encore';
@@ -17,6 +19,7 @@ import { TabDomains } from './TabDomains';
 export type EncoreTabProps = {
   oers: EncoreOer[]; domains: String[];
   searchCallBack: (domainIds: any[]) => Promise<void>;
+  setOERs: any;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {
@@ -26,8 +29,14 @@ export type EncoreTabLabelProps = {
 };
 
 export const EncoreTab = (props: EncoreTabProps) => {
-  const { oers, domains, searchCallBack, ...other } = props;
-  const config = getConfig(oers, domains, searchCallBack);
+  const { oers, domains, searchCallBack, setOERs, ...other } = props;
+  const config = getConfig(oers, setOERs, domains, searchCallBack);
+
+  // context elements OERs
+  // application context that includes the 
+
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
 
   return (
     <CustomTab
@@ -44,9 +53,9 @@ export const EncoreTab = (props: EncoreTabProps) => {
   );
 };
 
-const getConfig = (oers: EncoreOer[], domains: String[], searchCallBack: (domainIds: String[]) => Promise<void>) => {
+const getConfig = (oers: EncoreOer[], setOERs: any, domains: String[], searchCallBack: (domainIds: String[]) => Promise<void>) => {
 
-  const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
+  // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
 
   const config: CustomTabConfigProps = [
@@ -78,9 +87,10 @@ const getConfig = (oers: EncoreOer[], domains: String[], searchCallBack: (domain
           name=" Types of Resources"
         />
       ),
-      child: <TabTypesOfResources oers={oers} searchCallBack={
-        searchCallBack
-      } />,
+      child:
+        <TabTypesOfResources oers={oers} setOERs={
+          setOERs
+        } />,
       pt: '3%',
     },
   ];
@@ -91,6 +101,7 @@ const getConfig = (oers: EncoreOer[], domains: String[], searchCallBack: (domain
 const EncoreTabLabel = (props: EncoreTabLabelProps) => {
   const { name, spacing, iconSrc } = props;
   return (
+
     <Flex gap={spacing} justifyContent="center" alignItems="center">
       <Image src={iconSrc} alt={name} w={30} />
       <Text>{name}</Text>

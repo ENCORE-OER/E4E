@@ -213,13 +213,9 @@ async getSkillsByTextWithPages(page = 1, skill_text: string, allSkills: any[] = 
 }
 
 
-//api to retrieve the graph of concepts using generative AI 
-// starting from the OERs_ID
-
-async getConceptMapOersAI(
+async getConceptMapOersNLP(
   oers_ids: any[]
 ): Promise<AxiosResponse<EncoreConceptMap>> {
-  alert("OERs ID per API GPT:"+JSON.stringify(oers_ids));
   return this.axios.post(
     `${process.env.POLYGLOT_URL}/api/concepts/genGraphOers`,
     {
@@ -227,6 +223,7 @@ async getConceptMapOersAI(
     }
   );
 }
+
 
 
   async getConceptMapOers(

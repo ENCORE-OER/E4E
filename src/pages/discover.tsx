@@ -23,13 +23,13 @@ type DiscoverPageProps = {
     accessToken: string | undefined;
 };
 
+import { DiscoveryContext } from '../Contexts/discoveryContext';
+
 
 
 const Discover = (props: DiscoverPageProps) => {
-    const [searchValue, setSearchValue] = useState<string[]>([]);
-    const [suggestions, setSuggestions] = useState<string[]>([]);
-    const [page, setPage] = useState(true);
-    const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
+
+    // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
     const [oerById, setOerById] = useState<any[]>([]);
 
     const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
@@ -42,14 +42,15 @@ const Discover = (props: DiscoverPageProps) => {
 
 
 
+    const [filtered, setFiltered] = useState<any>([]);
+    const [byResourceType, setByResourceType] = useState<any>(null);
+
+
+
 
     const searchOERs = async (skills: String | String[], andOption: String, orOption: String, domainIds?: String[], resourceTypeIds?: String[]) => {
         //here we search the OERS using the query parameters
 
-        alert(JSON.stringify(skills));
-        alert("and option prima della query: " + andOption);
-        alert("or option prima della query: " + orOption);
-        alert(skills.length);
 
         const isArray = Array.isArray(skills);
 
@@ -62,7 +63,9 @@ const Discover = (props: DiscoverPageProps) => {
             const oers = await api.searhOERbySkillNoPages(
                 [skills],
             );
-            setRespSearchOers(oers);
+            //setRespSearchOers(oers);
+            setFiltered(oers);
+
         }
 
         //case 2 - more than one skill we check if all skills must be used or at least one
@@ -70,30 +73,34 @@ const Discover = (props: DiscoverPageProps) => {
             const oers = await api.getOersInAND(
                 skills,
             );
-            setRespSearchOers(oers);
+            // setRespSearchOers(oers);
+            setFiltered(oers);
         }
         else if (orOption === "true") {
             const oers = await api.getOersInOR(
                 skills,
             );
-            setRespSearchOers(oers);
+            //setRespSearchOers(oers);
+            setFiltered(oers);
         }
         else if ((orOption === "false") && (andOption === "false")) {
             const oers = await api.getOersInOR(
                 skills,
             );
-            setRespSearchOers(oers);
+            // setRespSearchOers(oers);
+            setFiltered(oers);
 
         }
         else {
             console.log("case not managed");
         }
 
+
         setIsLoading(false);
     };
 
     const searchCallback = async (domainIds: any[]) => {
-
+        alert("qui call back");
     };
 
 
@@ -146,13 +153,9 @@ const Discover = (props: DiscoverPageProps) => {
 
 
 
-
-
-
-
                             <HStack mb="5">
                                 <Text fontWeight="light" color="grey">
-                                    {`${respSearchOers.length} resources`}
+                                    {`${filtered?.length} resources`}
                                 </Text>
                             </HStack>
 
@@ -164,9 +167,9 @@ const Discover = (props: DiscoverPageProps) => {
                             )
                             }
 
-                            {respSearchOers && (
+                            {filtered && (
                                 <VStack>
-                                    {respSearchOers?.map((oer: any) => (
+                                    {filtered?.map((oer: any) => (
                                         <Box
                                             key={oer.id}
                                             onClick={async (e: any) => {
@@ -203,25 +206,27 @@ const Discover = (props: DiscoverPageProps) => {
                         <DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />
 
 
-
-                        <EncoreTab
-                            oers={respSearchOers}
-                            domains={domain}
-                            searchCallBack={searchCallback}
-                            flex="1" // "flex='1'" fill the rest of the page
-                            py="30px"
-                            px="30px"
-                            w="full"
-                            h="full"
-                            backgroundColor="background"
-                            borderLeft="0.5px"
-                            borderLeftColor={'secondary'}
-                            borderLeftStyle={'solid'}
-                        />
+                        <DiscoveryContext.Provider value={{ filtered, setFiltered, byResourceType, setByResourceType }}>
+                            <EncoreTab
+                                oers={filtered}
+                                setOERs={setFiltered}
+                                domains={domain}
+                                searchCallBack={searchCallback}
+                                flex="1" // "flex='1'" fill the rest of the page
+                                py="30px"
+                                px="30px"
+                                w="full"
+                                h="full"
+                                backgroundColor="background"
+                                borderLeft="0.5px"
+                                borderLeftColor={'secondary'}
+                                borderLeftStyle={'solid'}
+                            />
+                        </DiscoveryContext.Provider>
                     </Flex>
                 )}
             </>
-        </Flex>
+        </Flex >
     );
 };
 

@@ -1,6 +1,7 @@
 import { Stack, Text } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { EncoreOer } from '../../../types/encore';
 import { useHasHydrated } from '../../../utils/utils';
 export type TabDomainsProps = {
@@ -19,13 +20,15 @@ const baseSets = [
 ];
 
 
+
 export const TabDomains = (props: TabDomainsProps) => {
   const hydrated = useHasHydrated();
   // const { oers, domains, searchCallBack } = props;
-  const { oers } = props;
+  //const { oers } = props;
   //  const API = useMemo(() => new APIV2(undefined), []);
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
 
-  console.log(oers?.length);
+  //console.log(oers?.length);
 
   // here I filter the Oers and I should add these as new elments in the static
 
@@ -40,7 +43,7 @@ export const TabDomains = (props: TabDomainsProps) => {
   /**
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
-  oers?.forEach(oer => oer.skills.forEach((skill: { domain: any[]; }) => {
+  filtered?.forEach((oer: { skills: { domain: any[]; }[]; id: string; }) => oer.skills.forEach((skill: { domain: any[]; }) => {
     skill.domain.forEach((domain) => {
       if (!filteredOers[domain.name]) filteredOers[domain.name] = { name: domain.name?.toUpperCase(), elems: [], domainId: domain.name };
       filteredOers[domain.name].elems.push(oer.id + "");
@@ -87,14 +90,25 @@ export const TabDomains = (props: TabDomainsProps) => {
 
 
   const onClickDiagram = async (selection: any) => {
-    alert("SELEZIONe: " + selection.sets);
+
+    const Oers: any[] = [];
     if (!selection) return;
     const domainIds = [...selection.sets].map((set) => set.domainId);
-    alert(domainIds);
-    alert("quante OERS: " + filteredOers?.length);
-    //
+
+
+    /*?? check here
+    filtered?.forEach((oer: { skills: { domain: any[]; }[]; id: string; }) => oer.skills.forEach((skill: { domain: any[]; }) => {
+      skill.domain.forEach((domain) => {
+        if (!filteredOers[domain.name]) filteredOers[domain.name] = { name: domain.name?.toUpperCase(), elems: [], domainId: domain.name };
+        Oers.push(oer);
+      })
+    }));
+*/
+
 
   }
+
+
 
 
   return (

@@ -11,11 +11,9 @@ import {
   Title,
   Tooltip
 } from 'chart.js';
+import { useContext, useState } from 'react';
 
-import { useMemo, useState } from 'react';
 import { Bubble } from 'react-chartjs-2';
-import { APIV2 } from '../../../data/api';
-import { EncoreConceptMap } from '../../../types/encore';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,26 +25,38 @@ ChartJS.register(
 )
 
 
+import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+
+import { FaSync } from 'react-icons/fa';
+
+
+
 export type TabTypesOfResourcesProps = {
   oers?: any[];
-  searchCallBack: (domainIds: String[]) => Promise<void>;
+  setOERs: any;
 };
 
 
 export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
 
 
-  const { oers, searchCallBack } = props;
-
-  const [graph, setGraph] = useState<EncoreConceptMap | null>();
-  const API = useMemo(() => new APIV2(undefined), []);
 
 
+  // const { oers, setOERs } = props;
+
+  // const [graph, setGraph] = useState<EncoreConceptMap | null>();
+  //const API = useMemo(() => new APIV2(undefined), []);
+
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
+
+  const [previousContent, setPreviousContent] = useState('');
+  const [isActiveRefresh, setIsActiveRefresh] = useState(false);
+  const [isActiveBubble, setIsActiveBubble] = useState(false);
   const resourceTypes: any[] = [];
 
-
   //retrieve resourse types
-  oers?.forEach(oer => oer.media_type.map((item: any) => resourceTypes.push(item.name)));
+  filtered?.forEach((oer: { media_type: any[]; }) => oer.media_type?.map((item: any) => resourceTypes.push(item.name)));
 
 
   const transformedObject = resourceTypes.reduce((result, element) => {
@@ -66,11 +76,32 @@ export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
 
 
 
-  const onClickDiagram = async (selection: any) => {
-    if (!selection) return;
-    const domainIds = [...selection.sets].map((set) => set.domainId);
-    await searchCallBack(domainIds);
-  }
+  const handleReloadClick = () => {
+    setIsActiveRefresh(false);
+    setIsActiveBubble(false);
+    setFiltered(previousContent);
+  };
+
+
+  const onClickBubble = (event: any, elements: any) => {
+    setIsActiveRefresh(true);
+    setIsActiveBubble(true);
+    const resources: any[] = [];
+    setPreviousContent(filtered);
+    if (elements.length > 0) {
+      const item = chartData.datasets[elements[0].datasetIndex].data[elements[0].index];
+      const type = item.type
+      // here we filter the selected OERs by type
+      filtered?.forEach((oer: { media_type: any[]; }) => oer.media_type?.map((item: any) => {
+        if (item.name === type) {
+          resources.push(oer);
+        }
+      }));
+
+    }
+    setFiltered(resources);
+
+  };
 
 
   const getRandomColor = () => {
@@ -90,7 +121,7 @@ export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
   // Create an array of datasets
   const datasets = newData.map((item) => ({
     label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
-    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size, type: item.name }],
+    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size < 3 ? item.size * 8 : item.size, type: item.name }],
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
@@ -114,27 +145,28 @@ export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
     },
     plugins: {
       legend: {
-        position: 'right',
+        position: 'left',
         align: 'center',
-
+        labels: {
+          usePointStyle: true,
+          padding: 5, // Adjust the padding value to increase or decrease the space
+        },
       },
       tooltip: {
+
         callbacks: {
           label: (context: any) => {
             const item = context.dataset.data[context.dataIndex] as ExtendedBubbleDataPoint;
-            return `${item.type} - ${item.r}`;
+            return `${item.type}`;
           },
         },
       },
 
     },
+    onClick: isActiveBubble ? undefined : onClickBubble,
 
   };
 
-
-  const chartContainerStyle = {
-    marginBottom: '120px', // Add desired spacing value
-  };
 
 
   return (
@@ -146,12 +178,16 @@ export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
         </Text>
 
       </Stack>
+      <button onClick={handleReloadClick} disabled={!isActiveRefresh}>
+        <FaSync />
+        Refresh
+      </button>
 
+      <Stack spacing={0}>
 
-      <Bubble data={chartData} options={chartOptions} />
+        <Bubble data={chartData} options={chartOptions} />
 
-
-
+      </Stack>
     </>
   );
 };
