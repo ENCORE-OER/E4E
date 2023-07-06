@@ -24,7 +24,6 @@ type AddCollectionModalProps = {
 };
 
 export default function AddCollectionModal({
-  isOpen,
   onClose,
   oerToSave,
 }: AddCollectionModalProps) {
@@ -33,7 +32,7 @@ export default function AddCollectionModal({
   //const [idCollection, setIdCollection] = useState<any>(0);
   const { addCollection, addResource, collections } = useCollectionsContext();
   const [isNewCollection, setIsNewCollection] = useState<boolean>(false);
-console.log(isNewCollection);
+  console.log(isNewCollection);
 
   const newOer = {
     idOer: oerToSave?.id,

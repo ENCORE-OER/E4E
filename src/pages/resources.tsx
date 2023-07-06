@@ -21,7 +21,7 @@ import SideBar from '../components/SideBar/SideBar';
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
-import { LuFolderPlus } from 'react-icons/Lu';
+import { LuFolderPlus } from 'react-icons/lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
 import SingleResourceCard from '../components/Card/SingleResourceCard';
 import AddCollectionModal from '../components/Modals/AddCollectionModal';

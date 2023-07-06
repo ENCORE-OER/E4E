@@ -31,13 +31,10 @@ import { FaSync } from 'react-icons/fa';
 
 
 
-export type TabTypesOfResourcesProps = {
-  oers?: any[];
-  setOERs: any;
-};
+export type TabTypesOfResourcesProps = {};
 
 
-export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
 
 
 
@@ -48,7 +45,7 @@ export const TabTypesOfResources = (props: TabTypesOfResourcesProps) => {
   //const API = useMemo(() => new APIV2(undefined), []);
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
+  // const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
 
   const [previousContent, setPreviousContent] = useState('');
   const [isActiveRefresh, setIsActiveRefresh] = useState(false);

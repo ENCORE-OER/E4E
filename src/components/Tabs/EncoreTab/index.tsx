@@ -9,15 +9,14 @@ import { TabTypesOfResources } from './TabTypesOfResources';
 
 
 // TODO: find correct icon
-import { useContext } from 'react';
-import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
 import { EncoreOer } from '../../../types/encore';
 import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
-  oers: EncoreOer[]; domains: String[];
+  oers: EncoreOer[];
+  domains: string[];
   searchCallBack: (domainIds: any[]) => Promise<void>;
   setOERs: any;
 } & CustomTabStyleProps;
@@ -29,14 +28,13 @@ export type EncoreTabLabelProps = {
 };
 
 export const EncoreTab = (props: EncoreTabProps) => {
-  const { oers, domains, searchCallBack, setOERs, ...other } = props;
-  const config = getConfig(oers, setOERs, domains, searchCallBack);
+  const { ...other } = props;
+  const config = getConfig();
 
   // context elements OERs
   // application context that includes the 
 
-  const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
+  // const { filtered, byResourceType, setFiltered, setByResourceType } = useContext(DiscoveryContext);
 
   return (
     <CustomTab
@@ -53,10 +51,9 @@ export const EncoreTab = (props: EncoreTabProps) => {
   );
 };
 
-const getConfig = (oers: EncoreOer[], setOERs: any, domains: String[], searchCallBack: (domainIds: String[]) => Promise<void>) => {
+const getConfig = () => {
 
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
-
 
   const config: CustomTabConfigProps = [
     {
@@ -65,7 +62,7 @@ const getConfig = (oers: EncoreOer[], setOERs: any, domains: String[], searchCal
           iconSrc={typeResIcon.src}
           spacing={2} name="Domain" />
       ),
-      child: <TabDomains oers={oers} />,
+      child: <TabDomains />,
       pt: '3%',
     },
     {
@@ -76,7 +73,7 @@ const getConfig = (oers: EncoreOer[], setOERs: any, domains: String[], searchCal
           name="Map Of Concepts"
         />
       ),
-      child: <TabMapOfConcepts oers={oers} />,
+      child: <TabMapOfConcepts />,
       pt: '3%',
     },
     {
@@ -88,9 +85,7 @@ const getConfig = (oers: EncoreOer[], setOERs: any, domains: String[], searchCal
         />
       ),
       child:
-        <TabTypesOfResources oers={oers} setOERs={
-          setOERs
-        } />,
+        <TabTypesOfResources />,
       pt: '3%',
     },
   ];
