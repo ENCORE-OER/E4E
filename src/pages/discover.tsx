@@ -32,8 +32,7 @@ const Discover = (props: DiscoverPageProps) => {
     // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
     const [oerById, setOerById] = useState<any[]>([]);
 
-    const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
-    const [dataSearching, setDataSearching] = useState<any[]>([]); // save the data found from searching
+    const [domain] = useState<any[]>([]); // to save each type of domain of the resources
 
     const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
     const { user } = useUser();
@@ -48,7 +47,8 @@ const Discover = (props: DiscoverPageProps) => {
 
 
 
-    const searchOERs = async (skills: String | String[], andOption: String, orOption: String, domainIds?: String[], resourceTypeIds?: String[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const searchOERs = async (skills: string | string[], andOption: string, orOption: string, domainIds?: string[], resourceTypeIds?: string[]) => {
         //here we search the OERS using the query parameters
 
 
@@ -99,6 +99,7 @@ const Discover = (props: DiscoverPageProps) => {
         setIsLoading(false);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const searchCallback = async (domainIds: any[]) => {
         alert("qui call back");
     };
@@ -121,9 +122,9 @@ const Discover = (props: DiscoverPageProps) => {
 
     useEffect(() => {
         if (router.query.skills != undefined) {
-            let skills = router.query.skills as String[];
-            let andOption = router.query.andOption as String;
-            let orOption = router.query.orOption as String;
+            const skills = router.query.skills as string[];
+            const andOption = router.query.andOption as string;
+            const orOption = router.query.orOption as string;
             setIsLoading(true);
 
             searchOERs(skills, andOption, orOption);
