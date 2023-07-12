@@ -1,4 +1,3 @@
-import { useTheme } from '@fluentui/react';
 import { Handle, Position } from 'reactflow';
 import { ConceptNode } from '../../../types/encore';
 import Card from '../../Card/Card';
@@ -8,16 +7,14 @@ type ReactFlowConceptNodeProps = ReactFlowNodeProps & ConceptNode;
 
 const ReactFlowConceptNode = ({ data }: ReactFlowConceptNodeProps) => {
 
-  const theme = useTheme();
-
   const { label, numOfResources } = data;
 
   return (
     <Card
       className="Card-react-flow"
       style={{
-        borderColor: theme.palette.yellowDark,
-        background: `${theme.palette.orangeLight}08`,
+        borderColor: "yellow",
+        background: `lightYellow`,
       }}
     >
       {label}

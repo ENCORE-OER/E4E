@@ -1,13 +1,9 @@
 import { Stack, Text } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
-import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
-import { EncoreOer } from '../../../types/encore';
 import { useHasHydrated } from '../../../utils/utils';
 export type TabDomainsProps = {
-  oers?: EncoreOer[];
-  // domains: String[];
-  // searchCallBack: (domainIds: string[]) => Promise<void>;
 };
 
 
@@ -21,12 +17,12 @@ const baseSets = [
 
 
 
-export const TabDomains = (props: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const hydrated = useHasHydrated();
   // const { oers, domains, searchCallBack } = props;
   //const { oers } = props;
   //  const API = useMemo(() => new APIV2(undefined), []);
-  const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const { filtered } = useContext(DiscoveryContext);
 
   //console.log(oers?.length);
 
@@ -59,23 +55,23 @@ export const TabDomains = (props: TabDomainsProps) => {
 
 
   const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
-  const [value, setValue] = useState(3);
-  const changeValue = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(e.target.valueAsNumber);
-    },
-    [setValue]
-  );
-  const select = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSelection(
-        Array.from(e.target.closest('div')?.querySelectorAll<HTMLInputElement>('input:checked') ?? []).map(
-          (d) => d.valueAsNumber
-        )
-      );
-    },
-    [setSelection]
-  );
+  // const [value, setValue] = useState(3);
+  // const changeValue = useCallback(
+  //   (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     setValue(e.target.valueAsNumber);
+  //   },
+  //   [setValue]
+  // );
+  // const select = useCallback(
+  //   (e: React.ChangeEvent<HTMLInputElement>) => {
+  //     setSelection(
+  //       Array.from(e.target.closest('div')?.querySelectorAll<HTMLInputElement>('input:checked') ?? []).map(
+  //         (d) => d.valueAsNumber
+  //       )
+  //     );
+  //   },
+  //   [setSelection]
+  // );
 
   // Probably this is the problem
   const sets = useMemo(() => {
@@ -90,10 +86,9 @@ export const TabDomains = (props: TabDomainsProps) => {
 
 
   const onClickDiagram = async (selection: any) => {
-
-    const Oers: any[] = [];
     if (!selection) return;
-    const domainIds = [...selection.sets].map((set) => set.domainId);
+    // const Oers: any[] = [];
+    // const domainIds = [...selection.sets].map((set) => set.domainId);
 
 
     /*?? check here

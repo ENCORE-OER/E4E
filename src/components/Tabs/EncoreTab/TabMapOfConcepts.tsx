@@ -11,7 +11,6 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { APIV2 } from '../../../data/api';
-import { EncoreOer } from '../../../types/encore';
 import { ReactFlowFloatingEdge } from '../../ReactFlowEdge';
 import { ReactFlowConceptNode } from '../../ReactFlowNode';
 
@@ -20,9 +19,7 @@ import { v4 } from 'uuid';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 
-export type TabMapOfConceptsProps = {
-  oers?: EncoreOer[];
-};
+export type TabMapOfConceptsProps = {};
 
 // const initialNodes = [
 //   {
@@ -45,7 +42,7 @@ export type TabMapOfConceptsProps = {
 //   { id: 'e1-3', source: '1', target: '3' },
 // ];
 
-export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   // const { oers } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();
@@ -58,7 +55,7 @@ export const TabMapOfConcepts = (props: TabMapOfConceptsProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const { filtered } = useContext(DiscoveryContext);
 
   const onConnect = useCallback((params: any) => setEdges((els) => addEdge(params, els)), []);
 

@@ -6,7 +6,6 @@ import '../styles/globals.css';
 
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { ChakraProvider } from '@chakra-ui/react';
-import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { CollectionsProvider } from '../components/CollectionsContext/CollectionsContext';
@@ -35,8 +34,6 @@ export default function App({ Component, pageProps }: AppProps) {
     </UserProvider>
   );
 }
-
-initializeIcons();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

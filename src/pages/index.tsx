@@ -6,7 +6,6 @@ import {
   HStack,
   Text,
   Tooltip,
-  useDisclosure,
   VStack
 } from '@chakra-ui/react';
 
@@ -14,7 +13,7 @@ import Image from 'next/image';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { asSets, ISetLike, VennDiagram } from '@upsetjs/react';
+import { asSets, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
@@ -49,11 +48,11 @@ const Home = (props: DiscoverPageProps) => {
   //let searchValue: string[] = [];
   const [suggestions, setSuggestions] = useState<string[]>([]);
   //const suggestions: string[] = [];
-  const [page, setPage] = useState(true);
+  const [page] = useState(true);
   //  const [dataSkills, setDataSkills] = useState<any[]>([]);
   //const [dataOers, setDataOers] = useState<any[]>([]);
-  const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
-  const [oerById, setOerById] = useState<any[]>([]);
+  const [respSearchOers] = useState<any[]>([]);
+  const [oerById] = useState<any[]>([]);
   const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);
 
   const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
@@ -70,18 +69,13 @@ const Home = (props: DiscoverPageProps) => {
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');
   const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
-  const [dataSearching, setDataSearching] = useState<any[]>([]); // save the data found from searching
+  const [dataSearching] = useState<any[]>([]); // save the data found from searching
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
 
   const [checkboxAll, setCheckboxAll] = useState(false);
   const [checkboxOr, setCheckboxOr] = useState(false);
-
-
-  const api = new APIV2(props.accessToken);
 
   // retrieve all the OERs and create the 3 sets divided for Green, Digital and Ent
 
@@ -92,15 +86,15 @@ const Home = (props: DiscoverPageProps) => {
   }, []);
   //  const combinations = useMemo(() => ({ mergeColors }), []);
 
-  const combinations: { sets: string[]; size: number }[] = [
-    { sets: ['DIGITAL'], size: 163 },
-    { sets: ['GREEN'], size: 1220 },
-    { sets: ['ENTREPRENEURSHIP'], size: 280 },
-    { sets: ['DIGITAL', 'GREEN'], size: 254 },
-    { sets: ['GREEN', 'ENTREPRENEURSHIP'], size: 452 },
-    { sets: ['DIGITAL', 'ENTREPRENEURSHIP'], size: 4567 },
-    { sets: ['DIGITAL', 'GREEN', 'ENTREPRENEURSHIP'], size: 97585 },
-  ];
+  // const combinations: { sets: string[]; size: number }[] = [
+  //   { sets: ['DIGITAL'], size: 163 },
+  //   { sets: ['GREEN'], size: 1220 },
+  //   { sets: ['ENTREPRENEURSHIP'], size: 280 },
+  //   { sets: ['DIGITAL', 'GREEN'], size: 254 },
+  //   { sets: ['GREEN', 'ENTREPRENEURSHIP'], size: 452 },
+  //   { sets: ['DIGITAL', 'ENTREPRENEURSHIP'], size: 4567 },
+  //   { sets: ['DIGITAL', 'GREEN', 'ENTREPRENEURSHIP'], size: 97585 },
+  // ];
 
 
 
@@ -135,113 +129,113 @@ const Home = (props: DiscoverPageProps) => {
   };
 
 
-  const searchCallback = async (domainIds: String[], resourceTypeIds?: String[]) => {
-    const api = new APIV2(props.accessToken);
+  // const searchCallback = async (domainIds: string[], resourceTypeIds?: string[]) => {
+  //   const api = new APIV2(props.accessToken);
 
 
 
 
 
-    if (searchValue.length >= 0) {
-      const oers = await api.searchOers(
-        selectedSkillIds,
-        domainIds ?? selectedDomain,
-        selectedSubject,
-        resourceTypeIds ?? selectedResourceTypes,
-        selectedAudience
-      );
+  //   if (searchValue.length >= 0) {
+  //     const oers = await api.searchOers(
+  //       selectedSkillIds,
+  //       domainIds ?? selectedDomain,
+  //       selectedSubject,
+  //       resourceTypeIds ?? selectedResourceTypes,
+  //       selectedAudience
+  //     );
 
-      // console.log(oers);
-      setRespSearchOers(oers);
-      setPage(false);
-    } else if (searchValue.length < 0) {
+  //     // console.log(oers);
+  //     setRespSearchOers(oers);
+  //     setPage(false);
+  //   } else if (searchValue.length < 0) {
 
-      const oers = await api.getOERs();
-      //console.log(oers);
+  //     const oers = await api.getOERs();
+  //     //console.log(oers);
 
-      //setDataOers(oers);
+  //     //setDataOers(oers);
 
-      /*const oersSkills = oers.map((oer: any) => oer.skills);
-      console.log(oersSkills);
-      // -------------- LABEL --------------
-      const oersSkillsLabel = oersSkills?.flatMap(
-        (skills: any, index: number) =>
-          // use of [] to store more labels for the same id_oer in the same array
-          skills.length > 0
-            ? skills.map((skill: any) => ({
-                id_oer: oers[index].id,
-                skillLabel: skill.label,
-              }))
-            : {
-                id_oer: oers[index].id,
-                skillLabel: '',
-              }
-      );*/
+  //     /*const oersSkills = oers.map((oer: any) => oer.skills);
+  //     console.log(oersSkills);
+  //     // -------------- LABEL --------------
+  //     const oersSkillsLabel = oersSkills?.flatMap(
+  //       (skills: any, index: number) =>
+  //         // use of [] to store more labels for the same id_oer in the same array
+  //         skills.length > 0
+  //           ? skills.map((skill: any) => ({
+  //               id_oer: oers[index].id,
+  //               skillLabel: skill.label,
+  //             }))
+  //           : {
+  //               id_oer: oers[index].id,
+  //               skillLabel: '',
+  //             }
+  //     );*/
 
-      const oersSkillsLabel = oers?.flatMap((oer: any) => {
-        if (oer.skills?.length > 0) {
-          return oer.skills?.map((skill: any) => ({
-            id_oer: oer.id,
-            skillLabel: skill.label,
-          }));
-        } else {
-          return {
-            id_oer: oer.id,
-            skillLabel: '',
-          };
-        }
-      });
+  //     const oersSkillsLabel = oers?.flatMap((oer: any) => {
+  //       if (oer.skills?.length > 0) {
+  //         return oer.skills?.map((skill: any) => ({
+  //           id_oer: oer.id,
+  //           skillLabel: skill.label,
+  //         }));
+  //       } else {
+  //         return {
+  //           id_oer: oer.id,
+  //           skillLabel: '',
+  //         };
+  //       }
+  //     });
 
-      //stampo tutte le etichette delle skill delle oers
-      const labels = oersSkillsLabel?.map((element: any) => element.skillLabel);
-      console.log('labels: ' + labels);
+  //     //stampo tutte le etichette delle skill delle oers
+  //     const labels = oersSkillsLabel?.map((element: any) => element.skillLabel);
+  //     console.log('labels: ' + labels);
 
-      // searching alhorithm
+  //     // searching alhorithm
 
-      /*searchValue.map((item: any) => {
-        console.log(item);
-        const res = labels.includes(item);
-        console.log(res);
-        if (res) {
-          oersSkillsLabel.map((element: any) => {
-            if (element.skillLabel === item) {
-              setDataSearching((prev: any) => {
-                const updateData = prev.filter(
-                  (value: any) => value !== element.id_oer
-                );
-                return [...updateData, element.id_oer];
-              });
-            }
-          });
-        }
-      });*/
+  //     /*searchValue.map((item: any) => {
+  //       console.log(item);
+  //       const res = labels.includes(item);
+  //       console.log(res);
+  //       if (res) {
+  //         oersSkillsLabel.map((element: any) => {
+  //           if (element.skillLabel === item) {
+  //             setDataSearching((prev: any) => {
+  //               const updateData = prev.filter(
+  //                 (value: any) => value !== element.id_oer
+  //               );
+  //               return [...updateData, element.id_oer];
+  //             });
+  //           }
+  //         });
+  //       }
+  //     });*/
 
-      const filteredOers = oersSkillsLabel.filter((oer: any) =>
-        searchValue.includes(oer.skillLabel)
-      );
-      const formattedOers = filteredOers.map((oer: any) => ({
-        id_oer: oer.id_oer,
-        skillLabel: oer.skillLabel,
-      }));
+  //     const filteredOers = oersSkillsLabel.filter((oer: any) =>
+  //       searchValue.includes(oer.skillLabel)
+  //     );
+  //     const formattedOers = filteredOers.map((oer: any) => ({
+  //       id_oer: oer.id_oer,
+  //       skillLabel: oer.skillLabel,
+  //     }));
 
-      console.log(formattedOers);
-      //setDataSearching(formattedOers);
+  //     console.log(formattedOers);
+  //     //setDataSearching(formattedOers);
 
-      // find the oers that respect the search value
-      /*const oers_list = filteredOers.map((oer) =>
-        oers.find((item) => item.id === oer.id_oer)
-      );*/
-      setDataSearching(
-        filteredOers.map((oer) => oers.find((item) => item.id === oer.id_oer))
-      );
+  //     // find the oers that respect the search value
+  //     /*const oers_list = filteredOers.map((oer) =>
+  //       oers.find((item) => item.id === oer.id_oer)
+  //     );*/
+  //     setDataSearching(
+  //       filteredOers.map((oer) => oers.find((item) => item.id === oer.id_oer))
+  //     );
 
-      console.log(dataSearching);
+  //     console.log(dataSearching);
 
-      /*setDataSearching(
-        oers.map((oer) => oers.find((item) => item.id === oer.id_oer))
-      )*/
-    } else console.log('Write Something!');
-  };
+  //     /*setDataSearching(
+  //       oers.map((oer) => oers.find((item) => item.id === oer.id_oer))
+  //     )*/
+  //   } else console.log('Write Something!');
+  // };
 
 
 
@@ -344,12 +338,12 @@ const Home = (props: DiscoverPageProps) => {
       oer.media_type?.map((item: any) => item.name)
     );
     console.log(data);
-    respSearchOers?.map((oer: any) => {
-      const temp_aut = oer.media_type?.name;
-      const authorsOer = temp_aut?.length !== 0 ? temp_aut : ['Unknown'];
-      // console.log('authorsOer: ' + authorsOer);
-      //const domain = item.domains.map((obj: any) => obj.full_name);
-    });
+    // respSearchOers?.map((oer: any) => {
+    //   // const temp_aut = oer.media_type?.name;
+    //   // const authorsOer = temp_aut?.length !== 0 ? temp_aut : ['Unknown'];
+    //   // console.log('authorsOer: ' + authorsOer);
+    //   //const domain = item.domains.map((obj: any) => obj.full_name);
+    // });
   }, [respSearchOers, page]);
 
 
@@ -365,12 +359,12 @@ const Home = (props: DiscoverPageProps) => {
     setCheckboxOr(true);
   };
 
-  const RoundCheckboxIcon = () => (
-    <svg viewBox="0 0 24 24" width="16px" height="16px" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9 12l2 2 4-4" />
-    </svg>
-  );
+  // const RoundCheckboxIcon = () => (
+  //   <svg viewBox="0 0 24 24" width="16px" height="16px" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  //     <circle cx="12" cy="12" r="9" />
+  //     <path d="M9 12l2 2 4-4" />
+  //   </svg>
+  // );
 
 
 
