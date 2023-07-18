@@ -1,32 +1,41 @@
-import { createContext, useContext, useEffect } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+} from 'react';
 //import useLocalStorage from 'use-local-storage';
 import { useLocalStorage } from 'usehooks-ts';
+import { OerSkillInfo } from '../../types/encoreElements/oer/OerSkill';
 
 type OerProps = {
-  idOer: any;
+  idOer: number;
   title: string;
   description: string;
-  skills: any[];
+  skills: OerSkillInfo[];
   concepts: any[];
 };
 
 type CollectionProps = {
-  id: any;
+  id: number;
   name: string;
   oers: OerProps[];
 };
 
-type AddCollectionFunction = (id: any, name: string) => Promise<void>;
+type AddCollectionFunction = (id: number, name: string) => Promise<void>;
 type AddResourceFunction = (
-  collectionId: any,
+  collectionId: number,
   resource: OerProps
 ) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
-  deleteCollection: (id: any) => void;
+  deleteCollection: (id: number) => void;
   addResource: AddResourceFunction;
+  indexCollectionClicked: number;
+  setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
 };
 
 /*type CollectionContextProps = {
@@ -47,6 +56,9 @@ export const CollectionsProvider = ({ children }: any) => {
     'collection',
     []
   );
+
+  const [indexCollectionClicked, setIndexCollectionClicked] =
+    useLocalStorage<number>('indexCollectionClicked', -1);
 
   const addCollection = async (id: any, name: string): Promise<void> => {
     console.log('ID passato addCollection: ' + id);
@@ -125,7 +137,14 @@ export const CollectionsProvider = ({ children }: any) => {
 
   return (
     <CollectionsContext.Provider
-      value={{ collections, addCollection, deleteCollection, addResource }}
+      value={{
+        collections,
+        addCollection,
+        deleteCollection,
+        addResource,
+        indexCollectionClicked,
+        setIndexCollectionClicked,
+      }}
     >
       {children}
     </CollectionsContext.Provider>

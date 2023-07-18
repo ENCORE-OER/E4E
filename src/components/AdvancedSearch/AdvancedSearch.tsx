@@ -28,6 +28,7 @@ export default function AdvancedSearch({
   onResourceTypeFromDropDownMenu,
   onAudienceFromDropDownMenu,
 }: AdvancedSearchProps) {
+  // adding "All" checkbox
   useEffect(() => {
     if (!domain?.includes(ALL)) domain?.unshift(ALL);
     console.log('Domain in AdvancedSearch' + domain);

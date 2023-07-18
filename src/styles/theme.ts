@@ -70,7 +70,8 @@ const config = {
           bg: 'transparent',
           color: 'grey',
           borderRadius: '0px',
-          textDecoration: 'underline',
+          borderBottom: '1px',
+          borderBottomColor: 'grey',
           letterSpacing: '1px',
         },
         dropdown: {
@@ -78,6 +79,23 @@ const config = {
           fillColor: 'white',
           borderColor: 'grey',
           borderWidth: '0.5px',
+        },
+        learningPathDesign: {
+          bg: 'grey',
+          color: 'white',
+          borderRadius: '10px',
+          py: '10px', // padding y
+          px: '30px', // padding x
+          gap: '10px',
+        },
+        concept: {
+          borderRadius: '200px',
+          border: '2px',
+          borderColor: 'secondary',
+          borderStyle: 'solid',
+          py: '20px', // padding y
+          px: '15px', // padding x
+          letterSpacing: '1px',
         },
       },
     },
@@ -99,7 +117,7 @@ const config = {
           textAlign: 'left',
           color: 'grey',
         },
-        text_before_venn : {
+        text_before_venn: {
           fontFamily: 'Nunito',
           fontSize: '20px',
           color: 'grey',
@@ -108,7 +126,7 @@ const config = {
           letterSpacing: '0em',
           textAlign: 'left',
         },
-        text_searchFor : {
+        text_searchFor: {
           fontFamily: 'Nunito',
           fontSize: '20px',
           color: 'primary',
@@ -119,7 +137,7 @@ const config = {
           gap: '10px',
           marginRight: '20px',
         },
-        text_searchFor_secondary : {
+        text_searchFor_secondary: {
           fontFamily: 'Nunito',
           fontSize: '16px',
           color: 'primary',
@@ -212,7 +230,7 @@ const config = {
           textAlign: 'left',
           color: 'primary',
         },
-        label_checkbox:  {
+        label_checkbox: {
           whiteSpace: 'nowrap',
         },
       },

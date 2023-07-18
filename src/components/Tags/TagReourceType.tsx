@@ -2,7 +2,7 @@ import { HStack, Tag, TagLeftIcon, Text } from '@chakra-ui/react';
 import { IconVideo } from '../../public/Icons/svgToIcons/iconVideo';
 
 type TagResourceTypeProps = {
-  resourceType: any[];
+  resourceType: string[];
 };
 
 export default function TagResourceType({
