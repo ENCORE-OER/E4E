@@ -118,7 +118,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   // Create an array of datasets
   const datasets = newData.map((item) => ({
     label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
-    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size < 3 ? item.size * 8 : item.size, type: item.name }],
+    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size, type: item.name }],
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
@@ -142,11 +142,11 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     },
     plugins: {
       legend: {
-        position: 'left',
-        align: 'center',
+        position: 'bottom',
+        align: 'start',
         labels: {
           usePointStyle: true,
-          padding: 5, // Adjust the padding value to increase or decrease the space
+          padding: 10, // Adjust the padding value to increase or decrease the space
         },
       },
       tooltip: {

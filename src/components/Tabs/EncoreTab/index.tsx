@@ -18,7 +18,7 @@ export type EncoreTabProps = {
   oers: EncoreOer[];
   domains: string[];
   searchCallBack: (domainIds: any[]) => Promise<void>;
-  setOERs: any;
+  setOers: any;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {

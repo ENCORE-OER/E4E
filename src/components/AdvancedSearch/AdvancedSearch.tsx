@@ -71,7 +71,7 @@ export default function AdvancedSearch({
       <Box display="flex">
         <Grid
           w="100%"
-          templateColumns="repeat(4, 1fr)"
+          templateColumns="repeat(3, 1fr)"
           gap={4}
           flexWrap="nowrap"
         >
@@ -82,15 +82,6 @@ export default function AdvancedSearch({
             <DropDownMenu
               optionsObj={domain}
               onData={handleDomainFromDropDownMenu}
-            />
-          </GridItem>
-          <GridItem w="220px" h="10">
-            <Text variant="text_field_label" my="6px">
-              Subject
-            </Text>
-            <DropDownMenu
-              optionsObj={subject}
-              onData={handleSubjectFromDropDownMenu}
             />
           </GridItem>
           <GridItem w="220px" h="10">

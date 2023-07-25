@@ -48,7 +48,7 @@ const Discover = (props: DiscoverPageProps) => {
 
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const searchOERs = async (skills: string | string[], andOption: string, orOption: string, domainIds?: string[], resourceTypeIds?: string[]) => {
+    const searchOERs = async (skills: string | string[], andOption: string, orOption: string, domainIds?: string[], resourceTypeIds?: string[], audienceIds?: string[]) => {
         //here we search the OERS using the query parameters
 
 
@@ -56,14 +56,11 @@ const Discover = (props: DiscoverPageProps) => {
 
         const api = new APIV2(props.accessToken);
 
-
-
         //case 1 - only one skill
         if (!isArray) {
             const oers = await api.searhOERbySkillNoPages(
                 [skills],
             );
-            //setRespSearchOers(oers);
             setFiltered(oers);
 
         }
@@ -73,7 +70,6 @@ const Discover = (props: DiscoverPageProps) => {
             const oers = await api.getOersInAND(
                 skills,
             );
-            // setRespSearchOers(oers);
             setFiltered(oers);
         }
         else if (orOption === "true") {
@@ -87,13 +83,15 @@ const Discover = (props: DiscoverPageProps) => {
             const oers = await api.getOersInOR(
                 skills,
             );
-            // setRespSearchOers(oers);
+
             setFiltered(oers);
 
         }
         else {
             console.log("case not managed");
         }
+
+
 
 
         setIsLoading(false);
@@ -125,9 +123,13 @@ const Discover = (props: DiscoverPageProps) => {
             const skills = router.query.skills as string[];
             const andOption = router.query.andOption as string;
             const orOption = router.query.orOption as string;
+            const domains = router.query.domain as string[];
+            const types = router.query.types as string[];
+            const audiences = router.query.audiences as string[];
             setIsLoading(true);
 
-            searchOERs(skills, andOption, orOption);
+            searchOERs(skills, andOption, orOption, domains, types, audiences);
+
         }
     }, [router.query]);
 

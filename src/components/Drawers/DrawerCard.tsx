@@ -40,6 +40,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
   const [linkOer, setLinkOer] = useState<any>();
   const [resourceType, setResourceType] = useState<any[]>([]);
   const [subjects, setSubjects] = useState<any[]>([]);
+  const [concepts, setConcepts] = useState<any[]>([]);
   const [publishers, setPublishers] = useState<any[]>([]);
   const [contributors, setContributors] = useState<any[]>([]);
 
@@ -105,7 +106,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       setPublishers(oer.publisher?.map((item: any) => item.name) || []);
       setContributors(oer.contributor?.map((item: any) => item.name) || []);
 
-      console.log(JSON.stringify(oer));
+
+      setConcepts(oer.concepts?.map((item: any) => item.label) || []);
 
 
 
@@ -244,7 +246,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
               <Box>
                 <Text variant="label_drawer">Concepts covered</Text>
                 <HStack>
-                  <TagConcept concepts={['Food']} />
+                  <TagConcept concepts={concepts} />
                 </HStack>
               </Box>
             </Flex>

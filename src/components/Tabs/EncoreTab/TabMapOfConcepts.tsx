@@ -83,6 +83,9 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         const elk = new ELK();
 
 
+
+
+
         // you can change algorithm: view https://www.eclipse.org/elk/reference/algorithms.html
         const graph = {
           id: 'root',

@@ -13,7 +13,7 @@ import Image from 'next/image';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { asSets, VennDiagram } from '@upsetjs/react';
+import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
@@ -33,34 +33,24 @@ type DiscoverPageProps = {
 
 
 
-const baseSets = [
-  { name: 'DIGITAL', elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], domainId: "25", label: 'Digital Set' },
-  { name: 'GREEN', elems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23], domainId: "26" },
-  { name: 'ENTERPRENEURSHIP', elems: [1, 11, 12, 4, 5, 24, 25, 26, 27, 28, 29, 30], domainId: "27" },
-];
-
 
 
 
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
   const [searchValue, setSearchValue] = useState<string[]>([]);
-  //let searchValue: string[] = [];
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  //const suggestions: string[] = [];
   const [page] = useState(true);
-  //  const [dataSkills, setDataSkills] = useState<any[]>([]);
-  //const [dataOers, setDataOers] = useState<any[]>([]);
   const [respSearchOers] = useState<any[]>([]);
   const [oerById] = useState<any[]>([]);
   const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);
 
   const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
-  const [subject, setSubject] = useState<string[]>([]);
   const [resourceTypes, setResourceTypes] = useState<string[]>([]);
   const [audience, setAudience] = useState<string[]>([]);
+  const [metrics, setMetrics] = useState<any[]>([]);
+  const [totalOers, setTotalOers] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState<any[]>([]); // to save each type of domain of the resources
-  const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
   const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>(
     []
   );
@@ -77,27 +67,9 @@ const Home = (props: DiscoverPageProps) => {
   const [checkboxAll, setCheckboxAll] = useState(false);
   const [checkboxOr, setCheckboxOr] = useState(false);
 
-  // retrieve all the OERs and create the 3 sets divided for Green, Digital and Ent
 
 
-  const sets = useMemo(() => {
-    const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
-    return asSets(baseSets.map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
-  }, []);
-  //  const combinations = useMemo(() => ({ mergeColors }), []);
-
-  // const combinations: { sets: string[]; size: number }[] = [
-  //   { sets: ['DIGITAL'], size: 163 },
-  //   { sets: ['GREEN'], size: 1220 },
-  //   { sets: ['ENTREPRENEURSHIP'], size: 280 },
-  //   { sets: ['DIGITAL', 'GREEN'], size: 254 },
-  //   { sets: ['GREEN', 'ENTREPRENEURSHIP'], size: 452 },
-  //   { sets: ['DIGITAL', 'ENTREPRENEURSHIP'], size: 4567 },
-  //   { sets: ['DIGITAL', 'GREEN', 'ENTREPRENEURSHIP'], size: 97585 },
-  // ];
-
-
-
+  const combinations = useMemo(() => ({ mergeColors }), []);
 
 
 
@@ -105,9 +77,6 @@ const Home = (props: DiscoverPageProps) => {
     setSelectedDomain(data);
   };
 
-  const handleSubjectFromDropDownMenu = (data: any[]) => {
-    setSelectedSubject(data);
-  };
 
   const handleResourceTypeFromDropDownMenu = (data: any[]) => {
     setSelectedResourceTypes(data);
@@ -118,124 +87,13 @@ const Home = (props: DiscoverPageProps) => {
   };
 
 
-
-
   const searchCallback1 = async () => {
     if (selectedSkillIds.length == 0) return;
     router.push({
       pathname: '/discover',
-      query: { skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr }
+      query: { skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
     });
   };
-
-
-  // const searchCallback = async (domainIds: string[], resourceTypeIds?: string[]) => {
-  //   const api = new APIV2(props.accessToken);
-
-
-
-
-
-  //   if (searchValue.length >= 0) {
-  //     const oers = await api.searchOers(
-  //       selectedSkillIds,
-  //       domainIds ?? selectedDomain,
-  //       selectedSubject,
-  //       resourceTypeIds ?? selectedResourceTypes,
-  //       selectedAudience
-  //     );
-
-  //     // console.log(oers);
-  //     setRespSearchOers(oers);
-  //     setPage(false);
-  //   } else if (searchValue.length < 0) {
-
-  //     const oers = await api.getOERs();
-  //     //console.log(oers);
-
-  //     //setDataOers(oers);
-
-  //     /*const oersSkills = oers.map((oer: any) => oer.skills);
-  //     console.log(oersSkills);
-  //     // -------------- LABEL --------------
-  //     const oersSkillsLabel = oersSkills?.flatMap(
-  //       (skills: any, index: number) =>
-  //         // use of [] to store more labels for the same id_oer in the same array
-  //         skills.length > 0
-  //           ? skills.map((skill: any) => ({
-  //               id_oer: oers[index].id,
-  //               skillLabel: skill.label,
-  //             }))
-  //           : {
-  //               id_oer: oers[index].id,
-  //               skillLabel: '',
-  //             }
-  //     );*/
-
-  //     const oersSkillsLabel = oers?.flatMap((oer: any) => {
-  //       if (oer.skills?.length > 0) {
-  //         return oer.skills?.map((skill: any) => ({
-  //           id_oer: oer.id,
-  //           skillLabel: skill.label,
-  //         }));
-  //       } else {
-  //         return {
-  //           id_oer: oer.id,
-  //           skillLabel: '',
-  //         };
-  //       }
-  //     });
-
-  //     //stampo tutte le etichette delle skill delle oers
-  //     const labels = oersSkillsLabel?.map((element: any) => element.skillLabel);
-  //     console.log('labels: ' + labels);
-
-  //     // searching alhorithm
-
-  //     /*searchValue.map((item: any) => {
-  //       console.log(item);
-  //       const res = labels.includes(item);
-  //       console.log(res);
-  //       if (res) {
-  //         oersSkillsLabel.map((element: any) => {
-  //           if (element.skillLabel === item) {
-  //             setDataSearching((prev: any) => {
-  //               const updateData = prev.filter(
-  //                 (value: any) => value !== element.id_oer
-  //               );
-  //               return [...updateData, element.id_oer];
-  //             });
-  //           }
-  //         });
-  //       }
-  //     });*/
-
-  //     const filteredOers = oersSkillsLabel.filter((oer: any) =>
-  //       searchValue.includes(oer.skillLabel)
-  //     );
-  //     const formattedOers = filteredOers.map((oer: any) => ({
-  //       id_oer: oer.id_oer,
-  //       skillLabel: oer.skillLabel,
-  //     }));
-
-  //     console.log(formattedOers);
-  //     //setDataSearching(formattedOers);
-
-  //     // find the oers that respect the search value
-  //     /*const oers_list = filteredOers.map((oer) =>
-  //       oers.find((item) => item.id === oer.id_oer)
-  //     );*/
-  //     setDataSearching(
-  //       filteredOers.map((oer) => oers.find((item) => item.id === oer.id_oer))
-  //     );
-
-  //     console.log(dataSearching);
-
-  //     /*setDataSearching(
-  //       oers.map((oer) => oers.find((item) => item.id === oer.id_oer))
-  //     )*/
-  //   } else console.log('Write Something!');
-  // };
 
 
 
@@ -263,21 +121,42 @@ const Home = (props: DiscoverPageProps) => {
     (async () => {
       try {
 
-        //api getDomains()
+        // api get the Encore Metrics (Num of Oers and IDs for each Skill)
+        const resp_metrics: any = await api.getMetrics();
+        console.log('Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers));
+        setTotalOers(resp_metrics?.total_oers);
+
+        const digitalIds = resp_metrics?.digital_oers?.ids;
+        const greenIds = resp_metrics?.green_oers?.ids;
+        const entrepreneurialIds = resp_metrics?.entrepreneurial_oers?.ids;
+
+
+        const baseSets = [
+          { name: 'DIGITAL', elems: [], domainId: "Digital" },
+          { name: 'GREEN', elems: [], domainId: "Green" },
+          { name: 'ENTERPRENEURSHIP', elems: [], domainId: "Entrepreneurship" },
+        ];
+
+        const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
+
+
+        const newSet = asSets((baseSets).map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
+
+        // Update the elems field for each set dynamically
+        newSet[0].elems = digitalIds;
+        newSet[1].elems = greenIds;
+        newSet[2].elems = entrepreneurialIds;
+
+
+        setMetrics(newSet);
+
+
         const resp_dom = await api.getDomains();
-        //const domName = resp_dom?.map((item: any) => item.name);
         console.log('Domain -----------> ' + resp_dom);
         setDomain(resp_dom);
-        //api getSubjects()
-        const resp_sub = await api.getSubjects();
-        console.log('Subject -----------> ' + resp_sub);
-        setSubject(resp_sub);
-
-        //api getResourceTypes()
         const resp_res = await api.getResourceTypes();
         console.log('Type of reosource -----------> ' + resp_res);
         setResourceTypes(resp_res);
-        //api getAudience()
         const resp_aud = await api.getAudience();
         console.log('Audience -----------> ' + resp_aud);
         setAudience(resp_aud);
@@ -293,10 +172,6 @@ const Home = (props: DiscoverPageProps) => {
   }, [selectedDomain]);
 
   useEffect(() => {
-    console.log('SELECTED SUBJECTS: ' + selectedSubject);
-  }, [selectedSubject]);
-
-  useEffect(() => {
     console.log('SELECTED RESOURCE TYPES: ' + selectedResourceTypes);
   }, [selectedResourceTypes]);
 
@@ -304,9 +179,6 @@ const Home = (props: DiscoverPageProps) => {
     console.log('SELECTED AUDIENCE: ' + selectedAudience);
   }, [selectedAudience]);
 
-  useEffect(() => {
-    console.log('Total number subjects -----------> ' + subject.length);
-  }, [subject]);
 
   useEffect(() => {
     if (searchValue.length > 0) {
@@ -338,12 +210,6 @@ const Home = (props: DiscoverPageProps) => {
       oer.media_type?.map((item: any) => item.name)
     );
     console.log(data);
-    // respSearchOers?.map((oer: any) => {
-    //   // const temp_aut = oer.media_type?.name;
-    //   // const authorsOer = temp_aut?.length !== 0 ? temp_aut : ['Unknown'];
-    //   // console.log('authorsOer: ' + authorsOer);
-    //   //const domain = item.domains.map((obj: any) => obj.full_name);
-    // });
   }, [respSearchOers, page]);
 
 
@@ -358,13 +224,6 @@ const Home = (props: DiscoverPageProps) => {
     setCheckboxAll(false);
     setCheckboxOr(true);
   };
-
-  // const RoundCheckboxIcon = () => (
-  //   <svg viewBox="0 0 24 24" width="16px" height="16px" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-  //     <circle cx="12" cy="12" r="9" />
-  //     <path d="M9 12l2 2 4-4" />
-  //   </svg>
-  // );
 
 
 
@@ -456,11 +315,9 @@ const Home = (props: DiscoverPageProps) => {
                   >
                     <AdvancedSearch
                       domain={domain}
-                      subject={subject}
                       resourceType={resourceTypes}
                       audience={audience}
                       onDomainFromDropDownMenu={handleDomainFromDropDownMenu}
-                      onSubjectFromDropDownMenu={handleSubjectFromDropDownMenu}
                       onResourceTypeFromDropDownMenu={
                         handleResourceTypeFromDropDownMenu
                       }
@@ -483,16 +340,16 @@ const Home = (props: DiscoverPageProps) => {
                   </Button>
                 </Flex>
               </div>
-              <Text variant="text_before_venn">Search among 118.000 resources</Text>
+              <Text variant="text_before_venn">Search among {totalOers} resources</Text>
               <div>
                 {hydrated ? (
                   <VennDiagram
-                    sets={sets}
+                    sets={metrics}
                     width={550}
                     height={450}
                     // selection={selection}
                     // onHover={setSelection}
-                    // combinations={combinations}
+                    combinations={combinations}
                     hasSelectionOpacity={0.2}
                     selectionColor=""
                   />
