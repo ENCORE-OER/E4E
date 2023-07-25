@@ -88,11 +88,21 @@ const Home = (props: DiscoverPageProps) => {
 
 
   const searchCallback1 = async () => {
-    if (selectedSkillIds.length == 0) return;
-    router.push({
-      pathname: '/discover',
-      query: { skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
-    });
+    if (isClicked) {
+      // advanced search selected
+      router.push({
+        pathname: '/discover',
+        query: { advanced: true, skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
+      });
+    }
+    else {
+      //normal search
+      if (selectedSkillIds.length == 0) return;
+      router.push({
+        pathname: '/discover',
+        query: { advanced: false, skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
+      });
+    }
   };
 
 

@@ -10,7 +10,6 @@ type AdvancedSearchProps = {
   resourceType?: any[];
   audience?: any[];
   onDomainFromDropDownMenu?: (domain: any[]) => void;
-  onSubjectFromDropDownMenu?: (subject: any[]) => void;
   onResourceTypeFromDropDownMenu?: (resType: any[]) => void;
   onAudienceFromDropDownMenu?: (audience: any[]) => void;
 };
@@ -20,11 +19,9 @@ const ALL = { id: 0, name: 'All' };
 
 export default function AdvancedSearch({
   domain,
-  subject,
   resourceType,
   audience,
   onDomainFromDropDownMenu,
-  onSubjectFromDropDownMenu,
   onResourceTypeFromDropDownMenu,
   onAudienceFromDropDownMenu,
 }: AdvancedSearchProps) {
@@ -32,9 +29,7 @@ export default function AdvancedSearch({
     if (!domain?.includes(ALL)) domain?.unshift(ALL);
     console.log('Domain in AdvancedSearch' + domain);
   }, [domain]);
-  useEffect(() => {
-    if (!subject?.includes(ALL)) subject?.unshift(ALL);
-  }, [subject]);
+
   useEffect(() => {
     if (!resourceType?.includes(ALL)) resourceType?.unshift(ALL);
   }, [resourceType]);
@@ -48,11 +43,7 @@ export default function AdvancedSearch({
     }
   };
 
-  const handleSubjectFromDropDownMenu = (subject: any[]) => {
-    if (onSubjectFromDropDownMenu) {
-      onSubjectFromDropDownMenu(subject);
-    }
-  };
+
 
   const handleResourceTypeFromDropDownMenu = (resType: any[]) => {
     if (onResourceTypeFromDropDownMenu) {

@@ -46,6 +46,10 @@ const Discover = (props: DiscoverPageProps) => {
 
 
 
+    const allOERs = async () => {
+        alert("here all the OERs");
+    }
+
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const searchOERs = async (skills: string | string[], andOption: string, orOption: string, domainIds?: string[], resourceTypeIds?: string[], audienceIds?: string[]) => {
@@ -131,6 +135,11 @@ const Discover = (props: DiscoverPageProps) => {
             searchOERs(skills, andOption, orOption, domains, types, audiences);
 
         }
+        else {
+            //query con zero parametri...posso ritornare tutte le OERs?;
+            setIsLoading(true);
+            allOERs();
+        }
     }, [router.query]);
 
 
@@ -212,7 +221,7 @@ const Discover = (props: DiscoverPageProps) => {
                         <DiscoveryContext.Provider value={{ filtered, setFiltered, byResourceType, setByResourceType }}>
                             <EncoreTab
                                 oers={filtered}
-                                setOERs={setFiltered}
+                                setOers={setFiltered}
                                 domains={domain}
                                 searchCallBack={searchCallback}
                                 flex="1" // "flex='1'" fill the rest of the page
