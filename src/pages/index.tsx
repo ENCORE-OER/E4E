@@ -412,7 +412,6 @@ const Home = (props: DiscoverPageProps) => {
                   inputValueIds={selectedSkillIds}
                   setInputValueIds={setSelectedSkillIds}
                   items={suggestions}
-                  domainIds={domain}
                   onSearchCallback={searchCallback1}
                   placeholder="Search resources"
                 />
