@@ -9,7 +9,7 @@ export const IconPathEdit = ({ color, w, h }: IconPathEditProps) => (
     width={w || '20'}
     height={h || '20'}
     fontSize="16"
-    viewBox="0 0 20 20"
+    viewBox="0 0 22 13"
     fill="none"
     color={color || 'primary'}
     xmlns="http://www.w3.org/2000/svg"

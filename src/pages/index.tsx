@@ -6,7 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 
 import Image from 'next/image';
@@ -25,22 +25,28 @@ import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
 import { useHasHydrated } from '../utils/utils';
 
-
-
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
-
-
 const baseSets = [
-  { name: 'DIGITAL', elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18], domainId: "25", label: 'Digital Set' },
-  { name: 'GREEN', elems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23], domainId: "26" },
-  { name: 'ENTERPRENEURSHIP', elems: [1, 11, 12, 4, 5, 24, 25, 26, 27, 28, 29, 30], domainId: "27" },
+  {
+    name: 'DIGITAL',
+    elems: [1, 2, 3, 4, 11, 12, 13, 14, 15, 16, 17, 18],
+    domainId: '25',
+    label: 'Digital Set',
+  },
+  {
+    name: 'GREEN',
+    elems: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 19, 20, 21, 22, 23],
+    domainId: '26',
+  },
+  {
+    name: 'ENTERPRENEURSHIP',
+    elems: [1, 11, 12, 4, 5, 24, 25, 26, 27, 28, 29, 30],
+    domainId: '27',
+  },
 ];
-
-
-
 
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
@@ -79,10 +85,19 @@ const Home = (props: DiscoverPageProps) => {
 
   // retrieve all the OERs and create the 3 sets divided for Green, Digital and Ent
 
-
   const sets = useMemo(() => {
-    const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
-    return asSets(baseSets.map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
+    const colors = [
+      '#03A8B9',
+      '#49B61A',
+      '#FFCF24',
+      'white',
+      'white',
+      'white',
+      'red',
+    ];
+    return asSets(
+      baseSets.map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' }))
+    );
   }, []);
   //  const combinations = useMemo(() => ({ mergeColors }), []);
 
@@ -95,11 +110,6 @@ const Home = (props: DiscoverPageProps) => {
   //   { sets: ['DIGITAL', 'ENTREPRENEURSHIP'], size: 4567 },
   //   { sets: ['DIGITAL', 'GREEN', 'ENTREPRENEURSHIP'], size: 97585 },
   // ];
-
-
-
-
-
 
   const handleDomainFromDropDownMenu = (data: any[]) => {
     setSelectedDomain(data);
@@ -117,24 +127,20 @@ const Home = (props: DiscoverPageProps) => {
     setSelectedAudience(data);
   };
 
-
-
-
   const searchCallback1 = async () => {
     if (selectedSkillIds.length == 0) return;
     router.push({
       pathname: '/discover',
-      query: { skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr }
+      query: {
+        skills: selectedSkillIds,
+        andOption: checkboxAll,
+        orOption: checkboxOr,
+      },
     });
   };
 
-
   // const searchCallback = async (domainIds: string[], resourceTypeIds?: string[]) => {
   //   const api = new APIV2(props.accessToken);
-
-
-
-
 
   //   if (searchValue.length >= 0) {
   //     const oers = await api.searchOers(
@@ -237,8 +243,6 @@ const Home = (props: DiscoverPageProps) => {
   //   } else console.log('Write Something!');
   // };
 
-
-
   const handleAdvanceSearchClick = (e: any) => {
     e.preventDefault();
     if (showBox === false) {
@@ -262,7 +266,6 @@ const Home = (props: DiscoverPageProps) => {
     // nella useEffect le funzioni async fanno fatte così, è sbagliato mettere async subito la prima
     (async () => {
       try {
-
         //api getDomains()
         const resp_dom = await api.getDomains();
         //const domName = resp_dom?.map((item: any) => item.name);
@@ -284,7 +287,6 @@ const Home = (props: DiscoverPageProps) => {
       } catch (error) {
         console.error(error);
       }
-
     })();
   }, [user]);
 
@@ -318,12 +320,9 @@ const Home = (props: DiscoverPageProps) => {
         } catch (error) {
           console.error(error);
         }
-
       })();
     }
   }, [searchValue]);
-
-
 
   useEffect(() => {
     if (dataSearching.length === 0) console.log('No result!');
@@ -334,8 +333,8 @@ const Home = (props: DiscoverPageProps) => {
 
   useEffect(() => {
     console.log('RESPONSE SEARCH: ' + respSearchOers);
-    const data = respSearchOers.flatMap((oer: any) =>
-      oer.media_type?.map((item: any) => item.name)
+    const data = respSearchOers.flatMap(
+      (oer: any) => oer.media_type?.map((item: any) => item.name)
     );
     console.log(data);
     // respSearchOers?.map((oer: any) => {
@@ -345,9 +344,6 @@ const Home = (props: DiscoverPageProps) => {
     //   //const domain = item.domains.map((obj: any) => obj.full_name);
     // });
   }, [respSearchOers, page]);
-
-
-
 
   const handleCheckboxAllChange = () => {
     setCheckboxAll(true);
@@ -366,20 +362,15 @@ const Home = (props: DiscoverPageProps) => {
   //   </svg>
   // );
 
-
-
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} />
+      <Navbar user={user} pageName="Discover" />
       <SideBar pagePath={router.pathname} />
       <>
         {
-          <Box w="full" h="100vh" ml="200px" bg="background" pt="60px">
+          <Box w="full" h="full" ml="200px" bg="background" pt="60px">
             <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
-              <Flex
-                w="100%"
-                justifyContent="center"
-              >
+              <Flex w="100%" justifyContent="center">
                 <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
               </Flex>
 
@@ -417,13 +408,12 @@ const Home = (props: DiscoverPageProps) => {
                 />
               </Box>
 
-
-              <Box w="100%"
-                px="5px">
+              <Box w="100%" px="5px">
                 <HStack>
-
                   <Flex w="100%" justifyContent="center">
-                    <Text variant="text_searchFor"><span>Search for:</span></Text>
+                    <Text variant="text_searchFor">
+                      <span>Search for:</span>
+                    </Text>
 
                     <input
                       type="radio"
@@ -438,21 +428,15 @@ const Home = (props: DiscoverPageProps) => {
                       id="checkboxOr"
                       checked={checkboxOr}
                       onChange={handleCheckboxOrChange}
-
                     />
                     <Text variant="text_searchFor_secondary">Any keyword</Text>
                   </Flex>
-
                 </HStack>
               </Box>
 
-
               <div>
                 {showBox && (
-                  <Box
-                    w="100%"
-                    px="5px"
-                  >
+                  <Box w="100%" px="5px">
                     <AdvancedSearch
                       domain={domain}
                       subject={subject}
@@ -482,7 +466,9 @@ const Home = (props: DiscoverPageProps) => {
                   </Button>
                 </Flex>
               </div>
-              <Text variant="text_before_venn">Search among 118.000 resources</Text>
+              <Text variant="text_before_venn">
+                Search among 118.000 resources
+              </Text>
               <div>
                 {hydrated ? (
                   <VennDiagram
@@ -495,22 +481,16 @@ const Home = (props: DiscoverPageProps) => {
                     hasSelectionOpacity={0.2}
                     selectionColor=""
                   />
-                ) : "loading..."}
-
-              </div >
-
-
-
-
-
+                ) : (
+                  'loading...'
+                )}
+              </div>
             </VStack>
           </Box>
         }
       </>
-    </Flex >
+    </Flex>
   );
 };
 
 export default Home;
-
-

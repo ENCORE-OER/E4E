@@ -8,7 +8,6 @@ import {
   Spacer,
   Text,
   useDisclosure,
-  VStack,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -23,13 +22,10 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
-import SingleResourceCard from '../components/Card/SingleResourceCard';
+import ResourceCards from '../components/Card/ResourceCards';
 import AddCollectionModal from '../components/Modals/AddCollectionModal';
 import { APIV2 } from '../data/api';
 import { useHasHydrated } from '../utils/utils';
-
-
-
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -58,8 +54,7 @@ const Home = (props: DiscoverPageProps) => {
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
   const [collectionIndex, setCollectionIndex] = useState<number>(0);
-  const [prevCollectionIndex, setPrevCollectionIndex] =
-    useState<number>(9999999999999);
+  const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1);
   const { isOpen } = useDisclosure();
 
   /*const handleAddCollection = () => {
@@ -71,9 +66,8 @@ const Home = (props: DiscoverPageProps) => {
     useState<boolean>(false);
 
   const handleOpenAddCollectionModal = () => {
-
     setAddCollectionModalOpen(true);
-    console.log("eccolo: " + isAddCollectionModalOpen);
+    console.log('eccolo: ' + isAddCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
@@ -139,171 +133,117 @@ const Home = (props: DiscoverPageProps) => {
     }
   }, [collectionIndex]);
 
-  /*useEffect(() => {
-    const api = new APIV2(props.accessToken);
-    (async () => {
-      try {
-        //const resp_description = await api.getOerDescription();
-        //console.log('RESP DESCRIPTION: ' + resp_description);
-        //setDescription(resp_description);
-        //console.log('DESCRIPTION: ' + description);
-
-        const resp = await api.getOer();
-        setDataOer(resp);
-        //console.log('RESP : ' + resp);
-        setDescription(resp.description);
-        //console.log('DESCRIPTION: ' + description);
-        const creator = resp.creator?.map((item: any) => item.full_name);
-        setAuthors(creator);
-        setTitle(resp.title);
-        setIdOer(resp.id);
-        const resFormat = resp.resource_format?.map((item: any) => item.name);
-        setResourceType(resFormat);
-        setLastUpdate(resp.retrieval_date);
-        const domain_list = resp.skills?.flatMap((item: any) =>
-          item.domain?.map((dom: any) => dom.name)
-        );
-        setDomain(domain_list);
-        //console.log(domain_list);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, []);*/
-
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} />
+      <Navbar user={user} pageName="Your resources" />
       <SideBar pagePath={router.pathname} />
-      <>
-        <Box ml="200px" py="115px" pl="40px" w="full" h="100vh" bg="background">
-          <Flex
-            w="100%"
-            justifyContent="left"
-          //justify="space-between"
-          >
-            <Heading>Your resources</Heading>
-          </Flex>
 
-          <Flex w="full" h="full" my="30px" gap={3}>
-            <Box
-              borderRight="2px"
-              borderRightColor="secondary"
-              w="22%"
-              p="25px"
-              h="full"
-            >
-              <HStack mb="3">
-                <Heading fontSize="25px">Collections</Heading>
-                <Spacer />
-                <Button
-                  variant="ghost"
-                  _hover={{ bg: 'backgound' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    /*const id = Math.random();
+      <Box ml="200px" py="115px" pl="40px" w="full" h="100vh" bg="background">
+        <Flex
+          w="100%"
+          justifyContent="left"
+          //justify="space-between"
+        >
+          <Heading>Your resources</Heading>
+        </Flex>
+
+        <Flex w="full" h="full" my="30px" gap={3}>
+          <Box
+            borderRight="2px"
+            borderRightColor="secondary"
+            w="22%"
+            p="25px"
+            h="full"
+          >
+            <HStack mb="3">
+              <Heading fontSize="25px">Collections</Heading>
+              <Spacer />
+              <Button
+                variant="ghost"
+                _hover={{ bg: 'backgound' }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  /*const id = Math.random();
                   addCollection(id, nameCollection);
                   console.log('id collection: ' + id);
                   //setIdCollection(idCollection + 1);*/
-                    handleOpenAddCollectionModal();
-                  }}
-                >
-
-                  <Icon as={LuFolderPlus} w="30px" h="30px" />
-                </Button>
-              </HStack>
-              <Box>
-                {hydrated &&
-                  collections?.map((collection: any, index: number) => (
-                    <HStack
-                      ref={collectionRef}
-                      key={collection.id}
-                      mb="3"
-                      w="100%"
-                    >
-                      <Flex
-                        w="100%"
-                        _hover={{ bg: 'gray.200' }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCollectionIndex(index);
-                          handleCollectionClick();
-                        }}
-                        cursor={'pointer'}
-                      >
-                        <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                        <Heading
-                          fontSize="22px"
-                          fontWeight="semibold"
-                          noOfLines={1}
-                        >
-                          {collection.name}
-                        </Heading>
-                      </Flex>
-                      <Spacer />
-                      <Button
-                        variant="ghost"
-                        _hover={{ bg: 'background' }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeleteCollection(collection.id);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </HStack>
-                  ))}
-              </Box>
-            </Box>
-
-            <Box p="25px">
-              {collectionClicked && (
-                <Box minW="550px">
-                  <HStack w="100%" mb="3">
-                    <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                    <Heading fontSize="22px" fontWeight="semibold">
-                      {collections[collectionIndex].name}
-                    </Heading>
-                    <Spacer />
-                    <DownloadButton
-                      data={collections[collectionIndex]}
-                      fileName={collections[collectionIndex].name}
-                    />
-                  </HStack>
-                  <Text
-                    fontWeight="light"
-                    fontSize="small"
-                    color="grey"
+                  handleOpenAddCollectionModal();
+                }}
+              >
+                <Icon as={LuFolderPlus} w="30px" h="30px" />
+              </Button>
+            </HStack>
+            <Box>
+              {hydrated &&
+                collections?.map((collection: any, index: number) => (
+                  <HStack
+                    ref={collectionRef}
+                    key={collection.id}
                     mb="3"
-                  >{`${collections[collectionIndex].oers.length} resources`}</Text>
-                  <VStack>
-                    {oersById?.map((oer: any) => (
-                      <SingleResourceCard
-                        key={oer?.id}
-                        idOer={oer?.id}
-                        domain={
-                          oer?.skills?.flatMap((skill: any) =>
-                            skill.domain?.map((domain: any) => domain.name)
-                          ) || []
-                        }
-                        title={oer?.title}
-                        authors={
-                          oer?.creator?.map((item: any) => item.full_name) || []
-                        }
-                        description={oer?.description}
-                        lastUpdate={oer?.retrieval_date}
-                        resourceType={
-                          oer?.media_type?.map((item: any) => item.name) || []
-                        }
-                      />
-                    ))}
-                  </VStack>
-                </Box>
-              )}
+                    w="100%"
+                  >
+                    <Flex
+                      w="100%"
+                      _hover={{ bg: 'gray.200' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCollectionIndex(index);
+                        handleCollectionClick();
+                      }}
+                      cursor={'pointer'}
+                    >
+                      <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                      <Heading
+                        fontSize="22px"
+                        fontWeight="semibold"
+                        noOfLines={1}
+                      >
+                        {collection.name}
+                      </Heading>
+                    </Flex>
+                    <Spacer />
+                    <Button
+                      variant="ghost"
+                      _hover={{ bg: 'background' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDeleteCollection(collection.id);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </Button>
+                  </HStack>
+                ))}
             </Box>
-          </Flex>
-        </Box>
-      </>
+          </Box>
+
+          <Box p="25px">
+            {collectionClicked && (
+              <Box minW="550px">
+                <HStack w="100%" mb="3">
+                  <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                  <Heading fontSize="22px" fontWeight="semibold">
+                    {collections[collectionIndex].name}
+                  </Heading>
+                  <Spacer />
+                  <DownloadButton
+                    data={collections[collectionIndex]}
+                    fileName={collections[collectionIndex].name}
+                  />
+                </HStack>
+                <Text
+                  fontWeight="light"
+                  fontSize="small"
+                  color="grey"
+                  mb="3"
+                >{`${collections[collectionIndex].oers.length} resources`}</Text>
+                <ResourceCards oers={oersById} isNormalSizeCard={true} />
+              </Box>
+            )}
+          </Box>
+        </Flex>
+      </Box>
+
       {isAddCollectionModalOpen && (
         <AddCollectionModal
           isOpen={isOpen}

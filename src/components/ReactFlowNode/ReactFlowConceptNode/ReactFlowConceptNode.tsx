@@ -6,14 +6,13 @@ import { ReactFlowNodeProps } from '../ReactFlowNode';
 type ReactFlowConceptNodeProps = ReactFlowNodeProps & ConceptNode;
 
 const ReactFlowConceptNode = ({ data }: ReactFlowConceptNodeProps) => {
-
   const { label, numOfResources } = data;
 
   return (
     <Card
       className="Card-react-flow"
       style={{
-        borderColor: "yellow",
+        borderColor: 'yellow',
         background: `lightYellow`,
       }}
     >
