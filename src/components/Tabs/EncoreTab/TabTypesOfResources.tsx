@@ -9,7 +9,7 @@ import {
   LinearScale,
   PointElement,
   Title,
-  Tooltip
+  Tooltip,
 } from 'chart.js';
 import { useContext, useState } from 'react';
 
@@ -21,24 +21,16 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend,
-)
-
+  Legend
+);
 
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 import { FaSync } from 'react-icons/fa';
 
-
-
 export type TabTypesOfResourcesProps = {};
 
-
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
-
-
-
-
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   // const { oers, setOERs } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();
@@ -53,25 +45,23 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const resourceTypes: any[] = [];
 
   //retrieve resourse types
-  filtered?.forEach((oer: { media_type: any[]; }) => oer.media_type?.map((item: any) => resourceTypes.push(item.name)));
-
+  filtered?.forEach(
+    (oer: { media_type: any[] }) =>
+      oer.media_type?.map((item: any) => resourceTypes.push(item.name))
+  );
 
   const transformedObject = resourceTypes.reduce((result, element) => {
     result[element] = (result[element] || 0) + 1;
     return result;
   }, {});
 
-
-
-
-  const newData = Object.entries(transformedObject).map(([name, size], index) => ({
-    id: index + 1,
-    name: name,
-    size: Number(size as string),
-  }));
-
-
-
+  const newData = Object.entries(transformedObject).map(
+    ([name, size], index) => ({
+      id: index + 1,
+      name: name,
+      size: Number(size as string),
+    })
+  );
 
   const handleReloadClick = () => {
     setIsActiveRefresh(false);
@@ -79,27 +69,27 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     setFiltered(previousContent);
   };
 
-
   const onClickBubble = (event: any, elements: any) => {
     setIsActiveRefresh(true);
     setIsActiveBubble(true);
     const resources: any[] = [];
     setPreviousContent(filtered);
     if (elements.length > 0) {
-      const item = chartData.datasets[elements[0].datasetIndex].data[elements[0].index];
-      const type = item.type
+      const item =
+        chartData.datasets[elements[0].datasetIndex].data[elements[0].index];
+      const type = item.type;
       // here we filter the selected OERs by type
-      filtered?.forEach((oer: { media_type: any[]; }) => oer.media_type?.map((item: any) => {
-        if (item.name === type) {
-          resources.push(oer);
-        }
-      }));
-
+      filtered?.forEach(
+        (oer: { media_type: any[] }) =>
+          oer.media_type?.map((item: any) => {
+            if (item.name === type) {
+              resources.push(oer);
+            }
+          })
+      );
     }
     setFiltered(resources);
-
   };
-
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -110,22 +100,26 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     return color;
   };
 
-
   // Sort newData array by size in descending order
   newData.sort((a, b) => b.size - a.size);
-
 
   // Create an array of datasets
   const datasets = newData.map((item) => ({
     label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
-    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size < 3 ? item.size * 8 : item.size, type: item.name }],
+    data: [
+      {
+        x: Math.random() * 10,
+        y: Math.random() * 10,
+        r: item.size < 3 ? item.size * 8 : item.size,
+        type: item.name,
+      },
+    ],
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
   const chartData = {
     datasets: datasets,
   };
-
 
   interface ExtendedBubbleDataPoint extends BubbleDataPoint {
     type: string;
@@ -150,30 +144,27 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         },
       },
       tooltip: {
-
         callbacks: {
           label: (context: any) => {
-            const item = context.dataset.data[context.dataIndex] as ExtendedBubbleDataPoint;
+            const item = context.dataset.data[
+              context.dataIndex
+            ] as ExtendedBubbleDataPoint;
             return `${item.type}`;
           },
         },
       },
-
     },
     onClick: isActiveBubble ? undefined : onClickBubble,
-
   };
-
-
 
   return (
     <>
       <Stack spacing={0}>
         <Text color="primary">
-          The Bubble Chart shows the types of resources available for the searched keywords.
-          Click on a circle to filter resources according to the selected types.
+          The Bubble Chart shows the types of resources available for the
+          searched keywords. Click on a circle to filter resources according to
+          the selected types.
         </Text>
-
       </Stack>
       <button onClick={handleReloadClick} disabled={!isActiveRefresh}>
         <FaSync />
@@ -181,9 +172,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
       </button>
 
       <Stack spacing={0}>
-
         <Bubble data={chartData} options={chartOptions} />
-
       </Stack>
     </>
   );

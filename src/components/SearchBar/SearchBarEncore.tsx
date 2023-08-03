@@ -113,7 +113,6 @@ export default function SearchBar({
               ))
             }
           </AutoCompleteInput>
-
         </Flex>
         <AutoCompleteList>
           {items.map((item) => (
@@ -130,7 +129,6 @@ export default function SearchBar({
       <div
         onClick={() => {
           onSearchCallback(domainIds);
-
         }}
       >
         {/*<Link href="/discover">*/}

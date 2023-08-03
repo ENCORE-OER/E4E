@@ -3,21 +3,15 @@ import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
 import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { useHasHydrated } from '../../../utils/utils';
-export type TabDomainsProps = {
-};
-
-
-
+export type TabDomainsProps = {};
 
 const baseSets = [
-  { name: 'DIGITAL', elems: [], domainId: "Digital" },
-  { name: 'GREEN', elems: [], domainId: "Green" },
-  { name: 'ENTERPRENEURSHIP', elems: [], domainId: "Entrepreneurship" },
+  { name: 'DIGITAL', elems: [], domainId: 'Digital' },
+  { name: 'GREEN', elems: [], domainId: 'Green' },
+  { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-
-
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
   // const { oers, domains, searchCallBack } = props;
   //const { oers } = props;
@@ -30,7 +24,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   //const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer);
 
-  const filteredOers: any = {}
+  const filteredOers: any = {};
 
   // oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.forEach((domain) => filteredOers[domain.name] = )).map((oer) => oer);
 
@@ -39,13 +33,19 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   /**
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
-  filtered?.forEach((oer: { skills: { domain: any[]; }[]; id: string; }) => oer.skills.forEach((skill: { domain: any[]; }) => {
-    skill.domain.forEach((domain) => {
-      if (!filteredOers[domain.name]) filteredOers[domain.name] = { name: domain.name?.toUpperCase(), elems: [], domainId: domain.name };
-      filteredOers[domain.name].elems.push(oer.id + "");
+  filtered?.forEach((oer: { skills: { domain: any[] }[]; id: string }) =>
+    oer.skills.forEach((skill: { domain: any[] }) => {
+      skill.domain.forEach((domain) => {
+        if (!filteredOers[domain.name])
+          filteredOers[domain.name] = {
+            name: domain.name?.toUpperCase(),
+            elems: [],
+            domainId: domain.name,
+          };
+        filteredOers[domain.name].elems.push(oer.id + '');
+      });
     })
-  }));
-
+  );
 
   const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {
     const revised = filteredOers[index];
@@ -53,8 +53,9 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     return revised;
   });
 
-
-  const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
+  const [selection, setSelection] = useState<
+    ISetLike<unknown> | unknown[] | null
+  >(null);
   // const [value, setValue] = useState(3);
   // const changeValue = useCallback(
   //   (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,21 +76,30 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   // Probably this is the problem
   const sets = useMemo(() => {
-    const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
-    return asSets((dynamicSet ?? baseSets).map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
+    const colors = [
+      '#03A8B9',
+      '#49B61A',
+      '#FFCF24',
+      'white',
+      'white',
+      'white',
+      'red',
+    ];
+    return asSets(
+      (dynamicSet ?? baseSets).map((s, i) => ({
+        ...s,
+        color: colors[i],
+        fontColor: 'white',
+      }))
+    );
   }, [dynamicSet]);
 
-
-
-
   const combinations = useMemo(() => ({ mergeColors }), []);
-
 
   const onClickDiagram = async (selection: any) => {
     if (!selection) return;
     // const Oers: any[] = [];
     // const domainIds = [...selection.sets].map((set) => set.domainId);
-
 
     /*?? check here
     filtered?.forEach((oer: { skills: { domain: any[]; }[]; id: string; }) => oer.skills.forEach((skill: { domain: any[]; }) => {
@@ -99,20 +109,15 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       })
     }));
 */
-
-
-  }
-
-
-
+  };
 
   return (
-
     <>
       <Stack spacing={0}>
         <Text color="primary">
-          The Domains diagram shows how resources are distributed across the three domains of Digital, Green and Entrepreneurial.
-          Click on a sector to filter the resources accordingly.
+          The Domains diagram shows how resources are distributed across the
+          three domains of Digital, Green and Entrepreneurial. Click on a sector
+          to filter the resources accordingly.
         </Text>
       </Stack>
 
@@ -130,10 +135,10 @@ export const TabDomains = ({ }: TabDomainsProps) => {
             selectionColor=""
             onClick={onClickDiagram}
           />
-        ) : "loading..."}
-
-      </div >
-
+        ) : (
+          'loading...'
+        )}
+      </div>
     </>
   );
 };
