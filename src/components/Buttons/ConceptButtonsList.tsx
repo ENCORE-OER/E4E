@@ -14,7 +14,7 @@ export default function ConceptButtonsList({
   conceptSelectedIndex,
 }: ConceptButtonsListProps) {
   return (
-    <Flex gap={5}>
+    <Flex gap={5} pb="5">
       {concepts?.map((item: any, index: number) => (
         <ConceptButton
           item={item}

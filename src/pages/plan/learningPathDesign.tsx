@@ -5,9 +5,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 
 import React, { useEffect, useState } from 'react';
 import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
-import ResourceCards from '../../components/Card/ResourceCards';
 import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
+import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import { APIV2 } from '../../data/api';
@@ -90,18 +90,8 @@ const Home = (props: DiscoverPageProps) => {
           setConceptSelectedIndex={setConceptSelectedIndex}
         />
 
-        {!(conceptSelectedIndex === -1) && (
-          <Flex px="10px">
-            <Box bg="white" w="70%" h="400px" mt={5} p={3}></Box>
+        <LearningPathEditor oers={oersById} conceptSelectedIndex={conceptSelectedIndex} />
 
-            <Box flex="1" p={5} pr="60px">
-              <Text pb={5} fontSize="20" fontWeight="semibold">
-                Relevant OERs
-              </Text>
-              <ResourceCards oers={oersById} isNormalSizeCard={false} />
-            </Box>
-          </Flex>
-        )}
       </Box>
     </Flex>
   );
