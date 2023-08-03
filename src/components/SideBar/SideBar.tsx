@@ -1,9 +1,7 @@
 import { Box, BoxProps, useDisclosure } from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
-//import { BsBookmarkCheck } from 'react-icons/bs';
-//import { IoTelescope } from 'react-icons/io5';
-//import { RiDashboardFill, RiNodeTree } from 'react-icons/ri';
-import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
+import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
+//import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
 import { IconDashboard } from '../../public/Icons/svgToIcons/iconDashboard';
 import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import { IconTelescope } from '../../public/Icons/svgToIcons/iconTelescope';
@@ -20,8 +18,8 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Dashboard', icon: IconDashboard, link: '/' },
   { name: 'Discover', icon: IconTelescope, link: '/discover' },
-  { name: 'Your resources', icon: IconBookmarkCheck, link: '/resources' },
-  { name: 'Plan', icon: IconPathEdit, link: '/flows' },
+  { name: 'Your resources', icon: IconBookmarkCheckCustom, link: '/resources' },
+  { name: 'Plan', icon: IconPathEdit, link: '/plan' },
 ];
 
 export default function Sidebar({

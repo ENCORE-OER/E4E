@@ -7,7 +7,7 @@ import ReactFlow, {
   ReactFlowProvider,
   addEdge,
   useEdgesState,
-  useNodesState
+  useNodesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { APIV2 } from '../../../data/api';
@@ -17,7 +17,6 @@ import { ReactFlowConceptNode } from '../../ReactFlowNode';
 import ELK from 'elkjs';
 import { v4 } from 'uuid';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
-
 
 export type TabMapOfConceptsProps = {};
 
@@ -42,7 +41,7 @@ export type TabMapOfConceptsProps = {};
 //   { id: 'e1-3', source: '1', target: '3' },
 // ];
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   // const { oers } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();
@@ -52,14 +51,15 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const nodeTypes = useMemo(() => ({ conceptNode: ReactFlowConceptNode }), []);
   const edgeTypes = useMemo(() => ({ floating: ReactFlowFloatingEdge }), []);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const { filtered } = useContext(DiscoveryContext);
 
-  const onConnect = useCallback((params: any) => setEdges((els) => addEdge(params, els)), []);
-
-
+  const onConnect = useCallback(
+    (params: any) => setEdges((els) => addEdge(params, els)),
+    []
+  );
 
   /*
     UseEffect is used to execute actions only if some states changes,
@@ -71,20 +71,14 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     (async () => {
       setLoading(true);
       try {
-
         const oers_ids: any[] = [];
-        filtered?.forEach((oer: { id: any; }) => oers_ids.push(oer.id));
+        filtered?.forEach((oer: { id: any }) => oers_ids.push(oer.id));
 
         const respAI = await API.getConceptMapOersNLP(oers_ids);
-
 
         const { nodes, edges } = respAI.data;
 
         const elk = new ELK();
-
-
-
-
 
         // you can change algorithm: view https://www.eclipse.org/elk/reference/algorithms.html
         const graph = {
@@ -93,20 +87,20 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
             'elk.algorithm': 'force',
           },
           children: nodes.map((n) => ({
-            id: n.node_id + "",
+            id: n.node_id + '',
             width: 20,
             height: 20,
             labels: [{ text: n.name }],
           })),
           edges: edges.map((e) => ({
             id: v4(),
-            sources: [e.from + ""],
-            targets: [e.to + ""],
+            sources: [e.from + ''],
+            targets: [e.to + ''],
           })),
         };
 
-        console.log("nodes AI: " + JSON.stringify(respAI.data.nodes));
-        console.log("edges AI :" + JSON.stringify(respAI.data.edges));
+        console.log('nodes AI: ' + JSON.stringify(respAI.data.nodes));
+        console.log('edges AI :' + JSON.stringify(respAI.data.edges));
 
         const elkGraph = await elk.layout(graph);
         if (elkGraph.edges) {
@@ -139,16 +133,12 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
           ]);
         }
         setLoading(false);
-
       } catch (err) {
         // TODO: handle error
-        alert("ERRORE ESTRAZIONE CONCETTI:" + err);
+        alert('ERRORE ESTRAZIONE CONCETTI:' + err);
       }
     })();
   }, [API, filtered, setEdges, setNodes]);
-
-
-
 
   return (
     <>
@@ -164,11 +154,8 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         </Text>
       </Stack>
 
-
-
       <ReactFlowProvider>
-        <Flex h={500} justifyContent={'center'}
-          placeItems="center">
+        <Flex h={500} justifyContent={'center'} placeItems="center">
           {loading ? (
             <Flex direction={'column'} placeItems="center">
               <CircularProgress isIndeterminate color="blue.300" mb={2} />
@@ -190,10 +177,10 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
             >
               <Background variant={BackgroundVariant.Dots} />
               <Controls />
-            </ReactFlow>)}
+            </ReactFlow>
+          )}
         </Flex>
       </ReactFlowProvider>
     </>
-
   );
 };

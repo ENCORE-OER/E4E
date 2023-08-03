@@ -1,10 +1,10 @@
 import { Card } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import OerCardBody from './OerCardBody';
-import OerCardFooter from './OerCardFooter';
 import OerCardHeader from './OerCardHeader';
+import SmallOerCardFooter from './SmallOerCardFooter';
 
-type ReourceCardProps = {
+type SmallReourceCardProps = {
   idOer: number;
   description: string;
   authors: string[];
@@ -22,7 +22,7 @@ type ReourceCardProps = {
   //isNormalSizeCard?: boolean;
 };
 
-export default function SingleResourceCard({
+export default function SmallSingleResourceCard({
   idOer,
   description,
   authors,
@@ -38,7 +38,7 @@ export default function SingleResourceCard({
   noOfLinesTextCardBody,
   gapGridCardFooter,
 }: //dataOer
-ReourceCardProps) {
+SmallReourceCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
@@ -71,6 +71,7 @@ ReourceCardProps) {
       maxH={maxHCard || '190px'}
       maxW="550px"
       px={pxCard || '20px'}
+      p={0}
       border="1px"
       key={idOer}
       borderColor="secondary"
@@ -92,7 +93,7 @@ ReourceCardProps) {
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
       />
-      <OerCardFooter
+      <SmallOerCardFooter
         lastUpdate={lastUpdate}
         used={2}
         liked={2}
@@ -100,18 +101,7 @@ ReourceCardProps) {
         gapGrid={gapGridCardFooter}
       />
     </Card>
+
+    /* Creation of 2 differents SingleCard just beacause the OerCardFooter is different. Problem using condition variable */
   );
-  {
-    /*<OerCard
-      idOer={idOer}
-      showTagDigital={showTagDigital}
-      showTagEntrepreneurial={showTagEntrepreneurial}
-      showTagGreen={showTagGreen}
-      title={title}
-      authors={authors}
-      description={description}
-      lastUpdate={lastUpdate}
-      resourceType={resourceType}
-  />*/
-  }
 }

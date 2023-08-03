@@ -6,7 +6,7 @@ import {
   HStack,
   Text,
   Tooltip,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 
 import Image from 'next/image';
@@ -25,16 +25,9 @@ import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
 import { useHasHydrated } from '../utils/utils';
 
-
-
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
-
-
-
-
-
 
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
@@ -67,11 +60,7 @@ const Home = (props: DiscoverPageProps) => {
   const [checkboxAll, setCheckboxAll] = useState(false);
   const [checkboxOr, setCheckboxOr] = useState(false);
 
-
-
   const combinations = useMemo(() => ({ mergeColors }), []);
-
-
 
   const handleDomainFromDropDownMenu = (data: any[]) => {
     setSelectedDomain(data);
@@ -85,7 +74,6 @@ const Home = (props: DiscoverPageProps) => {
   const handleAudienceFromDropDownMenu = (data: any[]) => {
     setSelectedAudience(data);
   };
-
 
   const searchCallback1 = async () => {
     if (isClicked) {
@@ -104,8 +92,6 @@ const Home = (props: DiscoverPageProps) => {
       });
     }
   };
-
-
 
   const handleAdvanceSearchClick = (e: any) => {
     e.preventDefault();
@@ -130,7 +116,6 @@ const Home = (props: DiscoverPageProps) => {
     // nella useEffect le funzioni async fanno fatte così, è sbagliato mettere async subito la prima
     (async () => {
       try {
-
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
         const resp_metrics: any = await api.getMetrics();
         console.log('Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers));
@@ -160,7 +145,6 @@ const Home = (props: DiscoverPageProps) => {
 
         setMetrics(newSet);
 
-
         const resp_dom = await api.getDomains();
         console.log('Domain -----------> ' + resp_dom);
         setDomain(resp_dom);
@@ -173,7 +157,6 @@ const Home = (props: DiscoverPageProps) => {
       } catch (error) {
         console.error(error);
       }
-
     })();
   }, [user]);
 
@@ -200,12 +183,9 @@ const Home = (props: DiscoverPageProps) => {
         } catch (error) {
           console.error(error);
         }
-
       })();
     }
   }, [searchValue]);
-
-
 
   useEffect(() => {
     if (dataSearching.length === 0) console.log('No result!');
@@ -216,14 +196,11 @@ const Home = (props: DiscoverPageProps) => {
 
   useEffect(() => {
     console.log('RESPONSE SEARCH: ' + respSearchOers);
-    const data = respSearchOers.flatMap((oer: any) =>
-      oer.media_type?.map((item: any) => item.name)
+    const data = respSearchOers.flatMap(
+      (oer: any) => oer.media_type?.map((item: any) => item.name)
     );
     console.log(data);
   }, [respSearchOers, page]);
-
-
-
 
   const handleCheckboxAllChange = () => {
     setCheckboxAll(true);
@@ -235,20 +212,15 @@ const Home = (props: DiscoverPageProps) => {
     setCheckboxOr(true);
   };
 
-
-
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} />
+      <Navbar user={user} pageName="Discover" />
       <SideBar pagePath={router.pathname} />
       <>
         {
-          <Box w="full" h="100vh" ml="200px" bg="background" pt="60px">
+          <Box w="full" h="full" ml="200px" bg="background" pt="60px">
             <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
-              <Flex
-                w="100%"
-                justifyContent="center"
-              >
+              <Flex w="100%" justifyContent="center">
                 <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
               </Flex>
 
@@ -281,19 +253,17 @@ const Home = (props: DiscoverPageProps) => {
                   inputValueIds={selectedSkillIds}
                   setInputValueIds={setSelectedSkillIds}
                   items={suggestions}
-                  domainIds={domain}
                   onSearchCallback={searchCallback1}
                   placeholder="Search resources"
                 />
               </Box>
 
-
-              <Box w="100%"
-                px="5px">
+              <Box w="100%" px="5px">
                 <HStack>
-
                   <Flex w="100%" justifyContent="center">
-                    <Text variant="text_searchFor"><span>Search for:</span></Text>
+                    <Text variant="text_searchFor">
+                      <span>Search for:</span>
+                    </Text>
 
                     <input
                       type="radio"
@@ -308,21 +278,15 @@ const Home = (props: DiscoverPageProps) => {
                       id="checkboxOr"
                       checked={checkboxOr}
                       onChange={handleCheckboxOrChange}
-
                     />
                     <Text variant="text_searchFor_secondary">Any keyword</Text>
                   </Flex>
-
                 </HStack>
               </Box>
 
-
               <div>
                 {showBox && (
-                  <Box
-                    w="100%"
-                    px="5px"
-                  >
+                  <Box w="100%" px="5px">
                     <AdvancedSearch
                       domain={domain}
                       resourceType={resourceTypes}
@@ -363,22 +327,16 @@ const Home = (props: DiscoverPageProps) => {
                     hasSelectionOpacity={0.2}
                     selectionColor=""
                   />
-                ) : "loading..."}
-
-              </div >
-
-
-
-
-
+                ) : (
+                  'loading...'
+                )}
+              </div>
             </VStack>
           </Box>
         }
       </>
-    </Flex >
+    </Flex>
   );
 };
 
 export default Home;
-
-

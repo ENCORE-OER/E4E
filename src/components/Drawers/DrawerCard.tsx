@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { RefObject, useEffect, useRef, useState } from 'react';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
-import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
+import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
@@ -69,11 +69,10 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
     setAddCollectionModalOpen(false);
   };
 
-
   useEffect(() => {
     try {
-      const domain = oer?.skills?.flatMap((skill: any) =>
-        skill?.domain?.map((item: any) => item.name)
+      const domain = oer?.skills?.flatMap(
+        (skill: any) => skill?.domain?.map((item: any) => item.name)
       );
       setShowTagDigital(false);
       setShowTagEntrepreneurial(false);
@@ -87,7 +86,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       if (domain?.includes(green)) {
         setShowTagGreen(true);
       }
-
 
       const temp_auth = oer.creator?.map(
         (creator_name: any) => creator_name.full_name
@@ -108,8 +106,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
 
       setConcepts(oer.concepts?.map((item: any) => item.label) || []);
-
-
 
       console.log(authors);
       console.log(linkOer);
@@ -146,8 +142,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-      //container={drawerRef.current}
-      //getContainer={drawerRef.current}
+        //container={drawerRef.current}
+        //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />
@@ -163,13 +159,13 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
             </Heading>
             <HStack mb="5">
               <Button
-                leftIcon={<IconBookmarkCheck />}
+                leftIcon={<IconBookmarkCheckCustom />}
                 variant="secondary"
                 onClick={(e) => {
                   e.preventDefault();
                   handleOpenAddCollectionModal();
                 }}
-              /*onClick={(e) => {
+                /*onClick={(e) => {
                 e.preventDefault();
                 const id = Math.random();
                 addCollection(id, 'Drink');

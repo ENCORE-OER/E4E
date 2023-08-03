@@ -6,9 +6,10 @@ import Nav from '../Layout/NavBarEncore';
 
 type NavBarProps = {
   user: UserProfile | undefined;
+  pageName?: string;
 };
 
-export default function Navbar({ user }: NavBarProps) {
+export default function Navbar({ user, pageName }: NavBarProps) {
   return (
     <Nav>
       <HStack>
@@ -23,7 +24,7 @@ export default function Navbar({ user }: NavBarProps) {
           border-radius="0px"
         />
 
-        <Text variant="navbar_label">Discover</Text>
+        <Text variant="navbar_label">{pageName}</Text>
       </HStack>
       <HStack>
         {!user ? (

@@ -1,13 +1,12 @@
 import {
-    Box,
-    Flex,
-    Heading,
-    HStack,
-    Text,
-    useDisclosure,
-    VStack
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  useDisclosure,
+  VStack,
 } from '@chakra-ui/react';
-
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -20,15 +19,12 @@ import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
 
 type DiscoverPageProps = {
-    accessToken: string | undefined;
+  accessToken: string | undefined;
 };
 
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
-
-
 const Discover = (props: DiscoverPageProps) => {
-
     // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
     const [oerById, setOerById] = useState<any[]>([]);
 
@@ -243,5 +239,3 @@ const Discover = (props: DiscoverPageProps) => {
 };
 
 export default Discover;
-
-
