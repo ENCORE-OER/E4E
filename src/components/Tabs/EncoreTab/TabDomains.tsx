@@ -13,20 +13,13 @@ const baseSets = [
 
 export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
-  // const { oers, domains, searchCallBack } = props;
-  //const { oers } = props;
-  //  const API = useMemo(() => new APIV2(undefined), []);
+
   const { filtered } = useContext(DiscoveryContext);
 
-  //console.log(oers?.length);
 
-  // here I filter the Oers and I should add these as new elments in the static
-
-  //const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer);
 
   const filteredOers: any = {};
 
-  // oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.forEach((domain) => filteredOers[domain.name] = )).map((oer) => oer);
 
   // here i sorted the oers per domain
 
@@ -53,28 +46,8 @@ export const TabDomains = ({}: TabDomainsProps) => {
     return revised;
   });
 
-  const [selection, setSelection] = useState<
-    ISetLike<unknown> | unknown[] | null
-  >(null);
-  // const [value, setValue] = useState(3);
-  // const changeValue = useCallback(
-  //   (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setValue(e.target.valueAsNumber);
-  //   },
-  //   [setValue]
-  // );
-  // const select = useCallback(
-  //   (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setSelection(
-  //       Array.from(e.target.closest('div')?.querySelectorAll<HTMLInputElement>('input:checked') ?? []).map(
-  //         (d) => d.valueAsNumber
-  //       )
-  //     );
-  //   },
-  //   [setSelection]
-  // );
+  const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
 
-  // Probably this is the problem
   const sets = useMemo(() => {
     const colors = [
       '#03A8B9',

@@ -283,6 +283,24 @@ export class APIV2 {
     }
   }
 
+  
+
+  async getMetrics(): Promise<any[]> {
+    try {
+      const resp = await axiosNoCookie.get(
+        `https://encore-db.grial.eu/api/metrics/oers/`
+      );
+
+      const metrics = resp.data?.data?.metrics;
+     // console.log(JSON.stringify(metrics));
+
+      return metrics;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
   async getDomains(
     page = 1,
     allDomains: any[] = [],
