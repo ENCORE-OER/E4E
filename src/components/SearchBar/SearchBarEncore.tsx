@@ -7,26 +7,21 @@ import {
   AutoCompleteList,
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
-import { Dispatch, SetStateAction, useEffect } from 'react';
-
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 type SearchItems = any[];
-
 type SearchBarProps = {
   inputValue: string[];
   setInputValue: Dispatch<SetStateAction<string[]>>;
-  inputValueIds: any[];
-  setInputValueIds: Dispatch<SetStateAction<any[]>>;
+  inputValueIds: number[];
+  setInputValueIds: Dispatch<SetStateAction<number[]>>;
   placeholder?: string;
   items: SearchItems;
-  domainIds: any[];
   px?: SpaceProps['px'];
   py?: SpaceProps['py'];
   pb?: SpacerProps['pb'];
-  onSearchCallback: (domainIds: any[]) => Promise<void>;
+  onSearchCallback: () => Promise<void>;
 };
-
 /* For multi selected tag see https://github.com/anubra266/choc-autocomplete#multi-select-with-tags */
-
 export default function SearchBar({
   inputValue,
   setInputValue,
@@ -34,20 +29,25 @@ export default function SearchBar({
   setInputValueIds,
   placeholder,
   items,
-  domainIds,
   px, // padding orizonal
   py, //padding vertical
   pb, // padding bottom
   onSearchCallback,
 }: SearchBarProps) {
+  type skillsSelectedProps = {
+    id: number;
+    label: string;
+  }
+  const [skillsSelected, setSkillsSelected] = useState<skillsSelectedProps[]>([]);
   useEffect(() => {
     console.log('SELECTED SKILLS: ' + inputValue);
   }, [inputValue]);
-
   useEffect(() => {
     console.log('SELECTED SKILL IDs: ' + inputValueIds);
   }, [inputValueIds]);
-
+  useEffect(() => {
+    skillsSelected?.map((item: any) => console.log('SELECTED SKILLS LABEL: ' + item.label));
+  }, [skillsSelected]);
   return (
     <Flex align="center" px={px} py={py} pb={pb} gap="10px">
       <AutoComplete
@@ -56,23 +56,34 @@ export default function SearchBar({
         //value={inputValue}
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
-          const selectedValueId = items.find(
+          const selectedValueId = items?.find(
             (item: any) => item.label === selectedValue
-          ).id;
-
-          setInputValue((prevInputValues) => {
-            const updatedValues = prevInputValues.filter(
+          )?.id;
+          setInputValue((prev) => {
+            const updatedValues = prev.filter(
               // to avoid duplicate
-              (value: any) => value !== selectedValue
+              (value: string) => value !== selectedValue
             );
             return [...updatedValues, selectedValue];
           });
           setInputValueIds((prev) => {
             const updatedValueIds = prev.filter(
-              (value: any) => value !== selectedValueId
+              (value: number) => value !== selectedValueId
             );
-
             return [...updatedValueIds, selectedValueId];
+          });
+          setSkillsSelected((prev) => {
+            const newSkill: skillsSelectedProps = {
+              id: selectedValueId,
+              label: selectedValue,
+            };
+            const isSkillSelected = prev?.some(
+              (item: skillsSelectedProps) => item.id === selectedValueId
+            );
+            if (!isSkillSelected) {
+              return [...prev, newSkill];
+            }
+            return prev;
           });
         }}
       >
@@ -83,31 +94,39 @@ export default function SearchBar({
             placeholder={placeholder || 'Search...'}
             onChange={(e) => {
               e.preventDefault();
-              setInputValue([e.currentTarget.value]);
+              const currentValue = e.currentTarget.value;
+              setInputValue([currentValue])
             }}
           >
             {({ tags }) =>
-              tags.map((tag, tid) => (
+              tags?.map((tag, tid) => (
                 <AutoCompleteTag
                   key={tid}
                   label={tag.label}
-                  onRemove={() => {
-                    const tagId = items.find(
-                      (item: any) => item.label === tag.label
-                    ).id;
-                    setInputValue((prevInputValues) => {
-                      const updatedValues = prevInputValues.filter(
-                        (value: any) => value !== tag.label
+                  onRemove={async () => {
+                    const tagId = await skillsSelected?.find(          // items here is empty
+                      (item: skillsSelectedProps) => item.label === tag.label
+                    )?.id;
+                    setInputValue((prev) => {
+                      const updatedValues = prev?.filter(
+                        (value: string) => value !== tag.label
                       );
                       return updatedValues;
                     });
                     setInputValueIds((prev) => {
-                      const updatedValueIds = prev.filter(
-                        (value: any) => value !== tagId
+                      const updatedValueIds = prev?.filter(
+                        (value: number) => value !== tagId
                       );
                       return updatedValueIds;
                     });
-                    /*tag.onRemove;*/
+                    setSkillsSelected((prev) => {
+                      const deletingSkill = prev?.filter(
+                        (item: skillsSelectedProps) => item.id !== tagId
+                      );
+                      return deletingSkill;
+                    });
+
+                    tag.onRemove();
                   }}
                 />
               ))
@@ -127,8 +146,9 @@ export default function SearchBar({
         </AutoCompleteList>
       </AutoComplete>
       <div
-        onClick={() => {
-          onSearchCallback(domainIds);
+        onClick={(e) => {
+          e.preventDefault();
+          onSearchCallback();
         }}
       >
         {/*<Link href="/discover">*/}
