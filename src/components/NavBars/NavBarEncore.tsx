@@ -2,7 +2,7 @@ import { UserProfile } from '@auth0/nextjs-auth0/client';
 import { Button, HStack, Image, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import brandLogo from '../../public/logo_encore.png';
-import Nav from '../Layout/NavBarEncore';
+import Nav from '../Layout/NavBar';
 
 type NavBarProps = {
   user: UserProfile | undefined;
@@ -11,7 +11,18 @@ type NavBarProps = {
 
 export default function Navbar({ user, pageName }: NavBarProps) {
   return (
-    <Nav>
+    <Nav justify='space-between'
+      //wrap="wrap"
+      p={4}
+      bg="white"
+      color="black"
+      height="60px"
+      width="100%"
+      zIndex="sticky"
+      position="fixed"
+      borderBottom="0.5px"
+      borderBottomColor="secondary"
+      borderBottomStyle="solid">
       <HStack>
         <Image
           src={brandLogo.src}

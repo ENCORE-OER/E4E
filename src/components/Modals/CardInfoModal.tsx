@@ -37,7 +37,8 @@ export default function CardInfoModal({
   onClose,
 }: CardInfoModalProps) {
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
-  const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState<boolean>(false);
+  const [showTagEntrepreneurial, setShowTagEntrepreneurial] =
+    useState<boolean>(false);
   const [showTagGreen, setShowTagGreen] = useState<boolean>(false);
   const [authors, setAuthors] = useState<string[]>([]);
   const [linkOer, setLinkOer] = useState<string>();
@@ -49,9 +50,9 @@ export default function CardInfoModal({
   const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
     useState<boolean>(false);
   const [qualityScore, setQualityScore] = useState<number>(0);
-  const [lastUpdate, setLastUpdate] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
+  const [lastUpdate, setLastUpdate] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
 
   //const { collections, addCollection } = useCollectionsContext();
@@ -99,7 +100,7 @@ export default function CardInfoModal({
       setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
       setShowTagGreen(oer?.green_domain || false);
 
-      setTitle(oer?.title || "");
+      setTitle(oer?.title || '');
 
       const temp_auth = oer.creator?.map(
         (creator_name: any) => creator_name.full_name
@@ -109,7 +110,7 @@ export default function CardInfoModal({
 
       setLinkOer(oer.oer_url?.map((url: any) => url.url) || []);
 
-      setDescription(oer?.description || "");
+      setDescription(oer?.description || '');
 
       setResourceType(
         oer.media_type?.flatMap((resType: any) => resType.name) || []
@@ -121,7 +122,7 @@ export default function CardInfoModal({
       setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
       setConcepts(oer.concepts?.map((concept: any) => concept.label) || []);
       setQualityScore(oer?.overall_score || 0);
-      setLastUpdate(oer?.retrieval_date || "");
+      setLastUpdate(oer?.retrieval_date || '');
       setCoverage(oer.coverage?.map((audience: any) => audience.name) || []);
 
       console.log(JSON.stringify(oer));
@@ -194,7 +195,14 @@ export default function CardInfoModal({
           </ModalHeader>
           <ModalBody>
             <Text mb="5">{description}</Text>
-            <Flex gap={1} w="100%" mb="5" justifyContent={'flex-start'} flexWrap={'wrap'} flex="1">
+            <Flex
+              gap={1}
+              w="100%"
+              mb="5"
+              justifyContent={'flex-start'}
+              flexWrap={'wrap'}
+              flex="1"
+            >
               <TagResourceType resourceType={resourceType} />
             </Flex>
             <Flex w="100%" mb="5">

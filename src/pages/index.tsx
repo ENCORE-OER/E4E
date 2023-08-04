@@ -36,7 +36,7 @@ const Home = (props: DiscoverPageProps) => {
   const [respSearchOers] = useState<any[]>([]);
   const [oerById] = useState<any[]>([]);
 
-  const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);  // list of the skill ids selected in the searchbar
+  const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]); // list of the skill ids selected in the searchbar
   const [suggestions, setSuggestions] = useState<string[]>([]); // list of the skill selectable in the searchbar
 
   const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
@@ -67,7 +67,6 @@ const Home = (props: DiscoverPageProps) => {
     setSelectedDomain(data);
   };
 
-
   const handleResourceTypeFromDropDownMenu = (data: any[]) => {
     setSelectedResourceTypes(data);
   };
@@ -81,15 +80,30 @@ const Home = (props: DiscoverPageProps) => {
       // advanced search selected
       router.push({
         pathname: '/discover',
-        query: { advanced: true, skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
+        query: {
+          advanced: true,
+          skills: selectedSkillIds,
+          andOption: checkboxAll,
+          orOption: checkboxOr,
+          domains: selectedDomain,
+          types: selectedResourceTypes,
+          audiences: selectedAudience,
+        },
       });
-    }
-    else {
+    } else {
       //normal search
       if (selectedSkillIds.length == 0) return;
       router.push({
         pathname: '/discover',
-        query: { advanced: false, skills: selectedSkillIds, andOption: checkboxAll, orOption: checkboxOr, domains: selectedDomain, types: selectedResourceTypes, audiences: selectedAudience }
+        query: {
+          advanced: false,
+          skills: selectedSkillIds,
+          andOption: checkboxAll,
+          orOption: checkboxOr,
+          domains: selectedDomain,
+          types: selectedResourceTypes,
+          audiences: selectedAudience,
+        },
       });
     }
   };
@@ -119,30 +133,43 @@ const Home = (props: DiscoverPageProps) => {
       try {
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
         const resp_metrics: any = await api.getMetrics();
-        console.log('Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers));
+        console.log(
+          'Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers)
+        );
         setTotalOers(resp_metrics?.total_oers);
 
         const digitalIds = resp_metrics?.digital_oers?.ids;
         const greenIds = resp_metrics?.green_oers?.ids;
         const entrepreneurialIds = resp_metrics?.entrepreneurial_oers?.ids;
 
-
         const baseSets = [
-          { name: 'DIGITAL', elems: [], domainId: "Digital" },
-          { name: 'GREEN', elems: [], domainId: "Green" },
-          { name: 'ENTERPRENEURSHIP', elems: [], domainId: "Entrepreneurship" },
+          { name: 'DIGITAL', elems: [], domainId: 'Digital' },
+          { name: 'GREEN', elems: [], domainId: 'Green' },
+          { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
         ];
 
-        const colors = ['#03A8B9', '#49B61A', '#FFCF24', 'white', 'white', 'white', 'red'];
+        const colors = [
+          '#03A8B9',
+          '#49B61A',
+          '#FFCF24',
+          'white',
+          'white',
+          'white',
+          'red',
+        ];
 
-
-        const newSet = asSets((baseSets).map((s, i) => ({ ...s, color: colors[i], fontColor: 'white' })));
+        const newSet = asSets(
+          baseSets.map((s, i) => ({
+            ...s,
+            color: colors[i],
+            fontColor: 'white',
+          }))
+        );
 
         // Update the elems field for each set dynamically
         newSet[0].elems = digitalIds;
         newSet[1].elems = greenIds;
         newSet[2].elems = entrepreneurialIds;
-
 
         setMetrics(newSet);
 
@@ -173,9 +200,8 @@ const Home = (props: DiscoverPageProps) => {
     console.log('SELECTED AUDIENCE: ' + selectedAudience);
   }, [selectedAudience]);
 
-
   useEffect(() => {
-    console.log("SEARCH VALUE: " + searchValue)
+    console.log('SEARCH VALUE: ' + searchValue);
 
     if (searchValue.length > 0) {
       const api = new APIV2(props.accessToken);
@@ -191,8 +217,8 @@ const Home = (props: DiscoverPageProps) => {
   }, [searchValue]);
 
   useEffect(() => {
-    console.log("SELECTED SKILL IDS: " + selectedSkillIds)
-  }, [selectedSkillIds])
+    console.log('SELECTED SKILL IDS: ' + selectedSkillIds);
+  }, [selectedSkillIds]);
 
   /*useEffect(() => {
     if (dataSearching.length === 0) console.log('No result!');
@@ -321,7 +347,9 @@ const Home = (props: DiscoverPageProps) => {
                   </Button>
                 </Flex>
               </div>
-              <Text variant="text_before_venn">Search among {totalOers} resources</Text>
+              <Text variant="text_before_venn">
+                Search among {totalOers} resources
+              </Text>
               <div>
                 {hydrated ? (
                   <VennDiagram

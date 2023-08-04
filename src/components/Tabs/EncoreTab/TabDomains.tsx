@@ -11,15 +11,12 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered } = useContext(DiscoveryContext);
 
-
-
   const filteredOers: any = {};
-
 
   // here i sorted the oers per domain
 
@@ -46,7 +43,9 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     return revised;
   });
 
-  const [selection, setSelection] = useState<ISetLike<unknown> | unknown[] | null>(null);
+  const [selection, setSelection] = useState<
+    ISetLike<unknown> | unknown[] | null
+  >(null);
 
   const sets = useMemo(() => {
     const colors = [

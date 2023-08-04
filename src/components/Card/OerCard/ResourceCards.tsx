@@ -14,11 +14,9 @@ export default function ResourceCardsList({
   oers,
   isNormalSizeCard,
 }: ResourceCardsListProps) {
-
   const hydrated = useHasHydrated();
 
   return (
-
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
 
     <>
@@ -32,15 +30,9 @@ export default function ResourceCardsList({
         {!isNormalSizeCard &&
           hydrated &&
           oers?.map((oer: any, index: number) => (
-            <SmallSingleResourceCard
-              key={index}
-              oer={oer}
-            />
+            <SmallSingleResourceCard key={index} oer={oer} />
           ))}
       </VStack>
     </>
   );
-
 }
-
-

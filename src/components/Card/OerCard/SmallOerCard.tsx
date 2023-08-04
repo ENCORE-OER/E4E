@@ -22,9 +22,9 @@ export default function SmallOerCard({
   pyCardBody,
   noOfLinesTextCardBody,
   gapGridCardFooter,
-  qualityScore
+  qualityScore,
 }: //dataOer
-  ReourceCardProps) {
+ReourceCardProps) {
   //const [showTagDigital, setShowTagDigital] = useState(false);
   //const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   //const [showTagGreen, setShowTagGreen] = useState(false);

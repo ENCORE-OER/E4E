@@ -2,13 +2,12 @@ import OerCard from './OerCard';
 
 type SingleResourceCardProps = {
   oer: any;
-}
-
+};
 
 export default function SingleResourceCard({
-  oer
+  oer,
 }: //dataOer
-  SingleResourceCardProps) {
+SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -23,9 +22,7 @@ export default function SingleResourceCard({
       description={oer?.description}
       lastUpdate={oer?.retrieval_date}
       qualityScore={oer?.overall_score}
-      resourceType={
-        oer?.media_type?.map((item: any) => item.name) || []
-      }
+      resourceType={oer?.media_type?.map((item: any) => item.name) || []}
     />
   );
 }

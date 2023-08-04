@@ -44,8 +44,6 @@ export default function AdvancedSearch({
     }
   };
 
-
-
   const handleResourceTypeFromDropDownMenu = (resType: any[]) => {
     if (onResourceTypeFromDropDownMenu) {
       onResourceTypeFromDropDownMenu(resType);

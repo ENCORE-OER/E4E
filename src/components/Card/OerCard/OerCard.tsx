@@ -21,7 +21,7 @@ export default function OerCard({
   gapGridCardFooter,
   noOfLinesTextCardBody,
   ptCardHeader,
-  pyCardBody
+  pyCardBody,
 }: ReourceCardProps) {
   return (
     <Card

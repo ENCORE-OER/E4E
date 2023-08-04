@@ -104,7 +104,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       setPublishers(oer.publisher?.map((item: any) => item.name) || []);
       setContributors(oer.contributor?.map((item: any) => item.name) || []);
 
-
       setConcepts(oer.concepts?.map((item: any) => item.label) || []);
 
       console.log(authors);
@@ -142,8 +141,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-      //container={drawerRef.current}
-      //getContainer={drawerRef.current}
+        //container={drawerRef.current}
+        //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />

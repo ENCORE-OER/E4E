@@ -27,7 +27,7 @@ type SearchBarProps = {
 type SkillsSelectedProps = {
   id: number;
   label: string;
-}
+};
 
 /* For multi selected tag see https://github.com/anubra266/choc-autocomplete#multi-select-with-tags */
 
@@ -43,21 +43,22 @@ export default function SearchBar({
   pb, // padding bottom
   onSearchCallback,
 }: SearchBarProps) {
-
-  const [skillsSelected, setSkillsSelected] = useState<SkillsSelectedProps[]>([]);
+  const [skillsSelected, setSkillsSelected] = useState<SkillsSelectedProps[]>(
+    []
+  );
 
   useEffect(() => {
     console.log('SELECTED SKILLS: ' + inputValue);
   }, [inputValue]);
 
   useEffect(() => {
-
     console.log('SELECTED SKILL IDs: ' + inputValueIds);
-
   }, [inputValueIds]);
 
   useEffect(() => {
-    skillsSelected?.map((item: any) => console.log('SELECTED SKILLS LABEL: ' + item.label));
+    skillsSelected?.map((item: any) =>
+      console.log('SELECTED SKILLS LABEL: ' + item.label)
+    );
   }, [skillsSelected]);
 
   return (
@@ -110,7 +111,7 @@ export default function SearchBar({
             onChange={(e) => {
               e.preventDefault();
               const currentValue = e.currentTarget.value;
-              setInputValue([currentValue])
+              setInputValue([currentValue]);
             }}
           >
             {({ tags }) =>
@@ -119,7 +120,8 @@ export default function SearchBar({
                   key={tid}
                   label={tag.label}
                   onRemove={async () => {
-                    const tagId = await skillsSelected?.find(          // items here is empty
+                    const tagId = await skillsSelected?.find(
+                      // items here is empty
                       (item: SkillsSelectedProps) => item.label === tag.label
                     )?.id;
 

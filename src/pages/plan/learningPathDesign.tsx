@@ -90,8 +90,10 @@ const Home = (props: DiscoverPageProps) => {
           setConceptSelectedIndex={setConceptSelectedIndex}
         />
 
-        <LearningPathEditor oers={oersById} conceptSelectedIndex={conceptSelectedIndex} />
-
+        <LearningPathEditor
+          oers={oersById}
+          conceptSelectedIndex={conceptSelectedIndex}
+        />
       </Box>
     </Flex>
   );

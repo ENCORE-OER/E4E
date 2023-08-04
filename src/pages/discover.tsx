@@ -31,7 +31,6 @@ type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
-
 const Discover = (props: DiscoverPageProps) => {
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   const [oerById, setOerById] = useState<any[]>([]);
@@ -48,70 +47,60 @@ const Discover = (props: DiscoverPageProps) => {
 
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
-    { icon: IconCalendarCheck, name: "Last Update" },
-    { icon: IconThumbsUp, name: "Likes" },
-    { icon: IconMedal, name: "Quality Score" },
-    { icon: IconBezierCurve, name: "Time Used" },
-    { icon: IconBezierCurve, name: "A-Z" },
-  ]
+    { icon: IconCalendarCheck, name: 'Last Update' },
+    { icon: IconThumbsUp, name: 'Likes' },
+    { icon: IconMedal, name: 'Quality Score' },
+    { icon: IconBezierCurve, name: 'Time Used' },
+    { icon: IconBezierCurve, name: 'A-Z' },
+  ];
 
-  const [selectedSorting, SetSelectedSorting] = useState<string>("Last Update");
+  const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
   const [isAscending, setAscending] = useState<boolean>(true);
 
   const allOERs = async () => {
-    alert("here all the OERs");
-  }
+    alert('here all the OERs');
+  };
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const searchOERs = async (skills: string | string[], andOption: string, orOption: string, domainIds?: string[], resourceTypeIds?: string[], audienceIds?: string[]) => {
+  const searchOERs = async (
+    skills: string | string[],
+    andOption: string,
+    orOption: string,
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[]
+  ) => {
     //here we search the OERS using the query parameters
 
+    console.log(`${domainIds}, ${resourceTypeIds}, ${audienceIds}`);
 
     const isArray = Array.isArray(skills);
 
     const api = new APIV2(props.accessToken);
 
-
-
     //case 1 - only one skill
     if (!isArray) {
-      const oers = await api.searhOERbySkillNoPages(
-        [skills],
-      );
+      const oers = await api.searhOERbySkillNoPages([skills]);
       setFiltered(oers);
-
     }
 
     //case 2 - more than one skill we check if all skills must be used or at least one
-    else if (andOption === "true") {
-      const oers = await api.getOersInAND(
-        skills,
-      );
+    else if (andOption === 'true') {
+      const oers = await api.getOersInAND(skills);
       setFiltered(oers);
-    }
-    else if (orOption === "true") {
-      const oers = await api.getOersInOR(
-        skills,
-      );
+    } else if (orOption === 'true') {
+      const oers = await api.getOersInOR(skills);
       //setRespSearchOers(oers);
       setFiltered(oers);
-    }
-    else if ((orOption === "false") && (andOption === "false")) {
-      const oers = await api.getOersInOR(
-        skills,
-      );
+    } else if (orOption === 'false' && andOption === 'false') {
+      const oers = await api.getOersInOR(skills);
 
       setFiltered(oers);
-
+    } else {
+      console.log('case not managed');
     }
-    else {
-      console.log("case not managed");
-    }
-
-
-
 
     setIsLoading(false);
   };
@@ -147,12 +136,10 @@ const Discover = (props: DiscoverPageProps) => {
   const handleItemSortingClick = (sortingName: string) => {
     if (sortingName === selectedSorting) {
       setAscending(!isAscending);
-    }
-    else {
+    } else {
       SetSelectedSorting(sortingName);
       setAscending(true);
     }
-
   };
 
   useEffect(() => {
@@ -166,9 +153,7 @@ const Discover = (props: DiscoverPageProps) => {
       setIsLoading(true);
 
       searchOERs(skills, andOption, orOption, domains, types, audiences);
-
-    }
-    else {
+    } else {
       //query con zero parametri...posso ritornare tutte le OERs?;
       setIsLoading(true);
       allOERs();
@@ -180,14 +165,20 @@ const Discover = (props: DiscoverPageProps) => {
     setIsLoading(true);
     const sortedData = [...filtered];
     sortedData.sort((a: any, b: any) => {
-      if (selectedSorting === "Last Update") {
-        return (isAscending ? a.retrieval_date.localeCompare(b.retrieval_date) : b.retrieval_date.localeCompare(a.retrieval_date));
-      } else if (selectedSorting === "A-Z") {
-        return (isAscending ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title));
-      } else if (selectedSorting === "Quality Score") {
-        return (isAscending ? a.overall_score - b.overall_score : b.overall_score - a.overall_score);
+      if (selectedSorting === 'Last Update') {
+        return isAscending
+          ? a.retrieval_date.localeCompare(b.retrieval_date)
+          : b.retrieval_date.localeCompare(a.retrieval_date);
+      } else if (selectedSorting === 'A-Z') {
+        return isAscending
+          ? a.title.localeCompare(b.title)
+          : b.title.localeCompare(a.title);
+      } else if (selectedSorting === 'Quality Score') {
+        return isAscending
+          ? a.overall_score - b.overall_score
+          : b.overall_score - a.overall_score;
       }
-    })
+    });
 
     console.log(filtered);
     console.log(sortedData);
@@ -195,7 +186,6 @@ const Discover = (props: DiscoverPageProps) => {
     setFiltered(sortedData);
 
     setIsLoading(false);
-
   }, [selectedSorting, isAscending]);
 
   return (
@@ -214,7 +204,6 @@ const Discover = (props: DiscoverPageProps) => {
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
                 </Heading>
-
               </Flex>
 
               <HStack mb="5">
@@ -222,7 +211,12 @@ const Discover = (props: DiscoverPageProps) => {
                   {`${filtered?.length} resources`}
                 </Text>
                 <Flex flex="1" w="full" justifyContent="flex-end">
-                  <SortingDropDownMenu menuItemsSorting={menuItemsSorting} handleItemSortingClick={handleItemSortingClick} isAscending={isAscending} wMenu='250px' />
+                  <SortingDropDownMenu
+                    menuItemsSorting={menuItemsSorting}
+                    handleItemSortingClick={handleItemSortingClick}
+                    isAscending={isAscending}
+                    wMenu="250px"
+                  />
                 </Flex>
               </HStack>
 
@@ -247,9 +241,7 @@ const Discover = (props: DiscoverPageProps) => {
                       }}
                       as="button"
                     >
-                      <SingleResourceCard
-                        oer={oer}
-                      />
+                      <SingleResourceCard oer={oer} />
                     </Box>
                   ))}
                 </VStack>
