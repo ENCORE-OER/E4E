@@ -1,6 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
-import React from "react";
-import ResourceCards from "../Card/ResourceCards";
+import ResourceCards from "../Card/OerCard/ResourceCards";
 
 type LearningPathEditorProps = {
     conceptSelectedIndex: number;

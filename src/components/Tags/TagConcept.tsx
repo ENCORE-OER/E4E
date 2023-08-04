@@ -9,7 +9,7 @@ export default function TagConcept({ concepts }: TagConceptProps) {
     <>
       {concepts &&
         concepts?.map((item: any, id: number) => (
-          <Tag key={id} gap={1} bg={'gray.100'}>
+          <Tag key={id} bg={'gray.100'}>
             <TagLabel display="flex">{item}</TagLabel>
           </Tag>
         ))}

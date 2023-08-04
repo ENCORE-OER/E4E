@@ -32,11 +32,12 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
   const [searchValue, setSearchValue] = useState<string[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [page] = useState(true);
   const [respSearchOers] = useState<any[]>([]);
   const [oerById] = useState<any[]>([]);
-  const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);
+
+  const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]);  // list of the skill ids selected in the searchbar
+  const [suggestions, setSuggestions] = useState<string[]>([]); // list of the skill selectable in the searchbar
 
   const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<string[]>([]);
@@ -52,7 +53,7 @@ const Home = (props: DiscoverPageProps) => {
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');
   const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
-  const [dataSearching] = useState<any[]>([]); // save the data found from searching
+  //const [dataSearching] = useState<any[]>([]); // save the data found from searching
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
@@ -174,6 +175,8 @@ const Home = (props: DiscoverPageProps) => {
 
 
   useEffect(() => {
+    console.log("SEARCH VALUE: " + searchValue)
+
     if (searchValue.length > 0) {
       const api = new APIV2(props.accessToken);
       (async () => {
@@ -188,11 +191,15 @@ const Home = (props: DiscoverPageProps) => {
   }, [searchValue]);
 
   useEffect(() => {
+    console.log("SELECTED SKILL IDS: " + selectedSkillIds)
+  }, [selectedSkillIds])
+
+  /*useEffect(() => {
     if (dataSearching.length === 0) console.log('No result!');
     else {
       console.log('DATA SEARCHING: ' + dataSearching);
     }
-  }, [dataSearching]);
+  }, [dataSearching]);*/
 
   useEffect(() => {
     console.log('RESPONSE SEARCH: ' + respSearchOers);

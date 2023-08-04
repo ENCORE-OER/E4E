@@ -10,10 +10,10 @@ export const IconArrowDownFilter = () => {
       <path
         d="M17.0002 1.45312L10.4802 7.97313C9.71016 8.74313 8.45016 8.74313 7.68016 7.97313L1.16016 1.45312"
         stroke="#8F959E"
-        stroke-width="1.5"
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

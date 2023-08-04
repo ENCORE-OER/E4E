@@ -30,7 +30,7 @@ import { FaSync } from 'react-icons/fa';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   // const { oers, setOERs } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();

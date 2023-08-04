@@ -1,0 +1,21 @@
+export type ReourceCardProps = {
+  idOer: number;
+  showTagDigital: boolean;
+  showTagEntrepreneurial: boolean;
+  showTagGreen: boolean;
+  description: string;
+  authors: string[];
+  title: string;
+  resourceType: string[];
+  lastUpdate: string;
+  qualityScore: number;
+  domain?: string[];
+  maxHCard?: string;
+  pxCard?: string;
+  mbCard?: string;
+  ptCardHeader?: string;
+  pyCardBody?: string;
+  noOfLinesTextCardBody?: number;
+  gapGridCardFooter?: number;
+  //isNormalSizeCard?: boolean;
+};

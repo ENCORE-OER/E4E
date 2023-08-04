@@ -1,64 +1,71 @@
 import {
   Box,
   Button,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
   Flex,
-  Heading,
   HStack,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
-import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
+import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import AddCollectionModal from '../Modals/CollectionModals/AddCollectionModal';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
+import AddCollectionModal from './CollectionModals/AddCollectionModal';
 
-type DrawerCardProps = {
+type CardInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
   oer: any;
-  drawerRef?: RefObject<HTMLDivElement>;
 };
 
-export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
-  const btnRef = useRef<HTMLDivElement>(null);
-  //const [domainOer, setDomainOer] = useState<any[]>([]);
-  const [showTagDigital, setShowTagDigital] = useState(false);
-  const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
-  const [showTagGreen, setShowTagGreen] = useState(false);
-  const [authors, setAuthors] = useState<any[]>([]);
-  const [linkOer, setLinkOer] = useState<any>();
-  const [resourceType, setResourceType] = useState<any[]>([]);
-  const [subjects, setSubjects] = useState<any[]>([]);
-  const [concepts, setConcepts] = useState<any[]>([]);
-  const [publishers, setPublishers] = useState<any[]>([]);
-  const [contributors, setContributors] = useState<any[]>([]);
+export default function CardInfoModal({
+  oer,
+  isOpen,
+  onClose,
+}: CardInfoModalProps) {
+  const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
+  const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState<boolean>(false);
+  const [showTagGreen, setShowTagGreen] = useState<boolean>(false);
+  const [authors, setAuthors] = useState<string[]>([]);
+  const [linkOer, setLinkOer] = useState<string>();
+  const [resourceType, setResourceType] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [publishers, setPublishers] = useState<string[]>([]);
+  const [contributors, setContributors] = useState<string[]>([]);
+  const [concepts, setConcepts] = useState<string[]>([]);
+  const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
+    useState<boolean>(false);
+  const [qualityScore, setQualityScore] = useState<number>(0);
+  const [lastUpdate, setLastUpdate] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [coverage, setCoverage] = useState<string[]>([]);
 
   //const { collections, addCollection } = useCollectionsContext();
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const digital = 'Digital';
-  const entr = 'Entrepreneurship';
-  const green = 'Green';
+  //const digital = 'Digital';
+  //const entr = 'Entrepreneurship';
+  //const green = 'Green';
 
   const handleViewResource = () => {
     if (linkOer) {
       window?.open(linkOer, '_blank');
     }
   };
-
-  const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
-    useState<boolean>(false);
 
   const handleOpenAddCollectionModal = () => {
     setAddCollectionModalOpen(true);
@@ -71,21 +78,28 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
   useEffect(() => {
     try {
-      const domain = oer?.skills?.flatMap(
-        (skill: any) => skill?.domain?.map((item: any) => item.name)
-      );
-      setShowTagDigital(false);
-      setShowTagEntrepreneurial(false);
-      setShowTagGreen(false);
-      if (domain?.includes(digital)) {
-        setShowTagDigital(true);
-      }
-      if (domain?.includes(entr)) {
-        setShowTagEntrepreneurial(true);
-      }
-      if (domain?.includes(green)) {
-        setShowTagGreen(true);
-      }
+      /*setShowTagDigital(false);
+            setShowTagEntrepreneurial(false);
+            setShowTagGreen(false);
+            const domain = oer?.skills?.flatMap((skill: any) =>
+                skill?.domain?.map((item: any) => item.name)
+            );
+            
+            if (domain?.includes(digital)) {
+                setShowTagDigital(true);
+            }
+            if (domain?.includes(entr)) {
+                setShowTagEntrepreneurial(true);
+            }
+            if (domain?.includes(green)) {
+                setShowTagGreen(true);
+            }*/
+
+      setShowTagDigital(oer?.digital_domain || false);
+      setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
+      setShowTagGreen(oer?.green_domain || false);
+
+      setTitle(oer?.title || "");
 
       const temp_auth = oer.creator?.map(
         (creator_name: any) => creator_name.full_name
@@ -95,59 +109,49 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
       setLinkOer(oer.oer_url?.map((url: any) => url.url) || []);
 
+      setDescription(oer?.description || "");
+
       setResourceType(
         oer.media_type?.flatMap((resType: any) => resType.name) || []
       );
 
-      setSubjects(oer.subject?.map((item: any) => item.name) || []);
+      setSubjects(oer.subject?.map((sub: any) => sub.name) || []);
 
-      setPublishers(oer.publisher?.map((item: any) => item.name) || []);
-      setContributors(oer.contributor?.map((item: any) => item.name) || []);
+      setPublishers(oer.publisher?.map((pub: any) => pub.name) || []);
+      setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
+      setConcepts(oer.concepts?.map((concept: any) => concept.label) || []);
+      setQualityScore(oer?.overall_score || 0);
+      setLastUpdate(oer?.retrieval_date || "");
+      setCoverage(oer.coverage?.map((audience: any) => audience.name) || []);
 
-
-      setConcepts(oer.concepts?.map((item: any) => item.label) || []);
-
-      console.log(authors);
-      console.log(linkOer);
-      console.log(resourceType);
-      console.log(subjects);
-      console.log(publishers);
-      console.log(contributors);
+      console.log(JSON.stringify(oer));
     } catch (error) {
       console.error(error);
     }
   }, [oer]);
 
-  /*useEffect(() => {
-    setShowTagDigital(false);
-    setShowTagEntrepreneurial(false);
-    setShowTagGreen(false);
-    if (domainOer?.includes(digital)) {
-      setShowTagDigital(true);
-    }
-    if (domainOer?.includes(entr)) {
-      setShowTagEntrepreneurial(true);
-    }
-    if (domainOer?.includes(green)) {
-      setShowTagGreen(true);
-    }
-  }, [domainOer]);*/
+  /* useEffect(() => {
+     console.log('authors: ' + authors);
+     console.log('linkOer: ' + linkOer);
+     console.log('resourceType: ' + resourceType);
+     console.log('subjects: ' + subjects);
+     console.log('publishers: ' + publishers);
+     console.log('contributors: ' + contributors);
+     console.log('concepts: ' + concepts);
+   }, [concepts]);*/
 
   return (
-    <>
-      <Drawer
+    <Flex>
+      <Modal
         isOpen={isOpen}
-        placement="right"
         onClose={onClose}
-        finalFocusRef={btnRef}
-        size="lg"
-        key={oer.id}
-      //container={drawerRef.current}
-      //getContainer={drawerRef.current}
+        closeOnOverlayClick={true}
+        size={'xl'}
       >
-        <DrawerContent mx="auto">
-          <DrawerCloseButton />
-          <DrawerHeader>
+        <ModalOverlay />
+        <ModalContent overflow="auto">
+          <ModalCloseButton />
+          <ModalHeader>
             <TagsDomain
               showTagDigital={showTagDigital}
               showTagEntrepreneurial={showTagEntrepreneurial}
@@ -155,11 +159,11 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
               mb="5"
             />
             <Heading size="md" mb="5">
-              {oer.title}
+              {title}
             </Heading>
             <HStack mb="5">
               <Button
-                leftIcon={<IconBookmarkCheckCustom />}
+                leftIcon={<IconBookmarkCheck />}
                 variant="secondary"
                 onClick={(e) => {
                   e.preventDefault();
@@ -187,23 +191,23 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
                 </Text>
               </Box>
             </Flex>
-          </DrawerHeader>
-          <DrawerBody>
-            <Text mb="5">{oer.description}</Text>
-            <HStack gap={0.5} mb="5">
+          </ModalHeader>
+          <ModalBody>
+            <Text mb="5">{description}</Text>
+            <Flex gap={1} w="100%" mb="5" justifyContent={'flex-start'} flexWrap={'wrap'} flex="1">
               <TagResourceType resourceType={resourceType} />
-            </HStack>
-            <Flex w="100%" gap="100px" mb="5">
-              <Box display="flex">
+            </Flex>
+            <Flex w="100%" mb="5">
+              <Box flex="1" display="flex">
                 <Box>
                   <Text variant="label_drawer">Last Update</Text>
                   <HStack>
                     <IconCalendarCheck />
-                    <Text>{oer.retrieval_date}</Text>
+                    <Text>{lastUpdate}</Text>
                   </HStack>
                 </Box>
               </Box>
-              <Box display="flex">
+              <Box display="flex" flex="1">
                 <Box>
                   <Text variant="label_drawer">Used</Text>
                   <HStack>
@@ -212,7 +216,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
                   </HStack>
                 </Box>
               </Box>
-              <Box display="flex">
+              <Box display="flex" flex="1">
                 <Box>
                   <Text variant="label_drawer">Liked</Text>
                   <HStack>
@@ -221,29 +225,29 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
                   </HStack>
                 </Box>
               </Box>
-              <Box display="flex">
+              <Box display="flex" flex="1">
                 <Box>
                   <Text variant="label_drawer">Quality Score</Text>
                   <HStack>
                     <IconMedal />
-                    <Text>{oer.overall_score}</Text>
+                    <Text>{qualityScore}</Text>
                   </HStack>
                 </Box>
               </Box>
             </Flex>
-            <Flex justifyContent={'left'} mb="5">
+            <Flex justifyContent={'left'} mb="5" overflowWrap={'normal'}>
               <Box>
                 <Text variant="label_drawer">Concepts covered</Text>
-                <HStack>
+                <Flex gap={1} w="100%" flexWrap={'wrap'}>
                   <TagConcept concepts={concepts} />
-                </HStack>
+                </Flex>
               </Box>
             </Flex>
 
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>
-                <Text> Sciences</Text>
+                <Text> {`${coverage}`}</Text>
               </Box>
             </Flex>
 
@@ -256,18 +260,18 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
             <Flex justifyContent={'left'} mb="5">
               <Box flex="1">
                 <Text variant="label_drawer">Publisher</Text>
-                <Text>{`${publishers}`}</Text>
+                <Text>{publishers}</Text>
               </Box>
               <Box flex="1">
                 <Text variant="label_drawer">Contributor</Text>
-                <Text>{`${contributors}`}</Text>
+                <Text>{contributors}</Text>
               </Box>
             </Flex>
 
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Retrieved from</Text>
-                <Text></Text>
+                <Text>{oer.source}</Text>
               </Box>
             </Flex>
 
@@ -277,9 +281,12 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
                 <Text>{oer.rights}</Text>
               </Box>
             </Flex>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       {isAddCollectionModalOpen && (
         <AddCollectionModal
           isOpen={isOpen}
@@ -287,6 +294,6 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
           oerToSave={oer}
         />
       )}
-    </>
+    </Flex>
   );
 }
