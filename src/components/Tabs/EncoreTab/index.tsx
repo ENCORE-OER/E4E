@@ -8,6 +8,7 @@ import { TabMapOfConcepts } from './TabMapOfConcepts';
 import { TabTypesOfResources } from './TabTypesOfResources';
 
 // TODO: find correct icon
+import { Dispatch, SetStateAction } from 'react';
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
 import { EncoreOer } from '../../../types/encore';
@@ -17,7 +18,7 @@ export type EncoreTabProps = {
   oers: EncoreOer[];
   domains: string[];
   searchCallBack: (domainIds: any[]) => Promise<void>;
-  setOers: any;
+  setOers: Dispatch<SetStateAction<any>>;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {

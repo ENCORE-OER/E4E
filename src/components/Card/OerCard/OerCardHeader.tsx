@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
 import { BsBookmark } from 'react-icons/bs';
-import TagsDomain from '../Tags/TagsDomain';
+import TagsDomain from '../../Tags/TagsDomain';
 
 type OerCardHeaderProps = {
   ptCardHeader?: string;
@@ -77,7 +77,7 @@ export default function OerCardHeader({
             </Text>
           </Box>
           <Box>
-            <Text variant="author_card">{`${authors}`}</Text>
+            <Text variant="author_card" noOfLines={1}>{`${authors}`}</Text>
           </Box>
         </Flex>
       </Flex>

@@ -9,6 +9,7 @@ type GridMetadataCardProps = {
   lastUpdate: string;
   used: number;
   liked: number;
+  qualityScore: number;
 };
 
 export default function GridMetadataCard({
@@ -16,6 +17,7 @@ export default function GridMetadataCard({
   lastUpdate,
   used,
   liked,
+  qualityScore,
 }: GridMetadataCardProps) {
   return (
     <Flex w="100%" justifyContent="flex-end" gap={gap} position="sticky">
@@ -33,7 +35,7 @@ export default function GridMetadataCard({
       </Box>
       <Box display="flex" gap={1}>
         <IconMedal />
-        <Text variant="label_dinamic_data_card">{liked}</Text>
+        <Text variant="label_dinamic_data_card">{qualityScore}</Text>
       </Box>
     </Flex>
   );

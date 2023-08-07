@@ -15,7 +15,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
+import { useCollectionsContext } from '../../CollectionsContext/CollectionsContext';
 
 type AddCollectionModalProps = {
   isOpen: boolean;

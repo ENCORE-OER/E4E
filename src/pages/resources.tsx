@@ -22,8 +22,8 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
-import ResourceCards from '../components/Card/ResourceCards';
-import AddCollectionModal from '../components/Modals/AddCollectionModal';
+import ResourceCardsList from '../components/Card/OerCard/ResourceCards';
+import AddCollectionModal from '../components/Modals/CollectionModals/AddCollectionModal';
 import { APIV2 } from '../data/api';
 import { useHasHydrated } from '../utils/utils';
 
@@ -138,7 +138,7 @@ const Home = (props: DiscoverPageProps) => {
       <Navbar user={user} pageName="Your resources" />
       <SideBar pagePath={router.pathname} />
 
-      <Box ml="200px" py="115px" pl="40px" w="full" h="100vh" bg="background">
+      <Box ml="200px" py="115px" pl="40px" w="full" h="full" bg="background">
         <Flex
           w="100%"
           justifyContent="left"
@@ -237,7 +237,7 @@ const Home = (props: DiscoverPageProps) => {
                   color="grey"
                   mb="3"
                 >{`${collections[collectionIndex].oers.length} resources`}</Text>
-                <ResourceCards oers={oersById} isNormalSizeCard={true} />
+                <ResourceCardsList oers={oersById} isNormalSizeCard={true} />
               </Box>
             )}
           </Box>

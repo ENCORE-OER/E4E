@@ -1,35 +1,20 @@
 import { Card } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { ReourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
-import OerCardFooter from './OerCardFooter';
 import OerCardHeader from './OerCardHeader';
+import SmallOerCardFooter from './SmallOerCardFooter';
 
-type ReourceCardProps = {
-  idOer: number;
-  description: string;
-  authors: string[];
-  title: string;
-  resourceType: string[];
-  lastUpdate: string;
-  domain: string[];
-  maxHCard?: string;
-  pxCard?: string;
-  mbCard?: string;
-  ptCardHeader?: string;
-  pyCardBody?: string;
-  noOfLinesTextCardBody?: number;
-  gapGridCardFooter?: number;
-  //isNormalSizeCard?: boolean;
-};
-
-export default function SingleResourceCard({
+export default function SmallOerCard({
   idOer,
+  showTagDigital,
+  showTagEntrepreneurial,
+  showTagGreen,
   description,
   authors,
   lastUpdate,
   resourceType,
   title,
-  domain,
+  //domain,
   maxHCard,
   mbCard,
   pxCard,
@@ -37,14 +22,16 @@ export default function SingleResourceCard({
   pyCardBody,
   noOfLinesTextCardBody,
   gapGridCardFooter,
+  qualityScore,
 }: //dataOer
 ReourceCardProps) {
-  const [showTagDigital, setShowTagDigital] = useState(false);
-  const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
-  const [showTagGreen, setShowTagGreen] = useState(false);
+  //const [showTagDigital, setShowTagDigital] = useState(false);
+  //const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
+  //const [showTagGreen, setShowTagGreen] = useState(false);
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
+  /*
   const digital = 'Digital';
   const entr = 'Entrepreneurship';
   const green = 'Green';
@@ -63,7 +50,8 @@ ReourceCardProps) {
     } catch (error) {
       console.error(error);
     }
-  }, [domain]); // Empty dependency array ensures the effect runs only once after initial render
+  }, [domain]); // Empty dependency array ensures the effect runs only once after initial render 
+  */
 
   return (
     <Card
@@ -71,6 +59,7 @@ ReourceCardProps) {
       maxH={maxHCard || '190px'}
       maxW="550px"
       px={pxCard || '20px'}
+      //p={0}
       border="1px"
       key={idOer}
       borderColor="secondary"
@@ -92,26 +81,16 @@ ReourceCardProps) {
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
       />
-      <OerCardFooter
+      <SmallOerCardFooter
         lastUpdate={lastUpdate}
+        qualityScore={qualityScore}
         used={2}
         liked={2}
         resourceType={resourceType}
         gapGrid={gapGridCardFooter}
       />
     </Card>
+
+    /* Creation of 2 differents SingleCard just beacause the OerCardFooter is different. Problem using condition variable */
   );
-  {
-    /*<OerCard
-      idOer={idOer}
-      showTagDigital={showTagDigital}
-      showTagEntrepreneurial={showTagEntrepreneurial}
-      showTagGreen={showTagGreen}
-      title={title}
-      authors={authors}
-      description={description}
-      lastUpdate={lastUpdate}
-      resourceType={resourceType}
-  />*/
-  }
 }

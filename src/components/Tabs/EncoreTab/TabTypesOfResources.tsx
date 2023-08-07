@@ -106,7 +106,14 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   // Create an array of datasets
   const datasets = newData.map((item) => ({
     label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
-    data: [{ x: Math.random() * 10, y: Math.random() * 10, r: item.size, type: item.name }],
+    data: [
+      {
+        x: Math.random() * 10,
+        y: Math.random() * 10,
+        r: item.size,
+        type: item.name,
+      },
+    ],
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
