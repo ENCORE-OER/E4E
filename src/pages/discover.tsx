@@ -24,6 +24,7 @@ import { IconThumbsUp } from '../public/Icons/svgToIcons/iconThumbsUp';
 
 import SortingDropDownMenu from '../components/DropDownMenu/SortingDropDownMenu';
 import CardInfoModal from '../components/Modals/CardInfoModal';
+import Pagination from '../components/Pagination/pagination';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
 
@@ -58,7 +59,16 @@ const Discover = (props: DiscoverPageProps) => {
   const [isAscending, setAscending] = useState<boolean>(true);
 
   const allOERs = async () => {
-    alert('here all the OERs');
+    console.log("here to check when we enter with an empty query");
+  };
+
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
   };
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
@@ -228,22 +238,29 @@ const Discover = (props: DiscoverPageProps) => {
               )}
 
               {filtered && (
-                <VStack>
-                  {filtered?.map((oer: any) => (
-                    <Box
-                      key={oer.id}
-                      onClick={async (e: any) => {
-                        e.preventDefault();
-                        onOpen();
-                        //handleOpenCardInfoModal();
+                <VStack spacing="4" className="scrollable-content">
+                  {filtered
+                    ?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    .map((oer: any) => (
+                      <Box
+                        key={oer.id}
+                        onClick={async (e: any) => {
+                          e.preventDefault();
+                          onOpen();
+                          // handleOpenCardInfoModal();
 
-                        setOerById(await getDataOerById(oer.id));
-                      }}
-                      as="button"
-                    >
-                      <SingleResourceCard oer={oer} />
-                    </Box>
-                  ))}
+                          setOerById(await getDataOerById(oer.id));
+                        }}
+                        as="button"
+                      >
+                        <SingleResourceCard oer={oer} />
+                      </Box>
+                    ))}
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
                 </VStack>
               )}
             </Box>
