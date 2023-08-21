@@ -1,19 +1,17 @@
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext
-} from 'react';
+import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 //import useLocalStorage from 'use-local-storage';
 import { useLocalStorage } from 'usehooks-ts';
-import { CollectionProps, OerInCollectionProps } from '../../types/encoreElements';
+import {
+  CollectionProps,
+  OerInCollectionProps,
+} from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import { CustomToast } from '../Toast/CustomToast';
 
 type AddCollectionFunction = (id: number, name: string) => Promise<void>;
 type AddResourceFunction = (
   collectionId: number,
-  resource: OerInCollectionProps,
+  resource: OerInCollectionProps
 ) => Promise<void>;
 
 type CollectionContextProps = {
@@ -32,7 +30,7 @@ const CollectionsContext = createContext<CollectionContextProps>(
 export const useCollectionsContext = () => useContext(CollectionsContext);
 
 export const CollectionsProvider = ({ children }: any) => {
-  const { addToast } = CustomToast()
+  const { addToast } = CustomToast();
 
   const [collections, setCollections] = useLocalStorage<CollectionProps[]>(
     'collection',
@@ -49,20 +47,21 @@ export const CollectionsProvider = ({ children }: any) => {
     //console.log('Name passato addCollection: ' + name);
 
     try {
-      if (name.trim() === "") {
+      if (name.trim() === '') {
         addToast({
           message: 'Write a name for the collection!',
-          status: "error"
+          status: 'error',
         });
         return;
       } else {
         const isCollectionPresent = collections.find(
-          (collection: CollectionProps) => collection.name === name || collection.id === id
+          (collection: CollectionProps) =>
+            collection.name === name || collection.id === id
         );
         if (isCollectionPresent) {
           addToast({
             message: `Collection "${name}" already exists!`,
-            status: "error"
+            status: 'error',
           });
         } else {
           const newCollection: CollectionProps = {
@@ -86,8 +85,8 @@ export const CollectionsProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Error: ${error}`,
-        status: "error"
-      })
+        status: 'error',
+      });
     }
   };
 
@@ -99,34 +98,35 @@ export const CollectionsProvider = ({ children }: any) => {
       setCollections(updatedCollections);
       addToast({
         message: `Collection "${name}" delated succesfully!`,
-        status: "success"
-      })
+        status: 'success',
+      });
     } catch (error) {
       addToast({
         message: `Delating failed with this error: ${error}`,
-        status: "error"
-      })
+        status: 'error',
+      });
     }
-
   };
 
   const addResource = async (
     collectionId: number,
-    resource: OerInCollectionProps,
+    resource: OerInCollectionProps
   ): Promise<void> => {
     //console.log('collectionId addResource: ' + collectionId);
     //console.log('resource addResource: ' + resource);
     try {
       const updatedCollections = [...collections];
 
-      const collectionIndex = updatedCollections.findIndex(  // search the index of collection where the resource must be add
+      const collectionIndex = updatedCollections.findIndex(
+        // search the index of collection where the resource must be add
         (collection: CollectionProps) => collection.id === collectionId
       );
 
       if (collectionIndex > -1) {
         const collection = updatedCollections[collectionIndex];
 
-        const isOerAlreadySaved = collection.oers?.some(    // check if oer is already saved in the collection selected
+        const isOerAlreadySaved = collection.oers?.some(
+          // check if oer is already saved in the collection selected
           (item: any) => item.idOer === resource.idOer
         );
         //console.log('Did you find the oer?  ' + isOerAlreadySaved);
@@ -142,23 +142,21 @@ export const CollectionsProvider = ({ children }: any) => {
           if (hydrated) {
             addToast({
               message: `Resource added to "${collections[collectionIndex]?.name}" collection.`,
-              status: 'success'
+              status: 'success',
             });
           }
-
         } else {
           addToast({
             message: `The oer is already saved into "${collection.name}" collection!`,
-            status: 'error'
+            status: 'error',
           });
         }
       } else {
         addToast({
           message: "The collection doesn't exist!",
-          status: 'error'
+          status: 'error',
         });
       }
-
 
       /*const updatedCollections = collections?.map(
         (collection: CollectionProps) => {
@@ -204,8 +202,8 @@ export const CollectionsProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Error: ${error}`,
-        status: "error"
-      })
+        status: 'error',
+      });
     }
   };
 

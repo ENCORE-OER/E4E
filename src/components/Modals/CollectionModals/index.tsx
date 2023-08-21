@@ -6,7 +6,7 @@ import NewCollectionModal from './NewCollectionModal';
 interface IndexCollectionModalProps extends CollectionModalProps {
   isNewCollection: boolean;
   isFromFolderButton: boolean;
-  maxLength?: number;  // max collection name length
+  maxLength?: number; // max collection name length
 }
 
 export default function CollectionModal({

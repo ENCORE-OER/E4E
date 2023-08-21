@@ -40,11 +40,11 @@ export default function AddResourceToCollectionModal({
   const [indexCollectionClicked, setIndexCollectionClicked] =
     useState<number>(-1);
 
-
   const handleSaveResource = async (idCollectionSelected: number) => {
     setIndexCollectionClicked(
-      collections
-        .findIndex((collection: CollectionProps) => collection.id === idCollectionSelected)
+      collections.findIndex(
+        (collection: CollectionProps) => collection.id === idCollectionSelected
+      )
     );
     await addResource(idCollectionSelected, oerToAddCollection);
 

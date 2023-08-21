@@ -7,7 +7,7 @@ import {
   Icon,
   Spacer,
   Text,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -117,7 +117,8 @@ const Home = (props: DiscoverPageProps) => {
     if (hydrated && collections?.length > 0) {
       try {
         const fetchOerData = async () => {
-          if (collections[collectionIndex]?.oers) {   // check if the obj is undefined before to access in it
+          if (collections[collectionIndex]?.oers) {
+            // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
               collections[collectionIndex]?.oers?.map(async (oer: any) => {
                 const oerFound = await getDataOerById(oer.idOer);
@@ -153,7 +154,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -182,51 +183,56 @@ const Home = (props: DiscoverPageProps) => {
             </HStack>
             <Box>
               {hydrated &&
-                collections?.map((collection: CollectionProps, index: number) => (
-                  <HStack
-                    ref={collectionRef}
-                    key={collection.id}
-                    mb="3"
-                    w="100%"
-                    position="relative"
-                  //overflow="hidden"
-                  >
-                    <Flex
+                collections?.map(
+                  (collection: CollectionProps, index: number) => (
+                    <HStack
+                      ref={collectionRef}
+                      key={collection.id}
+                      mb="3"
                       w="100%"
-                      _hover={{ bg: 'gray.200' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCollectionIndex(index);
-                        handleCollectionClick();
-                      }}
-                      cursor={'pointer'}
+                      position="relative"
+                      //overflow="hidden"
                     >
-                      <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                      <Heading
-                        fontSize="22px"
-                        fontWeight="semibold"
-                        noOfLines={1}
-                        //overflow={"hidden"}
-                        w={"65%"}
+                      <Flex
+                        w="100%"
+                        _hover={{ bg: 'gray.200' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCollectionIndex(index);
+                          handleCollectionClick();
+                        }}
+                        cursor={'pointer'}
                       >
-                        {collection.name}
-                      </Heading>
-                    </Flex>
+                        <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                        <Heading
+                          fontSize="22px"
+                          fontWeight="semibold"
+                          noOfLines={1}
+                          //overflow={"hidden"}
+                          w={'65%'}
+                        >
+                          {collection.name}
+                        </Heading>
+                      </Flex>
 
-                    <Button
-                      variant="ghost"
-                      _hover={{ bg: 'background' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDeleteCollection(collection.id, collection.name);
-                      }}
-                      position="absolute"
-                      right={"0px"}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </HStack>
-                ))}
+                      <Button
+                        variant="ghost"
+                        _hover={{ bg: 'background' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDeleteCollection(
+                            collection.id,
+                            collection.name
+                          );
+                        }}
+                        position="absolute"
+                        right={'0px'}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </HStack>
+                  )
+                )}
             </Box>
           </Box>
           <Box
@@ -235,12 +241,15 @@ const Home = (props: DiscoverPageProps) => {
             //borderLeftColor="secondary"
             h="full"
           >
-
             {hydrated && collectionClicked && (
-              <Box minW="550px" >
+              <Box minW="550px">
                 <Flex w="100%" mb="3">
                   <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                  <Heading fontSize="22px" fontWeight="semibold" overflow={"hidden"}>
+                  <Heading
+                    fontSize="22px"
+                    fontWeight="semibold"
+                    overflow={'hidden'}
+                  >
                     {collections[collectionIndex].name}
                   </Heading>
                   <Spacer />
@@ -258,10 +267,9 @@ const Home = (props: DiscoverPageProps) => {
                 <ResourceCardsList oers={oersById} isNormalSizeCard={true} />
               </Box>
             )}
-
           </Box>
         </Flex>
-      </Box >
+      </Box>
 
       {isNewCollectionModalOpen && (
         <CollectionModal
@@ -271,7 +279,7 @@ const Home = (props: DiscoverPageProps) => {
           isFromFolderButton={true}
         />
       )}
-    </Flex >
+    </Flex>
   );
 };
 

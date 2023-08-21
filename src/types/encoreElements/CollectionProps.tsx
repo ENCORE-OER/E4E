@@ -1,7 +1,7 @@
-import { OerInCollectionProps } from "./oer";
+import { OerInCollectionProps } from './oer';
 
 export type CollectionProps = {
-    id: number;
-    name: string;
-    oers: OerInCollectionProps[];
+  id: number;
+  name: string;
+  oers: OerInCollectionProps[];
 };

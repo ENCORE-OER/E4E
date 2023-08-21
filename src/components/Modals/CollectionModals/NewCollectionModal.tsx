@@ -25,7 +25,7 @@ import { CustomToast } from '../../Toast/CustomToast';
 interface NewCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   isFolderButton: boolean; // to understood if this page is call by folder button in resource page
-  maxLength: number;  // max length of the collection name
+  maxLength: number; // max length of the collection name
 }
 
 export default function NewCollectionModal({
@@ -38,7 +38,7 @@ export default function NewCollectionModal({
   //const { isOpen, onClose } = useDisclosure();
   const [nameCollection, setNameCollection] = useState<string>('');
   const [newIdCollection, setNewIdCollection] = useState<number>(-1);
-  const [countClick, setCountClick] = useState<number>(0);  // to count click on "done" button
+  const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
 
   const { addCollection, addResource, collections } = useCollectionsContext();
 
@@ -57,7 +57,7 @@ export default function NewCollectionModal({
     } else {
       addToast({
         message: 'Write a name for the collection!',
-        status: "error"
+        status: 'error',
       });
     }
   };
@@ -95,7 +95,12 @@ export default function NewCollectionModal({
         <ModalHeader>New Collection</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <FormControl isInvalid={(!nameCollection && countClick > 0) || nameCollection.length === maxLength}>
+          <FormControl
+            isInvalid={
+              (!nameCollection && countClick > 0) ||
+              nameCollection.length === maxLength
+            }
+          >
             <FormLabel>First name</FormLabel>
             <Input
               placeholder="New collection..."
@@ -105,17 +110,20 @@ export default function NewCollectionModal({
                 const newValue = e.target.value.slice(0, maxLength);
                 setNameCollection(newValue);
               }}
-              errorBorderColor={nameCollection.length === maxLength ? 'orange.300' : 'red.300'}
+              errorBorderColor={
+                nameCollection.length === maxLength ? 'orange.300' : 'red.300'
+              }
             />
-            {(nameCollection.length === maxLength) && (
+            {nameCollection.length === maxLength && (
               <FormErrorMessage color="orange.300">
                 Length max 30!
               </FormErrorMessage>
             )}
-            {(!nameCollection && countClick > 0) && (
+            {!nameCollection && countClick > 0 && (
               <FormErrorMessage>
                 Write a name for the collection!
-              </FormErrorMessage>)}
+              </FormErrorMessage>
+            )}
           </FormControl>
         </ModalBody>
         <ModalFooter>
@@ -125,7 +133,7 @@ export default function NewCollectionModal({
               disabled={false}
               onClick={(e) => {
                 e.preventDefault();
-                setCountClick(countClick + 1)
+                setCountClick(countClick + 1);
                 handleSaveResource();
               }}
             >
