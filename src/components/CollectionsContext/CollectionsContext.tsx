@@ -7,26 +7,18 @@ import {
 } from 'react';
 //import useLocalStorage from 'use-local-storage';
 import { useLocalStorage } from 'usehooks-ts';
-import { OerSkillInfo } from '../../types/encoreElements/oer/OerSkill';
-
-type OerProps = {
-  idOer: number;
-  title: string;
-  description: string;
-  skills: OerSkillInfo[];
-  concepts: any[];
-};
+import { OerInCollectionProps } from '../../types/encoreElements';
 
 type CollectionProps = {
   id: number;
   name: string;
-  oers: OerProps[];
+  oers: OerInCollectionProps[];
 };
 
 type AddCollectionFunction = (id: number, name: string) => Promise<void>;
 type AddResourceFunction = (
   collectionId: number,
-  resource: OerProps
+  resource: OerInCollectionProps
 ) => Promise<void>;
 
 type CollectionContextProps = {
@@ -61,11 +53,11 @@ export const CollectionsProvider = ({ children }: any) => {
     useLocalStorage<number>('indexCollectionClicked', -1);
 
   const addCollection = async (id: any, name: string): Promise<void> => {
-    console.log('ID passato addCollection: ' + id);
-    console.log('Name passato addCollection: ' + name);
+    //console.log('ID passato addCollection: ' + id);
+    //console.log('Name passato addCollection: ' + name);
 
     if (name.length === 0) {
-      console.log('Write a name for the collection!');
+      alert('Write a name for the collection!');
     } else {
       const isCollectionPresent = collections.some(
         (collection: any) => collection.name === name || collection.id === id
@@ -76,44 +68,45 @@ export const CollectionsProvider = ({ children }: any) => {
           name: name,
           oers: [],
         };
-        console.log('NEW COLLECTION: ' + newCollection.name);
+        //console.log('NEW COLLECTION: ' + newCollection.name);
         return new Promise((resolve) => {
           setCollections([...collections, newCollection]);
           resolve();
         });
       } else {
-        console.log('Collection name already exists!');
+        alert('Collection "' + name + '" already exists!');
       }
     }
   };
 
   const deleteCollection = (id: any) => {
     const updatedCollections = collections.filter(
-      (collection: any) => collection.id !== id
+      (collection: CollectionProps) => collection.id !== id
     );
     setCollections(updatedCollections);
   };
 
   const addResource = async (
-    collectionId: any,
-    resource: OerProps
+    collectionId: number,
+    resource: OerInCollectionProps
   ): Promise<void> => {
-    console.log('collectionId addResource: ' + collectionId);
-    console.log('resource addResource: ' + resource);
-    const updatedCollections = collections?.map((collection) => {
-      console.log('COLLECTION --> ' + collection);
+    //console.log('collectionId addResource: ' + collectionId);
+    //console.log('resource addResource: ' + resource);
+    const updatedCollections = collections?.map((collection: CollectionProps) => {
+      //console.log('COLLECTION --> ' + collection);
       if (collection.id === collectionId) {
         const isOerAlreadySaved = collection.oers?.some(
           (item: any) => item.idOer === resource.idOer
         );
-        console.log('Did you find the oer?  ' + isOerAlreadySaved);
+        //console.log('Did you find the oer?  ' + isOerAlreadySaved);
         if (!isOerAlreadySaved) {
+          // create a new object representing the updated collection
           return {
-            ...collection,
-            oers: [...collection.oers, resource],
+            ...collection,  // Copy all fields of the existing 'collection' object using the spread operator.
+            oers: [...collection.oers, resource], // Adding new resource to the oers list of the collection
           };
         } else {
-          console.log(
+          alert(
             'The oer is already saved into collection -> ' + collection.name
           );
           return collection;
