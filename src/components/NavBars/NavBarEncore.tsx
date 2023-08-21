@@ -11,7 +11,8 @@ type NavBarProps = {
 
 export default function Navbar({ user, pageName }: NavBarProps) {
   return (
-    <Nav justify='space-between'
+    <Nav
+      justify="space-between"
       //wrap="wrap"
       p={4}
       bg="white"
@@ -22,7 +23,8 @@ export default function Navbar({ user, pageName }: NavBarProps) {
       position="fixed"
       borderBottom="0.5px"
       borderBottomColor="secondary"
-      borderBottomStyle="solid">
+      borderBottomStyle="solid"
+    >
       <HStack>
         <Image
           src={brandLogo.src}

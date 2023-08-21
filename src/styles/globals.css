@@ -56,7 +56,9 @@ code {
   background-color: #f4f4f4;
   border: 1px solid #ccc;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .pagination-item button.active {
@@ -74,15 +76,9 @@ code {
   margin-right: 5px;
 }
 
-
 /*scrool for the list of OERs in the discovery page */
 
 .scrollable-content {
   overflow: auto;
-  max-height: 70vh; 
+  max-height: 70vh;
 }
-
-
-
-
-

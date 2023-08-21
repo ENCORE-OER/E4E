@@ -302,6 +302,7 @@ export default function CardInfoModal({
           oerToSave={oer}
           isNewCollection={false}
           isFromFolderButton={false}
+          maxLength={30}
         />
       )}
     </Flex>

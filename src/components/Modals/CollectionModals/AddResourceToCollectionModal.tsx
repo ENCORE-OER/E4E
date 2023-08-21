@@ -9,16 +9,20 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { CollectionModalProps, OerInCollectionProps } from '../../../types/encoreElements';
+import {
+  CollectionModalProps,
+  CollectionProps,
+  OerInCollectionProps,
+} from '../../../types/encoreElements';
 
 import { useHasHydrated } from '../../../utils/utils';
 import { useCollectionsContext } from '../../CollectionsContext/CollectionsContext';
 
 interface AddCollectionModalProps extends CollectionModalProps {
-  oerToAddCollection: OerInCollectionProps;   // this is the oer with only the info needed to add it to the collection
+  oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   setIsNewCollection: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -26,7 +30,7 @@ export default function AddResourceToCollectionModal({
   onClose,
   oerToAddCollection,
   isOpen,
-  setIsNewCollection
+  setIsNewCollection,
 }: AddCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const { addResource, collections } = useCollectionsContext();
@@ -38,7 +42,10 @@ export default function AddResourceToCollectionModal({
 
 
   const handleSaveResource = async (idCollectionSelected: number) => {
-    setIndexCollectionClicked(collections.map((collection: any) => collection.id).indexOf(idCollectionSelected));
+    setIndexCollectionClicked(
+      collections
+        .findIndex((collection: CollectionProps) => collection.id === idCollectionSelected)
+    );
     await addResource(idCollectionSelected, oerToAddCollection);
 
     onClose();
@@ -51,6 +58,10 @@ export default function AddResourceToCollectionModal({
   useEffect(() => {
     if (hydrated) {
       //alert(`Resource added to "${collections[indexCollectionClicked]?.name}" collection`)
+      /*addToast({
+        message: `Resource added to "${collections[indexCollectionClicked]?.name}" collection`,
+        status: 'success'
+      })*/
     }
   }, [indexCollectionClicked]);
 
@@ -69,7 +80,7 @@ export default function AddResourceToCollectionModal({
             maxH="100px"
             overflowY="scroll"
           >
-            {collections?.map((collection: any) => (
+            {collections?.map((collection: CollectionProps) => (
               <Text
                 key={collection.id}
                 _hover={{ bg: 'gray.200' }}

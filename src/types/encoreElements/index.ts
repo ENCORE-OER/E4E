@@ -1,3 +1,4 @@
+export * from './CollectionProps';
 export * from './ResourceCardProps';
 export * from './SortingDropDownMenu/index';
 export * from './collectionModal/index';
