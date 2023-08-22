@@ -77,7 +77,7 @@ export default function AddResourceToCollectionModal({
             p="2px"
             borderColor="grey"
             rounded="5px"
-            maxH="100px"
+            h="200px"
             overflowY="scroll"
           >
             {collections?.map((collection: CollectionProps) => (
@@ -88,6 +88,9 @@ export default function AddResourceToCollectionModal({
                   e.preventDefault();
                   handleSaveResource(collection.id);
                 }}
+                fontSize="18px"
+                borderRadius={3}
+                p={1}
               >
                 {collection.name}
               </Text>

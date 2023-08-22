@@ -8,7 +8,7 @@ import { IconTelescope } from '../../public/Icons/svgToIcons/iconTelescope';
 
 import { useState } from 'react';
 import { IconType } from 'react-icons';
-import NavItem from '../NavItems/NavItem';
+import SideBarNavItem from '../NavItems/SideBarNavItem';
 
 interface LinkItemProps {
   name: string;
@@ -87,16 +87,10 @@ const SidebarContent = ({
       left="0"
       {...rest}
     >
-      {LinkItems.map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          link={link.link}
-          isSelected={link.link === selectedLink}
-          setIsSelected={() => setIsSelected(link.link)}
-        >
+      {LinkItems.map((link: LinkItemProps, index: number) => (
+        <SideBarNavItem key={index} link={link} selectedLink={selectedLink} setIsSelected={setIsSelected}>
           {link.name}
-        </NavItem>
+        </SideBarNavItem>
       ))}
     </Box>
   );

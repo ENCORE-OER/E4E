@@ -8,7 +8,7 @@ type SingleResourceCardProps = {
 export default function SingleResourceCard({
   oer,
 }: //dataOer
-  SingleResourceCardProps) {
+SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 

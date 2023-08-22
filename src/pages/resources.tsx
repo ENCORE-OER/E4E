@@ -21,6 +21,7 @@ import SideBar from '../components/SideBar/SideBar';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
+import AddResourcesButton from '../components/Buttons/AddResourcesButton';
 import DownloadButton from '../components/Buttons/DownloadButton';
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import CollectionModal from '../components/Modals/CollectionModals';
@@ -265,7 +266,8 @@ const Home = (props: DiscoverPageProps) => {
                   color="grey"
                   mb="3"
                 >{`${collections[collectionIndex]?.oers.length} resources`}</Text>
-                <ResourceCardsList oers={oersById} isNormalSizeCard={true} />
+                <ResourceCardsList oers={oersById} isNormalSizeCard={true} itemsPerPage={5} />
+                <Flex justifyContent="center" padding="5"><AddResourcesButton text="Add Resources ..." pathname='/' variant='primary' /></Flex>
               </Box>
             )}
           </Box>

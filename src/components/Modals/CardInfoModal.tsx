@@ -20,7 +20,14 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import { OerAudienceInfo, OerAuthorsInfo, OerConceptInfo, OerMediaTypeInfo, OerProps, OerSubjectInfo } from '../../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerAuthorsInfo,
+  OerConceptInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSubjectInfo,
+} from '../../types/encoreElements';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
@@ -109,22 +116,28 @@ export default function CardInfoModal({
 
         setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
 
-        setLinkOer(oer.oer_url.url || "");
+        setLinkOer(oer.oer_url.url || '');
 
         setDescription(oer?.description || '');
 
         setResourceType(
-          oer.media_type?.flatMap((resType: OerMediaTypeInfo) => resType.name) || []
+          oer.media_type?.flatMap(
+            (resType: OerMediaTypeInfo) => resType.name
+          ) || []
         );
 
         setSubjects(oer.subject?.map((sub: OerSubjectInfo) => sub.name) || []);
 
         setPublishers(oer.publisher?.map((pub: any) => pub.name) || []);
         setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
-        setConcepts(oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []);
+        setConcepts(
+          oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
+        );
         setQualityScore(oer?.overall_score || 0);
         setLastUpdate(oer?.retrieval_date || '');
-        setCoverage(oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []);
+        setCoverage(
+          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
+        );
 
         console.log(JSON.stringify(oer));
       }

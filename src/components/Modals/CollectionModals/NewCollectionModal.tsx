@@ -76,13 +76,13 @@ export default function NewCollectionModal({
         //console.log("New Collection id: " + collections[collections.length - 1].id)
         //console.log("newIdCollection: " + newIdCollection);
 
-        /*const fetchData = async () => {
-                  await addResource(newIdCollection, oerToAddCollection);
-              };
-  
-              fetchData();*/
+        const fetchData = async () => {
+          await addResource(newIdCollection, oerToAddCollection);
+        };
 
-        addResource(newIdCollection, oerToAddCollection);
+        fetchData();
+
+        //addResource(newIdCollection, oerToAddCollection);
         //alert(`Resource added to "${nameCollection}" collection`)
       }
     }

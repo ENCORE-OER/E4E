@@ -24,7 +24,7 @@ export default function SmallOerCard({
   gapGridCardFooter,
   overall_score: qualityScore,
 }: //dataOer
-  ResourceCardProps) {
+ResourceCardProps) {
   //const [showTagDigital, setShowTagDigital] = useState(false);
   //const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   //const [showTagGreen, setShowTagGreen] = useState(false);

@@ -25,31 +25,12 @@ const NavItem = ({
     <Link
       href={link}
       style={{ textDecoration: 'none' }}
-      //_focus={{ boxShadow: 'none' }}
+    //_focus={{ boxShadow: 'none' }}
     >
       <Flex
-        gap={3}
-        height="45px"
-        width="196px"
-        ml="1px"
-        pl="20px"
-        my="15px"
-        align="center"
-        //p="4"
-        role="group"
-        cursor="pointer"
         onClick={() => {
           setIsSelected(!isSelected);
         }}
-        borderLeft="5px"
-        borderLeftColor={isSelected ? 'accent.900' : 'white'}
-        borderLeftStyle={'solid'}
-        _hover={{
-          bg: 'white',
-          color: 'accent.900',
-        }}
-        bg={isSelected ? 'accent.200' : ''}
-        color={'primary'}
         {...rest}
       >
         {icon && (
