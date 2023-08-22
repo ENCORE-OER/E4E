@@ -1,28 +1,29 @@
+import { OerProps } from '../../../types/encoreElements';
 import SmallOerCard from './SmallOerCard';
 
 type SmallSingleResourceCardProps = {
-  oer: any;
+  oer: OerProps;
 };
 
 export default function SmallSingleResourceCard({
   oer,
 }: //dataOer
-SmallSingleResourceCardProps) {
+  SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
   return (
     <SmallOerCard
-      idOer={oer?.id}
-      showTagDigital={oer?.digital_domain || false}
-      showTagEntrepreneurial={oer?.entrepreneurship_domain || false}
-      showTagGreen={oer?.green_domain || false}
+      id={oer?.id}
+      digital_domain={oer?.digital_domain || false}
+      entrepreneurship_domain={oer?.entrepreneurship_domain || false}
+      green_domain={oer?.green_domain || false}
       title={oer?.title}
-      authors={oer?.creator?.map((item: any) => item.full_name) || []}
+      creator={oer?.creator?.map((item: any) => item.full_name) || []}
       description={oer?.description}
-      lastUpdate={oer?.retrieval_date}
-      qualityScore={oer?.overall_score}
-      resourceType={oer?.media_type?.map((item: any) => item.name) || []}
+      retrieval_date={oer?.retrieval_date}
+      overall_score={oer?.overall_score}
+      media_type={oer?.media_type?.map((item: any) => item.name) || []}
       maxHCard="155px"
       mbCard="2"
       pxCard="0px"

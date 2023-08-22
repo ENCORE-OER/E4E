@@ -1,20 +1,20 @@
 import { Card } from '@chakra-ui/react';
-import { ReourceCardProps } from '../../../types/encoreElements';
+import { ResourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
 import OerCardFooter from './OerCardFooter';
 import OerCardHeader from './OerCardHeader';
 
 export default function OerCard({
-  idOer,
+  id: idOer,
   description,
-  authors,
-  lastUpdate,
-  qualityScore,
-  resourceType,
+  creator: authors,
+  retrieval_date: lastUpdate,
+  overall_score: qualityScore,
+  media_type: resourceType,
   title,
-  showTagDigital,
-  showTagEntrepreneurial,
-  showTagGreen,
+  digital_domain: showTagDigital,
+  entrepreneurship_domain: showTagEntrepreneurial,
+  green_domain: showTagGreen,
   maxHCard,
   mbCard,
   pxCard,
@@ -22,7 +22,7 @@ export default function OerCard({
   noOfLinesTextCardBody,
   ptCardHeader,
   pyCardBody,
-}: ReourceCardProps) {
+}: ResourceCardProps) {
   return (
     <Card
       display="flex"

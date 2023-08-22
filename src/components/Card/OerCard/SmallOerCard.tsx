@@ -1,18 +1,18 @@
 import { Card } from '@chakra-ui/react';
-import { ReourceCardProps } from '../../../types/encoreElements';
+import { ResourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
 import OerCardHeader from './OerCardHeader';
 import SmallOerCardFooter from './SmallOerCardFooter';
 
 export default function SmallOerCard({
-  idOer,
-  showTagDigital,
-  showTagEntrepreneurial,
-  showTagGreen,
+  id: idOer,
+  digital_domain: showTagDigital,
+  entrepreneurship_domain: showTagEntrepreneurial,
+  green_domain: showTagGreen,
   description,
-  authors,
-  lastUpdate,
-  resourceType,
+  creator: authors,
+  retrieval_date: lastUpdate,
+  media_type: resourceType,
   title,
   //domain,
   maxHCard,
@@ -22,9 +22,9 @@ export default function SmallOerCard({
   pyCardBody,
   noOfLinesTextCardBody,
   gapGridCardFooter,
-  qualityScore,
+  overall_score: qualityScore,
 }: //dataOer
-ReourceCardProps) {
+  ResourceCardProps) {
   //const [showTagDigital, setShowTagDigital] = useState(false);
   //const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   //const [showTagGreen, setShowTagGreen] = useState(false);

@@ -26,6 +26,7 @@ import SortingDropDownMenu from '../components/DropDownMenu/SortingDropDownMenu'
 import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
+import { OerProps } from '../types/encoreElements';
 import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
 
 type DiscoverPageProps = {
@@ -34,7 +35,7 @@ type DiscoverPageProps = {
 
 const Discover = (props: DiscoverPageProps) => {
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
-  const [oerById, setOerById] = useState<any[]>([]);
+  const [oerById, setOerById] = useState<OerProps | null>(null);
 
   const [domain] = useState<string[]>([]); // to save each type of domain of the resources
 
@@ -43,7 +44,7 @@ const Discover = (props: DiscoverPageProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filtered, setFiltered] = useState<any>([]);
+  const [filtered, setFiltered] = useState<OerProps[]>([]);
   const [byResourceType, setByResourceType] = useState<any>(null);
 
   // items for Sorting DropDown menu
@@ -209,7 +210,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>

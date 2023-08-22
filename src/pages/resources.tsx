@@ -22,7 +22,7 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
-import ResourceCardsList from '../components/Card/OerCard/ResourceCards';
+import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import CollectionModal from '../components/Modals/CollectionModals';
 import { APIV2 } from '../data/api';
 import { CollectionProps } from '../types/encoreElements';
@@ -121,6 +121,7 @@ const Home = (props: DiscoverPageProps) => {
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
               collections[collectionIndex]?.oers?.map(async (oer: any) => {
+                console.log(oer);
                 const oerFound = await getDataOerById(oer.idOer);
                 return oerFound;
               })
@@ -131,7 +132,7 @@ const Home = (props: DiscoverPageProps) => {
 
         fetchOerData();
 
-        console.log(oersById);
+        //console.log(oersById);
       } catch (error) {
         throw error;
       }
@@ -154,7 +155,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-          //justify="space-between"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -191,7 +192,7 @@ const Home = (props: DiscoverPageProps) => {
                       mb="3"
                       w="100%"
                       position="relative"
-                      //overflow="hidden"
+                    //overflow="hidden"
                     >
                       <Flex
                         w="100%"
