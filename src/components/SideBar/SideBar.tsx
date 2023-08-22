@@ -88,7 +88,12 @@ const SidebarContent = ({
       {...rest}
     >
       {LinkItems.map((link: LinkItemProps, index: number) => (
-        <SideBarNavItem key={index} link={link} selectedLink={selectedLink} setIsSelected={setIsSelected}>
+        <SideBarNavItem
+          key={index}
+          link={link}
+          selectedLink={selectedLink}
+          setIsSelected={setIsSelected}
+        >
           {link.name}
         </SideBarNavItem>
       ))}

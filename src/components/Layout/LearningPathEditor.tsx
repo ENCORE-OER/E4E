@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import ResourceCards from '../Card/OerCard/ResourceCardsList';
+import ResourceCardList from '../Card/OerCard/ResourceCardsList';
 
 type LearningPathEditorProps = {
   conceptSelectedIndex: number;
@@ -26,7 +26,7 @@ export default function LearningPathEditor({
             <Text pb={5} fontSize="20" fontWeight="semibold">
               Relevant OERs
             </Text>
-            <ResourceCards oers={oers} isNormalSizeCard={false} />
+            <ResourceCardList oers={oers} isNormalSizeCard={false} itemsPerPage={5} />
           </Box>
         </Flex>
       )}

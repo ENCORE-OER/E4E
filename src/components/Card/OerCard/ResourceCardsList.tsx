@@ -12,13 +12,13 @@ import SmallSingleResourceCard from './SmallSingleResourceCard';
 type ResourceCardsListProps = {
   oers: OerProps[];
   isNormalSizeCard: boolean;
-  itemsPerPage: number
+  itemsPerPage: number;
 };
 
 export default function ResourceCardsList({
   oers,
   isNormalSizeCard,
-  itemsPerPage
+  itemsPerPage,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -45,46 +45,65 @@ export default function ResourceCardsList({
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
 
     <>
-
       {isNormalSizeCard &&
-        hydrated &&
-        (<Box>
-          <VStack h="full" spacing={4} > {
-            oers?.slice(
-              (currentPage - 1) * itemsPerPage,
-              currentPage * itemsPerPage
-            ).map((oer: OerProps, index: number) => (
-              <Box
-                key={index}
-                onClick={async (e: any) => {
-                  e.preventDefault();
-                  onOpen();
-                  // handleOpenCardInfoModal();
+        hydrated && (
+          <Box>
+            <VStack h="full" spacing={4}>
+              {oers
+                ?.slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map((oer: OerProps, index: number) => (
+                  <Box
+                    key={index}
+                    onClick={async (e: any) => {
+                      e.preventDefault();
+                      onOpen();
+                      // handleOpenCardInfoModal();
 
-                  setOerById(oer);
-                }}
-                as="button"
-              >
-                <SingleResourceCard oer={oer} />
-              </Box>
-            ))}
-          </VStack>
-          {oers.length !== 0 &&
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />}
-        </Box>
-        )}
+                      setOerById(oer);
+                    }}
+                    as="button"
+                  >
+                    <SingleResourceCard oer={oer} />
+                  </Box>
+                ))}
+            </VStack>
+            {oers.length !== 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </Box>
+        )
+      }
 
       {/*<SingleResourceCard key={index} oer={oer} />*/}
 
       {!isNormalSizeCard &&
-        hydrated &&
-        oers?.map((oer: OerProps, index: number) => (
-          <SmallSingleResourceCard key={index} oer={oer} />
-        ))}
+        hydrated && (
+          <Box>
+            <VStack h="full" spacing={4} className='scrollable-content'>
+              {oers?.slice(
+                (currentPage - 1) * itemsPerPage,
+                currentPage * itemsPerPage
+              ).map((oer: OerProps, index: number) => (
+                <SmallSingleResourceCard key={index} oer={oer} />
+              ))}
+            </VStack>
+            {oers.length !== 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </Box>
+        )
+      }
 
       <CardInfoModal
         isOpen={isOpen}

@@ -6,9 +6,9 @@ import { ReactText } from 'react';
 import { IconType } from 'react-icons';
 
 interface NavItemProps extends FlexProps {
-  icon: IconType;
+  icon?: IconType;
   children: ReactText | string;
-  link: string;
+  link?: string;
   isSelected: boolean;
   setIsSelected: (value: boolean) => void;
 }
