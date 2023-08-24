@@ -60,7 +60,7 @@ export default function SearchBar({
                 <AutoCompleteTag
                   key={tid}
                   label={tag.label}
-                /*onRemove={() => {
+                  /*onRemove={() => {
                   setInputValue((prevInputValues) => {
                     const updatedValues = prevInputValues.filter(
                       (value: any) => value !== tag.label

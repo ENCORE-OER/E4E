@@ -50,7 +50,8 @@ export default function NewCollectionModal({
       const id_new = Math.random();
       //console.log('Id collection' + id_new);
       setNewIdCollection(id_new);
-      const collectionColor = '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).slice(1, 7) // random color generator
+      const collectionColor =
+        '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).slice(1, 7); // random color generator
       await addCollection(id_new, nameCollection, collectionColor);
       //await addResource(id_new, oerToAddCollection);
 

@@ -22,7 +22,11 @@ import CollectionModal from '../components/Modals/CollectionModals';
 import CollectionNavItem from '../components/NavItems/CollectionNavItem';
 import CollectionView from '../components/Views/CollectionView';
 import { APIV2 } from '../data/api';
-import { CollectionProps, OerInCollectionProps, OerProps } from '../types/encoreElements';
+import {
+  CollectionProps,
+  OerInCollectionProps,
+  OerProps,
+} from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -82,11 +86,13 @@ const Home = (props: DiscoverPageProps) => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
-              collections[collectionIndex]?.oers?.map(async (oer: OerInCollectionProps) => {
-                console.log(oer);
-                const oerFound = await getDataOerById(oer?.id);
-                return oerFound;
-              })
+              collections[collectionIndex]?.oers?.map(
+                async (oer: OerInCollectionProps) => {
+                  console.log(oer);
+                  const oerFound = await getDataOerById(oer?.id);
+                  return oerFound;
+                }
+              )
             );
             setOersById(oerData);
           }
@@ -116,7 +122,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

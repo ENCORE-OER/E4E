@@ -18,7 +18,16 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import { OerAuthorsInfo, OerConceptInfo, OerDomainInfo, OerMediaTypeInfo, OerProps, OerSkillInfo, OerSubjectInfo, OerUrlInfo } from '../../types/encoreElements';
+import {
+  OerAuthorsInfo,
+  OerConceptInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSkillInfo,
+  OerSubjectInfo,
+  OerUrlInfo,
+} from '../../types/encoreElements';
 import CollectionModal from '../Modals/CollectionModals';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -74,7 +83,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
     try {
       // TO DO: watch CardInfoModal to reafactor this part
       const domain = oer?.skills?.flatMap(
-        (skill: OerSkillInfo) => skill?.domain?.map((item: OerDomainInfo) => item.name)
+        (skill: OerSkillInfo) =>
+          skill?.domain?.map((item: OerDomainInfo) => item.name)
       );
       setShowTagDigital(false);
       setShowTagEntrepreneurial(false);
@@ -98,7 +108,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
 
       setResourceType(
-        oer.media_type?.flatMap((resType: OerMediaTypeInfo) => resType.name) || []
+        oer.media_type?.flatMap((resType: OerMediaTypeInfo) => resType.name) ||
+          []
       );
 
       setSubjects(oer.subject?.map((item: OerSubjectInfo) => item.name) || []);
@@ -106,7 +117,9 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       setPublishers(oer.publisher?.map((item: any) => item.name) || []);
       setContributors(oer.contributor?.map((item: any) => item.name) || []);
 
-      setConcepts(oer.concepts?.map((item: OerConceptInfo) => item.label) || []);
+      setConcepts(
+        oer.concepts?.map((item: OerConceptInfo) => item.label) || []
+      );
 
       console.log(authors);
       console.log(linkOer);
@@ -143,8 +156,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-      //container={drawerRef.current}
-      //getContainer={drawerRef.current}
+        //container={drawerRef.current}
+        //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />

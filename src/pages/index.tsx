@@ -23,7 +23,12 @@ import SideBar from '../components/SideBar/SideBar';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
-import { OerAudienceInfo, OerDomainInfo, OerMediaTypeInfo, OerSkillInfo } from '../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSkillInfo,
+} from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -46,8 +51,12 @@ const Home = (props: DiscoverPageProps) => {
   const [metrics, setMetrics] = useState<any[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState<string[] | number[]>([]); // to save each type of domain of the resources
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[] | number[]>([]);
-  const [selectedAudience, setSelectedAudience] = useState<string[] | number[]>([]);
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<
+    string[] | number[]
+  >([]);
+  const [selectedAudience, setSelectedAudience] = useState<string[] | number[]>(
+    []
+  );
   //const [audienceCard, setAudienceCard] = useState<string[]>([]);
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');

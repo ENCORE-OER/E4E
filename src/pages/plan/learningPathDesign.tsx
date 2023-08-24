@@ -48,10 +48,12 @@ const Home = (props: DiscoverPageProps) => {
       try {
         const fetchOerData = async () => {
           const oerData = await Promise.all(
-            collections[indexCollectionClicked]?.oers?.map(async (oer: OerInCollectionProps) => {
-              const oerFound = await getDataOerById(oer?.id);
-              return oerFound;
-            })
+            collections[indexCollectionClicked]?.oers?.map(
+              async (oer: OerInCollectionProps) => {
+                const oerFound = await getDataOerById(oer?.id);
+                return oerFound;
+              }
+            )
           );
           setOersById(oerData);
         };

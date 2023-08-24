@@ -1,7 +1,12 @@
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
 
 import { useEffect } from 'react';
-import { OerAudienceInfo, OerDomainInfo, OerMediaTypeInfo, OerSubjectInfo } from '../../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSubjectInfo,
+} from '../../types/encoreElements';
 import DropDownMenu from '../DropDownMenu/DropDownMenu';
 
 type AdvancedSearchProps = {

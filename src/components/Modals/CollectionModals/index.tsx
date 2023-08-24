@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { CollectionModalProps, OerInCollectionProps } from '../../../types/encoreElements';
+import {
+  CollectionModalProps,
+  OerInCollectionProps,
+} from '../../../types/encoreElements';
 import AddCollectionModal from './AddResourceToCollectionModal';
 import NewCollectionModal from './NewCollectionModal';
 

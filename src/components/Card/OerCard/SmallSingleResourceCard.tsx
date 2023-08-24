@@ -1,4 +1,8 @@
-import { OerAuthorsInfo, OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
+import {
+  OerAuthorsInfo,
+  OerMediaTypeInfo,
+  OerProps,
+} from '../../../types/encoreElements';
 import SmallOerCard from './SmallOerCard';
 
 type SmallSingleResourceCardProps = {
@@ -8,7 +12,7 @@ type SmallSingleResourceCardProps = {
 export default function SmallSingleResourceCard({
   oer,
 }: //dataOer
-  SmallSingleResourceCardProps) {
+SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -19,11 +23,15 @@ export default function SmallSingleResourceCard({
       entrepreneurship_domain={oer?.entrepreneurship_domain || false}
       green_domain={oer?.green_domain || false}
       title={oer?.title}
-      creator={oer?.creator?.map((item: OerAuthorsInfo) => item.full_name) || []}
+      creator={
+        oer?.creator?.map((item: OerAuthorsInfo) => item.full_name) || []
+      }
       description={oer?.description}
       retrieval_date={oer?.retrieval_date}
       overall_score={oer?.overall_score}
-      media_type={oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []}
+      media_type={
+        oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []
+      }
       maxHCard="155px"
       mbCard="2"
       pxCard="0px"

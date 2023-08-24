@@ -20,7 +20,7 @@ export default function ResourceCardsList({
   oers,
   isNormalSizeCard,
   itemsPerPage,
-  collectionColor
+  collectionColor,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,7 +67,10 @@ export default function ResourceCardsList({
                   }}
                   as="button"
                 >
-                  <SingleResourceCard collectionColor={collectionColor} oer={oer} />
+                  <SingleResourceCard
+                    collectionColor={collectionColor}
+                    oer={oer}
+                  />
                 </Box>
               ))}
           </VStack>

@@ -1,8 +1,17 @@
 import { Checkbox } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
-import { OerAudienceInfo, OerDomainInfo, OerMediaTypeInfo, OerSubjectInfo } from '../../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSubjectInfo,
+} from '../../types/encoreElements';
 
-export type optionsObjType = OerAudienceInfo | OerDomainInfo | OerSubjectInfo | OerMediaTypeInfo;
+export type optionsObjType =
+  | OerAudienceInfo
+  | OerDomainInfo
+  | OerSubjectInfo
+  | OerMediaTypeInfo;
 
 type DropDownMenuItemProps = {
   idItem?: number;
@@ -53,8 +62,12 @@ export default function DropDownMenuItem({
     } else*/ if (optionsObj) {
       if (item === optionsObj[0].name) {
         if (e.target.checked) {
-          setSelectedOptions(optionsObj.map((item: optionsObjType) => item.name));
-          setSelectedOptionIds(optionsObj.map((item: optionsObjType) => item.id));
+          setSelectedOptions(
+            optionsObj.map((item: optionsObjType) => item.name)
+          );
+          setSelectedOptionIds(
+            optionsObj.map((item: optionsObjType) => item.id)
+          );
         } else {
           setSelectedOptions([]);
           setSelectedOptionIds([]);
@@ -66,11 +79,16 @@ export default function DropDownMenuItem({
             !selectedOptions.includes(optionsObj[0].name) &&
             !selectedOptions.includes(item)
           ) {
-            setSelectedOptions(optionsObj.map((item: optionsObjType) => item.name));
-            setSelectedOptionIds(optionsObj.map((item: optionsObjType) => item.id));
+            setSelectedOptions(
+              optionsObj.map((item: optionsObjType) => item.name)
+            );
+            setSelectedOptionIds(
+              optionsObj.map((item: optionsObjType) => item.id)
+            );
           } else {
             setSelectedOptions((prev) => [...prev, item]);
-            if (idItem) // This part could be delete. idItem useful? 
+            if (idItem)
+              // This part could be delete. idItem useful?
               setSelectedOptionIds((prev) => [...prev, idItem]);
           }
         } else {
@@ -79,10 +97,13 @@ export default function DropDownMenuItem({
               (option) => option != item && option != optionsObj[0].name
             )
           );
-          setSelectedOptionIds((prev) =>   // This part could be delete. idItem useful? 
-            prev.filter(
-              (option) => option != idItem && option != optionsObj[0].id
-            )
+          setSelectedOptionIds(
+            (
+              prev // This part could be delete. idItem useful?
+            ) =>
+              prev.filter(
+                (option) => option != idItem && option != optionsObj[0].id
+              )
           );
         }
       }

@@ -33,7 +33,7 @@ export default function OerCardHeader({
   showTagGreen,
   title,
   collection_color,
-  checkBookmark
+  checkBookmark,
 }: OerCardHeaderProps) {
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
@@ -62,7 +62,11 @@ export default function OerCardHeader({
               }}
             >
               {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-              <IconBookmarkCheck colorBookMark={collection_color} size='25px' isCheck={checkBookmark} />
+              <IconBookmarkCheck
+                colorBookMark={collection_color}
+                size="25px"
+                isCheck={checkBookmark}
+              />
             </Button>
           }
         </HStack>

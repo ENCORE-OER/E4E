@@ -27,7 +27,7 @@ export default function OerCard({
   noOfLinesTextCardBody,
   ptCardHeader,
   pyCardBody,
-  checkBookmark
+  checkBookmark,
 }: OerCardProps) {
   return (
     <Card

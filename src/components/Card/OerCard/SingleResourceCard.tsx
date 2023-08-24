@@ -1,4 +1,8 @@
-import { OerAuthorsInfo, OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
+import {
+  OerAuthorsInfo,
+  OerMediaTypeInfo,
+  OerProps,
+} from '../../../types/encoreElements';
 import OerCard from './OerCard';
 
 type SingleResourceCardProps = {
@@ -10,9 +14,8 @@ type SingleResourceCardProps = {
 export default function SingleResourceCard({
   oer,
   collectionColor,
-  checkBookmark
-}:
-  SingleResourceCardProps) {
+  checkBookmark,
+}: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -24,11 +27,15 @@ export default function SingleResourceCard({
       entrepreneurship_domain={oer?.entrepreneurship_domain ?? false}
       green_domain={oer?.green_domain ?? false}
       title={oer?.title}
-      creator={oer?.creator?.map((item: OerAuthorsInfo) => item.full_name) || []}
+      creator={
+        oer?.creator?.map((item: OerAuthorsInfo) => item.full_name) || []
+      }
       description={oer?.description}
       retrieval_date={oer?.retrieval_date}
       overall_score={oer?.overall_score}
-      media_type={oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []}
+      media_type={
+        oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []
+      }
       checkBookmark={checkBookmark}
     />
   );

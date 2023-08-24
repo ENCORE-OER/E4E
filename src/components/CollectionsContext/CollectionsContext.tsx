@@ -8,7 +8,11 @@ import {
 import { useHasHydrated } from '../../utils/utils';
 import { CustomToast } from '../Toast/CustomToast';
 
-type AddCollectionFunction = (id: number, name: string, color: string) => Promise<void>;
+type AddCollectionFunction = (
+  id: number,
+  name: string,
+  color: string
+) => Promise<void>;
 type AddResourceFunction = (
   collectionId: number,
   resource: OerInCollectionProps
@@ -43,7 +47,11 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const hydrated = useHasHydrated();
 
-  const addCollection = async (id: number, name: string, color: string): Promise<void> => {
+  const addCollection = async (
+    id: number,
+    name: string,
+    color: string
+  ): Promise<void> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
 
@@ -69,7 +77,7 @@ export const CollectionsProvider = ({ children }: any) => {
             id: id,
             name: name,
             oers: [],
-            color: color
+            color: color,
           };
 
           addToast({
