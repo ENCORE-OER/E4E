@@ -59,7 +59,7 @@ const Discover = (props: DiscoverPageProps) => {
   const [isAscending, setAscending] = useState<boolean>(true);
 
   const allOERs = async () => {
-    console.log("here to check when we enter with an empty query");
+    console.log('here to check when we enter with an empty query');
   };
 
   const itemsPerPage = 10;
@@ -209,7 +209,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-              //justify="space-between"
+                //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
@@ -240,7 +240,10 @@ const Discover = (props: DiscoverPageProps) => {
               {filtered && (
                 <VStack spacing="4" className="scrollable-content">
                   {filtered
-                    ?.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+                    ?.slice(
+                      (currentPage - 1) * itemsPerPage,
+                      currentPage * itemsPerPage
+                    )
                     .map((oer: any) => (
                       <Box
                         key={oer.id}

@@ -12,6 +12,7 @@ import {
 
 import { useEffect, useState } from 'react';
 import { IconArrowDownFilter } from '../../public/Icons/svgToIcons/iconArrowDownFilter';
+import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 
@@ -58,7 +59,7 @@ export default function CollectionMenu({}: CollectionMenuProps) {
 
   useEffect(() => {
     setIndexCollectionClicked(-1);
-  }, []);
+  });
 
   return (
     <>
@@ -89,7 +90,7 @@ export default function CollectionMenu({}: CollectionMenuProps) {
             overflowWrap={'normal'}
           >
             {hydrated &&
-              collections?.map((collection: any, index: number) => (
+              collections?.map((collection: CollectionProps, index: number) => (
                 <MenuItem
                   key={collection.id}
                   onClick={(e: any) => {

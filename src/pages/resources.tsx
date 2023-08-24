@@ -23,8 +23,9 @@ import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
 import DownloadButton from '../components/Buttons/DownloadButton';
 import ResourceCardsList from '../components/Card/OerCard/ResourceCards';
-import AddCollectionModal from '../components/Modals/CollectionModals/AddCollectionModal';
+import CollectionModal from '../components/Modals/CollectionModals';
 import { APIV2 } from '../data/api';
+import { CollectionProps } from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -53,7 +54,7 @@ const Home = (props: DiscoverPageProps) => {
 
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
-  const [collectionIndex, setCollectionIndex] = useState<number>(0);
+  const [collectionIndex, setCollectionIndex] = useState<number>(-1);
   const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1);
   const { isOpen } = useDisclosure();
 
@@ -62,23 +63,23 @@ const Home = (props: DiscoverPageProps) => {
     addCollection(nameCollection);
   };*/
 
-  const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
+  const [isNewCollectionModalOpen, setNewCollectionModalOpen] =
     useState<boolean>(false);
 
-  const handleOpenAddCollectionModal = () => {
-    setAddCollectionModalOpen(true);
-    console.log('eccolo: ' + isAddCollectionModalOpen);
+  const handleOpenNewCollectionModal = () => {
+    setNewCollectionModalOpen(true);
+    //console.log('eccolo: ' + isNewCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
-    setAddCollectionModalOpen(false);
+    setNewCollectionModalOpen(false);
   };
 
   // handle which collection is clicked to show the right data
   const handleCollectionClick = () => {
-    console.log('1: ' + collectionClicked);
-    console.log('1 index: ' + collectionIndex);
-    console.log('1 prev index: ' + prevCollectionIndex);
+    //console.log('1: ' + collectionClicked);
+    //console.log('1 index: ' + collectionIndex);
+    //console.log('1 prev index: ' + prevCollectionIndex);
 
     if (!collectionClicked) {
       setCollectionClicked(true);
@@ -88,19 +89,19 @@ const Home = (props: DiscoverPageProps) => {
 
     setPrevCollectionIndex(collectionIndex);
 
-    console.log('2: ' + collectionClicked);
-    console.log('2 index: ' + collectionIndex);
-    console.log('2 prev index: ' + prevCollectionIndex);
+    //console.log('2: ' + collectionClicked);
+    //console.log('2 index: ' + collectionIndex);
+    //console.log('2 prev index: ' + prevCollectionIndex);
   };
 
-  const handleDeleteCollection = (idCol: number) => {
+  const handleDeleteCollection = (idColl: number, nameColl: string) => {
     if (collectionClicked) {
       setCollectionClicked(false);
     }
-    deleteCollection(idCol);
+    deleteCollection(idColl, nameColl);
   };
 
-  const getDataOerById = async (id_oer: any) => {
+  const getDataOerById = async (id_oer: number) => {
     const api = new APIV2(props.accessToken);
 
     try {
@@ -111,17 +112,21 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
+  // recover all the oers of a collection
   useEffect(() => {
-    if (collections?.length > 0) {
+    if (hydrated && collections?.length > 0) {
       try {
         const fetchOerData = async () => {
-          const oerData = await Promise.all(
-            collections[collectionIndex]?.oers?.map(async (oer: any) => {
-              const oerFound = await getDataOerById(oer.idOer);
-              return oerFound;
-            })
-          );
-          setOersById(oerData);
+          if (collections[collectionIndex]?.oers) {
+            // check if the obj is undefined before to access in it
+            const oerData = await Promise.all(
+              collections[collectionIndex]?.oers?.map(async (oer: any) => {
+                const oerFound = await getDataOerById(oer.idOer);
+                return oerFound;
+              })
+            );
+            setOersById(oerData);
+          }
         };
 
         fetchOerData();
@@ -138,7 +143,14 @@ const Home = (props: DiscoverPageProps) => {
       <Navbar user={user} pageName="Your resources" />
       <SideBar pagePath={router.pathname} />
 
-      <Box ml="200px" py="115px" pl="40px" w="full" h="full" bg="background">
+      <Box
+        ml="200px"
+        py="115px"
+        pl="40px"
+        w="full"
+        minH="100vh"
+        bg="background"
+      >
         <Flex
           w="100%"
           justifyContent="left"
@@ -147,13 +159,13 @@ const Home = (props: DiscoverPageProps) => {
           <Heading>Your resources</Heading>
         </Flex>
 
-        <Flex w="full" h="full" my="30px" gap={3}>
+        <Flex w="full" minH="full" my="30px" gap={3}>
           <Box
             borderRight="2px"
             borderRightColor="secondary"
-            w="22%"
+            w="25%"
             p="25px"
-            h="full"
+            minH="full"
           >
             <HStack mb="3">
               <Heading fontSize="25px">Collections</Heading>
@@ -163,11 +175,7 @@ const Home = (props: DiscoverPageProps) => {
                 _hover={{ bg: 'backgound' }}
                 onClick={(e) => {
                   e.preventDefault();
-                  /*const id = Math.random();
-                  addCollection(id, nameCollection);
-                  console.log('id collection: ' + id);
-                  //setIdCollection(idCollection + 1);*/
-                  handleOpenAddCollectionModal();
+                  handleOpenNewCollectionModal();
                 }}
               >
                 <Icon as={LuFolderPlus} w="30px" h="30px" />
@@ -175,54 +183,73 @@ const Home = (props: DiscoverPageProps) => {
             </HStack>
             <Box>
               {hydrated &&
-                collections?.map((collection: any, index: number) => (
-                  <HStack
-                    ref={collectionRef}
-                    key={collection.id}
-                    mb="3"
-                    w="100%"
-                  >
-                    <Flex
+                collections?.map(
+                  (collection: CollectionProps, index: number) => (
+                    <HStack
+                      ref={collectionRef}
+                      key={collection.id}
+                      mb="3"
                       w="100%"
-                      _hover={{ bg: 'gray.200' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setCollectionIndex(index);
-                        handleCollectionClick();
-                      }}
-                      cursor={'pointer'}
+                      position="relative"
+                      //overflow="hidden"
                     >
-                      <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                      <Heading
-                        fontSize="22px"
-                        fontWeight="semibold"
-                        noOfLines={1}
+                      <Flex
+                        w="100%"
+                        _hover={{ bg: 'gray.200' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCollectionIndex(index);
+                          handleCollectionClick();
+                        }}
+                        cursor={'pointer'}
                       >
-                        {collection.name}
-                      </Heading>
-                    </Flex>
-                    <Spacer />
-                    <Button
-                      variant="ghost"
-                      _hover={{ bg: 'background' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDeleteCollection(collection.id);
-                      }}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  </HStack>
-                ))}
+                        <Icon as={FcFolder} w="30px" h="30px" mr="3" />
+                        <Heading
+                          fontSize="22px"
+                          fontWeight="semibold"
+                          noOfLines={1}
+                          //overflow={"hidden"}
+                          w={'65%'}
+                        >
+                          {collection.name}
+                        </Heading>
+                      </Flex>
+
+                      <Button
+                        variant="ghost"
+                        _hover={{ bg: 'background' }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDeleteCollection(
+                            collection.id,
+                            collection.name
+                          );
+                        }}
+                        position="absolute"
+                        right={'0px'}
+                      >
+                        <DeleteIcon />
+                      </Button>
+                    </HStack>
+                  )
+                )}
             </Box>
           </Box>
-
-          <Box p="25px">
-            {collectionClicked && (
+          <Box
+            p="25px"
+            //borderLeft="2px"
+            //borderLeftColor="secondary"
+            h="full"
+          >
+            {hydrated && collectionClicked && (
               <Box minW="550px">
-                <HStack w="100%" mb="3">
+                <Flex w="100%" mb="3">
                   <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                  <Heading fontSize="22px" fontWeight="semibold">
+                  <Heading
+                    fontSize="22px"
+                    fontWeight="semibold"
+                    overflow={'hidden'}
+                  >
                     {collections[collectionIndex].name}
                   </Heading>
                   <Spacer />
@@ -230,13 +257,13 @@ const Home = (props: DiscoverPageProps) => {
                     data={collections[collectionIndex]}
                     fileName={collections[collectionIndex].name}
                   />
-                </HStack>
+                </Flex>
                 <Text
                   fontWeight="light"
                   fontSize="small"
                   color="grey"
                   mb="3"
-                >{`${collections[collectionIndex].oers.length} resources`}</Text>
+                >{`${collections[collectionIndex]?.oers.length} resources`}</Text>
                 <ResourceCardsList oers={oersById} isNormalSizeCard={true} />
               </Box>
             )}
@@ -244,10 +271,12 @@ const Home = (props: DiscoverPageProps) => {
         </Flex>
       </Box>
 
-      {isAddCollectionModalOpen && (
-        <AddCollectionModal
+      {isNewCollectionModalOpen && (
+        <CollectionModal
           isOpen={isOpen}
           onClose={handleCloseCollectionModal}
+          isNewCollection={true}
+          isFromFolderButton={true}
         />
       )}
     </Flex>

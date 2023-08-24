@@ -18,7 +18,7 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
-import AddCollectionModal from '../Modals/CollectionModals/AddCollectionModal';
+import CollectionModal from '../Modals/CollectionModals';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
@@ -280,10 +280,12 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         </DrawerContent>
       </Drawer>
       {isAddCollectionModalOpen && (
-        <AddCollectionModal
+        <CollectionModal
           isOpen={isOpen}
           onClose={handleCloseCollectionModal}
           oerToSave={oer}
+          isNewCollection={false}
+          isFromFolderButton={false}
         />
       )}
     </>

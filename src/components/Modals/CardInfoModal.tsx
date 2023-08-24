@@ -23,7 +23,7 @@ import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
-import AddCollectionModal from './CollectionModals/AddCollectionModal';
+import CollectionModal from './CollectionModals';
 
 type CardInfoModalProps = {
   isOpen: boolean;
@@ -296,10 +296,13 @@ export default function CardInfoModal({
         </ModalContent>
       </Modal>
       {isAddCollectionModalOpen && (
-        <AddCollectionModal
+        <CollectionModal
           isOpen={isOpen}
           onClose={handleCloseCollectionModal}
           oerToSave={oer}
+          isNewCollection={false}
+          isFromFolderButton={false}
+          maxLength={30}
         />
       )}
     </Flex>
