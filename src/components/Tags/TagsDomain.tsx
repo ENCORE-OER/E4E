@@ -4,7 +4,7 @@ type TagsDomainProps = {
   showTagDigital: boolean;
   showTagEntrepreneurial: boolean;
   showTagGreen: boolean;
-  mb?: any;
+  mb?: string | number;
 };
 
 export default function TagsDomain({

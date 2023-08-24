@@ -13,15 +13,15 @@ export type OerProps = {
   id: number;
   plain_text_summary: string;
   creator: OerAuthorsInfo[];
-  publisher: any[];
-  contributor: any[];
+  publisher: any[] | null;
+  contributor: any[] | null;
   coverage: OerAudienceInfo[];
   skills: OerSkillInfo[];
   concepts: OerConceptInfo[];
   media_type: OerMediaTypeInfo[];
   resource_format: OerResourceFormatInfo[];
   subject: OerSubjectInfo[];
-  oer_url: OerUrlInfo;
+  oer_url: OerUrlInfo[];
   source_roer: OerSourceRoerInfo[];
   title: string;
   description: string;

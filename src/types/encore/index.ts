@@ -35,8 +35,8 @@ export type EncoreOer = {
   id: number;
   plain_text_summary: string;
   creator: OerAuthorsInfo[];
-  publisher: any[];
-  contributor: any[];
+  publisher: any[] | null;
+  contributor: any[] | null;
   coverage: OerAudienceInfo[];
   skills: OerSkillInfo[];
   concepts: OerConceptInfo[];

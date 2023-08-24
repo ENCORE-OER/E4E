@@ -2,10 +2,15 @@
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, Flex, HStack, Heading, Icon } from '@chakra-ui/react';
-import { Dispatch, ReactText, RefObject, SetStateAction, useState } from 'react';
+import {
+    Dispatch,
+    ReactText,
+    RefObject,
+    SetStateAction,
+    useState
+} from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 
 interface CollectionNavItemProps {
     collection: CollectionProps;
@@ -16,6 +21,7 @@ interface CollectionNavItemProps {
     collectionClicked: boolean;
     setCollectionIndex: Dispatch<SetStateAction<number>>;
     collectionIndex: number;
+    deleteCollection: (id: number, name: string) => void;
 }
 
 const CollectionNavItem = ({
@@ -26,15 +32,17 @@ const CollectionNavItem = ({
     setCollectionClicked,
     collectionClicked,
     collectionIndex,
-    setCollectionIndex
+    setCollectionIndex,
+    deleteCollection
 }: CollectionNavItemProps) => {
+
 
     // handle the click on the collection
     //const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
     //const [collectionIndex, setCollectionIndex] = useState<number>(-1);
     const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1);
 
-    const { deleteCollection } = useCollectionsContext();
+    //const { deleteCollection } = useCollectionsContext();
     //const collectionRef = useRef<HTMLDivElement>(null);
 
     // handle which collection is clicked to show the right data
@@ -63,18 +71,20 @@ const CollectionNavItem = ({
         deleteCollection(idColl, nameColl);
     };
 
-
     return (
         <HStack
             ref={collectionRef}
             mb="3"
             w="100%"
             position="relative"
+            borderLeft="5px"
+            borderLeftColor={collection.color}
+            borderLeftStyle={'solid'}
         //overflow="hidden"
         >
             <Flex
                 w="100%"
-                _hover={{ bg: 'gray.200' }}
+                _hover={{ bg: 'gray.200', borderRadius: "5px" }}
                 onClick={(e) => {
                     e.preventDefault();
                     setCollectionIndex(index);
@@ -99,10 +109,7 @@ const CollectionNavItem = ({
                 _hover={{ bg: 'background' }}
                 onClick={(e) => {
                     e.preventDefault();
-                    handleDeleteCollection(
-                        collection.id,
-                        collection.name
-                    );
+                    handleDeleteCollection(collection.id, collection.name);
                 }}
                 position="absolute"
                 right={'0px'}

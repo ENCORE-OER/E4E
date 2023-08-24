@@ -117,11 +117,11 @@ const Discover = (props: DiscoverPageProps) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const searchCallback = async (domainIds: any[]) => {
+  const searchCallback = async (domainIds?: number[]) => {
     alert('qui call back');
   };
 
-  const getDataOerById = async (id_oer: any) => {
+  const getDataOerById = async (id_oer: number) => {
     const api = new APIV2(props.accessToken);
 
     try {
@@ -175,7 +175,7 @@ const Discover = (props: DiscoverPageProps) => {
   useEffect(() => {
     setIsLoading(true);
     const sortedData = [...filtered];
-    sortedData.sort((a: any, b: any) => {
+    sortedData.sort((a: OerProps, b: OerProps) => {
       if (selectedSorting === 'Last Update') {
         return isAscending
           ? a.retrieval_date.localeCompare(b.retrieval_date)
@@ -188,6 +188,8 @@ const Discover = (props: DiscoverPageProps) => {
         return isAscending
           ? a.overall_score - b.overall_score
           : b.overall_score - a.overall_score;
+      } else {
+        return 0;
       }
     });
 
@@ -205,12 +207,12 @@ const Discover = (props: DiscoverPageProps) => {
       <SideBar pagePath={router.pathname} />
       <>
         {
-          <Flex ml="200px" h="100vh" pt="60px" w="full">
+          <Flex ml="200px" minH="100vh" pt="60px" w="full">
             <Box flex="1" py="30px" px="30px" h="full" w="full">
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
@@ -239,33 +241,37 @@ const Discover = (props: DiscoverPageProps) => {
               )}
 
               {filtered && (
-                <VStack spacing="4" className="scrollable-content">
-                  {filtered
-                    ?.slice(
-                      (currentPage - 1) * itemsPerPage,
-                      currentPage * itemsPerPage
-                    )
-                    .map((oer: any) => (
-                      <Box
-                        key={oer.id}
-                        onClick={async (e: any) => {
-                          e.preventDefault();
-                          onOpen();
-                          // handleOpenCardInfoModal();
+                <Box>
+                  <VStack spacing="4" className="scrollable-content" p={3}>
+                    {filtered
+                      ?.slice(
+                        (currentPage - 1) * itemsPerPage,
+                        currentPage * itemsPerPage
+                      )
+                      .map((oer: OerProps) => (
+                        <Box
+                          key={oer.id}
+                          onClick={async (e: any) => {
+                            e.preventDefault();
+                            onOpen();
+                            // handleOpenCardInfoModal();
 
-                          setOerById(await getDataOerById(oer.id));
-                        }}
-                        as="button"
-                      >
-                        <SingleResourceCard oer={oer} />
-                      </Box>
-                    ))}
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
-                </VStack>
+                            setOerById(await getDataOerById(oer.id));
+                          }}
+                          as="button"
+                        >
+                          <SingleResourceCard checkBookmark={false} oer={oer} />
+                        </Box>
+                      ))}
+                  </VStack>
+                  {filtered.length > 0 &&
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  }
+                </Box>
               )}
             </Box>
 

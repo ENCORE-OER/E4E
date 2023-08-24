@@ -1,5 +1,6 @@
 export type ResourceCardProps = {
   id: number;
+  collection_color?: string;
   digital_domain: boolean;
   entrepreneurship_domain: boolean;
   green_domain: boolean;

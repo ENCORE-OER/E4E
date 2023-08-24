@@ -27,10 +27,11 @@ ChartJS.register(
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 import { FaSync } from 'react-icons/fa';
+import { OerMediaTypeInfo } from '../../../types/encoreElements';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   // const { oers, setOERs } = props;
 
   // const [graph, setGraph] = useState<EncoreConceptMap | null>();
@@ -46,8 +47,8 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
 
   //retrieve resourse types
   filtered?.forEach(
-    (oer: { media_type: any[] }) =>
-      oer.media_type?.map((item: any) => resourceTypes.push(item.name))
+    (oer: { media_type: OerMediaTypeInfo[] }) =>
+      oer.media_type?.map((item: OerMediaTypeInfo) => resourceTypes.push(item.name))
   );
 
   const transformedObject = resourceTypes.reduce((result, element) => {
@@ -80,7 +81,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
       const type = item.type;
       // here we filter the selected OERs by type
       filtered?.forEach(
-        (oer: { media_type: any[] }) =>
+        (oer: { media_type: OerMediaTypeInfo[] }) =>
           oer.media_type?.map((item: any) => {
             if (item.name === type) {
               resources.push(oer);

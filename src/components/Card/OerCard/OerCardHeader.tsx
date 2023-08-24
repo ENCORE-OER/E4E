@@ -8,7 +8,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
-import { BsBookmark } from 'react-icons/bs';
+//import { BsBookmark } from 'react-icons/bs';
+import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import TagsDomain from '../../Tags/TagsDomain';
 
 type OerCardHeaderProps = {
@@ -18,6 +19,8 @@ type OerCardHeaderProps = {
   showTagGreen: boolean;
   title: string;
   authors: string[];
+  collection_color?: string;
+  checkBookmark?: boolean;
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -29,6 +32,8 @@ export default function OerCardHeader({
   showTagEntrepreneurial,
   showTagGreen,
   title,
+  collection_color,
+  checkBookmark
 }: OerCardHeaderProps) {
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
@@ -56,7 +61,8 @@ export default function OerCardHeader({
                     addResource(idCollection, idOer);*/
               }}
             >
-              <BsBookmark size={25} />
+              {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
+              <IconBookmarkCheck colorBookMark={collection_color} size='25px' isCheck={checkBookmark} />
             </Button>
           }
         </HStack>

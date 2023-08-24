@@ -11,7 +11,7 @@ export default function TagResourceType({
   return (
     <>
       {resourceType &&
-        resourceType.map((item: any, id: number) => (
+        resourceType.map((name: string, id: number) => (
           <Tag
             key={id}
             gap={1}
@@ -25,7 +25,7 @@ export default function TagResourceType({
           >
             <TagLeftIcon as={IconVideo} />
             <Text variant="label_tag_resType" noOfLines={1}>
-              {item}
+              {name}
             </Text>
           </Tag>
         ))}

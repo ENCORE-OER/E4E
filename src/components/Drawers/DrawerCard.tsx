@@ -18,6 +18,7 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
+import { OerAuthorsInfo, OerConceptInfo, OerDomainInfo, OerMediaTypeInfo, OerProps, OerSkillInfo, OerSubjectInfo, OerUrlInfo } from '../../types/encoreElements';
 import CollectionModal from '../Modals/CollectionModals';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -26,7 +27,7 @@ import TagsDomain from '../Tags/TagsDomain';
 type DrawerCardProps = {
   isOpen: boolean;
   onClose: () => void;
-  oer: any;
+  oer: OerProps;
   drawerRef?: RefObject<HTMLDivElement>;
 };
 
@@ -36,13 +37,13 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
-  const [authors, setAuthors] = useState<any[]>([]);
-  const [linkOer, setLinkOer] = useState<any>();
-  const [resourceType, setResourceType] = useState<any[]>([]);
-  const [subjects, setSubjects] = useState<any[]>([]);
-  const [concepts, setConcepts] = useState<any[]>([]);
-  const [publishers, setPublishers] = useState<any[]>([]);
-  const [contributors, setContributors] = useState<any[]>([]);
+  const [authors, setAuthors] = useState<string[]>([]);
+  const [linkOer, setLinkOer] = useState<string[]>();
+  const [resourceType, setResourceType] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [concepts, setConcepts] = useState<string[]>([]);
+  const [publishers, setPublishers] = useState<string[]>([]);
+  const [contributors, setContributors] = useState<string[]>([]);
 
   //const { collections, addCollection } = useCollectionsContext();
   //const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,7 +54,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
   const handleViewResource = () => {
     if (linkOer) {
-      window?.open(linkOer, '_blank');
+      window?.open(linkOer[0], '_blank');
     }
   };
 
@@ -71,8 +72,9 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
   useEffect(() => {
     try {
+      // TO DO: watch CardInfoModal to reafactor this part
       const domain = oer?.skills?.flatMap(
-        (skill: any) => skill?.domain?.map((item: any) => item.name)
+        (skill: OerSkillInfo) => skill?.domain?.map((item: OerDomainInfo) => item.name)
       );
       setShowTagDigital(false);
       setShowTagEntrepreneurial(false);
@@ -88,23 +90,23 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
       }
 
       const temp_auth = oer.creator?.map(
-        (creator_name: any) => creator_name.full_name
+        (creator_name: OerAuthorsInfo) => creator_name.full_name
       );
 
       setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
 
-      setLinkOer(oer.oer_url?.map((url: any) => url.url) || []);
+      setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
 
       setResourceType(
-        oer.media_type?.flatMap((resType: any) => resType.name) || []
+        oer.media_type?.flatMap((resType: OerMediaTypeInfo) => resType.name) || []
       );
 
-      setSubjects(oer.subject?.map((item: any) => item.name) || []);
+      setSubjects(oer.subject?.map((item: OerSubjectInfo) => item.name) || []);
 
       setPublishers(oer.publisher?.map((item: any) => item.name) || []);
       setContributors(oer.contributor?.map((item: any) => item.name) || []);
 
-      setConcepts(oer.concepts?.map((item: any) => item.label) || []);
+      setConcepts(oer.concepts?.map((item: OerConceptInfo) => item.label) || []);
 
       console.log(authors);
       console.log(linkOer);
@@ -141,8 +143,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-        //container={drawerRef.current}
-        //getContainer={drawerRef.current}
+      //container={drawerRef.current}
+      //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />

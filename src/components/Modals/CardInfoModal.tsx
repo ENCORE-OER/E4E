@@ -27,6 +27,7 @@ import {
   OerMediaTypeInfo,
   OerProps,
   OerSubjectInfo,
+  OerUrlInfo,
 } from '../../types/encoreElements';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -49,7 +50,7 @@ export default function CardInfoModal({
     useState<boolean>(false);
   const [showTagGreen, setShowTagGreen] = useState<boolean>(false);
   const [authors, setAuthors] = useState<string[]>([]);
-  const [linkOer, setLinkOer] = useState<string>();
+  const [linkOer, setLinkOer] = useState<string[]>();
   const [resourceType, setResourceType] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [publishers, setPublishers] = useState<string[]>([]);
@@ -72,7 +73,7 @@ export default function CardInfoModal({
 
   const handleViewResource = () => {
     if (linkOer) {
-      window?.open(linkOer, '_blank');
+      window?.open(linkOer[0], '_blank');
     }
   };
 
@@ -116,7 +117,7 @@ export default function CardInfoModal({
 
         setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
 
-        setLinkOer(oer.oer_url.url || '');
+        setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
 
         setDescription(oer?.description || '');
 

@@ -1,9 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { OerProps } from '../../types/encoreElements';
 import ResourceCardList from '../Card/OerCard/ResourceCardsList';
 
 type LearningPathEditorProps = {
   conceptSelectedIndex: number;
-  oers: any[];
+  oers: OerProps[];
 };
 
 export default function LearningPathEditor({
@@ -26,7 +27,11 @@ export default function LearningPathEditor({
             <Text pb={5} fontSize="20" fontWeight="semibold">
               Relevant OERs
             </Text>
-            <ResourceCardList oers={oers} isNormalSizeCard={false} itemsPerPage={5} />
+            <ResourceCardList
+              oers={oers}
+              isNormalSizeCard={false}
+              itemsPerPage={5}
+            />
           </Box>
         </Flex>
       )}

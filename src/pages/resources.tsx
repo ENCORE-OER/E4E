@@ -6,7 +6,7 @@ import {
   HStack,
   Icon,
   Spacer,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -22,7 +22,7 @@ import CollectionModal from '../components/Modals/CollectionModals';
 import CollectionNavItem from '../components/NavItems/CollectionNavItem';
 import CollectionView from '../components/Views/CollectionView';
 import { APIV2 } from '../data/api';
-import { CollectionProps } from '../types/encoreElements';
+import { CollectionProps, OerInCollectionProps, OerProps } from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -32,10 +32,10 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { collections } = useCollectionsContext();
+  const { collections, deleteCollection } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
-  const [oersById, setOersById] = useState<any[]>([]);
+  const [oersById, setOersById] = useState<OerProps[]>([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
 
   // handle the click on the collection
@@ -61,14 +61,16 @@ const Home = (props: DiscoverPageProps) => {
     setNewCollectionModalOpen(false);
   };
 
-  const getDataOerById = async (id_oer: number) => {
+  const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
 
-    try {
-      const oer = await api.getOerById(id_oer);
-      return oer[0];
-    } catch (error) {
-      throw error;
+    if (id_oer) {
+      try {
+        const oer = await api.getOerById(id_oer);
+        return oer[0];
+      } catch (error) {
+        throw error;
+      }
     }
   };
 
@@ -80,9 +82,9 @@ const Home = (props: DiscoverPageProps) => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
-              collections[collectionIndex]?.oers?.map(async (oer: any) => {
+              collections[collectionIndex]?.oers?.map(async (oer: OerInCollectionProps) => {
                 console.log(oer);
-                const oerFound = await getDataOerById(oer.idOer);
+                const oerFound = await getDataOerById(oer?.id);
                 return oerFound;
               })
             );
@@ -154,6 +156,7 @@ const Home = (props: DiscoverPageProps) => {
                       setCollectionClicked={setCollectionClicked}
                       collectionIndex={collectionIndex}
                       setCollectionIndex={setCollectionIndex}
+                      deleteCollection={deleteCollection}
                     >
                       {collection.name}
                     </CollectionNavItem>
@@ -161,13 +164,14 @@ const Home = (props: DiscoverPageProps) => {
                 )}
             </Box>
           </Box>
-          <Box
-            p="25px"
-            h="full"
-
-          >
+          <Box p="25px" h="full">
             {hydrated && collectionClicked && (
-              <CollectionView collectionIndex={collectionIndex} collections={collections} oersById={oersById} minW={"550px"} />
+              <CollectionView
+                collectionIndex={collectionIndex}
+                collections={collections}
+                oersById={oersById}
+                minW={'550px'}
+              />
             )}
           </Box>
         </Flex>

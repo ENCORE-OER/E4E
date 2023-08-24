@@ -4,8 +4,13 @@ import OerCardBody from './OerCardBody';
 import OerCardFooter from './OerCardFooter';
 import OerCardHeader from './OerCardHeader';
 
+interface OerCardProps extends ResourceCardProps {
+  checkBookmark?: boolean;
+}
+
 export default function OerCard({
   id: idOer,
+  collection_color,
   description,
   creator: authors,
   retrieval_date: lastUpdate,
@@ -22,7 +27,8 @@ export default function OerCard({
   noOfLinesTextCardBody,
   ptCardHeader,
   pyCardBody,
-}: ResourceCardProps) {
+  checkBookmark
+}: OerCardProps) {
   return (
     <Card
       display="flex"
@@ -45,6 +51,8 @@ export default function OerCard({
         showTagDigital={showTagDigital}
         showTagEntrepreneurial={showTagEntrepreneurial}
         showTagGreen={showTagGreen}
+        collection_color={collection_color}
+        checkBookmark={checkBookmark}
       />
       <OerCardBody
         description={description}

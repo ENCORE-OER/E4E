@@ -39,7 +39,7 @@ export default function SearchBar({
           setInputValue((prevInputValues) => {
             const updatedValues = prevInputValues.filter(
               // to avoid duplicate
-              (value: any) => value !== selectedValue
+              (value: string) => value !== selectedValue
             );
             return [...updatedValues, selectedValue];
           });
@@ -60,14 +60,14 @@ export default function SearchBar({
                 <AutoCompleteTag
                   key={tid}
                   label={tag.label}
-                  /*onRemove={() => {
-                    setInputValue((prevInputValues) => {
-                      const updatedValues = prevInputValues.filter(
-                        (value: any) => value !== tag.label
-                      );
-                      return updatedValues;
-                    });
-                  }}*/
+                /*onRemove={() => {
+                  setInputValue((prevInputValues) => {
+                    const updatedValues = prevInputValues.filter(
+                      (value: any) => value !== tag.label
+                    );
+                    return updatedValues;
+                  });
+                }}*/
                 />
               ))
             }

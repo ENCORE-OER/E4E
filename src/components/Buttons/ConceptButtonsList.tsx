@@ -15,7 +15,7 @@ export default function ConceptButtonsList({
 }: ConceptButtonsListProps) {
   return (
     <Flex gap={5} pb="5">
-      {concepts?.map((item: any, index: number) => (
+      {concepts?.map((item: string, index: number) => (
         <ConceptButton
           item={item}
           key={index}

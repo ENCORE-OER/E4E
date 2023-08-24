@@ -3,7 +3,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 //import { useRouter } from 'next/router';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
@@ -11,6 +11,7 @@ import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import { APIV2 } from '../../data/api';
+import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 
 type DiscoverPageProps = {
@@ -22,20 +23,22 @@ const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const { collections, indexCollectionClicked } = useCollectionsContext();
 
-  const [oersById, setOersById] = useState<any[]>([]);
+  const [oersById, setOersById] = useState<OerProps[]>([]);
 
   const hydrated = useHasHydrated(); // used to avoid hydration failed
   const concepts = ['concept 1', 'concept 2', 'concept 3'];
   const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
 
-  const getDataOerById = async (id_oer: any) => {
+  const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
 
-    try {
-      const oer = await api.getOerById(id_oer);
-      return oer[0];
-    } catch (error) {
-      throw error;
+    if (id_oer) {
+      try {
+        const oer = await api.getOerById(id_oer);
+        return oer[0];
+      } catch (error) {
+        throw error;
+      }
     }
   };
 
@@ -45,8 +48,8 @@ const Home = (props: DiscoverPageProps) => {
       try {
         const fetchOerData = async () => {
           const oerData = await Promise.all(
-            collections[indexCollectionClicked]?.oers?.map(async (oer: any) => {
-              const oerFound = await getDataOerById(oer.idOer);
+            collections[indexCollectionClicked]?.oers?.map(async (oer: OerInCollectionProps) => {
+              const oerFound = await getDataOerById(oer?.id);
               return oerFound;
             })
           );
