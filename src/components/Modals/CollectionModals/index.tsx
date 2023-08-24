@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { CollectionModalProps } from '../../../types/encoreElements';
+import {
+  CollectionModalProps,
+  OerInCollectionProps,
+} from '../../../types/encoreElements';
 import AddCollectionModal from './AddResourceToCollectionModal';
 import NewCollectionModal from './NewCollectionModal';
 
@@ -19,8 +22,8 @@ export default function CollectionModal({
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);
 
-  const newOer = {
-    idOer: oerToSave?.id,
+  const newOer: OerInCollectionProps = {
+    id: oerToSave?.id,
     title: oerToSave?.title,
     description: oerToSave?.description,
     skills: oerToSave?.skills,

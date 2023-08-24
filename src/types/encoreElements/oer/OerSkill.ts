@@ -6,5 +6,5 @@ export type OerSkillInfo = {
   label: string;
   description: string;
   alt_label?: string;
-  relevance?: number;
+  relevance?: number | null;
 };

@@ -50,7 +50,9 @@ export default function NewCollectionModal({
       const id_new = Math.random();
       //console.log('Id collection' + id_new);
       setNewIdCollection(id_new);
-      await addCollection(id_new, nameCollection);
+      const collectionColor =
+        '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).slice(1, 7); // random color generator
+      await addCollection(id_new, nameCollection, collectionColor);
       //await addResource(id_new, oerToAddCollection);
 
       onClose();
@@ -76,13 +78,13 @@ export default function NewCollectionModal({
         //console.log("New Collection id: " + collections[collections.length - 1].id)
         //console.log("newIdCollection: " + newIdCollection);
 
-        /*const fetchData = async () => {
-                  await addResource(newIdCollection, oerToAddCollection);
-              };
-  
-              fetchData();*/
+        const fetchData = async () => {
+          await addResource(newIdCollection, oerToAddCollection);
+        };
 
-        addResource(newIdCollection, oerToAddCollection);
+        fetchData();
+
+        //addResource(newIdCollection, oerToAddCollection);
         //alert(`Resource added to "${nameCollection}" collection`)
       }
     }

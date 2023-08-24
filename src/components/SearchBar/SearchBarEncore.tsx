@@ -8,8 +8,9 @@ import {
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { OerSkillInfo } from '../../types/encoreElements';
 
-type SearchItems = any[];
+//type SearchItems = any[];
 
 type SearchBarProps = {
   inputValue: string[];
@@ -17,7 +18,7 @@ type SearchBarProps = {
   inputValueIds: number[];
   setInputValueIds: Dispatch<SetStateAction<number[]>>;
   placeholder?: string;
-  items: SearchItems;
+  items: OerSkillInfo[];
   px?: SpaceProps['px'];
   py?: SpaceProps['py'];
   pb?: SpacerProps['pb'];
@@ -56,7 +57,7 @@ export default function SearchBar({
   }, [inputValueIds]);
 
   useEffect(() => {
-    skillsSelected?.map((item: any) =>
+    skillsSelected?.map((item: SkillsSelectedProps) =>
       console.log('SELECTED SKILLS LABEL: ' + item.label)
     );
   }, [skillsSelected]);
@@ -70,7 +71,7 @@ export default function SearchBar({
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
           const selectedValueId = items?.find(
-            (item: any) => item.label === selectedValue
+            (item: OerSkillInfo) => item.label === selectedValue
           )?.id;
 
           setInputValue((prev) => {
@@ -81,26 +82,28 @@ export default function SearchBar({
             return [...updatedValues, selectedValue];
           });
 
-          setInputValueIds((prev) => {
-            const updatedValueIds = prev.filter(
-              (value: number) => value !== selectedValueId
-            );
-            return [...updatedValueIds, selectedValueId];
-          });
+          if (selectedValueId) {
+            setInputValueIds((prev) => {
+              const updatedValueIds = prev.filter(
+                (value: number) => value !== selectedValueId
+              );
+              return [...updatedValueIds, selectedValueId];
+            });
 
-          setSkillsSelected((prev) => {
-            const newSkill: SkillsSelectedProps = {
-              id: selectedValueId,
-              label: selectedValue,
-            };
-            const isSkillSelected = prev?.some(
-              (item: SkillsSelectedProps) => item.id === selectedValueId
-            );
-            if (!isSkillSelected) {
-              return [...prev, newSkill];
-            }
-            return prev;
-          });
+            setSkillsSelected((prev) => {
+              const newSkill: SkillsSelectedProps = {
+                id: selectedValueId,
+                label: selectedValue,
+              };
+              const isSkillSelected = prev?.some(
+                (item: SkillsSelectedProps) => item.id === selectedValueId
+              );
+              if (!isSkillSelected) {
+                return [...prev, newSkill];
+              }
+              return prev;
+            });
+          }
         }}
       >
         <Flex align="center">

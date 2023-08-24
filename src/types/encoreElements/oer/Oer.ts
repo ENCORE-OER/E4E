@@ -1,37 +1,15 @@
-import {
-  OerAudienceInfo,
-  OerAuthorsInfo,
-  OerConceptInfo,
-  OerMediaTypeInfo,
-  OerResourceFormatInfo,
-  OerSkillInfo,
-  OerSourceRoerInfo,
-  OerSubjectInfo,
-  OerUrlInfo,
-} from '../encoreElements';
+import { OerAudienceInfo } from './OerAudience';
+import { OerAuthorsInfo } from './OerAuthors';
+import { OerConceptInfo } from './OerConcept';
+import { OerMediaTypeInfo } from './OerMediaType';
+import { OerResourceFormatInfo } from './OerResourceFormat';
+import { OerSkillInfo } from './OerSkill';
+import { OerSourceRoerInfo } from './OerSourceRoer';
+import { OerSubjectInfo } from './OerSubject';
+import { OerUrlInfo } from './OerUrl';
 
-export type EncoreConceptMapNode = {
-  node_id: number;
-  name: string;
-};
-
-export type EncoreConceptMapEdge = {
-  from: number;
-  to: number;
-};
-
-export type EncoreConceptMap = {
-  nodes: any[];
-  edges: any[];
-};
-
-export type EncoreOer = {
-  /* id: any;
-  skills: any;
-  title: string;
-  domain: string;
-  media_type: string;*/
-
+// complete oer element
+export type OerProps = {
   id: number;
   plain_text_summary: string;
   creator: OerAuthorsInfo[];
@@ -43,7 +21,7 @@ export type EncoreOer = {
   media_type: OerMediaTypeInfo[];
   resource_format: OerResourceFormatInfo[];
   subject: OerSubjectInfo[];
-  oer_url: OerUrlInfo;
+  oer_url: OerUrlInfo[];
   source_roer: OerSourceRoerInfo[];
   title: string;
   description: string;
@@ -65,8 +43,4 @@ export type EncoreOer = {
   overall_score: number;
   detailed_media_type: number[];
   detailed_coverage: number[];
-};
-
-export type ConceptNode = {
-  data: { numOfResources?: number };
 };

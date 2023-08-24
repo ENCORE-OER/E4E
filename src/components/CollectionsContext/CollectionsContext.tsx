@@ -8,16 +8,21 @@ import {
 import { useHasHydrated } from '../../utils/utils';
 import { CustomToast } from '../Toast/CustomToast';
 
-type AddCollectionFunction = (id: number, name: string) => Promise<void>;
+type AddCollectionFunction = (
+  id: number,
+  name: string,
+  color: string
+) => Promise<void>;
 type AddResourceFunction = (
   collectionId: number,
   resource: OerInCollectionProps
 ) => Promise<void>;
+type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
-  deleteCollection: (id: number, name: string) => void;
+  deleteCollection: DeleteCollectionFunction;
   addResource: AddResourceFunction;
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
@@ -42,7 +47,11 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const hydrated = useHasHydrated();
 
-  const addCollection = async (id: number, name: string): Promise<void> => {
+  const addCollection = async (
+    id: number,
+    name: string,
+    color: string
+  ): Promise<void> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
 
@@ -68,6 +77,7 @@ export const CollectionsProvider = ({ children }: any) => {
             id: id,
             name: name,
             oers: [],
+            color: color,
           };
 
           addToast({
@@ -90,15 +100,18 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-  const deleteCollection = (id: number, name: string) => {
+  const deleteCollection = async (id: number, name: string): Promise<void> => {
     try {
       const updatedCollections = collections.filter(
         (collection: CollectionProps) => collection.id !== id
       );
-      setCollections(updatedCollections);
       addToast({
         message: `Collection "${name}" delated succesfully!`,
         status: 'success',
+      });
+      return new Promise((resolve) => {
+        setCollections(updatedCollections);
+        resolve();
       });
     } catch (error) {
       addToast({
@@ -127,7 +140,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
         const isOerAlreadySaved = collection.oers?.some(
           // check if oer is already saved in the collection selected
-          (item: any) => item.idOer === resource.idOer
+          (item: OerInCollectionProps) => item.id === resource.id
         );
         //console.log('Did you find the oer?  ' + isOerAlreadySaved);
         if (!isOerAlreadySaved) {

@@ -1,14 +1,15 @@
-export type ReourceCardProps = {
-  idOer: number;
-  showTagDigital: boolean;
-  showTagEntrepreneurial: boolean;
-  showTagGreen: boolean;
+export type ResourceCardProps = {
+  id: number;
+  collection_color?: string;
+  digital_domain: boolean;
+  entrepreneurship_domain: boolean;
+  green_domain: boolean;
   description: string;
-  authors: string[];
+  creator: string[];
   title: string;
-  resourceType: string[];
-  lastUpdate: string;
-  qualityScore: number;
+  media_type: string[];
+  retrieval_date: string;
+  overall_score: number;
   domain?: string[];
   maxHCard?: string;
   pxCard?: string;

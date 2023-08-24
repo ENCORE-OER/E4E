@@ -6,7 +6,6 @@ import {
   HStack,
   Icon,
   Spacer,
-  Text,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -18,14 +17,16 @@ import { useCollectionsContext } from '../components/CollectionsContext/Collecti
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 
-import { DeleteIcon } from '@chakra-ui/icons';
-import { FcFolder } from 'react-icons/fc';
 import { LuFolderPlus } from 'react-icons/lu';
-import DownloadButton from '../components/Buttons/DownloadButton';
-import ResourceCardsList from '../components/Card/OerCard/ResourceCards';
 import CollectionModal from '../components/Modals/CollectionModals';
+import CollectionNavItem from '../components/NavItems/CollectionNavItem';
+import CollectionView from '../components/Views/CollectionView';
 import { APIV2 } from '../data/api';
-import { CollectionProps } from '../types/encoreElements';
+import {
+  CollectionProps,
+  OerInCollectionProps,
+  OerProps,
+} from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -38,24 +39,13 @@ const Home = (props: DiscoverPageProps) => {
   const { collections, deleteCollection } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
-  const [oersById, setOersById] = useState<any[]>([]);
+  const [oersById, setOersById] = useState<OerProps[]>([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
-  /*const [description, setDescription] = useState<any>();
-  const [title, setTitle] = useState<any>();
-  const [idOer, setIdOer] = useState<any>();
-  const [authors, setAuthors] = useState<any[]>([]);
-  const [resourceType, setResourceType] = useState<any[]>([]);
-  const [lastUpdate, setLastUpdate] = useState<any>();
-  const [domain, setDomain] = useState<any[]>([]);
-  let countRes = 0;
-
-  const nameCollection = 'Drink';
-  const [idCollection, setIdCollection] = useState<any>(0);*/
 
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
   const [collectionIndex, setCollectionIndex] = useState<number>(-1);
-  const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1);
+  //const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1); // handle in CollectionNavItem
   const { isOpen } = useDisclosure();
 
   /*const handleAddCollection = () => {
@@ -75,40 +65,16 @@ const Home = (props: DiscoverPageProps) => {
     setNewCollectionModalOpen(false);
   };
 
-  // handle which collection is clicked to show the right data
-  const handleCollectionClick = () => {
-    //console.log('1: ' + collectionClicked);
-    //console.log('1 index: ' + collectionIndex);
-    //console.log('1 prev index: ' + prevCollectionIndex);
-
-    if (!collectionClicked) {
-      setCollectionClicked(true);
-    } else if (collectionClicked && collectionIndex !== prevCollectionIndex) {
-      setCollectionClicked(true);
-    }
-
-    setPrevCollectionIndex(collectionIndex);
-
-    //console.log('2: ' + collectionClicked);
-    //console.log('2 index: ' + collectionIndex);
-    //console.log('2 prev index: ' + prevCollectionIndex);
-  };
-
-  const handleDeleteCollection = (idColl: number, nameColl: string) => {
-    if (collectionClicked) {
-      setCollectionClicked(false);
-    }
-    deleteCollection(idColl, nameColl);
-  };
-
-  const getDataOerById = async (id_oer: number) => {
+  const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
 
-    try {
-      const oer = await api.getOerById(id_oer);
-      return oer[0];
-    } catch (error) {
-      throw error;
+    if (id_oer) {
+      try {
+        const oer = await api.getOerById(id_oer);
+        return oer[0];
+      } catch (error) {
+        throw error;
+      }
     }
   };
 
@@ -120,10 +86,13 @@ const Home = (props: DiscoverPageProps) => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
-              collections[collectionIndex]?.oers?.map(async (oer: any) => {
-                const oerFound = await getDataOerById(oer.idOer);
-                return oerFound;
-              })
+              collections[collectionIndex]?.oers?.map(
+                async (oer: OerInCollectionProps) => {
+                  console.log(oer);
+                  const oerFound = await getDataOerById(oer?.id);
+                  return oerFound;
+                }
+              )
             );
             setOersById(oerData);
           }
@@ -131,7 +100,7 @@ const Home = (props: DiscoverPageProps) => {
 
         fetchOerData();
 
-        console.log(oersById);
+        //console.log(oersById);
       } catch (error) {
         throw error;
       }
@@ -142,7 +111,6 @@ const Home = (props: DiscoverPageProps) => {
     <Flex w="100%" h="100%">
       <Navbar user={user} pageName="Your resources" />
       <SideBar pagePath={router.pathname} />
-
       <Box
         ml="200px"
         py="115px"
@@ -163,7 +131,7 @@ const Home = (props: DiscoverPageProps) => {
           <Box
             borderRight="2px"
             borderRightColor="secondary"
-            w="25%"
+            w="300px"
             p="25px"
             minH="full"
           >
@@ -185,87 +153,31 @@ const Home = (props: DiscoverPageProps) => {
               {hydrated &&
                 collections?.map(
                   (collection: CollectionProps, index: number) => (
-                    <HStack
-                      ref={collectionRef}
-                      key={collection.id}
-                      mb="3"
-                      w="100%"
-                      position="relative"
-                      //overflow="hidden"
+                    <CollectionNavItem
+                      key={index}
+                      index={index}
+                      collection={collection}
+                      collectionRef={collectionRef}
+                      collectionClicked={collectionClicked}
+                      setCollectionClicked={setCollectionClicked}
+                      collectionIndex={collectionIndex}
+                      setCollectionIndex={setCollectionIndex}
+                      deleteCollection={deleteCollection}
                     >
-                      <Flex
-                        w="100%"
-                        _hover={{ bg: 'gray.200' }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setCollectionIndex(index);
-                          handleCollectionClick();
-                        }}
-                        cursor={'pointer'}
-                      >
-                        <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                        <Heading
-                          fontSize="22px"
-                          fontWeight="semibold"
-                          noOfLines={1}
-                          //overflow={"hidden"}
-                          w={'65%'}
-                        >
-                          {collection.name}
-                        </Heading>
-                      </Flex>
-
-                      <Button
-                        variant="ghost"
-                        _hover={{ bg: 'background' }}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDeleteCollection(
-                            collection.id,
-                            collection.name
-                          );
-                        }}
-                        position="absolute"
-                        right={'0px'}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </HStack>
+                      {collection.name}
+                    </CollectionNavItem>
                   )
                 )}
             </Box>
           </Box>
-          <Box
-            p="25px"
-            //borderLeft="2px"
-            //borderLeftColor="secondary"
-            h="full"
-          >
+          <Box p="25px" h="full">
             {hydrated && collectionClicked && (
-              <Box minW="550px">
-                <Flex w="100%" mb="3">
-                  <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-                  <Heading
-                    fontSize="22px"
-                    fontWeight="semibold"
-                    overflow={'hidden'}
-                  >
-                    {collections[collectionIndex].name}
-                  </Heading>
-                  <Spacer />
-                  <DownloadButton
-                    data={collections[collectionIndex]}
-                    fileName={collections[collectionIndex].name}
-                  />
-                </Flex>
-                <Text
-                  fontWeight="light"
-                  fontSize="small"
-                  color="grey"
-                  mb="3"
-                >{`${collections[collectionIndex]?.oers.length} resources`}</Text>
-                <ResourceCardsList oers={oersById} isNormalSizeCard={true} />
-              </Box>
+              <CollectionView
+                collectionIndex={collectionIndex}
+                collections={collections}
+                oersById={oersById}
+                minW={'550px'}
+              />
             )}
           </Box>
         </Flex>

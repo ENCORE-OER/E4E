@@ -11,14 +11,14 @@ import { TabTypesOfResources } from './TabTypesOfResources';
 import { Dispatch, SetStateAction } from 'react';
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
-import { EncoreOer } from '../../../types/encore';
+import { OerProps } from '../../../types/encoreElements';
 import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
-  oers: EncoreOer[];
+  oers: OerProps[];
   domains: string[];
-  searchCallBack: (domainIds: any[]) => Promise<void>;
-  setOers: Dispatch<SetStateAction<any>>;
+  searchCallBack: (domainIds: number[]) => Promise<void>;
+  setOers: Dispatch<SetStateAction<OerProps[]>>;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {

@@ -20,6 +20,15 @@ import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarChe
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
+import {
+  OerAudienceInfo,
+  OerAuthorsInfo,
+  OerConceptInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSubjectInfo,
+  OerUrlInfo,
+} from '../../types/encoreElements';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
@@ -28,7 +37,7 @@ import CollectionModal from './CollectionModals';
 type CardInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  oer: any;
+  oer: OerProps | null;
 };
 
 export default function CardInfoModal({
@@ -41,7 +50,7 @@ export default function CardInfoModal({
     useState<boolean>(false);
   const [showTagGreen, setShowTagGreen] = useState<boolean>(false);
   const [authors, setAuthors] = useState<string[]>([]);
-  const [linkOer, setLinkOer] = useState<string>();
+  const [linkOer, setLinkOer] = useState<string[]>();
   const [resourceType, setResourceType] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [publishers, setPublishers] = useState<string[]>([]);
@@ -64,7 +73,7 @@ export default function CardInfoModal({
 
   const handleViewResource = () => {
     if (linkOer) {
-      window?.open(linkOer, '_blank');
+      window?.open(linkOer[0], '_blank');
     }
   };
 
@@ -95,37 +104,44 @@ export default function CardInfoModal({
             if (domain?.includes(green)) {
                 setShowTagGreen(true);
             }*/
+      if (oer) {
+        setShowTagDigital(oer?.digital_domain || false);
+        setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
+        setShowTagGreen(oer?.green_domain || false);
 
-      setShowTagDigital(oer?.digital_domain || false);
-      setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
-      setShowTagGreen(oer?.green_domain || false);
+        setTitle(oer?.title || '');
 
-      setTitle(oer?.title || '');
+        const temp_auth = oer.creator?.map(
+          (creator_name: OerAuthorsInfo) => creator_name.full_name
+        );
 
-      const temp_auth = oer.creator?.map(
-        (creator_name: any) => creator_name.full_name
-      );
+        setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
 
-      setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
+        setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
 
-      setLinkOer(oer.oer_url?.map((url: any) => url.url) || []);
+        setDescription(oer?.description || '');
 
-      setDescription(oer?.description || '');
+        setResourceType(
+          oer.media_type?.flatMap(
+            (resType: OerMediaTypeInfo) => resType.name
+          ) || []
+        );
 
-      setResourceType(
-        oer.media_type?.flatMap((resType: any) => resType.name) || []
-      );
+        setSubjects(oer.subject?.map((sub: OerSubjectInfo) => sub.name) || []);
 
-      setSubjects(oer.subject?.map((sub: any) => sub.name) || []);
+        setPublishers(oer.publisher?.map((pub: any) => pub.name) || []);
+        setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
+        setConcepts(
+          oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
+        );
+        setQualityScore(oer?.overall_score || 0);
+        setLastUpdate(oer?.retrieval_date || '');
+        setCoverage(
+          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
+        );
 
-      setPublishers(oer.publisher?.map((pub: any) => pub.name) || []);
-      setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
-      setConcepts(oer.concepts?.map((concept: any) => concept.label) || []);
-      setQualityScore(oer?.overall_score || 0);
-      setLastUpdate(oer?.retrieval_date || '');
-      setCoverage(oer.coverage?.map((audience: any) => audience.name) || []);
-
-      console.log(JSON.stringify(oer));
+        console.log(JSON.stringify(oer));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -279,14 +295,14 @@ export default function CardInfoModal({
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Retrieved from</Text>
-                <Text>{oer.source}</Text>
+                <Text>{oer?.source}</Text>
               </Box>
             </Flex>
 
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">License</Text>
-                <Text>{oer.rights}</Text>
+                <Text>{oer?.rights}</Text>
               </Box>
             </Flex>
           </ModalBody>
