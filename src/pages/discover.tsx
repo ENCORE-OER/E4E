@@ -58,9 +58,9 @@ const Discover = (props: DiscoverPageProps) => {
   const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
   const [isAscending, setAscending] = useState<boolean>(true);
 
-  const allOERs = async () => {
-    console.log("here to check when we enter with an empty query");
-  };
+  // const allOERs = async () => {
+  //   console.log("here to check when we enter with an empty query");
+  // };
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -77,10 +77,7 @@ const Discover = (props: DiscoverPageProps) => {
   const searchOERs = async (
     skills: string | string[],
     andOption: string,
-    orOption: string,
-    domainIds?: string[],
-    resourceTypeIds?: string[],
-    audienceIds?: string[]
+    orOption: string
   ) => {
     //here we search the OERS using the query parameters
 
@@ -164,12 +161,12 @@ const Discover = (props: DiscoverPageProps) => {
     const skills: string[] = JSON.parse(skillsString);
     const andOption = localStorage.getItem('andOption') as string;
     const orOption = localStorage.getItem('orOption') as string;
-    const domains = localStorage.getItem('domains') as unknown as string[];
-    const types = localStorage.getItem('types') as unknown as string[];
-    const audience = localStorage.getItem('audience') as unknown as string[];
+    // const domains = localStorage.getItem('domains') as unknown as string[];
+    // const types = localStorage.getItem('types') as unknown as string[];
+    // const audience = localStorage.getItem('audience') as unknown as string[];
 
 
-    searchOERs(skills, andOption, orOption, domains, types, audience);
+    searchOERs(skills, andOption, orOption);
 
   }, [router.query.parameters]);
 

@@ -78,7 +78,7 @@ const Home = (props: DiscoverPageProps) => {
   const searchCallback1 = async () => {
 
 
-    var searchData = {};
+    let searchData = {};
 
 
     if (isClicked) {
