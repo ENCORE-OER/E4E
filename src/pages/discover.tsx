@@ -84,7 +84,7 @@ const Discover = (props: DiscoverPageProps) => {
   ) => {
     //here we search the OERS using the query parameters
 
-    console.log(`${domainIds}, ${resourceTypeIds}, ${audienceIds}`);
+
 
     const isArray = Array.isArray(skills);
 
@@ -109,11 +109,14 @@ const Discover = (props: DiscoverPageProps) => {
 
       setFiltered(oers);
     } else {
-      console.log('case not managed');
+      // case where the and / or options are not selected - by default we use the OR condition
+      const oers = await api.getOersInOR(skills);
+      setFiltered(oers);
     }
 
     setIsLoading(false);
   };
+
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const searchCallback = async (domainIds: any[]) => {
@@ -153,22 +156,22 @@ const Discover = (props: DiscoverPageProps) => {
   };
 
   useEffect(() => {
-    if (router.query.skills != undefined) {
-      const skills = router.query.skills as string[];
-      const andOption = router.query.andOption as string;
-      const orOption = router.query.orOption as string;
-      const domains = router.query.domain as string[];
-      const types = router.query.types as string[];
-      const audiences = router.query.audiences as string[];
-      setIsLoading(true);
 
-      searchOERs(skills, andOption, orOption, domains, types, audiences);
-    } else {
-      //query con zero parametri...posso ritornare tutte le OERs?;
-      setIsLoading(true);
-      allOERs();
-    }
-  }, [router.query]);
+    setIsLoading(true);
+
+
+    const skillsString = localStorage.getItem('selectedSkills') as string;
+    const skills: string[] = JSON.parse(skillsString);
+    const andOption = localStorage.getItem('andOption') as string;
+    const orOption = localStorage.getItem('orOption') as string;
+    const domains = localStorage.getItem('domains') as unknown as string[];
+    const types = localStorage.getItem('types') as unknown as string[];
+    const audience = localStorage.getItem('audience') as unknown as string[];
+
+
+    searchOERs(skills, andOption, orOption, domains, types, audience);
+
+  }, [router.query.parameters]);
 
   // sorting of the OERs
   useEffect(() => {
