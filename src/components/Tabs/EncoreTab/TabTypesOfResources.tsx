@@ -1,48 +1,29 @@
 import { Stack, Text } from '@chakra-ui/react';
-import {
-  BubbleDataPoint,
-  CategoryScale,
-  Chart as ChartJS,
-  ChartOptions,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  Title,
-  Tooltip,
-} from 'chart.js';
+
 import { useContext, useState } from 'react';
 
-import { Bubble } from 'react-chartjs-2';
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+
+
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+import { Doughnut } from 'react-chartjs-2';
+
+
 
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
-import { FaSync } from 'react-icons/fa';
 import { OerMediaTypeInfo } from '../../../types/encoreElements';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
-  // const { oers, setOERs } = props;
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
 
-  // const [graph, setGraph] = useState<EncoreConceptMap | null>();
-  //const API = useMemo(() => new APIV2(undefined), []);
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-  // const { byResourceType, setByResourceType } = useContext(DiscoveryContext);
-
   const [previousContent, setPreviousContent] = useState('');
-  const [isActiveRefresh, setIsActiveRefresh] = useState(false);
-  const [isActiveBubble, setIsActiveBubble] = useState(false);
+
   const resourceTypes: any[] = [];
 
   //retrieve resourse types
@@ -66,33 +47,8 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     })
   );
 
-  const handleReloadClick = () => {
-    setIsActiveRefresh(false);
-    setIsActiveBubble(false);
-    setFiltered(previousContent);
-  };
 
-  const onClickBubble = (event: any, elements: any) => {
-    setIsActiveRefresh(true);
-    setIsActiveBubble(true);
-    const resources: any[] = [];
-    setPreviousContent(filtered);
-    if (elements.length > 0) {
-      const item =
-        chartData.datasets[elements[0].datasetIndex].data[elements[0].index];
-      const type = item.type;
-      // here we filter the selected OERs by type
-      filtered?.forEach(
-        (oer: { media_type: OerMediaTypeInfo[] }) =>
-          oer.media_type?.map((item: any) => {
-            if (item.name === type) {
-              resources.push(oer);
-            }
-          })
-      );
-    }
-    setFiltered(resources);
-  };
+
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -111,8 +67,6 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
     data: [
       {
-        x: Math.random() * 10,
-        y: Math.random() * 10,
         r: item.size,
         type: item.name,
       },
@@ -120,63 +74,121 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
-  const chartData = {
-    datasets: datasets,
+
+  const jsonData = {
+    datasets: datasets
   };
 
-  interface ExtendedBubbleDataPoint extends BubbleDataPoint {
-    type: string;
-  }
 
-  const chartOptions: ChartOptions<'bubble'> = {
-    scales: {
-      x: {
-        display: false,
+  // Transform the JSON data into a format suitable for a pie chart
+  const transformedData = jsonData.datasets.flatMap(dataset =>
+    dataset.data.map(item => ({
+      label: item.type,
+      value: item.r,
+      backgroundColor: dataset.backgroundColor,
+    }))
+  );
+
+  const data = {
+    labels: transformedData.map(item => item.label),
+    datasets: [
+      {
+        data: transformedData.map(item => item.value),
+        backgroundColor: transformedData.map(item => item.backgroundColor),
       },
-      y: {
-        display: false,
-      },
-    },
-    plugins: {
-      legend: {
-        position: 'bottom',
-        align: 'start',
-        labels: {
-          usePointStyle: true,
-          padding: 10, // Adjust the padding value to increase or decrease the space
-        },
-      },
-      tooltip: {
-        callbacks: {
-          label: (context: any) => {
-            const item = context.dataset.data[
-              context.dataIndex
-            ] as ExtendedBubbleDataPoint;
-            return `${item.type}`;
+    ],
+  };
+
+
+
+  const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
+
+
+  const handleSliceClick = (event: any, elements: any) => {
+    if (elements.length > 0 && elements[0].index !== undefined) {
+      const clickedIndex = elements[0].index;
+      console.log("Clicked Index:", clickedIndex);
+
+      if (clickedIndex >= 0 && clickedIndex < transformedData.length) {
+        const clickedSliceLabel = transformedData[clickedIndex].label;
+        console.log("Clicked Slice Label:", clickedSliceLabel);
+
+        if (selectedSlice === clickedIndex) {
+          setSelectedSlice(null);
+          setFiltered(previousContent);
+        } else if (selectedSlice !== null) {
+          setSelectedSlice(null);
+          setFiltered(previousContent);
+        } else {
+          setSelectedSlice(clickedIndex);
+          updateOers(clickedSliceLabel);
+        }
+      } else {
+        console.log("Invalid Clicked Index:" + clickedIndex);
+      }
+    }
+  };
+
+  const filterData = () => {
+    if (selectedSlice !== null && transformedData[selectedSlice]) {
+      const { label, value } = transformedData[selectedSlice];
+      return {
+        labels: [label],
+        datasets: [
+          {
+            data: [value],
+            backgroundColor: data.datasets[0].backgroundColor,
           },
-        },
-      },
-    },
-    onClick: isActiveBubble ? undefined : onClickBubble,
+        ],
+      };
+    } else {
+      return {
+        labels: data.labels,
+        datasets: [
+          {
+            data: data.datasets[0].data,
+            backgroundColor: data.datasets[0].backgroundColor,
+          },
+        ],
+      };
+    }
   };
+
+
+
+
+  const filteredDataObject = filterData();
+
+  const updateOers = (label: string) => {
+    const resources: any[] = [];
+    setPreviousContent(filtered);
+    filtered?.forEach(
+      (oer: { media_type: OerMediaTypeInfo[] }) =>
+        oer.media_type?.map((item: any) => {
+          if (item.name === label) {
+            resources.push(oer);
+          }
+        })
+    );
+    setFiltered(resources);
+
+  };
+
 
   return (
     <>
       <Stack spacing={0}>
         <Text color="primary">
-          The Bubble Chart shows the types of resources available for the
-          searched keywords. Click on a circle to filter resources according to
+          The Pie Chart shows the types of resources available for the
+          searched keywords. Click on a portion to filter resources according to
           the selected types.
         </Text>
       </Stack>
-      <button onClick={handleReloadClick} disabled={!isActiveRefresh}>
-        <FaSync />
-        Refresh
-      </button>
 
       <Stack spacing={0}>
-        <Bubble data={chartData} options={chartOptions} />
+        <Doughnut data={filteredDataObject} options={{ onClick: handleSliceClick }} />;
       </Stack>
     </>
   );
 };
+
