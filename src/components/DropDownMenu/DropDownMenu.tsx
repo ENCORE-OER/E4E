@@ -10,12 +10,28 @@ import {
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
-import DropDownMenuItem from '../DropDownMenuItem/DropDownMenuItem';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSubjectInfo,
+} from '../../types/encoreElements';
+import DropDownMenuItem, {
+  optionsObjType,
+} from '../DropDownMenuItem/DropDownMenuItem';
+
+export type onDataType =
+  | number
+  | string
+  | OerAudienceInfo
+  | OerMediaTypeInfo
+  | OerDomainInfo
+  | OerSubjectInfo;
 
 type DropDownMenuProps = {
   options?: string[] | undefined;
-  optionsObj?: any[] | undefined;
-  onData?: (data: any[]) => void;
+  optionsObj?: optionsObjType[] | undefined;
+  onData?: (data: string[] | number[]) => void;
 };
 
 export default function DropDownMenu({
@@ -24,7 +40,7 @@ export default function DropDownMenu({
   onData,
 }: DropDownMenuProps) {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [selectedOptionIds, setSelectedOptionIds] = useState<any[]>([]);
+  const [selectedOptionIds, setSelectedOptionIds] = useState<number[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
 
   const handleData = () => {
@@ -47,7 +63,7 @@ export default function DropDownMenu({
 
   // pusho tutti i name di optionsObj in options
   useEffect(() => {
-    optionsObj?.map((item: any) => {
+    optionsObj?.map((item: optionsObjType) => {
       options?.push(item.name);
     });
     console.log('OPTIONS in DropDownMenu: ' + options);
@@ -85,7 +101,7 @@ export default function DropDownMenu({
             whiteSpace="pre-wrap"
             overflowWrap={'normal'}
           >
-            {options?.map((option) => (
+            {/*options?.map((option) => (
               <MenuItem key={option}>
                 <DropDownMenuItem
                   item={option}
@@ -95,7 +111,7 @@ export default function DropDownMenu({
                   setSelectedOptionIds={setSelectedOptionIds}
                 />
               </MenuItem>
-            ))}
+            ))*/}
             {optionsObj?.map((option) => (
               <MenuItem key={option.id}>
                 <DropDownMenuItem

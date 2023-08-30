@@ -23,6 +23,12 @@ import SideBar from '../components/SideBar/SideBar';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSkillInfo,
+} from '../types/encoreElements';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -32,23 +38,25 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
   const [searchValue, setSearchValue] = useState<string[]>([]);
-  const [page] = useState(true);
-  const [respSearchOers] = useState<any[]>([]);
-  const [oerById] = useState<any[]>([]);
+  //const [page] = useState(true);
+  //const [respSearchOers] = useState<OerProps[]>([]);
+  //const [oerById] = useState<OerProps | null>(null);
 
-  const [selectedSkillIds, setSelectedSkillIds] = useState<any[]>([]); // list of the skill ids selected in the searchbar
-  const [suggestions, setSuggestions] = useState<string[]>([]); // list of the skill selectable in the searchbar
+  const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
+  const [suggestions, setSuggestions] = useState<OerSkillInfo[]>([]); // list of the skill selectable in the searchbar
 
-  const [domain, setDomain] = useState<any[]>([]); // to save each type of domain of the resources
-  const [resourceTypes, setResourceTypes] = useState<string[]>([]);
-  const [audience, setAudience] = useState<string[]>([]);
+  const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
+  const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
+  const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
   const [metrics, setMetrics] = useState<any[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
-  const [selectedDomain, setSelectedDomain] = useState<any[]>([]); // to save each type of domain of the resources
-  const [selectedResourceTypes, setSelectedResourceTypes] = useState<string[]>(
+  const [selectedDomain, setSelectedDomain] = useState<string[] | number[]>([]); // to save each type of domain of the resources
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<
+    string[] | number[]
+  >([]);
+  const [selectedAudience, setSelectedAudience] = useState<string[] | number[]>(
     []
   );
-  const [selectedAudience, setSelectedAudience] = useState<string[]>([]);
   //const [audienceCard, setAudienceCard] = useState<string[]>([]);
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');
@@ -63,15 +71,15 @@ const Home = (props: DiscoverPageProps) => {
 
   const combinations = useMemo(() => ({ mergeColors }), []);
 
-  const handleDomainFromDropDownMenu = (data: any[]) => {
+  const handleDomainFromDropDownMenu = (data: string[] | number[]) => {
     setSelectedDomain(data);
   };
 
-  const handleResourceTypeFromDropDownMenu = (data: any[]) => {
+  const handleResourceTypeFromDropDownMenu = (data: string[] | number[]) => {
     setSelectedResourceTypes(data);
   };
 
-  const handleAudienceFromDropDownMenu = (data: any[]) => {
+  const handleAudienceFromDropDownMenu = (data: string[] | number[]) => {
     setSelectedAudience(data);
   };
 
@@ -146,9 +154,9 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log(oerById);
-  }, [oerById]);
+  }, [oerById]);*/
 
   useEffect(() => {
     const api = new APIV2(props.accessToken);
@@ -199,13 +207,13 @@ const Home = (props: DiscoverPageProps) => {
         setMetrics(newSet);
 
         const resp_dom = await api.getDomains();
-        console.log('Domain -----------> ' + resp_dom);
+        //console.log('Domain -----------> ' + resp_dom);
         setDomain(resp_dom);
         const resp_res = await api.getResourceTypes();
-        console.log('Type of reosource -----------> ' + resp_res);
+        //console.log('Type of reosource -----------> ' + resp_res);
         setResourceTypes(resp_res);
         const resp_aud = await api.getAudience();
-        console.log('Audience -----------> ' + resp_aud);
+        //console.log('Audience -----------> ' + resp_aud);
         setAudience(resp_aud);
       } catch (error) {
         console.error(error);
@@ -252,13 +260,13 @@ const Home = (props: DiscoverPageProps) => {
     }
   }, [dataSearching]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log('RESPONSE SEARCH: ' + respSearchOers);
     const data = respSearchOers.flatMap(
       (oer: any) => oer.media_type?.map((item: any) => item.name)
     );
     console.log(data);
-  }, [respSearchOers, page]);
+  }, [respSearchOers, page]);*/
 
   const handleCheckboxAllChange = () => {
     setCheckboxAll(true);

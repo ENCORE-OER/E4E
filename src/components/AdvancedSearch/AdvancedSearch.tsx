@@ -1,17 +1,23 @@
 import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
 
 import { useEffect } from 'react';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerSubjectInfo,
+} from '../../types/encoreElements';
 import DropDownMenu from '../DropDownMenu/DropDownMenu';
 
 type AdvancedSearchProps = {
   //buttonWidth: string; // mi serve per impostare la 'width' fissa dei menuButton in base alla pagina in cui sono
-  domain?: any[];
-  subject?: any[];
-  resourceType?: any[];
-  audience?: any[];
-  onDomainFromDropDownMenu?: (domain: any[]) => void;
-  onResourceTypeFromDropDownMenu?: (resType: any[]) => void;
-  onAudienceFromDropDownMenu?: (audience: any[]) => void;
+  domain?: OerDomainInfo[];
+  subject?: OerSubjectInfo[];
+  resourceType?: OerMediaTypeInfo[];
+  audience?: OerAudienceInfo[];
+  onDomainFromDropDownMenu?: (domain: string[] | number[]) => void;
+  onResourceTypeFromDropDownMenu?: (resType: string[] | number[]) => void;
+  onAudienceFromDropDownMenu?: (audience: string[] | number[]) => void;
 };
 
 const ALL = { id: 0, name: 'All' };
@@ -38,19 +44,19 @@ export default function AdvancedSearch({
     if (!audience?.includes(ALL)) audience?.unshift(ALL);
   }, [audience]);
 
-  const handleDomainFromDropDownMenu = (domain: any[]) => {
+  const handleDomainFromDropDownMenu = (domain: string[] | number[]) => {
     if (onDomainFromDropDownMenu) {
       onDomainFromDropDownMenu(domain);
     }
   };
 
-  const handleResourceTypeFromDropDownMenu = (resType: any[]) => {
+  const handleResourceTypeFromDropDownMenu = (resType: string[] | number[]) => {
     if (onResourceTypeFromDropDownMenu) {
       onResourceTypeFromDropDownMenu(resType);
     }
   };
 
-  const handleAudienceFromDropDownMenu = (audience: any[]) => {
+  const handleAudienceFromDropDownMenu = (audience: string[] | number[]) => {
     if (onAudienceFromDropDownMenu) {
       onAudienceFromDropDownMenu(audience);
     }

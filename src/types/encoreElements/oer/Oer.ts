@@ -1,0 +1,46 @@
+import { OerAudienceInfo } from './OerAudience';
+import { OerAuthorsInfo } from './OerAuthors';
+import { OerConceptInfo } from './OerConcept';
+import { OerMediaTypeInfo } from './OerMediaType';
+import { OerResourceFormatInfo } from './OerResourceFormat';
+import { OerSkillInfo } from './OerSkill';
+import { OerSourceRoerInfo } from './OerSourceRoer';
+import { OerSubjectInfo } from './OerSubject';
+import { OerUrlInfo } from './OerUrl';
+
+// complete oer element
+export type OerProps = {
+  id: number;
+  plain_text_summary: string;
+  creator: OerAuthorsInfo[];
+  publisher: any[] | null;
+  contributor: any[] | null;
+  coverage: OerAudienceInfo[];
+  skills: OerSkillInfo[];
+  concepts: OerConceptInfo[];
+  media_type: OerMediaTypeInfo[];
+  resource_format: OerResourceFormatInfo[];
+  subject: OerSubjectInfo[];
+  oer_url: OerUrlInfo[];
+  source_roer: OerSourceRoerInfo[];
+  title: string;
+  description: string;
+  publisher_source: string;
+  publication_date: string;
+  retrieval_date: string;
+  source: string;
+  language: string;
+  related_to: string;
+  rights: string;
+  green_domain: boolean;
+  digital_domain: boolean;
+  entrepreneurship_domain: boolean;
+  table_of_contents: string;
+  detailed_subject: string;
+  completeness_score: number;
+  authority_score: number;
+  readability_score: number;
+  overall_score: number;
+  detailed_media_type: number[];
+  detailed_coverage: number[];
+};

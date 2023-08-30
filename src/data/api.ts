@@ -1,5 +1,14 @@
 import axiosCreate, { AxiosInstance, AxiosResponse } from 'axios';
 import { EncoreConceptMap } from '../types/encore';
+import {
+  MetricsOers,
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSkillInfo,
+  OerSubjectInfo,
+} from '../types/encoreElements';
 
 const axios = axiosCreate.create({
   baseURL: process.env.BACK_URL,
@@ -45,7 +54,10 @@ export class APIV2 {
     return this;
   }
 
-  async getSkills(page = 1, allSkills: any[] = []): Promise<any[]> {
+  async getSkills(
+    page = 1,
+    allSkills: OerSkillInfo[] = []
+  ): Promise<OerSkillInfo[]> {
     try {
       const respSkills = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/skills/?page=${page}`
@@ -65,7 +77,7 @@ export class APIV2 {
 
   // API to retrieve the Skills from a free text - even partial written text in the search bar
   //without pagination
-  async getSkillsByText(skill_text: string): Promise<any> {
+  async getSkillsByText(skill_text: string): Promise<OerSkillInfo[]> {
     try {
       const resp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/skills/label_search/?search=${skill_text}`
@@ -81,8 +93,8 @@ export class APIV2 {
   async getSkillsByTextWithPages(
     page = 1,
     skill_text: string,
-    allSkills: any[] = []
-  ): Promise<any[]> {
+    allSkills: OerSkillInfo[] = []
+  ): Promise<OerSkillInfo[]> {
     try {
       const respSkills = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/skills/label_search/?page=${page}&search=${skill_text}`
@@ -101,7 +113,7 @@ export class APIV2 {
   }
 
   async getConceptMapOersNLP(
-    oers_ids: any[]
+    oers_ids: number[]
   ): Promise<AxiosResponse<EncoreConceptMap>> {
     return this.axios.post(
       `${process.env.POLYGLOT_URL}/api/concepts/genGraphOers`,
@@ -112,7 +124,7 @@ export class APIV2 {
   }
 
   async getConceptMapOers(
-    filteredOers: any
+    filteredOers: OerProps
   ): Promise<AxiosResponse<EncoreConceptMap>> {
     return this.axios.post(
       `${process.env.POLYGLOT_URL}/api/concepts/genGraphExt`,
@@ -133,7 +145,7 @@ export class APIV2 {
     );
   }
 
-  async getAllSkills(): Promise<any[]> {
+  async getAllSkills(): Promise<OerSkillInfo[]> {
     try {
       return await this.getSkills();
     } catch (error) {
@@ -141,7 +153,7 @@ export class APIV2 {
     }
   }
 
-  async getSkillsLabel(): Promise<any[]> {
+  async getSkillsLabel(): Promise<{ id: number; label: string }[]> {
     try {
       const temp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/skills/labels/`
@@ -151,7 +163,7 @@ export class APIV2 {
       const num_pages = Math.ceil(recordsTotal / 10);
       console.log('NUM PAGES: ' + num_pages);
 
-      let updatedSkills: any[] = [];
+      let updatedSkills: { id: number; label: string }[] = [];
 
       for (let i = 1; i < num_pages + 1; i++) {
         const resp = await axiosNoCookie.get(
@@ -159,7 +171,7 @@ export class APIV2 {
         );
 
         const labelsPage =
-          resp.data?.data?.map((skill: any) => ({
+          resp.data?.data?.map((skill: OerSkillInfo) => ({
             id: skill.id,
             label: skill.label,
           })) || [];
@@ -172,7 +184,7 @@ export class APIV2 {
     }
   }
 
-  async getAllSkillsLabel(): Promise<any[]> {
+  async getAllSkillsLabel(): Promise<{ id: number; label: string }[]> {
     try {
       const resp = await this.getSkillsLabel();
 
@@ -182,7 +194,11 @@ export class APIV2 {
     }
   }
 
-  async getOERs(page = 1, allOers: any[] = [], stop = 100): Promise<any[]> {
+  async getOERs(
+    page = 1,
+    allOers: OerProps[] = [],
+    stop = 100
+  ): Promise<any[]> {
     try {
       const respOers = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/oers/?page=${page}`
@@ -202,7 +218,7 @@ export class APIV2 {
     }
   }
 
-  async getOerById(id_oer: any): Promise<any> {
+  async getOerById(id_oer: number): Promise<any> {
     try {
       const resp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/oers/?id=${id_oer}`
@@ -220,7 +236,7 @@ export class APIV2 {
   //API to retrieve the resources with multiple skills in AND
   //https://encore-db.grial.eu/api/boolean/oers/?and_skills=23304&and_skills=22529
 
-  async getOersInAND(oers: string[]): Promise<any> {
+  async getOersInAND(oers: string[]): Promise<OerProps[]> {
     try {
       const transformedParams = oers.map((id) => `and_skills=${id}`).join('&');
       const apiUrl = `https://encore-db.grial.eu/api/boolean/oers/?${transformedParams}`;
@@ -231,7 +247,7 @@ export class APIV2 {
     }
   }
 
-  async getOersInOR(oers: string[]): Promise<any> {
+  async getOersInOR(oers: string[]): Promise<OerProps[]> {
     try {
       const transformedParams = oers.map((id) => `or_skills=${id}`).join('&');
       const apiUrl = `https://encore-db.grial.eu/api/boolean/oers/?${transformedParams}`;
@@ -245,7 +261,7 @@ export class APIV2 {
   //API to retrieve the resources with multiple skills in OR
   //https://encore-db.grial.eu/api/boolean/oers/?or_skills=23304&or_skills=22529
 
-  async getDigitalOer(): Promise<any> {
+  async getDigitalOer(): Promise<OerProps> {
     try {
       const resp_oer = await axios.get(
         ' https://encore-db.grial.eu/api/oers/?green={false}&digital={true}&entrepreneurhip={false}'
@@ -259,7 +275,7 @@ export class APIV2 {
     }
   }
 
-  async getOer(): Promise<any> {
+  async getOer(): Promise<OerProps> {
     try {
       const resp_oer = await axios.get('http://localhost:3000/api/encore/oer');
 
@@ -271,7 +287,7 @@ export class APIV2 {
     }
   }
 
-  async getOerDescription(): Promise<any> {
+  async getOerDescription(): Promise<string> {
     try {
       const resp_oer = await axios.get('http://localhost:3000/api/encore/oer');
 
@@ -283,7 +299,7 @@ export class APIV2 {
     }
   }
 
-  async getMetrics(): Promise<any[]> {
+  async getMetrics(): Promise<MetricsOers[]> {
     try {
       const resp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/metrics/oers/`
@@ -300,19 +316,16 @@ export class APIV2 {
 
   async getDomains(
     page = 1,
-    allDomains: any[] = [],
+    allDomains: OerDomainInfo[] = [],
     stop = 10
-  ): Promise<any[]> {
+  ): Promise<OerDomainInfo[]> {
     try {
       const resp_dom = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/domains/?page=${page}`
       );
 
       const domainsPage =
-        resp_dom.data?.data?.map((domain: any) => ({
-          id: domain.id,
-          name: domain.name,
-        })) || [];
+        resp_dom.data?.data?.map((domain: OerDomainInfo) => domain) || [];
       const updatedDomains = [...allDomains, ...domainsPage];
 
       if (domainsPage.length === 10) {
@@ -329,19 +342,16 @@ export class APIV2 {
 
   async getSubjects(
     page = 1,
-    allSubjects: any[] = [],
+    allSubjects: OerSubjectInfo[] = [],
     stop = 10
-  ): Promise<any[]> {
+  ): Promise<OerSubjectInfo[]> {
     try {
       const resp_sub = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/subjects/?page=${page}`
       );
 
       const subjectsPage =
-        resp_sub.data?.data?.map((subject: any) => ({
-          id: subject.id,
-          name: subject.name,
-        })) || [];
+        resp_sub.data?.data?.map((subject: OerSubjectInfo) => subject) || [];
       const updatedSubjects = [...allSubjects, ...subjectsPage];
 
       if (subjectsPage.length === 10) {
@@ -357,19 +367,17 @@ export class APIV2 {
 
   async getResourceTypes(
     page = 1,
-    allTypes: any[] = [],
+    allTypes: OerMediaTypeInfo[] = [],
     stop = 10
-  ): Promise<any[]> {
+  ): Promise<OerMediaTypeInfo[]> {
     try {
       const resp_ResTypes = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/types/?page=${page}`
       );
 
       const resTypesPage =
-        resp_ResTypes.data?.data?.map((resType: any) => ({
-          id: resType.id,
-          name: resType.name,
-        })) || [];
+        resp_ResTypes.data?.data?.map((resType: OerMediaTypeInfo) => resType) ||
+        [];
       const updatedResTypes = [...allTypes, ...resTypesPage];
 
       if (resTypesPage.length === 10) {
@@ -389,19 +397,16 @@ export class APIV2 {
 
   async getAudience(
     page = 1,
-    allAudience: any[] = [],
+    allAudience: OerAudienceInfo[] = [],
     stop = 10
-  ): Promise<any[]> {
+  ): Promise<OerAudienceInfo[]> {
     try {
       const resp_aud = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/coverage/?page=${page}`
       );
 
       const audiencePage =
-        resp_aud.data?.data?.map((audience: any) => ({
-          id: audience.id,
-          name: audience.name,
-        })) || [];
+        resp_aud.data?.data?.map((audience: OerAudienceInfo) => audience) || [];
       const updatedAudience = [...allAudience, ...audiencePage];
 
       if (audiencePage.length === 10) {
@@ -415,11 +420,11 @@ export class APIV2 {
     }
   }
 
-  async searhOERbySkillNoPages(skillIds: any[]): Promise<any[]> {
+  async searhOERbySkillNoPages(skillIds: string[]): Promise<OerProps[]> {
     try {
       const queryParams = new URLSearchParams();
 
-      skillIds?.forEach((skillId: any) => {
+      skillIds?.forEach((skillId: string) => {
         queryParams.append('skills', skillId);
       });
 
@@ -460,7 +465,7 @@ export class APIV2 {
     audienceIds: any[]
 
     // Implement oer[] type
-  ): Promise<any[]> {
+  ): Promise<OerProps[]> {
     const ID_ALL = 0;
 
     try {

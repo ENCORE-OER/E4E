@@ -1,20 +1,25 @@
 import { Card } from '@chakra-ui/react';
-import { ReourceCardProps } from '../../../types/encoreElements';
+import { ResourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
 import OerCardFooter from './OerCardFooter';
 import OerCardHeader from './OerCardHeader';
 
+interface OerCardProps extends ResourceCardProps {
+  checkBookmark?: boolean;
+}
+
 export default function OerCard({
-  idOer,
+  id: idOer,
+  collection_color,
   description,
-  authors,
-  lastUpdate,
-  qualityScore,
-  resourceType,
+  creator: authors,
+  retrieval_date: lastUpdate,
+  overall_score: qualityScore,
+  media_type: resourceType,
   title,
-  showTagDigital,
-  showTagEntrepreneurial,
-  showTagGreen,
+  digital_domain: showTagDigital,
+  entrepreneurship_domain: showTagEntrepreneurial,
+  green_domain: showTagGreen,
   maxHCard,
   mbCard,
   pxCard,
@@ -22,7 +27,8 @@ export default function OerCard({
   noOfLinesTextCardBody,
   ptCardHeader,
   pyCardBody,
-}: ReourceCardProps) {
+  checkBookmark,
+}: OerCardProps) {
   return (
     <Card
       display="flex"
@@ -45,6 +51,8 @@ export default function OerCard({
         showTagDigital={showTagDigital}
         showTagEntrepreneurial={showTagEntrepreneurial}
         showTagGreen={showTagGreen}
+        collection_color={collection_color}
+        checkBookmark={checkBookmark}
       />
       <OerCardBody
         description={description}

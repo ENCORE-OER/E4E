@@ -6,9 +6,9 @@ import { ReactText } from 'react';
 import { IconType } from 'react-icons';
 
 interface NavItemProps extends FlexProps {
-  icon: IconType;
+  icon?: IconType;
   children: ReactText | string;
-  link: string;
+  link?: string;
   isSelected: boolean;
   setIsSelected: (value: boolean) => void;
 }
@@ -28,28 +28,9 @@ const NavItem = ({
       //_focus={{ boxShadow: 'none' }}
     >
       <Flex
-        gap={3}
-        height="45px"
-        width="196px"
-        ml="1px"
-        pl="20px"
-        my="15px"
-        align="center"
-        //p="4"
-        role="group"
-        cursor="pointer"
         onClick={() => {
           setIsSelected(!isSelected);
         }}
-        borderLeft="5px"
-        borderLeftColor={isSelected ? 'accent.900' : 'white'}
-        borderLeftStyle={'solid'}
-        _hover={{
-          bg: 'white',
-          color: 'accent.900',
-        }}
-        bg={isSelected ? 'accent.200' : ''}
-        color={'primary'}
         {...rest}
       >
         {icon && (
