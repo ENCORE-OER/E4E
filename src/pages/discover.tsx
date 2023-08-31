@@ -92,21 +92,25 @@ const Discover = (props: DiscoverPageProps) => {
 
     //case 2 - more than one skill we check if all skills must be used or at least one
     else if (andOption === 'true') {
+      // TODO: to check the API in case of AND if it returns only the first 10 OERs
       const oers = await api.getOersInAND(skills);
       setFiltered(oers);
     } else if (orOption === 'true') {
+      // TODO: to check the API in case of OR if it returns only the first 10 OERs
       const oers = await api.getOersInOR(skills);
       //setRespSearchOers(oers);
       setFiltered(oers);
     } else if (orOption === 'false' && andOption === 'false') {
+      // TODO: to check the API in case of OR if it returns only the first 10 OERs
       const oers = await api.getOersInOR(skills);
-
       setFiltered(oers);
     } else {
       // case where the and / or options are not selected - by default we use the OR condition
-      const oers = await api.getOersInOR(skills);
+      // TODO: to check the API in case of OR if it returns only the first 10 OERs and reuse the OR APIs
+      const oers = await api.searhOERbySkillNoPages(skills);
       setFiltered(oers);
     }
+
 
     setIsLoading(false);
   };
@@ -158,6 +162,9 @@ const Discover = (props: DiscoverPageProps) => {
 
     if (!searchData) {
       // TODO: handle redirect
+      // router.push({
+      //   pathname: '/'
+      // });
       return;
     }
 
@@ -179,7 +186,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   // sorting of the OERs
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     const sortedData = [...filtered];
     sortedData.sort((a: OerProps, b: OerProps) => {
       if (selectedSorting === 'Last Update') {
@@ -204,7 +211,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     setFiltered(sortedData);
 
-    setIsLoading(false);
+    // setIsLoading(false);
   }, [selectedSorting, isAscending]);
 
   return (
