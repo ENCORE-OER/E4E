@@ -175,7 +175,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     searchOERs(skills, andOption, orOption);
 
-  }, [router.query.parameters, searchOERs]);
+  }, [router.query]);
 
   // sorting of the OERs
   useEffect(() => {
