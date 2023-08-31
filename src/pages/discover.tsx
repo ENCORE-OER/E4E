@@ -58,7 +58,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
   const [isAscending, setAscending] = useState<boolean>(true);
-  
+
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
@@ -154,10 +154,20 @@ const Discover = (props: DiscoverPageProps) => {
     setIsLoading(true);
 
 
-    const skillsString = localStorage.getItem('selectedSkills') as string;
-    const skills: string[] = JSON.parse(skillsString);
-    const andOption = localStorage.getItem('andOption') as string;
-    const orOption = localStorage.getItem('orOption') as string;
+    const searchData = localStorage.getItem('searchData');
+
+    if (!searchData) {
+      // TODO: handle redirect
+      return;
+    }
+
+    const convertedData = JSON.parse(searchData);
+
+
+    // TODO: add check if null
+    const skills = convertedData["selectedSkills"];
+    const andOption = convertedData["andOption"];
+    const orOption = convertedData["orOption"];
     // const domains = localStorage.getItem('domains') as unknown as string[];
     // const types = localStorage.getItem('types') as unknown as string[];
     // const audience = localStorage.getItem('audience') as unknown as string[];
@@ -165,7 +175,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     searchOERs(skills, andOption, orOption);
 
-  }, [router.query.parameters]);
+  }, [router.query.parameters, searchOERs]);
 
   // sorting of the OERs
   useEffect(() => {
@@ -208,7 +218,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
