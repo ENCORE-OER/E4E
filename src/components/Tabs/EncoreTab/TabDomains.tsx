@@ -11,12 +11,19 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
-  const { filtered } = useContext(DiscoveryContext);
+
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
 
   const filteredOers: any = {};
+
+  const [previousContent, setPreviousContent] = useState('');
+
+  const [selectedOERIds, setSelectedOERIds] = useState([]);
+  
+
 
   // here i sorted the oers per domain
 
@@ -68,20 +75,63 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
   const combinations = useMemo(() => ({ mergeColors }), []);
 
+  /* const onClickDiagram = async (selection: any) => {
+ 
+     if (!selection) return;
+     const oerIds = selection.elems;
+     updateOers(oerIds);
+ 
+   };
+ 
+ 
+   const updateOers = (ids: string[]) => {
+     // 'filtered' is an array of OER objects
+     // Filter the 'filtered' array to include only OERs with matching IDs
+     const filteredOERs = filtered?.filter((oer: any) => ids.includes(oer.id.toString()));
+     setFiltered(filteredOERs);
+   };*/
+
+
+
+
   const onClickDiagram = async (selection: any) => {
     if (!selection) return;
-    // const Oers: any[] = [];
-    // const domainIds = [...selection.sets].map((set) => set.domainId);
 
-    /*?? check here
-    filtered?.forEach((oer: { skills: { domain: any[]; }[]; id: string; }) => oer.skills.forEach((skill: { domain: any[]; }) => {
-      skill.domain.forEach((domain) => {
-        if (!filteredOers[domain.name]) filteredOers[domain.name] = { name: domain.name?.toUpperCase(), elems: [], domainId: domain.name };
-        Oers.push(oer);
-      })
-    }));
-*/
+    // Convert the selected OER IDs to an array
+    const selectedIds = selection.elems;
+    // Check if the selected IDs are equal to the currently selected IDs
+    if (selectedIds.length == 0) {
+      return;
+    }
+    else if (arraysEqual(selectedIds, selectedOERIds)) {
+      // Second click on the same slice, reset to initial state
+      setSelectedOERIds([]);
+      setFiltered(previousContent);
+    } else {
+      // First click on a slice, update the selected OER IDs
+      setSelectedOERIds(selectedIds);
+      setPreviousContent(filtered);
+
+      // Filter the displayed OERs based on the selected IDs
+      const filteredObjects = filtered.filter(((oer: { id: string }) =>
+        selectedIds.includes(oer.id.toString())
+      ));
+      setFiltered(filteredObjects);
+    }
   };
+
+  // Function to check if two arrays are equal
+  const arraysEqual = (arr1: string[], arr2: string[]) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) return false;
+    }
+    return true;
+  };
+
+
+
+
 
   return (
     <>
