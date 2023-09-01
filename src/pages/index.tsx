@@ -84,10 +84,7 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   const searchCallback1 = async () => {
-
-
     let searchData = {};
-
 
     if (isClicked) {
       // advanced search selected
@@ -98,7 +95,7 @@ const Home = (props: DiscoverPageProps) => {
         orOption: checkboxOr,
         domains: selectedDomain,
         types: selectedResourceTypes,
-        audience: selectedAudience
+        audience: selectedAudience,
       };
       router.push({
         pathname: '/discover',
@@ -121,7 +118,7 @@ const Home = (props: DiscoverPageProps) => {
         orOption: checkboxOr,
         domains: selectedDomain,
         types: selectedResourceTypes,
-        audience: selectedAudience
+        audience: selectedAudience,
       };
       if (selectedSkillIds.length == 0) return;
       router.push({
@@ -138,7 +135,7 @@ const Home = (props: DiscoverPageProps) => {
       });
     }
     localStorage.setItem('searchData', JSON.stringify(searchData));
-    console.log("LOCAL STORAGE - SEARCH DATA: " + JSON.stringify(localStorage));
+    console.log('LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage));
   };
 
   const handleAdvanceSearchClick = (e: any) => {

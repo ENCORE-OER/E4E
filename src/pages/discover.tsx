@@ -78,8 +78,6 @@ const Discover = (props: DiscoverPageProps) => {
   ) => {
     //here we search the OERS using the query parameters
 
-
-
     const isArray = Array.isArray(skills);
 
     const api = new APIV2(props.accessToken);
@@ -111,10 +109,8 @@ const Discover = (props: DiscoverPageProps) => {
       setFiltered(oers);
     }
 
-
     setIsLoading(false);
   };
-
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const searchCallback = async (domainIds?: number[]) => {
@@ -154,9 +150,7 @@ const Discover = (props: DiscoverPageProps) => {
   };
 
   useEffect(() => {
-
     setIsLoading(true);
-
 
     const searchData = localStorage.getItem('searchData');
 
@@ -170,18 +164,15 @@ const Discover = (props: DiscoverPageProps) => {
 
     const convertedData = JSON.parse(searchData);
 
-
     // TODO: add check if null
-    const skills = convertedData["selectedSkills"];
-    const andOption = convertedData["andOption"];
-    const orOption = convertedData["orOption"];
+    const skills = convertedData['selectedSkills'];
+    const andOption = convertedData['andOption'];
+    const orOption = convertedData['orOption'];
     // const domains = localStorage.getItem('domains') as unknown as string[];
     // const types = localStorage.getItem('types') as unknown as string[];
     // const audience = localStorage.getItem('audience') as unknown as string[];
 
-
     searchOERs(skills, andOption, orOption);
-
   }, [router.query]);
 
   // sorting of the OERs
@@ -225,7 +216,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-              //justify="space-between"
+                //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>

@@ -20,7 +20,7 @@ type CollectionMenuProps = {
   indexCollection?: number;
 };
 
-export default function CollectionMenu({ }: CollectionMenuProps) {
+export default function CollectionMenu({}: CollectionMenuProps) {
   const [selectedOption, setSelectedOption] = useState<string>('');
   //const [selectedOptionId, setSelectedOptionId] = useState<number>();
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
