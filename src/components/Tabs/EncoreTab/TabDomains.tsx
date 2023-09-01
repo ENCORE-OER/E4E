@@ -22,7 +22,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   const [previousContent, setPreviousContent] = useState('');
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
-  const [displayedOERs, setDisplayedOERs] = useState(DiscoveryContext);
+  
 
 
   // here i sorted the oers per domain
