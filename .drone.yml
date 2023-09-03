@@ -1,0 +1,9 @@
+kind: pipeline
+type: kubernetes
+name: E4E
+
+steps:
+  - name: greetings
+    image: alpine
+    commands:
+      - env
