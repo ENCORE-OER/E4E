@@ -12,7 +12,7 @@ steps:
   - name: Build and push image to Docker # building the encore docker image
     image: plugins/docker
     settings:
-      repo: docker.polyglot-edu.com/ENCORE-OER/E4E
+      repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
       registry: docker.polyglot-edu.com
       dockerfile: ./Dockerfile
       tags: ['${DRONE_COMMIT_SHA:0:7}', 'latest']
