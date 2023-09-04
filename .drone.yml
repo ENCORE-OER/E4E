@@ -34,7 +34,8 @@ steps:
         from_secret: cf_origin
       DOCKERCONFIG:
         from_secret: dockerconfigjson
-      ENV: ${globals.env}
+      ENV:
+        <<: *env
     settings:
       mode: upgrade
       chart: ./charts
