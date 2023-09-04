@@ -32,7 +32,7 @@ steps:
         from_secret: kube_token
       values:
         - 'url=e4e.polyglot-edu.com'
-        - 'cfOriginKey=${*kube_token}'
+        - 'cfOriginKey=$${*kube_token}'
       cleanup_failed_upgrade: true
       force_upgrade: true
   #  depends_on:
