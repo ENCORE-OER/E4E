@@ -2,15 +2,11 @@ import { Stack, Text } from '@chakra-ui/react';
 
 import { useContext, useState } from 'react';
 
-
-
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 import { Doughnut } from 'react-chartjs-2';
-
-
 
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
@@ -18,9 +14,7 @@ import { OerMediaTypeInfo } from '../../../types/encoreElements';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
-
-
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
   const [previousContent, setPreviousContent] = useState('');
 
@@ -47,9 +41,6 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     })
   );
 
-
-
-
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
     let color = '#';
@@ -74,15 +65,13 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     backgroundColor: getRandomColor(), // Set a color for each dataset
   }));
 
-
   const jsonData = {
-    datasets: datasets
+    datasets: datasets,
   };
 
-
   // Transform the JSON data into a format suitable for a pie chart
-  const transformedData = jsonData.datasets.flatMap(dataset =>
-    dataset.data.map(item => ({
+  const transformedData = jsonData.datasets.flatMap((dataset) =>
+    dataset.data.map((item) => ({
       label: item.type,
       value: item.r,
       backgroundColor: dataset.backgroundColor,
@@ -90,28 +79,25 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   );
 
   const data = {
-    labels: transformedData.map(item => item.label),
+    labels: transformedData.map((item) => item.label),
     datasets: [
       {
-        data: transformedData.map(item => item.value),
-        backgroundColor: transformedData.map(item => item.backgroundColor),
+        data: transformedData.map((item) => item.value),
+        backgroundColor: transformedData.map((item) => item.backgroundColor),
       },
     ],
   };
 
-
-
   const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
-
 
   const handleSliceClick = (event: any, elements: any) => {
     if (elements.length > 0 && elements[0].index !== undefined) {
       const clickedIndex = elements[0].index;
-      console.log("Clicked Index:", clickedIndex);
+      console.log('Clicked Index:', clickedIndex);
 
       if (clickedIndex >= 0 && clickedIndex < transformedData.length) {
         const clickedSliceLabel = transformedData[clickedIndex].label;
-        console.log("Clicked Slice Label:", clickedSliceLabel);
+        console.log('Clicked Slice Label:', clickedSliceLabel);
 
         if (selectedSlice === clickedIndex) {
           setSelectedSlice(null);
@@ -124,7 +110,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
           updateOers(clickedSliceLabel);
         }
       } else {
-        console.log("Invalid Clicked Index:" + clickedIndex);
+        console.log('Invalid Clicked Index:' + clickedIndex);
       }
     }
   };
@@ -154,9 +140,6 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     }
   };
 
-
-
-
   const filteredDataObject = filterData();
 
   const updateOers = (label: string) => {
@@ -171,24 +154,25 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         })
     );
     setFiltered(resources);
-
   };
-
 
   return (
     <>
       <Stack spacing={0}>
         <Text color="primary">
-          The Pie Chart shows the types of resources available for the
-          searched keywords. Click on a portion to filter resources according to
-          the selected types.
+          The Pie Chart shows the types of resources available for the searched
+          keywords. Click on a portion to filter resources according to the
+          selected types.
         </Text>
       </Stack>
 
       <Stack spacing={0}>
-        <Doughnut data={filteredDataObject} options={{ onClick: handleSliceClick }} />;
+        <Doughnut
+          data={filteredDataObject}
+          options={{ onClick: handleSliceClick }}
+        />
+        ;
       </Stack>
     </>
   );
 };
-

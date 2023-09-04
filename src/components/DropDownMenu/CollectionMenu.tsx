@@ -59,7 +59,7 @@ export default function CollectionMenu({}: CollectionMenuProps) {
 
   useEffect(() => {
     setIndexCollectionClicked(-1);
-  });
+  }, []);
 
   return (
     <>
