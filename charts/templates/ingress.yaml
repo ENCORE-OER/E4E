@@ -24,7 +24,6 @@ metadata:
       cert-manager.io/issuer: prod-issuer
       cert-manager.io/issuer-kind: OriginIssuer
       cert-manager.io/issuer-group: cert-manager.k8s.cloudflare.com
-  {{- end }}
 spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: {{ .Values.ingress.className }}
@@ -34,7 +33,6 @@ spec:
       hosts:
         - {{ .Values.url }}
   rules:
-    {{- range .Values.ingress.hosts }}
     - host: {{ .Values.url }}
       http:
         paths:
@@ -51,5 +49,4 @@ spec:
                 serviceName: {{ $fullName }}
                 servicePort: {{ $svcPort }}
                 {{- end }}
-    {{- end }}
 {{- end }}
