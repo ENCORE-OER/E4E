@@ -16,7 +16,7 @@ steps:
       repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
       registry: docker.polyglot-edu.com
       dockerfile: ./Dockerfile
-      tags: ['$DRONE_BRANCH']
+      tags: ['${DRONE_BRANCH}']
       <<: *docker_creds
   - name: Deploy # deploy to kubernetes using a Helm chart
     image: pelotech/drone-helm3
@@ -28,19 +28,19 @@ steps:
     settings:
       mode: upgrade
       chart: ./charts
-      release: e4e-$DRONE_BRANCH
-      namespace: e4e-$DRONE_BRANCH
+      release: e4e-${DRONE_BRANCH}
+      namespace: e4e-${DRONE_BRANCH}
       debug: true
       kube_service_account: admin-user
       kube_api_server: 'https://131.114.23.149:6443'
       kube_token:
         from_secret: kube_token
       values:
-        - 'url=$DRONE_BRANCH-e4e.polyglot-edu.com'
+        - 'url=${DRONE_BRANCH}-e4e.polyglot-edu.com'
         - 'cfOriginKey=$CFORIGIN'
         - 'dockerconfigjson=$DOCKERCONFIG'
         - 'image.repository=docker.polyglot-edu.com/encore-oer/e4e'
-        - 'image.tag=$DRONE_BRANCH'
+        - 'image.tag=${DRONE_BRANCH}'
       cleanup_failed_upgrade: true
       force_upgrade: true
       skip_tls_verify: true
