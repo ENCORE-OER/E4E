@@ -23,6 +23,8 @@ steps:
     environment:
       CFORIGIN:
         from_secret: cf_origin
+      DOCKERCONFIG:
+        from_secret: dockerconfigjson
     settings:
       mode: upgrade
       chart: ./charts
@@ -36,6 +38,7 @@ steps:
       values:
         - 'url=e4e.polyglot-edu.com'
         - 'cfOriginKey=$CFORIGIN'
+        - 'dockerconfigjson=$DOCKERCONFIG'
       cleanup_failed_upgrade: true
       force_upgrade: true
       skip_tls_verify: true
