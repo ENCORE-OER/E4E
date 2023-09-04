@@ -35,6 +35,8 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- range $key, $val := .Values.env }}
+            {{ $key }}: {{ $val }}
+            {{- end}}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
