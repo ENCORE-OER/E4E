@@ -19,14 +19,14 @@ globals:
     POLYGLOT_URL: http://localhost:5000
 
 steps:
-  - name: Build and push image to Docker # building the encore docker image
-    image: plugins/docker
-    settings:
-      repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
-      registry: docker.polyglot-edu.com
-      dockerfile: ./Dockerfile
-      tags: ['${DRONE_BRANCH}']
-      <<: *docker_creds
+  # - name: Build and push image to Docker # building the encore docker image
+  #   image: plugins/docker
+  #   settings:
+  #     repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
+  #     registry: docker.polyglot-edu.com
+  #     dockerfile: ./Dockerfile
+  #     tags: ['${DRONE_BRANCH}']
+  #     <<: *docker_creds
   - name: Deploy # deploy to kubernetes using a Helm chart
     image: pelotech/drone-helm3
     environment:
