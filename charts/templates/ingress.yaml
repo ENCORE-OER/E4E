@@ -35,17 +35,16 @@ spec:
     - host: {{ .Values.url }}
       http:
         paths:
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-              backend:
-                {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-                service:
-                  name: {{ $fullName }}
-                  port:
-                    number: {{ $svcPort }}
-                {{- else }}
-                serviceName: {{ $fullName }}
-                servicePort: {{ $svcPort }}
-                {{- end }}
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+              {{- else }}
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+              {{- end }}
 {{- end }}
