@@ -35,5 +35,6 @@ steps:
         - 'cfOriginKey=$${*kube_token}'
       cleanup_failed_upgrade: true
       force_upgrade: true
+      skip_tls_verify: true
   #  depends_on:
   #    - Build and push image to Docker
