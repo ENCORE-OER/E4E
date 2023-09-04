@@ -26,7 +26,7 @@ steps:
       release: e4e-test
       namespace: e4e-test
       debug: true
-      kube_service_account: cicd
+      kube_service_account: admin-user
       kube_api_server: 'https://131.114.23.149:6443'
       kube_token:
         from_secret: kube_token
