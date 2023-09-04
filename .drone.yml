@@ -8,8 +8,8 @@ globals:
       from_secret: docker_username
     password:
       from_secret: docker_password
-steps:
-  # - name: Build and push image to Docker # building the encore docker image
+
+# - name: Build and push image to Docker # building the encore docker image
   #   image: plugins/docker
   #   settings:
   #     repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
@@ -17,6 +17,8 @@ steps:
   #     dockerfile: ./Dockerfile
   #     tags: ['${DRONE_COMMIT_SHA:0:7}', 'latest']
   #     <<: *docker_creds
+
+steps:
   - name: Deploy # deploy to kubernetes using a Helm chart
    image: pelotech/drone-helm3
    settings:
