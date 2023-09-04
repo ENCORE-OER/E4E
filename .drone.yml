@@ -9,11 +9,30 @@ globals:
     password:
       from_secret: docker_password
 steps:
-  - name: Build and push image to Docker # building the encore docker image
-    image: plugins/docker
-    settings:
-      repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
-      registry: docker.polyglot-edu.com
-      dockerfile: ./Dockerfile
-      tags: ['${DRONE_COMMIT_SHA:0:7}', 'latest']
-      <<: *docker_creds
+  # - name: Build and push image to Docker # building the encore docker image
+  #   image: plugins/docker
+  #   settings:
+  #     repo: docker.polyglot-edu.com/encore-oer/e4e # must be lowercase
+  #     registry: docker.polyglot-edu.com
+  #     dockerfile: ./Dockerfile
+  #     tags: ['${DRONE_COMMIT_SHA:0:7}', 'latest']
+  #     <<: *docker_creds
+  - name: Deploy # deploy to kubernetes using a Helm chart
+   image: pelotech/drone-helm3
+   settings:
+     mode: upgrade
+     chart: ./charts
+     release: e4e-test
+     namespace: e4e-test
+     debug: true
+     kube_service_account: cicd
+     kube_api_server: "https://131.114.23.149:6443"
+     kube_token:
+       from_secret: kube_token
+     values:
+       - "url=e4e.polyglot-edu.com"
+       - "cfOriginKey=${*kube_token}"
+     cleanup_failed_upgrade: true
+     force_upgrade: true
+  #  depends_on:
+  #    - Build and push image to Docker
