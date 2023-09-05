@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 //import { useRouter } from 'next/router';
@@ -19,14 +19,14 @@ type DiscoverPageProps = {
 };
 
 const Home = (props: DiscoverPageProps) => {
-  //const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
+  //const router = useRouter();
   const { user } = useUser();
-  const { collections, indexCollectionClicked } = useCollectionsContext();
+  const { collections, indexCollectionClicked, setIndexCollectionClicked } =
+    useCollectionsContext();
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
   const hydrated = useHasHydrated(); // used to avoid hydration failed
-  const concepts = ['concept 1', 'concept 2', 'concept 3'];
   const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
 
   const getDataOerById = async (id_oer?: number) => {
@@ -44,6 +44,8 @@ const Home = (props: DiscoverPageProps) => {
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
+    console.log(indexCollectionClicked);
+
     if (collections?.length > 0 && hydrated && indexCollectionClicked >= 0) {
       try {
         const fetchOerData = async () => {
@@ -79,26 +81,53 @@ const Home = (props: DiscoverPageProps) => {
       <Box
         ml="200px"
         py="115px"
-        pl="40px"
+        px="40px"
         w="full"
         h={conceptSelectedIndex === -1 ? '100vh' : 'full'}
         bg="background"
       >
-        <HeadingPlanDesign title="Learning path design" />
+        <HeadingPlanDesign
+          collections={collections}
+          collectionIndex={indexCollectionClicked}
+          setCollectionIndex={setIndexCollectionClicked}
+          title="Learning path design"
+        />
         <Text pt="30px" pb="7px">
           For each concept add the educational activities.
         </Text>
 
-        <ConceptButtonsList
-          concepts={concepts}
-          conceptSelectedIndex={conceptSelectedIndex}
-          setConceptSelectedIndex={setConceptSelectedIndex}
-        />
+        <Box position="relative">
+          <Flex>
+            <Box
+              p={3}
+              w="80%"
+              h="auto"
+              border="2px"
+              borderRadius="10px"
+              borderColor="secondary"
+              borderStyle="solid"
+            >
+              <ConceptButtonsList
+                collections={collections}
+                conceptSelectedIndex={conceptSelectedIndex}
+                setConceptSelectedIndex={setConceptSelectedIndex}
+                collectionIndex={indexCollectionClicked}
+              />
+            </Box>
 
-        <LearningPathEditor
-          oers={oersById}
-          conceptSelectedIndex={conceptSelectedIndex}
-        />
+            {/* TODO: add onClick function to add concepts */}
+            <Box display="flex" flex="1" px={5}>
+              <Button variant="primary">Add a new concept</Button>
+            </Box>
+          </Flex>
+
+          <LearningPathEditor
+            collectionIndex={indexCollectionClicked}
+            setConceptSelectedIndex={setConceptSelectedIndex}
+            oers={oersById}
+            conceptSelectedIndex={conceptSelectedIndex}
+          />
+        </Box>
       </Box>
     </Flex>
   );

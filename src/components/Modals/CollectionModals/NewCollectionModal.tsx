@@ -103,7 +103,7 @@ export default function NewCollectionModal({
               nameCollection.length === maxLength
             }
           >
-            <FormLabel>First name</FormLabel>
+            <FormLabel>Enter a name for the collection</FormLabel>
             <Input
               placeholder="New collection..."
               value={nameCollection}

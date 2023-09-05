@@ -22,7 +22,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const goToConceptMapDesignPage = async () => {
     router.push({
-      pathname: `/plan/conceptMapDesign`,
+      pathname: `/plan/learningPathDesign`,
     });
   };
 
