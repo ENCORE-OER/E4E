@@ -93,8 +93,8 @@ const config = {
           border: '2px',
           borderColor: 'secondary',
           borderStyle: 'solid',
-          py: '20px', // padding y
-          px: '15px', // padding x
+          py: '15px', // padding y
+          px: '10px', // padding x
           letterSpacing: '1px',
         },
       },

@@ -10,26 +10,29 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { IconArrowDownFilter } from '../../public/Icons/svgToIcons/iconArrowDownFilter';
 import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 
 type CollectionMenuProps = {
-  indexCollection?: number;
+  collectionIndex?: number;
+  setCollectionIndex: Dispatch<SetStateAction<number>>;
+  collections?: CollectionProps[];
 };
 
-export default function CollectionMenu({}: CollectionMenuProps) {
+export default function CollectionMenu({
+  setCollectionIndex,
+  collections,
+}: CollectionMenuProps) {
   const [selectedOption, setSelectedOption] = useState<string>('');
   //const [selectedOptionId, setSelectedOptionId] = useState<number>();
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   //const [collectionIndex, setCollectionIndex] = useState<number>(0);
-  //const [prevCollectionIndex, setPrevCollectionIndex] =
-  useState<number>(9999999999999);
+  //const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(9999999999999);
   //const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
 
-  const { collections, setIndexCollectionClicked } = useCollectionsContext();
+  //const { collections, setIndexCollectionClicked } = useCollectionsContext();
   const hydrated = useHasHydrated(); // used to avoid hydration failed
 
   const handleToggleMenu = () => {
@@ -58,7 +61,7 @@ export default function CollectionMenu({}: CollectionMenuProps) {
   */
 
   useEffect(() => {
-    setIndexCollectionClicked(-1);
+    setCollectionIndex(-1);
   }, []);
 
   return (
@@ -97,7 +100,8 @@ export default function CollectionMenu({}: CollectionMenuProps) {
                     e.preventDefault();
                     //setCollectionIndex(index);
                     setSelectedOption(collection.name);
-                    setIndexCollectionClicked(index);
+                    //setCollectionIndex(index);
+                    setCollectionIndex(index);
                     //handleCollectionClick();
                   }}
                 >

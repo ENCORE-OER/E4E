@@ -3,9 +3,9 @@ import { Box, Button, Flex, Text } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 
-//import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
-import React from 'react';
+import { useState } from 'react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -17,7 +17,8 @@ import SideBar from '../../components/SideBar/SideBar';
 const Home = (/*props: DiscoverPageProps*/) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  //const { collections, deleteCollection } = useCollectionsContext();
+  const { collections } = useCollectionsContext();
+  const [collectionIndex, setCollectionIndex] = useState<number>(-1);
 
   //const hydrated = useHasHydrated(); // used to avoid hydration failed
 
@@ -33,7 +34,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
       <SideBar pagePath={'/plan'} />
 
       <Box ml="200px" py="115px" pl="40px" w="full" h="full" bg="background">
-        <HeadingPlanDesign title="Concept map design" />
+        <HeadingPlanDesign
+          collections={collections}
+          collectionIndex={collectionIndex}
+          setCollectionIndex={setCollectionIndex}
+          title="Concept map design"
+        />
 
         <Box
           bg="white"
@@ -48,7 +54,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             This is a map of concepts generated from the collection.
             <br /> Select the relevant concepts and add new ones.
           </Text>
-
+          {/*<TagConcept concepts={collections[collectionIndex]?.conceptsSelected.map((concept: OerConceptInfo) => concept.label)} />*/}
           <Button variant="primary" position="absolute" top="3rem" right="1rem">
             Add a new concept
           </Button>

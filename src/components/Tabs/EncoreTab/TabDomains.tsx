@@ -11,9 +11,8 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
-
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
 
@@ -22,8 +21,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   const [previousContent, setPreviousContent] = useState('');
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
-  
-
 
   // here i sorted the oers per domain
 
@@ -91,9 +88,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
      setFiltered(filteredOERs);
    };*/
 
-
-
-
   const onClickDiagram = async (selection: any) => {
     if (!selection) return;
 
@@ -102,8 +96,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     // Check if the selected IDs are equal to the currently selected IDs
     if (selectedIds.length == 0) {
       return;
-    }
-    else if (arraysEqual(selectedIds, selectedOERIds)) {
+    } else if (arraysEqual(selectedIds, selectedOERIds)) {
       // Second click on the same slice, reset to initial state
       setSelectedOERIds([]);
       setFiltered(previousContent);
@@ -113,9 +106,9 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter(((oer: { id: string }) =>
+      const filteredObjects = filtered.filter((oer: { id: string }) =>
         selectedIds.includes(oer.id.toString())
-      ));
+      );
       setFiltered(filteredObjects);
     }
   };
@@ -128,10 +121,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     }
     return true;
   };
-
-
-
-
 
   return (
     <>
