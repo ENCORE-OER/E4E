@@ -22,9 +22,7 @@ import { OerConceptInfo } from '../../../types/encoreElements/oer/OerConcept';
 
 export type TabMapOfConceptsProps = {};
 
-
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
-
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const [loading, setLoading] = useState(true);
 
@@ -120,19 +118,19 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     })();
   }, [API, filtered, setEdges, setNodes]);
 
-
   // Define a function to handle node clicks
   const handleNodeClick: NodeMouseHandler = (event, node) => {
     // 'event' contains information about the click event
     // 'node' contains information about the clicked node
 
     const label = node.data.label;
-    const filteredObjects = filtered.filter((oer: { concepts: OerConceptInfo[] }) => {
-      return oer.concepts.some((concept) => concept.label === label);
-    });
+    const filteredObjects = filtered.filter(
+      (oer: { concepts: OerConceptInfo[] }) => {
+        return oer.concepts.some((concept) => concept.label === label);
+      }
+    );
 
     setFiltered(filteredObjects);
-
   };
 
   return (
