@@ -51,14 +51,14 @@ steps:
         - 'dockerconfigjson=$DOCKERCONFIG'
         - 'image.repository=docker.polyglot-edu.com/encore-oer/e4e'
         - 'image.tag=${DRONE_BRANCH}'
-        - 'env.authSecret=$AUTH0_SECRET'
-        - 'env.authIssuerUrl=$AUTH0_ISSUER_BASE_URL'
-        - 'env.authClientId=$AUTH0_CLIENT_ID'
-        - 'env.authClientSecret=$AUTH0_CLIENT_SECRET'
-        - 'env.authAudience=$AUTH0_AUDIENCE'
-        - 'env.authScope=$AUTH0_SCOPE'
-        - 'env.backUrl=$BACK_URL'
-        - 'env.polyglotUrl=$POLYGLOT_URL'
+        - 'authSecret=$AUTH0_SECRET'
+        - 'authIssuerUrl=$AUTH0_ISSUER_BASE_URL'
+        - 'authClientId=$AUTH0_CLIENT_ID'
+        - 'authClientSecret=$AUTH0_CLIENT_SECRET'
+        - 'authAudience=$AUTH0_AUDIENCE'
+        - 'authScope=$AUTH0_SCOPE'
+        - 'backUrl=$BACK_URL'
+        - 'polyglotUrl=$POLYGLOT_URL'
       cleanup_failed_upgrade: true
       force_upgrade: true
       skip_tls_verify: true
