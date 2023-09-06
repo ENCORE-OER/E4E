@@ -34,9 +34,14 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{- range $key, $val := .Values.env }}
-            {{ $key }}: {{ $val }}
-            {{- end}}
+            AUTH0_SECRET: {{ .Values.env.authSecret }}
+            AUTH0_ISSUER_BASE_URL: {{ .Values.env.authIssuerUrl }}
+            AUTH0_CLIENT_ID: {{ .Values.env.authClientId }}
+            AUTH0_CLIENT_SECRET: {{ .Values.env.authClientSecret }}
+            AUTH0_AUDIENCE: {{ .Values.env.authAudience }}
+            AUTH0_SCOPE: {{ .Values.env.authScope }}
+            BACK_URL: {{ .Values.env.backUrl }}
+            POLYGLOT_URL: {{ .Values.env.polyglotUrl }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
