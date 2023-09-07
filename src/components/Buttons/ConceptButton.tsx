@@ -30,7 +30,7 @@ export default function ConceptButton({
         }
       }}
     >
-      <Text fontSize="18px" fontWeight="semibold">
+      <Text fontSize="15px" fontWeight="semibold">
         {item}
       </Text>
     </Button>

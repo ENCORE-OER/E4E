@@ -170,13 +170,14 @@ const Home = (props: DiscoverPageProps) => {
                 )}
             </Box>
           </Box>
-          <Box p="25px" h="full">
+          <Box p="25px" flex="1" h="full">
             {hydrated && collectionClicked && (
               <CollectionView
                 collectionIndex={collectionIndex}
                 collections={collections}
                 oersById={oersById}
                 minW={'550px'}
+                display="flex"
               />
             )}
           </Box>

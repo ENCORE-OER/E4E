@@ -4,6 +4,7 @@ import ReactFlow, {
   Background,
   BackgroundVariant,
   Controls,
+  NodeMouseHandler,
   ReactFlowProvider,
   addEdge,
   useEdgesState,
@@ -17,34 +18,11 @@ import { ReactFlowConceptNode } from '../../ReactFlowNode';
 import ELK from 'elkjs';
 import { v4 } from 'uuid';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { OerConceptInfo } from '../../../types/encoreElements/oer/OerConcept';
 
 export type TabMapOfConceptsProps = {};
 
-// const initialNodes = [
-//   {
-//     id: '1',
-//     type: "conceptNode",
-//     data: { numOfResources: 10, label: "node1" },
-//     position: { x: 250, y: 5 },
-//   },
-//   { id: '2', type: "conceptNode", data: { numOfResources: 10, label: 'Node 2' }, position: { x: 100, y: 100 } },
-//   { id: '3', type: "conceptNode", data: { numOfResources: 10, label: 'Node 3' }, position: { x: 400, y: 100 } },
-//   { id: '4', type: "conceptNode", data: { numOfResources: 10, label: 'Node 4' }, position: { x: 400, y: 200 } },
-// ];
-
-// const initialEdges = [
-//   {
-//     id: 'e1-2',
-//     source: '1',
-//     target: '2',
-//   },
-//   { id: 'e1-3', source: '1', target: '3' },
-// ];
-
 export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
-  // const { oers } = props;
-
-  // const [graph, setGraph] = useState<EncoreConceptMap | null>();
   const API = useMemo(() => new APIV2(undefined), []);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +32,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  const { filtered } = useContext(DiscoveryContext);
+  const { filtered, setFiltered } = useContext(DiscoveryContext);
 
   const onConnect = useCallback(
     (params: any) => setEdges((els) => addEdge(params, els)),
@@ -135,10 +113,25 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         setLoading(false);
       } catch (err) {
         // TODO: handle error
-        alert('ERRORE ESTRAZIONE CONCETTI:' + err);
+        alert('ERROR EXTRACTING THE CONCEPTS:' + err);
       }
     })();
   }, [API, filtered, setEdges, setNodes]);
+
+  // Define a function to handle node clicks
+  const handleNodeClick: NodeMouseHandler = (event, node) => {
+    // 'event' contains information about the click event
+    // 'node' contains information about the clicked node
+
+    const label = node.data.label;
+    const filteredObjects = filtered.filter(
+      (oer: { concepts: OerConceptInfo[] }) => {
+        return oer.concepts.some((concept) => concept.label === label);
+      }
+    );
+
+    setFiltered(filteredObjects);
+  };
 
   return (
     <>
@@ -172,7 +165,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
-              // onNodeClick={}
+              onNodeClick={handleNodeClick}
               fitView
             >
               <Background variant={BackgroundVariant.Dots} />

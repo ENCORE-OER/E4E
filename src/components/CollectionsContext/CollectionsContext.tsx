@@ -3,6 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import {
   CollectionProps,
+  OerConceptInfo,
   OerInCollectionProps,
 } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
@@ -18,6 +19,10 @@ type AddResourceFunction = (
   resource: OerInCollectionProps
 ) => Promise<void>;
 type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
+type SelectedConceptsFunction = (
+  collectionId: number,
+  concepts: OerConceptInfo[]
+) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
@@ -26,6 +31,7 @@ type CollectionContextProps = {
   addResource: AddResourceFunction;
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
+  setSelectedConceptsForCollection: SelectedConceptsFunction;
 };
 
 const CollectionsContext = createContext<CollectionContextProps>(
@@ -77,6 +83,7 @@ export const CollectionsProvider = ({ children }: any) => {
             id: id,
             name: name,
             oers: [],
+            conceptsSelected: [],
             color: color,
           };
 
@@ -220,6 +227,26 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
+  // used
+  const setSelectedConceptsForCollection = async (
+    collectionId: number,
+    concepts: OerConceptInfo[]
+  ): Promise<void> => {
+    // Trova la collezione corrispondente in collections
+    const updatedCollections = collections.map((collection) => {
+      if (collection.id === collectionId) {
+        return {
+          ...collection,
+          conceptsSelected: concepts,
+        };
+      }
+      return collection;
+    });
+
+    // Aggiorna lo stato globale delle collezioni con i nuovi concetti selezionati
+    setCollections(updatedCollections);
+  };
+
   return (
     <CollectionsContext.Provider
       value={{
@@ -229,6 +256,7 @@ export const CollectionsProvider = ({ children }: any) => {
         addResource,
         indexCollectionClicked, //used in CollectionMenu component
         setIndexCollectionClicked,
+        setSelectedConceptsForCollection,
       }}
     >
       {children}

@@ -25,6 +25,7 @@ export type EncoreConceptMap = {
   edges: any[];
 };
 
+// this type is equal to "OerCard" in /encoreElement/oer/OerCard.ts. OerCard could be more updated.s
 export type EncoreOer = {
   /* id: any;
   skills: any;
