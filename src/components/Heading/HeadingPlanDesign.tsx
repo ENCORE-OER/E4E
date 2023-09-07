@@ -25,7 +25,7 @@ export default function HeadingPlanDesign({
       <Flex
         w="100%"
         justifyContent="left"
-        //justify="space-between"
+      //justify="space-between"
       >
         <Heading>{title}</Heading>
       </Flex>
@@ -45,25 +45,28 @@ export default function HeadingPlanDesign({
           <Text variant="text_field_label" my="6px">
             Title
           </Text>
-          {/* <Text
-            borderBottom="2px"
-            borderBottomColor="grey"
-            borderBottomStyle="solid"
-            pb="3px"
-          >
-            {(hydrated &&
-              collections[indexCollectionClicked] &&
-              `${collections[indexCollectionClicked]?.name} Learning Path`) ||
-              ' '}
-          </Text>*/}
+
           <Input
-            w="300px"
+            w="500px"
             borderBottom="2px"
             borderBottomColor="grey"
             borderBottomStyle="solid"
             variant="flushed"
-            placeholder="Type a learning path name..."
+            placeholder="Type a learning path title"
           ></Input>
+          <Box>
+            <Text variant="text_field_label" my="6px">
+              Description
+            </Text>
+            <Input
+              w="500px"
+              borderBottom="2px"
+              borderBottomColor="grey"
+              borderBottomStyle="solid"
+              variant="flushed"
+              placeholder="Type the learning path description"
+            ></Input>
+          </Box>
         </Box>
       </HStack>
     </Box>

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 //import { useRouter } from 'next/router';
@@ -93,7 +93,7 @@ const Home = (props: DiscoverPageProps) => {
           title="Learning path design"
         />
         <Text pt="30px" pb="7px">
-          For each concept add the educational activities.
+          For each concept add its learning fragment.
         </Text>
 
         <Box position="relative">
@@ -116,9 +116,10 @@ const Home = (props: DiscoverPageProps) => {
             </Box>
 
             {/* TODO: add onClick function to add concepts */}
+            {/*}
             <Box display="flex" flex="1" px={5}>
               <Button variant="primary">Add a new concept</Button>
-            </Box>
+           </Box>*/}
           </Flex>
 
           <LearningPathEditor
