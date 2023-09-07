@@ -16,7 +16,7 @@ globals:
     AUTH0_AUDIENCE: https://api.polyglot-edu.com
     AUTH0_SCOPE: 'openid profile email read:products'
     BACK_URL: http://localhost:5000
-    POLYGLOT_URL: http://localhost:5000
+    POLYGLOT_URL: https://concept.polyglot-edu.com
   - &condition
     event:
       - push
