@@ -66,7 +66,7 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
 
-  const [checkboxAll, setCheckboxAll] = useState(false);
+  const [checkboxAll, setCheckboxAll] = useState(true);
   const [checkboxOr, setCheckboxOr] = useState(false);
 
   const combinations = useMemo(() => ({ mergeColors }), []);
@@ -281,7 +281,7 @@ const Home = (props: DiscoverPageProps) => {
       <SideBar pagePath={router.pathname} />
       <>
         {
-          <Box w="full" h="full" ml="200px" bg="background" pt="60px">
+          <Box w="full" minH="100vh" ml="200px" bg="background" pt="60px">
             <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
               <Flex w="100%" justifyContent="center">
                 <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
