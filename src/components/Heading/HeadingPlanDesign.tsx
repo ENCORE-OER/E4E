@@ -25,7 +25,7 @@ export default function HeadingPlanDesign({
       <Flex
         w="100%"
         justifyContent="left"
-      //justify="space-between"
+        //justify="space-between"
       >
         <Heading>{title}</Heading>
       </Flex>
