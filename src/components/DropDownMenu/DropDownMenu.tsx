@@ -46,7 +46,11 @@ export default function DropDownMenu({
   const handleData = () => {
     if (onData) {
       if (optionsObj) {
-        onData(selectedOptionIds);
+        if (!selectedOptionIds.includes(0)) {
+          onData(selectedOptionIds);
+        } else {
+          onData([]);
+        }
       } else {
         onData(selectedOptions);
       }

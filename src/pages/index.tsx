@@ -52,7 +52,9 @@ const Home = (props: DiscoverPageProps) => {
   const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
   const [metrics, setMetrics] = useState<any[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
-  const [selectedDomains, setSelectedDomain] = useState<string[] | number[]>([]); // to save each type of domain of the resources
+  const [selectedDomains, setSelectedDomains] = useState<string[] | number[]>(
+    []
+  ); // to save each type of domain of the resources
   const [selectedResourceTypes, setSelectedResourceTypes] = useState<
     string[] | number[]
   >([]);
@@ -73,7 +75,7 @@ const Home = (props: DiscoverPageProps) => {
   const combinations = useMemo(() => ({ mergeColors }), []);
 
   const handleDomainFromDropDownMenu = (data: string[] | number[]) => {
-    setSelectedDomain(data);
+    setSelectedDomains(data);
   };
 
   const handleResourceTypeFromDropDownMenu = (data: string[] | number[]) => {
@@ -119,7 +121,7 @@ const Home = (props: DiscoverPageProps) => {
       addToast({
         message: 'Error: you must set at least one skill or parameter!',
         status: 'error',
-      })
+      });
       return;
     } else {
       router.push({

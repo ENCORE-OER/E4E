@@ -27,7 +27,13 @@ import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
 import { CustomToast } from '../components/Toast/CustomToast';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
-import { OerAudienceInfo, OerDomainInfo, OerMediaTypeInfo, OerProps, OerSkillInfo } from '../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSkillInfo,
+} from '../types/encoreElements';
 import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
 
 type DiscoverPageProps = {
@@ -85,9 +91,8 @@ const Discover = (props: DiscoverPageProps) => {
     orOption: boolean,
     domains: string[],
     types: string[],
-    audience: string[],
+    audience: string[]
   ) => {
-
     //console.log('andOption: ', andOption);
     //console.log('orOption: ', orOption);
     //console.log('domains: ', domains);
@@ -108,7 +113,6 @@ const Discover = (props: DiscoverPageProps) => {
     try {
       let oers;
 
-
       if (skills.length > 0) {
         if (andOption) {
           oers = await api.getOersInAND(skills);
@@ -124,15 +128,23 @@ const Discover = (props: DiscoverPageProps) => {
         if (domains.length > 0 || types.length > 0 || audience.length > 0) {
           // Filter based on domains, types, and audience
           const filteredOers = oers?.filter((oer: OerProps) => {
-            const domain_Ids = Array.from(new Set(
-              oer.skills?.flatMap((skill: OerSkillInfo) =>
-                skill.domain.map((dom: OerDomainInfo) => dom.id as unknown as string)
+            const domain_Ids = Array.from(
+              new Set(
+                oer.skills?.flatMap((skill: OerSkillInfo) =>
+                  skill.domain.map(
+                    (dom: OerDomainInfo) => dom.id as unknown as string
+                  )
+                )
               )
-            )); // list of domains in a single oer
+            ); // list of domains in a single oer
             console.log('domain_Ids: ', domain_Ids);
-            const type_Ids = oer.media_type?.map((mediaType: OerMediaTypeInfo) => mediaType.id as unknown as string);  // list of type in a single oer
+            const type_Ids = oer.media_type?.map(
+              (mediaType: OerMediaTypeInfo) => mediaType.id as unknown as string
+            ); // list of type in a single oer
             console.log('type_Ids: ', type_Ids);
-            const audience_Ids = oer.coverage?.map((aud: OerAudienceInfo) => aud.id as unknown as string); // list of audience in a single oer
+            const audience_Ids = oer.coverage?.map(
+              (aud: OerAudienceInfo) => aud.id as unknown as string
+            ); // list of audience in a single oer
             console.log('audience_Ids: ', audience_Ids);
 
             let domainMatch = false;
@@ -172,11 +184,20 @@ const Discover = (props: DiscoverPageProps) => {
           setFiltered(oers);
         }
 
-        // 
-      } else if (domains.length > 0 || audience.length > 0 || types.length > 0) {
+        //
+      } else if (
+        domains.length > 0 ||
+        audience.length > 0 ||
+        types.length > 0
+      ) {
         // It's not an efficient solution, but it's the best for now
         // TODO: return only the first 10 OERs. Recall the API on click on the next page button
-        oers = await api.searchOERbySkillNoPages(skills, domains, types, audience);
+        oers = await api.searchOERbySkillNoPages(
+          skills,
+          domains,
+          types,
+          audience
+        );
         setFiltered(oers);
       }
     } catch (error) {
@@ -232,7 +253,7 @@ const Discover = (props: DiscoverPageProps) => {
     if (!searchData) {
       // TODO: handle redirect
       router.push({
-        pathname: '/'
+        pathname: '/',
       });
       return;
     }
@@ -280,26 +301,25 @@ const Discover = (props: DiscoverPageProps) => {
     setIsLoading(false);
   }, [selectedSorting, isAscending]);
 
-
   // redirect to home page if no resources are found
   useEffect(() => {
     if (endSearch && filtered.length === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',
-        status: 'error'
+        status: 'error',
       });
       setTimeout(() => {
         router.push({
           pathname: '/',
-        })
+        });
       }, 1000);
     } else if (endSearch) {
       addToast({
         message: 'Search completed!',
-        status: 'success'
+        status: 'success',
       });
     }
-  }, [endSearch])
+  }, [endSearch]);
 
   return (
     <Flex w="100%" h="100%">
@@ -312,7 +332,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-              //justify="space-between"
+                //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>

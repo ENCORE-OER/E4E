@@ -12,11 +12,14 @@ import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 import { OerMediaTypeInfo } from '../../../types/encoreElements';
 
+import { useHasHydrated } from '../../../utils/utils';
+
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
   const [previousContent, setPreviousContent] = useState('');
+  const hydrated = useHasHydrated();
 
   const resourceTypes: any[] = [];
 
@@ -166,13 +169,12 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
         </Text>
       </Stack>
 
-      <Stack spacing={0}>
+      {filtered.length > 0 && hydrated && (<Stack spacing={0}>
         <Doughnut
           data={filteredDataObject}
           options={{ onClick: handleSliceClick }}
         />
-        ;
-      </Stack>
+      </Stack>)}
     </>
   );
 };
