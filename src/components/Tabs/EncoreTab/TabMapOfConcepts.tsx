@@ -23,7 +23,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [loading, setLoading] = useState(true);
@@ -65,8 +65,8 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
           id: 'root',
           layoutOptions: {
             'elk.algorithm': 'force',
-            'position': 'CENTER',
-            'zoom': '1.0',
+            position: 'CENTER',
+            zoom: '1.0',
           },
           children: nodes.map((n) => ({
             id: n.node_id + '',
@@ -162,9 +162,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
                 </Text>
               </Flex>
             ) : (
-
               <ReactFlow
-
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 nodes={nodes}
@@ -178,7 +176,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
                 <Background variant={BackgroundVariant.Dots} />
                 <Controls />
               </ReactFlow>
-
             )}
           </Flex>
         </ReactFlowProvider>
