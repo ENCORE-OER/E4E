@@ -23,7 +23,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [loading, setLoading] = useState(true);
