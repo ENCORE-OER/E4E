@@ -1,4 +1,5 @@
-import { PolyglotEdge, PolyglotNode } from '.';
+import { PolyglotEdge } from './PolyglotEdge';
+import { PolyglotNode } from './PolyglotNode';
 
 export type PolyglotExecutionData = {
   algo: string;
