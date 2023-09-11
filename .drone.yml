@@ -15,8 +15,10 @@ globals:
     AUTH0_CLIENT_SECRET: client_secret
     AUTH0_AUDIENCE: https://api.polyglot-edu.com
     AUTH0_SCOPE: 'openid profile email read:products'
+    DEPLOY_URL: ${DRONE_BRANCH}-e4e.polyglot-edu.com
+    CONCEPT_URL: https://concept.polyglot-edu.com
+    POLYGLOT_URL: https://polyglot-api.polyglot-edu.com
     BACK_URL: http://localhost:5000
-    POLYGLOT_URL: https://concept.polyglot-edu.com
   - &condition
     event:
       - push
@@ -29,6 +31,8 @@ steps:
       registry: docker.polyglot-edu.com
       dockerfile: ./Dockerfile
       tags: ['${DRONE_BRANCH}']
+      build_args:
+        <<: *env
       <<: *docker_creds
     when:
       <<: *condition
