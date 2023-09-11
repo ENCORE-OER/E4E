@@ -36,7 +36,6 @@ export default function AdvancedSearch({
     if (!domain?.includes(ALL)) domain?.unshift(ALL);
     console.log('Domain in AdvancedSearch' + domain);
   }, [domain]);
-
   useEffect(() => {
     if (!resourceType?.includes(ALL)) resourceType?.unshift(ALL);
   }, [resourceType]);

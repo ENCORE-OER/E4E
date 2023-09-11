@@ -16,7 +16,7 @@ export type optionsObjType =
 type DropDownMenuItemProps = {
   idItem?: number;
   item: string;
-  options?: string[];
+  options?: string[] | number[];
   optionsObj?: optionsObjType[];
   selectedOptions: string[];
   setSelectedOptions: Dispatch<SetStateAction<string[]>>;

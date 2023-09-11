@@ -86,12 +86,12 @@ export default function DropDownMenu({
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
             <Text align="left" noOfLines={1}>
               {selectedOptions.includes('All') &&
-              (options?.length === selectedOptions.length ||
-                optionsObj?.length === selectedOptions.length)
+                (options?.length === selectedOptions.length ||
+                  optionsObj?.length === selectedOptions.length)
                 ? 'All'
                 : selectedOptions.length > 0
-                ? selectedOptions.join(', ')
-                : 'Select Options'}
+                  ? selectedOptions.join(', ')
+                  : 'Select Options'}
             </Text>
           </MenuButton>
           <MenuList
@@ -125,38 +125,6 @@ export default function DropDownMenu({
                 />
               </MenuItem>
             ))}
-            {/*<MenuItem>
-            <DropDownMenuItem
-              item={options[0]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[1]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[2]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[3]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem> */}
           </MenuList>
         </Menu>
       </Box>

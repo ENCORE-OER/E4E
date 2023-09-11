@@ -20,6 +20,7 @@ import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SideBar from '../components/SideBar/SideBar';
+import { CustomToast } from '../components/Toast/CustomToast';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
@@ -37,6 +38,7 @@ type DiscoverPageProps = {
 
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
+  const { addToast } = CustomToast();
   const [searchValue, setSearchValue] = useState<string[]>([]);
   //const [page] = useState(true);
   //const [respSearchOers] = useState<OerProps[]>([]);
@@ -50,7 +52,7 @@ const Home = (props: DiscoverPageProps) => {
   const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
   const [metrics, setMetrics] = useState<any[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
-  const [selectedDomain, setSelectedDomain] = useState<string[] | number[]>([]); // to save each type of domain of the resources
+  const [selectedDomains, setSelectedDomain] = useState<string[] | number[]>([]); // to save each type of domain of the resources
   const [selectedResourceTypes, setSelectedResourceTypes] = useState<
     string[] | number[]
   >([]);
@@ -61,7 +63,6 @@ const Home = (props: DiscoverPageProps) => {
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   const [buttonName, setButtonName] = useState('Advanced Search');
   const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
-  //const [dataSearching] = useState<any[]>([]); // save the data found from searching
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
@@ -93,22 +94,10 @@ const Home = (props: DiscoverPageProps) => {
         advanced: true,
         andOption: checkboxAll,
         orOption: checkboxOr,
-        domains: selectedDomain,
+        domains: selectedDomains,
         types: selectedResourceTypes,
         audience: selectedAudience,
       };
-      router.push({
-        pathname: '/discover',
-        query: {
-          advanced: true,
-          skills: selectedSkillIds,
-          andOption: checkboxAll,
-          orOption: checkboxOr,
-          domains: selectedDomain,
-          types: selectedResourceTypes,
-          audiences: selectedAudience,
-        },
-      });
     } else {
       //normal search
       searchData = {
@@ -116,22 +105,26 @@ const Home = (props: DiscoverPageProps) => {
         advanced: false,
         andOption: checkboxAll,
         orOption: checkboxOr,
-        domains: selectedDomain,
+        domains: selectedDomains,
         types: selectedResourceTypes,
         audience: selectedAudience,
       };
-      if (selectedSkillIds.length == 0) return;
+    }
+    if (
+      selectedSkillIds.length === 0 &&
+      selectedDomains.length === 0 &&
+      selectedResourceTypes.length === 0 &&
+      selectedAudience.length === 0
+    ) {
+      addToast({
+        message: 'Error: you must set at least one skill or parameter!',
+        status: 'error',
+      })
+      return;
+    } else {
       router.push({
         pathname: '/discover',
-        query: {
-          advanced: false,
-          skills: selectedSkillIds,
-          andOption: checkboxAll,
-          orOption: checkboxOr,
-          domains: selectedDomain,
-          types: selectedResourceTypes,
-          audiences: selectedAudience,
-        },
+        query: searchData,
       });
     }
     localStorage.setItem('searchData', JSON.stringify(searchData));
@@ -149,6 +142,16 @@ const Home = (props: DiscoverPageProps) => {
       setShowBox(false);
       setIsClicked(!isClicked);
     }
+  };
+
+  const handleCheckboxAllChange = () => {
+    setCheckboxAll(true);
+    setCheckboxOr(false);
+  };
+
+  const handleCheckboxOrChange = () => {
+    setCheckboxAll(false);
+    setCheckboxOr(true);
   };
 
   /*useEffect(() => {
@@ -219,8 +222,8 @@ const Home = (props: DiscoverPageProps) => {
   }, [user]);
 
   useEffect(() => {
-    console.log('SELECTED DOMAINS: ' + selectedDomain);
-  }, [selectedDomain]);
+    console.log('SELECTED DOMAINS: ' + selectedDomains);
+  }, [selectedDomains]);
 
   useEffect(() => {
     console.log('SELECTED RESOURCE TYPES: ' + selectedResourceTypes);
@@ -249,31 +252,6 @@ const Home = (props: DiscoverPageProps) => {
   useEffect(() => {
     console.log('SELECTED SKILL IDS: ' + selectedSkillIds);
   }, [selectedSkillIds]);
-
-  /*useEffect(() => {
-    if (dataSearching.length === 0) console.log('No result!');
-    else {
-      console.log('DATA SEARCHING: ' + dataSearching);
-    }
-  }, [dataSearching]);*/
-
-  /*useEffect(() => {
-    console.log('RESPONSE SEARCH: ' + respSearchOers);
-    const data = respSearchOers.flatMap(
-      (oer: any) => oer.media_type?.map((item: any) => item.name)
-    );
-    console.log(data);
-  }, [respSearchOers, page]);*/
-
-  const handleCheckboxAllChange = () => {
-    setCheckboxAll(true);
-    setCheckboxOr(false);
-  };
-
-  const handleCheckboxOrChange = () => {
-    setCheckboxAll(false);
-    setCheckboxOr(true);
-  };
 
   return (
     <Flex w="100%" h="100%">

@@ -22,7 +22,7 @@ import { OerConceptInfo } from '../../../types/encoreElements/oer/OerConcept';
 
 export type TabMapOfConceptsProps = {};
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const [loading, setLoading] = useState(true);
 
@@ -49,8 +49,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     (async () => {
       setLoading(true);
       try {
-        const oers_ids: any[] = [];
-        filtered?.forEach((oer: { id: any }) => oers_ids.push(oer.id));
+        const oers_ids: number[] = [];
+        filtered?.forEach((oer: { id: number }) => oers_ids.push(oer.id));
 
         const respAI = await API.getConceptMapOersNLP(oers_ids);
 
