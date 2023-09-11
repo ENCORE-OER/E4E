@@ -118,7 +118,7 @@ export class APIV2 {
     oers_ids: number[]
   ): Promise<AxiosResponse<EncoreConceptMap>> {
     return this.axios.post(
-      `${process.env.POLYGLOT_URL}/api/concepts/genGraphOers`,
+      `${process.env.CONCEPT_URL}/api/concept/genMapOers`,
       {
         oers_ids: oers_ids,
       }
@@ -128,19 +128,16 @@ export class APIV2 {
   async getConceptMapOers(
     filteredOers: OerProps
   ): Promise<AxiosResponse<EncoreConceptMap>> {
-    return this.axios.post(
-      `${process.env.POLYGLOT_URL}/api/concepts/genGraphExt`,
-      {
-        oers: filteredOers,
-      }
-    );
+    return this.axios.post(`${process.env.CONCEPT_URL}/api/concept/genMapExt`, {
+      oers: filteredOers,
+    });
   }
 
   async getConceptMapSkill(
     skill: string
   ): Promise<AxiosResponse<EncoreConceptMap>> {
     return this.axios.post(
-      `${process.env.POLYGLOT_URL}/api/concepts/genGraphSkill`,
+      `${process.env.CONCEPT_URL}/api/concept/genMapSkill`,
       {
         skill: skill,
       }
