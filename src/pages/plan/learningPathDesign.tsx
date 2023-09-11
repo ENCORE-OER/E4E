@@ -4,6 +4,7 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 //import { useRouter } from 'next/router';
 
 import { useEffect, useState } from 'react';
+import { LearningPathProvider } from '../../Contexts/learningPathContext';
 import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
@@ -74,63 +75,65 @@ const Home = (props: DiscoverPageProps) => {
   }, [conceptSelectedIndex]);
 
   return (
-    <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Plan" />
-      <SideBar pagePath={'/plan'} />
+    <LearningPathProvider>
+      <Flex w="100%" h="100%">
+        <Navbar user={user} pageName="Plan" />
+        <SideBar pagePath={'/plan'} />
 
-      <Box
-        ml="200px"
-        py="115px"
-        px="40px"
-        w="full"
-        h={conceptSelectedIndex === -1 ? '100vh' : 'full'}
-        bg="background"
-      >
-        <HeadingPlanDesign
-          collections={collections}
-          collectionIndex={indexCollectionClicked}
-          setCollectionIndex={setIndexCollectionClicked}
-          title="Learning path design"
-        />
-        <Text pt="30px" pb="7px">
-          For each concept add its learning fragment.
-        </Text>
+        <Box
+          ml="200px"
+          py="115px"
+          px="40px"
+          w="full"
+          h={conceptSelectedIndex === -1 ? '100vh' : 'full'}
+          bg="background"
+        >
+          <HeadingPlanDesign
+            collections={collections}
+            collectionIndex={indexCollectionClicked}
+            setCollectionIndex={setIndexCollectionClicked}
+            title="Learning path design"
+          />
+          <Text pt="30px" pb="7px">
+            For each concept add its learning fragment.
+          </Text>
 
-        <Box position="relative">
-          <Flex>
-            <Box
-              p={3}
-              w="80%"
-              h="auto"
-              border="2px"
-              borderRadius="10px"
-              borderColor="secondary"
-              borderStyle="solid"
-            >
-              <ConceptButtonsList
-                collections={collections}
-                conceptSelectedIndex={conceptSelectedIndex}
-                setConceptSelectedIndex={setConceptSelectedIndex}
-                collectionIndex={indexCollectionClicked}
-              />
-            </Box>
+          <Box position="relative">
+            <Flex>
+              <Box
+                p={3}
+                w="80%"
+                h="auto"
+                border="2px"
+                borderRadius="10px"
+                borderColor="secondary"
+                borderStyle="solid"
+              >
+                <ConceptButtonsList
+                  collections={collections}
+                  conceptSelectedIndex={conceptSelectedIndex}
+                  setConceptSelectedIndex={setConceptSelectedIndex}
+                  collectionIndex={indexCollectionClicked}
+                />
+              </Box>
 
-            {/* TODO: add onClick function to add concepts */}
-            {/*}
+              {/* TODO: add onClick function to add concepts */}
+              {/*}
             <Box display="flex" flex="1" px={5}>
               <Button variant="primary">Add a new concept</Button>
            </Box>*/}
-          </Flex>
+            </Flex>
 
-          <LearningPathEditor
-            collectionIndex={indexCollectionClicked}
-            setConceptSelectedIndex={setConceptSelectedIndex}
-            oers={oersById}
-            conceptSelectedIndex={conceptSelectedIndex}
-          />
+            <LearningPathEditor
+              collectionIndex={indexCollectionClicked}
+              setConceptSelectedIndex={setConceptSelectedIndex}
+              oers={oersById}
+              conceptSelectedIndex={conceptSelectedIndex}
+            />
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+    </LearningPathProvider>
   );
 };
 

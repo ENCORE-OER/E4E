@@ -1,4 +1,5 @@
 import axiosCreate, { AxiosInstance, AxiosResponse } from 'axios';
+import { v4 } from 'uuid';
 import { EncoreConceptMap } from '../types/encore';
 import {
   MetricsOers,
@@ -9,6 +10,7 @@ import {
   OerSkillInfo,
   OerSubjectInfo,
 } from '../types/encoreElements';
+import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
 
 const axios = axiosCreate.create({
   baseURL: process.env.BACK_URL,
@@ -393,6 +395,30 @@ export class APIV2 {
     } catch (error) {
       throw error;
     }
+  }
+
+  async createNewFlow(
+    flow: Partial<PolyglotFlowInfo>
+  ): Promise<AxiosResponse<PolyglotFlow>> {
+    return this.axios.post<{}, AxiosResponse, {}>(
+      `${process.env.POLYGLOT_URL}/api/flows`,
+      {
+        _id: v4(),
+        title: 'Untitled',
+        description: 'Description',
+        tags: [],
+        nodes: [],
+        edges: [],
+        ...flow,
+      }
+    );
+  }
+
+  async updateFlow(flow: Partial<PolyglotFlow>) {
+    return this.axios.put<PolyglotFlow>(
+      `${process.env.POLYGLOT_URL}/api/flows/${flow._id}`,
+      flow
+    );
   }
 
   async getAudience(
