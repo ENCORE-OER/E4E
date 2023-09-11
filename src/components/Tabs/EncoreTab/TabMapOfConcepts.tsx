@@ -65,6 +65,8 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
           id: 'root',
           layoutOptions: {
             'elk.algorithm': 'force',
+            'position': 'CENTER',
+            'zoom': '1.0',
           },
           children: nodes.map((n) => ({
             id: n.node_id + '',
@@ -149,8 +151,8 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         </Text>
       </Stack>
 
-      {hydrated && filtered.length > 0 &&
-        < ReactFlowProvider >
+      {hydrated && filtered.length > 0 && (
+        <ReactFlowProvider>
           <Flex h={500} justifyContent={'center'} placeItems="center">
             {loading ? (
               <Flex direction={'column'} placeItems="center">
@@ -160,7 +162,9 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
                 </Text>
               </Flex>
             ) : (
+
               <ReactFlow
+
                 nodeTypes={nodeTypes}
                 edgeTypes={edgeTypes}
                 nodes={nodes}
@@ -174,9 +178,11 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
                 <Background variant={BackgroundVariant.Dots} />
                 <Controls />
               </ReactFlow>
+
             )}
           </Flex>
-        </ReactFlowProvider >}
+        </ReactFlowProvider>
+      )}
     </>
   );
 };

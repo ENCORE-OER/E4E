@@ -16,7 +16,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
   const [previousContent, setPreviousContent] = useState('');
   const hydrated = useHasHydrated();
@@ -169,12 +169,14 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         </Text>
       </Stack>
 
-      {filtered.length > 0 && hydrated && (<Stack spacing={0}>
-        <Doughnut
-          data={filteredDataObject}
-          options={{ onClick: handleSliceClick }}
-        />
-      </Stack>)}
+      {filtered.length > 0 && hydrated && (
+        <Stack spacing={0}>
+          <Doughnut
+            data={filteredDataObject}
+            options={{ onClick: handleSliceClick }}
+          />
+        </Stack>
+      )}
     </>
   );
 };
