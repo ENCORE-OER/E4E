@@ -120,7 +120,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-      //justifyContent="center"
+        //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip
@@ -139,7 +139,8 @@ export default function CollectionView({
           </Tooltip>
           <Box>
             <Heading fontSize="18px" fontWeight="semibold" mb="2">
-              Choose the key concepts you wish to incorporate into the learning path.
+              Choose the key concepts you wish to incorporate into the learning
+              path.
             </Heading>
             <Text fontWeight="light" color="grey">
               {`${collections[collectionIndex]?.conceptsSelected?.length} concepts selected`}

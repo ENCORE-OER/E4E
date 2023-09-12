@@ -19,11 +19,13 @@ import ELK from 'elkjs';
 import { v4 } from 'uuid';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { OerConceptInfo } from '../../../types/encoreElements/oer/OerConcept';
+import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
 
 export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
+  const hydrated = useHasHydrated();
   const [loading, setLoading] = useState(true);
 
   const nodeTypes = useMemo(() => ({ conceptNode: ReactFlowConceptNode }), []);
@@ -49,8 +51,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     (async () => {
       setLoading(true);
       try {
-        const oers_ids: any[] = [];
-        filtered?.forEach((oer: { id: any }) => oers_ids.push(oer.id));
+        const oers_ids: number[] = [];
+        filtered?.forEach((oer: { id: number }) => oers_ids.push(oer.id));
 
         const respAI = await API.getConceptMapOersNLP(oers_ids);
 
@@ -63,6 +65,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
           id: 'root',
           layoutOptions: {
             'elk.algorithm': 'force',
+            //position: 'CENTER',
+            //zoom: '1.0',
           },
           children: nodes.map((n) => ({
             id: n.node_id + '',
@@ -147,33 +151,35 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         </Text>
       </Stack>
 
-      <ReactFlowProvider>
-        <Flex h={500} justifyContent={'center'} placeItems="center">
-          {loading ? (
-            <Flex direction={'column'} placeItems="center">
-              <CircularProgress isIndeterminate color="blue.300" mb={2} />
-              <Text fontWeight={'bold'} fontSize="lg">
-                Generating graph...
-              </Text>
-            </Flex>
-          ) : (
-            <ReactFlow
-              nodeTypes={nodeTypes}
-              edgeTypes={edgeTypes}
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              onNodeClick={handleNodeClick}
-              fitView
-            >
-              <Background variant={BackgroundVariant.Dots} />
-              <Controls />
-            </ReactFlow>
-          )}
-        </Flex>
-      </ReactFlowProvider>
+      {hydrated && filtered.length > 0 && (
+        <ReactFlowProvider>
+          <Flex h={500} justifyContent={'center'} placeItems="center">
+            {loading ? (
+              <Flex direction={'column'} placeItems="center">
+                <CircularProgress isIndeterminate color="blue.300" mb={2} />
+                <Text fontWeight={'bold'} fontSize="lg">
+                  Generating graph...
+                </Text>
+              </Flex>
+            ) : (
+              <ReactFlow
+                nodeTypes={nodeTypes}
+                edgeTypes={edgeTypes}
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onNodeClick={handleNodeClick}
+                fitView
+              >
+                <Background variant={BackgroundVariant.Dots} />
+                <Controls />
+              </ReactFlow>
+            )}
+          </Flex>
+        </ReactFlowProvider>
+      )}
     </>
   );
 };

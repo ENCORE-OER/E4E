@@ -25,8 +25,15 @@ import { IconThumbsUp } from '../public/Icons/svgToIcons/iconThumbsUp';
 import SortingDropDownMenu from '../components/DropDownMenu/SortingDropDownMenu';
 import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
+import { CustomToast } from '../components/Toast/CustomToast';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
-import { OerProps } from '../types/encoreElements';
+import {
+  OerAudienceInfo,
+  OerDomainInfo,
+  OerMediaTypeInfo,
+  OerProps,
+  OerSkillInfo,
+} from '../types/encoreElements';
 import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
 
 type DiscoverPageProps = {
@@ -34,9 +41,10 @@ type DiscoverPageProps = {
 };
 
 const Discover = (props: DiscoverPageProps) => {
+  const { addToast } = CustomToast();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   const [oerById, setOerById] = useState<OerProps | null>(null);
-
+  const [endSearch, setEndSearch] = useState<boolean>(false);
   const [domain] = useState<string[]>([]); // to save each type of domain of the resources
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -72,43 +80,131 @@ const Discover = (props: DiscoverPageProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const searchOERs = async (
-    skills: string | string[],
+    /*skills: string | string[],
     andOption: string,
-    orOption: string
+    orOption: string,
+    domains: string | string[],
+    types: string | string[],
+    audience: string | string[],*/
+    skills: string[],
+    andOption: boolean,
+    orOption: boolean,
+    domains: string[],
+    types: string[],
+    audience: string[]
   ) => {
+    //console.log('andOption: ', andOption);
+    //console.log('orOption: ', orOption);
+    //console.log('domains: ', domains);
+    //console.log('types: ', types);
+    //console.log('audience: ', audience);
+
+    const ID_ALL = '0';
+
     //here we search the OERS using the query parameters
 
-    const isArray = Array.isArray(skills);
+    //const isArraySkills = Array.isArray(skills);
+    const isArrayDomains = Array.isArray(domains);
+    const isArrayTypes = Array.isArray(types);
+    const isArrayAudience = Array.isArray(audience);
 
     const api = new APIV2(props.accessToken);
 
-    //case 1 - only one skill
-    if (!isArray) {
-      const oers = await api.searhOERbySkillNoPages([skills]);
-      setFiltered(oers);
+    try {
+      let oers;
+
+      if (skills.length > 0) {
+        if (andOption) {
+          oers = await api.getOersInAND(skills);
+        } else if (orOption) {
+          oers = await api.getOersInOR(skills);
+        } else {
+          //console.log('I am here');
+          oers = await api.searchOERbySkillNoPages(skills);
+        }
+
+        console.log('oers: ', oers);
+
+        if (domains.length > 0 || types.length > 0 || audience.length > 0) {
+          // Filter based on domains, types, and audience
+          const filteredOers = oers?.filter((oer: OerProps) => {
+            const domain_Ids = Array.from(
+              new Set(
+                oer.skills?.flatMap((skill: OerSkillInfo) =>
+                  skill.domain.map(
+                    (dom: OerDomainInfo) => dom.id as unknown as string
+                  )
+                )
+              )
+            ); // list of domains in a single oer
+            console.log('domain_Ids: ', domain_Ids);
+            const type_Ids = oer.media_type?.map(
+              (mediaType: OerMediaTypeInfo) => mediaType.id as unknown as string
+            ); // list of type in a single oer
+            console.log('type_Ids: ', type_Ids);
+            const audience_Ids = oer.coverage?.map(
+              (aud: OerAudienceInfo) => aud.id as unknown as string
+            ); // list of audience in a single oer
+            console.log('audience_Ids: ', audience_Ids);
+
+            let domainMatch = false;
+            let typeMatch = false;
+            let audienceMatch = false;
+
+            // if 'All' is selected we don't filter by that parameter
+            if (isArrayDomains && !domain_Ids?.includes(ID_ALL)) {
+              domainMatch = andOption
+                ? domains.every((dom: string) => domain_Ids.includes(dom))
+                : domains.some((dom: string) => domain_Ids.includes(dom));
+            }
+
+            if (isArrayTypes && !domain_Ids?.includes(ID_ALL)) {
+              typeMatch = andOption
+                ? types.every((type: string) => type_Ids.includes(type))
+                : types.some((type: string) => type_Ids.includes(type));
+            }
+
+            if (isArrayAudience && !domain_Ids?.includes(ID_ALL)) {
+              audienceMatch = andOption
+                ? audience.every((aud: string) => audience_Ids.includes(aud))
+                : audience.some((aud: string) => audience_Ids.includes(aud));
+            }
+
+            if (andOption) {
+              return domainMatch && typeMatch && audienceMatch;
+            } else {
+              return domainMatch || typeMatch || audienceMatch;
+            }
+          });
+
+          console.log('filteredOers: ', filteredOers);
+
+          setFiltered(filteredOers);
+        } else {
+          setFiltered(oers);
+        }
+
+        //
+      } else if (
+        domains.length > 0 ||
+        audience.length > 0 ||
+        types.length > 0
+      ) {
+        // It's not an efficient solution, but it's the best for now
+        // TODO: return only the first 10 OERs. Recall the API on click on the next page button
+        oers = await api.searchOERbySkillNoPages(
+          skills,
+          domains,
+          types,
+          audience
+        );
+        setFiltered(oers);
+      }
+    } catch (error) {
+      throw error;
     }
 
-    //case 2 - more than one skill we check if all skills must be used or at least one
-    else if (andOption === 'true') {
-      // TODO: to check the API in case of AND if it returns only the first 10 OERs
-      const oers = await api.getOersInAND(skills);
-      setFiltered(oers);
-    } else if (orOption === 'true') {
-      // TODO: to check the API in case of OR if it returns only the first 10 OERs
-      const oers = await api.getOersInOR(skills);
-      //setRespSearchOers(oers);
-      setFiltered(oers);
-    } else if (orOption === 'false' && andOption === 'false') {
-      // TODO: to check the API in case of OR if it returns only the first 10 OERs
-      const oers = await api.getOersInOR(skills);
-      setFiltered(oers);
-    } else {
-      // case where the and / or options are not selected - by default we use the OR condition
-      // TODO: to check the API in case of OR if it returns only the first 10 OERs and reuse the OR APIs
-      const oers = await api.searhOERbySkillNoPages(skills);
-      setFiltered(oers);
-    }
-
+    setEndSearch(true);
     setIsLoading(false);
   };
 
@@ -122,7 +218,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     try {
       const oer = await api.getOerById(id_oer);
-      return oer[0];
+      return oer;
     } catch (error) {
       throw error;
     }
@@ -156,9 +252,9 @@ const Discover = (props: DiscoverPageProps) => {
 
     if (!searchData) {
       // TODO: handle redirect
-      // router.push({
-      //   pathname: '/'
-      // });
+      router.push({
+        pathname: '/',
+      });
       return;
     }
 
@@ -168,16 +264,16 @@ const Discover = (props: DiscoverPageProps) => {
     const skills = convertedData['selectedSkills'];
     const andOption = convertedData['andOption'];
     const orOption = convertedData['orOption'];
-    // const domains = localStorage.getItem('domains') as unknown as string[];
-    // const types = localStorage.getItem('types') as unknown as string[];
-    // const audience = localStorage.getItem('audience') as unknown as string[];
+    const domains = convertedData['domains'];
+    const types = convertedData['types'];
+    const audience = convertedData['audience'];
 
-    searchOERs(skills, andOption, orOption);
-  }, [router.query]);
+    searchOERs(skills, andOption, orOption, domains, types, audience);
+  }, [router.query.searchData]);
 
   // sorting of the OERs
   useEffect(() => {
-    // setIsLoading(true);
+    setIsLoading(true);
     const sortedData = [...filtered];
     sortedData.sort((a: OerProps, b: OerProps) => {
       if (selectedSorting === 'Last Update') {
@@ -197,13 +293,33 @@ const Discover = (props: DiscoverPageProps) => {
       }
     });
 
-    console.log(filtered);
-    console.log(sortedData);
+    //console.log(filtered);
+    //console.log(sortedData);
 
     setFiltered(sortedData);
 
-    // setIsLoading(false);
+    setIsLoading(false);
   }, [selectedSorting, isAscending]);
+
+  // redirect to home page if no resources are found
+  useEffect(() => {
+    if (endSearch && filtered.length === 0) {
+      addToast({
+        message: 'No resources found! You will be redirected to the home page.',
+        status: 'error',
+      });
+      setTimeout(() => {
+        router.push({
+          pathname: '/',
+        });
+      }, 1000);
+    } else if (endSearch) {
+      addToast({
+        message: 'Search completed!',
+        status: 'success',
+      });
+    }
+  }, [endSearch]);
 
   return (
     <Flex w="100%" h="100%">

@@ -134,7 +134,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
       <br />
       <div>
-        {hydrated ? (
+        {filtered.length > 0 && hydrated && (
           <VennDiagram
             sets={sets}
             width={550}
@@ -146,8 +146,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
             selectionColor=""
             onClick={onClickDiagram}
           />
-        ) : (
-          'loading...'
         )}
       </div>
     </>

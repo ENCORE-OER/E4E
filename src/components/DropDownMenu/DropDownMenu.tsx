@@ -46,7 +46,11 @@ export default function DropDownMenu({
   const handleData = () => {
     if (onData) {
       if (optionsObj) {
-        onData(selectedOptionIds);
+        if (!selectedOptionIds.includes(0)) {
+          onData(selectedOptionIds);
+        } else {
+          onData([]);
+        }
       } else {
         onData(selectedOptions);
       }
@@ -125,38 +129,6 @@ export default function DropDownMenu({
                 />
               </MenuItem>
             ))}
-            {/*<MenuItem>
-            <DropDownMenuItem
-              item={options[0]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[1]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[2]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem>
-          <MenuItem>
-            <DropDownMenuItem
-              item={options[3]}
-              options={options}
-              selectedOptions={selectedOptions}
-              setSelectedOptions={setSelectedOptions}
-            />
-          </MenuItem> */}
           </MenuList>
         </Menu>
       </Box>

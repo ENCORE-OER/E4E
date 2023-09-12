@@ -197,7 +197,7 @@ export class APIV2 {
     page = 1,
     allOers: OerProps[] = [],
     stop = 100
-  ): Promise<any[]> {
+  ): Promise<OerProps[]> {
     try {
       const respOers = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/oers/?page=${page}`
@@ -234,11 +234,13 @@ export class APIV2 {
 
   //API to retrieve the resources with multiple skills in AND
   //https://encore-db.grial.eu/api/boolean/oers/?and_skills=23304&and_skills=22529
+  // Without pagination
+  //https://encore-db.grial.eu/api/no_pagination/boolean/oers/?and_skills=23304&and_skills=22529
 
   async getOersInAND(oers: string[]): Promise<OerProps[]> {
     try {
       const transformedParams = oers.map((id) => `and_skills=${id}`).join('&');
-      const apiUrl = `https://encore-db.grial.eu/api/boolean/oers/?${transformedParams}`;
+      const apiUrl = `https://encore-db.grial.eu/api/no_pagination/boolean/oers/?${transformedParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
       return resp.data?.data;
     } catch (error) {
@@ -249,7 +251,7 @@ export class APIV2 {
   async getOersInOR(oers: string[]): Promise<OerProps[]> {
     try {
       const transformedParams = oers.map((id) => `or_skills=${id}`).join('&');
-      const apiUrl = `https://encore-db.grial.eu/api/boolean/oers/?${transformedParams}`;
+      const apiUrl = `https://encore-db.grial.eu/api/no_pagination/boolean/oers/?${transformedParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
       return resp.data?.data;
     } catch (error) {
@@ -259,6 +261,8 @@ export class APIV2 {
 
   //API to retrieve the resources with multiple skills in OR
   //https://encore-db.grial.eu/api/boolean/oers/?or_skills=23304&or_skills=22529
+  // Without pagination
+  //https://encore-db.grial.eu/api/no_pagination/boolean/oers/?or_skills=23304&or_skills=22529
 
   async getDigitalOer(): Promise<OerProps> {
     try {
@@ -443,13 +447,36 @@ export class APIV2 {
     }
   }
 
-  async searhOERbySkillNoPages(skillIds: string[]): Promise<OerProps[]> {
+  async searchOERbySkillNoPages(
+    skillIds?: string[],
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[]
+  ): Promise<OerProps[]> {
     try {
       const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
 
       skillIds?.forEach((skillId: string) => {
         queryParams.append('skills', skillId);
       });
+
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
 
       // `https://encore-db.grial.eu/api/no_pagination/boolean/oers/
       //  https://encore-db.grial.eu/api/no_pagination/oers/ API with no pagination
@@ -481,52 +508,65 @@ export class APIV2 {
 
   async searchOers(
     //page = 1,fn
-    skillIds: any[],
-    domainIds: any[],
-    subjectIds: any[],
-    resourceTypeIds: any[],
-    audienceIds: any[]
+    //skillIds: string[],
+    //domainIds: string[],
+    resourceTypeIds: string[],
+    audienceIds: string[]
 
     // Implement oer[] type
   ): Promise<OerProps[]> {
-    const ID_ALL = 0;
+    const ID_ALL = '0';
 
     try {
       const queryParams = new URLSearchParams();
 
-      skillIds?.forEach((skillId: any) => {
+      /*skillIds?.forEach((skillId: any) => {
         queryParams.append('skills', skillId);
-      });
+      });*/
 
       // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
 
-      if (!domainIds?.includes(ID_ALL)) {
-        domainIds?.forEach((domainId: any) => {
+      /*if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
           queryParams.append('skill_domain', domainId);
         });
-      }
-      if (!subjectIds?.includes(ID_ALL)) {
-        subjectIds?.forEach((subjectId: any) => {
+      }*/
+      /*if (!subjectIds?.includes(ID_ALL)) {
+        subjectIds?.forEach((subjectId: string) => {
           queryParams.append('subject', subjectId);
         });
-      }
+      }*/
       if (!resourceTypeIds?.includes(ID_ALL)) {
-        resourceTypeIds?.forEach((resourceTypeId: any) => {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
           queryParams.append('media_type', resourceTypeId);
         });
       }
       if (!audienceIds?.includes(ID_ALL)) {
-        audienceIds?.forEach((audienceId: any) => {
+        audienceIds?.forEach((audienceId: string) => {
           queryParams.append('coverage', audienceId);
         });
       }
 
       const url = `https://encore-db.grial.eu/api/oers/?${queryParams}`;
-      alert('url to search OERS: ' + url);
+      //alert('url to search OERS: ' + url);
+
+      /*const temp = await axiosNoCookie.get(url);
+      const recordsTotal = temp.data?.recordsTotal;
+      const num_pages = Math.ceil(recordsTotal / 10);
+      let updatedOERs: OerProps[] = [];
+
+      for (let i = 1; i < num_pages + 1; i++) {
+        const url = `https://encore-db.grial.eu/api/oers/?page=${i}&${queryParams}`;
+        const resp = await axiosNoCookie.get(url);
+
+        const oers = resp.data?.data || [];
+        updatedOERs = [...updatedOERs, ...oers]; // to create a new array combining two other array
+      }*/
 
       const resp = await axiosNoCookie.get(url);
 
       return resp.data?.data;
+      //return updatedOERs;
     } catch (error) {
       throw error;
     }

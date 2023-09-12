@@ -65,7 +65,7 @@ export default function SearchBar({
   return (
     <Flex align="center" px={px} py={py} pb={pb} gap="10px">
       <AutoComplete
-        openOnFocus
+        //openOnFocus
         multiple
         //value={inputValue}
         onSelectOption={(e) => {
