@@ -218,7 +218,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     try {
       const oer = await api.getOerById(id_oer);
-      return oer;
+      return oer[0];
     } catch (error) {
       throw error;
     }
@@ -332,7 +332,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>

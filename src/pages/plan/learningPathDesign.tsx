@@ -36,7 +36,7 @@ const Home = (props: DiscoverPageProps) => {
     if (id_oer) {
       try {
         const oer = await api.getOerById(id_oer);
-        return oer;
+        return oer[0];
       } catch (error) {
         throw error;
       }
