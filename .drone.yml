@@ -32,7 +32,10 @@ steps:
       dockerfile: ./Dockerfile
       tags: ['${DRONE_BRANCH}']
       build_args:
-        <<: *env
+        - 'CONCEPT_URL=https://concept.polyglot-edu.com'
+        - 'POLYGLOT_URL=https://polyglot-api.polyglot-edu.com'
+        - 'POLYGLOT_DASHBOARD=https://polyglot-edu.com'
+        - 'DEPLOY_URL=${DRONE_BRANCH}-e4e.polyglot-edu.com'
       <<: *docker_creds
     when:
       <<: *condition
@@ -68,6 +71,7 @@ steps:
         - 'env.authScope=$AUTH0_SCOPE'
         - 'env.backUrl=$BACK_URL'
         - 'env.polyglotUrl=$POLYGLOT_URL'
+        - 'env.polyglotDashboard=https://polyglot-edu.com'
       cleanup_failed_upgrade: true
       force_upgrade: true
       skip_tls_verify: true
