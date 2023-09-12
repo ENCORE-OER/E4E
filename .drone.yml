@@ -71,6 +71,7 @@ steps:
         - 'env.authScope=$AUTH0_SCOPE'
         - 'env.backUrl=$BACK_URL'
         - 'env.polyglotUrl=$POLYGLOT_URL'
+        - 'env.polyglotDashboard=https://polyglot-edu.com'
       cleanup_failed_upgrade: true
       force_upgrade: true
       skip_tls_verify: true

@@ -50,6 +50,8 @@ spec:
               value: {{ .Values.env.backUrl }}
             - name: POLYGLOT_URL
               value: {{ .Values.env.polyglotUrl }}
+            - name: POLYGLOT_DASHBOARD
+              value: {{ .Values.env.polyglotDashboard }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
