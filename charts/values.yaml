@@ -23,8 +23,7 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ''
 
-podAnnotations:
-  timestamp: "{{ now | date "20060102150405" }}"
+podAnnotations: {}
 
 podSecurityContext:
   {}
