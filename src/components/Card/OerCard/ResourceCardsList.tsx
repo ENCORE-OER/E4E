@@ -95,7 +95,22 @@ export default function ResourceCardsList({
                 currentPage * itemsPerPage
               )
               .map((oer: OerProps, index: number) => (
-                <SmallSingleResourceCard key={index} oer={oer} />
+                <Box
+                  key={index}
+                  onClick={async (e: any) => {
+                    e.preventDefault();
+                    onOpen();
+                    // handleOpenCardInfoModal();
+                    setOerById(oer);
+                  }}
+                  as="button"
+                >
+                  <SmallSingleResourceCard
+                    key={index}
+                    oer={oer}
+                  />
+                </Box>
+
               ))}
           </VStack>
           {oers.length !== 0 && (

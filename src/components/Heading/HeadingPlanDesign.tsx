@@ -28,7 +28,7 @@ export default function HeadingPlanDesign({
       <Flex
         w="100%"
         justifyContent="left"
-        //justify="space-between"
+      //justify="space-between"
       >
         <Heading>{title}</Heading>
       </Flex>
@@ -56,9 +56,9 @@ export default function HeadingPlanDesign({
             borderBottomStyle="solid"
             variant="flushed"
             placeholder="Type a learning path title"
-            defaultValue={"Untitled"}
+            defaultValue={'Untitled'}
             onChange={async (value) => {
-              await updateInfo({ title: value.target.value })
+              await updateInfo({ title: value.target.value });
             }}
           ></Input>
           <Box>
@@ -72,9 +72,9 @@ export default function HeadingPlanDesign({
               borderBottomStyle="solid"
               variant="flushed"
               placeholder="Type the learning path description"
-              defaultValue={"Description"}
+              defaultValue={'Description'}
               onChange={async (value) => {
-                await updateInfo({ description: value.target.value })
+                await updateInfo({ description: value.target.value });
               }}
             ></Input>
           </Box>
