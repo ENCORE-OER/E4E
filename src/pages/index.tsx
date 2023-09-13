@@ -124,7 +124,7 @@ const Home = (props: DiscoverPageProps) => {
       });
       addToast({
         message:
-          'Note: the selection of the "All" parameter has no influence on the search.',
+          'Note: if you are selecting the “All” parameter it will have no effect on the search.',
         type: 'warning',
       });
       return;
