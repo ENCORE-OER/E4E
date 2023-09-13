@@ -123,7 +123,8 @@ const Home = (props: DiscoverPageProps) => {
         type: 'error',
       });
       addToast({
-        message: 'Note: the selection of the "All" parameter has no influence on the search.',
+        message:
+          'Note: the selection of the "All" parameter has no influence on the search.',
         type: 'warning',
       });
       return;

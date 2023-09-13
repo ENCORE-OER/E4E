@@ -14,9 +14,9 @@ type SmallSingleResourceCardProps = {
 export default function SmallSingleResourceCard({
   oer,
   checkBookmark,
-  collectionColor
+  collectionColor,
 }: //dataOer
-  SmallSingleResourceCardProps) {
+SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -45,7 +45,6 @@ export default function SmallSingleResourceCard({
       pyCardBody="0px"
       noOfLinesTextCardBody={1}
       gapGridCardFooter={1}
-
     />
   );
 }

@@ -20,7 +20,6 @@ export default function OerCardFooter({
   qualityScore,
 }: OerCardFooterProps) {
   return (
-
     <CardFooter pt="0">
       <Box w="100%">
         <GridMetadataCard
@@ -31,14 +30,15 @@ export default function OerCardFooter({
           qualityScore={qualityScore}
         />
 
-        <Flex>
-          <TagResourceType resourceType={resourceType} />
+        <Flex gap={0.5}>
+          <TagResourceType resourceType={resourceType} maxTags={3} />
         </Flex>
       </Box>
     </CardFooter>
   );
 
-  {/*<CardFooter pt="0">
+  {
+    /*<CardFooter pt="0">
       <Flex justifyContent="flex-start" flexWrap={'nowrap'} w="50%">
         <TagResourceType resourceType={resourceType} />
       </Flex>
@@ -51,5 +51,6 @@ export default function OerCardFooter({
           qualityScore={qualityScore}
         />
       </Flex>
-  </CardFooter>*/}
+  </CardFooter>*/
+  }
 }
