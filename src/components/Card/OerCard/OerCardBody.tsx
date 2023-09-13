@@ -11,10 +11,10 @@ export default function OerCardBody({
   pyCardBody,
   description,
   noOfLinesText,
-  minHCardBody
+  minHCardBody,
 }: OerCardBodyProps) {
   return (
-    <CardBody py={pyCardBody || '1.5'} minH={minHCardBody || "22px"}>
+    <CardBody py={pyCardBody || '1.5'} minH={minHCardBody || '22px'}>
       <Flex justifyContent="flex-start">
         <Text noOfLines={noOfLinesText || 2} variant="description_card">
           {description}

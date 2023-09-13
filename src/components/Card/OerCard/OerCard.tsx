@@ -41,7 +41,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}
@@ -59,7 +59,7 @@ export default function OerCard({
         description={description}
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
-        minHCardBody='55px'
+        minHCardBody="55px"
       />
       <OerCardFooter
         lastUpdate={lastUpdate}
