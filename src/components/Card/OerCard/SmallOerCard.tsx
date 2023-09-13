@@ -29,7 +29,7 @@ export default function SmallOerCard({
   pyCardBody,
   checkBookmark,
 }: //dataOer
-  SmallOerCardProps) {
+SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -41,7 +41,7 @@ export default function SmallOerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
@@ -59,7 +59,7 @@ export default function SmallOerCard({
         description={description}
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
-        minHCardBody='22px'
+        minHCardBody="22px"
       />
       <SmallOerCardFooter
         lastUpdate={lastUpdate}
