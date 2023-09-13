@@ -20,7 +20,6 @@ import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SideBar from '../components/SideBar/SideBar';
-import { CustomToast } from '../components/Toast/CustomToast';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import themeEncore from '../styles/theme';
@@ -30,6 +29,7 @@ import {
   OerMediaTypeInfo,
   OerSkillInfo,
 } from '../types/encoreElements';
+import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
@@ -120,7 +120,7 @@ const Home = (props: DiscoverPageProps) => {
     ) {
       addToast({
         message: 'Error: you must set at least one skill or parameter!',
-        status: 'error',
+        type: 'error',
       });
       return;
     } else {

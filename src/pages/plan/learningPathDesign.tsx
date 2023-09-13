@@ -13,6 +13,7 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
 type DiscoverPageProps = {
@@ -27,6 +28,7 @@ const Home = (props: DiscoverPageProps) => {
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
+  const { addToast } = CustomToast();
   const hydrated = useHasHydrated(); // used to avoid hydration failed
   const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
 
@@ -48,26 +50,50 @@ const Home = (props: DiscoverPageProps) => {
     console.log(indexCollectionClicked);
 
     if (collections?.length > 0 && hydrated && indexCollectionClicked >= 0) {
-      try {
-        const fetchOerData = async () => {
-          const oerData = await Promise.all(
-            collections[indexCollectionClicked]?.oers?.map(
-              async (oer: OerInCollectionProps) => {
-                const oerFound = await getDataOerById(oer?.id);
-                return oerFound;
-              }
-            )
-          );
-          setOersById(oerData);
-        };
+      if (collections[indexCollectionClicked]?.oers?.length > 0) {
+        try {
+          const fetchOerData = async () => {
+            const oerData = await Promise.all(
+              collections[indexCollectionClicked]?.oers?.map(
+                async (oer: OerInCollectionProps) => {
+                  const oerFound = await getDataOerById(oer?.id);
+                  return oerFound;
+                }
+              )
+            );
+            setOersById(oerData);
+          };
 
-        fetchOerData();
+          fetchOerData();
 
-        console.log(oersById);
-      } catch (error) {
-        throw error;
+          //console.log(oersById);
+
+          if (collections[indexCollectionClicked]?.conceptsSelected?.length === 0) {
+            addToast({
+              message: 'No concepts selected in this collection!',
+              type: 'warning',
+            })
+          } else {
+            setConceptSelectedIndex(0);
+          }
+
+        } catch (error) {
+          throw error;
+        }
       }
+      else {
+        addToast({
+          message: 'No OERs found in this collection!',
+          type: 'warning',
+        })
+      }
+    } else if (collections?.length === 0 && indexCollectionClicked < 0) {
+      addToast({
+        message: 'No collection created!',
+        type: 'warning',
+      })
     }
+
   }, [indexCollectionClicked]);
 
   useEffect(() => {

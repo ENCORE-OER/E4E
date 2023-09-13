@@ -25,7 +25,6 @@ import { IconThumbsUp } from '../public/Icons/svgToIcons/iconThumbsUp';
 import SortingDropDownMenu from '../components/DropDownMenu/SortingDropDownMenu';
 import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
-import { CustomToast } from '../components/Toast/CustomToast';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 import {
   OerAudienceInfo,
@@ -35,6 +34,7 @@ import {
   OerSkillInfo,
 } from '../types/encoreElements';
 import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
+import { CustomToast } from '../utils/Toast/CustomToast';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -306,7 +306,7 @@ const Discover = (props: DiscoverPageProps) => {
     if (endSearch && filtered.length === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',
-        status: 'error',
+        type: 'error',
       });
       setTimeout(() => {
         router.push({
@@ -316,7 +316,7 @@ const Discover = (props: DiscoverPageProps) => {
     } else if (endSearch) {
       addToast({
         message: 'Search completed!',
-        status: 'success',
+        type: 'success',
       });
     }
   }, [endSearch]);

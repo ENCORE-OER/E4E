@@ -23,7 +23,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [loading, setLoading] = useState(true);
@@ -65,8 +65,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
           id: 'root',
           layoutOptions: {
             'elk.algorithm': 'force',
-            //position: 'CENTER',
-            //zoom: '1.0',
+            'position': 'CENTER',
+            'zoom': '0.5',
           },
           children: nodes.map((n) => ({
             id: n.node_id + '',

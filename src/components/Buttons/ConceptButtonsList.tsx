@@ -30,7 +30,7 @@ export default function ConceptButtonsList({
       flexWrap={'wrap'}
     >
       {hydrated &&
-        collections[collectionIndex]?.conceptsSelected.map(
+        collections[collectionIndex]?.conceptsSelected?.map(
           (concept: OerConceptInfo, index: number) => (
             <ConceptButton
               item={concept.label}

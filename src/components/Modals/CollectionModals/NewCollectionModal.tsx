@@ -18,9 +18,9 @@ import {
   CollectionModalProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../../utils/utils';
 import { useCollectionsContext } from '../../CollectionsContext/CollectionsContext';
-import { CustomToast } from '../../Toast/CustomToast';
 
 interface NewCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
@@ -59,7 +59,7 @@ export default function NewCollectionModal({
     } else {
       addToast({
         message: 'Write a name for the collection!',
-        status: 'error',
+        type: 'error',
       });
     }
   };

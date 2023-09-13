@@ -6,8 +6,8 @@ import {
   OerConceptInfo,
   OerInCollectionProps,
 } from '../../types/encoreElements';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import { CustomToast } from '../Toast/CustomToast';
 
 type AddCollectionFunction = (
   id: number,
@@ -65,7 +65,7 @@ export const CollectionsProvider = ({ children }: any) => {
       if (name.trim() === '') {
         addToast({
           message: 'Write a name for the collection!',
-          status: 'error',
+          type: 'error',
         });
         return;
       } else {
@@ -76,7 +76,7 @@ export const CollectionsProvider = ({ children }: any) => {
         if (isCollectionPresent) {
           addToast({
             message: `Collection "${name}" already exists!`,
-            status: 'error',
+            type: 'error',
           });
         } else {
           const newCollection: CollectionProps = {
@@ -89,7 +89,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
           addToast({
             message: `Collection "${name}" created successfully!`,
-            status: 'success',
+            type: 'success',
           });
 
           //console.log('NEW COLLECTION: ' + newCollection.name);
@@ -102,7 +102,7 @@ export const CollectionsProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Error: ${error}`,
-        status: 'error',
+        type: 'error',
       });
     }
   };
@@ -114,7 +114,7 @@ export const CollectionsProvider = ({ children }: any) => {
       );
       addToast({
         message: `Collection "${name}" delated succesfully!`,
-        status: 'success',
+        type: 'success',
       });
       return new Promise((resolve) => {
         setCollections(updatedCollections);
@@ -123,7 +123,7 @@ export const CollectionsProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Delating failed with this error: ${error}`,
-        status: 'error',
+        type: 'error',
       });
     }
   };
@@ -162,19 +162,19 @@ export const CollectionsProvider = ({ children }: any) => {
           if (hydrated) {
             addToast({
               message: `Resource added to "${collections[collectionIndex]?.name}" collection.`,
-              status: 'success',
+              type: 'success',
             });
           }
         } else {
           addToast({
             message: `The oer is already saved into "${collection.name}" collection!`,
-            status: 'error',
+            type: 'error',
           });
         }
       } else {
         addToast({
           message: "The collection doesn't exist!",
-          status: 'error',
+          type: 'error',
         });
       }
 
@@ -222,7 +222,7 @@ export const CollectionsProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Error: ${error}`,
-        status: 'error',
+        type: 'error',
       });
     }
   };
