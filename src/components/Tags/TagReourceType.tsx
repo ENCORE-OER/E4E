@@ -3,7 +3,7 @@ import { IconVideo } from '../../public/Icons/svgToIcons/iconVideo';
 
 type TagResourceTypeProps = {
   resourceType: string[];
-  maxTags?: number;
+  maxTags?: number; // set max nummber of tags to show in a card
 };
 
 export default function TagResourceType({
