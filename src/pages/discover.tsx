@@ -93,6 +93,8 @@ const Discover = (props: DiscoverPageProps) => {
     types: string[],
     audience: string[]
   ) => {
+    setIsLoading(true);
+
     //console.log('andOption: ', andOption);
     //console.log('orOption: ', orOption);
     //console.log('domains: ', domains);
@@ -269,6 +271,7 @@ const Discover = (props: DiscoverPageProps) => {
     const audience = convertedData['audience'];
 
     searchOERs(skills, andOption, orOption, domains, types, audience);
+
   }, [router.query.searchData]);
 
   // sorting of the OERs
@@ -303,6 +306,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   // redirect to home page if no resources are found
   useEffect(() => {
+    //setIsLoading(false);
     if (endSearch && filtered.length === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',
@@ -332,7 +336,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>

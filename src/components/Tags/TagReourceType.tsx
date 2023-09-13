@@ -1,6 +1,7 @@
 import { Tag, TagLeftIcon, Text } from '@chakra-ui/react';
 import { IconVideo } from '../../public/Icons/svgToIcons/iconVideo';
 
+
 type TagResourceTypeProps = {
   resourceType: string[];
   maxTags?: number;
@@ -13,7 +14,8 @@ export default function TagResourceType({
   return (
     <>
       {resourceType &&
-        resourceType.slice(0, maxTags ? maxTags : resourceType.length)
+        resourceType
+          .slice(0, maxTags ? maxTags : resourceType.length)
           .map((name: string, id: number) => (
             <Tag
               key={id}
@@ -27,9 +29,7 @@ export default function TagResourceType({
               display="flex"
             >
               <TagLeftIcon as={IconVideo} />
-              <Text variant="label_tag_resType">
-                {name}
-              </Text>
+              <Text variant="label_tag_resType">{name}</Text>
             </Tag>
           ))}
     </>
