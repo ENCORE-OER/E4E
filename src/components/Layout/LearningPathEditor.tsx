@@ -11,12 +11,14 @@ type LearningPathEditorProps = {
   setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
   oers: OerProps[];
   collectionIndex: number;
+  collectionColor?: string;
 };
 
 export default function LearningPathEditor({
   conceptSelectedIndex,
   oers,
   collectionIndex,
+  collectionColor,
   setConceptSelectedIndex,
 }: LearningPathEditorProps) {
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
@@ -95,6 +97,7 @@ export default function LearningPathEditor({
                 oers={oers}
                 isNormalSizeCard={false}
                 itemsPerPage={3}
+                collectionColor={collectionColor}
               />
             </Box>
           </Flex>

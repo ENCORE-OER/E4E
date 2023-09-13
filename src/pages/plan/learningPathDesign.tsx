@@ -77,7 +77,8 @@ const Home = (props: DiscoverPageProps) => {
               type: 'error',
             });
             addToast({
-              message: 'You need to select concepts from the saved OERs to create learning paths.',
+              message:
+                'You need to select concepts from the saved OERs to create learning paths.',
               type: 'warning',
             });
           } else {
@@ -102,7 +103,8 @@ const Home = (props: DiscoverPageProps) => {
         type: 'error',
       });
       addToast({
-        message: 'Before accessing Plan, create a collection and save the OERs that interest you.',
+        message:
+          'Before accessing Plan, create a collection and save the OERs that interest you.',
         type: 'warning',
       });
       setTimeout(() => {
@@ -172,6 +174,7 @@ const Home = (props: DiscoverPageProps) => {
               setConceptSelectedIndex={setConceptSelectedIndex}
               oers={oersById}
               conceptSelectedIndex={conceptSelectedIndex}
+              collectionColor={collections[indexCollectionClicked]?.color}
             />
           </Box>
         </Box>

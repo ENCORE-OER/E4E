@@ -1,4 +1,4 @@
-import { CardFooter, Flex } from '@chakra-ui/react';
+import { Box, CardFooter, Flex } from '@chakra-ui/react';
 import GridMetadataCard from '../../Grids/GridMetadataCard';
 import TagResourceType from '../../Tags/TagReourceType';
 
@@ -20,7 +20,25 @@ export default function OerCardFooter({
   qualityScore,
 }: OerCardFooterProps) {
   return (
+
     <CardFooter pt="0">
+      <Box w="100%">
+        <GridMetadataCard
+          gap={gapGrid || 3}
+          lastUpdate={lastUpdate}
+          used={used}
+          liked={liked}
+          qualityScore={qualityScore}
+        />
+
+        <Flex>
+          <TagResourceType resourceType={resourceType} />
+        </Flex>
+      </Box>
+    </CardFooter>
+  );
+
+  {/*<CardFooter pt="0">
       <Flex justifyContent="flex-start" flexWrap={'nowrap'} w="50%">
         <TagResourceType resourceType={resourceType} />
       </Flex>
@@ -33,6 +51,5 @@ export default function OerCardFooter({
           qualityScore={qualityScore}
         />
       </Flex>
-    </CardFooter>
-  );
+  </CardFooter>*/}
 }

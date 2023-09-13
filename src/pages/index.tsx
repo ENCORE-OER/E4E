@@ -122,6 +122,10 @@ const Home = (props: DiscoverPageProps) => {
         message: 'Error: you must set at least one skill or parameter!',
         type: 'error',
       });
+      addToast({
+        message: 'Note: the selection of the "All" parameter has no influence on the search.',
+        type: 'warning',
+      });
       return;
     } else {
       router.push({

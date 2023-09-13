@@ -106,11 +106,10 @@ export default function ResourceCardsList({
                   as="button"
                 >
                   <SmallSingleResourceCard
-                    key={index}
+                    collectionColor={collectionColor}
                     oer={oer}
                   />
                 </Box>
-
               ))}
           </VStack>
           {oers.length !== 0 && (
