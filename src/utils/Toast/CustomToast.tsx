@@ -2,7 +2,7 @@ import { useToast } from '@chakra-ui/react';
 
 type ToastProps = {
   message: string | undefined;
-  status: 'info' | 'warning' | 'success' | 'error' | 'loading' | undefined;
+  type: 'info' | 'warning' | 'success' | 'error' | 'loading' | undefined;
 };
 
 export const CustomToast = () => {
@@ -12,7 +12,7 @@ export const CustomToast = () => {
   const addToast = (newRes: ToastProps) => {
     toast({
       description: newRes.message,
-      status: newRes.status,
+      status: newRes.type,
       position: 'top-right',
       isClosable: true,
       duration: 5000,

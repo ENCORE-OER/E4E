@@ -66,7 +66,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
           layoutOptions: {
             'elk.algorithm': 'force',
             //position: 'CENTER',
-            //zoom: '1.0',
+            //zoom: '0.5',
           },
           children: nodes.map((n) => ({
             id: n.node_id + '',

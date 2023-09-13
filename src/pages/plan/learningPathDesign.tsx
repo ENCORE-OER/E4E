@@ -3,6 +3,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 //import { useRouter } from 'next/router';
 
+import router from 'next/router';
 import { useEffect, useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
 import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
@@ -13,6 +14,7 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
 type DiscoverPageProps = {
@@ -27,6 +29,7 @@ const Home = (props: DiscoverPageProps) => {
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
+  const { addToast } = CustomToast();
   const hydrated = useHasHydrated(); // used to avoid hydration failed
   const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
 
@@ -48,25 +51,67 @@ const Home = (props: DiscoverPageProps) => {
     console.log(indexCollectionClicked);
 
     if (collections?.length > 0 && hydrated && indexCollectionClicked >= 0) {
-      try {
-        const fetchOerData = async () => {
-          const oerData = await Promise.all(
-            collections[indexCollectionClicked]?.oers?.map(
-              async (oer: OerInCollectionProps) => {
-                const oerFound = await getDataOerById(oer?.id);
-                return oerFound;
-              }
-            )
-          );
-          setOersById(oerData);
-        };
+      if (collections[indexCollectionClicked]?.oers?.length > 0) {
+        try {
+          const fetchOerData = async () => {
+            const oerData = await Promise.all(
+              collections[indexCollectionClicked]?.oers?.map(
+                async (oer: OerInCollectionProps) => {
+                  const oerFound = await getDataOerById(oer?.id);
+                  return oerFound;
+                }
+              )
+            );
+            setOersById(oerData);
+          };
 
-        fetchOerData();
+          fetchOerData();
 
-        console.log(oersById);
-      } catch (error) {
-        throw error;
+          //console.log(oersById);
+
+          if (
+            collections[indexCollectionClicked]?.conceptsSelected?.length === 0
+          ) {
+            addToast({
+              message: 'No concepts selected in this collection!',
+              type: 'error',
+            });
+            addToast({
+              message:
+                'You need to select concepts from the saved OERs to create learning paths.',
+              type: 'warning',
+            });
+          } else {
+            setConceptSelectedIndex(0);
+          }
+        } catch (error) {
+          throw error;
+        }
+      } else {
+        addToast({
+          message: 'No OERs found in this collection!',
+          type: 'error',
+        });
+        addToast({
+          message: 'You need to save OERs to create learning paths.',
+          type: 'warning',
+        });
       }
+    } else if (collections?.length === 0 && indexCollectionClicked < 0) {
+      addToast({
+        message: 'No collection created!',
+        type: 'error',
+      });
+      addToast({
+        message:
+          'Before accessing Plan, create a collection and save the OERs that interest you.',
+        type: 'warning',
+      });
+      setTimeout(() => {
+        router.push({
+          pathname: '/',
+        });
+      }, 1000);
     }
   }, [indexCollectionClicked]);
 
@@ -129,6 +174,7 @@ const Home = (props: DiscoverPageProps) => {
               setConceptSelectedIndex={setConceptSelectedIndex}
               oers={oersById}
               conceptSelectedIndex={conceptSelectedIndex}
+              collectionColor={collections[indexCollectionClicked]?.color}
             />
           </Box>
         </Box>

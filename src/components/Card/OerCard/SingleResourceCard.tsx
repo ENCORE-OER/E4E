@@ -22,6 +22,7 @@ export default function SingleResourceCard({
   return (
     <OerCard
       id={oer?.id}
+      checkBookmark={checkBookmark}
       collection_color={collectionColor}
       digital_domain={oer?.digital_domain ?? false}
       entrepreneurship_domain={oer?.entrepreneurship_domain ?? false}
@@ -36,7 +37,6 @@ export default function SingleResourceCard({
       media_type={
         oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []
       }
-      checkBookmark={checkBookmark}
     />
   );
 }

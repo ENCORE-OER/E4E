@@ -21,7 +21,7 @@ export default function OerCard({
   entrepreneurship_domain: showTagEntrepreneurial,
   green_domain: showTagGreen,
   maxHCard,
-  mbCard,
+  //mbCard,
   pxCard,
   gapGridCardFooter,
   noOfLinesTextCardBody,
@@ -32,15 +32,16 @@ export default function OerCard({
   return (
     <Card
       display="flex"
-      maxH={maxHCard || '190px'}
-      maxW="550px"
+      h={maxHCard || '195px'}
+      w="550px"
       px={pxCard || '20px'}
+      py={0}
       //p={0}
       border="1px"
       key={idOer}
       borderColor="secondary"
       bg="white"
-      mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}

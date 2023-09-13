@@ -4,67 +4,44 @@ import OerCardBody from './OerCardBody';
 import OerCardHeader from './OerCardHeader';
 import SmallOerCardFooter from './SmallOerCardFooter';
 
+interface SmallOerCardProps extends ResourceCardProps {
+  checkBookmark?: boolean;
+}
+
 export default function SmallOerCard({
   id: idOer,
-  digital_domain: showTagDigital,
-  entrepreneurship_domain: showTagEntrepreneurial,
-  green_domain: showTagGreen,
+  collection_color,
   description,
   creator: authors,
   retrieval_date: lastUpdate,
+  overall_score: qualityScore,
   media_type: resourceType,
   title,
-  //domain,
+  digital_domain: showTagDigital,
+  entrepreneurship_domain: showTagEntrepreneurial,
+  green_domain: showTagGreen,
   maxHCard,
-  mbCard,
+  //mbCard,
   pxCard,
+  gapGridCardFooter,
+  noOfLinesTextCardBody,
   ptCardHeader,
   pyCardBody,
-  noOfLinesTextCardBody,
-  gapGridCardFooter,
-  overall_score: qualityScore,
+  checkBookmark,
 }: //dataOer
-ResourceCardProps) {
-  //const [showTagDigital, setShowTagDigital] = useState(false);
-  //const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
-  //const [showTagGreen, setShowTagGreen] = useState(false);
-  //const { addResource, addCollection } = useCollectionsContext();
-  //const [isSaved, setIsSaved] = useState(false);
-
-  /*
-  const digital = 'Digital';
-  const entr = 'Entrepreneurship';
-  const green = 'Green';
-
-  useEffect(() => {
-    try {
-      for (let i = 0; i < domain?.length; i++) {
-        if (domain[i] === digital) {
-          setShowTagDigital(true);
-        } else if (domain[i] === entr) {
-          setShowTagEntrepreneurial(true);
-        } else if (domain[i] === green) {
-          setShowTagGreen(true);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [domain]); // Empty dependency array ensures the effect runs only once after initial render 
-  */
-
+SmallOerCardProps) {
   return (
     <Card
       display="flex"
       maxH={maxHCard || '190px'}
       maxW="550px"
       px={pxCard || '20px'}
-      //p={0}
+      py={0}
       border="1px"
       key={idOer}
       borderColor="secondary"
       bg="white"
-      mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
@@ -75,6 +52,8 @@ ResourceCardProps) {
         showTagEntrepreneurial={showTagEntrepreneurial}
         showTagGreen={showTagGreen}
         ptCardHeader={ptCardHeader}
+        collection_color={collection_color}
+        checkBookmark={checkBookmark}
       />
       <OerCardBody
         description={description}

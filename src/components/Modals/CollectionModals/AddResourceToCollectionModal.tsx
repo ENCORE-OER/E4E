@@ -82,6 +82,7 @@ export default function AddResourceToCollectionModal({
           >
             {collections?.map((collection: CollectionProps) => (
               <Text
+                cursor={'pointer'}
                 key={collection.id}
                 _hover={{ bg: 'gray.200' }}
                 onClick={(e) => {
