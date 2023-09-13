@@ -59,6 +59,7 @@ SmallOerCardProps) {
         description={description}
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
+        minHCardBody="22px"
       />
       <SmallOerCardFooter
         lastUpdate={lastUpdate}

@@ -59,6 +59,7 @@ export default function OerCard({
         description={description}
         pyCardBody={pyCardBody}
         noOfLinesText={noOfLinesTextCardBody}
+        minHCardBody="55px"
       />
       <OerCardFooter
         lastUpdate={lastUpdate}

@@ -31,7 +31,7 @@ export default function SmallOerCardFooter({
         />
 
         <Flex>
-          <TagResourceType resourceType={resourceType} />
+          <TagResourceType maxTags={2} resourceType={resourceType} />
         </Flex>
       </Box>
     </CardFooter>
