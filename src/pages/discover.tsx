@@ -342,7 +342,11 @@ const Discover = (props: DiscoverPageProps) => {
                   {`${filtered?.length} resources`}
                 </Text>
                 <Flex flex="1" w="full" justifyContent="flex-end">
-                  <OerCardsSorting filtered={filtered} setFiltered={setFiltered} setIsLoading={setIsLoading} />
+                  <OerCardsSorting
+                    filtered={filtered}
+                    setFiltered={setFiltered}
+                    setIsLoading={setIsLoading}
+                  />
                 </Flex>
               </HStack>
 

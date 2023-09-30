@@ -40,6 +40,7 @@ const Home = (props: DiscoverPageProps) => {
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
+  const [resetSortingMenu, setResetSortingMenu] = useState<boolean>(false); // used to reset the sorting menu when the collection is changed
   const hydrated = useHasHydrated(); // used to avoid hydration failed
 
   // handle the click on the collection
@@ -82,6 +83,7 @@ const Home = (props: DiscoverPageProps) => {
   useEffect(() => {
     if (hydrated && collections?.length > 0) {
       try {
+        setResetSortingMenu(!resetSortingMenu);
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
@@ -122,7 +124,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-          //justify="space-between"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -176,8 +178,10 @@ const Home = (props: DiscoverPageProps) => {
                 collectionIndex={collectionIndex}
                 collections={collections}
                 oersById={oersById}
+                setOersById={setOersById}
                 minW={'550px'}
                 display="flex"
+                resetSortingMenu={resetSortingMenu}
               />
             )}
           </Box>

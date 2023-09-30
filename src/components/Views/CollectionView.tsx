@@ -2,6 +2,7 @@ import {
   Box,
   BoxProps,
   Flex,
+  HStack,
   Heading,
   Icon,
   Spacer,
@@ -10,9 +11,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
-import Select, { MultiValue } from 'react-select';
+import { MultiValue } from 'react-select';
 import icon_infocircle from '../../public/Icons/icon_infocircle.svg';
 import {
   CollectionProps,
@@ -25,17 +26,23 @@ import AddResourcesButton from '../Buttons/AddResourcesButton';
 import DownloadButton from '../Buttons/DownloadButton';
 import ResourceCardsList from '../Card/OerCard/ResourceCardsList';
 import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
+import SelectConcepts from '../Selects/SelectConcepts';
+import OerCardsSorting from '../Sorting/OerCardsSorting';
 
 interface CollectionViewProps extends BoxProps {
   collections: CollectionProps[];
   collectionIndex: number;
   oersById: OerProps[];
+  setOersById: Dispatch<SetStateAction<OerProps[]>>;
+  resetSortingMenu: boolean;
 }
 
 export default function CollectionView({
   collections,
   collectionIndex,
   oersById,
+  setOersById,
+  resetSortingMenu,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -47,7 +54,7 @@ export default function CollectionView({
     'Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths';
 
   const extractUniqueConcepts = (collection: CollectionProps) => {
-    // exttracting concepts only for the selected collection
+    // extracting concepts only for the selected collection
 
     const uniqueConceptsSet = new Set<OerConceptInfo>();
 
@@ -91,12 +98,20 @@ export default function CollectionView({
             fileName={collections[collectionIndex].name}
           />
         </Flex>
-        <Text
-          fontWeight="light"
-          fontSize="small"
-          color="grey"
-          mb="3"
-        >{`${collections[collectionIndex]?.oers.length} resources`}</Text>
+        <HStack pb="3">
+          <Text
+            fontWeight="light"
+            fontSize="small"
+            color="grey"
+          >{`${collections[collectionIndex]?.oers.length} resources`}</Text>
+          <Flex flex="1" w="full" justifyContent="flex-end">
+            <OerCardsSorting
+              filtered={oersById}
+              setFiltered={setOersById}
+              resetSortingMenu={resetSortingMenu}
+            />
+          </Flex>
+        </HStack>
         <VStack>
           <ResourceCardsList
             oers={oersById}
@@ -120,7 +135,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-        //justifyContent="center"
+      //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip
@@ -149,45 +164,11 @@ export default function CollectionView({
         </Flex>
         <Box w="full" p={3} h="full">
           {hydrated && (
-            <Select
-              minMenuHeight={10000}
-              isMulti
-              isDisabled={
-                !collections[collectionIndex]?.oers.length ||
-                collections[collectionIndex]?.oers.length === 0
-              }
-              options={uniqueConcepts}
-              value={collections[collectionIndex].conceptsSelected}
-              onChange={handleConceptsChange}
-              getOptionLabel={(option) => option.label} // Specifica come ottenere la label
-              getOptionValue={(option) => option.id.toString()} // Specifica come ottenere il valore
-              placeholder="Select Concepts"
-              menuPortalTarget={document.body} // Portale separato per il menu
-              styles={{
-                control: (provided) => ({
-                  ...provided,
-                  borderRadius: '5px',
-                  //minHeight: '30px',
-                  //height: '30px',
-                }),
-                menuPortal: (base) => ({
-                  ...base,
-                  zIndex: 9999,
-                }),
-                menu: (base) => ({
-                  ...base,
-                  maxHeight: 'none',
-                }),
-                menuList: (base) => ({
-                  ...base,
-                  maxHeight: '550px', // here to extend optionsList height
-                }),
-                option: (provided) => ({
-                  ...provided,
-                  //padding: '10px', // imposta l'altezza delle opzioni qui
-                  borderRadius: '5px',
-                }),
-              }}
+            <SelectConcepts
+              collectionLength={collections[collectionIndex]?.oers.length}
+              conceptsSelected={collections[collectionIndex].conceptsSelected}
+              handleConceptsChange={handleConceptsChange}
+              uniqueConcepts={uniqueConcepts}
             />
           )}
         </Box>
