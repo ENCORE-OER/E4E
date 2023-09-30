@@ -20,7 +20,7 @@ export default function OerCardsSorting({
   setIsLoading,
   filtered,
   setFiltered,
-  resetSortingMenu
+  resetSortingMenu,
 }: OerCardsSortingProps) {
   const [isAscending, setAscending] = useState<boolean>(true);
   const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');

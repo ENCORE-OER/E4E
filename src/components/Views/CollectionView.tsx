@@ -135,7 +135,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-      //justifyContent="center"
+        //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip
