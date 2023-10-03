@@ -40,12 +40,12 @@ const Home = (props: DiscoverPageProps) => {
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
-  const [resetSortingMenu, setResetSortingMenu] = useState<boolean>(false); // used to reset the sorting menu when the collection is changed
   const hydrated = useHasHydrated(); // used to avoid hydration failed
 
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
   const [collectionIndex, setCollectionIndex] = useState<number>(-1);
+  const [viewChanged, setViewChanged] = useState<boolean>(false); // used to force the re-render of the CollectionView component
   //const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1); // handle in CollectionNavItem
   const { isOpen } = useDisclosure();
 
@@ -82,8 +82,8 @@ const Home = (props: DiscoverPageProps) => {
   // recover all the oers of a collection
   useEffect(() => {
     if (hydrated && collections?.length > 0) {
+      setViewChanged(true);
       try {
-        setResetSortingMenu(!resetSortingMenu);
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
@@ -101,7 +101,6 @@ const Home = (props: DiscoverPageProps) => {
         };
 
         fetchOerData();
-
         //console.log(oersById);
       } catch (error) {
         throw error;
@@ -124,7 +123,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-          //justify="space-between"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -165,6 +164,7 @@ const Home = (props: DiscoverPageProps) => {
                       collectionIndex={collectionIndex}
                       setCollectionIndex={setCollectionIndex}
                       deleteCollection={deleteCollection}
+
                     >
                       {collection.name}
                     </CollectionNavItem>
@@ -175,13 +175,14 @@ const Home = (props: DiscoverPageProps) => {
           <Box p="25px" flex="1" h="full">
             {hydrated && collectionClicked && (
               <CollectionView
+                viewChanged={viewChanged}
+                setViewChanged={setViewChanged}
                 collectionIndex={collectionIndex}
                 collections={collections}
                 oersById={oersById}
                 setOersById={setOersById}
                 minW={'550px'}
                 display="flex"
-                resetSortingMenu={resetSortingMenu}
               />
             )}
           </Box>

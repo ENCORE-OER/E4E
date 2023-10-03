@@ -34,7 +34,8 @@ interface CollectionViewProps extends BoxProps {
   collectionIndex: number;
   oersById: OerProps[];
   setOersById: Dispatch<SetStateAction<OerProps[]>>;
-  resetSortingMenu: boolean;
+  viewChanged: boolean;
+  setViewChanged: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CollectionView({
@@ -42,7 +43,8 @@ export default function CollectionView({
   collectionIndex,
   oersById,
   setOersById,
-  resetSortingMenu,
+  viewChanged,
+  setViewChanged,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -82,7 +84,8 @@ export default function CollectionView({
 
   useEffect(() => {
     extractUniqueConcepts(collections[collectionIndex]);
-  }, [collectionIndex]);
+
+  }, [collectionIndex, collections]);
 
   return (
     <Box {...rest}>
@@ -108,7 +111,8 @@ export default function CollectionView({
             <OerCardsSorting
               filtered={oersById}
               setFiltered={setOersById}
-              resetSortingMenu={resetSortingMenu}
+              viewChanged={viewChanged}
+              setViewChanged={setViewChanged}
             />
           </Flex>
         </HStack>
@@ -135,7 +139,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-        //justifyContent="center"
+      //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip

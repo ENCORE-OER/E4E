@@ -11,19 +11,22 @@ import SortingDropDownMenu from '../DropDownMenu/SortingDropDownMenu';
 
 type OerCardsSortingProps = {
   setIsLoading?: Dispatch<SetStateAction<boolean>>;
-  filtered: Array<OerProps>;
-  setFiltered: Dispatch<SetStateAction<Array<OerProps>>>;
-  resetSortingMenu?: boolean;
+  filtered: OerProps[];
+  setFiltered: Dispatch<SetStateAction<OerProps[]>>;
+  viewChanged?: boolean;
+  setViewChanged?: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function OerCardsSorting({
   setIsLoading,
   filtered,
   setFiltered,
-  resetSortingMenu,
+  viewChanged,
+  setViewChanged,
 }: OerCardsSortingProps) {
   const [isAscending, setAscending] = useState<boolean>(true);
-  const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
+  const [selectedSorting, setSelectedSorting] = useState<string>('Last Update');
+
 
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
@@ -38,17 +41,14 @@ export default function OerCardsSorting({
     if (sortingName === selectedSorting) {
       setAscending(!isAscending);
     } else {
-      SetSelectedSorting(sortingName);
+      setSelectedSorting(sortingName);
       setAscending(true);
     }
   };
 
-  useEffect(() => {
-    SetSelectedSorting('Last Update');
-  }, [resetSortingMenu]);
-
   // sorting of the OERs
   useEffect(() => {
+    //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
     if (setIsLoading) {
       setIsLoading(true);
     }
@@ -79,7 +79,19 @@ export default function OerCardsSorting({
     if (setIsLoading) {
       setIsLoading(false);
     }
-  }, [selectedSorting, isAscending]);
+  }, [selectedSorting, isAscending, filtered, setFiltered, setIsLoading]);
+
+
+  // to reset sorting when the collection is changed in 'Your resources' page
+  useEffect(() => {
+    //alert(`resetSortingMenu: ${resetSortingMenu}`)
+    if (viewChanged && setViewChanged) {
+      setSelectedSorting('Last Update');
+      setAscending(true);
+      setViewChanged(false);
+    }
+
+  }, [viewChanged, setViewChanged]);
 
   return (
     <SortingDropDownMenu
@@ -87,6 +99,7 @@ export default function OerCardsSorting({
       handleItemSortingClick={handleItemSortingClick}
       isAscending={isAscending}
       wMenu="250px"
+      viewChanged={viewChanged}
     />
   );
 }
