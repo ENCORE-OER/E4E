@@ -4,10 +4,10 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 
 //import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
-import CreatePathCollectionButton from '../../components/Buttons/CreatePathCollectionButton';
+//import CreatePathCollectionButton from '../../components/Buttons/CreatePathCollectionButton';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
-import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
+//import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
 
 /*type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -20,11 +20,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   //const hydrated = useHasHydrated(); // used to avoid hydration failed
 
-  const goToConceptMapDesignPage = async () => {
+ /* const goToConceptMapDesignPage = async () => {
     router.push({
       pathname: `/plan/learningPathDesign`,
     });
-  };
+  };*/
 
   return (
     <Flex w="100%" h="100%">
@@ -37,14 +37,30 @@ const Home = (/*props: DiscoverPageProps*/) => {
           justifyContent="left"
           //justify="space-between"
         >
-          <Heading>Plan</Heading>
+          <Heading>Learning path design</Heading>
         </Flex>
 
-        <Box p={5}>
-          <CreatePathCollectionButton onClick={goToConceptMapDesignPage} />
+        <Flex
+          paddingTop="2rem"
+          w="100%"
+          justifyContent="left"
+          //justify="space-between"
+        >
+          <Text>
+            This section is designed to assist you in crafting a personalized learning journey to achieve specific learning objectives. 
+            It does so by suggesting potential educational activities and learning resources based on the desired learning objectives.
+          </Text>
+        </Flex>
+
+        <Box paddingTop="1.5rem">
+          
         </Box>
 
-        <Box
+        {/*<Box p={5}>
+          <CreatePathCollectionButton onClick={goToConceptMapDesignPage} />
+        </Box>}*/}
+
+        {/*<Box
           display="flex"
           borderTop={3}
           borderTopColor="gray.200"
@@ -52,7 +68,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           w="70%"
           p={5}
         >
-          {/* TODO: create component for learning path card */}
+          {/* TODO: create component for learning path card 
 
           <Box
             display="flex"
@@ -85,7 +101,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Box>
             </Flex>
           </Box>
-        </Box>
+        </Box>*/}
       </Box>
     </Flex>
   );
