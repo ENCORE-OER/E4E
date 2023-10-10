@@ -36,7 +36,10 @@ interface CollectionViewProps extends BoxProps {
   setOersById: Dispatch<SetStateAction<OerProps[]>>;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
-  deleteResourceFromCollection?: (idCollection: number, idOer: number) => Promise<void>;
+  deleteResourceFromCollection?: (
+    idCollection: number,
+    idOer: number
+  ) => Promise<void>;
 }
 
 export default function CollectionView({
@@ -143,7 +146,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-      //justifyContent="center"
+        //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip

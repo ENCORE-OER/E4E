@@ -17,7 +17,10 @@ type ResourceCardsListProps = {
   itemsPerPage: number;
   collectionColor?: string;
   isResourcePage?: boolean;
-  deleteResourceFromCollection?: (idCollection: number, idOer: number) => Promise<void>;
+  deleteResourceFromCollection?: (
+    idCollection: number,
+    idOer: number
+  ) => Promise<void>;
 };
 
 export default function ResourceCardsList({
@@ -53,7 +56,7 @@ export default function ResourceCardsList({
     if (deleteResourceFromCollection) {
       deleteResourceFromCollection(idCollection, idOer);
     }
-  }
+  };
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -94,11 +97,12 @@ export default function ResourceCardsList({
                           handleDeleteButtonClick(collection.id, oer.id);
                         }
                       }}
-                    //position="absolute"
-                    //right={'0px'}
+                      //position="absolute"
+                      //right={'0px'}
                     >
                       <DeleteIcon />
-                    </Button>)}
+                    </Button>
+                  )}
                 </HStack>
               ))}
           </VStack>

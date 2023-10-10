@@ -112,7 +112,7 @@ const CollectionNavItem = ({
         borderLeft="5px"
         borderLeftColor={collection.color}
         borderLeftStyle={'solid'}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"

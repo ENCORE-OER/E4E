@@ -36,7 +36,8 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { collections, deleteCollection, deleteResourceFromCollection } = useCollectionsContext();
+  const { collections, deleteCollection, deleteResourceFromCollection } =
+    useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
@@ -123,7 +124,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

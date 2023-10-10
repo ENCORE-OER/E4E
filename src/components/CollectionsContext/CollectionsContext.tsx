@@ -23,7 +23,10 @@ type SelectedConceptsFunction = (
   collectionId: number,
   concepts: OerConceptInfo[]
 ) => Promise<void>;
-type DeleteResourceFunction = (idCollection: number, idOer: number) => Promise<void>;
+type DeleteResourceFunction = (
+  idCollection: number,
+  idOer: number
+) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
@@ -229,17 +232,15 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-
   const deleteResourceFromCollection = async (
     idCollection: number,
-    idOer: number,
+    idOer: number
   ): Promise<void> => {
     try {
-
       const updatedCollections = [...collections];
-      const updatedCollectionOers = updatedCollections[idCollection].oers?.filter(
-        (oer: OerInCollectionProps) => oer.id !== idOer
-      );
+      const updatedCollectionOers = updatedCollections[
+        idCollection
+      ].oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
 
       const updatedCollection = {
         ...collections[idCollection],
@@ -259,14 +260,13 @@ export const CollectionsProvider = ({ children }: any) => {
         setCollections(updatedCollections);
         resolve();
       });
-
     } catch (error) {
       addToast({
         message: `OER deleting failed with this error: ${error}`,
         type: 'error',
       });
     }
-  }
+  };
 
   // used
   const setSelectedConceptsForCollection = async (
