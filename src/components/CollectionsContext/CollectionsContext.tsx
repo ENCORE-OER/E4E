@@ -23,12 +23,14 @@ type SelectedConceptsFunction = (
   collectionId: number,
   concepts: OerConceptInfo[]
 ) => Promise<void>;
+type DeleteResourceFunction = (idCollection: number, idOer: number) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
   deleteCollection: DeleteCollectionFunction;
   addResource: AddResourceFunction;
+  deleteResourceFromCollection: DeleteResourceFunction;
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
   setSelectedConceptsForCollection: SelectedConceptsFunction;
@@ -161,13 +163,13 @@ export const CollectionsProvider = ({ children }: any) => {
 
           if (hydrated) {
             addToast({
-              message: `Resource added to "${collections[collectionIndex]?.name}" collection.`,
+              message: `OER added to "${collections[collectionIndex]?.name}" collection.`,
               type: 'success',
             });
           }
         } else {
           addToast({
-            message: `The oer is already saved into "${collection.name}" collection!`,
+            message: `The OER is already saved into "${collection.name}" collection!`,
             type: 'error',
           });
         }
@@ -227,6 +229,45 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
+
+  const deleteResourceFromCollection = async (
+    idCollection: number,
+    idOer: number,
+  ): Promise<void> => {
+    try {
+
+      const updatedCollections = [...collections];
+      const updatedCollectionOers = updatedCollections[idCollection].oers?.filter(
+        (oer: OerInCollectionProps) => oer.id !== idOer
+      );
+
+      const updatedCollection = {
+        ...collections[idCollection],
+        oers: updatedCollectionOers,
+      };
+
+      updatedCollections[idCollection] = updatedCollection;
+
+      if (hydrated) {
+        addToast({
+          message: `OER succesfully deleted from "${collections[idCollection]?.name}" collection.`,
+          type: 'success',
+        });
+      }
+
+      return new Promise((resolve) => {
+        setCollections(updatedCollections);
+        resolve();
+      });
+
+    } catch (error) {
+      addToast({
+        message: `OER deleting failed with this error: ${error}`,
+        type: 'error',
+      });
+    }
+  }
+
   // used
   const setSelectedConceptsForCollection = async (
     collectionId: number,
@@ -254,6 +295,7 @@ export const CollectionsProvider = ({ children }: any) => {
         addCollection,
         deleteCollection,
         addResource,
+        deleteResourceFromCollection,
         indexCollectionClicked, //used in CollectionMenu component
         setIndexCollectionClicked,
         setSelectedConceptsForCollection,

@@ -1,8 +1,9 @@
 /* To show all the oer cards */
 
-import { Box, VStack, useDisclosure } from '@chakra-ui/react';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
 import { useState } from 'react';
-import { OerProps } from '../../../types/encoreElements';
+import { CollectionProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
@@ -11,20 +12,27 @@ import SmallSingleResourceCard from './SmallSingleResourceCard';
 
 type ResourceCardsListProps = {
   oers: OerProps[];
+  collection?: CollectionProps;
   isNormalSizeCard: boolean;
   itemsPerPage: number;
   collectionColor?: string;
+  isResourcePage?: boolean;
+  deleteResourceFromCollection?: (idCollection: number, idOer: number) => Promise<void>;
 };
 
 export default function ResourceCardsList({
   oers,
+  collection,
   isNormalSizeCard,
   itemsPerPage,
   collectionColor,
+  isResourcePage,
+  deleteResourceFromCollection,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<OerProps | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleCloseCardInfoModal = () => {
     //setCardInfoModalOpen(false);
@@ -36,12 +44,16 @@ export default function ResourceCardsList({
   //const itemsPerPage = 5;
   const totalPages = Math.ceil(oers.length / itemsPerPage);
 
-  const [currentPage, setCurrentPage] = useState(1);
-
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
   /////////////////////////////////////////////////////////////
+
+  const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
+    if (deleteResourceFromCollection) {
+      deleteResourceFromCollection(idCollection, idOer);
+    }
+  }
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -56,22 +68,38 @@ export default function ResourceCardsList({
                 currentPage * itemsPerPage
               )
               .map((oer: OerProps, index: number) => (
-                <Box
-                  key={index}
-                  onClick={async (e: any) => {
-                    e.preventDefault();
-                    onOpen();
-                    // handleOpenCardInfoModal();
+                <HStack key={index}>
+                  <Box
+                    onClick={async (e: any) => {
+                      e.preventDefault();
+                      onOpen();
+                      // handleOpenCardInfoModal();
 
-                    setOerById(oer);
-                  }}
-                  as="button"
-                >
-                  <SingleResourceCard
-                    collectionColor={collectionColor}
-                    oer={oer}
-                  />
-                </Box>
+                      setOerById(oer);
+                    }}
+                    as="button"
+                  >
+                    <SingleResourceCard
+                      collectionColor={collectionColor}
+                      oer={oer}
+                    />
+                  </Box>
+                  {isResourcePage && (
+                    <Button
+                      variant="ghost"
+                      _hover={{ bg: 'gray.300' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (collection) {
+                          handleDeleteButtonClick(collection.id, oer.id);
+                        }
+                      }}
+                    //position="absolute"
+                    //right={'0px'}
+                    >
+                      <DeleteIcon />
+                    </Button>)}
+                </HStack>
               ))}
           </VStack>
           {oers.length !== 0 && (

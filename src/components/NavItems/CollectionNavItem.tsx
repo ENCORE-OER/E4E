@@ -22,7 +22,7 @@ interface CollectionNavItemProps {
   collectionClicked: boolean;
   setCollectionIndex: Dispatch<SetStateAction<number>>;
   collectionIndex: number;
-  deleteCollection: (id: number, name: string) => void;
+  deleteCollection: (id: number, name: string) => Promise<void>;
 }
 
 interface ItemToDeleteProps {
@@ -138,7 +138,7 @@ const CollectionNavItem = ({
 
         <Button
           variant="ghost"
-          _hover={{ bg: 'background' }}
+          _hover={{ bg: 'gray.300' }}
           onClick={(e) => {
             e.preventDefault();
             handleDeleteButtonClick(collection.id, collection.name);

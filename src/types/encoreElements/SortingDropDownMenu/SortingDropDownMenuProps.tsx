@@ -6,5 +6,5 @@ export type SortingDropDownMenuProps = {
   wMenu?: string;
   handleItemSortingClick: (sortingName: string) => void;
   isAscending?: boolean;
-  viewChanged?: boolean
+  viewChanged?: boolean;
 };

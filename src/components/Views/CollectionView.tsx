@@ -36,6 +36,7 @@ interface CollectionViewProps extends BoxProps {
   setOersById: Dispatch<SetStateAction<OerProps[]>>;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
+  deleteResourceFromCollection?: (idCollection: number, idOer: number) => Promise<void>;
 }
 
 export default function CollectionView({
@@ -45,6 +46,7 @@ export default function CollectionView({
   setOersById,
   viewChanged,
   setViewChanged,
+  deleteResourceFromCollection,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -84,7 +86,6 @@ export default function CollectionView({
 
   useEffect(() => {
     extractUniqueConcepts(collections[collectionIndex]);
-
   }, [collectionIndex, collections]);
 
   return (
@@ -119,9 +120,12 @@ export default function CollectionView({
         <VStack>
           <ResourceCardsList
             oers={oersById}
+            collection={collections[collectionIndex]}
             isNormalSizeCard={true}
             itemsPerPage={5}
             collectionColor={collections[collectionIndex]?.color}
+            isResourcePage={true}
+            deleteResourceFromCollection={deleteResourceFromCollection}
           />
           <Flex justifyContent="center" padding="5">
             <AddResourcesButton

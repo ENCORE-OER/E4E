@@ -27,7 +27,6 @@ export default function OerCardsSorting({
   const [isAscending, setAscending] = useState<boolean>(true);
   const [selectedSorting, setSelectedSorting] = useState<string>('Last Update');
 
-
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
     { icon: IconCalendarCheck, name: 'Last Update' },
@@ -81,7 +80,6 @@ export default function OerCardsSorting({
     }
   }, [selectedSorting, isAscending, filtered, setFiltered, setIsLoading]);
 
-
   // to reset sorting when the collection is changed in 'Your resources' page
   useEffect(() => {
     //alert(`resetSortingMenu: ${resetSortingMenu}`)
@@ -90,7 +88,6 @@ export default function OerCardsSorting({
       setAscending(true);
       setViewChanged(false);
     }
-
   }, [viewChanged, setViewChanged]);
 
   return (

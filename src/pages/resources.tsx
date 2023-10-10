@@ -36,7 +36,7 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { collections, deleteCollection } = useCollectionsContext();
+  const { collections, deleteCollection, deleteResourceFromCollection } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
@@ -164,7 +164,6 @@ const Home = (props: DiscoverPageProps) => {
                       collectionIndex={collectionIndex}
                       setCollectionIndex={setCollectionIndex}
                       deleteCollection={deleteCollection}
-
                     >
                       {collection.name}
                     </CollectionNavItem>
@@ -183,6 +182,7 @@ const Home = (props: DiscoverPageProps) => {
                 setOersById={setOersById}
                 minW={'550px'}
                 display="flex"
+                deleteResourceFromCollection={deleteResourceFromCollection}
               />
             )}
           </Box>
