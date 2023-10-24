@@ -5,9 +5,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 
 import router from 'next/router';
 import { useEffect, useState } from 'react';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
 import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
-import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';

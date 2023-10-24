@@ -13,9 +13,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
-import { useCollectionsContext } from '../components/CollectionsContext/CollectionsContext';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
+import { useCollectionsContext } from '../Contexts/CollectionsContext/CollectionsContext';
 
 import { LuFolderPlus } from 'react-icons/lu';
 import CollectionModal from '../components/Modals/CollectionModals';
@@ -60,7 +60,6 @@ const Home = (props: DiscoverPageProps) => {
 
   const handleOpenNewCollectionModal = () => {
     setNewCollectionModalOpen(true);
-    //console.log('eccolo: ' + isNewCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
@@ -80,9 +79,21 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
+  const handleDeleteResource = async (collectionIndex: number, idOer: number) => {
+    try {
+      alert("sono in handleDeleteResource");
+      await deleteResourceFromCollection(collectionIndex, idOer);
+      console.log(`delete resource ${idOer} from collection ${collectionIndex}`);
+      setOersById(prevOers => prevOers.filter(oer => oer.id !== idOer));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // recover all the oers of a collection
   useEffect(() => {
-    if (hydrated && collections?.length > 0) {
+
+    if (collections?.length > 0) {
       setViewChanged(true);
       try {
         const fetchOerData = async () => {
@@ -104,7 +115,7 @@ const Home = (props: DiscoverPageProps) => {
         fetchOerData();
         //console.log(oersById);
       } catch (error) {
-        throw error;
+        console.error(error);
       }
     }
   }, [collectionIndex]);
@@ -124,7 +135,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-          //justify="space-between"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -184,6 +195,7 @@ const Home = (props: DiscoverPageProps) => {
                 minW={'550px'}
                 display="flex"
                 deleteResourceFromCollection={deleteResourceFromCollection}
+                handleDeleteResource={handleDeleteResource}
               />
             )}
           </Box>

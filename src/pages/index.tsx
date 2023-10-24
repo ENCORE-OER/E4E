@@ -44,6 +44,7 @@ const Home = (props: DiscoverPageProps) => {
   //const [respSearchOers] = useState<OerProps[]>([]);
   //const [oerById] = useState<OerProps | null>(null);
 
+
   const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
   const [suggestions, setSuggestions] = useState<OerSkillInfo[]>([]); // list of the skill selectable in the searchbar
 

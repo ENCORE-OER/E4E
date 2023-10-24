@@ -14,13 +14,13 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import {
   CollectionModalProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../../utils/utils';
-import { useCollectionsContext } from '../../CollectionsContext/CollectionsContext';
 
 interface NewCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection

@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { MultiValue } from 'react-select';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import icon_infocircle from '../../public/Icons/icon_infocircle.svg';
 import {
   CollectionProps,
@@ -25,7 +26,6 @@ import { useHasHydrated } from '../../utils/utils';
 import AddResourcesButton from '../Buttons/AddResourcesButton';
 import DownloadButton from '../Buttons/DownloadButton';
 import ResourceCardsList from '../Card/OerCard/ResourceCardsList';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import SelectConcepts from '../Selects/SelectConcepts';
 import OerCardsSorting from '../Sorting/OerCardsSorting';
 
@@ -36,6 +36,10 @@ interface CollectionViewProps extends BoxProps {
   setOersById: Dispatch<SetStateAction<OerProps[]>>;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
+  handleDeleteResource: (
+    collectionIndex: number,
+    idOer: number
+  ) => Promise<void>;
   deleteResourceFromCollection?: (
     idCollection: number,
     idOer: number
@@ -50,6 +54,7 @@ export default function CollectionView({
   viewChanged,
   setViewChanged,
   deleteResourceFromCollection,
+  handleDeleteResource,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -80,12 +85,20 @@ export default function CollectionView({
   ) => {
     //setSelectedConcepts(selectedOptions.map((option) => option));
 
-    //recall the context funtion to store concept selected
+    //recall the context function to store concept selected
     setSelectedConceptsForCollection(
-      collections[collectionIndex].id,
-      selectedOptions.map((option) => option)
+      collections[collectionIndex]?.id,
+      selectedOptions?.map((option: OerConceptInfo) => option)
     );
   };
+
+
+  // function to handle the click on the delete button of a resource
+  /*const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
+    if (deleteResourceFromCollection) {
+      deleteResourceFromCollection(idCollection, idOer);
+    }
+  };*/
 
   useEffect(() => {
     extractUniqueConcepts(collections[collectionIndex]);
@@ -121,15 +134,18 @@ export default function CollectionView({
           </Flex>
         </HStack>
         <VStack>
-          <ResourceCardsList
-            oers={oersById}
-            collection={collections[collectionIndex]}
-            isNormalSizeCard={true}
-            itemsPerPage={5}
-            collectionColor={collections[collectionIndex]?.color}
-            isResourcePage={true}
-            deleteResourceFromCollection={deleteResourceFromCollection}
-          />
+          {hydrated && (
+            <ResourceCardsList
+              oers={oersById}
+              collection={collections[collectionIndex]}
+              isNormalSizeCard={true}
+              itemsPerPage={5}
+              collectionColor={collections[collectionIndex]?.color}
+              isResourcePage={true}
+              deleteResourceFromCollection={deleteResourceFromCollection}
+              handleDeleteButtonClick={handleDeleteResource}
+              collectionIndex={collectionIndex}
+            />)}
           <Flex justifyContent="center" padding="5">
             <AddResourcesButton
               text="Add Resources ..."
@@ -146,7 +162,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-        //justifyContent="center"
+      //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip
@@ -176,8 +192,8 @@ export default function CollectionView({
         <Box w="full" p={3} h="full">
           {hydrated && (
             <SelectConcepts
-              collectionLength={collections[collectionIndex]?.oers.length}
-              conceptsSelected={collections[collectionIndex].conceptsSelected}
+              collectionLength={collections[collectionIndex]?.oers?.length}
+              conceptsSelected={collections[collectionIndex]?.conceptsSelected}
               handleConceptsChange={handleConceptsChange}
               uniqueConcepts={uniqueConcepts}
             />

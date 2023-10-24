@@ -18,13 +18,16 @@ type AddResourceFunction = (
   collectionId: number,
   resource: OerInCollectionProps
 ) => Promise<void>;
-type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
+type DeleteCollectionFunction = (
+  id: number,
+  name: string,
+) => Promise<void>;
 type SelectedConceptsFunction = (
   collectionId: number,
   concepts: OerConceptInfo[]
 ) => Promise<void>;
 type DeleteResourceFunction = (
-  idCollection: number,
+  collectionIndex: number,
   idOer: number
 ) => Promise<void>;
 
@@ -112,7 +115,10 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-  const deleteCollection = async (id: number, name: string): Promise<void> => {
+  const deleteCollection = async (
+    id: number,
+    name: string
+  ): Promise<void> => {
     try {
       const updatedCollections = collections.filter(
         (collection: CollectionProps) => collection.id !== id
@@ -233,36 +239,72 @@ export const CollectionsProvider = ({ children }: any) => {
   };
 
   const deleteResourceFromCollection = async (
-    idCollection: number,
-    idOer: number
+    collectionIndex: number,
+    idOer: number,
   ): Promise<void> => {
     try {
+
       const updatedCollections = [...collections];
+
+      if (!updatedCollections[collectionIndex] || !updatedCollections[collectionIndex]?.oers) {
+        throw new Error(`Collection with ID ${collectionIndex} doesn't exist or doesn't have any OERs.`);
+      }
+
       const updatedCollectionOers = updatedCollections[
-        idCollection
-      ].oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
+        collectionIndex
+      ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
+
+      console.log("oers: " + updatedCollectionOers?.map((oer: OerInCollectionProps) =>
+        oer.title
+      ));
+
+      const possibleConceptsSelected = collections[
+        collectionIndex
+      ]?.oers?.flatMap((oer: OerInCollectionProps) => {
+        oer.concepts?.map((concept: OerConceptInfo) => concept);
+      });
+
+      console.log("possibleConceptsSelected: " + possibleConceptsSelected);
+
+      const updatedConceptsSelected = updatedCollections[
+        collectionIndex
+      ]?.conceptsSelected?.filter((concept: any) =>
+        possibleConceptsSelected?.includes(concept)
+      );
+
+      /*const removedConcepts = collections[collectionIndex]?.oers
+        ?.find((oer) => oer.id === idOer)
+        ?.concepts?.map((concept: OerConceptInfo) => concept);
+
+      const updatedConceptsSelected = collections[collectionIndex]?.conceptsSelected
+        ?.filter((concept: OerConceptInfo) => !removedConcepts?.includes(concept));
+*/
 
       const updatedCollection = {
-        ...collections[idCollection],
+        ...collections[collectionIndex],
         oers: updatedCollectionOers,
+        conceptsSelected: updatedConceptsSelected,
       };
 
-      updatedCollections[idCollection] = updatedCollection;
+      updatedCollections[collectionIndex] = updatedCollection;
 
       if (hydrated) {
         addToast({
-          message: `OER succesfully deleted from "${collections[idCollection]?.name}" collection.`,
+          message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
           type: 'success',
+        });
+
+        return new Promise((resolve) => {
+          setCollections(updatedCollections);
+          //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
+          resolve();
         });
       }
 
-      return new Promise((resolve) => {
-        setCollections(updatedCollections);
-        resolve();
-      });
+
     } catch (error) {
       addToast({
-        message: `OER deleting failed with this error: ${error}`,
+        message: `${error}`,
         type: 'error',
       });
     }
@@ -273,19 +315,31 @@ export const CollectionsProvider = ({ children }: any) => {
     collectionId: number,
     concepts: OerConceptInfo[]
   ): Promise<void> => {
-    // Trova la collezione corrispondente in collections
-    const updatedCollections = collections.map((collection) => {
-      if (collection.id === collectionId) {
-        return {
-          ...collection,
-          conceptsSelected: concepts,
-        };
-      }
-      return collection;
-    });
+    try {
+      // Find the collection with the given ID
+      const updatedCollections = collections.map((collection) => {
+        if (collection.id === collectionId) {
+          return {
+            ...collection,
+            conceptsSelected: concepts,
+          };
+        }
+        return collection;
+      });
 
-    // Aggiorna lo stato globale delle collezioni con i nuovi concetti selezionati
-    setCollections(updatedCollections);
+      // Update the collections state with new selected concepts
+      //setCollections(updatedCollections);
+      return new Promise((resolve) => {
+        setCollections(updatedCollections);
+        resolve();
+      });
+    } catch (error) {
+      addToast({
+        message: `${error}`,
+        type: 'error',
+      });
+    }
+
   };
 
   return (

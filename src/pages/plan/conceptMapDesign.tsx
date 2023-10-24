@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import { useState } from 'react';
 import { AiOutlineArrowRight } from 'react-icons/ai';
-import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';

@@ -2,7 +2,7 @@
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { CollectionProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModal';
@@ -17,20 +17,28 @@ type ResourceCardsListProps = {
   itemsPerPage: number;
   collectionColor?: string;
   isResourcePage?: boolean;
+  handleDeleteButtonClick?: (
+    collectionIndex: number,
+    idOer: number,
+  ) => Promise<void>;
   deleteResourceFromCollection?: (
     idCollection: number,
     idOer: number
   ) => Promise<void>;
+  collectionIndex?: number;
+  setViewChanged?: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function ResourceCardsList({
   oers,
-  collection,
+  //collection,
   isNormalSizeCard,
   itemsPerPage,
   collectionColor,
   isResourcePage,
-  deleteResourceFromCollection,
+  //deleteResourceFromCollection,
+  handleDeleteButtonClick,
+  collectionIndex,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,11 +60,13 @@ export default function ResourceCardsList({
   };
   /////////////////////////////////////////////////////////////
 
-  const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
+  /*const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
     if (deleteResourceFromCollection) {
       deleteResourceFromCollection(idCollection, idOer);
     }
-  };
+  }; */
+
+
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -77,7 +87,6 @@ export default function ResourceCardsList({
                       e.preventDefault();
                       onOpen();
                       // handleOpenCardInfoModal();
-
                       setOerById(oer);
                     }}
                     as="button"
@@ -93,12 +102,12 @@ export default function ResourceCardsList({
                       _hover={{ bg: 'gray.300' }}
                       onClick={(e) => {
                         e.preventDefault();
-                        if (collection) {
-                          handleDeleteButtonClick(collection.id, oer.id);
+                        if (handleDeleteButtonClick && collectionIndex && collectionIndex >= 0) { //I don't know why, but at the moment doesn't work if collectionIndex could be undefined and collectionIndex = 0.
+                          handleDeleteButtonClick(collectionIndex, oer.id);
                         }
                       }}
-                      //position="absolute"
-                      //right={'0px'}
+                    //position="absolute"
+                    //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>
