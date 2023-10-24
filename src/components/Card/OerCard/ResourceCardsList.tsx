@@ -19,7 +19,7 @@ type ResourceCardsListProps = {
   isResourcePage?: boolean;
   handleDeleteButtonClick?: (
     collectionIndex: number,
-    idOer: number,
+    idOer: number
   ) => Promise<void>;
   deleteResourceFromCollection?: (
     idCollection: number,
@@ -66,8 +66,6 @@ export default function ResourceCardsList({
     }
   }; */
 
-
-
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
 
@@ -102,12 +100,17 @@ export default function ResourceCardsList({
                       _hover={{ bg: 'gray.300' }}
                       onClick={(e) => {
                         e.preventDefault();
-                        if (handleDeleteButtonClick && collectionIndex && collectionIndex >= 0) { //I don't know why, but at the moment doesn't work if collectionIndex could be undefined and collectionIndex = 0.
+                        if (
+                          handleDeleteButtonClick &&
+                          collectionIndex &&
+                          collectionIndex >= 0
+                        ) {
+                          //I don't know why, but at the moment doesn't work if collectionIndex could be undefined and collectionIndex = 0.
                           handleDeleteButtonClick(collectionIndex, oer.id);
                         }
                       }}
-                    //position="absolute"
-                    //right={'0px'}
+                      //position="absolute"
+                      //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>

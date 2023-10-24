@@ -92,7 +92,6 @@ export default function CollectionView({
     );
   };
 
-
   // function to handle the click on the delete button of a resource
   /*const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
     if (deleteResourceFromCollection) {
@@ -145,7 +144,8 @@ export default function CollectionView({
               deleteResourceFromCollection={deleteResourceFromCollection}
               handleDeleteButtonClick={handleDeleteResource}
               collectionIndex={collectionIndex}
-            />)}
+            />
+          )}
           <Flex justifyContent="center" padding="5">
             <AddResourcesButton
               text="Add Resources ..."
@@ -162,7 +162,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-      //justifyContent="center"
+        //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip

@@ -79,12 +79,17 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-  const handleDeleteResource = async (collectionIndex: number, idOer: number) => {
+  const handleDeleteResource = async (
+    collectionIndex: number,
+    idOer: number
+  ) => {
     try {
-      alert("sono in handleDeleteResource");
+      alert('sono in handleDeleteResource');
       await deleteResourceFromCollection(collectionIndex, idOer);
-      console.log(`delete resource ${idOer} from collection ${collectionIndex}`);
-      setOersById(prevOers => prevOers.filter(oer => oer.id !== idOer));
+      console.log(
+        `delete resource ${idOer} from collection ${collectionIndex}`
+      );
+      setOersById((prevOers) => prevOers.filter((oer) => oer.id !== idOer));
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +97,6 @@ const Home = (props: DiscoverPageProps) => {
 
   // recover all the oers of a collection
   useEffect(() => {
-
     if (collections?.length > 0) {
       setViewChanged(true);
       try {
@@ -135,7 +139,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

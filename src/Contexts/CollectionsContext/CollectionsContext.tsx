@@ -18,10 +18,7 @@ type AddResourceFunction = (
   collectionId: number,
   resource: OerInCollectionProps
 ) => Promise<void>;
-type DeleteCollectionFunction = (
-  id: number,
-  name: string,
-) => Promise<void>;
+type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
 type SelectedConceptsFunction = (
   collectionId: number,
   concepts: OerConceptInfo[]
@@ -115,10 +112,7 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-  const deleteCollection = async (
-    id: number,
-    name: string
-  ): Promise<void> => {
+  const deleteCollection = async (id: number, name: string): Promise<void> => {
     try {
       const updatedCollections = collections.filter(
         (collection: CollectionProps) => collection.id !== id
@@ -240,23 +234,28 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const deleteResourceFromCollection = async (
     collectionIndex: number,
-    idOer: number,
+    idOer: number
   ): Promise<void> => {
     try {
-
       const updatedCollections = [...collections];
 
-      if (!updatedCollections[collectionIndex] || !updatedCollections[collectionIndex]?.oers) {
-        throw new Error(`Collection with ID ${collectionIndex} doesn't exist or doesn't have any OERs.`);
+      if (
+        !updatedCollections[collectionIndex] ||
+        !updatedCollections[collectionIndex]?.oers
+      ) {
+        throw new Error(
+          `Collection with ID ${collectionIndex} doesn't exist or doesn't have any OERs.`
+        );
       }
 
       const updatedCollectionOers = updatedCollections[
         collectionIndex
       ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
 
-      console.log("oers: " + updatedCollectionOers?.map((oer: OerInCollectionProps) =>
-        oer.title
-      ));
+      console.log(
+        'oers: ' +
+          updatedCollectionOers?.map((oer: OerInCollectionProps) => oer.title)
+      );
 
       const possibleConceptsSelected = collections[
         collectionIndex
@@ -264,12 +263,12 @@ export const CollectionsProvider = ({ children }: any) => {
         oer.concepts?.map((concept: OerConceptInfo) => concept);
       });
 
-      console.log("possibleConceptsSelected: " + possibleConceptsSelected);
+      console.log('possibleConceptsSelected: ' + possibleConceptsSelected);
 
       const updatedConceptsSelected = updatedCollections[
         collectionIndex
-      ]?.conceptsSelected?.filter((concept: any) =>
-        possibleConceptsSelected?.includes(concept)
+      ]?.conceptsSelected?.filter(
+        (concept: any) => possibleConceptsSelected?.includes(concept)
       );
 
       /*const removedConcepts = collections[collectionIndex]?.oers
@@ -300,8 +299,6 @@ export const CollectionsProvider = ({ children }: any) => {
           resolve();
         });
       }
-
-
     } catch (error) {
       addToast({
         message: `${error}`,
@@ -339,7 +336,6 @@ export const CollectionsProvider = ({ children }: any) => {
         type: 'error',
       });
     }
-
   };
 
   return (
