@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  //Flex,
   Menu,
   MenuButton,
   MenuItem,
@@ -12,12 +11,6 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
-/*import {
-    CollectionProps,
-} from '../../types/encoreElements';*/
-/*import {
-    useCollectionsContext
-} from '../CollectionsContext/CollectionsContext';*/
 
 export type onDataType = number | string;
 type ArrayProps = {
@@ -32,6 +25,7 @@ type CollectionMenuProps = {
   data: ArrayProps[]; // Array di dati da scorrere nel menu
   options?: string[] | undefined;
   onData?: (data: string[] | number[]) => void;
+  onSelectionChange?: (selectedItem: number) => void;
 };
 
 export default function CustomDropDownMenu({
@@ -39,13 +33,13 @@ export default function CustomDropDownMenu({
   data, // Usa il prop data per popolare il menu
   options,
   onData,
+  onSelectionChange,
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState(initialTitle);
 
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
-  //const { collections } = useCollectionsContext();
   const hydrated = useHasHydrated();
 
   const handleData = () => {
@@ -53,8 +47,9 @@ export default function CustomDropDownMenu({
       onData(selectedOptions);
     }
   };
-  const handleMenuItemClick = (item: ArrayProps) => {
+  const handleMenuItemClick = (item: ArrayProps, index: number) => {
     //setSelectedItem(item.name);
+    if (onSelectionChange)    onSelectionChange(index);
     setMenuTitle(item.name);
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
   };
@@ -77,7 +72,6 @@ export default function CustomDropDownMenu({
           <MenuButton
             as={Button}
             rightIcon={<ChevronDownIcon />}
-            //w={buttonWidth}
             w="100%"
           >
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
@@ -96,7 +90,7 @@ export default function CustomDropDownMenu({
           <MenuList>
             {hydrated &&
               data?.map((item: ArrayProps, index: number) => (
-                <MenuItem key={index} onClick={() => handleMenuItemClick(item)}>
+                <MenuItem key={index} onClick={() => handleMenuItemClick(item, index)}>
                   <Text>{item.name}</Text>
                 </MenuItem>
               ))}
