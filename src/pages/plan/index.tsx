@@ -106,7 +106,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
       <SideBar pagePath={router.pathname} />
 
       <Box ml="200px" py="115px" pl="40px" w="full" h="100vh" bg="background">
-      
         <Box w="100%" h="100%">
           <Flex
             w="100%"
@@ -273,7 +272,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Box>
             </Flex>
           )}
-        
         </Box>
       </Box>
     </Flex>

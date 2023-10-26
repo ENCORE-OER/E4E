@@ -49,7 +49,7 @@ export default function CustomDropDownMenu({
   };
   const handleMenuItemClick = (item: ArrayProps, index: number) => {
     //setSelectedItem(item.name);
-    if (onSelectionChange)    onSelectionChange(index);
+    if (onSelectionChange) onSelectionChange(index);
     setMenuTitle(item.name);
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
   };
@@ -69,11 +69,7 @@ export default function CustomDropDownMenu({
           onOpen={handleToggleMenu}
           onClose={handleToggleMenu}
         >
-          <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-            w="100%"
-          >
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%">
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
             <Text align="left" noOfLines={1}>
               {
@@ -90,7 +86,10 @@ export default function CustomDropDownMenu({
           <MenuList>
             {hydrated &&
               data?.map((item: ArrayProps, index: number) => (
-                <MenuItem key={index} onClick={() => handleMenuItemClick(item, index)}>
+                <MenuItem
+                  key={index}
+                  onClick={() => handleMenuItemClick(item, index)}
+                >
                   <Text>{item.name}</Text>
                 </MenuItem>
               ))}

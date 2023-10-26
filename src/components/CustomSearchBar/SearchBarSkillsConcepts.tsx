@@ -8,9 +8,7 @@ import {
 } from '@choc-ui/chakra-autocomplete';
 import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../utils/utils';
-import {
-  OerInCollectionProps,
-} from '../../types/encoreElements';
+import { OerInCollectionProps } from '../../types/encoreElements';
 
 interface Tag {
   label: string;
@@ -76,20 +74,20 @@ export default function SearchBarPathDesign({
 
   const renderSkillAndConceptItems = () => {
     const uniqueItems = new Set(); // Utilizza un Set per evitare duplicati
-  
+
     hydrated &&
-      oers?.forEach((oer:OerInCollectionProps) => {
+      oers?.forEach((oer: OerInCollectionProps) => {
         oer?.skills?.forEach((skill) => {
           const skillLabel = skill.label;
           uniqueItems.add(skillLabel);
         });
-  
+
         oer?.concepts?.forEach((concept) => {
           const conceptLabel = concept.label;
           uniqueItems.add(conceptLabel);
         });
       });
-  
+
     return (
       <AutoCompleteList>
         {[...uniqueItems].map((item) => (
