@@ -1,4 +1,5 @@
 import axiosCreate, { AxiosInstance, AxiosResponse } from 'axios';
+import { Word } from 'react-wordcloud';
 import { v4 } from 'uuid';
 import { EncoreConceptMap } from '../types/encore';
 import {
@@ -8,7 +9,7 @@ import {
   OerMediaTypeInfo,
   OerProps,
   OerSkillInfo,
-  OerSubjectInfo,
+  OerSubjectInfo
 } from '../types/encoreElements';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
 
@@ -125,6 +126,10 @@ export class APIV2 {
     );
   }
 
+
+ 
+
+  
   async getConceptMapOers(
     filteredOers: OerProps
   ): Promise<AxiosResponse<EncoreConceptMap>> {
@@ -216,6 +221,23 @@ export class APIV2 {
       throw error;
     }
   }
+
+
+  // ?? here introduce the API to retrieve the concepts occurriences from the set of OERs
+  
+ // https://encore-db.grial.eu/api/oer_concept_count/?oer_ids=101866&oer_ids=109505&oer_ids=97314&oer_ids=84058
+
+ async getConceptsWords(oers: number[]): Promise<Word[]> {
+  try {
+    const transformedParams = oers.map((id) => `oer_ids=${id}`).join('&');
+    const apiUrl = `https://encore-db.grial.eu/api/oer_concept_count/?${transformedParams}`;
+   const resp = await axiosNoCookie.get(apiUrl);
+   return resp.data?.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 
   async getOerById(id_oer: number): Promise<any> {
     try {
