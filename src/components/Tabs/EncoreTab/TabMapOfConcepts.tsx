@@ -1,29 +1,29 @@
-import { Stack, Text } from '@chakra-ui/react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Stack, Tag, Text } from '@chakra-ui/react';
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { TagCloud } from 'react-tagcloud';
 import 'reactflow/dist/style.css';
-import { APIV2 } from '../../../data/api';
-
-
-
-import { select } from 'd3';
-import ReactWordcloud, { Callbacks, Word } from 'react-wordcloud';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { APIV2 } from '../../../data/api';
 import { OerConceptInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 
 
-
 export type TabMapOfConceptsProps = {};
+
+
+type Tag = {
+  value: string;
+  count: number;
+}
+
+
 
 export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
-  const [words, setWords] = useState<Word[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-
-  const [selectedWord, setSelectedWord] = useState<string | null>();
-
-
 
 
   useEffect(() => {
@@ -36,12 +36,14 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
 
         const resultArray = Object.entries(respAPI).map(([text, value]) => ({ text, value }));
 
-        const wordArray = resultArray.map(({ text, value }) => ({
-          text: String(text),
-          value: Number(value),
-        }));
+        const tagsArray = resultArray
+          .map(({ text, value }) => ({
+            value: String(text),
+            count: Number(value),
+          }))
+          .filter((tag) => tag.count > 6);
 
-        setWords(wordArray);
+        setTags(tagsArray);
       } catch (err) {
         alert('ERROR EXTRACTING THE CONCEPTS:' + err);
       }
@@ -52,46 +54,57 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     }
   }, [API, filtered]);
 
+
+  const getBackgroundColor = (value: number) => {
+    // Define a color mapping based on the size of the tag value
+    const colorMap = {
+      small: '#e9e6ed',
+      medium: '#d3cddb',
+      large: '#beb4c9',
+    };
+
+    // Determine the size category based on the value length
+    let sizeCategory: string;
+    if (value < 5) {
+      sizeCategory = 'small';
+    } else if (value < 10) {
+      sizeCategory = 'medium';
+    } else {
+      sizeCategory = 'large';
+    }
+
+
+    // Get the background color from the color mapping
+    return colorMap[sizeCategory as keyof typeof colorMap];
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const options: any = {
-    colors: ["#25044a", "#2a0554", "#491f78", "#5d3887"],
-    enableTooltip: true,
-    deterministic: true,
-    fontFamily: "nunito",
-    fontSizes: [15, 70],
-    fontStyle: "normal",
-    fontWeight: "normal",
-    padding: 1,
-    rotations: 3,
-    rotationAngles: [0, 90],
-    scale: "sqrt",
-    spiral: "archimedean",
-    transitionDuration: 1000
+  /* const options: any = {
+     colors: ["#25044a", "#2a0554", "#491f78", "#5d3887"],
+     enableTooltip: true,
+     deterministic: true,
+     fontFamily: "nunito",
+     fontSizes: [15, 70],
+     fontStyle: "normal",
+     fontWeight: "normal",
+     padding: 1,
+     rotations: 3,
+     rotationAngles: [0, 90],
+     scale: "sqrt",
+     spiral: "archimedean",
+     transitionDuration: 1000
+   };
+ */
+
+
+  const handleContainerClick = (event: any) => {
+    if (event.target === event.currentTarget) {
+      // Handle click on the white space
+      // Reload the current page
+      window.location.reload();
+    }
   };
 
-
-
-  const callbacks: Callbacks = {
-    onWordClick: (word: Word, event: any) => {
-      const element = event.target;
-      const text = select(element).text();
-
-      setSelectedWord(text);
-      console.log("selected word: " + selectedWord);
-
-      // Filter the `filtered` array based on the selected word
-      const newFilteredObjects = filtered.filter((oer: { concepts: OerConceptInfo[] }) => {
-        return oer.concepts.some((concept) => concept.label === text);
-      });
-
-      // Update the main DiscoveryContext with the new filtered OERs
-      setFiltered(newFilteredObjects);
-
-    },
-    getWordTooltip: function (word: Word): void {
-      console.log("word selected " + word);
-    },
-  };
 
 
   return (
@@ -109,13 +122,51 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       {
         filtered.length > 0 && hydrated && (
           <div>
-            <div style={{ height: 600, width: 800 }}>
-              <ReactWordcloud options={options} words={words} callbacks={callbacks} />
+            <div style={{ height: 600, width: 800 }} onClick={handleContainerClick}>
+
+              <TagCloud
+                tags={tags}
+                minSize={12}
+                maxSize={30}
+                colorOptions={{ luminosity: 'light' }}
+                onClick={(tag: Tag) => {
+                  // Filter the `filtered` array based on the selected word
+                  const newFilteredObjects = filtered.filter((oer: { concepts: OerConceptInfo[] }) => {
+                    return oer.concepts.some((concept) => concept.label === tag.value);
+                  });
+
+                  // Update the main DiscoveryContext with the new filtered OERs
+                  setFiltered(newFilteredObjects);
+                  // Handle tag click event here
+                }
+                }
+                renderer={(tag: Tag, size: number) => (
+                  <span
+                    style={{
+                      fontSize: size,
+                      padding: '4px 8px',
+                      margin: 4,
+                      backgroundColor: getBackgroundColor(tag.count),
+                      color: '#51366e',
+                      borderRadius: '4px',
+                      display: 'inline-block',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {tag.value}
+                  </span>
+
+                )}
+              />
+
             </div>
           </div>
 
+
+
         )
       }
+
     </>
 
   );

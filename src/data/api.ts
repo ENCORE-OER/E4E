@@ -1,5 +1,4 @@
 import axiosCreate, { AxiosInstance, AxiosResponse } from 'axios';
-import { Word } from 'react-wordcloud';
 import { v4 } from 'uuid';
 import { EncoreConceptMap } from '../types/encore';
 import {
@@ -27,6 +26,12 @@ const axiosNoCookie = axiosCreate.create({
     'Content-Type': 'application/json',
   },
 });
+
+
+type Tag = {
+  value: string;
+  count: number;
+}
 
 export class APIV2 {
   axios: AxiosInstance;
@@ -227,7 +232,7 @@ export class APIV2 {
   
  // https://encore-db.grial.eu/api/oer_concept_count/?oer_ids=101866&oer_ids=109505&oer_ids=97314&oer_ids=84058
 
- async getConceptsWords(oers: number[]): Promise<Word[]> {
+ async getConceptsWords(oers: number[]): Promise<Tag[]> {
   try {
     const transformedParams = oers.map((id) => `oer_ids=${id}`).join('&');
     const apiUrl = `https://encore-db.grial.eu/api/oer_concept_count/?${transformedParams}`;
