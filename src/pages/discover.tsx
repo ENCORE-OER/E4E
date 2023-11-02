@@ -22,6 +22,7 @@ import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
 import OerCardsSorting from '../components/Sorting/OerCardsSorting';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
+
 import {
   OerAudienceInfo,
   OerDomainInfo,
@@ -330,7 +331,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-                //justify="space-between"
+              //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
