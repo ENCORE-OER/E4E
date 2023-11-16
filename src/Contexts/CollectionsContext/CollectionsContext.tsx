@@ -100,6 +100,7 @@ export const CollectionsProvider = ({ children }: any) => {
           //console.log('NEW COLLECTION: ' + newCollection.name);
           return new Promise((resolve) => {
             setCollections([...collections, newCollection]);
+            //console.log("I'm triggering collections");
             resolve();
           });
         }
@@ -123,6 +124,7 @@ export const CollectionsProvider = ({ children }: any) => {
       });
       return new Promise((resolve) => {
         setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
         resolve();
       });
     } catch (error) {
@@ -183,45 +185,10 @@ export const CollectionsProvider = ({ children }: any) => {
         });
       }
 
-      /*const updatedCollections = collections?.map(
-        (collection: CollectionProps) => {
-          //console.log('COLLECTION --> ' + collection);
-          if (collection.id === collectionId) {
-            const isOerAlreadySaved = collection.oers?.some(
-              (item: any) => item.idOer === resource.idOer
-            );
-            //console.log('Did you find the oer?  ' + isOerAlreadySaved);
-            if (!isOerAlreadySaved) {
-              // create a new object representing the updated collection
-              const collectionUpdated = {
-                ...collection, // Copy all fields of the existing 'collection' object using the spread operator.
-                oers: [...collection.oers, resource], // Adding new resource to the oers list of the collection
-              };
-              //addToast({
-              //  message: `Resource added to "${collections[indexCollectionClicked]?.name}" collection.`,
-              //  status: 'success'
-              //});
-              return collectionUpdated;
-            } else {
-              addToast({
-                message: `The oer is already saved into "${collection.name}" collection!`,
-                status: 'error'
-              });
-              return collection;
-            }
-          } else {  // problems because the others collections will be always return, so we'll have a lot of "collection doesn't exist" message
-            //addToast({
-            //  message: "The collection doesn't exist!",
-            //  status: 'error'
-            //});
-            return collection;
-          }
-        }
-      );*/
-
       //console.log(updatedCollections);
       return new Promise((resolve) => {
         setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
         resolve();
       });
     } catch (error) {
@@ -244,60 +211,40 @@ export const CollectionsProvider = ({ children }: any) => {
         !updatedCollections[collectionIndex]?.oers
       ) {
         throw new Error(
-          `Collection with ID ${collectionIndex} doesn't exist or doesn't have any OERs.`
+          `Collection {with ID ${collectionIndex}} doesn't exist or doesn't have any OERs.`
         );
-      }
+      } else {
 
-      const updatedCollectionOers = updatedCollections[
-        collectionIndex
-      ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
+        const updatedCollectionOers = updatedCollections[
+          collectionIndex
+        ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
 
-      console.log(
-        'oers: ' +
-          updatedCollectionOers?.map((oer: OerInCollectionProps) => oer.title)
-      );
+        //console.log(
+        // 'oers: ' +
+        //  updatedCollectionOers?.map((oer: OerInCollectionProps) => oer.title)
+        //);
 
-      const possibleConceptsSelected = collections[
-        collectionIndex
-      ]?.oers?.flatMap((oer: OerInCollectionProps) => {
-        oer.concepts?.map((concept: OerConceptInfo) => concept);
-      });
+        const updatedCollection = {
+          ...collections[collectionIndex],
+          oers: updatedCollectionOers,
+          //conceptsSelected: updatedConceptsSelected,
+        };
 
-      console.log('possibleConceptsSelected: ' + possibleConceptsSelected);
+        updatedCollections[collectionIndex] = updatedCollection;
 
-      const updatedConceptsSelected = updatedCollections[
-        collectionIndex
-      ]?.conceptsSelected?.filter(
-        (concept: any) => possibleConceptsSelected?.includes(concept)
-      );
+        if (hydrated) {
+          addToast({
+            message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
+            type: 'success',
+          });
 
-      /*const removedConcepts = collections[collectionIndex]?.oers
-        ?.find((oer) => oer.id === idOer)
-        ?.concepts?.map((concept: OerConceptInfo) => concept);
-
-      const updatedConceptsSelected = collections[collectionIndex]?.conceptsSelected
-        ?.filter((concept: OerConceptInfo) => !removedConcepts?.includes(concept));
-*/
-
-      const updatedCollection = {
-        ...collections[collectionIndex],
-        oers: updatedCollectionOers,
-        conceptsSelected: updatedConceptsSelected,
-      };
-
-      updatedCollections[collectionIndex] = updatedCollection;
-
-      if (hydrated) {
-        addToast({
-          message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
-          type: 'success',
-        });
-
-        return new Promise((resolve) => {
-          setCollections(updatedCollections);
-          //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
-          resolve();
-        });
+          return new Promise((resolve) => {
+            setCollections(updatedCollections);
+            //console.log("I'm triggering collections");
+            //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
+            resolve();
+          });
+        }
       }
     } catch (error) {
       addToast({
@@ -328,6 +275,7 @@ export const CollectionsProvider = ({ children }: any) => {
       //setCollections(updatedCollections);
       return new Promise((resolve) => {
         setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
         resolve();
       });
     } catch (error) {

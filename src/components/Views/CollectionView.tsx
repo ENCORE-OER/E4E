@@ -14,7 +14,7 @@ import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { MultiValue } from 'react-select';
-import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
+import { OerItemToDeleteProps } from '../../pages/resources';
 import icon_infocircle from '../../public/Icons/icon_infocircle.svg';
 import {
   CollectionProps,
@@ -26,6 +26,7 @@ import { useHasHydrated } from '../../utils/utils';
 import AddResourcesButton from '../Buttons/AddResourcesButton';
 import DownloadButton from '../Buttons/DownloadButton';
 import ResourceCardsList from '../Card/OerCard/ResourceCardsList';
+import DeleteAlertDialog from '../Modals/DeleteAlertDialog';
 import SelectConcepts from '../Selects/SelectConcepts';
 import OerCardsSorting from '../Sorting/OerCardsSorting';
 
@@ -40,9 +41,19 @@ interface CollectionViewProps extends BoxProps {
     collectionIndex: number,
     idOer: number
   ) => Promise<void>;
-  deleteResourceFromCollection?: (
-    idCollection: number,
+  isNewDataLoaded?: boolean;
+  setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
+  isDeleteAlertDialogOpen: boolean;
+  onCloseDeleteAlertDialog: () => void;
+  handleDeleteButtonClick: (
+    collectionIndex: number,
     idOer: number
+  ) => void;
+  OerItemToDelete: OerItemToDeleteProps | null;
+  setOerItemToDelete: Dispatch<SetStateAction<OerItemToDeleteProps | null>>;
+  setSelectedConceptsForCollection: (
+    collectionId: number,
+    concepts: OerConceptInfo[]
   ) => Promise<void>;
 }
 
@@ -53,17 +64,25 @@ export default function CollectionView({
   setOersById,
   viewChanged,
   setViewChanged,
-  deleteResourceFromCollection,
+
   handleDeleteResource,
+  isNewDataLoaded,
+  setIsNewDataLoaded,
+  setSelectedConceptsForCollection,
+  // handle deleting a resource
+  isDeleteAlertDialogOpen,
+  onCloseDeleteAlertDialog,
+  handleDeleteButtonClick,
+  OerItemToDelete,
+  setOerItemToDelete,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
 
-  const { setSelectedConceptsForCollection } = useCollectionsContext();
-
   const label_tooltip =
     'Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths';
+
 
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
@@ -79,6 +98,7 @@ export default function CollectionView({
     setUniqueConcepts(Array.from(uniqueConceptsSet));
   };
 
+
   const handleConceptsChange = (
     selectedOptions: MultiValue<OerConceptInfo>
     //actionMeta: ActionMeta<OerConceptInfo>
@@ -92,16 +112,51 @@ export default function CollectionView({
     );
   };
 
-  // function to handle the click on the delete button of a resource
-  /*const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
-    if (deleteResourceFromCollection) {
-      deleteResourceFromCollection(idCollection, idOer);
-    }
-  };*/
+
+  useEffect(() => {
+    //alert("CollectionView");
+
+    setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
+    //console.log("I'm triggering viewChanged to true");
+    /*if (setIsNewDataLoaded) {
+      setIsNewDataLoaded(true);
+    }*/
+    extractUniqueConcepts(collections[collectionIndex]);
+    //console.log("I'm extracting unique concepts after collectionIndex change");
+    //console.log("COLLECTION INDEX: " + collectionIndex);
+    //console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
+
+    // "collections" is a dependency because we need to extract the unique concepts for the selected collection 
+    // But in this way we also reset the sorting of the OERs. 
+  }, [collectionIndex]);
 
   useEffect(() => {
     extractUniqueConcepts(collections[collectionIndex]);
-  }, [collectionIndex, collections]);
+    //console.log("I'm extracting unique concepts after deleting a resource");
+  }, [collections])
+
+  // I have to decide where to put this useEffect. Here or in resources.tsx
+  useEffect(() => {
+
+    if (collectionIndex >= 0 && oersById?.length > 0) {
+
+      // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
+      if (setIsNewDataLoaded !== undefined) {
+        setIsNewDataLoaded(true);
+        //console.log("I'm triggering isNewDataLoaded to true");
+      }
+
+      // I have to update the conceptsSelected array of the collection with the concepts of the oers that are in the collection after deleting a resource
+      const remainingConcepts = collections[collectionIndex]?.conceptsSelected?.filter((concept: OerConceptInfo) => {
+        return oersById?.some((oer: OerProps) =>
+          oer.concepts?.map((oerConcept: OerConceptInfo) => oerConcept.id).includes(concept.id)
+        );
+      });
+
+      setSelectedConceptsForCollection(collections[collectionIndex]?.id, remainingConcepts);
+    }
+
+  }, [oersById]);
 
   return (
     <Box {...rest}>
@@ -133,16 +188,16 @@ export default function CollectionView({
           </Flex>
         </HStack>
         <VStack>
-          {hydrated && (
+          {hydrated && isNewDataLoaded && (
             <ResourceCardsList
-              oers={oersById}
-              collection={collections[collectionIndex]}
+              oersById={oersById}
+              //collection={collections[collectionIndex]}
               isNormalSizeCard={true}
               itemsPerPage={5}
               collectionColor={collections[collectionIndex]?.color}
               isResourcePage={true}
-              deleteResourceFromCollection={deleteResourceFromCollection}
-              handleDeleteButtonClick={handleDeleteResource}
+              // deleteResourceFromCollection={deleteResourceFromCollection}
+              handleDeleteButtonClick={handleDeleteButtonClick}
               collectionIndex={collectionIndex}
             />
           )}
@@ -162,7 +217,7 @@ export default function CollectionView({
         display="flex"
         flexDirection="column"
         h="full"
-        //justifyContent="center"
+      //justifyContent="center"
       >
         <Flex gap={1}>
           <Tooltip
@@ -200,6 +255,25 @@ export default function CollectionView({
           )}
         </Box>
       </Box>
+
+      <DeleteAlertDialog
+        isOpen={isDeleteAlertDialogOpen}
+        onClose={onCloseDeleteAlertDialog}
+        onConfirm={() => {
+          if (OerItemToDelete) {
+            handleDeleteResource(
+              OerItemToDelete.collectionIndex,
+              OerItemToDelete.oer_id,
+            );
+            setOerItemToDelete(null);
+          }
+          onCloseDeleteAlertDialog();
+        }}
+        item_name={OerItemToDelete ? OerItemToDelete.oer_title : ''}
+        modalText={`You have selected one or more concepts referred to this Oer.
+      If you delete it, the concepts could be removed.\n
+      Are you sure you want to delete`}
+      />
     </Box>
   );
 }

@@ -11,7 +11,7 @@ import SingleResourceCard from './SingleResourceCard';
 import SmallSingleResourceCard from './SmallSingleResourceCard';
 
 type ResourceCardsListProps = {
-  oers: OerProps[];
+  oersById: OerProps[];
   collection?: CollectionProps;
   isNormalSizeCard: boolean;
   itemsPerPage: number;
@@ -20,23 +20,22 @@ type ResourceCardsListProps = {
   handleDeleteButtonClick?: (
     collectionIndex: number,
     idOer: number
-  ) => Promise<void>;
-  deleteResourceFromCollection?: (
+  ) => void;
+  /*deleteResourceFromCollection?: (
     idCollection: number,
     idOer: number
-  ) => Promise<void>;
+  ) => Promise<void>;*/
   collectionIndex?: number;
   setViewChanged?: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function ResourceCardsList({
-  oers,
+  oersById: oers,
   //collection,
   isNormalSizeCard,
   itemsPerPage,
   collectionColor,
   isResourcePage,
-  //deleteResourceFromCollection,
   handleDeleteButtonClick,
   collectionIndex,
 }: ResourceCardsListProps) {
@@ -51,20 +50,24 @@ export default function ResourceCardsList({
   };
 
   // handle pagination of the oers
-  /////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
   //const itemsPerPage = 5;
   const totalPages = Math.ceil(oers.length / itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-  /////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
 
-  /*const handleDeleteButtonClick = (idCollection: number, idOer: number) => {
-    if (deleteResourceFromCollection) {
-      deleteResourceFromCollection(idCollection, idOer);
-    }
-  }; */
+
+  /*useEffect(() => {
+    console.log("--- ResourceCardsList --- \n collectionIndex-1: ", collectionIndex);
+    console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
+  }, []);
+
+  useEffect(() => {
+    console.log("--- ResourceCardsList --- \n collectionIndex-2: ", collectionIndex);
+  }, [collectionIndex])*/
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -100,17 +103,20 @@ export default function ResourceCardsList({
                       _hover={{ bg: 'gray.300' }}
                       onClick={(e) => {
                         e.preventDefault();
+                        //alert("Click su delete");
+                        //console.log("I'm triggering delete resource button");
                         if (
                           handleDeleteButtonClick &&
-                          collectionIndex &&
-                          collectionIndex >= 0
+                          collectionIndex !== undefined &&
+                          collectionIndex > -1
                         ) {
-                          //I don't know why, but at the moment doesn't work if collectionIndex could be undefined and collectionIndex = 0.
                           handleDeleteButtonClick(collectionIndex, oer.id);
-                        }
+                        } //else {
+                        //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
+                        //}
                       }}
-                      //position="absolute"
-                      //right={'0px'}
+                    //position="absolute"
+                    //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>

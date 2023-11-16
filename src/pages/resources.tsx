@@ -24,31 +24,45 @@ import CollectionView from '../components/Views/CollectionView';
 import { APIV2 } from '../data/api';
 import {
   CollectionProps,
+  OerConceptInfo,
   OerInCollectionProps,
-  OerProps,
+  OerProps
 } from '../types/encoreElements';
+import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
+export interface OerItemToDeleteProps {
+  collectionIndex: number;
+  oer_id: number;
+  oer_title: string;
+}
+
 const Home = (props: DiscoverPageProps) => {
-  const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
+  const router = useRouter();
   const { user } = useUser();
-  const { collections, deleteCollection, deleteResourceFromCollection } =
+  const { collections, deleteCollection, deleteResourceFromCollection, setSelectedConceptsForCollection } =
     useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
+  const { addToast } = CustomToast();
 
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
   const [collectionIndex, setCollectionIndex] = useState<number>(-1);
-  const [viewChanged, setViewChanged] = useState<boolean>(false); // used to force the re-render of the CollectionView component
+  const [viewChanged, setViewChanged] = useState<boolean>(false); // used to force the re-render of the CollectionView component when I trigger oerSortingMenu
   //const [prevCollectionIndex, setPrevCollectionIndex] = useState<number>(-1); // handle in CollectionNavItem
   const { isOpen } = useDisclosure();
+
+  // abortController to abort the fetch request when I switch collection to fast
+  const abortController = new AbortController();
+  // used to know if the data are loaded
+  const [isNewDataLoaded, setIsNewDataLoaded] = useState<boolean>(false);
 
   /*const handleAddCollection = () => {
     const nameCollection = 'Food';
@@ -66,12 +80,12 @@ const Home = (props: DiscoverPageProps) => {
     setNewCollectionModalOpen(false);
   };
 
-  const getDataOerById = async (id_oer?: number) => {
+  const getDataOerById = async (id_oer?: number, signal?: AbortSignal) => {
     const api = new APIV2(props.accessToken);
 
     if (id_oer) {
       try {
-        const oer = await api.getOerById(id_oer);
+        const oer = await api.getOerById(id_oer, signal);
         return oer[0];
       } catch (error) {
         throw error;
@@ -79,27 +93,92 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
+  // ------------------ handle deleting of a Oer ------------------
+  // handle deleting oer
+  const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
+    useState<boolean>(false);
+  const [OerItemToDelete, setOerItemToDelete] = useState<OerItemToDeleteProps | null>(
+    null
+  );
+
+  const onCloseDeleteAlertDialog = () => {
+    setIsDeleteAlertDialogOpen(false);
+  };
+
+  /*const handleDeleteOer = (
+    collectionIndex: number,
+    idOer: number,
+  ) => {
+    deleteResourceFromCollection(collectionIndex, idOer);
+  };*/
+
+  const onOpenDeleteAlertDialog = (
+    collectionIndex: number,
+    oer_id: number,
+    oer_title: string
+  ) => {
+    setIsDeleteAlertDialogOpen(true);
+    setOerItemToDelete({ collectionIndex, oer_id, oer_title });
+  };
+
   const handleDeleteResource = async (
     collectionIndex: number,
-    idOer: number
+    idOer: number,
   ) => {
+
     try {
-      alert('sono in handleDeleteResource');
       await deleteResourceFromCollection(collectionIndex, idOer);
-      console.log(
-        `delete resource ${idOer} from collection ${collectionIndex}`
-      );
+      //console.log(
+      //  `delete resource ${idOer} from collection ${collectionIndex}`
+      //);
+      while (!hydrated) {
+        console.log('hydrated: ' + hydrated);
+      }
       setOersById((prevOers) => prevOers.filter((oer) => oer.id !== idOer));
+      //console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
-      console.error(error);
+      addToast({
+        message: `${error}`,
+        type: 'error',
+      });
     }
   };
 
+  const handleDeleteButtonClick = (
+    collectionIndex: number,
+    idOer: number,
+  ) => {
+    const hasResourceAtLeastOneConceptSelected =
+      oersById.find((oer: OerProps) =>
+        oer.id === idOer
+      )?.concepts?.some((oerConcept: OerConceptInfo) => {
+        return collections[collectionIndex]?.conceptsSelected?.some((concept: OerConceptInfo) =>
+          concept.id === oerConcept.id
+        )
+      })
+    const oer_title = oersById.find((oer: OerProps) => oer.id === idOer)?.title;
+
+    if (collections[collectionIndex]?.conceptsSelected?.length > 0 && hasResourceAtLeastOneConceptSelected && oer_title) {
+      onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
+    } else {
+      handleDeleteResource(collectionIndex, idOer);
+    }
+  }
+
+  // --------------------------------------------------------------
+
   // recover all the oers of a collection
   useEffect(() => {
+
+    //alert("Resources")
+
     if (collections?.length > 0) {
-      setViewChanged(true);
+
       try {
+        //setViewChanged(true); // set to true in CollectionView 'Cause from this page we don't trigger the OerCardsSorting useEffect.
+        //console.log("--- Collection index: " + collectionIndex + " --- " + new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
+        setIsNewDataLoaded(false);
+        //console.log("I'm triggering isNewDataLoaded to false");
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers) {
             // check if the obj is undefined before to access in it
@@ -107,22 +186,35 @@ const Home = (props: DiscoverPageProps) => {
               collections[collectionIndex]?.oers?.map(
                 async (oer: OerInCollectionProps) => {
                   console.log(oer);
-                  const oerFound = await getDataOerById(oer?.id);
+                  const oerFound = await getDataOerById(oer?.id, abortController.signal);
                   return oerFound;
                 }
               )
             );
             setOersById(oerData);
+            //console.log("I'm triggering oersById");
+
+            console.log("End fetchOerData()");
+
           }
         };
 
         fetchOerData();
+
+
+        return () => {
+          abortController.abort();
+        };
         //console.log(oersById);
       } catch (error) {
-        console.error(error);
+        addToast({
+          message: `${error}`,
+          type: 'error',
+        });
       }
     }
   }, [collectionIndex]);
+
 
   return (
     <Flex w="100%" h="100%">
@@ -139,7 +231,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-          //justify="space-between"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -198,8 +290,16 @@ const Home = (props: DiscoverPageProps) => {
                 setOersById={setOersById}
                 minW={'550px'}
                 display="flex"
-                deleteResourceFromCollection={deleteResourceFromCollection}
+                isNewDataLoaded={isNewDataLoaded}
+                setIsNewDataLoaded={setIsNewDataLoaded}
+                setSelectedConceptsForCollection={setSelectedConceptsForCollection}
+                // handle deleting of a Oer with alert dialog
                 handleDeleteResource={handleDeleteResource}
+                isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
+                onCloseDeleteAlertDialog={onCloseDeleteAlertDialog}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                OerItemToDelete={OerItemToDelete}
+                setOerItemToDelete={setOerItemToDelete}
               />
             )}
           </Box>

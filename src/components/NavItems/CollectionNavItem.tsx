@@ -7,7 +7,7 @@ import {
   ReactText,
   RefObject,
   SetStateAction,
-  useState,
+  useState
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
@@ -23,6 +23,7 @@ interface CollectionNavItemProps {
   setCollectionIndex: Dispatch<SetStateAction<number>>;
   collectionIndex: number;
   deleteCollection: (id: number, name: string) => Promise<void>;
+  setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface ItemToDeleteProps {
@@ -112,14 +113,16 @@ const CollectionNavItem = ({
         borderLeft="5px"
         borderLeftColor={collection.color}
         borderLeftStyle={'solid'}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"
           _hover={{ bg: 'gray.200', borderRadius: '5px' }}
           onClick={(e) => {
             e.preventDefault();
+            //console.log("Click on CollectionNavItem");
             setCollectionIndex(index);
+            //console.log("I'm triggering collectionIndex");
             handleCollectionClick();
           }}
           cursor={'pointer'}
@@ -163,7 +166,8 @@ const CollectionNavItem = ({
           }
           onCloseDeleteAlertDialog();
         }}
-        collection_name={itemToDelete ? itemToDelete.collection_name : ''}
+        item_name={itemToDelete ? itemToDelete.collection_name : ''}
+        modalText='This collection is not empty. Are you sure you want to delete '
       />
     </>
   );
