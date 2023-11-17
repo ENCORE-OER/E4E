@@ -8,7 +8,7 @@ import {
   OerMediaTypeInfo,
   OerProps,
   OerSkillInfo,
-  OerSubjectInfo
+  OerSubjectInfo,
 } from '../types/encoreElements';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
 
@@ -27,11 +27,10 @@ const axiosNoCookie = axiosCreate.create({
   },
 });
 
-
 type Tag = {
   value: string;
   count: number;
-}
+};
 
 export class APIV2 {
   axios: AxiosInstance;
@@ -131,10 +130,6 @@ export class APIV2 {
     );
   }
 
-
- 
-
-  
   async getConceptMapOers(
     filteredOers: OerProps
   ): Promise<AxiosResponse<EncoreConceptMap>> {
@@ -227,27 +222,30 @@ export class APIV2 {
     }
   }
 
-
   // ?? here introduce the API to retrieve the concepts occurriences from the set of OERs
-  
- // https://encore-db.grial.eu/api/oer_concept_count/?oer_ids=101866&oer_ids=109505&oer_ids=97314&oer_ids=84058
 
- async getConceptsWords(oers: number[]): Promise<Tag[]> {
-  try {
-    const transformedParams = oers.map((id) => `oer_ids=${id}`).join('&');
-    const apiUrl = `https://encore-db.grial.eu/api/oer_concept_count/?${transformedParams}`;
-   const resp = await axiosNoCookie.get(apiUrl);
-   return resp.data?.data;
-  } catch (error) {
-    throw error;
-  }
-}
+  // https://encore-db.grial.eu/api/oer_concept_count/?oer_ids=101866&oer_ids=109505&oer_ids=97314&oer_ids=84058
 
-
-  async getOerById(id_oer: number): Promise<any> {
+  async getConceptsWords(oers: number[]): Promise<Tag[]> {
     try {
+      const transformedParams = oers.map((id) => `oer_ids=${id}`).join('&');
+      const apiUrl = `https://encore-db.grial.eu/api/oer_concept_count/?${transformedParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+      return resp.data?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getOerById(id_oer: number, signal?: AbortSignal): Promise<any> {
+    try {
+      const config: any = {
+        singal: signal,
+      };
+
       const resp = await axiosNoCookie.get(
-        `https://encore-db.grial.eu/api/oers/?id=${id_oer}`
+        `https://encore-db.grial.eu/api/oers/?id=${id_oer}`,
+        config
       );
 
       /*const oer = resp.data?.data.map((item: any) => item);

@@ -18,8 +18,8 @@ import {
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 
+import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../../utils/utils';
-import { useCollectionsContext } from '../../CollectionsContext/CollectionsContext';
 
 interface AddCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection

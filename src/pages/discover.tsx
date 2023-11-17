@@ -17,14 +17,10 @@ import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
-import { IconBezierCurve } from '../public/Icons/svgToIcons/iconBezierCurve';
-import { IconCalendarCheck } from '../public/Icons/svgToIcons/iconCalendarCheck';
-import { IconMedal } from '../public/Icons/svgToIcons/iconMedal';
-import { IconThumbsUp } from '../public/Icons/svgToIcons/iconThumbsUp';
 
-import SortingDropDownMenu from '../components/DropDownMenu/SortingDropDownMenu';
 import CardInfoModal from '../components/Modals/CardInfoModal';
 import Pagination from '../components/Pagination/pagination';
+import OerCardsSorting from '../components/Sorting/OerCardsSorting';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
 import {
@@ -34,7 +30,6 @@ import {
   OerProps,
   OerSkillInfo,
 } from '../types/encoreElements';
-import { SortingDropDownMenuItemProps } from '../types/encoreElements/SortingDropDownMenu';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
 type DiscoverPageProps = {
@@ -57,7 +52,7 @@ const Discover = (props: DiscoverPageProps) => {
   const [byResourceType, setByResourceType] = useState<any>(null);
 
   // items for Sorting DropDown menu
-  const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
+  /*const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
     { icon: IconCalendarCheck, name: 'Last Update' },
     { icon: IconThumbsUp, name: 'Likes' },
     { icon: IconMedal, name: 'Quality Score' },
@@ -66,7 +61,7 @@ const Discover = (props: DiscoverPageProps) => {
   ];
 
   const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
-  const [isAscending, setAscending] = useState<boolean>(true);
+  const [isAscending, setAscending] = useState<boolean>(true); */
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -239,14 +234,14 @@ const Discover = (props: DiscoverPageProps) => {
     onClose();
   };
 
-  const handleItemSortingClick = (sortingName: string) => {
+  /*const handleItemSortingClick = (sortingName: string) => {
     if (sortingName === selectedSorting) {
       setAscending(!isAscending);
     } else {
       SetSelectedSorting(sortingName);
       setAscending(true);
     }
-  };
+  }; */
 
   useEffect(() => {
     setIsLoading(true);
@@ -275,7 +270,7 @@ const Discover = (props: DiscoverPageProps) => {
   }, [router.query.searchData]);
 
   // sorting of the OERs
-  useEffect(() => {
+  /*useEffect(() => {
     setIsLoading(true);
     const sortedData = [...filtered];
     sortedData.sort((a: OerProps, b: OerProps) => {
@@ -302,7 +297,7 @@ const Discover = (props: DiscoverPageProps) => {
     setFiltered(sortedData);
 
     setIsLoading(false);
-  }, [selectedSorting, isAscending]);
+  }, [selectedSorting, isAscending]); */
 
   // redirect to home page if no resources are found
   useEffect(() => {
@@ -336,7 +331,7 @@ const Discover = (props: DiscoverPageProps) => {
               <Flex
                 w="100%"
                 justifyContent="left"
-              //justify="space-between"
+                //justify="space-between"
               >
                 <Heading fontFamily="title">
                   <Text>Discover</Text>
@@ -348,11 +343,10 @@ const Discover = (props: DiscoverPageProps) => {
                   {`${filtered?.length} resources`}
                 </Text>
                 <Flex flex="1" w="full" justifyContent="flex-end">
-                  <SortingDropDownMenu
-                    menuItemsSorting={menuItemsSorting}
-                    handleItemSortingClick={handleItemSortingClick}
-                    isAscending={isAscending}
-                    wMenu="250px"
+                  <OerCardsSorting
+                    filtered={filtered}
+                    setFiltered={setFiltered}
+                    setIsLoading={setIsLoading}
                   />
                 </Flex>
               </HStack>

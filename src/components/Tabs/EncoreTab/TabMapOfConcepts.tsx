@@ -8,33 +8,30 @@ import { APIV2 } from '../../../data/api';
 import { OerConceptInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 
-
 export type TabMapOfConceptsProps = {};
-
 
 type Tag = {
   value: string;
   count: number;
-}
+};
 
-
-
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [tags, setTags] = useState<Tag[]>([]);
   const { filtered, setFiltered } = useContext(DiscoveryContext);
 
-
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         const oers_ids: number[] = [];
         filtered.forEach((oer: { id: number }) => oers_ids.push(oer.id));
         const respAPI = await API.getConceptsWords(oers_ids);
 
-        const resultArray = Object.entries(respAPI).map(([text, value]) => ({ text, value }));
+        const resultArray = Object.entries(respAPI).map(([text, value]) => ({
+          text,
+          value,
+        }));
 
         const tagsArray = resultArray
           .map(({ text, value }) => ({
@@ -54,7 +51,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     }
   }, [API, filtered]);
 
-
   const getBackgroundColor = (value: number) => {
     // Define a color mapping based on the size of the tag value
     const colorMap = {
@@ -72,7 +68,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     } else {
       sizeCategory = 'large';
     }
-
 
     // Get the background color from the color mapping
     return colorMap[sizeCategory as keyof typeof colorMap];
@@ -96,7 +91,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
    };
  */
 
-
   const handleContainerClick = (event: any) => {
     if (event.target === event.currentTarget) {
       // Handle click on the white space
@@ -105,10 +99,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     }
   };
 
-
-
   return (
-
     <>
       <Stack spacing={0}>
         <Text color="primary">
@@ -119,58 +110,51 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       </Stack>
       <br />
       <br />
-      {
-        filtered.length > 0 && hydrated && (
-          <div>
-            <div style={{ height: 600, width: 800 }} onClick={handleContainerClick}>
+      {filtered.length > 0 && hydrated && (
+        <div>
+          <div
+            style={{ height: 600, width: 800 }}
+            onClick={handleContainerClick}
+          >
+            <TagCloud
+              tags={tags}
+              minSize={12}
+              maxSize={30}
+              colorOptions={{ luminosity: 'light' }}
+              onClick={(tag: Tag) => {
+                // Filter the `filtered` array based on the selected word
+                const newFilteredObjects = filtered.filter(
+                  (oer: { concepts: OerConceptInfo[] }) => {
+                    return oer.concepts.some(
+                      (concept) => concept.label === tag.value
+                    );
+                  }
+                );
 
-              <TagCloud
-                tags={tags}
-                minSize={12}
-                maxSize={30}
-                colorOptions={{ luminosity: 'light' }}
-                onClick={(tag: Tag) => {
-                  // Filter the `filtered` array based on the selected word
-                  const newFilteredObjects = filtered.filter((oer: { concepts: OerConceptInfo[] }) => {
-                    return oer.concepts.some((concept) => concept.label === tag.value);
-                  });
-
-                  // Update the main DiscoveryContext with the new filtered OERs
-                  setFiltered(newFilteredObjects);
-                  // Handle tag click event here
-                }
-                }
-                renderer={(tag: Tag, size: number) => (
-                  <span
-                    style={{
-                      fontSize: size,
-                      padding: '4px 8px',
-                      margin: 4,
-                      backgroundColor: getBackgroundColor(tag.count),
-                      color: '#51366e',
-                      borderRadius: '4px',
-                      display: 'inline-block',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {tag.value}
-                  </span>
-
-                )}
-              />
-
-            </div>
+                // Update the main DiscoveryContext with the new filtered OERs
+                setFiltered(newFilteredObjects);
+                // Handle tag click event here
+              }}
+              renderer={(tag: Tag, size: number) => (
+                <span
+                  style={{
+                    fontSize: size,
+                    padding: '4px 8px',
+                    margin: 4,
+                    backgroundColor: getBackgroundColor(tag.count),
+                    color: '#51366e',
+                    borderRadius: '4px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {tag.value}
+                </span>
+              )}
+            />
           </div>
-
-
-
-        )
-      }
-
+        </div>
+      )}
     </>
-
   );
 };
-
-
-

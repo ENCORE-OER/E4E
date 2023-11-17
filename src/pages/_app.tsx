@@ -8,7 +8,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
-import { CollectionsProvider } from '../components/CollectionsContext/CollectionsContext';
+import { CollectionsProvider } from '../Contexts/CollectionsContext/CollectionsContext';
 import reportWebVitals from '../reportWebVitals';
 import theme from '../styles/theme';
 

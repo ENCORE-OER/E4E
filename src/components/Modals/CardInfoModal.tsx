@@ -175,6 +175,7 @@ export default function CardInfoModal({
               showTagGreen={showTagGreen}
               mb="5"
             />
+            <HStack>{}</HStack>
             <Heading size="md" mb="5">
               {title}
             </Heading>

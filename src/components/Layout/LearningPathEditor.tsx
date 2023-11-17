@@ -94,7 +94,7 @@ export default function LearningPathEditor({
                 Relevant OERs
               </Text>
               <ResourceCardList
-                oers={oers}
+                oersById={oers}
                 isNormalSizeCard={false}
                 itemsPerPage={3}
                 collectionColor={collectionColor}
