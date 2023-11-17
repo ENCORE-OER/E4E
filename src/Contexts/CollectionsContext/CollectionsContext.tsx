@@ -173,16 +173,18 @@ export const CollectionsProvider = ({ children }: any) => {
             });
           }
         } else {
-          addToast({
+          throw new Error(`The OER is already saved into "${collection.name}" collection!`);
+          /*addToast({
             message: `The OER is already saved into "${collection.name}" collection!`,
             type: 'error',
-          });
+          });*/
         }
       } else {
-        addToast({
+        throw new Error("The collection doesn't exist!");
+        /*addToast({
           message: "The collection doesn't exist!",
           type: 'error',
-        });
+        });*/
       }
 
       //console.log(updatedCollections);
@@ -193,7 +195,7 @@ export const CollectionsProvider = ({ children }: any) => {
       });
     } catch (error) {
       addToast({
-        message: `Error: ${error}`,
+        message: `${error}`,
         type: 'error',
       });
     }
@@ -214,7 +216,6 @@ export const CollectionsProvider = ({ children }: any) => {
           `Collection {with ID ${collectionIndex}} doesn't exist or doesn't have any OERs.`
         );
       } else {
-
         const updatedCollectionOers = updatedCollections[
           collectionIndex
         ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
@@ -232,19 +233,21 @@ export const CollectionsProvider = ({ children }: any) => {
 
         updatedCollections[collectionIndex] = updatedCollection;
 
-        if (hydrated) {
-          addToast({
-            message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
-            type: 'success',
-          });
-
-          return new Promise((resolve) => {
-            setCollections(updatedCollections);
-            //console.log("I'm triggering collections");
-            //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
-            resolve();
-          });
+        while (!hydrated) {
+          console.log('Waiting for hydration...');
         }
+
+        addToast({
+          message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
+          type: 'success',
+        });
+
+        return new Promise((resolve) => {
+          setCollections(updatedCollections);
+          //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
+          resolve();
+        });
+
       }
     } catch (error) {
       addToast({

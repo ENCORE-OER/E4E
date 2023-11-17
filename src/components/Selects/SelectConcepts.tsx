@@ -22,10 +22,10 @@ export default function SelectConcepts({
       options={uniqueConcepts}
       value={conceptsSelected}
       onChange={handleConceptsChange}
-      getOptionLabel={(option) => option.label} // Specifica come ottenere la label
-      getOptionValue={(option) => option.id.toString()} // Specifica come ottenere il valore
+      getOptionLabel={(option) => option.label} // Specify how to get the label
+      getOptionValue={(option) => option.id.toString()} // Specify how to get the value
       placeholder="Select Concepts"
-      menuPortalTarget={document.body} // Portale separato per il menu
+      menuPortalTarget={document.body} // Different portal for the menu
       styles={{
         control: (provided) => ({
           ...provided,
@@ -47,7 +47,7 @@ export default function SelectConcepts({
         }),
         option: (provided) => ({
           ...provided,
-          //padding: '10px', // imposta l'altezza delle opzioni qui
+          //padding: '10px', // here to extend option box height
           borderRadius: '5px',
         }),
       }}

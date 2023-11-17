@@ -17,10 +17,7 @@ type ResourceCardsListProps = {
   itemsPerPage: number;
   collectionColor?: string;
   isResourcePage?: boolean;
-  handleDeleteButtonClick?: (
-    collectionIndex: number,
-    idOer: number
-  ) => void;
+  handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
   /*deleteResourceFromCollection?: (
     idCollection: number,
     idOer: number
@@ -58,7 +55,6 @@ export default function ResourceCardsList({
     setCurrentPage(newPage);
   };
   //-----------------------------------------------------------
-
 
   /*useEffect(() => {
     console.log("--- ResourceCardsList --- \n collectionIndex-1: ", collectionIndex);
@@ -115,8 +111,8 @@ export default function ResourceCardsList({
                         //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                         //}
                       }}
-                    //position="absolute"
-                    //right={'0px'}
+                      //position="absolute"
+                      //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>

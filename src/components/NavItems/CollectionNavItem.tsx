@@ -7,11 +7,11 @@ import {
   ReactText,
   RefObject,
   SetStateAction,
-  useState
+  useState,
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
-import DeleteAlertDialog from '../Modals/DeleteAlertDialog';
+import DeleteAlertDialog from '../Modals/DeleteAlertDialog/DeleteAlertDialog';
 
 interface CollectionNavItemProps {
   collection: CollectionProps;
@@ -167,7 +167,7 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText='This collection is not empty. Are you sure you want to delete '
+        modalText="This collection is not empty. Are you sure you want to delete "
       />
     </>
   );

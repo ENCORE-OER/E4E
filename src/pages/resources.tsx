@@ -20,13 +20,13 @@ import { useCollectionsContext } from '../Contexts/CollectionsContext/Collection
 import { LuFolderPlus } from 'react-icons/lu';
 import CollectionModal from '../components/Modals/CollectionModals';
 import CollectionNavItem from '../components/NavItems/CollectionNavItem';
-import CollectionView from '../components/Views/CollectionView';
+import CollectionView from '../components/Views/CollectionViews/CollectionView';
 import { APIV2 } from '../data/api';
 import {
   CollectionProps,
   OerConceptInfo,
   OerInCollectionProps,
-  OerProps
+  OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
@@ -44,8 +44,12 @@ export interface OerItemToDeleteProps {
 const Home = (props: DiscoverPageProps) => {
   const router = useRouter();
   const { user } = useUser();
-  const { collections, deleteCollection, deleteResourceFromCollection, setSelectedConceptsForCollection } =
-    useCollectionsContext();
+  const {
+    collections,
+    deleteCollection,
+    deleteResourceFromCollection,
+    setSelectedConceptsForCollection,
+  } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
@@ -97,9 +101,8 @@ const Home = (props: DiscoverPageProps) => {
   // handle deleting oer
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
     useState<boolean>(false);
-  const [OerItemToDelete, setOerItemToDelete] = useState<OerItemToDeleteProps | null>(
-    null
-  );
+  const [OerItemToDelete, setOerItemToDelete] =
+    useState<OerItemToDeleteProps | null>(null);
 
   const onCloseDeleteAlertDialog = () => {
     setIsDeleteAlertDialogOpen(false);
@@ -123,17 +126,16 @@ const Home = (props: DiscoverPageProps) => {
 
   const handleDeleteResource = async (
     collectionIndex: number,
-    idOer: number,
+    idOer: number
   ) => {
-
     try {
       await deleteResourceFromCollection(collectionIndex, idOer);
-      //console.log(
-      //  `delete resource ${idOer} from collection ${collectionIndex}`
-      //);
-      while (!hydrated) {
+      console.log(
+        `delete resource ${idOer} from collection ${collectionIndex}`
+      );
+      /*while (!hydrated) {
         console.log('hydrated: ' + hydrated);
-      }
+      }*/
       setOersById((prevOers) => prevOers.filter((oer) => oer.id !== idOer));
       //console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
@@ -144,36 +146,35 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-  const handleDeleteButtonClick = (
-    collectionIndex: number,
-    idOer: number,
-  ) => {
-    const hasResourceAtLeastOneConceptSelected =
-      oersById.find((oer: OerProps) =>
-        oer.id === idOer
-      )?.concepts?.some((oerConcept: OerConceptInfo) => {
-        return collections[collectionIndex]?.conceptsSelected?.some((concept: OerConceptInfo) =>
-          concept.id === oerConcept.id
-        )
-      })
+  const handleDeleteButtonClick = (collectionIndex: number, idOer: number) => {
+    console.log('Delete button clicked');
+    const hasResourceAtLeastOneConceptSelected = oersById
+      .find((oer: OerProps) => oer.id === idOer)
+      ?.concepts?.some((oerConcept: OerConceptInfo) => {
+        return collections[collectionIndex]?.conceptsSelected?.some(
+          (concept: OerConceptInfo) => concept.id === oerConcept.id
+        );
+      });
     const oer_title = oersById.find((oer: OerProps) => oer.id === idOer)?.title;
 
-    if (collections[collectionIndex]?.conceptsSelected?.length > 0 && hasResourceAtLeastOneConceptSelected && oer_title) {
+    if (
+      collections[collectionIndex]?.conceptsSelected?.length > 0 &&
+      hasResourceAtLeastOneConceptSelected &&
+      oer_title
+    ) {
       onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
     } else {
       handleDeleteResource(collectionIndex, idOer);
     }
-  }
+  };
 
   // --------------------------------------------------------------
 
   // recover all the oers of a collection
   useEffect(() => {
-
     //alert("Resources")
 
     if (collections?.length > 0) {
-
       try {
         //setViewChanged(true); // set to true in CollectionView 'Cause from this page we don't trigger the OerCardsSorting useEffect.
         //console.log("--- Collection index: " + collectionIndex + " --- " + new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
@@ -186,7 +187,10 @@ const Home = (props: DiscoverPageProps) => {
               collections[collectionIndex]?.oers?.map(
                 async (oer: OerInCollectionProps) => {
                   console.log(oer);
-                  const oerFound = await getDataOerById(oer?.id, abortController.signal);
+                  const oerFound = await getDataOerById(
+                    oer?.id,
+                    abortController.signal
+                  );
                   return oerFound;
                 }
               )
@@ -194,13 +198,11 @@ const Home = (props: DiscoverPageProps) => {
             setOersById(oerData);
             //console.log("I'm triggering oersById");
 
-            console.log("End fetchOerData()");
-
+            console.log('End fetchOerData()');
           }
         };
 
         fetchOerData();
-
 
         return () => {
           abortController.abort();
@@ -214,7 +216,6 @@ const Home = (props: DiscoverPageProps) => {
       }
     }
   }, [collectionIndex]);
-
 
   return (
     <Flex w="100%" h="100%">
@@ -292,7 +293,9 @@ const Home = (props: DiscoverPageProps) => {
                 display="flex"
                 isNewDataLoaded={isNewDataLoaded}
                 setIsNewDataLoaded={setIsNewDataLoaded}
-                setSelectedConceptsForCollection={setSelectedConceptsForCollection}
+                setSelectedConceptsForCollection={
+                  setSelectedConceptsForCollection
+                }
                 // handle deleting of a Oer with alert dialog
                 handleDeleteResource={handleDeleteResource}
                 isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}

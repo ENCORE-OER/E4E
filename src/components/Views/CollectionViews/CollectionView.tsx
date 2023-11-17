@@ -3,32 +3,25 @@ import {
   BoxProps,
   Flex,
   HStack,
-  Heading,
-  Icon,
-  Spacer,
   Text,
-  Tooltip,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
-import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { FcFolder } from 'react-icons/fc';
 import { MultiValue } from 'react-select';
-import { OerItemToDeleteProps } from '../../pages/resources';
-import icon_infocircle from '../../public/Icons/icon_infocircle.svg';
+import { OerItemToDeleteProps } from '../../../pages/resources';
 import {
   CollectionProps,
   OerConceptInfo,
   OerInCollectionProps,
   OerProps,
-} from '../../types/encoreElements';
-import { useHasHydrated } from '../../utils/utils';
-import AddResourcesButton from '../Buttons/AddResourcesButton';
-import DownloadButton from '../Buttons/DownloadButton';
-import ResourceCardsList from '../Card/OerCard/ResourceCardsList';
-import DeleteAlertDialog from '../Modals/DeleteAlertDialog';
-import SelectConcepts from '../Selects/SelectConcepts';
-import OerCardsSorting from '../Sorting/OerCardsSorting';
+} from '../../../types/encoreElements';
+import { useHasHydrated } from '../../../utils/utils';
+import AddResourcesButton from '../../Buttons/AddResourcesButton';
+import ResourceCardsList from '../../Card/OerCard/ResourceCardsList';
+import DeleteOerAlertDialog from '../../Modals/DeleteAlertDialog/DeleteOerAlertDialog';
+import OerCardsSorting from '../../Sorting/OerCardsSorting';
+import ConceptsCollectionView from './ConceptsCollectionView';
+import HeaderCollectionView from './HeaderCollectionView';
 
 interface CollectionViewProps extends BoxProps {
   collections: CollectionProps[];
@@ -37,18 +30,17 @@ interface CollectionViewProps extends BoxProps {
   setOersById: Dispatch<SetStateAction<OerProps[]>>;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
+  isNewDataLoaded?: boolean;
+  setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
+  //--------------------------------------
+  // handle deleting a resource
   handleDeleteResource: (
     collectionIndex: number,
     idOer: number
   ) => Promise<void>;
-  isNewDataLoaded?: boolean;
-  setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isDeleteAlertDialogOpen: boolean;
   onCloseDeleteAlertDialog: () => void;
-  handleDeleteButtonClick: (
-    collectionIndex: number,
-    idOer: number
-  ) => void;
+  handleDeleteButtonClick: (collectionIndex: number, idOer: number) => void;
   OerItemToDelete: OerItemToDeleteProps | null;
   setOerItemToDelete: Dispatch<SetStateAction<OerItemToDeleteProps | null>>;
   setSelectedConceptsForCollection: (
@@ -64,7 +56,6 @@ export default function CollectionView({
   setOersById,
   viewChanged,
   setViewChanged,
-
   handleDeleteResource,
   isNewDataLoaded,
   setIsNewDataLoaded,
@@ -80,10 +71,6 @@ export default function CollectionView({
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
 
-  const label_tooltip =
-    'Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths';
-
-
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
 
@@ -98,20 +85,18 @@ export default function CollectionView({
     setUniqueConcepts(Array.from(uniqueConceptsSet));
   };
 
-
-  const handleConceptsChange = (
+  const handleConceptsChange = async (
     selectedOptions: MultiValue<OerConceptInfo>
     //actionMeta: ActionMeta<OerConceptInfo>
   ) => {
     //setSelectedConcepts(selectedOptions.map((option) => option));
 
     //recall the context function to store concept selected
-    setSelectedConceptsForCollection(
+    await setSelectedConceptsForCollection(
       collections[collectionIndex]?.id,
       selectedOptions?.map((option: OerConceptInfo) => option)
     );
   };
-
 
   useEffect(() => {
     //alert("CollectionView");
@@ -126,20 +111,14 @@ export default function CollectionView({
     //console.log("COLLECTION INDEX: " + collectionIndex);
     //console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
 
-    // "collections" is a dependency because we need to extract the unique concepts for the selected collection 
-    // But in this way we also reset the sorting of the OERs. 
+    // "collections" is a dependency because we need to extract the unique concepts for the selected collection
+    // But in this way we also reset the sorting of the OERs.
   }, [collectionIndex]);
-
-  useEffect(() => {
-    extractUniqueConcepts(collections[collectionIndex]);
-    //console.log("I'm extracting unique concepts after deleting a resource");
-  }, [collections])
 
   // I have to decide where to put this useEffect. Here or in resources.tsx
   useEffect(() => {
 
-    if (collectionIndex >= 0 && oersById?.length > 0) {
-
+    if (collectionIndex >= 0 && oersById?.length >= 0) {
       // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
       if (setIsNewDataLoaded !== undefined) {
         setIsNewDataLoaded(true);
@@ -147,31 +126,39 @@ export default function CollectionView({
       }
 
       // I have to update the conceptsSelected array of the collection with the concepts of the oers that are in the collection after deleting a resource
-      const remainingConcepts = collections[collectionIndex]?.conceptsSelected?.filter((concept: OerConceptInfo) => {
-        return oersById?.some((oer: OerProps) =>
-          oer.concepts?.map((oerConcept: OerConceptInfo) => oerConcept.id).includes(concept.id)
+      const remainingConcepts = collections[
+        collectionIndex
+      ]?.conceptsSelected?.filter((concept: OerConceptInfo) => {
+        return oersById?.some(
+          (oer: OerProps) =>
+            oer.concepts
+              ?.map((oerConcept: OerConceptInfo) => oerConcept.id)
+              .includes(concept.id)
         );
       });
 
-      setSelectedConceptsForCollection(collections[collectionIndex]?.id, remainingConcepts);
+      setSelectedConceptsForCollection(
+        collections[collectionIndex]?.id,
+        remainingConcepts
+      );
     }
-
   }, [oersById]);
+
+  useEffect(() => {
+    // console.log(collections[collectionIndex]?.oers?.length);
+    // console.log(collections[collectionIndex]?.conceptsSelected);
+    extractUniqueConcepts(collections[collectionIndex]);
+    // console.log("I'm extracting unique concepts after deleting a resource");
+  }, [collections]);
 
   return (
     <Box {...rest}>
       <Box w="550px">
-        <Flex w="100%" mb="3">
-          <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-          <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'}>
-            {collections[collectionIndex]?.name}
-          </Heading>
-          <Spacer />
-          <DownloadButton
-            data={collections[collectionIndex]}
-            fileName={collections[collectionIndex].name}
-          />
-        </Flex>
+        <HeaderCollectionView
+          collectionName={collections[collectionIndex]?.name}
+          data={collections[collectionIndex]}
+          fileName={collections[collectionIndex]?.name}
+        />
         <HStack pb="3">
           <Text
             fontWeight="light"
@@ -211,69 +198,23 @@ export default function CollectionView({
         </VStack>
       </Box>
 
-      <Box
-        px={5}
-        flex="1"
-        display="flex"
-        flexDirection="column"
-        h="full"
-      //justifyContent="center"
-      >
-        <Flex gap={1}>
-          <Tooltip
-            hasArrow
-            placement="top"
-            label={label_tooltip}
-            aria-label={label_tooltip}
-            //ml="1px"
-            bg="white"
-            color="primary"
-            p={2}
-          >
-            <span>
-              <Image src={icon_infocircle} alt="infocircle" />
-            </span>
-          </Tooltip>
-          <Box>
-            <Heading fontSize="18px" fontWeight="semibold" mb="2">
-              Choose the key concepts you wish to incorporate into the learning
-              path.
-            </Heading>
-            <Text fontWeight="light" color="grey">
-              {`${collections[collectionIndex]?.conceptsSelected?.length} concepts selected`}
-            </Text>
-          </Box>
-        </Flex>
-        <Box w="full" p={3} h="full">
-          {hydrated && (
-            <SelectConcepts
-              collectionLength={collections[collectionIndex]?.oers?.length}
-              conceptsSelected={collections[collectionIndex]?.conceptsSelected}
-              handleConceptsChange={handleConceptsChange}
-              uniqueConcepts={uniqueConcepts}
-            />
-          )}
-        </Box>
-      </Box>
-
-      <DeleteAlertDialog
-        isOpen={isDeleteAlertDialogOpen}
-        onClose={onCloseDeleteAlertDialog}
-        onConfirm={() => {
-          if (OerItemToDelete) {
-            handleDeleteResource(
-              OerItemToDelete.collectionIndex,
-              OerItemToDelete.oer_id,
-            );
-            setOerItemToDelete(null);
-          }
-          onCloseDeleteAlertDialog();
-        }}
-        item_name={OerItemToDelete ? OerItemToDelete.oer_title : ''}
-        modalText={`You have selected one or more concepts referred to this Oer.
-      If you delete it, the concepts could be removed.\n
-      Are you sure you want to delete`}
+      <ConceptsCollectionView
+        handleConceptsChange={handleConceptsChange}
+        uniqueConcepts={uniqueConcepts}
+        conceptsSeletedLength={collections[collectionIndex]?.conceptsSelected?.length}
+        conceptsSelected={collections[collectionIndex]?.conceptsSelected}
+        oersLength={collections[collectionIndex]?.oers?.length}
+        label_tooltip='Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths'
       />
+
+      <DeleteOerAlertDialog
+        handleDeleteResource={handleDeleteResource}
+        isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
+        onCloseDeleteAlertDialog={onCloseDeleteAlertDialog}
+        OerItemToDelete={OerItemToDelete}
+        setOerItemToDelete={setOerItemToDelete}
+      />
+
     </Box>
   );
 }

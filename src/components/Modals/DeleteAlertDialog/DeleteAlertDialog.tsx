@@ -31,8 +31,7 @@ export default function DeleteAlertDialog({
         <ModalHeader>Deleting confirm</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {modalText}{' '}
-          <strong>{item_name}</strong>?
+          {modalText} <strong>{item_name}</strong>?
         </ModalBody>
 
         <ModalFooter>
