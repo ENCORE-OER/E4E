@@ -13,17 +13,19 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
+  AddResourceFunction,
   CollectionModalProps,
   CollectionProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 
-import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../../utils/utils';
 
 interface AddCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   setIsNewCollection: Dispatch<SetStateAction<boolean>>;
+  collections: CollectionProps[];
+  addResource: AddResourceFunction;
 }
 
 export default function AddResourceToCollectionModal({
@@ -31,9 +33,10 @@ export default function AddResourceToCollectionModal({
   oerToAddCollection,
   isOpen,
   setIsNewCollection,
+  collections,
+  addResource,
 }: AddCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
-  const { addResource, collections } = useCollectionsContext();
   const hydrated = useHasHydrated();
   //const [isNewCollection, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);

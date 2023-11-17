@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import {
   CollectionModalProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
-import AddCollectionModal from './AddResourceToCollectionModal';
+import AddResourceToCollectionModal from './AddResourceToCollectionModal';
 import NewCollectionModal from './NewCollectionModal';
 
 interface IndexCollectionModalProps extends CollectionModalProps {
@@ -18,6 +19,8 @@ export default function CollectionModal({
   isNewCollection,
   isFromFolderButton,
 }: IndexCollectionModalProps) {
+  const { addCollection, addResource, collections } = useCollectionsContext();
+
   //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);
@@ -41,11 +44,13 @@ export default function CollectionModal({
   return (
     <>
       {!isCollectionNew && (
-        <AddCollectionModal
+        <AddResourceToCollectionModal
           isOpen={true}
           onClose={handleCloseCollectionModal}
           oerToAddCollection={newOer}
           setIsNewCollection={setIsNewCollection}
+          collections={collections}
+          addResource={addResource}
         />
       )}
 
@@ -56,6 +61,9 @@ export default function CollectionModal({
           oerToAddCollection={newOer}
           isFolderButton={isFromFolderButton}
           maxLength={30}
+          collections={collections}
+          addResource={addResource}
+          addCollection={addCollection}
         />
       )}
     </>

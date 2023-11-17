@@ -14,9 +14,11 @@ import {
   ModalOverlay,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import {
+  AddCollectionFunction,
+  AddResourceFunction,
   CollectionModalProps,
+  CollectionProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
@@ -26,6 +28,9 @@ interface NewCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   isFolderButton: boolean; // to understood if this page is call by folder button in resource page
   maxLength: number; // max length of the collection name
+  collections: CollectionProps[];
+  addResource: AddResourceFunction;
+  addCollection: AddCollectionFunction;
 }
 
 export default function NewCollectionModal({
@@ -34,13 +39,16 @@ export default function NewCollectionModal({
   isOpen,
   isFolderButton,
   maxLength,
+  collections,
+  addResource,
+  addCollection,
 }: NewCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const [nameCollection, setNameCollection] = useState<string>('');
   const [newIdCollection, setNewIdCollection] = useState<number>(-1);
   const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
 
-  const { addCollection, addResource, collections } = useCollectionsContext();
+
 
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();

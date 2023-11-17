@@ -2,31 +2,18 @@ import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 //import useLocalStorage from 'use-local-storage';
 import { useLocalStorage } from 'usehooks-ts';
 import {
+  AddCollectionFunction,
+  AddResourceFunction,
   CollectionProps,
+  DeleteCollectionFunction,
+  DeleteResourceFunction,
   OerConceptInfo,
   OerInCollectionProps,
+  SelectedConceptsFunction,
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
-type AddCollectionFunction = (
-  id: number,
-  name: string,
-  color: string
-) => Promise<void>;
-type AddResourceFunction = (
-  collectionId: number,
-  resource: OerInCollectionProps
-) => Promise<void>;
-type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
-type SelectedConceptsFunction = (
-  collectionId: number,
-  concepts: OerConceptInfo[]
-) => Promise<void>;
-type DeleteResourceFunction = (
-  collectionIndex: number,
-  idOer: number
-) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
