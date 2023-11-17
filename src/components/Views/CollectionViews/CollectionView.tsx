@@ -77,10 +77,11 @@ export default function CollectionView({
 
     const uniqueConceptsArray = Array.from(uniqueConceptsSet.values());
 
-    setUniqueConcepts(uniqueConceptsArray.sort(
-      (a: OerConceptInfo, b: OerConceptInfo) =>
+    setUniqueConcepts(
+      uniqueConceptsArray.sort((a: OerConceptInfo, b: OerConceptInfo) =>
         a.label.localeCompare(b.label)
-    ));
+      )
+    );
   };
 
   const handleConceptsChange = async (
