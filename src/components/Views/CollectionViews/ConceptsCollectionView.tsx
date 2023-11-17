@@ -1,10 +1,10 @@
-import { Box, Flex, Heading, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
 import Image from 'next/image';
-import { MultiValue } from "react-select";
+import { MultiValue } from 'react-select';
 import icon_infocircle from '../../../public/Icons/icon_infocircle.svg';
-import { OerConceptInfo } from "../../../types/encoreElements";
+import { OerConceptInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
-import SelectConcepts from "../../Selects/SelectConcepts";
+import SelectConcepts from '../../Selects/SelectConcepts';
 
 type ConceptsCollectionViewProps = {
   uniqueConcepts: OerConceptInfo[];
@@ -15,17 +15,14 @@ type ConceptsCollectionViewProps = {
   label_tooltip: string;
 };
 
-export default function ConceptsCollectionView(
-  {
-    uniqueConcepts,
-    handleConceptsChange,
-    conceptsSeletedLength,
-    conceptsSelected,
-    oersLength,
-    label_tooltip,
-  }: ConceptsCollectionViewProps
-) {
-
+export default function ConceptsCollectionView({
+  uniqueConcepts,
+  handleConceptsChange,
+  conceptsSeletedLength,
+  conceptsSelected,
+  oersLength,
+  label_tooltip,
+}: ConceptsCollectionViewProps) {
   const hydrated = useHasHydrated();
 
   //const label_tooltip =
@@ -38,7 +35,7 @@ export default function ConceptsCollectionView(
       display="flex"
       flexDirection="column"
       h="full"
-    //justifyContent="center"
+      //justifyContent="center"
     >
       <Flex gap={1}>
         <Tooltip
@@ -76,5 +73,5 @@ export default function ConceptsCollectionView(
         )}
       </Box>
     </Box>
-  )
+  );
 }

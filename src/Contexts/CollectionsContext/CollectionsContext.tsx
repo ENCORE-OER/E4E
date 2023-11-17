@@ -173,7 +173,9 @@ export const CollectionsProvider = ({ children }: any) => {
             });
           }
         } else {
-          throw new Error(`The OER is already saved into "${collection.name}" collection!`);
+          throw new Error(
+            `The OER is already saved into "${collection.name}" collection!`
+          );
           /*addToast({
             message: `The OER is already saved into "${collection.name}" collection!`,
             type: 'error',
@@ -247,7 +249,6 @@ export const CollectionsProvider = ({ children }: any) => {
           //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
           resolve();
         });
-
       }
     } catch (error) {
       addToast({

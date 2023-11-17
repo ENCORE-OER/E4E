@@ -1,11 +1,4 @@
-import {
-  Box,
-  BoxProps,
-  Flex,
-  HStack,
-  Text,
-  VStack
-} from '@chakra-ui/react';
+import { Box, BoxProps, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { MultiValue } from 'react-select';
 import { OerItemToDeleteProps } from '../../../pages/resources';
@@ -74,15 +67,20 @@ export default function CollectionView({
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
 
-    const uniqueConceptsSet = new Set<OerConceptInfo>();
+    const uniqueConceptsSet = new Map<number, OerConceptInfo>();
 
     collection.oers?.forEach((oer: OerInCollectionProps) => {
       oer.concepts?.forEach((concept: OerConceptInfo) => {
-        uniqueConceptsSet.add(concept);
+        uniqueConceptsSet.set(concept.id, concept);
       });
     });
 
-    setUniqueConcepts(Array.from(uniqueConceptsSet));
+    const uniqueConceptsArray = Array.from(uniqueConceptsSet.values());
+
+    setUniqueConcepts(uniqueConceptsArray.sort(
+      (a: OerConceptInfo, b: OerConceptInfo) =>
+        a.label.localeCompare(b.label)
+    ));
   };
 
   const handleConceptsChange = async (
@@ -117,7 +115,6 @@ export default function CollectionView({
 
   // I have to decide where to put this useEffect. Here or in resources.tsx
   useEffect(() => {
-
     if (collectionIndex >= 0 && oersById?.length >= 0) {
       // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
       if (setIsNewDataLoaded !== undefined) {
@@ -201,10 +198,12 @@ export default function CollectionView({
       <ConceptsCollectionView
         handleConceptsChange={handleConceptsChange}
         uniqueConcepts={uniqueConcepts}
-        conceptsSeletedLength={collections[collectionIndex]?.conceptsSelected?.length}
+        conceptsSeletedLength={
+          collections[collectionIndex]?.conceptsSelected?.length
+        }
         conceptsSelected={collections[collectionIndex]?.conceptsSelected}
         oersLength={collections[collectionIndex]?.oers?.length}
-        label_tooltip='Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths'
+        label_tooltip="Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths"
       />
 
       <DeleteOerAlertDialog
@@ -214,7 +213,6 @@ export default function CollectionView({
         OerItemToDelete={OerItemToDelete}
         setOerItemToDelete={setOerItemToDelete}
       />
-
     </Box>
   );
 }
