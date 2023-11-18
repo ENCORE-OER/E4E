@@ -48,8 +48,6 @@ export default function NewCollectionModal({
   const [newIdCollection, setNewIdCollection] = useState<number>(-1);
   const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
 
-
-
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
 

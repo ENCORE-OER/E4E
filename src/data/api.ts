@@ -596,4 +596,23 @@ export class APIV2 {
       throw error;
     }
   }
+
+  async freeSearchOers(keywords: string[]): Promise<OerProps[]> {
+    /*const queryParams = new URLSearchParams();
+
+    keywords?.forEach((keyword: string) => {
+      queryParams.append('search', keyword);
+    });*/
+
+    try {
+      const transformedParams = keywords
+        .map((keyword) => `keywords=${keyword}`)
+        .join('&');
+      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${transformedParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+      return resp.data?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

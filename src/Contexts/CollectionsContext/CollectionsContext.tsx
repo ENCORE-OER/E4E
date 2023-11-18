@@ -14,7 +14,6 @@ import {
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
-
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
