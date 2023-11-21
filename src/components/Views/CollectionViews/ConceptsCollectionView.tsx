@@ -35,7 +35,7 @@ export default function ConceptsCollectionView({
       display="flex"
       flexDirection="column"
       h="full"
-      //justifyContent="center"
+    //justifyContent="center"
     >
       <Flex gap={1}>
         <Tooltip
@@ -58,7 +58,11 @@ export default function ConceptsCollectionView({
             path.
           </Heading>
           <Text fontWeight="light" color="grey">
-            {`${conceptsSeletedLength} concepts selected`}
+            {
+              conceptsSeletedLength === 1
+                ? `${conceptsSeletedLength} concept selected`
+                : `${conceptsSeletedLength} concepts selected`
+            }
           </Text>
         </Box>
       </Flex>

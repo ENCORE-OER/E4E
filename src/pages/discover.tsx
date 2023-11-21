@@ -3,32 +3,24 @@ import {
   Flex,
   Heading,
   HStack,
-  Text,
-  useDisclosure,
-  VStack,
+  Text
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import SingleResourceCard from '../components/Card/OerCard/SingleResourceCard';
 //import DrawerCard from '../components/Drawers/DrawerCard';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
 
-import CardInfoModal from '../components/Modals/CardInfoModal';
-import Pagination from '../components/Pagination/pagination';
 import OerCardsSorting from '../components/Sorting/OerCardsSorting';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
+import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
-  OerAudienceInfo,
-  OerDomainInfo,
-  OerMediaTypeInfo,
-  OerProps,
-  OerSkillInfo,
+  OerProps
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
@@ -39,16 +31,16 @@ type DiscoverPageProps = {
 const Discover = (props: DiscoverPageProps) => {
   const { addToast } = CustomToast();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
-  const [oerById, setOerById] = useState<OerProps | null>(null);
+  //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
   const [endSearch, setEndSearch] = useState<boolean>(false);
   const [domain] = useState<string[]>([]); // to save each type of domain of the resources
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  //const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filtered, setFiltered] = useState<OerProps[]>([]);
+  const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
 
   // items for Sorting DropDown menu
@@ -63,25 +55,19 @@ const Discover = (props: DiscoverPageProps) => {
   const [selectedSorting, SetSelectedSorting] = useState<string>('Last Update');
   const [isAscending, setAscending] = useState<boolean>(true); */
 
-  const itemsPerPage = 10;
+  /*const itemsPerPage = 10;
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-  };
+  };*/
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const searchOERs = async (
-    /*skills: string | string[],
-    andOption: string,
-    orOption: string,
-    domains: string | string[],
-    types: string | string[],
-    audience: string | string[],*/
+  /*const searchOERs = async (
     skills: string[],
     andOption: boolean,
     orOption: boolean,
@@ -90,12 +76,6 @@ const Discover = (props: DiscoverPageProps) => {
     audience: string[]
   ) => {
     setIsLoading(true);
-
-    //console.log('andOption: ', andOption);
-    //console.log('orOption: ', orOption);
-    //console.log('domains: ', domains);
-    //console.log('types: ', types);
-    //console.log('audience: ', audience);
 
     const ID_ALL = '0';
 
@@ -204,10 +184,56 @@ const Discover = (props: DiscoverPageProps) => {
 
     setEndSearch(true);
     setIsLoading(false);
+  };*/
+
+  const freeSearchOERs = async (keywords: string[]) => {
+    setIsLoading(true);
+
+    const api = new APIV2(props.accessToken);
+
+    try {
+      let oers: OerProps[] = [];
+
+      if (keywords.length > 0) {
+        oers = await api.freeSearchOers(keywords);  // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+
+        if (oers?.length > 0) {
+          // get all the oers data
+          const oerData = await Promise.all(
+            oers?.map(
+              async (oer: OerProps) => {
+                //console.log(oer);
+                const oerFound = await getDataOerById(
+                  oer?.id,
+                );
+                return oerFound;
+              }
+            )
+          );
+
+          //console.log('oers: ', oers);
+          setFiltered(oerData);
+        }
+
+        setEndSearch(true);
+        setIsLoading(false);
+
+      } else {
+        throw new Error('No keywords provided');
+      }
+
+    } catch (error) {
+      setEndSearch(true);
+      setIsLoading(false);
+      addToast({
+        message: `${error}`,
+        type: 'error',
+      });
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const searchCallback = async (domainIds?: number[]) => {
+  const searchCallbackEncoreTab = async (domainIds?: number[]) => {
     alert('qui call back');
   };
 
@@ -221,27 +247,6 @@ const Discover = (props: DiscoverPageProps) => {
       throw error;
     }
   };
-
-  // handle CardInfoModal opening
-
-  /*const handleOpenCardInfoModal = () => {
-        setCardInfoModalOpen(true);
-        console.log(isCardInfoModalOpen);
-    };*/
-
-  const handleCloseCardInfoModal = () => {
-    //setCardInfoModalOpen(false);
-    onClose();
-  };
-
-  /*const handleItemSortingClick = (sortingName: string) => {
-    if (sortingName === selectedSorting) {
-      setAscending(!isAscending);
-    } else {
-      SetSelectedSorting(sortingName);
-      setAscending(true);
-    }
-  }; */
 
   useEffect(() => {
     setIsLoading(true);
@@ -259,45 +264,20 @@ const Discover = (props: DiscoverPageProps) => {
     const convertedData = JSON.parse(searchData);
 
     // TODO: add check if null
-    const skills = convertedData['selectedSkills'];
+    /*const skills = convertedData['selectedSkills'];
     const andOption = convertedData['andOption'];
     const orOption = convertedData['orOption'];
     const domains = convertedData['domains'];
     const types = convertedData['types'];
     const audience = convertedData['audience'];
 
-    searchOERs(skills, andOption, orOption, domains, types, audience);
+    searchOERs(skills, andOption, orOption, domains, types, audience);*/
+
+    const keywords = convertedData['keywords'];
+    freeSearchOERs(keywords);
+
   }, [router.query.searchData]);
 
-  // sorting of the OERs
-  /*useEffect(() => {
-    setIsLoading(true);
-    const sortedData = [...filtered];
-    sortedData.sort((a: OerProps, b: OerProps) => {
-      if (selectedSorting === 'Last Update') {
-        return isAscending
-          ? a.retrieval_date.localeCompare(b.retrieval_date)
-          : b.retrieval_date.localeCompare(a.retrieval_date);
-      } else if (selectedSorting === 'A-Z') {
-        return isAscending
-          ? a.title.localeCompare(b.title)
-          : b.title.localeCompare(a.title);
-      } else if (selectedSorting === 'Quality Score') {
-        return isAscending
-          ? a.overall_score - b.overall_score
-          : b.overall_score - a.overall_score;
-      } else {
-        return 0;
-      }
-    });
-
-    //console.log(filtered);
-    //console.log(sortedData);
-
-    setFiltered(sortedData);
-
-    setIsLoading(false);
-  }, [selectedSorting, isAscending]); */
 
   // redirect to home page if no resources are found
   useEffect(() => {
@@ -324,109 +304,75 @@ const Discover = (props: DiscoverPageProps) => {
     <Flex w="100%" h="100%">
       <Navbar user={user} />
       <SideBar pagePath={router.pathname} />
-      <>
-        {
-          <Flex ml="200px" minH="100vh" pt="60px" w="full">
-            <Box flex="1" py="30px" px="30px" h="full" w="full">
-              <Flex
-                w="100%"
-                justifyContent="left"
-                //justify="space-between"
-              >
-                <Heading fontFamily="title">
-                  <Text>Discover</Text>
-                </Heading>
-              </Flex>
-
-              <HStack mb="5">
-                <Text flex="1" fontWeight="light" color="grey">
-                  {`${filtered?.length} resources`}
-                </Text>
-                <Flex flex="1" w="full" justifyContent="flex-end">
-                  <OerCardsSorting
-                    filtered={filtered}
-                    setFiltered={setFiltered}
-                    setIsLoading={setIsLoading}
-                  />
-                </Flex>
-              </HStack>
-
-              {isLoading && (
-                <div className="loading-spinner">
-                  <div className="spinner"></div>
-                  <p>Loading...</p>
-                </div>
-              )}
-
-              {filtered && (
-                <Box>
-                  <VStack spacing="4" className="scrollable-content" p={3}>
-                    {filtered
-                      ?.slice(
-                        (currentPage - 1) * itemsPerPage,
-                        currentPage * itemsPerPage
-                      )
-                      .map((oer: OerProps) => (
-                        <Box
-                          key={oer.id}
-                          onClick={async (e: any) => {
-                            e.preventDefault();
-                            onOpen();
-                            // handleOpenCardInfoModal();
-
-                            setOerById(await getDataOerById(oer.id));
-                          }}
-                          as="button"
-                        >
-                          <SingleResourceCard checkBookmark={false} oer={oer} />
-                        </Box>
-                      ))}
-                  </VStack>
-                  {filtered.length > 0 && (
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
-                  )}
-                </Box>
-              )}
-            </Box>
-
-            {/*<DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />*/}
-
-            <DiscoveryContext.Provider
-              value={{
-                filtered,
-                setFiltered,
-                byResourceType,
-                setByResourceType,
-              }}
-            >
-              <EncoreTab
-                oers={filtered}
-                setOers={setFiltered}
-                domains={domain}
-                searchCallBack={searchCallback}
-                flex="1" // "flex='1'" fill the rest of the page
-                py="30px"
-                px="30px"
-                w="full"
-                h="full"
-                backgroundColor="background"
-                borderLeft="0.5px"
-                borderLeftColor={'secondary'}
-                borderLeftStyle={'solid'}
-              />
-            </DiscoveryContext.Provider>
+      <Flex ml="200px" minH="100vh" pt="60px" w="full">
+        <Box flex="1" py="30px" px="30px" h="full" w="full">
+          <Flex
+            w="100%"
+            justifyContent="left"
+          //justify="space-between"
+          >
+            <Heading fontFamily="title">
+              <Text>Discover</Text>
+            </Heading>
           </Flex>
-        }
-      </>
-      <CardInfoModal
-        isOpen={isOpen}
-        onClose={handleCloseCardInfoModal}
-        oer={oerById}
-      />
+
+          <HStack mb="5">
+            <Text flex="1" fontWeight="light" color="grey">
+              {`${filtered?.length} resources`}
+            </Text>
+            <Flex flex="1" w="full" justifyContent="flex-end">
+              <OerCardsSorting
+                filtered={filtered}
+                setFiltered={setFiltered}
+                setIsLoading={setIsLoading}
+              />
+            </Flex>
+          </HStack>
+
+          {isLoading && (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading...</p>
+            </div>
+          )}
+
+          {filtered && !isLoading && (
+            <ResourceCardsList
+              oers={filtered}
+              isNormalSizeCard={true}
+              itemsPerPage={5}
+              isResourcePage={false}
+            />
+          )}
+        </Box>
+
+        {/*<DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />*/}
+
+        <DiscoveryContext.Provider
+          value={{
+            filtered,
+            setFiltered,
+            byResourceType,
+            setByResourceType,
+          }}
+        >
+          <EncoreTab
+            oers={filtered}
+            setOers={setFiltered}
+            domains={domain}
+            searchCallBack={searchCallbackEncoreTab}
+            flex="1" // "flex='1'" fill the rest of the page
+            py="30px"
+            px="30px"
+            w="full"
+            h="full"
+            backgroundColor="background"
+            borderLeft="0.5px"
+            borderLeftColor={'secondary'}
+            borderLeftStyle={'solid'}
+          />
+        </DiscoveryContext.Provider>
+      </Flex>
     </Flex>
   );
 };

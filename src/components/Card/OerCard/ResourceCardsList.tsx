@@ -11,12 +11,12 @@ import SingleResourceCard from './SingleResourceCard';
 import SmallSingleResourceCard from './SmallSingleResourceCard';
 
 type ResourceCardsListProps = {
-  oersById: OerProps[];
+  oers: OerProps[];
   collection?: CollectionProps;
   isNormalSizeCard: boolean;
   itemsPerPage: number;
   collectionColor?: string;
-  isResourcePage?: boolean;
+  isResourcePage: boolean;
   handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
   /*deleteResourceFromCollection?: (
     idCollection: number,
@@ -24,10 +24,11 @@ type ResourceCardsListProps = {
   ) => Promise<void>;*/
   collectionIndex?: number;
   setViewChanged?: Dispatch<SetStateAction<boolean>>;
+  //getDataOerById?: (idOer: number) => Promise<OerProps>;
 };
 
 export default function ResourceCardsList({
-  oersById: oers,
+  oers,
   //collection,
   isNormalSizeCard,
   itemsPerPage,
@@ -35,6 +36,7 @@ export default function ResourceCardsList({
   isResourcePage,
   handleDeleteButtonClick,
   collectionIndex,
+  //getDataOerById,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -84,6 +86,7 @@ export default function ResourceCardsList({
                       e.preventDefault();
                       onOpen();
                       // handleOpenCardInfoModal();
+
                       setOerById(oer);
                     }}
                     as="button"
@@ -111,8 +114,8 @@ export default function ResourceCardsList({
                         //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                         //}
                       }}
-                      //position="absolute"
-                      //right={'0px'}
+                    //position="absolute"
+                    //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>

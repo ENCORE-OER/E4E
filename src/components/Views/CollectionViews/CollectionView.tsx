@@ -116,7 +116,7 @@ export default function CollectionView({
 
   // I have to decide where to put this useEffect. Here or in resources.tsx
   useEffect(() => {
-    if (collectionIndex >= 0 && oersById?.length >= 0) {
+    if (collectionIndex >= 0 && oersById?.length >= 0) {  // with 'oersById?.length > 0' it doesn't trigger the update of the conceptsSelected array of the collection after deleting the last resource 
       // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
       if (setIsNewDataLoaded !== undefined) {
         setIsNewDataLoaded(true);
@@ -175,7 +175,7 @@ export default function CollectionView({
         <VStack>
           {hydrated && isNewDataLoaded && (
             <ResourceCardsList
-              oersById={oersById}
+              oers={oersById}
               //collection={collections[collectionIndex]}
               isNormalSizeCard={true}
               itemsPerPage={5}
