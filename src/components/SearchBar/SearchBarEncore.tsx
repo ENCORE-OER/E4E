@@ -3,7 +3,7 @@ import { Button, Flex, SpaceProps, SpacerProps } from '@chakra-ui/react';
 import {
   AutoComplete,
   AutoCompleteInput,
-  AutoCompleteTag
+  AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { OerSkillInfo } from '../../types/encoreElements';
@@ -16,7 +16,7 @@ type SearchBarProps = {
   inputValueIds?: number[];
   setInputValueIds?: Dispatch<SetStateAction<number[]>>;
   placeholder?: string;
-  items?: OerSkillInfo[];  // suggested skills
+  items?: OerSkillInfo[]; // suggested skills
   px?: SpaceProps['px'];
   py?: SpaceProps['py'];
   pb?: SpacerProps['pb'];
@@ -57,26 +57,28 @@ export default function SearchBar({
     console.log('SELECTED SKILL IDs: ' + inputValueIds);
   }, [inputValueIds]);*/
 
-
   useEffect(() => {
     setInputValue([]);
-  }, [])
+  }, []);
 
   return (
     <Flex align="center" px={px} py={py} pb={pb} gap="10px">
       <AutoComplete
         //openOnFocus
 
-        creatable={(freeText !== '' && /\S/.test(freeText)) ? true : false}   // without this logic it could create empty tag
+        creatable={freeText !== '' && /\S/.test(freeText) ? true : false} // without this logic it could create empty tag
         multiple
         //value={inputValue}
         onSelectOption={(e) => {
-          const selectedValue = e.item ? e.item.value.trim().replace(/\s+/g, ' ') : freeText;
+          const selectedValue = e.item
+            ? e.item.value.trim().replace(/\s+/g, ' ')
+            : freeText;
           /*const selectedValueId = items?.find(
             (item: OerSkillInfo) => item.label === selectedValue
           )?.id;*/
 
-          if (selectedValue.trim() !== '' && /\S/.test(selectedValue)) {    // '/\S/.test(selectedValue)' to avoid empty string
+          if (selectedValue.trim() !== '' && /\S/.test(selectedValue)) {
+            // '/\S/.test(selectedValue)' to avoid empty string
             console.log('SELECTED VALUE: ' + selectedValue);
 
             setInputValue((prev) => [...new Set([...prev, selectedValue])]);
@@ -124,8 +126,6 @@ export default function SearchBar({
                 return prev;
               });
             }*/
-
-
           }
         }}
       >
@@ -136,7 +136,9 @@ export default function SearchBar({
             placeholder={placeholder || 'Search...'}
             onChange={(e) => {
               e.preventDefault();
-              const currentValue = e.currentTarget.value.trim().replace(/\s+/g, ' '); // to avoid spaces: trim() remove spaces at the beginning and at the end, replace() remove multiple spaces
+              const currentValue = e.currentTarget.value
+                .trim()
+                .replace(/\s+/g, ' '); // to avoid spaces: trim() remove spaces at the beginning and at the end, replace() remove multiple spaces
               //const currentValueEdit = currentValue.replace(/\s+/g, ' ');
 
               //setInputValue([currentValue]);
@@ -148,11 +150,14 @@ export default function SearchBar({
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                const currentValue = e.currentTarget.value.trim().replace(/\s+/g, ' ');
+                const currentValue = e.currentTarget.value
+                  .trim()
+                  .replace(/\s+/g, ' ');
 
                 if (currentValue !== '' && /\S/.test(currentValue)) {
-
-                  setInputValue((prev) => [...new Set([...prev, currentValue])]); // to avoid duplicate // Set() is more efficient than filter()
+                  setInputValue((prev) => [
+                    ...new Set([...prev, currentValue]),
+                  ]); // to avoid duplicate // Set() is more efficient than filter()
                   //setKeywordsSelected((prev) => [...new Set([...prev, currentValue])]);
                   e.currentTarget.value = '';
 
@@ -225,8 +230,7 @@ export default function SearchBar({
               {item.label}
             </AutoCompleteItem>
           ))*/}
-        {
-            /*<AutoCompleteItem value={freeText ? freeText : ''}>
+        {/*<AutoCompleteItem value={freeText ? freeText : ''}>
               {freeText}
             </AutoCompleteItem>
 

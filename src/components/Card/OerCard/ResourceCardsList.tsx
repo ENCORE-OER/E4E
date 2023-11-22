@@ -15,7 +15,7 @@ type ResourceCardsListProps = {
   collection?: CollectionProps;
   isNormalSizeCard: boolean;
   itemsPerPage: number;
-  collectionColor?: string;
+  collectionColor?: (string | undefined)[];
   isResourcePage: boolean;
   handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
   /*deleteResourceFromCollection?: (
@@ -36,8 +36,8 @@ export default function ResourceCardsList({
   isResourcePage,
   handleDeleteButtonClick,
   collectionIndex,
-  //getDataOerById,
-}: ResourceCardsListProps) {
+} //getDataOerById,
+  : ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<OerProps | null>(null);
@@ -92,7 +92,7 @@ export default function ResourceCardsList({
                     as="button"
                   >
                     <SingleResourceCard
-                      collectionColor={collectionColor}
+                      collectionColor={collectionColor ? collectionColor[index] : ''}
                       oer={oer}
                     />
                   </Box>
@@ -155,7 +155,7 @@ export default function ResourceCardsList({
                   as="button"
                 >
                   <SmallSingleResourceCard
-                    collectionColor={collectionColor}
+                    collectionColor={collectionColor ? collectionColor[index] : ''}
                     oer={oer}
                   />
                 </Box>

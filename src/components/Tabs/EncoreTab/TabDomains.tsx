@@ -12,7 +12,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
@@ -28,18 +28,19 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   /**
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
-  filtered?.forEach((oer: { skills: { domain: OerDomainInfo[] }[]; id: string }) =>
-    oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
-      skill.domain?.forEach((domain) => {
-        if (!filteredOers[domain.name])
-          filteredOers[domain.name] = {
-            name: domain.name?.toUpperCase(),
-            elems: [],
-            domainId: domain.name,
-          };
-        filteredOers[domain.name].elems.push(oer.id + '');
-      });
-    })
+  filtered?.forEach(
+    (oer: { skills: { domain: OerDomainInfo[] }[]; id: string }) =>
+      oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
+        skill.domain?.forEach((domain) => {
+          if (!filteredOers[domain.name])
+            filteredOers[domain.name] = {
+              name: domain.name?.toUpperCase(),
+              elems: [],
+              domainId: domain.name,
+            };
+          filteredOers[domain.name].elems.push(oer.id + '');
+        });
+      })
   );
 
   const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {

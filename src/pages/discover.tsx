@@ -1,10 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -16,12 +10,11 @@ import { EncoreTab } from '../components/Tabs/EncoreTab';
 import { APIV2 } from '../data/api';
 
 import OerCardsSorting from '../components/Sorting/OerCardsSorting';
+import { useCollectionsContext } from '../Contexts/CollectionsContext/CollectionsContext';
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
-import {
-  OerProps
-} from '../types/encoreElements';
+import { CollectionProps, OerInCollectionProps, OerProps } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
 type DiscoverPageProps = {
@@ -30,6 +23,7 @@ type DiscoverPageProps = {
 
 const Discover = (props: DiscoverPageProps) => {
   const { addToast } = CustomToast();
+  const { collections } = useCollectionsContext();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
   const [endSearch, setEndSearch] = useState<boolean>(false);
@@ -42,6 +36,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
+  const [IconBookmarkColor, setIconBookmarkColor] = useState<(string | undefined)[]>([]);
 
   // items for Sorting DropDown menu
   /*const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
@@ -195,20 +190,16 @@ const Discover = (props: DiscoverPageProps) => {
       let oers: OerProps[] = [];
 
       if (keywords.length > 0) {
-        oers = await api.freeSearchOers(keywords);  // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        oers = await api.freeSearchOers(keywords); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
 
         if (oers?.length > 0) {
           // get all the oers data
           const oerData = await Promise.all(
-            oers?.map(
-              async (oer: OerProps) => {
-                //console.log(oer);
-                const oerFound = await getDataOerById(
-                  oer?.id,
-                );
-                return oerFound;
-              }
-            )
+            oers?.map(async (oer: OerProps) => {
+              //console.log(oer);
+              const oerFound = await getDataOerById(oer?.id);
+              return oerFound;
+            })
           );
 
           //console.log('oers: ', oers);
@@ -217,11 +208,9 @@ const Discover = (props: DiscoverPageProps) => {
 
         setEndSearch(true);
         setIsLoading(false);
-
       } else {
         throw new Error('No keywords provided');
       }
-
     } catch (error) {
       setEndSearch(true);
       setIsLoading(false);
@@ -275,9 +264,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     const keywords = convertedData['keywords'];
     freeSearchOERs(keywords);
-
   }, [router.query.searchData]);
-
 
   // redirect to home page if no resources are found
   useEffect(() => {
@@ -299,6 +286,26 @@ const Discover = (props: DiscoverPageProps) => {
       });
     }
   }, [endSearch]);
+
+  // list of colors for the bookmark icon of each resource
+  useEffect(() => {
+    if (filtered !== undefined || collections !== undefined) {
+      // return the color of the collection if the oer is in the collection
+      // if the oer is in more than one collection, return the color of the first collection
+      const colors = filtered.map((filteredOer: OerProps) => {
+        const collectionColor = collections.find((collection: CollectionProps) =>
+          collection.oers?.some((oer: OerInCollectionProps) => oer.id === filteredOer.id)
+        )?.color || '';
+
+        return collectionColor;
+      });
+      setIconBookmarkColor(colors);
+    }
+  }, [filtered, collections]);
+
+  useEffect(() => {
+    console.log('IconBookmarkColor: ', IconBookmarkColor);
+  }, [IconBookmarkColor])
 
   return (
     <Flex w="100%" h="100%">
@@ -342,6 +349,7 @@ const Discover = (props: DiscoverPageProps) => {
               isNormalSizeCard={true}
               itemsPerPage={5}
               isResourcePage={false}
+              collectionColor={IconBookmarkColor}
             />
           )}
         </Box>

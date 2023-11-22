@@ -14,6 +14,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
@@ -21,13 +23,15 @@ import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOp
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import {
+  CollectionProps,
   OerAudienceInfo,
   OerAuthorsInfo,
   OerConceptInfo,
+  OerInCollectionProps,
   OerMediaTypeInfo,
   OerProps,
   OerSubjectInfo,
-  OerUrlInfo,
+  OerUrlInfo
 } from '../../types/encoreElements';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -63,8 +67,9 @@ export default function CardInfoModal({
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
+  const [collectionsColor, setCollectionsColor] = useState<string[]>([]); // array of colors of the collections that has the oer selected
+  const { collections } = useCollectionsContext();
 
-  //const { collections, addCollection } = useCollectionsContext();
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
   //const digital = 'Digital';
@@ -139,13 +144,34 @@ export default function CardInfoModal({
         setCoverage(
           oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
         );
+        const colors: string[] = [];
+        collections?.map(async (collection: CollectionProps) => {
+          collection.oers?.map((oer_item: OerInCollectionProps) => {
+            if (oer_item.id === oer.id && collection.color) {
+              colors.push(collection.color);
+            }
+          })
+        });
+        setCollectionsColor(colors);
+
+        /*Promise.all(
+          collections?.map(async (collection: CollectionProps) => {
+            if (collection.oers?.includes(oer)) {
+              return collection.color;
+            }
+          }) || []
+        ).then((colors) => {
+          if (!colors.includes(undefined))
+            setCollectionsColor(colors);
+        });*/
 
         console.log(JSON.stringify(oer));
       }
     } catch (error) {
       console.error(error);
     }
-  }, [oer]);
+  }, [oer, collections]);
+
 
   /* useEffect(() => {
      console.log('authors: ' + authors);
@@ -169,13 +195,23 @@ export default function CardInfoModal({
         <ModalContent overflow="auto">
           <ModalCloseButton />
           <ModalHeader>
+
             <TagsDomain
               showTagDigital={showTagDigital}
               showTagEntrepreneurial={showTagEntrepreneurial}
               showTagGreen={showTagGreen}
               mb="5"
             />
-            <HStack>{}</HStack>
+            {collectionsColor?.length &&
+              collectionsColor?.map((collection_color: string, index: number) => {
+                <IconBookmarkCheck
+                  key={index}
+                  colorBookMark={collection_color}
+                  size="25px"
+                />
+              })
+            }
+
             <Heading size="md" mb="5">
               {title}
             </Heading>

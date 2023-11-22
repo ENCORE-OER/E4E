@@ -102,7 +102,9 @@ const Home = (props: DiscoverPageProps) => {
           audience: selectedAudience,
         };*/
 
-        throw new Error('Advanced search is not available yet! \n Close the advanced search and try again.');
+        throw new Error(
+          'Advanced search is not available yet! \n Close the advanced search and try again.'
+        );
       } else {
         //normal search
         searchData = {
@@ -115,7 +117,6 @@ const Home = (props: DiscoverPageProps) => {
           //types: selectedResourceTypes,
           //audience: selectedAudience,
         };
-
       }
       if (
         searchValue.length === 0 &&
@@ -137,14 +138,15 @@ const Home = (props: DiscoverPageProps) => {
         });
       }
       localStorage.setItem('searchData', JSON.stringify(searchData));
-      console.log('LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage));
+      console.log(
+        'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
+      );
     } catch (error) {
       addToast({
         message: `${error}`,
         type: 'error',
       });
     }
-
   };
 
   const handleAdvanceSearchClick = (e: any) => {
@@ -349,9 +351,7 @@ const Home = (props: DiscoverPageProps) => {
                   onResourceTypeFromDropDownMenu={
                     handleResourceTypeFromDropDownMenu
                   }
-                  onAudienceFromDropDownMenu={
-                    handleAudienceFromDropDownMenu
-                  }
+                  onAudienceFromDropDownMenu={handleAudienceFromDropDownMenu}
                 />
               </Box>
             )}
@@ -359,9 +359,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex justifyContent="center" pt={isClicked ? '70px' : '5px'}>
               <Button
                 variant="link"
-                rightIcon={
-                  !isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />
-                }
+                rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
                 onClick={handleAdvanceSearchClick}
               >
                 {buttonName}
