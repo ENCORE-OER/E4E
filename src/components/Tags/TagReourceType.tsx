@@ -1,5 +1,4 @@
-import { Tag, TagLeftIcon, Text } from '@chakra-ui/react';
-import { IconVideo } from '../../public/Icons/svgToIcons/iconVideo';
+import { Tag, Text } from '@chakra-ui/react';
 
 type TagResourceTypeProps = {
   resourceType: string[];
@@ -27,7 +26,7 @@ export default function TagResourceType({
               border="1px"
               display="flex"
             >
-              <TagLeftIcon as={IconVideo} />
+              {/*<TagLeftIcon as={IconVideo} />*/}
               <Text variant="label_tag_resType">{name}</Text>
             </Tag>
           ))}

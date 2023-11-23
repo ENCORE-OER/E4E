@@ -22,7 +22,6 @@ import SearchBar from '../components/SearchBar/SearchBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
-import themeEncore from '../styles/theme';
 import {
   OerAudienceInfo,
   OerDomainInfo,
@@ -89,53 +88,65 @@ const Home = (props: DiscoverPageProps) => {
   const searchCallback1 = async () => {
     let searchData = {};
 
-    if (isClicked) {
-      // advanced search selected
-      searchData = {
-        selectedSkills: selectedSkillIds,
-        advanced: true,
-        andOption: checkboxAll,
-        orOption: checkboxOr,
-        domains: selectedDomains,
-        types: selectedResourceTypes,
-        audience: selectedAudience,
-      };
-    } else {
-      //normal search
-      searchData = {
-        selectedSkills: selectedSkillIds,
-        advanced: false,
-        andOption: checkboxAll,
-        orOption: checkboxOr,
-        domains: selectedDomains,
-        types: selectedResourceTypes,
-        audience: selectedAudience,
-      };
-    }
-    if (
-      selectedSkillIds.length === 0 &&
-      selectedDomains.length === 0 &&
-      selectedResourceTypes.length === 0 &&
-      selectedAudience.length === 0
-    ) {
+    try {
+      if (isClicked) {
+        // advanced search selected
+        /*searchData = {
+          keywords: searchValue,
+          selectedSkills: selectedSkillIds,
+          advanced: true,
+          andOption: checkboxAll,
+          orOption: checkboxOr,
+          domains: selectedDomains,
+          types: selectedResourceTypes,
+          audience: selectedAudience,
+        };*/
+
+        throw new Error(
+          'Advanced search is not available yet! \n Close the advanced search and try again.'
+        );
+      } else {
+        //normal search
+        searchData = {
+          keywords: searchValue,
+          //selectedSkills: selectedSkillIds,
+          //advanced: false,
+          //andOption: checkboxAll,
+          //orOption: checkboxOr,
+          //domains: selectedDomains,
+          //types: selectedResourceTypes,
+          //audience: selectedAudience,
+        };
+      }
+      if (
+        searchValue.length === 0 &&
+        selectedSkillIds.length === 0 &&
+        selectedDomains.length === 0 &&
+        selectedResourceTypes.length === 0 &&
+        selectedAudience.length === 0
+      ) {
+        addToast({
+          message:
+            'Note: if you are selecting the “All” parameter it will have no effect on the search.',
+          type: 'warning',
+        });
+        throw new Error('Error: you must set at least one skill or parameter!');
+      } else {
+        router.push({
+          pathname: '/discover',
+          query: searchData,
+        });
+      }
+      localStorage.setItem('searchData', JSON.stringify(searchData));
+      console.log(
+        'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
+      );
+    } catch (error) {
       addToast({
-        message: 'Error: you must set at least one skill or parameter!',
+        message: `${error}`,
         type: 'error',
       });
-      addToast({
-        message:
-          'Note: if you are selecting the “All” parameter it will have no effect on the search.',
-        type: 'warning',
-      });
-      return;
-    } else {
-      router.push({
-        pathname: '/discover',
-        query: searchData,
-      });
     }
-    localStorage.setItem('searchData', JSON.stringify(searchData));
-    console.log('LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage));
   };
 
   const handleAdvanceSearchClick = (e: any) => {
@@ -161,14 +172,11 @@ const Home = (props: DiscoverPageProps) => {
     setCheckboxOr(true);
   };
 
-  /*useEffect(() => {
-    console.log(oerById);
-  }, [oerById]);*/
-
+  // update metrics
   useEffect(() => {
     const api = new APIV2(props.accessToken);
 
-    // nella useEffect le funzioni async fanno fatte così, è sbagliato mettere async subito la prima
+    // inside useEffect is not allowed to use async directly. You have to create a function inside useEffect and call it immediately.
     (async () => {
       try {
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
@@ -240,6 +248,7 @@ const Home = (props: DiscoverPageProps) => {
     console.log('SELECTED AUDIENCE: ' + selectedAudience);
   }, [selectedAudience]);
 
+  // update suggestions while texting
   useEffect(() => {
     console.log('SEARCH VALUE: ' + searchValue);
 
@@ -264,127 +273,120 @@ const Home = (props: DiscoverPageProps) => {
     <Flex w="100%" h="100%">
       <Navbar user={user} pageName="Discover" />
       <SideBar pagePath={router.pathname} />
-      <>
-        {
-          <Box w="full" minH="100vh" ml="200px" bg="background" pt="60px">
-            <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
+      <Box w="full" minH="100vh" ml="200px" bg="background" pt="60px">
+        <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
+          <Flex w="100%" justifyContent="center">
+            <Heading>Discover</Heading>
+          </Flex>
+
+          {/* TODO: Create SearchView component*/}
+          <Box w="full">
+            <HStack>
+              <Text variant="label" my="6px">
+                Keywords
+              </Text>
+              <Tooltip
+                hasArrow
+                placement="top"
+                label="Keywords. Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
+                aria-label="Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
+                ml="1px"
+                bg="white"
+                color="primary"
+                p={2}
+              >
+                <span>
+                  {' '}
+                  {/*use span element to fix problem of communication between Tooltip element and svg image*/}
+                  <Image src={icon_infocircle} alt="infocircle" />
+                </span>
+              </Tooltip>
+            </HStack>
+
+            <SearchBar
+              inputValue={searchValue}
+              setInputValue={setSearchValue}
+              inputValueIds={selectedSkillIds}
+              setInputValueIds={setSelectedSkillIds}
+              items={suggestions}
+              onSearchCallback={searchCallback1}
+              placeholder="Search resources"
+            />
+          </Box>
+
+          <Box w="100%" px="5px">
+            <HStack>
               <Flex w="100%" justifyContent="center">
-                <Heading fontFamily={themeEncore.fonts.title}>Discover</Heading>
+                <Text variant="text_searchFor">
+                  <span>Search for:</span>
+                </Text>
+
+                <input
+                  type="radio"
+                  id="checkboxAll"
+                  checked={checkboxAll}
+                  onChange={handleCheckboxAllChange}
+                />
+
+                <Text variant="text_searchFor_secondary">All keywords</Text>
+                <input
+                  type="radio"
+                  id="checkboxOr"
+                  checked={checkboxOr}
+                  onChange={handleCheckboxOrChange}
+                />
+                <Text variant="text_searchFor_secondary">Any keyword</Text>
               </Flex>
+            </HStack>
+          </Box>
 
-              <Box w="full">
-                <HStack>
-                  <Text variant="label" my="6px">
-                    Keywords
-                  </Text>
-                  <Tooltip
-                    hasArrow
-                    placement="top"
-                    label="Keywords. Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
-                    aria-label="Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
-                    ml="1px"
-                    bg="white"
-                    color="primary"
-                    p={2}
-                  >
-                    <span>
-                      {' '}
-                      {/*use span element to fix problem of communication between Tooltip element and svg image*/}
-                      <Image src={icon_infocircle} alt="infocircle" />
-                    </span>
-                  </Tooltip>
-                </HStack>
-
-                <SearchBar
-                  inputValue={searchValue}
-                  setInputValue={setSearchValue}
-                  inputValueIds={selectedSkillIds}
-                  setInputValueIds={setSelectedSkillIds}
-                  items={suggestions}
-                  onSearchCallback={searchCallback1}
-                  placeholder="Search resources"
+          <div>
+            {showBox && (
+              <Box w="100%" px="5px">
+                <AdvancedSearch
+                  domain={domain}
+                  resourceType={resourceTypes}
+                  audience={audience}
+                  onDomainFromDropDownMenu={handleDomainFromDropDownMenu}
+                  onResourceTypeFromDropDownMenu={
+                    handleResourceTypeFromDropDownMenu
+                  }
+                  onAudienceFromDropDownMenu={handleAudienceFromDropDownMenu}
                 />
               </Box>
+            )}
 
-              <Box w="100%" px="5px">
-                <HStack>
-                  <Flex w="100%" justifyContent="center">
-                    <Text variant="text_searchFor">
-                      <span>Search for:</span>
-                    </Text>
-
-                    <input
-                      type="radio"
-                      id="checkboxAll"
-                      checked={checkboxAll}
-                      onChange={handleCheckboxAllChange}
-                    />
-
-                    <Text variant="text_searchFor_secondary">All keywords</Text>
-                    <input
-                      type="radio"
-                      id="checkboxOr"
-                      checked={checkboxOr}
-                      onChange={handleCheckboxOrChange}
-                    />
-                    <Text variant="text_searchFor_secondary">Any keyword</Text>
-                  </Flex>
-                </HStack>
-              </Box>
-
-              <div>
-                {showBox && (
-                  <Box w="100%" px="5px">
-                    <AdvancedSearch
-                      domain={domain}
-                      resourceType={resourceTypes}
-                      audience={audience}
-                      onDomainFromDropDownMenu={handleDomainFromDropDownMenu}
-                      onResourceTypeFromDropDownMenu={
-                        handleResourceTypeFromDropDownMenu
-                      }
-                      onAudienceFromDropDownMenu={
-                        handleAudienceFromDropDownMenu
-                      }
-                    />
-                  </Box>
-                )}
-
-                <Flex justifyContent="center" mt={isClicked ? '70px' : '5px'}>
-                  <Button
-                    variant="link"
-                    rightIcon={
-                      !isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />
-                    }
-                    onClick={handleAdvanceSearchClick}
-                  >
-                    {buttonName}
-                  </Button>
-                </Flex>
-              </div>
-              <Text variant="text_before_venn">
-                Search among {totalOers} resources
-              </Text>
-              <div>
-                {hydrated ? (
-                  <VennDiagram
-                    sets={metrics}
-                    width={550}
-                    height={450}
-                    // selection={selection}
-                    // onHover={setSelection}
-                    combinations={combinations}
-                    hasSelectionOpacity={0.2}
-                    selectionColor=""
-                  />
-                ) : (
-                  'loading...'
-                )}
-              </div>
-            </VStack>
-          </Box>
-        }
-      </>
+            <Flex justifyContent="center" pt={isClicked ? '70px' : '5px'}>
+              <Button
+                variant="link"
+                rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
+                onClick={handleAdvanceSearchClick}
+              >
+                {buttonName}
+              </Button>
+            </Flex>
+          </div>
+          <Text variant="text_before_venn">
+            Search among {totalOers} resources
+          </Text>
+          <div>
+            {hydrated ? (
+              <VennDiagram
+                sets={metrics}
+                width={550}
+                height={450}
+                // selection={selection}
+                // onHover={setSelection}
+                combinations={combinations}
+                hasSelectionOpacity={0.2}
+                selectionColor=""
+              />
+            ) : (
+              'loading...'
+            )}
+          </div>
+        </VStack>
+      </Box>
     </Flex>
   );
 };

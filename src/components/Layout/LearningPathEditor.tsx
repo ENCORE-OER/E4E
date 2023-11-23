@@ -94,10 +94,12 @@ export default function LearningPathEditor({
                 Relevant OERs
               </Text>
               <ResourceCardList
-                oersById={oers}
+                oers={oers}
                 isNormalSizeCard={false}
                 itemsPerPage={3}
-                collectionColor={collectionColor}
+                collectionsColor={collectionColor ? collectionColor : ''}
+                isResourcePage={false}
+                oersLength={oers.length}
               />
             </Box>
           </Flex>

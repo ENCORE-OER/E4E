@@ -2,6 +2,7 @@ import { Stack, Text } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
 import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { OerDomainInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 export type TabDomainsProps = {};
 
@@ -27,18 +28,19 @@ export const TabDomains = ({}: TabDomainsProps) => {
   /**
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
-  filtered?.forEach((oer: { skills: { domain: any[] }[]; id: string }) =>
-    oer.skills.forEach((skill: { domain: any[] }) => {
-      skill.domain.forEach((domain) => {
-        if (!filteredOers[domain.name])
-          filteredOers[domain.name] = {
-            name: domain.name?.toUpperCase(),
-            elems: [],
-            domainId: domain.name,
-          };
-        filteredOers[domain.name].elems.push(oer.id + '');
-      });
-    })
+  filtered?.forEach(
+    (oer: { skills: { domain: OerDomainInfo[] }[]; id: string }) =>
+      oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
+        skill.domain?.forEach((domain) => {
+          if (!filteredOers[domain.name])
+            filteredOers[domain.name] = {
+              name: domain.name?.toUpperCase(),
+              elems: [],
+              domainId: domain.name,
+            };
+          filteredOers[domain.name].elems.push(oer.id + '');
+        });
+      })
   );
 
   const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {

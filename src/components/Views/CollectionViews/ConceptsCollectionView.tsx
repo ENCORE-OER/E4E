@@ -58,7 +58,9 @@ export default function ConceptsCollectionView({
             path.
           </Heading>
           <Text fontWeight="light" color="grey">
-            {`${conceptsSeletedLength} concepts selected`}
+            {conceptsSeletedLength === 1
+              ? `${conceptsSeletedLength} concept selected`
+              : `${conceptsSeletedLength} concepts selected`}
           </Text>
         </Box>
       </Flex>

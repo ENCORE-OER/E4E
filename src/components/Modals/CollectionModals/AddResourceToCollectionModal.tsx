@@ -13,17 +13,19 @@ import {
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
+  AddResourceFunction,
   CollectionModalProps,
   CollectionProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 
-import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../../utils/utils';
 
 interface AddCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   setIsNewCollection: Dispatch<SetStateAction<boolean>>;
+  collections: CollectionProps[];
+  addResource: AddResourceFunction;
 }
 
 export default function AddResourceToCollectionModal({
@@ -31,9 +33,10 @@ export default function AddResourceToCollectionModal({
   oerToAddCollection,
   isOpen,
   setIsNewCollection,
+  collections,
+  addResource,
 }: AddCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
-  const { addResource, collections } = useCollectionsContext();
   const hydrated = useHasHydrated();
   //const [isNewCollection, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);
@@ -77,24 +80,30 @@ export default function AddResourceToCollectionModal({
             p="2px"
             borderColor="grey"
             rounded="5px"
-            h="200px"
-            overflowY="scroll"
+            h="250px"
+            overflow={'hidden'}
+            overflowY="auto"
           >
             {collections?.map((collection: CollectionProps) => (
-              <Text
-                cursor={'pointer'}
-                key={collection.id}
-                _hover={{ bg: 'gray.200' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSaveResource(collection.id);
-                }}
-                fontSize="18px"
-                borderRadius={3}
-                p={1}
-              >
-                {collection.name}
-              </Text>
+              <Box p={0.5} key={collection.id}>
+                <Text
+                  cursor={'pointer'}
+                  _hover={{ bg: 'gray.200' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSaveResource(collection.id);
+                  }}
+                  fontSize="18px"
+                  borderRadius={3}
+                  p={1}
+                  pl={3}
+                  borderLeft={'10px'}
+                  borderLeftColor={collection?.color}
+                  borderLeftStyle={'solid'}
+                >
+                  {collection.name}
+                </Text>
+              </Box>
             ))}
           </Box>
         </ModalBody>

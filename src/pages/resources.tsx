@@ -49,6 +49,8 @@ const Home = (props: DiscoverPageProps) => {
     deleteCollection,
     deleteResourceFromCollection,
     setSelectedConceptsForCollection,
+    addCollection, // for InfoCardModal
+    addResource, // for InfoCardModal
   } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
@@ -67,6 +69,9 @@ const Home = (props: DiscoverPageProps) => {
   const abortController = new AbortController();
   // used to know if the data are loaded
   const [isNewDataLoaded, setIsNewDataLoaded] = useState<boolean>(false);
+
+  // for loading
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /*const handleAddCollection = () => {
     const nameCollection = 'Food';
@@ -179,6 +184,7 @@ const Home = (props: DiscoverPageProps) => {
         //setViewChanged(true); // set to true in CollectionView 'Cause from this page we don't trigger the OerCardsSorting useEffect.
         //console.log("--- Collection index: " + collectionIndex + " --- " + new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
         setIsNewDataLoaded(false);
+        setIsLoading(true);
         //console.log("I'm triggering isNewDataLoaded to false");
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers) {
@@ -303,6 +309,8 @@ const Home = (props: DiscoverPageProps) => {
                 handleDeleteButtonClick={handleDeleteButtonClick}
                 OerItemToDelete={OerItemToDelete}
                 setOerItemToDelete={setOerItemToDelete}
+                isLoading={isLoading}
+                setIsLoading={setIsLoading}
               />
             )}
           </Box>
@@ -315,6 +323,9 @@ const Home = (props: DiscoverPageProps) => {
           onClose={handleCloseCollectionModal}
           isNewCollection={true}
           isFromFolderButton={true}
+          collections={collections}
+          addCollection={addCollection}
+          addResource={addResource}
         />
       )}
     </Flex>

@@ -40,6 +40,8 @@ interface CollectionViewProps extends BoxProps {
     collectionId: number,
     concepts: OerConceptInfo[]
   ) => Promise<void>;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CollectionView({
@@ -59,6 +61,9 @@ export default function CollectionView({
   handleDeleteButtonClick,
   OerItemToDelete,
   setOerItemToDelete,
+  //--------
+  isLoading,
+  setIsLoading,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -105,6 +110,7 @@ export default function CollectionView({
     /*if (setIsNewDataLoaded) {
       setIsNewDataLoaded(true);
     }*/
+
     extractUniqueConcepts(collections[collectionIndex]);
     //console.log("I'm extracting unique concepts after collectionIndex change");
     //console.log("COLLECTION INDEX: " + collectionIndex);
@@ -117,6 +123,7 @@ export default function CollectionView({
   // I have to decide where to put this useEffect. Here or in resources.tsx
   useEffect(() => {
     if (collectionIndex >= 0 && oersById?.length >= 0) {
+      // with 'oersById?.length > 0' it doesn't trigger the update of the conceptsSelected array of the collection after deleting the last resource
       // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
       if (setIsNewDataLoaded !== undefined) {
         setIsNewDataLoaded(true);
@@ -140,6 +147,7 @@ export default function CollectionView({
         remainingConcepts
       );
     }
+    setIsLoading(false);
   }, [oersById]);
 
   useEffect(() => {
@@ -172,28 +180,35 @@ export default function CollectionView({
             />
           </Flex>
         </HStack>
-        <VStack>
-          {hydrated && isNewDataLoaded && (
-            <ResourceCardsList
-              oersById={oersById}
-              //collection={collections[collectionIndex]}
-              isNormalSizeCard={true}
-              itemsPerPage={5}
-              collectionColor={collections[collectionIndex]?.color}
-              isResourcePage={true}
-              // deleteResourceFromCollection={deleteResourceFromCollection}
-              handleDeleteButtonClick={handleDeleteButtonClick}
-              collectionIndex={collectionIndex}
-            />
-          )}
-          <Flex justifyContent="center" padding="5">
-            <AddResourcesButton
-              text="Add Resources ..."
-              pathname="/"
-              variant="primary"
-            />
-          </Flex>
-        </VStack>
+        {isLoading && (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        )}
+        {!isLoading && (
+          <VStack>
+            {hydrated && isNewDataLoaded && (
+              <ResourceCardsList
+                oers={oersById}
+                isNormalSizeCard={true}
+                itemsPerPage={5}
+                collectionsColor={[collections[collectionIndex]?.color]}
+                isResourcePage={true}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                collectionIndex={collectionIndex}
+                oersLength={oersById.length}
+              />
+            )}
+            <Flex justifyContent="center" padding="5">
+              <AddResourcesButton
+                text="Add Resources ..."
+                pathname="/"
+                variant="primary"
+              />
+            </Flex>
+          </VStack>
+        )}
       </Box>
 
       <ConceptsCollectionView

@@ -7,7 +7,7 @@ import OerCard from './OerCard';
 
 type SingleResourceCardProps = {
   oer: OerProps;
-  collectionColor?: string;
+  collectionColor: string;
   checkBookmark?: boolean;
 };
 

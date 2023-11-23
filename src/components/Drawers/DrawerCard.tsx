@@ -28,7 +28,6 @@ import {
   OerSubjectInfo,
   OerUrlInfo,
 } from '../../types/encoreElements';
-import CollectionModal from '../Modals/CollectionModals';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
@@ -75,9 +74,9 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
     console.log(isAddCollectionModalOpen);
   };
 
-  const handleCloseCollectionModal = () => {
+  /*const handleCloseCollectionModal = () => {
     setAddCollectionModalOpen(false);
-  };
+  };*/
 
   useEffect(() => {
     try {
@@ -294,15 +293,16 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-      {isAddCollectionModalOpen && (
+      {/*isAddCollectionModalOpen && (
         <CollectionModal
           isOpen={isOpen}
           onClose={handleCloseCollectionModal}
           oerToSave={oer}
           isNewCollection={false}
           isFromFolderButton={false}
+
         />
-      )}
+      )*/}
     </>
   );
 }
