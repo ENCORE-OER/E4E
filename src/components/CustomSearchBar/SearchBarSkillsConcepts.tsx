@@ -9,6 +9,7 @@ import {
 import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../utils/utils';
 import { OerInCollectionProps } from '../../types/encoreElements';
+import { Box } from '@chakra-ui/react';
 
 interface Tag {
   label: string;
@@ -17,14 +18,11 @@ interface Tag {
 
 type SearchBarV2Props = {
   collectionIndex: number;
-  isSkillsConcepts: boolean;
   selectedTags?: string[];
   setSelectedTags: Dispatch<SetStateAction<string[]>>;
 };
 export default function SearchBarPathDesign({
   collectionIndex,
-  isSkillsConcepts,
-  //selectedTags,
   setSelectedTags,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
@@ -48,28 +46,6 @@ export default function SearchBarPathDesign({
       return prev.filter((value: string) => value !== tagLabel);
     });
     tag.onRemove();
-  };
-
-  const renderSubjectsItems = () => {
-    /* <AutoCompleteList>
-      {hydrated &&
-      oers.map((oer: any, index:number) => (
-        <React.Fragment key={`oer-${index}`}>
-          {oer.suject.map((name: Subject, subjectIndex:number) => {
-            const subjectName = name.label;
-            return (
-              <AutoCompleteItem
-                key={`concept-${subjectIndex}`}
-                value={subjectName}
-                textTransform="capitalize"
-              >
-                {subjectName}
-              </AutoCompleteItem>
-            );
-          })}
-        </React.Fragment>
-      ))}
-  </AutoCompleteList>*/
   };
 
   const renderSkillAndConceptItems = () => {
@@ -104,42 +80,49 @@ export default function SearchBarPathDesign({
   };
 
   return (
-    <AutoComplete
-      openOnFocus
-      multiple
-      onSelectOption={(e) => {
-        const selectedValue = e.item.value;
-
-        setSelectedTags((prev: string[]) => {
-          const updatedValues = prev.filter(
-            // to avoid duplicate
-            (value: string) => value !== selectedValue
-          );
-          return [...updatedValues, selectedValue];
-        });
-      }}
+    <Box
+      border="1px" 
+      borderColor={'#CED4DA'} 
+      borderRadius={'7px'}
     >
-      <AutoCompleteInput
-        variant="filled"
-        placeholder="Search..."
-        value={inputValue}
-        onChange={(e) => {
-          e.preventDefault();
-          const currentValue = e.currentTarget.value;
-          setInputValue([currentValue]); // Imposta il valore di inputValue con il nuovo valore
+      <AutoComplete
+        openOnFocus
+        multiple
+        onSelectOption={(e) => {
+          const selectedValue = e.item.value;
+
+          setSelectedTags((prev: string[]) => {
+            const updatedValues = prev.filter(
+              // to avoid duplicate
+              (value: string) => value !== selectedValue
+            );
+            return [...updatedValues, selectedValue];
+          });
+          setInputValue([]); // Reset the input value
         }}
       >
-        {({ tags }) =>
-          tags.map((tag, tid) => (
-            <AutoCompleteTag
-              key={tid}
-              label={tag.label}
-              onRemove={() => handleTagsRemove(tag)}
-            />
-          ))
-        }
-      </AutoCompleteInput>
-      {isSkillsConcepts ? renderSkillAndConceptItems() : renderSubjectsItems()}
-    </AutoComplete>
+        <AutoCompleteInput
+          variant="filled"
+          placeholder="Search..."
+          value={inputValue}
+          onChange={(e) => {
+            e.preventDefault();
+            const currentValue = e.currentTarget.value;
+            setInputValue([currentValue]); // Imposta il valore di inputValue con il nuovo valore
+          }}
+        >
+          {({ tags }) =>
+            tags.map((tag, tid) => (
+              <AutoCompleteTag
+                key={tid}
+                label={tag.label}
+                onRemove={() => handleTagsRemove(tag)}
+              />
+            ))
+          }
+        </AutoCompleteInput>
+        {renderSkillAndConceptItems()}
+      </AutoComplete>
+    </Box>
   );
 }

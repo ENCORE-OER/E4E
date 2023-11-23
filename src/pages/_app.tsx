@@ -9,6 +9,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { CollectionsProvider } from '../components/CollectionsContext/CollectionsContext';
+import { LearningPathDesignProvider } from '../Contexts/LearningPathDesignContext';
 import reportWebVitals from '../reportWebVitals';
 import theme from '../styles/theme';
 
@@ -27,8 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <ChakraProvider theme={theme}>
         <CollectionsProvider>
+        <LearningPathDesignProvider>
           <Component {...pageProps} />
           <Analytics />
+        </LearningPathDesignProvider>
         </CollectionsProvider>
       </ChakraProvider>
     </UserProvider>

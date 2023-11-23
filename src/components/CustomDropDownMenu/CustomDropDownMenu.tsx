@@ -11,15 +11,11 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
+import { ArrayProps } from "../../types/encoreElements";
+
 
 export type onDataType = number | string;
-type ArrayProps = {
-  name: string;
-  // oers: OerInCollectionProps[];
-  // conceptsSelected: OerConceptInfo[];
-  // color?: string;
-  // date?: Date;
-};
+
 type CollectionMenuProps = {
   initialTitle: string; // Titolo iniziale del menu
   data: ArrayProps[]; // Array di dati da scorrere nel menu
@@ -63,7 +59,11 @@ export default function CustomDropDownMenu({
   }, [selectedOptions]);
   return (
     <>
-      <Box flex="1">
+      <Box flex="1"
+        border="1px" 
+        borderColor={'#CED4DA'} 
+        borderRadius={'7px'}
+      >
         <Menu
           isOpen={isOpen}
           onOpen={handleToggleMenu}
