@@ -48,14 +48,13 @@ type CardInfoModalProps = {
 type ColorCollectionProps = {
   name: string;
   color: string | undefined;
-}
+};
 
 export default function CardInfoModal({
   oer,
   isOpen,
   onClose,
 }: CardInfoModalProps) {
-
   const { addCollection, addResource, collections } = useCollectionsContext();
 
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
@@ -76,7 +75,9 @@ export default function CardInfoModal({
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
-  const [collectionsColor, setCollectionsColor] = useState<(ColorCollectionProps | undefined)[]>([]); // array of colors of the collections that has the oer selected
+  const [collectionsColor, setCollectionsColor] = useState<
+    (ColorCollectionProps | undefined)[]
+  >([]); // array of colors of the collections that has the oer selected
 
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -176,13 +177,11 @@ export default function CardInfoModal({
           if (!colors.includes(undefined))
             setCollectionsColor(colors);
         });*/
-
       }
     } catch (error) {
       console.error(error);
     }
   }, [oer, collections]);
-
 
   /* useEffect(() => {
      console.log('authors: ' + authors);
@@ -211,11 +210,13 @@ export default function CardInfoModal({
                 showTagDigital={showTagDigital}
                 showTagEntrepreneurial={showTagEntrepreneurial}
                 showTagGreen={showTagGreen}
-
               />
               {collectionsColor?.length &&
                 collectionsColor?.map(
-                  (collection_color: ColorCollectionProps | undefined, index: number) => (
+                  (
+                    collection_color: ColorCollectionProps | undefined,
+                    index: number
+                  ) => (
                     <Tooltip
                       key={index}
                       aria-label={collection_color?.name}
@@ -224,7 +225,7 @@ export default function CardInfoModal({
                       placement="bottom"
                       bg="gray.200"
                       color="primary"
-                      fontSize={"md"}
+                      fontSize={'md'}
                       p={2}
                     >
                       <span>
@@ -374,21 +375,19 @@ export default function CardInfoModal({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {
-        isAddCollectionModalOpen && (
-          <CollectionModal
-            isOpen={isOpen}
-            onClose={handleCloseCollectionModal}
-            oerToSave={oer}
-            isNewCollection={false}
-            isFromFolderButton={false}
-            maxLength={30}
-            collections={collections}
-            addResource={addResource}
-            addCollection={addCollection}
-          />
-        )
-      }
-    </Flex >
+      {isAddCollectionModalOpen && (
+        <CollectionModal
+          isOpen={isOpen}
+          onClose={handleCloseCollectionModal}
+          oerToSave={oer}
+          isNewCollection={false}
+          isFromFolderButton={false}
+          maxLength={30}
+          collections={collections}
+          addResource={addResource}
+          addCollection={addCollection}
+        />
+      )}
+    </Flex>
   );
 }

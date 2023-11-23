@@ -80,26 +80,30 @@ export default function AddResourceToCollectionModal({
             p="2px"
             borderColor="grey"
             rounded="5px"
-            h="200px"
-            overflowY="scroll"
+            h="250px"
+            overflow={'hidden'}
+            overflowY="auto"
           >
             {collections?.map((collection: CollectionProps) => (
-              <Text
-                cursor={'pointer'}
-                key={collection.id}
-                _hover={{ bg: 'gray.200' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleSaveResource(collection.id);
-                }}
-                fontSize="18px"
-                borderRadius={3}
-                p={1}
-                borderRight={2}
-                borderRightColor={collection?.color}
-              >
-                {collection.name}
-              </Text>
+              <Box p={0.5} key={collection.id}>
+                <Text
+                  cursor={'pointer'}
+                  _hover={{ bg: 'gray.200' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleSaveResource(collection.id);
+                  }}
+                  fontSize="18px"
+                  borderRadius={3}
+                  p={1}
+                  pl={3}
+                  borderLeft={"10px"}
+                  borderLeftColor={collection?.color}
+                  borderLeftStyle={"solid"}
+                >
+                  {collection.name}
+                </Text>
+              </Box>
             ))}
           </Box>
         </ModalBody>

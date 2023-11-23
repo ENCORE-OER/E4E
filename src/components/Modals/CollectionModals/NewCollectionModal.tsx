@@ -118,6 +118,13 @@ export default function NewCollectionModal({
                 const newValue = e.target.value.slice(0, maxLength);
                 setNameCollection(newValue);
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setCountClick(countClick + 1);
+                  handleSaveResource();
+                }
+              }}
               errorBorderColor={
                 nameCollection.length === maxLength ? 'orange.300' : 'red.300'
               }
