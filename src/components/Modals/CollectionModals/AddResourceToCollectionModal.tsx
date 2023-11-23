@@ -97,9 +97,9 @@ export default function AddResourceToCollectionModal({
                   borderRadius={3}
                   p={1}
                   pl={3}
-                  borderLeft={"10px"}
+                  borderLeft={'10px'}
                   borderLeftColor={collection?.color}
-                  borderLeftStyle={"solid"}
+                  borderLeftStyle={'solid'}
                 >
                   {collection.name}
                 </Text>
