@@ -224,7 +224,7 @@ export default function SearchBar({
             }
           </AutoCompleteInput>
         </Flex>
-        {freeText.length > 0 &&
+        {freeText.length > 0 && (
           <AutoCompleteList>
             {/*items.map((item) => (
             <AutoCompleteItem
@@ -236,13 +236,14 @@ export default function SearchBar({
             </AutoCompleteItem>
           ))*/}
 
-            { // could be possibile comment this part if we don't want text that appear like suggestion under the searchbar 
+            {
+              // could be possibile comment this part if we don't want text that appear like suggestion under the searchbar
               <AutoCompleteItem value={freeText ? freeText : ''}>
                 {freeText}
               </AutoCompleteItem>
-
             }
-          </AutoCompleteList>}
+          </AutoCompleteList>
+        )}
       </AutoComplete>
       <div
         onClick={(e) => {

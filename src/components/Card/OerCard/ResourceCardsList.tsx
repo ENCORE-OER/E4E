@@ -14,7 +14,7 @@ type ResourceCardsListProps = {
   oers: OerProps[];
   isNormalSizeCard: boolean;
   itemsPerPage: number;
-  collectionsColor: (string)[] | string;
+  collectionsColor: string[] | string;
   isResourcePage: boolean;
   handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
   collectionIndex?: number;
@@ -87,7 +87,11 @@ export default function ResourceCardsList({
                     <SingleResourceCard
                       collectionColor={
                         //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
-                        collectionsColor ? (isResourcePage && collectionsColor[0] ? collectionsColor[0] : collectionsColor[index]) : ''
+                        collectionsColor
+                          ? isResourcePage && collectionsColor[0]
+                            ? collectionsColor[0]
+                            : collectionsColor[index]
+                          : ''
                       }
                       oer={oer}
                     />
@@ -110,8 +114,8 @@ export default function ResourceCardsList({
                         //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                         //}
                       }}
-                    //position="absolute"
-                    //right={'0px'}
+                      //position="absolute"
+                      //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>
@@ -152,7 +156,11 @@ export default function ResourceCardsList({
                 >
                   <SmallSingleResourceCard
                     collectionColor={
-                      collectionsColor ? (isResourcePage ? collectionsColor[0] : collectionsColor[index]) : ''
+                      collectionsColor
+                        ? isResourcePage
+                          ? collectionsColor[0]
+                          : collectionsColor[index]
+                        : ''
                     }
                     oer={oer}
                   />

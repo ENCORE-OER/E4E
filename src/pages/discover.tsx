@@ -17,7 +17,7 @@ import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
   OerInCollectionProps,
-  OerProps
+  OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
@@ -40,9 +40,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
-  const [IconBookmarkColor, setIconBookmarkColor] = useState<
-    string[]
-  >([]);
+  const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
   const [filteredLength, setFilteredLength] = useState<number>(0);
 
   // items for Sorting DropDown menu
@@ -206,7 +204,6 @@ const Discover = (props: DiscoverPageProps) => {
         oers = await api.freeSearchOers(keywords); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
         setFilteredLength(oers?.length);
 
-
         if (oers?.length > 0) {
           // get all the oers data
           const oerData = await Promise.all(
@@ -335,7 +332,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>

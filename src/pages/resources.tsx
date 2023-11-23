@@ -49,8 +49,8 @@ const Home = (props: DiscoverPageProps) => {
     deleteCollection,
     deleteResourceFromCollection,
     setSelectedConceptsForCollection,
-    addCollection,  // for InfoCardModal
-    addResource,  // for InfoCardModal
+    addCollection, // for InfoCardModal
+    addResource, // for InfoCardModal
   } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +70,7 @@ const Home = (props: DiscoverPageProps) => {
   // used to know if the data are loaded
   const [isNewDataLoaded, setIsNewDataLoaded] = useState<boolean>(false);
 
-  // for loading 
+  // for loading
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   /*const handleAddCollection = () => {
@@ -238,7 +238,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

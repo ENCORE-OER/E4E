@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
@@ -31,7 +32,7 @@ import {
   OerMediaTypeInfo,
   OerProps,
   OerSubjectInfo,
-  OerUrlInfo
+  OerUrlInfo,
 } from '../../types/encoreElements';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -44,11 +45,19 @@ type CardInfoModalProps = {
   oer: OerProps | null;
 };
 
+type ColorCollectionProps = {
+  name: string;
+  color: string | undefined;
+}
+
 export default function CardInfoModal({
   oer,
   isOpen,
   onClose,
 }: CardInfoModalProps) {
+
+  const { addCollection, addResource, collections } = useCollectionsContext();
+
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] =
     useState<boolean>(false);
@@ -67,8 +76,7 @@ export default function CardInfoModal({
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
-  const [collectionsColor, setCollectionsColor] = useState<string[]>([]); // array of colors of the collections that has the oer selected
-  const { collections } = useCollectionsContext();
+  const [collectionsColor, setCollectionsColor] = useState<(ColorCollectionProps | undefined)[]>([]); // array of colors of the collections that has the oer selected
 
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -144,14 +152,18 @@ export default function CardInfoModal({
         setCoverage(
           oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
         );
-        const colors: string[] = [];
-        collections?.map(async (collection: CollectionProps) => {
+
+        // set the color of the collections that has the oer selected
+        const colors: ColorCollectionProps[] = [];
+        collections?.map((collection: CollectionProps) => {
           collection.oers?.map((oer_item: OerInCollectionProps) => {
-            if (oer_item.id === oer.id && collection.color) {
-              colors.push(collection.color);
+            if (oer_item.id === oer.id && collection.color !== undefined) {
+              //setCollectionsColor((prev: (string | undefined)[]) => [...prev, collection.color]);
+              colors.push({ name: collection.name, color: collection.color });
             }
-          })
+          });
         });
+
         setCollectionsColor(colors);
 
         /*Promise.all(
@@ -165,7 +177,6 @@ export default function CardInfoModal({
             setCollectionsColor(colors);
         });*/
 
-        console.log(JSON.stringify(oer));
       }
     } catch (error) {
       console.error(error);
@@ -195,23 +206,38 @@ export default function CardInfoModal({
         <ModalContent overflow="auto">
           <ModalCloseButton />
           <ModalHeader>
+            <HStack pb="5" pr="10">
+              <TagsDomain
+                showTagDigital={showTagDigital}
+                showTagEntrepreneurial={showTagEntrepreneurial}
+                showTagGreen={showTagGreen}
 
-            <TagsDomain
-              showTagDigital={showTagDigital}
-              showTagEntrepreneurial={showTagEntrepreneurial}
-              showTagGreen={showTagGreen}
-              mb="5"
-            />
-            {collectionsColor?.length &&
-              collectionsColor?.map((collection_color: string, index: number) => {
-                <IconBookmarkCheck
-                  key={index}
-                  colorBookMark={collection_color}
-                  size="25px"
-                />
-              })
-            }
-
+              />
+              {collectionsColor?.length &&
+                collectionsColor?.map(
+                  (collection_color: ColorCollectionProps | undefined, index: number) => (
+                    <Tooltip
+                      key={index}
+                      aria-label={collection_color?.name}
+                      label={collection_color?.name}
+                      hasArrow
+                      placement="bottom"
+                      bg="gray.200"
+                      color="primary"
+                      fontSize={"md"}
+                      p={2}
+                    >
+                      <span>
+                        <IconBookmarkCheck
+                          //key={index}
+                          colorBookMark={collection_color?.color}
+                          size="25px"
+                        />
+                      </span>
+                    </Tooltip>
+                  )
+                )}
+            </HStack>
             <Heading size="md" mb="5">
               {title}
             </Heading>
@@ -348,16 +374,21 @@ export default function CardInfoModal({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {isAddCollectionModalOpen && (
-        <CollectionModal
-          isOpen={isOpen}
-          onClose={handleCloseCollectionModal}
-          oerToSave={oer}
-          isNewCollection={false}
-          isFromFolderButton={false}
-          maxLength={30}
-        />
-      )}
-    </Flex>
+      {
+        isAddCollectionModalOpen && (
+          <CollectionModal
+            isOpen={isOpen}
+            onClose={handleCloseCollectionModal}
+            oerToSave={oer}
+            isNewCollection={false}
+            isFromFolderButton={false}
+            maxLength={30}
+            collections={collections}
+            addResource={addResource}
+            addCollection={addCollection}
+          />
+        )
+      }
+    </Flex >
   );
 }

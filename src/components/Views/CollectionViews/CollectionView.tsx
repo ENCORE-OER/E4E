@@ -69,7 +69,6 @@ export default function CollectionView({
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
 
-
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
 
@@ -111,7 +110,6 @@ export default function CollectionView({
     /*if (setIsNewDataLoaded) {
       setIsNewDataLoaded(true);
     }*/
-
 
     extractUniqueConcepts(collections[collectionIndex]);
     //console.log("I'm extracting unique concepts after collectionIndex change");
@@ -188,27 +186,29 @@ export default function CollectionView({
             <p>Loading...</p>
           </div>
         )}
-        {!isLoading && <VStack>
-          {hydrated && isNewDataLoaded && (
-            <ResourceCardsList
-              oers={oersById}
-              isNormalSizeCard={true}
-              itemsPerPage={5}
-              collectionsColor={[collections[collectionIndex]?.color]}
-              isResourcePage={true}
-              handleDeleteButtonClick={handleDeleteButtonClick}
-              collectionIndex={collectionIndex}
-              oersLength={oersById.length}
-            />
-          )}
-          <Flex justifyContent="center" padding="5">
-            <AddResourcesButton
-              text="Add Resources ..."
-              pathname="/"
-              variant="primary"
-            />
-          </Flex>
-        </VStack>}
+        {!isLoading && (
+          <VStack>
+            {hydrated && isNewDataLoaded && (
+              <ResourceCardsList
+                oers={oersById}
+                isNormalSizeCard={true}
+                itemsPerPage={5}
+                collectionsColor={[collections[collectionIndex]?.color]}
+                isResourcePage={true}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                collectionIndex={collectionIndex}
+                oersLength={oersById.length}
+              />
+            )}
+            <Flex justifyContent="center" padding="5">
+              <AddResourcesButton
+                text="Add Resources ..."
+                pathname="/"
+                variant="primary"
+              />
+            </Flex>
+          </VStack>
+        )}
       </Box>
 
       <ConceptsCollectionView

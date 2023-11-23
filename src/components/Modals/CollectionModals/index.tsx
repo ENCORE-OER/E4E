@@ -27,7 +27,6 @@ export default function CollectionModal({
   addCollection,
   collections,
 }: IndexCollectionModalProps) {
-
   //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);
