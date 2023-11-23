@@ -97,8 +97,9 @@ export default function LearningPathEditor({
                 oers={oers}
                 isNormalSizeCard={false}
                 itemsPerPage={3}
-                collectionColor={collectionColor}
+                collectionsColor={collectionColor ? collectionColor : ''}
                 isResourcePage={false}
+                oersLength={oers.length}
               />
             </Box>
           </Flex>

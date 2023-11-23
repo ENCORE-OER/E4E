@@ -40,6 +40,8 @@ interface CollectionViewProps extends BoxProps {
     collectionId: number,
     concepts: OerConceptInfo[]
   ) => Promise<void>;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CollectionView({
@@ -59,10 +61,14 @@ export default function CollectionView({
   handleDeleteButtonClick,
   OerItemToDelete,
   setOerItemToDelete,
+  //--------
+  isLoading,
+  setIsLoading,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
+
 
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
@@ -105,6 +111,8 @@ export default function CollectionView({
     /*if (setIsNewDataLoaded) {
       setIsNewDataLoaded(true);
     }*/
+
+
     extractUniqueConcepts(collections[collectionIndex]);
     //console.log("I'm extracting unique concepts after collectionIndex change");
     //console.log("COLLECTION INDEX: " + collectionIndex);
@@ -141,6 +149,7 @@ export default function CollectionView({
         remainingConcepts
       );
     }
+    setIsLoading(false);
   }, [oersById]);
 
   useEffect(() => {
@@ -173,18 +182,23 @@ export default function CollectionView({
             />
           </Flex>
         </HStack>
-        <VStack>
+        {isLoading && (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        )}
+        {!isLoading && <VStack>
           {hydrated && isNewDataLoaded && (
             <ResourceCardsList
               oers={oersById}
-              //collection={collections[collectionIndex]}
               isNormalSizeCard={true}
               itemsPerPage={5}
-              collectionColor={collections[collectionIndex]?.color}
+              collectionsColor={[collections[collectionIndex]?.color]}
               isResourcePage={true}
-              // deleteResourceFromCollection={deleteResourceFromCollection}
               handleDeleteButtonClick={handleDeleteButtonClick}
               collectionIndex={collectionIndex}
+              oersLength={oersById.length}
             />
           )}
           <Flex justifyContent="center" padding="5">
@@ -194,7 +208,7 @@ export default function CollectionView({
               variant="primary"
             />
           </Flex>
-        </VStack>
+        </VStack>}
       </Box>
 
       <ConceptsCollectionView

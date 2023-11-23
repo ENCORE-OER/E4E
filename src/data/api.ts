@@ -598,7 +598,7 @@ export class APIV2 {
   }
 
   // This has pagination (10 items per page)
-  async freeSearchOers(keywords: string[]): Promise<OerProps[]> {
+  async freeSearchOers(keywords: string[], page?: number): Promise<OerProps[]> {
     /*const queryParams = new URLSearchParams();
 
     keywords?.forEach((keyword: string) => {
@@ -606,12 +606,17 @@ export class APIV2 {
     });*/
 
     try {
+      const pageParams = page ? `page=${page}&` : '';
       const queryParams = keywords
         .map((keyword) => `keywords=${keyword}`)
         .join('&');
-      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${queryParams}`;
+      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${pageParams}${queryParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
-      return resp.data?.data;
+      if (!page) {
+        return resp.data?.data;
+      } else {
+        return resp?.data;
+      }
     } catch (error) {
       throw error;
     }

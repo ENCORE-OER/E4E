@@ -14,7 +14,11 @@ import { useCollectionsContext } from '../Contexts/CollectionsContext/Collection
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
-import { CollectionProps, OerInCollectionProps, OerProps } from '../types/encoreElements';
+import {
+  CollectionProps,
+  OerInCollectionProps,
+  OerProps
+} from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
 type DiscoverPageProps = {
@@ -36,7 +40,10 @@ const Discover = (props: DiscoverPageProps) => {
 
   const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
-  const [IconBookmarkColor, setIconBookmarkColor] = useState<(string | undefined)[]>([]);
+  const [IconBookmarkColor, setIconBookmarkColor] = useState<
+    string[]
+  >([]);
+  const [filteredLength, setFilteredLength] = useState<number>(0);
 
   // items for Sorting DropDown menu
   /*const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
@@ -187,10 +194,18 @@ const Discover = (props: DiscoverPageProps) => {
     const api = new APIV2(props.accessToken);
 
     try {
-      let oers: OerProps[] = [];
+      //let resp: RespDataProps | null = null;
+      let oers: OerProps[] | null = null;
 
       if (keywords.length > 0) {
+        //with freeSearchOers(keywords, page)
+        //resp = await api.freeSearchOers(keywords, 1); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        //setFilteredLength(resp?.recordsFiltered);
+        //const oers = resp?.data;
+
         oers = await api.freeSearchOers(keywords); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        setFilteredLength(oers?.length);
+
 
         if (oers?.length > 0) {
           // get all the oers data
@@ -293,9 +308,13 @@ const Discover = (props: DiscoverPageProps) => {
       // return the color of the collection if the oer is in the collection
       // if the oer is in more than one collection, return the color of the first collection
       const colors = filtered.map((filteredOer: OerProps) => {
-        const collectionColor = collections.find((collection: CollectionProps) =>
-          collection.oers?.some((oer: OerInCollectionProps) => oer.id === filteredOer.id)
-        )?.color || '';
+        const collectionColor =
+          collections.find(
+            (collection: CollectionProps) =>
+              collection.oers?.some(
+                (oer: OerInCollectionProps) => oer.id === filteredOer.id
+              )
+          )?.color || '';
 
         return collectionColor;
       });
@@ -305,7 +324,7 @@ const Discover = (props: DiscoverPageProps) => {
 
   useEffect(() => {
     console.log('IconBookmarkColor: ', IconBookmarkColor);
-  }, [IconBookmarkColor])
+  }, [IconBookmarkColor]);
 
   return (
     <Flex w="100%" h="100%">
@@ -347,9 +366,10 @@ const Discover = (props: DiscoverPageProps) => {
             <ResourceCardsList
               oers={filtered}
               isNormalSizeCard={true}
-              itemsPerPage={5}
+              itemsPerPage={10}
+              oersLength={filteredLength}
               isResourcePage={false}
-              collectionColor={IconBookmarkColor}
+              collectionsColor={IconBookmarkColor}
             />
           )}
         </Box>

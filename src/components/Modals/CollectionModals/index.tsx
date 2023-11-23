@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import {
+  AddCollectionFunction,
+  AddResourceFunction,
   CollectionModalProps,
+  CollectionProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 import AddResourceToCollectionModal from './AddResourceToCollectionModal';
@@ -11,6 +13,9 @@ interface IndexCollectionModalProps extends CollectionModalProps {
   isNewCollection: boolean;
   isFromFolderButton: boolean;
   maxLength?: number; // max collection name length
+  collections: CollectionProps[];
+  addResource: AddResourceFunction;
+  addCollection: AddCollectionFunction;
 }
 
 export default function CollectionModal({
@@ -18,8 +23,10 @@ export default function CollectionModal({
   oerToSave,
   isNewCollection,
   isFromFolderButton,
+  addResource,
+  addCollection,
+  collections,
 }: IndexCollectionModalProps) {
-  const { addCollection, addResource, collections } = useCollectionsContext();
 
   //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);

@@ -3,6 +3,8 @@ import { Button, Flex, SpaceProps, SpacerProps } from '@chakra-ui/react';
 import {
   AutoComplete,
   AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -66,7 +68,9 @@ export default function SearchBar({
       <AutoComplete
         //openOnFocus
 
-        creatable={freeText !== '' && /\S/.test(freeText) ? true : false} // without this logic it could create empty tag
+        // this logic is crucial, because using only this one without AutoCompleteItem could create empty tag
+        // we are using both 'creatable' and 'AutoCompleteItem' because the second one doesn't create tag if there are spaces at the end of the keywords
+        creatable={freeText !== '' && /\S/.test(freeText) ? true : false}
         multiple
         //value={inputValue}
         onSelectOption={(e) => {
@@ -220,8 +224,9 @@ export default function SearchBar({
             }
           </AutoCompleteInput>
         </Flex>
-        {/*<AutoCompleteList>
-          {/*items.map((item) => (
+        {freeText.length > 0 &&
+          <AutoCompleteList>
+            {/*items.map((item) => (
             <AutoCompleteItem
               key={item.id}
               value={item.label}
@@ -230,12 +235,14 @@ export default function SearchBar({
               {item.label}
             </AutoCompleteItem>
           ))*/}
-        {/*<AutoCompleteItem value={freeText ? freeText : ''}>
-              {freeText}
-            </AutoCompleteItem>
 
-          }
-        </AutoCompleteList>*/}
+            { // could be possibile comment this part if we don't want text that appear like suggestion under the searchbar 
+              <AutoCompleteItem value={freeText ? freeText : ''}>
+                {freeText}
+              </AutoCompleteItem>
+
+            }
+          </AutoCompleteList>}
       </AutoComplete>
       <div
         onClick={(e) => {

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   OerAuthorsInfo,
   OerMediaTypeInfo,
@@ -7,7 +8,7 @@ import OerCard from './OerCard';
 
 type SingleResourceCardProps = {
   oer: OerProps;
-  collectionColor?: string;
+  collectionColor: string;
   checkBookmark?: boolean;
 };
 
@@ -18,6 +19,10 @@ export default function SingleResourceCard({
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    console.log('--- SingleResourceCard --- \n collectionColor: ', collectionColor);
+  }, [collectionColor]);
 
   return (
     <OerCard

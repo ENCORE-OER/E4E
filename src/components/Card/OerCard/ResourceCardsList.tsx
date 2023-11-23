@@ -2,8 +2,8 @@
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { CollectionProps, OerProps } from '../../../types/encoreElements';
+import { useState } from 'react';
+import { OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
@@ -12,32 +12,25 @@ import SmallSingleResourceCard from './SmallSingleResourceCard';
 
 type ResourceCardsListProps = {
   oers: OerProps[];
-  collection?: CollectionProps;
   isNormalSizeCard: boolean;
   itemsPerPage: number;
-  collectionColor?: (string | undefined)[];
+  collectionsColor: (string)[] | string;
   isResourcePage: boolean;
   handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
-  /*deleteResourceFromCollection?: (
-    idCollection: number,
-    idOer: number
-  ) => Promise<void>;*/
   collectionIndex?: number;
-  setViewChanged?: Dispatch<SetStateAction<boolean>>;
-  //getDataOerById?: (idOer: number) => Promise<OerProps>;
+  oersLength: number;
 };
 
 export default function ResourceCardsList({
   oers,
-  //collection,
   isNormalSizeCard,
   itemsPerPage,
-  collectionColor,
+  collectionsColor,
   isResourcePage,
   handleDeleteButtonClick,
   collectionIndex,
-} //getDataOerById,
-  : ResourceCardsListProps) {
+  oersLength,
+}: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<OerProps | null>(null);
@@ -51,7 +44,7 @@ export default function ResourceCardsList({
   // handle pagination of the oers
   //-----------------------------------------------------------
   //const itemsPerPage = 5;
-  const totalPages = Math.ceil(oers.length / itemsPerPage);
+  const totalPages = Math.ceil(oersLength / itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -92,7 +85,10 @@ export default function ResourceCardsList({
                     as="button"
                   >
                     <SingleResourceCard
-                      collectionColor={collectionColor ? collectionColor[index] : ''}
+                      collectionColor={
+                        //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
+                        collectionsColor ? (isResourcePage && collectionsColor[0] ? collectionsColor[0] : collectionsColor[index]) : ''
+                      }
                       oer={oer}
                     />
                   </Box>
@@ -155,7 +151,9 @@ export default function ResourceCardsList({
                   as="button"
                 >
                   <SmallSingleResourceCard
-                    collectionColor={collectionColor ? collectionColor[index] : ''}
+                    collectionColor={
+                      collectionsColor ? (isResourcePage ? collectionsColor[0] : collectionsColor[index]) : ''
+                    }
                     oer={oer}
                   />
                 </Box>

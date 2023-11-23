@@ -5,6 +5,6 @@ export type CollectionProps = {
   name: string;
   oers: OerInCollectionProps[];
   conceptsSelected: OerConceptInfo[];
-  color?: string;
+  color: string;
   date?: Date;
 };

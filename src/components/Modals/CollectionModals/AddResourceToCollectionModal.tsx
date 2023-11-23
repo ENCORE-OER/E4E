@@ -95,6 +95,8 @@ export default function AddResourceToCollectionModal({
                 fontSize="18px"
                 borderRadius={3}
                 p={1}
+                borderRight={2}
+                borderRightColor={collection?.color}
               >
                 {collection.name}
               </Text>
