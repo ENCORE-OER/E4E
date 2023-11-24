@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
 import Navbar from '../components/NavBars/NavBarEncore';
-import SearchBar from '../components/SearchBar/SearchBarEncore';
+import SearchBarEncore from '../components/SearchBar/SearchBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import { APIV2 } from '../data/api';
 import icon_infocircle from '../public/Icons/icon_infocircle.svg';
@@ -26,7 +26,6 @@ import {
   OerAudienceInfo,
   OerDomainInfo,
   OerMediaTypeInfo,
-  OerSkillInfo,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
@@ -43,8 +42,8 @@ const Home = (props: DiscoverPageProps) => {
   //const [respSearchOers] = useState<OerProps[]>([]);
   //const [oerById] = useState<OerProps | null>(null);
 
-  const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
-  const [suggestions, setSuggestions] = useState<OerSkillInfo[]>([]); // list of the skill selectable in the searchbar
+  //const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
+  //const [suggestions, setSuggestions] = useState<OerSkillInfo[]>([]); // list of the skill selectable in the searchbar
 
   const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
@@ -91,36 +90,35 @@ const Home = (props: DiscoverPageProps) => {
     try {
       if (isClicked) {
         // advanced search selected
-        /*searchData = {
+        searchData = {
           keywords: searchValue,
-          selectedSkills: selectedSkillIds,
+          //selectedSkills: selectedSkillIds,
           advanced: true,
           andOption: checkboxAll,
           orOption: checkboxOr,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
-        };*/
+        };
 
-        throw new Error(
+        /*throw new Error(
           'Advanced search is not available yet! \n Close the advanced search and try again.'
-        );
+        );*/
       } else {
         //normal search
         searchData = {
           keywords: searchValue,
           //selectedSkills: selectedSkillIds,
-          //advanced: false,
-          //andOption: checkboxAll,
-          //orOption: checkboxOr,
-          //domains: selectedDomains,
-          //types: selectedResourceTypes,
-          //audience: selectedAudience,
+          advanced: false,
+          andOption: checkboxAll,
+          orOption: checkboxOr,
+          domains: selectedDomains,
+          types: selectedResourceTypes,
+          audience: selectedAudience,
         };
       }
       if (
         searchValue.length === 0 &&
-        selectedSkillIds.length === 0 &&
         selectedDomains.length === 0 &&
         selectedResourceTypes.length === 0 &&
         selectedAudience.length === 0
@@ -249,7 +247,7 @@ const Home = (props: DiscoverPageProps) => {
   }, [selectedAudience]);
 
   // update suggestions while texting
-  useEffect(() => {
+  /*useEffect(() => {
     console.log('SEARCH VALUE: ' + searchValue);
 
     if (searchValue.length > 0) {
@@ -263,11 +261,7 @@ const Home = (props: DiscoverPageProps) => {
         }
       })();
     }
-  }, [searchValue]);
-
-  useEffect(() => {
-    console.log('SELECTED SKILL IDS: ' + selectedSkillIds);
-  }, [selectedSkillIds]);
+  }, [searchValue]);*/
 
   return (
     <Flex w="100%" h="100%">
@@ -303,12 +297,12 @@ const Home = (props: DiscoverPageProps) => {
               </Tooltip>
             </HStack>
 
-            <SearchBar
+            <SearchBarEncore
               inputValue={searchValue}
               setInputValue={setSearchValue}
-              inputValueIds={selectedSkillIds}
-              setInputValueIds={setSelectedSkillIds}
-              items={suggestions}
+              //inputValueIds={selectedSkillIds}
+              //setInputValueIds={setSelectedSkillIds}
+              //items={suggestions}
               onSearchCallback={searchCallback1}
               placeholder="Search resources"
             />
