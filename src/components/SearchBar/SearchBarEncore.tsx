@@ -15,8 +15,8 @@ import { OerSkillInfo } from '../../types/encoreElements';
 type SearchBarProps = {
   inputValue: string[];
   setInputValue: Dispatch<SetStateAction<string[]>>;
-  inputValueIds?: number[];
-  setInputValueIds?: Dispatch<SetStateAction<number[]>>;
+  //inputValueIds?: number[];
+  //setInputValueIds?: Dispatch<SetStateAction<number[]>>;
   placeholder?: string;
   items?: OerSkillInfo[]; // suggested skills
   px?: SpaceProps['px'];
@@ -32,7 +32,7 @@ type SearchBarProps = {
 
 /* For multi selected tag see https://github.com/anubra266/choc-autocomplete#multi-select-with-tags */
 
-export default function SearchBar({
+export default function SearchBarEncore({
   inputValue,
   setInputValue,
   //inputValueIds,

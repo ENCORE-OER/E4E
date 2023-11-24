@@ -473,7 +473,8 @@ export class APIV2 {
   }
 
   async searchOERbySkillNoPages(
-    skillIds?: string[],
+    //skillIds?: string[],
+    //keywords?: string[],
     domainIds?: string[],
     resourceTypeIds?: string[],
     audienceIds?: string[]
@@ -482,9 +483,13 @@ export class APIV2 {
       const queryParams = new URLSearchParams();
       const ID_ALL = '0';
 
-      skillIds?.forEach((skillId: string) => {
+      /*skillIds?.forEach((skillId: string) => {
         queryParams.append('skills', skillId);
-      });
+      });*/
+
+      /*keywords?.forEach((keyword: string) => {
+        queryParams.append('keywords', keyword);
+      });*/
 
       if (!domainIds?.includes(ID_ALL)) {
         domainIds?.forEach((domainId: string) => {
@@ -598,24 +603,56 @@ export class APIV2 {
   }
 
   // This has pagination (10 items per page)
-  async freeSearchOers(keywords: string[], page?: number): Promise<OerProps[]> {
-    /*const queryParams = new URLSearchParams();
-
-    keywords?.forEach((keyword: string) => {
-      queryParams.append('search', keyword);
-    });*/
-
+  async freeSearchOers(
+    keywords: string[],
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    page?: number
+  ): Promise<OerProps[]> {
     try {
-      const pageParams = page ? `page=${page}&` : '';
+      /*const pageParams = page ? `page=${page.toString()}&` : '';
       const queryParams = keywords
         .map((keyword) => `keywords=${keyword}`)
-        .join('&');
-      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${pageParams}${queryParams}`;
+        .join('&');*/
+
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      if (page) {
+        queryParams.append('page', page.toString());
+      }
+
+      keywords?.forEach((keyword: string) => {
+        queryParams.append('keywords', keyword);
+      });
+
+      // ------------------------------------------
+      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
+      // ------------------------------------------
+
+      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${queryParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
       if (!page) {
-        return resp.data?.data;
+        return resp.data?.data || [];
       } else {
-        return resp?.data;
+        return resp?.data || [];
       }
     } catch (error) {
       throw error;
