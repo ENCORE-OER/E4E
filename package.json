@@ -9,8 +9,6 @@
     "lint": "next lint",
     "prettier": "prettier --write .",
     "prepare": "husky install",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
     "postinstall": "npm run prepare"
   },
   "dependencies": {
