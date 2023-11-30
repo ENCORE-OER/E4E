@@ -1,5 +1,4 @@
 export type Tag = {
-    label: string;
-    onRemove: () => void;
-  }
-  
+  label: string;
+  onRemove: () => void;
+};

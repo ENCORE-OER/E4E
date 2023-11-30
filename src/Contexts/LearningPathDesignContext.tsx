@@ -66,7 +66,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const [initialCollectionTitle, setInitialCollectionTitle] =
     useState<string>('Select Collection');
-  
+
   const [initialBloomTitle, setInitialBloomTitle] =
     useState<string>('Select Bloom Level');
 
@@ -141,17 +141,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setText(newText);
   };
 
-  const handleCollectionTitleSelection = (newCollectionTitle:string) => {
+  const handleCollectionTitleSelection = (newCollectionTitle: string) => {
     setInitialCollectionTitle(newCollectionTitle);
-  }
-  const handleBloomTitleSelection = (newBloomTitle:string) => {
+  };
+  const handleBloomTitleSelection = (newBloomTitle: string) => {
     setInitialBloomTitle(newBloomTitle);
-  }
+  };
 
   const handleCollectionIndexChange = (newCollectionIndex: number) => {
     setcollectionIndex(newCollectionIndex);
     handleCollectionTitleSelection(collections[newCollectionIndex].name);
-  }
+  };
 
   //handlers for bloom level selection
   const handleBloomLevelChange = (bloomLevelIndex: number) => {

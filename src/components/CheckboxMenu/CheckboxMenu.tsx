@@ -1,4 +1,4 @@
-import React, {useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { CheckboxGroup, Checkbox, Stack, CSSReset } from '@chakra-ui/react';
 import { useHasHydrated } from '../../utils/utils';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -16,9 +16,7 @@ export default function CheckboxMenu({
 }: CheckboxMenuProps) {
   //const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const hydrated = useHasHydrated();
-  const {
-    selectedOptions
-  } = useLearningPathDesignContext();
+  const { selectedOptions } = useLearningPathDesignContext();
 
   const handleCheckboxChange = (newSelectedOptions: string[]) => {
     // setSelectedOptions(newSelectedOptions);

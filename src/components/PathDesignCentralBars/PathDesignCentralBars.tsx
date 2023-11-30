@@ -64,9 +64,7 @@ export default function PathDesignCentralBars({
         </Box>
 
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          <SearchBarPathDesign
-            collectionIndex={collectionIndex}
-          />
+          <SearchBarPathDesign collectionIndex={collectionIndex} />
         </Box>
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <TextBox backgroundColor="#EDF2F7" placeholder="Add some text..." />

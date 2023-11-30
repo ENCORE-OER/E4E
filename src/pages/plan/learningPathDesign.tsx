@@ -32,7 +32,7 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
-const { SPACING, pathDesignData, /*handleResetStep1*/ } =
+const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
     useLearningPathDesignContext();
 
   const router = useRouter();
@@ -63,6 +63,10 @@ const { SPACING, pathDesignData, /*handleResetStep1*/ } =
       pathname: '/plan/LearningObjective',
     });
   };
+
+  useEffect(() => {
+    handleCreatePath();
+  }, []);
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
@@ -185,6 +189,7 @@ const { SPACING, pathDesignData, /*handleResetStep1*/ } =
                   borderRadius={'md'}
                 >
                   <Text>
+                    {console.log(pathDesignData)}
                     List key principle of:{' '}
                     {hydrated &&
                       pathDesignData.skills &&
@@ -221,7 +226,6 @@ const { SPACING, pathDesignData, /*handleResetStep1*/ } =
               </Flex>
 
               <LearningPathEditor
-                collectionIndex={indexCollectionClicked}
                 setConceptSelectedIndex={setConceptSelectedIndex}
                 oers={oersById}
                 conceptSelectedIndex={conceptSelectedIndex}

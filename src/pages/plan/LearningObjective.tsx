@@ -34,7 +34,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
-  
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected

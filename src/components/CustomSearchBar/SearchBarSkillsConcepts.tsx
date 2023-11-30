@@ -26,7 +26,8 @@ export default function SearchBarPathDesign({
   collectionIndex,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
-  const { selectedSkillConceptsTags, handleSkillsChange } = useLearningPathDesignContext();
+  const { selectedSkillConceptsTags, handleSkillsChange } =
+    useLearningPathDesignContext();
   const hydrated = useHasHydrated();
   const [inputValue, setInputValue] = useState<string[]>([]);
 
