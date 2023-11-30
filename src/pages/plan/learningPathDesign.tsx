@@ -32,12 +32,11 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
-const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
+  const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
     useLearningPathDesignContext();
 
   const router = useRouter();
-  const { collections, indexCollectionClicked } =
-    useCollectionsContext();
+  const { collections, indexCollectionClicked } = useCollectionsContext();
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
@@ -56,7 +55,7 @@ const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
       }
     }
   };
-  
+
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
@@ -142,7 +141,7 @@ const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
   }, [conceptSelectedIndex]);
 
   return (
-    <LearningPathProvider>   
+    <LearningPathProvider>
       <Flex w="100%" h="100%">
         <Navbar user={user} pageName="Plan" />
         <SideBar pagePath={'/plan'} />
@@ -171,9 +170,9 @@ const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
                 <Text>
                   Based on the information provided this a potential learning
                   objective and a suggested learning path. You have the
-                  flexibility to modify and customize both the description of the
-                  learning objective and the types and sequence of the proposed
-                  activities
+                  flexibility to modify and customize both the description of
+                  the learning objective and the types and sequence of the
+                  proposed activities
                 </Text>
               </Box>
             </Box>
@@ -216,13 +215,12 @@ const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
                   borderStyle="solid"
                 >
                   <ConceptButtonsList
-                  collections={collections}
-                  conceptSelectedIndex={conceptSelectedIndex}
-                  setConceptSelectedIndex={setConceptSelectedIndex}
-                  collectionIndex={indexCollectionClicked}
-                />
+                    collections={collections}
+                    conceptSelectedIndex={conceptSelectedIndex}
+                    setConceptSelectedIndex={setConceptSelectedIndex}
+                    collectionIndex={indexCollectionClicked}
+                  />
                 </Box>
-
               </Flex>
 
               <LearningPathEditor
@@ -233,27 +231,27 @@ const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
               />
             </Box>
           </Box>
-        <Flex paddingTop="1.5rem" w="100%">
-          <Flex
-            w="auto"
-            paddingRight={`${SPACING}%`}
-            position={'fixed'}
-            bottom="5%"
-            right="11%"
-          >
-            <Button
-              marginRight={'1px'}
-              border={'1px solid'}
-              colorScheme="yellow"
-              onClick={handlePrevButtonClick}
+          <Flex paddingTop="1.5rem" w="100%">
+            <Flex
+              w="auto"
+              paddingRight={`${SPACING}%`}
+              position={'fixed'}
+              bottom="5%"
+              right="11%"
             >
-              <Text fontWeight="bold" fontSize="lg">
-                Previous
-              </Text>
-            </Button>
+              <Button
+                marginRight={'1px'}
+                border={'1px solid'}
+                colorScheme="yellow"
+                onClick={handlePrevButtonClick}
+              >
+                <Text fontWeight="bold" fontSize="lg">
+                  Previous
+                </Text>
+              </Button>
+            </Flex>
           </Flex>
-        </Flex>
-      </Box>
+        </Box>
       </Flex>
     </LearningPathProvider>
   );
