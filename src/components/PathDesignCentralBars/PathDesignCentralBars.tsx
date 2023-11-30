@@ -17,13 +17,12 @@ export default function PathDesignCentralBars({
     DIMENSION,
     SPACING,
     bloomLevels,
-    selectedSkillConceptsTags,
-    handleSkillsChange,
     handleBloomLevelChange,
     currentBloomOptions,
     handleOptionsChange,
     step,
     resetCheckBoxOptions,
+    initialBloomTitle,
   } = useLearningPathDesignContext();
 
   return (
@@ -58,7 +57,7 @@ export default function PathDesignCentralBars({
       <Flex w="100%">
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <CustomDropDownMenu
-            initialTitle="Bloom Level"
+            initialTitle={initialBloomTitle}
             data={bloomLevels}
             onSelectionChange={handleBloomLevelChange}
           />
@@ -67,8 +66,6 @@ export default function PathDesignCentralBars({
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <SearchBarPathDesign
             collectionIndex={collectionIndex}
-            selectedTags={selectedSkillConceptsTags}
-            setSelectedTags={handleSkillsChange}
           />
         </Box>
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>

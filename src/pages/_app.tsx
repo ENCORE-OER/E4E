@@ -28,10 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <ChakraProvider theme={theme}>
         <CollectionsProvider>
-        <LearningPathDesignProvider>
-          <Component {...pageProps} />
-          <Analytics />
-        </LearningPathDesignProvider>
+          <LearningPathDesignProvider>
+            <Component {...pageProps} />
+            <Analytics />
+          </LearningPathDesignProvider>
         </CollectionsProvider>
       </ChakraProvider>
     </UserProvider>

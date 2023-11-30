@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCollectionsContext } from '../../components/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
@@ -19,11 +19,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
     bloomLevelIndex,
     text,
     step,
+    collectionIndex,
     selectedSkillConceptsTags,
     handleStepChange,
     selectedOptions,
-    handleResetStep0,
-    handleCreatePath,
+    initialCollectionTitle,
+    //handleResetStep0,
+    handleCollectionIndexChange,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -32,7 +34,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
-  const [collectionIndex, setcollectionIndex] = useState<number>(0);
+  
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
@@ -41,26 +43,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleCollectionChange = (collectionIndex: number) => {
     //console.log('COLLECTION INDEX: ' + collectionIndex);
-    setcollectionIndex(collectionIndex);
+    handleCollectionIndexChange(collectionIndex);
     handleStepChange(1); // Update the state to show the text when a collection is selected
   };
 
   const handlePrevButtonClick = () => {
-    handleResetStep0();
+    //handleResetStep0();
     router.push({
       pathname: '/plan',
     });
   };
-
-  useEffect(() => {
-    //console.log('cambiato qualcosa');
-  }, [selectedCollection]);
-  useEffect(() => {
-    //console.log('cambiato qualcosa');
-  }, [collectionIndex]);
-  useEffect(() => {
-    //console.log('cambiato qualcosa');
-  }, [selectedSkillConceptsTags]);
 
   return (
     <>
@@ -114,7 +106,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             </Flex>
             <Box w={`${DIMENSION - SPACING}%`}>
               <CustomDropDownMenu
-                initialTitle="Select Collection"
+                initialTitle={initialCollectionTitle}
                 data={collections}
                 onData={handleCollectionSelection}
                 onSelectionChange={handleCollectionChange}
@@ -170,9 +162,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       selectedOptions.length > 0 &&
                       text?.trim() !== ''
                     ) {
-                      handleCreatePath(collections[collectionIndex].name);
                       router.push({
-                        pathname: '/plan/pathDesign',
+                        pathname: '/plan/learningPathDesign',
                       });
                     } else {
                       addToast({

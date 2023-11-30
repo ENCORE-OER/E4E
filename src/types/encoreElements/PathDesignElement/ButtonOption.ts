@@ -1,4 +1,4 @@
 export type Option = {
-    title: string;
-    description?: string;
+  title: string;
+  description?: string;
 };

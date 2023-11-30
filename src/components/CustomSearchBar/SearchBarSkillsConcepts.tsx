@@ -10,6 +10,7 @@ import { useCollectionsContext } from '../CollectionsContext/CollectionsContext'
 import { useHasHydrated } from '../../utils/utils';
 import { OerInCollectionProps } from '../../types/encoreElements';
 import { Box } from '@chakra-ui/react';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 interface Tag {
   label: string;
@@ -19,13 +20,13 @@ interface Tag {
 type SearchBarV2Props = {
   collectionIndex: number;
   selectedTags?: string[];
-  setSelectedTags: Dispatch<SetStateAction<string[]>>;
+  setSelectedTags?: Dispatch<SetStateAction<string[]>>;
 };
 export default function SearchBarPathDesign({
   collectionIndex,
-  setSelectedTags,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
+  const { selectedSkillConceptsTags, handleSkillsChange } = useLearningPathDesignContext();
   const hydrated = useHasHydrated();
   const [inputValue, setInputValue] = useState<string[]>([]);
 
@@ -42,7 +43,7 @@ export default function SearchBarPathDesign({
   const handleTagsRemove = async (tag: Tag) => {
     const tagLabel = tag.label;
 
-    setSelectedTags((prev: string[]) => {
+    handleSkillsChange((prev: string[]) => {
       return prev.filter((value: string) => value !== tagLabel);
     });
     tag.onRemove();
@@ -80,18 +81,15 @@ export default function SearchBarPathDesign({
   };
 
   return (
-    <Box
-      border="1px" 
-      borderColor={'#CED4DA'} 
-      borderRadius={'7px'}
-    >
+    <Box border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
       <AutoComplete
         openOnFocus
         multiple
+        defaultValues={selectedSkillConceptsTags}
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
 
-          setSelectedTags((prev: string[]) => {
+          handleSkillsChange((prev: string[]) => {
             const updatedValues = prev.filter(
               // to avoid duplicate
               (value: string) => value !== selectedValue

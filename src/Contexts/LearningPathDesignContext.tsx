@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 //import { useHasHydrated } from '../../utils/utils';
 import { Option, ArrayProps } from '../types/encoreElements/index';
 import { PathDesign } from '../types/encoreElements/index';
+import { useCollectionsContext } from '../components/CollectionsContext/CollectionsContext';
 
 //constext props
 type LearnignPathDesignContextProps = {
@@ -19,21 +20,25 @@ type LearnignPathDesignContextProps = {
   selectedOptions: string[];
   bloomLevelIndex: number | null;
   step: number;
+  collectionIndex: number;
   pathDesignData: PathDesign;
   resetCheckBoxOptions: boolean;
+  initialCollectionTitle: string;
+  initialBloomTitle: string;
   setSelectedSkillConceptsTags: (newSkills: string[]) => void;
   handleYourExperienceChange: (selected: Option) => void;
   handleContextChange: (selected: Option) => void;
   handleGroupDimensionChange: (selected: Option) => void;
   handleLeanerExperienceChange: (selected: Option) => void;
   handleSetText: (newText: string) => void;
-  handleCreatePath: (collectionName: string) => void;
+  handleCreatePath: () => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
   handleSkillsChange: React.Dispatch<React.SetStateAction<string[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
-  handleResetStep0: () => void;
-  handleResetStep1: () => void;
+  // handleResetStep0: () => void;
+  // handleResetStep1: () => void;
+  handleCollectionIndexChange: (newCollectionIndex: number) => void;
 };
 
 // create the context and export it so that it can be used in other components
@@ -48,6 +53,7 @@ export const useLearningPathDesignContext = () =>
 
 // create a provider to wrap the app and provide the context to all its children
 export const LearningPathDesignProvider = ({ children }: any) => {
+  const { collections } = useCollectionsContext();
   const DIMENSION = 30;
   const SPACING = 3;
   const bloomLevels = [
@@ -57,6 +63,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     { name: 'Apply' },
     { name: 'Create' },
   ];
+
+  const [initialCollectionTitle, setInitialCollectionTitle] =
+    useState<string>('Select Collection');
+  
+  const [initialBloomTitle, setInitialBloomTitle] =
+    useState<string>('Select Bloom Level');
 
   //data for the checkboxe menu
   const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
@@ -83,6 +95,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     string[]
   >([]);
 
+  //collection index selection
+  const [collectionIndex, setcollectionIndex] = useState<number>(0);
+
   //bloom level index selection
   const [bloomLevelIndex, setBloomLevelIndex] = useState<number | null>(null);
 
@@ -93,7 +108,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [step, setStep] = useState<number>(0);
 
   const [pathDesignData, setPathDesignData] = useState<PathDesign>({
-    collection: '',
+    collectionIndex: 0,
     bloomLevel: '',
     skills: [],
     verbsLearingObjective: [],
@@ -126,9 +141,22 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setText(newText);
   };
 
+  const handleCollectionTitleSelection = (newCollectionTitle:string) => {
+    setInitialCollectionTitle(newCollectionTitle);
+  }
+  const handleBloomTitleSelection = (newBloomTitle:string) => {
+    setInitialBloomTitle(newBloomTitle);
+  }
+
+  const handleCollectionIndexChange = (newCollectionIndex: number) => {
+    setcollectionIndex(newCollectionIndex);
+    handleCollectionTitleSelection(collections[newCollectionIndex].name);
+  }
+
   //handlers for bloom level selection
   const handleBloomLevelChange = (bloomLevelIndex: number) => {
     setBloomLevelIndex(bloomLevelIndex);
+    handleBloomTitleSelection(bloomLevels[bloomLevelIndex].name);
 
     switch (bloomLevelIndex) {
       case 0:
@@ -170,10 +198,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setStep(newStep);
   };
 
-  const handleCreatePath = (collectionName: string) => {
+  const handleCreatePath = () => {
     if (bloomLevelIndex !== null) {
       setPathDesignData({
-        collection: collectionName,
+        collectionIndex: collectionIndex,
         bloomLevel: bloomLevels[bloomLevelIndex].name,
         skills: selectedSkillConceptsTags,
         verbsLearingObjective: selectedOptions,
@@ -185,25 +213,25 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   };
 
-  const handleResetStep0 = () => {
-    setStep(0);
-    setBloomLevelIndex(null);
-    setSelectedSkillConceptsTags([]);
-    setSelectedOptions([]);
-    setText('');
-    setSelectedYourExperience(null);
-    setSelectedContext(null);
-    setSelectedGroupDimension(null);
-    setSelectedLeanerExperience(null);
-  };
+  // const handleResetStep0 = () => {
+  //   setStep(0);
+  //   setBloomLevelIndex(null);
+  //   setSelectedSkillConceptsTags([]);
+  //   setSelectedOptions([]);
+  //   setText('');
+  //   setSelectedYourExperience(null);
+  //   setSelectedContext(null);
+  //   setSelectedGroupDimension(null);
+  //   setSelectedLeanerExperience(null);
+  // };
 
-  const handleResetStep1 = () => {
-    setStep(0);
-    setBloomLevelIndex(null);
-    setSelectedSkillConceptsTags([]);
-    setSelectedOptions([]);
-    setText('');
-  }
+  // const handleResetStep1 = () => {
+  //   setStep(0);
+  //   setBloomLevelIndex(null);
+  //   setSelectedSkillConceptsTags([]);
+  //   setSelectedOptions([]);
+  //   setText('');
+  // };
 
   useEffect(() => {
     console.log(bloomLevelIndex);
@@ -231,6 +259,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedOptions,
         resetCheckBoxOptions,
         pathDesignData,
+        collectionIndex,
+        initialCollectionTitle,
+        initialBloomTitle,
         handleYourExperienceChange,
         handleContextChange,
         handleGroupDimensionChange,
@@ -241,8 +272,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleSkillsChange,
         handleStepChange,
         handleOptionsChange,
-        handleResetStep0,
-        handleResetStep1,        
+        //handleResetStep0,
+        //handleResetStep1,
+        handleCollectionIndexChange,
       }}
     >
       {children}

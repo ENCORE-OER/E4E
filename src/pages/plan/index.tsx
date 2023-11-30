@@ -28,7 +28,14 @@ const Home = () => {
       <Navbar user={user} pageName="Plan" />
       <SideBar pagePath={router.pathname} />
 
-      <Box ml="200px" py="115px" pl="40px" w="full" minH="100vh" bg="background">
+      <Box
+        ml="200px"
+        py="115px"
+        pl="40px"
+        w="full"
+        minH="100vh"
+        bg="background"
+      >
         <Box w="100%" h="100%">
           <Flex
             w="100%"
@@ -50,41 +57,44 @@ const Home = () => {
 
             <Box w="80%" paddingTop="2rem">
               <Text>
-                This part will guide you in creating a tailored learning path to meet your specific educational goals. 
-                Start by detailing the educational context or setting in which you plan to carry out your activities.
+                This part will guide you in creating a tailored learning path to
+                meet your specific educational goals. Start by detailing the
+                educational context or setting in which you plan to carry out
+                your activities.
               </Text>
             </Box>
             <Box w="80%" paddingTop="2rem">
               <SegmentedButtonGroup onOptionsChange={handleOptionsChange} />
-            </Box>    
+            </Box>
 
             <Box w="5%" paddingRight="10%">
-                <Button
-                  leftIcon={<IconPathEdit />}
-                  border={'1px solid'}
-                  colorScheme="yellow"
-                  position={'absolute'}
-                  bottom="5%"
-                  right="10%"
-                  onClick={ () => {
-                    if (areOptionsComplete) {
-                      router.push({
-                        pathname: '/plan/LearningObjective',
-                      });
-                    } else {
-                      addToast({
-                        message: 'Please ensure all required fields are filled out before proceeding.',
-                        type: 'warning',
-                      });
-                    }
-                  }}
-                  //isDisabled={!areOptionsComplete}
-                >
-                  <Text fontWeight="bold" fontSize="lg">
-                    Next
-                  </Text>
-                </Button>
-              </Box>
+              <Button
+                leftIcon={<IconPathEdit />}
+                border={'1px solid'}
+                colorScheme="yellow"
+                position={'absolute'}
+                bottom="5%"
+                right="10%"
+                onClick={() => {
+                  if (areOptionsComplete) {
+                    router.push({
+                      pathname: '/plan/LearningObjective',
+                    });
+                  } else {
+                    addToast({
+                      message:
+                        'Please ensure all required fields are filled out before proceeding.',
+                      type: 'warning',
+                    });
+                  }
+                }}
+                //isDisabled={!areOptionsComplete}
+              >
+                <Text fontWeight="bold" fontSize="lg">
+                  Next
+                </Text>
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>

@@ -60,7 +60,6 @@ export const CollectionsProvider = ({ children }: any) => {
   ): Promise<void> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
-
     try {
       if (name.trim() === '') {
         addToast({
