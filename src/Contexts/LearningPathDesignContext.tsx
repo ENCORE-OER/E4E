@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 //import { useHasHydrated } from '../../utils/utils';
 import { Option, ArrayProps } from '../types/encoreElements/index';
 import { PathDesign } from '../types/encoreElements/index';
-import { useCollectionsContext } from '../components/CollectionsContext/CollectionsContext';
+import { useCollectionsContext } from './CollectionsContext/CollectionsContext';
 
 //constext props
 type LearnignPathDesignContextProps = {

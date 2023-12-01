@@ -6,7 +6,7 @@ import {
   AutoCompleteList,
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
-import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useHasHydrated } from '../../utils/utils';
 import { OerInCollectionProps } from '../../types/encoreElements';
 import { Box } from '@chakra-ui/react';
