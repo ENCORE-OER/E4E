@@ -10,7 +10,7 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   HiOutlineArrowNarrowDown,
   HiOutlineArrowNarrowUp,
@@ -27,6 +27,7 @@ export default function SortingDropDownMenu({
   wMenu,
   handleItemSortingClick,
   isAscending,
+  viewChanged,
 }: SortingDropDownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [itemSorting, setItemSorting] = useState<SortingDropDownMenuItemProps>(
@@ -36,6 +37,13 @@ export default function SortingDropDownMenu({
   const handleToggleMenu = () => {
     setIsOpen(!isOpen); // invert open menu state
   };
+
+  useEffect(() => {
+    if (viewChanged) {
+      setItemSorting(menuItemsSorting[0]);
+      handleItemSortingClick(menuItemsSorting[0].name);
+    }
+  }, [viewChanged, handleItemSortingClick, menuItemsSorting]);
 
   return (
     <Menu isOpen={isOpen} onOpen={handleToggleMenu} onClose={handleToggleMenu}>

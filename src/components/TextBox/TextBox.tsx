@@ -14,14 +14,9 @@ const TextBox = ({ backgroundColor, placeholder }: TextBoxProps) => {
     const newText = e.target.value;
     handleSetText(newText);
   };
-  
 
   return (
-    <Box 
-      border="1px" 
-      borderColor={'#CED4DA'} 
-      borderRadius={'7px'}
-    >
+    <Box border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
       <Textarea
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
         bg={backgroundColor}

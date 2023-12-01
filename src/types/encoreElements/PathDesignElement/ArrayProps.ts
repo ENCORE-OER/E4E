@@ -1,3 +1,3 @@
 export type ArrayProps = {
-    name: string;
+  name: string;
 };

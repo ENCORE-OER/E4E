@@ -5,24 +5,24 @@ import { OerProps } from '../../types/encoreElements';
 import { PolyglotFlow } from '../../types/polyglot/PolyglotFlow';
 import { useHasHydrated } from '../../utils/utils';
 import ResourceCardList from '../Card/OerCard/ResourceCardsList';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type LearningPathEditorProps = {
   conceptSelectedIndex: number;
   setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
   oers: OerProps[];
-  collectionIndex: number;
   collectionColor?: string;
 };
 
 export default function LearningPathEditor({
   conceptSelectedIndex,
   oers,
-  collectionIndex,
   collectionColor,
   setConceptSelectedIndex,
 }: LearningPathEditorProps) {
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
   const { getFragment } = useLearningPathContext();
+  const { collectionIndex } = useLearningPathDesignContext();
 
   const [isFrameLoading, setIsFrameLoading] = useState<boolean>(true);
   const [isChangeCollection, setChangeCollection] = useState<boolean>(false);
@@ -97,7 +97,9 @@ export default function LearningPathEditor({
                 oers={oers}
                 isNormalSizeCard={false}
                 itemsPerPage={3}
-                collectionColor={collectionColor}
+                collectionsColor={collectionColor ? collectionColor : ''}
+                isResourcePage={false}
+                oersLength={oers.length}
               />
             </Box>
           </Flex>

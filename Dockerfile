@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:21-alpine
 
 ARG DEPLOY_URL=http://localhost:3000
 ARG CONCEPT_URL=https://concept.polyglot-edu.com
@@ -9,7 +9,7 @@ COPY package.json .
 COPY package-lock.json .
 COPY tsconfig.json .
 
-RUN npm install
+RUN npm install --ignore-scripts
 
 COPY . .
 

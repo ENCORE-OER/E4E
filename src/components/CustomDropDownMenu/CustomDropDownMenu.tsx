@@ -11,8 +11,7 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
-import { ArrayProps } from "../../types/encoreElements";
-
+import { ArrayProps } from '../../types/encoreElements';
 
 export type onDataType = number | string;
 
@@ -59,11 +58,7 @@ export default function CustomDropDownMenu({
   }, [selectedOptions]);
   return (
     <>
-      <Box flex="1"
-        border="1px" 
-        borderColor={'#CED4DA'} 
-        borderRadius={'7px'}
-      >
+      <Box flex="1" border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
         <Menu
           isOpen={isOpen}
           onOpen={handleToggleMenu}
@@ -77,8 +72,8 @@ export default function CustomDropDownMenu({
                 options?.length === selectedOptions.length
                   ? 'All'
                   : selectedOptions.length > 0
-                  ? selectedOptions.join(', ')
-                  : menuTitle // Utilizza il valore memorizzato in menuTitle
+                    ? selectedOptions.join(', ')
+                    : menuTitle // Utilizza il valore memorizzato in menuTitle
               }
             </Text>
           </MenuButton>

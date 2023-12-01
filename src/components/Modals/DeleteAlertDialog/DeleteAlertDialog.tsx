@@ -13,16 +13,16 @@ type DeleteAlertDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  collection_name: string;
-  //isConfirmDialogOpen: boolean;
-  //setIsConfirmDialogOpen: Dispatch<SetStateAction<boolean>>;
+  item_name: string;
+  modalText: string;
 };
 
 export default function DeleteAlertDialog({
   isOpen,
-  collection_name,
+  item_name,
   onClose,
   onConfirm,
+  modalText,
 }: DeleteAlertDialogProps) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -31,8 +31,7 @@ export default function DeleteAlertDialog({
         <ModalHeader>Deleting confirm</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          This collection is not empty. Are you sure to delete{' '}
-          <strong>{collection_name}</strong> collection?
+          {modalText} <strong>{item_name}</strong>?
         </ModalBody>
 
         <ModalFooter>

@@ -27,6 +27,11 @@ const axiosNoCookie = axiosCreate.create({
   },
 });
 
+type Tag = {
+  value: string;
+  count: number;
+};
+
 export class APIV2 {
   axios: AxiosInstance;
   redirect401: boolean;
@@ -217,10 +222,30 @@ export class APIV2 {
     }
   }
 
-  async getOerById(id_oer: number): Promise<any> {
+  // ?? here introduce the API to retrieve the concepts occurriences from the set of OERs
+
+  // https://encore-db.grial.eu/api/oer_concept_count/?oer_ids=101866&oer_ids=109505&oer_ids=97314&oer_ids=84058
+
+  async getConceptsWords(oers: number[]): Promise<Tag[]> {
     try {
+      const transformedParams = oers.map((id) => `oer_ids=${id}`).join('&');
+      const apiUrl = `https://encore-db.grial.eu/api/oer_concept_count/?${transformedParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+      return resp.data?.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getOerById(id_oer: number, signal?: AbortSignal): Promise<any> {
+    try {
+      const config: any = {
+        singal: signal,
+      };
+
       const resp = await axiosNoCookie.get(
-        `https://encore-db.grial.eu/api/oers/?id=${id_oer}`
+        `https://encore-db.grial.eu/api/oers/?id=${id_oer}`,
+        config
       );
 
       /*const oer = resp.data?.data.map((item: any) => item);
@@ -448,7 +473,8 @@ export class APIV2 {
   }
 
   async searchOERbySkillNoPages(
-    skillIds?: string[],
+    //skillIds?: string[],
+    //keywords?: string[],
     domainIds?: string[],
     resourceTypeIds?: string[],
     audienceIds?: string[]
@@ -457,9 +483,13 @@ export class APIV2 {
       const queryParams = new URLSearchParams();
       const ID_ALL = '0';
 
-      skillIds?.forEach((skillId: string) => {
+      /*skillIds?.forEach((skillId: string) => {
         queryParams.append('skills', skillId);
-      });
+      });*/
+
+      /*keywords?.forEach((keyword: string) => {
+        queryParams.append('keywords', keyword);
+      });*/
 
       if (!domainIds?.includes(ID_ALL)) {
         domainIds?.forEach((domainId: string) => {
@@ -567,6 +597,63 @@ export class APIV2 {
 
       return resp.data?.data;
       //return updatedOERs;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // This has pagination (10 items per page)
+  async freeSearchOers(
+    keywords: string[],
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    page?: number
+  ): Promise<OerProps[]> {
+    try {
+      /*const pageParams = page ? `page=${page.toString()}&` : '';
+      const queryParams = keywords
+        .map((keyword) => `keywords=${keyword}`)
+        .join('&');*/
+
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      if (page) {
+        queryParams.append('page', page.toString());
+      }
+
+      keywords?.forEach((keyword: string) => {
+        queryParams.append('keywords', keyword);
+      });
+
+      // ------------------------------------------
+      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
+      // ------------------------------------------
+
+      const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${queryParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+      if (!page) {
+        return resp.data?.data || [];
+      } else {
+        return resp?.data || [];
+      }
     } catch (error) {
       throw error;
     }

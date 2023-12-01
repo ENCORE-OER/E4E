@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
-import DeleteAlertDialog from '../Modals/DeleteAlertDialog';
+import DeleteAlertDialog from '../Modals/DeleteAlertDialog/DeleteAlertDialog';
 
 interface CollectionNavItemProps {
   collection: CollectionProps;
@@ -22,7 +22,8 @@ interface CollectionNavItemProps {
   collectionClicked: boolean;
   setCollectionIndex: Dispatch<SetStateAction<number>>;
   collectionIndex: number;
-  deleteCollection: (id: number, name: string) => void;
+  deleteCollection: (id: number, name: string) => Promise<void>;
+  setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface ItemToDeleteProps {
@@ -119,7 +120,9 @@ const CollectionNavItem = ({
           _hover={{ bg: 'gray.200', borderRadius: '5px' }}
           onClick={(e) => {
             e.preventDefault();
+            //console.log("Click on CollectionNavItem");
             setCollectionIndex(index);
+            //console.log("I'm triggering collectionIndex");
             handleCollectionClick();
           }}
           cursor={'pointer'}
@@ -138,7 +141,7 @@ const CollectionNavItem = ({
 
         <Button
           variant="ghost"
-          _hover={{ bg: 'background' }}
+          _hover={{ bg: 'gray.300' }}
           onClick={(e) => {
             e.preventDefault();
             handleDeleteButtonClick(collection.id, collection.name);
@@ -163,7 +166,8 @@ const CollectionNavItem = ({
           }
           onCloseDeleteAlertDialog();
         }}
-        collection_name={itemToDelete ? itemToDelete.collection_name : ''}
+        item_name={itemToDelete ? itemToDelete.collection_name : ''}
+        modalText="This collection is not empty. Are you sure you want to delete "
       />
     </>
   );

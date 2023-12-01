@@ -12,8 +12,11 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
@@ -21,9 +24,11 @@ import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOp
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import {
+  CollectionProps,
   OerAudienceInfo,
   OerAuthorsInfo,
   OerConceptInfo,
+  OerInCollectionProps,
   OerMediaTypeInfo,
   OerProps,
   OerSubjectInfo,
@@ -40,11 +45,18 @@ type CardInfoModalProps = {
   oer: OerProps | null;
 };
 
+type ColorCollectionProps = {
+  name: string;
+  color: string | undefined;
+};
+
 export default function CardInfoModal({
   oer,
   isOpen,
   onClose,
 }: CardInfoModalProps) {
+  const { addCollection, addResource, collections } = useCollectionsContext();
+
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] =
     useState<boolean>(false);
@@ -63,8 +75,10 @@ export default function CardInfoModal({
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
+  const [collectionsColor, setCollectionsColor] = useState<
+    (ColorCollectionProps | undefined)[]
+  >([]); // array of colors of the collections that has the oer selected
 
-  //const { collections, addCollection } = useCollectionsContext();
   //const { isOpen, onOpen, onClose } = useDisclosure();
 
   //const digital = 'Digital';
@@ -140,12 +154,34 @@ export default function CardInfoModal({
           oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
         );
 
-        console.log(JSON.stringify(oer));
+        // set the color of the collections that has the oer selected
+        const colors: ColorCollectionProps[] = [];
+        collections?.map((collection: CollectionProps) => {
+          collection.oers?.map((oer_item: OerInCollectionProps) => {
+            if (oer_item.id === oer.id && collection.color !== undefined) {
+              //setCollectionsColor((prev: (string | undefined)[]) => [...prev, collection.color]);
+              colors.push({ name: collection.name, color: collection.color });
+            }
+          });
+        });
+
+        setCollectionsColor(colors);
+
+        /*Promise.all(
+          collections?.map(async (collection: CollectionProps) => {
+            if (collection.oers?.includes(oer)) {
+              return collection.color;
+            }
+          }) || []
+        ).then((colors) => {
+          if (!colors.includes(undefined))
+            setCollectionsColor(colors);
+        });*/
       }
     } catch (error) {
       console.error(error);
     }
-  }, [oer]);
+  }, [oer, collections]);
 
   /* useEffect(() => {
      console.log('authors: ' + authors);
@@ -169,12 +205,40 @@ export default function CardInfoModal({
         <ModalContent overflow="auto">
           <ModalCloseButton />
           <ModalHeader>
-            <TagsDomain
-              showTagDigital={showTagDigital}
-              showTagEntrepreneurial={showTagEntrepreneurial}
-              showTagGreen={showTagGreen}
-              mb="5"
-            />
+            <HStack pb="5" pr="10">
+              <TagsDomain
+                showTagDigital={showTagDigital}
+                showTagEntrepreneurial={showTagEntrepreneurial}
+                showTagGreen={showTagGreen}
+              />
+              {collectionsColor?.length &&
+                collectionsColor?.map(
+                  (
+                    collection_color: ColorCollectionProps | undefined,
+                    index: number
+                  ) => (
+                    <Tooltip
+                      key={index}
+                      aria-label={collection_color?.name}
+                      label={collection_color?.name}
+                      hasArrow
+                      placement="bottom"
+                      bg="gray.200"
+                      color="primary"
+                      fontSize={'md'}
+                      p={2}
+                    >
+                      <span>
+                        <IconBookmarkCheck
+                          //key={index}
+                          colorBookMark={collection_color?.color}
+                          size="25px"
+                        />
+                      </span>
+                    </Tooltip>
+                  )
+                )}
+            </HStack>
             <Heading size="md" mb="5">
               {title}
             </Heading>
@@ -319,6 +383,9 @@ export default function CardInfoModal({
           isNewCollection={false}
           isFromFolderButton={false}
           maxLength={30}
+          collections={collections}
+          addResource={addResource}
+          addCollection={addCollection}
         />
       )}
     </Flex>

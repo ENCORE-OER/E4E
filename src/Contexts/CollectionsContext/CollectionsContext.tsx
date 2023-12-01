@@ -2,33 +2,24 @@ import { createContext, Dispatch, SetStateAction, useContext } from 'react';
 //import useLocalStorage from 'use-local-storage';
 import { useLocalStorage } from 'usehooks-ts';
 import {
+  AddCollectionFunction,
+  AddResourceFunction,
   CollectionProps,
+  DeleteCollectionFunction,
+  DeleteResourceFunction,
   OerConceptInfo,
   OerInCollectionProps,
+  SelectedConceptsFunction,
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-
-type AddCollectionFunction = (
-  id: number,
-  name: string,
-  color: string
-) => Promise<void>;
-type AddResourceFunction = (
-  collectionId: number,
-  resource: OerInCollectionProps
-) => Promise<void>;
-type DeleteCollectionFunction = (id: number, name: string) => Promise<void>;
-type SelectedConceptsFunction = (
-  collectionId: number,
-  concepts: OerConceptInfo[]
-) => Promise<void>;
 
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
   deleteCollection: DeleteCollectionFunction;
   addResource: AddResourceFunction;
+  deleteResourceFromCollection: DeleteResourceFunction;
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
   setSelectedConceptsForCollection: SelectedConceptsFunction;
@@ -60,7 +51,6 @@ export const CollectionsProvider = ({ children }: any) => {
   ): Promise<void> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
-
     try {
       if (name.trim() === '') {
         addToast({
@@ -95,6 +85,7 @@ export const CollectionsProvider = ({ children }: any) => {
           //console.log('NEW COLLECTION: ' + newCollection.name);
           return new Promise((resolve) => {
             setCollections([...collections, newCollection]);
+            //console.log("I'm triggering collections");
             resolve();
           });
         }
@@ -118,6 +109,7 @@ export const CollectionsProvider = ({ children }: any) => {
       });
       return new Promise((resolve) => {
         setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
         resolve();
       });
     } catch (error) {
@@ -161,67 +153,91 @@ export const CollectionsProvider = ({ children }: any) => {
 
           if (hydrated) {
             addToast({
-              message: `Resource added to "${collections[collectionIndex]?.name}" collection.`,
+              message: `OER added to "${collections[collectionIndex]?.name}" collection.`,
               type: 'success',
             });
           }
         } else {
-          addToast({
-            message: `The oer is already saved into "${collection.name}" collection!`,
+          throw new Error(
+            `The OER is already saved into "${collection.name}" collection!`
+          );
+          /*addToast({
+            message: `The OER is already saved into "${collection.name}" collection!`,
             type: 'error',
-          });
+          });*/
         }
       } else {
-        addToast({
+        throw new Error("The collection doesn't exist!");
+        /*addToast({
           message: "The collection doesn't exist!",
           type: 'error',
-        });
+        });*/
       }
-
-      /*const updatedCollections = collections?.map(
-        (collection: CollectionProps) => {
-          //console.log('COLLECTION --> ' + collection);
-          if (collection.id === collectionId) {
-            const isOerAlreadySaved = collection.oers?.some(
-              (item: any) => item.idOer === resource.idOer
-            );
-            //console.log('Did you find the oer?  ' + isOerAlreadySaved);
-            if (!isOerAlreadySaved) {
-              // create a new object representing the updated collection
-              const collectionUpdated = {
-                ...collection, // Copy all fields of the existing 'collection' object using the spread operator.
-                oers: [...collection.oers, resource], // Adding new resource to the oers list of the collection
-              };
-              //addToast({
-              //  message: `Resource added to "${collections[indexCollectionClicked]?.name}" collection.`,
-              //  status: 'success'
-              //});
-              return collectionUpdated;
-            } else {
-              addToast({
-                message: `The oer is already saved into "${collection.name}" collection!`,
-                status: 'error'
-              });
-              return collection;
-            }
-          } else {  // problems because the others collections will be always return, so we'll have a lot of "collection doesn't exist" message
-            //addToast({
-            //  message: "The collection doesn't exist!",
-            //  status: 'error'
-            //});
-            return collection;
-          }
-        }
-      );*/
 
       //console.log(updatedCollections);
       return new Promise((resolve) => {
         setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
         resolve();
       });
     } catch (error) {
       addToast({
-        message: `Error: ${error}`,
+        message: `${error}`,
+        type: 'error',
+      });
+    }
+  };
+
+  const deleteResourceFromCollection = async (
+    collectionIndex: number,
+    idOer: number
+  ): Promise<void> => {
+    try {
+      const updatedCollections = [...collections];
+
+      if (
+        !updatedCollections[collectionIndex] ||
+        !updatedCollections[collectionIndex]?.oers
+      ) {
+        throw new Error(
+          `Collection {with ID ${collectionIndex}} doesn't exist or doesn't have any OERs.`
+        );
+      } else {
+        const updatedCollectionOers = updatedCollections[
+          collectionIndex
+        ]?.oers?.filter((oer: OerInCollectionProps) => oer.id !== idOer);
+
+        //console.log(
+        // 'oers: ' +
+        //  updatedCollectionOers?.map((oer: OerInCollectionProps) => oer.title)
+        //);
+
+        const updatedCollection = {
+          ...collections[collectionIndex],
+          oers: updatedCollectionOers,
+          //conceptsSelected: updatedConceptsSelected,
+        };
+
+        updatedCollections[collectionIndex] = updatedCollection;
+
+        while (!hydrated) {
+          console.log('Waiting for hydration...');
+        }
+
+        addToast({
+          message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
+          type: 'success',
+        });
+
+        return new Promise((resolve) => {
+          setCollections(updatedCollections);
+          //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
+          resolve();
+        });
+      }
+    } catch (error) {
+      addToast({
+        message: `${error}`,
         type: 'error',
       });
     }
@@ -232,19 +248,31 @@ export const CollectionsProvider = ({ children }: any) => {
     collectionId: number,
     concepts: OerConceptInfo[]
   ): Promise<void> => {
-    // Trova la collezione corrispondente in collections
-    const updatedCollections = collections.map((collection) => {
-      if (collection.id === collectionId) {
-        return {
-          ...collection,
-          conceptsSelected: concepts,
-        };
-      }
-      return collection;
-    });
+    try {
+      // Find the collection with the given ID
+      const updatedCollections = collections.map((collection) => {
+        if (collection.id === collectionId) {
+          return {
+            ...collection,
+            conceptsSelected: concepts,
+          };
+        }
+        return collection;
+      });
 
-    // Aggiorna lo stato globale delle collezioni con i nuovi concetti selezionati
-    setCollections(updatedCollections);
+      // Update the collections state with new selected concepts
+      //setCollections(updatedCollections);
+      return new Promise((resolve) => {
+        setCollections(updatedCollections);
+        //console.log("I'm triggering collections");
+        resolve();
+      });
+    } catch (error) {
+      addToast({
+        message: `${error}`,
+        type: 'error',
+      });
+    }
   };
 
   return (
@@ -254,6 +282,7 @@ export const CollectionsProvider = ({ children }: any) => {
         addCollection,
         deleteCollection,
         addResource,
+        deleteResourceFromCollection,
         indexCollectionClicked, //used in CollectionMenu component
         setIndexCollectionClicked,
         setSelectedConceptsForCollection,
