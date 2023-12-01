@@ -90,7 +90,7 @@ export default function ResourceCardsList({
                         collectionsColor
                           ? isResourcePage && collectionsColor[0]
                             ? collectionsColor[0]
-                            : collectionsColor[index]
+                            : collectionsColor[currentPage > 1 ? index + (itemsPerPage * (currentPage - 1)) : index]  //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
                           : ''
                       }
                       oer={oer}
@@ -114,8 +114,8 @@ export default function ResourceCardsList({
                         //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                         //}
                       }}
-                      //position="absolute"
-                      //right={'0px'}
+                    //position="absolute"
+                    //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>
@@ -123,7 +123,7 @@ export default function ResourceCardsList({
                 </HStack>
               ))}
           </VStack>
-          {oers.length !== 0 && (
+          {oersLength !== 0 && (
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

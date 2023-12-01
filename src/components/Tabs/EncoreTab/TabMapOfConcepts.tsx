@@ -15,41 +15,12 @@ type Tag = {
   count: number;
 };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [tags, setTags] = useState<Tag[]>([]);
   const { filtered, setFiltered } = useContext(DiscoveryContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const oers_ids: number[] = [];
-        filtered.forEach((oer: { id: number }) => oers_ids.push(oer.id));
-        const respAPI = await API.getConceptsWords(oers_ids);
-
-        const resultArray = Object.entries(respAPI).map(([text, value]) => ({
-          text,
-          value,
-        }));
-
-        const tagsArray = resultArray
-          .map(({ text, value }) => ({
-            value: String(text),
-            count: Number(value),
-          }))
-          .filter((tag) => tag.count > 6);
-
-        setTags(tagsArray);
-      } catch (err) {
-        alert('ERROR EXTRACTING THE CONCEPTS:' + err);
-      }
-    };
-
-    if (filtered.length > 0) {
-      fetchData();
-    }
-  }, [API, filtered]);
 
   const getBackgroundColor = (value: number) => {
     // Define a color mapping based on the size of the tag value
@@ -99,6 +70,53 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const oers_ids: number[] = [];
+        filtered?.forEach((oer: { id: number }) => {
+          //console.log(oer.id);
+          oers_ids.push(oer.id);
+        });
+        const respAPI = await API.getConceptsWords(oers_ids);
+
+        //console.log(respAPI)
+
+        const resultArray = Object.entries(respAPI).map(([text, value]) => ({
+          text,
+          value,
+        }));
+
+        /*resultArray.map((item: any) => {
+          console.log(item.text);
+        })*/
+
+        const tagsArray = resultArray
+          .map(({ text, value }) => ({
+            value: String(text),
+            count: Number(value),
+          }))
+          .filter((tag) => tag.count > 6);
+
+        tagsArray.map((item: any) => {
+          console.log(item.value);
+        });
+
+        setTags(tagsArray);
+      } catch (err) {
+        alert('ERROR EXTRACTING THE CONCEPTS:' + err);
+      }
+    };
+
+    if (filtered.length > 0) {
+      fetchData();
+    }
+  }, [API, filtered]);
+
+  /*useEffect(() => {
+    console.log('tags', tags);
+  }, [tags]);*/
+
   return (
     <>
       <Stack spacing={0}>
@@ -113,7 +131,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       {filtered.length > 0 && hydrated && (
         <div>
           <div
-            style={{ height: 600, width: 800 }}
+            style={{ minHeight: 600, minWidth: "fill" }}
             onClick={handleContainerClick}
           >
             <TagCloud

@@ -1,6 +1,6 @@
-@tailwind base;
+/*@tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities;*/
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -54,17 +54,17 @@ code {
 .pagination-item button {
   padding: 5px 10px;
   background-color: #f4f4f4;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   cursor: pointer;
   transition:
     background-color 0.3s,
     color 0.3s;
 }
 
-.pagination-item button.active {
-  background-color: #007bff;
+.pagination-item button:active {
+  background-color: #feedc1;
   color: #fff;
-  border: 1px solid #007bff;
+  border: 3px solid #ffcc49;
 }
 
 .pagination-item button:disabled {
@@ -74,6 +74,11 @@ code {
 
 .pagination-item button i {
   margin-right: 5px;
+}
+
+.pagination-item button.active {
+  background-color: #ffcc49;
+  border: 2px solid #ffcc49;
 }
 
 /*scrool for the list of OERs in the discovery page */

@@ -32,6 +32,7 @@ type DiscoverPageProps = {
 const Discover = (props: DiscoverPageProps) => {
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
+  const abortController = new AbortController();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
   const [endSearch, setEndSearch] = useState<boolean>(false);
@@ -45,7 +46,7 @@ const Discover = (props: DiscoverPageProps) => {
   const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
-  const [filteredLength, setFilteredLength] = useState<number>(0);
+  //const [filteredLength, setFilteredLength] = useState<number>(0);
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
@@ -171,8 +172,9 @@ const Discover = (props: DiscoverPageProps) => {
 
   const freeSearchOERs = async (
     keywords: string[],
-    andOption: boolean,
-    orOption: boolean,
+    //andOption: boolean,
+    //orOption: boolean,
+    operator: string,
     domains: string[],
     types: string[],
     audience: string[]
@@ -199,20 +201,23 @@ const Discover = (props: DiscoverPageProps) => {
         //setFilteredLength(resp?.recordsFiltered);
         //const oers = resp?.data;
 
-        oersResp = await api.freeSearchOers(keywords); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
-        setFilteredLength(oersResp?.length);
+        oersResp = await api.freeSearchOersNoPagination(keywords, domains, types, audience, operator); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        //setFilteredLength(oersResp?.length);
 
         if (oersResp?.length > 0) {
           // get all the oers data
           const oers = await Promise.all(
             oersResp?.map(async (oer: OerProps) => {
-              //console.log(oer);
-              const oerFound = await getDataOerById(oer?.id);
+              console.log(oer);
+              const oerFound = await getDataOerById(oer?.id, abortController.signal);
               return oerFound;
             })
           );
 
-          if (domains.length > 0 || types.length > 0 || audience.length > 0) {
+          if (domains.length > 0 || types.length > 0 || audience.length > 0) {  // check if there are filters with keywords
+
+
+
             // Filter based on domains, types, and audience
             const filteredOers = oers?.filter((oer: OerProps) => {
               const domain_Ids = Array.from(
@@ -241,24 +246,24 @@ const Discover = (props: DiscoverPageProps) => {
 
               // if 'All' is selected we don't filter by that parameter
               if (isArrayDomains && !domain_Ids?.includes(ID_ALL)) {
-                domainMatch = andOption
+                domainMatch = operator === 'and'
                   ? domains.every((dom: string) => domain_Ids.includes(dom))
                   : domains.some((dom: string) => domain_Ids.includes(dom));
               }
 
               if (isArrayTypes && !domain_Ids?.includes(ID_ALL)) {
-                typeMatch = andOption
+                typeMatch = operator === 'and'
                   ? types.every((type: string) => type_Ids.includes(type))
                   : types.some((type: string) => type_Ids.includes(type));
               }
 
               if (isArrayAudience && !domain_Ids?.includes(ID_ALL)) {
-                audienceMatch = andOption
+                audienceMatch = operator === 'and'
                   ? audience.every((aud: string) => audience_Ids.includes(aud))
                   : audience.some((aud: string) => audience_Ids.includes(aud));
               }
 
-              if (andOption) {
+              if (operator === 'and') {
                 return domainMatch && typeMatch && audienceMatch;
               } else {
                 return domainMatch || typeMatch || audienceMatch;
@@ -272,7 +277,7 @@ const Discover = (props: DiscoverPageProps) => {
             setFiltered(oers);
           }
         }
-      } else if (
+      } else if (   // check if there are filters without keywords
         domains.length > 0 ||
         audience.length > 0 ||
         types.length > 0
@@ -290,8 +295,13 @@ const Discover = (props: DiscoverPageProps) => {
       } else {
         throw new Error('No keywords or filters provided');
       }
+
       setEndSearch(true);
       setIsLoading(false);
+
+      return () => {
+        abortController.abort();
+      };
     } catch (error) {
       setEndSearch(true);
       setIsLoading(false);
@@ -307,11 +317,11 @@ const Discover = (props: DiscoverPageProps) => {
     alert('qui call back');
   };
 
-  const getDataOerById = async (id_oer: number) => {
+  const getDataOerById = async (id_oer: number, signal?: AbortSignal) => {
     const api = new APIV2(props.accessToken);
 
     try {
-      const oer = await api.getOerById(id_oer);
+      const oer = await api.getOerById(id_oer, signal);
       return oer[0];
     } catch (error) {
       throw error;
@@ -344,12 +354,13 @@ const Discover = (props: DiscoverPageProps) => {
     searchOERs(skills, andOption, orOption, domains, types, audience);*/
 
     const keywords = convertedData['keywords'];
-    const andOption = convertedData['andOption'];
-    const orOption = convertedData['orOption'];
+    //const andOption = convertedData['andOption'];
+    //const orOption = convertedData['orOption'];
+    const operator = convertedData['operator'];
     const domains = convertedData['domains'];
     const types = convertedData['types'];
     const audience = convertedData['audience'];
-    freeSearchOERs(keywords, andOption, orOption, domains, types, audience);
+    freeSearchOERs(keywords, operator, domains, types, audience);
   }, [router.query.searchData]);
 
   // redirect to home page if no resources are found
@@ -406,7 +417,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -438,7 +449,7 @@ const Discover = (props: DiscoverPageProps) => {
               oers={filtered}
               isNormalSizeCard={true}
               itemsPerPage={10}
-              oersLength={filteredLength}
+              oersLength={filtered?.length}
               isResourcePage={false}
               collectionsColor={IconBookmarkColor}
             />

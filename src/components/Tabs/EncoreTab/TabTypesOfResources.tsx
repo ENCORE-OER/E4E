@@ -10,15 +10,15 @@ import { Doughnut } from 'react-chartjs-2';
 
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
-import { OerMediaTypeInfo } from '../../../types/encoreElements';
+import { OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
 
 import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const [previousContent, setPreviousContent] = useState('');
+  const [previousContent, setPreviousContent] = useState<OerProps[]>([]);
   const hydrated = useHasHydrated();
 
   const resourceTypes: any[] = [];

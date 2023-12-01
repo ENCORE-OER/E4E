@@ -19,6 +19,9 @@ export default function SingleResourceCard({
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
+  const creators = oer?.creator?.map((item: OerAuthorsInfo) => item.full_name);
+  const mediaTypes = oer?.media_type?.map((item: OerMediaTypeInfo) => item.name);
+
   return (
     <OerCard
       id={oer?.id}
@@ -28,15 +31,11 @@ export default function SingleResourceCard({
       entrepreneurship_domain={oer?.entrepreneurship_domain ?? false}
       green_domain={oer?.green_domain ?? false}
       title={oer?.title}
-      creator={
-        oer?.creator?.map((item: OerAuthorsInfo) => item.full_name) || []
-      }
+      creator={creators.length > 0 ? creators : ['Unknown']}
       description={oer?.description}
       retrieval_date={oer?.retrieval_date}
       overall_score={oer?.overall_score}
-      media_type={
-        oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) || []
-      }
+      media_type={mediaTypes.length > 0 ? mediaTypes : []}
     />
   );
 }
