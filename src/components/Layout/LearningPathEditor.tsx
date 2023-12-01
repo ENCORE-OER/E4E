@@ -1,48 +1,49 @@
 import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
 import { PolyglotFlow } from '../../types/polyglot/PolyglotFlow';
 import { useHasHydrated } from '../../utils/utils';
 import ResourceCardList from '../Card/OerCard/ResourceCardsList';
+//import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type LearningPathEditorProps = {
   conceptSelectedIndex: number;
-  setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
+  //setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
   oers: OerProps[];
-  collectionIndex: number;
   collectionColor?: string;
+  isLoading: boolean;
 };
 
 export default function LearningPathEditor({
   conceptSelectedIndex,
   oers,
-  collectionIndex,
   collectionColor,
-  setConceptSelectedIndex,
+  isLoading, //setConceptSelectedIndex,
 }: LearningPathEditorProps) {
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
   const { getFragment } = useLearningPathContext();
+  //const { collectionIndex } = useLearningPathDesignContext();
 
   const [isFrameLoading, setIsFrameLoading] = useState<boolean>(true);
-  const [isChangeCollection, setChangeCollection] = useState<boolean>(false);
-  const [isChangeConcept, setChangeConcept] = useState<boolean>(false);
+  // const [isChangeCollection, setChangeCollection] = useState<boolean>(false);
+  //const [isChangeConcept, setChangeConcept] = useState<boolean>(false);
   const hydrated = useHasHydrated();
 
-  useEffect(() => {
+  /* useEffect(() => {
     console.log('collection index in LearningPathEditor: ' + collectionIndex);
     setChangeCollection(true);
     setConceptSelectedIndex(-1);
     setIsFrameLoading(true);
-  }, [collectionIndex]);
+  }, [collectionIndex]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     setChangeConcept(false);
     if (conceptSelectedIndex !== -1) {
       setChangeConcept(true);
       setIsFrameLoading(true);
     }
-  }, [conceptSelectedIndex]);
+  }, [conceptSelectedIndex]);*/
 
   useEffect(() => {
     (async () => {
@@ -54,7 +55,7 @@ export default function LearningPathEditor({
   return (
     <>
       {hydrated &&
-        (isChangeCollection || isChangeConcept) &&
+        //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
           <Flex p="10px">
             {/**/}
@@ -93,14 +94,24 @@ export default function LearningPathEditor({
               <Text pb={5} fontSize="20" fontWeight="semibold">
                 Relevant OERs
               </Text>
-              <ResourceCardList
-                oers={oers}
-                isNormalSizeCard={false}
-                itemsPerPage={3}
-                collectionsColor={collectionColor ? collectionColor : ''}
-                isResourcePage={false}
-                oersLength={oers.length}
-              />
+
+              {isLoading && (
+                <div className="loading-spinner">
+                  <div className="spinner"></div>
+                  <p>Loading...</p>
+                </div>
+              )}
+
+              {oers && !isLoading && (
+                <ResourceCardList
+                  oers={oers}
+                  isNormalSizeCard={false}
+                  itemsPerPage={3}
+                  collectionsColor={collectionColor ? collectionColor : ''}
+                  isResourcePage={false}
+                  oersLength={oers.length}
+                />
+              )}
             </Box>
           </Flex>
         )}

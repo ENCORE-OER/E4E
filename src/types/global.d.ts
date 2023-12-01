@@ -18,5 +18,5 @@ type PathValue<T, P extends Path<T>> = P extends `${infer K}.${infer Rest}`
       : never
     : never
   : P extends keyof T
-  ? T[P]
-  : never;
+    ? T[P]
+    : never;

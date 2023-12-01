@@ -94,8 +94,8 @@ export default function DropDownMenu({
                 optionsObj?.length === selectedOptions.length)
                 ? 'All'
                 : selectedOptions.length > 0
-                ? selectedOptions.join(', ')
-                : 'Select Options'}
+                  ? selectedOptions.join(', ')
+                  : 'Select Options'}
             </Text>
           </MenuButton>
           <MenuList

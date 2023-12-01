@@ -1,14 +1,19 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
-
+import React from 'react';
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Card,
+  CardBody,
+  Button,
+} from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
-//import { useRouter } from 'next/router';
-
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
-import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
-import HeadingPlanDesign from '../../components/Heading/HeadingPlanDesign';
+//import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -16,22 +21,31 @@ import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
+import LearningStepper from '../../components/Stepper/Stepper';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
 const Home = (props: DiscoverPageProps) => {
-  //const router = useRouter();
   const { user } = useUser();
-  const { collections, indexCollectionClicked, setIndexCollectionClicked } =
-    useCollectionsContext();
+  const hydrated = useHasHydrated();
+  const {
+    SPACING,
+    pathDesignData,
+    handleCreatePath,
+    collectionIndex /*handleResetStep1*/,
+  } = useLearningPathDesignContext();
+
+  const router = useRouter();
+  const { collections } = useCollectionsContext();
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
   const { addToast } = CustomToast();
-  const hydrated = useHasHydrated(); // used to avoid hydration failed
-  const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
+  //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
@@ -46,16 +60,34 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
+  const handlePrevButtonClick = () => {
+    //handleResetStep1();
+    router.push({
+      pathname: '/plan/LearningObjective',
+    });
+  };
+
+  useEffect(() => {
+    console.log(collectionIndex);
+  }, [collectionIndex]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [oersById]);
+
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
-    console.log(indexCollectionClicked);
-
-    if (collections?.length > 0 && hydrated && indexCollectionClicked >= 0) {
-      if (collections[indexCollectionClicked]?.oers?.length > 0) {
+    handleCreatePath();
+    setIsLoading(true);
+    if (collections?.length > 0 && hydrated) {
+      console.log('passo 1');
+      console.log('collectionIndex: ' + collectionIndex);
+      if (collections[collectionIndex]?.oers?.length > 0) {
+        console.log('passo 2');
         try {
           const fetchOerData = async () => {
             const oerData = await Promise.all(
-              collections[indexCollectionClicked]?.oers?.map(
+              collections[collectionIndex]?.oers?.map(
                 async (oer: OerInCollectionProps) => {
                   const oerFound = await getDataOerById(oer?.id);
                   return oerFound;
@@ -69,23 +101,28 @@ const Home = (props: DiscoverPageProps) => {
 
           //console.log(oersById);
 
-          if (
+          // this part is commented because we don't need to select a concept to create a learning path
+          /* if (
             collections[indexCollectionClicked]?.conceptsSelected?.length === 0
           ) {
-            addToast({
-              message: 'No concepts selected in this collection!',
-              type: 'error',
-            });
             addToast({
               message:
                 'You need to select concepts from the saved OERs to create learning paths.',
               type: 'warning',
             });
+            throw new Error('No concepts selected in this collection!');
+            
           } else {
             setConceptSelectedIndex(0);
-          }
+          }*/
+          setIsLoading(false);
         } catch (error) {
-          throw error;
+          addToast({
+            message: `${error}`,
+            type: 'error',
+          });
+
+          setIsLoading(false);
         }
       } else {
         addToast({
@@ -97,7 +134,7 @@ const Home = (props: DiscoverPageProps) => {
           type: 'warning',
         });
       }
-    } else if (collections?.length === 0 && indexCollectionClicked < 0) {
+    } else if (collections?.length === 0 && collectionIndex < 0) {
       addToast({
         message: 'No collection created!',
         type: 'error',
@@ -113,11 +150,9 @@ const Home = (props: DiscoverPageProps) => {
         });
       }, 1000);
     }
-  }, [indexCollectionClicked]);
 
-  useEffect(() => {
-    console.log(conceptSelectedIndex);
-  }, [conceptSelectedIndex]);
+    setIsLoading(false);
+  }, [hydrated, collectionIndex]);
 
   return (
     <LearningPathProvider>
@@ -130,53 +165,88 @@ const Home = (props: DiscoverPageProps) => {
           py="115px"
           px="40px"
           w="full"
-          h={conceptSelectedIndex === -1 ? '100vh' : 'full'}
+          h={'full'}
           bg="background"
         >
-          <HeadingPlanDesign
-            collections={collections}
-            collectionIndex={indexCollectionClicked}
-            setCollectionIndex={setIndexCollectionClicked}
-            title="Learning path design"
-          />
-          <Text pt="30px" pb="7px">
-            For each concept add its learning fragment.
-          </Text>
-
-          <Box position="relative">
-            <Flex>
-              <Box
-                p={3}
-                w="80%"
-                h="auto"
-                border="2px"
-                borderRadius="10px"
-                borderColor="secondary"
-                borderStyle="solid"
-              >
-                <ConceptButtonsList
-                  collections={collections}
-                  conceptSelectedIndex={conceptSelectedIndex}
-                  setConceptSelectedIndex={setConceptSelectedIndex}
-                  collectionIndex={indexCollectionClicked}
-                />
-              </Box>
-
-              {/* TODO: add onClick function to add concepts */}
-              {/*}
-            <Box display="flex" flex="1" px={5}>
-              <Button variant="primary">Add a new concept</Button>
-           </Box>*/}
+          <Box w="100%" h="100%">
+            <Flex
+              w="100%"
+              justifyContent="left"
+              //justify="space-between"
+            >
+              <Heading>Learning path design</Heading>
             </Flex>
+            <Box paddingTop="1.5rem" w="100%" justifyContent="left">
+              <Box w="80% ">
+                <LearningStepper activeStep={2} />
+              </Box>
+              <Box w="80%" paddingTop="2rem">
+                <Text>
+                  Based on the information provided this a potential learning
+                  objective and a suggested learning path. You have the
+                  flexibility to modify and customize both the description of
+                  the learning objective and the types and sequence of the
+                  proposed activities
+                </Text>
+              </Box>
+            </Box>
+            <Box paddingTop="0.5rem" w="80%">
+              <Card size="sm" shadow={0} backgroundColor={'#F8F9FA'}>
+                <Heading size={'sl'} fontFamily={'body'}>
+                  Learning objective
+                </Heading>
+                <CardBody
+                  backgroundColor={'#EDF2F7'}
+                  border="1px"
+                  borderColor={'#CED4DA'}
+                  borderRadius={'md'}
+                >
+                  <Text>
+                    {console.log(pathDesignData)}
+                    List key principle of:{' '}
+                    {hydrated &&
+                      pathDesignData.skills &&
+                      pathDesignData.skills.join(', ')}
+                    {'. '}
+                    {hydrated &&
+                      pathDesignData.verbsLearingObjective &&
+                      pathDesignData.verbsLearingObjective.join(' and ')}{' '}
+                    {hydrated && pathDesignData.textLearingObjective}
+                  </Text>
+                </CardBody>
+              </Card>
+            </Box>
 
-            <LearningPathEditor
-              collectionIndex={indexCollectionClicked}
-              setConceptSelectedIndex={setConceptSelectedIndex}
-              oers={oersById}
-              conceptSelectedIndex={conceptSelectedIndex}
-              collectionColor={collections[indexCollectionClicked]?.color}
-            />
+            <Box position="relative" paddingTop="2rem">
+              <LearningPathEditor
+                //setConceptSelectedIndex={setConceptSelectedIndex}
+                isLoading={isLoading}
+                oers={oersById}
+                conceptSelectedIndex={0}
+                collectionColor={collections[collectionIndex]?.color}
+              />
+            </Box>
           </Box>
+          <Flex paddingTop="1.5rem" w="100%">
+            <Flex
+              w="auto"
+              paddingRight={`${SPACING}%`}
+              position={'fixed'}
+              bottom="5%"
+              right="11%"
+            >
+              <Button
+                marginRight={'1px'}
+                border={'1px solid'}
+                colorScheme="yellow"
+                onClick={handlePrevButtonClick}
+              >
+                <Text fontWeight="bold" fontSize="lg">
+                  Previous
+                </Text>
+              </Button>
+            </Flex>
+          </Flex>
         </Box>
       </Flex>
     </LearningPathProvider>

@@ -5,3 +5,4 @@ export * from './ResourceCardProps';
 export * from './SortingDropDownMenu';
 export * from './collectionModal';
 export * from './oer/index';
+export * from './PathDesignElement/index';
