@@ -8,7 +8,7 @@ import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { ChakraProvider } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
-import { CollectionsProvider } from '../components/CollectionsContext/CollectionsContext';
+import { CollectionsProvider } from '../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathDesignProvider } from '../Contexts/LearningPathDesignContext';
 import reportWebVitals from '../reportWebVitals';
 import theme from '../styles/theme';
@@ -19,7 +19,7 @@ import theme from '../styles/theme';
       heading: `Work Sans, system-ui, sans-serif`,
       body: `Inter, system-ui, sans-serif`,
     },
-  },
+  },J
   withProse()
 );*/
 
@@ -28,10 +28,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <UserProvider>
       <ChakraProvider theme={theme}>
         <CollectionsProvider>
-        <LearningPathDesignProvider>
-          <Component {...pageProps} />
-          <Analytics />
-        </LearningPathDesignProvider>
+          <LearningPathDesignProvider>
+            <Component {...pageProps} />
+            <Analytics />
+          </LearningPathDesignProvider>
         </CollectionsProvider>
       </ChakraProvider>
     </UserProvider>
