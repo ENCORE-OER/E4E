@@ -15,12 +15,11 @@ type Tag = {
   count: number;
 };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [tags, setTags] = useState<Tag[]>([]);
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-
 
   const getBackgroundColor = (value: number) => {
     // Define a color mapping based on the size of the tag value
@@ -131,7 +130,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       {filtered.length > 0 && hydrated && (
         <div>
           <div
-            style={{ minHeight: 600, minWidth: "fill" }}
+            style={{ minHeight: 600, minWidth: 'fill' }}
             onClick={handleContainerClick}
           >
             <TagCloud

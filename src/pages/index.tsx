@@ -89,7 +89,12 @@ const Home = (props: DiscoverPageProps) => {
     let searchData = {};
 
     try {
-      if (isClicked && (selectedAudience.length > 0 || selectedAudience.length > 0 || selectedResourceTypes.length > 0)) {
+      if (
+        isClicked &&
+        (selectedAudience.length > 0 ||
+          selectedAudience.length > 0 ||
+          selectedResourceTypes.length > 0)
+      ) {
         // advanced search selected
         searchData = {
           keywords: searchValue,
@@ -97,7 +102,7 @@ const Home = (props: DiscoverPageProps) => {
           advanced: true,
           //andOption: checkboxAnd,
           //orOption: checkboxOr,
-          operator: searchValue.length > 1 ? operator : 'and',
+          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
@@ -114,7 +119,7 @@ const Home = (props: DiscoverPageProps) => {
           advanced: false,
           //andOption: checkboxAnd,
           //orOption: checkboxOr,
-          operator: searchValue.length > 1 ? operator : 'and',
+          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
@@ -174,7 +179,6 @@ const Home = (props: DiscoverPageProps) => {
     //setCheckboxOr(true);
     setOperator('or');
   };
-
 
   // update metrics
   useEffect(() => {
@@ -327,8 +331,8 @@ const Home = (props: DiscoverPageProps) => {
                   checked={operator === 'and'}
                   onChange={handleCheckboxAndChange}
                 />
-
                 <Text variant="text_searchFor_secondary">All keywords</Text>
+
                 <input
                   type="radio"
                   id="checkboxOr"

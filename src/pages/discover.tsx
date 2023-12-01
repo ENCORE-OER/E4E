@@ -16,12 +16,8 @@ import { DiscoveryContext } from '../Contexts/discoveryContext';
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
-  OerAudienceInfo,
-  OerDomainInfo,
   OerInCollectionProps,
-  OerMediaTypeInfo,
-  OerProps,
-  OerSkillInfo,
+  OerProps
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
@@ -181,13 +177,8 @@ const Discover = (props: DiscoverPageProps) => {
   ) => {
     setIsLoading(true);
 
-    const ID_ALL = '0';
 
     //here we search the OERS using the query parameters
-
-    const isArrayDomains = Array.isArray(domains);
-    const isArrayTypes = Array.isArray(types);
-    const isArrayAudience = Array.isArray(audience);
 
     const api = new APIV2(props.accessToken);
 
@@ -201,7 +192,13 @@ const Discover = (props: DiscoverPageProps) => {
         //setFilteredLength(resp?.recordsFiltered);
         //const oers = resp?.data;
 
-        oersResp = await api.freeSearchOersNoPagination(keywords, domains, types, audience, operator); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        oersResp = await api.freeSearchOersNoPagination(
+          keywords,
+          domains,
+          types,
+          audience,
+          operator
+        ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
         //setFilteredLength(oersResp?.length);
 
         if (oersResp?.length > 0) {
@@ -209,75 +206,22 @@ const Discover = (props: DiscoverPageProps) => {
           const oers = await Promise.all(
             oersResp?.map(async (oer: OerProps) => {
               console.log(oer);
-              const oerFound = await getDataOerById(oer?.id, abortController.signal);
+              const oerFound = await getDataOerById(
+                oer?.id,
+                abortController.signal
+              );
+              console.log(oerFound);
               return oerFound;
             })
           );
 
-          if (domains.length > 0 || types.length > 0 || audience.length > 0) {  // check if there are filters with keywords
+          // Eventually, if the filtered search should not work with API, you should add the 
+          // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function) 
 
-
-
-            // Filter based on domains, types, and audience
-            const filteredOers = oers?.filter((oer: OerProps) => {
-              const domain_Ids = Array.from(
-                new Set(
-                  oer.skills?.flatMap((skill: OerSkillInfo) =>
-                    skill.domain.map(
-                      (dom: OerDomainInfo) => dom.id as unknown as string
-                    )
-                  )
-                )
-              ); // list of domains in a single oer
-              console.log('domain_Ids: ', domain_Ids);
-              const type_Ids = oer.media_type?.map(
-                (mediaType: OerMediaTypeInfo) =>
-                  mediaType.id as unknown as string
-              ); // list of type in a single oer
-              console.log('type_Ids: ', type_Ids);
-              const audience_Ids = oer.coverage?.map(
-                (aud: OerAudienceInfo) => aud.id as unknown as string
-              ); // list of audience in a single oer
-              console.log('audience_Ids: ', audience_Ids);
-
-              let domainMatch = false;
-              let typeMatch = false;
-              let audienceMatch = false;
-
-              // if 'All' is selected we don't filter by that parameter
-              if (isArrayDomains && !domain_Ids?.includes(ID_ALL)) {
-                domainMatch = operator === 'and'
-                  ? domains.every((dom: string) => domain_Ids.includes(dom))
-                  : domains.some((dom: string) => domain_Ids.includes(dom));
-              }
-
-              if (isArrayTypes && !domain_Ids?.includes(ID_ALL)) {
-                typeMatch = operator === 'and'
-                  ? types.every((type: string) => type_Ids.includes(type))
-                  : types.some((type: string) => type_Ids.includes(type));
-              }
-
-              if (isArrayAudience && !domain_Ids?.includes(ID_ALL)) {
-                audienceMatch = operator === 'and'
-                  ? audience.every((aud: string) => audience_Ids.includes(aud))
-                  : audience.some((aud: string) => audience_Ids.includes(aud));
-              }
-
-              if (operator === 'and') {
-                return domainMatch && typeMatch && audienceMatch;
-              } else {
-                return domainMatch || typeMatch || audienceMatch;
-              }
-            });
-
-            //console.log('oers: ', filteredOers);
-            setFiltered(filteredOers);
-          } else {
-            //console.log('oers: ', oerData);
-            setFiltered(oers);
-          }
+          setFiltered(oers);
         }
-      } else if (   // check if there are filters without keywords
+      } else if (
+        // check if there are filters without keywords
         domains.length > 0 ||
         audience.length > 0 ||
         types.length > 0

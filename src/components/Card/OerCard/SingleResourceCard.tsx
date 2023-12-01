@@ -20,7 +20,9 @@ export default function SingleResourceCard({
   //const [isSaved, setIsSaved] = useState(false);
 
   const creators = oer?.creator?.map((item: OerAuthorsInfo) => item.full_name);
-  const mediaTypes = oer?.media_type?.map((item: OerMediaTypeInfo) => item.name);
+  const mediaTypes = oer?.media_type?.map(
+    (item: OerMediaTypeInfo) => item.name
+  );
 
   return (
     <OerCard

@@ -12,7 +12,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
