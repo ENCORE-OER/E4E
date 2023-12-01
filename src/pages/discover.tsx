@@ -17,7 +17,7 @@ import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
   OerInCollectionProps,
-  OerProps
+  OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
@@ -177,7 +177,6 @@ const Discover = (props: DiscoverPageProps) => {
   ) => {
     setIsLoading(true);
 
-
     //here we search the OERS using the query parameters
 
     const api = new APIV2(props.accessToken);
@@ -192,6 +191,7 @@ const Discover = (props: DiscoverPageProps) => {
         //setFilteredLength(resp?.recordsFiltered);
         //const oers = resp?.data;
 
+        // calling the API for the serch
         oersResp = await api.freeSearchOersNoPagination(
           keywords,
           domains,
@@ -215,8 +215,8 @@ const Discover = (props: DiscoverPageProps) => {
             })
           );
 
-          // Eventually, if the filtered search should not work with API, you should add the 
-          // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function) 
+          // Eventually, if the filtered search should not work with API, you should add the
+          // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
 
           setFiltered(oers);
         }
