@@ -96,7 +96,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   >([]);
 
   //collection index selection
-  const [collectionIndex, setcollectionIndex] = useState<number>(0);
+  const [collectionIndex, setcollectionIndex] = useState<number>(-1);
 
   //bloom level index selection
   const [bloomLevelIndex, setBloomLevelIndex] = useState<number | null>(null);
@@ -108,7 +108,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [step, setStep] = useState<number>(0);
 
   const [pathDesignData, setPathDesignData] = useState<PathDesign>({
-    collectionIndex: 0,
+    collectionIndex: -1,
     bloomLevel: '',
     skills: [],
     verbsLearingObjective: [],

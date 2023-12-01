@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
-import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
+//import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -31,16 +31,21 @@ type DiscoverPageProps = {
 const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
-  const { SPACING, pathDesignData, handleCreatePath /*handleResetStep1*/ } =
-    useLearningPathDesignContext();
+  const {
+    SPACING,
+    pathDesignData,
+    handleCreatePath,
+    collectionIndex /*handleResetStep1*/,
+  } = useLearningPathDesignContext();
 
   const router = useRouter();
-  const { collections, indexCollectionClicked } = useCollectionsContext();
+  const { collections } = useCollectionsContext();
 
   const [oersById, setOersById] = useState<OerProps[]>([]);
 
   const { addToast } = CustomToast();
-  const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
+  //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
@@ -63,19 +68,26 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   useEffect(() => {
-    handleCreatePath();
-  }, []);
+    console.log(collectionIndex);
+  }, [collectionIndex]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [oersById]);
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
-    console.log(indexCollectionClicked);
-
-    if (collections?.length > 0 && hydrated && indexCollectionClicked >= 0) {
-      if (collections[indexCollectionClicked]?.oers?.length > 0) {
+    handleCreatePath();
+    setIsLoading(true);
+    if (collections?.length > 0 && hydrated) {
+      console.log('passo 1');
+      console.log('collectionIndex: ' + collectionIndex);
+      if (collections[collectionIndex]?.oers?.length > 0) {
+        console.log('passo 2');
         try {
           const fetchOerData = async () => {
             const oerData = await Promise.all(
-              collections[indexCollectionClicked]?.oers?.map(
+              collections[collectionIndex]?.oers?.map(
                 async (oer: OerInCollectionProps) => {
                   const oerFound = await getDataOerById(oer?.id);
                   return oerFound;
@@ -89,23 +101,28 @@ const Home = (props: DiscoverPageProps) => {
 
           //console.log(oersById);
 
-          if (
+          // this part is commented because we don't need to select a concept to create a learning path
+          /* if (
             collections[indexCollectionClicked]?.conceptsSelected?.length === 0
           ) {
-            addToast({
-              message: 'No concepts selected in this collection!',
-              type: 'error',
-            });
             addToast({
               message:
                 'You need to select concepts from the saved OERs to create learning paths.',
               type: 'warning',
             });
+            throw new Error('No concepts selected in this collection!');
+            
           } else {
             setConceptSelectedIndex(0);
-          }
+          }*/
+          setIsLoading(false);
         } catch (error) {
-          throw error;
+          addToast({
+            message: `${error}`,
+            type: 'error',
+          });
+
+          setIsLoading(false);
         }
       } else {
         addToast({
@@ -117,7 +134,7 @@ const Home = (props: DiscoverPageProps) => {
           type: 'warning',
         });
       }
-    } else if (collections?.length === 0 && indexCollectionClicked < 0) {
+    } else if (collections?.length === 0 && collectionIndex < 0) {
       addToast({
         message: 'No collection created!',
         type: 'error',
@@ -133,11 +150,9 @@ const Home = (props: DiscoverPageProps) => {
         });
       }, 1000);
     }
-  }, [indexCollectionClicked]);
 
-  useEffect(() => {
-    console.log(conceptSelectedIndex);
-  }, [conceptSelectedIndex]);
+    setIsLoading(false);
+  }, [hydrated, collectionIndex]);
 
   return (
     <LearningPathProvider>
@@ -150,7 +165,7 @@ const Home = (props: DiscoverPageProps) => {
           py="115px"
           px="40px"
           w="full"
-          h={conceptSelectedIndex === -1 ? '100vh' : 'full'}
+          h={'full'}
           bg="background"
         >
           <Box w="100%" h="100%">
@@ -203,30 +218,12 @@ const Home = (props: DiscoverPageProps) => {
             </Box>
 
             <Box position="relative" paddingTop="2rem">
-              <Flex>
-                <Box
-                  p={3}
-                  w="80%"
-                  h="auto"
-                  border="2px"
-                  borderRadius="10px"
-                  borderColor="secondary"
-                  borderStyle="solid"
-                >
-                  <ConceptButtonsList
-                    collections={collections}
-                    conceptSelectedIndex={conceptSelectedIndex}
-                    setConceptSelectedIndex={setConceptSelectedIndex}
-                    collectionIndex={indexCollectionClicked}
-                  />
-                </Box>
-              </Flex>
-
               <LearningPathEditor
-                setConceptSelectedIndex={setConceptSelectedIndex}
+                //setConceptSelectedIndex={setConceptSelectedIndex}
+                isLoading={isLoading}
                 oers={oersById}
-                conceptSelectedIndex={conceptSelectedIndex}
-                collectionColor={collections[indexCollectionClicked]?.color}
+                conceptSelectedIndex={0}
+                collectionColor={collections[collectionIndex]?.color}
               />
             </Box>
           </Box>

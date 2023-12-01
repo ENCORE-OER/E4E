@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
@@ -52,6 +52,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
       pathname: '/plan',
     });
   };
+
+  useEffect(() => {
+    console.log(collectionIndex);
+  }, [collectionIndex]);
 
   return (
     <>
@@ -110,6 +114,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 onData={handleCollectionSelection}
                 onSelectionChange={handleCollectionChange}
               />
+              {console.log(collectionIndex)}
             </Box>
 
             {step >= 1 && (
