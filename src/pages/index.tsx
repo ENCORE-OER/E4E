@@ -67,8 +67,9 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
 
-  const [checkboxAll, setCheckboxAll] = useState(true);
-  const [checkboxOr, setCheckboxOr] = useState(false);
+  //const [checkboxAnd, setCheckboxAnd] = useState(true);
+  //const [checkboxOr, setCheckboxOr] = useState(false);
+  const [operator, setOperator] = useState('and'); // operator used for the search
 
   const combinations = useMemo(() => ({ mergeColors }), []);
 
@@ -88,14 +89,20 @@ const Home = (props: DiscoverPageProps) => {
     let searchData = {};
 
     try {
-      if (isClicked) {
+      if (
+        isClicked &&
+        (selectedAudience.length > 0 ||
+          selectedAudience.length > 0 ||
+          selectedResourceTypes.length > 0)
+      ) {
         // advanced search selected
         searchData = {
           keywords: searchValue,
           //selectedSkills: selectedSkillIds,
           advanced: true,
-          andOption: checkboxAll,
-          orOption: checkboxOr,
+          //andOption: checkboxAnd,
+          //orOption: checkboxOr,
+          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
@@ -110,8 +117,9 @@ const Home = (props: DiscoverPageProps) => {
           keywords: searchValue,
           //selectedSkills: selectedSkillIds,
           advanced: false,
-          andOption: checkboxAll,
-          orOption: checkboxOr,
+          //andOption: checkboxAnd,
+          //orOption: checkboxOr,
+          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
@@ -160,14 +168,16 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-  const handleCheckboxAllChange = () => {
-    setCheckboxAll(true);
-    setCheckboxOr(false);
+  const handleCheckboxAndChange = () => {
+    //setCheckboxAnd(true);
+    //setCheckboxOr(false);
+    setOperator('and');
   };
 
   const handleCheckboxOrChange = () => {
-    setCheckboxAll(false);
-    setCheckboxOr(true);
+    //setCheckboxAnd(false);
+    //setCheckboxOr(true);
+    setOperator('or');
   };
 
   // update metrics
@@ -318,15 +328,15 @@ const Home = (props: DiscoverPageProps) => {
                 <input
                   type="radio"
                   id="checkboxAll"
-                  checked={checkboxAll}
-                  onChange={handleCheckboxAllChange}
+                  checked={operator === 'and'}
+                  onChange={handleCheckboxAndChange}
                 />
-
                 <Text variant="text_searchFor_secondary">All keywords</Text>
+
                 <input
                   type="radio"
                   id="checkboxOr"
-                  checked={checkboxOr}
+                  checked={operator === 'or'}
                   onChange={handleCheckboxOrChange}
                 />
                 <Text variant="text_searchFor_secondary">Any keyword</Text>

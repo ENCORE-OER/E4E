@@ -2,7 +2,7 @@ import { Stack, Text } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
 import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
-import { OerDomainInfo } from '../../../types/encoreElements';
+import { OerDomainInfo, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 export type TabDomainsProps = {};
 
@@ -19,7 +19,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
   const filteredOers: any = {};
 
-  const [previousContent, setPreviousContent] = useState('');
+  const [previousContent, setPreviousContent] = useState<OerProps[]>([]);
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
 
@@ -29,7 +29,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
   filtered?.forEach(
-    (oer: { skills: { domain: OerDomainInfo[] }[]; id: string }) =>
+    (oer: { skills: { domain: OerDomainInfo[] }[]; id: number }) =>
       oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
         skill.domain?.forEach((domain) => {
           if (!filteredOers[domain.name])
@@ -108,7 +108,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter((oer: { id: string }) =>
+      const filteredObjects = filtered.filter((oer: { id: number }) =>
         selectedIds.includes(oer.id.toString())
       );
       setFiltered(filteredObjects);

@@ -16,9 +16,9 @@ import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
   oers: OerProps[];
+  setOers: Dispatch<SetStateAction<OerProps[]>>;
   domains: string[];
   searchCallBack: (domainIds: number[]) => Promise<void>;
-  setOers: Dispatch<SetStateAction<OerProps[]>>;
 } & CustomTabStyleProps;
 
 export type EncoreTabLabelProps = {

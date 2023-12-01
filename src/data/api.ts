@@ -658,4 +658,58 @@ export class APIV2 {
       throw error;
     }
   }
+
+  // free-search without pagination
+  async freeSearchOersNoPagination(
+    keywords: string[],
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    operator?: string
+  ): Promise<OerProps[]> {
+    try {
+      /*const pageParams = page ? `page=${page.toString()}&` : '';
+      const queryParams = keywords
+        .map((keyword) => `keywords=${keyword}`)
+        .join('&');*/
+
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      const queryParamsKeywords = keywords.join(',');
+      queryParams.append('keywords', queryParamsKeywords);
+
+      // ------------------------------------------
+      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
+
+      if (operator !== undefined) {
+        queryParams.append('operator', operator);
+      }
+
+      // ------------------------------------------
+
+      const apiUrl = `https://encore-db.grial.eu/api/no_pagination/free-search/oers/?${queryParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      return resp.data?.data || [];
+    } catch (error) {
+      throw error;
+    }
+  }
 }

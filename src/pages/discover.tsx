@@ -16,12 +16,8 @@ import { DiscoveryContext } from '../Contexts/discoveryContext';
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
-  OerAudienceInfo,
-  OerDomainInfo,
   OerInCollectionProps,
-  OerMediaTypeInfo,
   OerProps,
-  OerSkillInfo,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
@@ -32,6 +28,7 @@ type DiscoverPageProps = {
 const Discover = (props: DiscoverPageProps) => {
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
+  const abortController = new AbortController();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
   const [endSearch, setEndSearch] = useState<boolean>(false);
@@ -45,7 +42,7 @@ const Discover = (props: DiscoverPageProps) => {
   const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
-  const [filteredLength, setFilteredLength] = useState<number>(0);
+  //const [filteredLength, setFilteredLength] = useState<number>(0);
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
@@ -171,21 +168,16 @@ const Discover = (props: DiscoverPageProps) => {
 
   const freeSearchOERs = async (
     keywords: string[],
-    andOption: boolean,
-    orOption: boolean,
+    //andOption: boolean,
+    //orOption: boolean,
+    operator: string,
     domains: string[],
     types: string[],
     audience: string[]
   ) => {
     setIsLoading(true);
 
-    const ID_ALL = '0';
-
     //here we search the OERS using the query parameters
-
-    const isArrayDomains = Array.isArray(domains);
-    const isArrayTypes = Array.isArray(types);
-    const isArrayAudience = Array.isArray(audience);
 
     const api = new APIV2(props.accessToken);
 
@@ -199,80 +191,37 @@ const Discover = (props: DiscoverPageProps) => {
         //setFilteredLength(resp?.recordsFiltered);
         //const oers = resp?.data;
 
-        oersResp = await api.freeSearchOers(keywords); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
-        setFilteredLength(oersResp?.length);
+        // calling the API for the serch
+        oersResp = await api.freeSearchOersNoPagination(
+          keywords,
+          domains,
+          types,
+          audience,
+          operator
+        ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        //setFilteredLength(oersResp?.length);
 
         if (oersResp?.length > 0) {
           // get all the oers data
           const oers = await Promise.all(
             oersResp?.map(async (oer: OerProps) => {
-              //console.log(oer);
-              const oerFound = await getDataOerById(oer?.id);
+              console.log(oer);
+              const oerFound = await getDataOerById(
+                oer?.id,
+                abortController.signal
+              );
+              console.log(oerFound);
               return oerFound;
             })
           );
 
-          if (domains.length > 0 || types.length > 0 || audience.length > 0) {
-            // Filter based on domains, types, and audience
-            const filteredOers = oers?.filter((oer: OerProps) => {
-              const domain_Ids = Array.from(
-                new Set(
-                  oer.skills?.flatMap((skill: OerSkillInfo) =>
-                    skill.domain.map(
-                      (dom: OerDomainInfo) => dom.id as unknown as string
-                    )
-                  )
-                )
-              ); // list of domains in a single oer
-              console.log('domain_Ids: ', domain_Ids);
-              const type_Ids = oer.media_type?.map(
-                (mediaType: OerMediaTypeInfo) =>
-                  mediaType.id as unknown as string
-              ); // list of type in a single oer
-              console.log('type_Ids: ', type_Ids);
-              const audience_Ids = oer.coverage?.map(
-                (aud: OerAudienceInfo) => aud.id as unknown as string
-              ); // list of audience in a single oer
-              console.log('audience_Ids: ', audience_Ids);
+          // Eventually, if the filtered search should not work with API, you should add the
+          // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
 
-              let domainMatch = false;
-              let typeMatch = false;
-              let audienceMatch = false;
-
-              // if 'All' is selected we don't filter by that parameter
-              if (isArrayDomains && !domain_Ids?.includes(ID_ALL)) {
-                domainMatch = andOption
-                  ? domains.every((dom: string) => domain_Ids.includes(dom))
-                  : domains.some((dom: string) => domain_Ids.includes(dom));
-              }
-
-              if (isArrayTypes && !domain_Ids?.includes(ID_ALL)) {
-                typeMatch = andOption
-                  ? types.every((type: string) => type_Ids.includes(type))
-                  : types.some((type: string) => type_Ids.includes(type));
-              }
-
-              if (isArrayAudience && !domain_Ids?.includes(ID_ALL)) {
-                audienceMatch = andOption
-                  ? audience.every((aud: string) => audience_Ids.includes(aud))
-                  : audience.some((aud: string) => audience_Ids.includes(aud));
-              }
-
-              if (andOption) {
-                return domainMatch && typeMatch && audienceMatch;
-              } else {
-                return domainMatch || typeMatch || audienceMatch;
-              }
-            });
-
-            //console.log('oers: ', filteredOers);
-            setFiltered(filteredOers);
-          } else {
-            //console.log('oers: ', oerData);
-            setFiltered(oers);
-          }
+          setFiltered(oers);
         }
       } else if (
+        // check if there are filters without keywords
         domains.length > 0 ||
         audience.length > 0 ||
         types.length > 0
@@ -290,8 +239,13 @@ const Discover = (props: DiscoverPageProps) => {
       } else {
         throw new Error('No keywords or filters provided');
       }
+
       setEndSearch(true);
       setIsLoading(false);
+
+      return () => {
+        abortController.abort();
+      };
     } catch (error) {
       setEndSearch(true);
       setIsLoading(false);
@@ -307,11 +261,11 @@ const Discover = (props: DiscoverPageProps) => {
     alert('qui call back');
   };
 
-  const getDataOerById = async (id_oer: number) => {
+  const getDataOerById = async (id_oer: number, signal?: AbortSignal) => {
     const api = new APIV2(props.accessToken);
 
     try {
-      const oer = await api.getOerById(id_oer);
+      const oer = await api.getOerById(id_oer, signal);
       return oer[0];
     } catch (error) {
       throw error;
@@ -344,12 +298,13 @@ const Discover = (props: DiscoverPageProps) => {
     searchOERs(skills, andOption, orOption, domains, types, audience);*/
 
     const keywords = convertedData['keywords'];
-    const andOption = convertedData['andOption'];
-    const orOption = convertedData['orOption'];
+    //const andOption = convertedData['andOption'];
+    //const orOption = convertedData['orOption'];
+    const operator = convertedData['operator'];
     const domains = convertedData['domains'];
     const types = convertedData['types'];
     const audience = convertedData['audience'];
-    freeSearchOERs(keywords, andOption, orOption, domains, types, audience);
+    freeSearchOERs(keywords, operator, domains, types, audience);
   }, [router.query.searchData]);
 
   // redirect to home page if no resources are found
@@ -438,7 +393,7 @@ const Discover = (props: DiscoverPageProps) => {
               oers={filtered}
               isNormalSizeCard={true}
               itemsPerPage={10}
-              oersLength={filteredLength}
+              oersLength={filtered?.length}
               isResourcePage={false}
               collectionsColor={IconBookmarkColor}
             />
