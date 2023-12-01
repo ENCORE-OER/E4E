@@ -273,7 +273,6 @@ const Home = (props: DiscoverPageProps) => {
     }
   }, [searchValue]);*/
 
-
   return (
     <Flex w="100%" h="100%">
       <Navbar user={user} pageName="Discover" />
