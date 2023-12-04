@@ -78,7 +78,7 @@ const Home = () => {
                 onClick={() => {
                   if (areOptionsComplete) {
                     router.push({
-                      pathname: '/plan/LearningObjective',
+                      pathname: '/design/LearningObjective',
                     });
                   } else {
                     addToast({
