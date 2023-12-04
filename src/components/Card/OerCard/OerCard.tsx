@@ -43,7 +43,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}

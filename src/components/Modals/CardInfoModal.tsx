@@ -140,10 +140,20 @@ export default function CardInfoModal({
           ) || []
         );
 
-        setSubjects(oer.subject?.map((sub: OerSubjectInfo) => sub.name) || ['Unknown']);
+        setSubjects(
+          oer.subject?.map((sub: OerSubjectInfo) => sub.name) || ['Unknown']
+        );
 
-        setPublishers(oer.publisher?.map((pub: OerAuthorsInfo) => pub.full_name) || ['Unknown']);
-        setContributors(oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || ['Unknown']);
+        setPublishers(
+          oer.publisher?.map((pub: OerAuthorsInfo) => pub.full_name) || [
+            'Unknown',
+          ]
+        );
+        setContributors(
+          oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || [
+            'Unknown',
+          ]
+        );
         setConcepts(
           oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
         );
@@ -152,7 +162,9 @@ export default function CardInfoModal({
         setTotal_likes(oer?.total_likes || 0);
         setLastUpdate(oer?.retrieval_date || 'Unknown');
         setCoverage(
-          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || ['Unknown']
+          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || [
+            'Unknown',
+          ]
         );
 
         // set the color of the collections that has the oer selected
@@ -269,7 +281,7 @@ export default function CardInfoModal({
               </Box>
               <Box>
                 <Text color="grey" fontWeight="semibold" fontSize="sm">
-                  {`${authors}`}  {/* Print the names with the commas*/}
+                  {`${authors}`} {/* Print the names with the commas*/}
                 </Text>
               </Box>
             </Flex>

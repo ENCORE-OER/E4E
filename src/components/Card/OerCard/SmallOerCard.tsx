@@ -31,7 +31,7 @@ export default function SmallOerCard({
   times_used,
   total_likes,
 }: //dataOer
-  SmallOerCardProps) {
+SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -43,7 +43,7 @@ export default function SmallOerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
