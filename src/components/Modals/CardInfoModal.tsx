@@ -17,12 +17,8 @@ import {
 import { useEffect, useState } from 'react';
 
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
-import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
-import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
-import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import {
   CollectionProps,
   OerAudienceInfo,
@@ -34,6 +30,7 @@ import {
   OerSubjectInfo,
   OerUrlInfo,
 } from '../../types/encoreElements';
+import GridMetadataOer from '../Grids/GridMetadataOer';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
 import TagsDomain from '../Tags/TagsDomain';
@@ -71,6 +68,8 @@ export default function CardInfoModal({
   const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
     useState<boolean>(false);
   const [qualityScore, setQualityScore] = useState<number>(0);
+  const [times_used, setTimes_used] = useState<number>(0);
+  const [total_likes, setTotal_likes] = useState<number>(0);
   const [lastUpdate, setLastUpdate] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -141,17 +140,19 @@ export default function CardInfoModal({
           ) || []
         );
 
-        setSubjects(oer.subject?.map((sub: OerSubjectInfo) => sub.name) || []);
+        setSubjects(oer.subject?.map((sub: OerSubjectInfo) => sub.name) || ['Unknown']);
 
-        setPublishers(oer.publisher?.map((pub: any) => pub.name) || []);
-        setContributors(oer.contributor?.map((contr: any) => contr.name) || []);
+        setPublishers(oer.publisher?.map((pub: OerAuthorsInfo) => pub.full_name) || ['Unknown']);
+        setContributors(oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || ['Unknown']);
         setConcepts(
           oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
         );
         setQualityScore(oer?.overall_score || 0);
-        setLastUpdate(oer?.retrieval_date || '');
+        setTimes_used(oer?.times_used || 0);
+        setTotal_likes(oer?.total_likes || 0);
+        setLastUpdate(oer?.retrieval_date || 'Unknown');
         setCoverage(
-          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || []
+          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || ['Unknown']
         );
 
         // set the color of the collections that has the oer selected
@@ -268,7 +269,7 @@ export default function CardInfoModal({
               </Box>
               <Box>
                 <Text color="grey" fontWeight="semibold" fontSize="sm">
-                  {`${authors}`}
+                  {`${authors}`}  {/* Print the names with the commas*/}
                 </Text>
               </Box>
             </Flex>
@@ -285,44 +286,7 @@ export default function CardInfoModal({
             >
               <TagResourceType resourceType={resourceType} />
             </Flex>
-            <Flex w="100%" mb="5">
-              <Box flex="1" display="flex">
-                <Box>
-                  <Text variant="label_drawer">Last Update</Text>
-                  <HStack>
-                    <IconCalendarCheck />
-                    <Text>{lastUpdate}</Text>
-                  </HStack>
-                </Box>
-              </Box>
-              <Box display="flex" flex="1">
-                <Box>
-                  <Text variant="label_drawer">Used</Text>
-                  <HStack>
-                    <IconBezierCurve />
-                    <Text>2</Text>
-                  </HStack>
-                </Box>
-              </Box>
-              <Box display="flex" flex="1">
-                <Box>
-                  <Text variant="label_drawer">Liked</Text>
-                  <HStack>
-                    <IconThumbsUp />
-                    <Text>54</Text>
-                  </HStack>
-                </Box>
-              </Box>
-              <Box display="flex" flex="1">
-                <Box>
-                  <Text variant="label_drawer">Quality Score</Text>
-                  <HStack>
-                    <IconMedal />
-                    <Text>{qualityScore}</Text>
-                  </HStack>
-                </Box>
-              </Box>
-            </Flex>
+
             <Flex justifyContent={'left'} mb="5" overflowWrap={'normal'}>
               <Box>
                 <Text variant="label_drawer">Concepts covered</Text>
@@ -331,7 +295,14 @@ export default function CardInfoModal({
                 </Flex>
               </Box>
             </Flex>
-
+            <GridMetadataOer
+              gap={3}
+              lastUpdate={lastUpdate}
+              used={times_used}
+              likes={total_likes}
+              qualityScore={qualityScore}
+              isCardInfoModal={true}
+            />
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>
@@ -352,7 +323,7 @@ export default function CardInfoModal({
               </Box>
               <Box flex="1">
                 <Text variant="label_drawer">Contributor</Text>
-                <Text>{contributors}</Text>
+                <Text>{`${contributors}`}</Text>
               </Box>
             </Flex>
 

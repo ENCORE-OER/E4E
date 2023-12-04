@@ -16,7 +16,7 @@ export default function SmallSingleResourceCard({
   checkBookmark,
   collectionColor,
 }: //dataOer
-SmallSingleResourceCardProps) {
+  SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -45,6 +45,8 @@ SmallSingleResourceCardProps) {
       pyCardBody="0px"
       noOfLinesTextCardBody={1}
       gapGridCardFooter={1}
+      times_used={oer?.times_used}
+      total_likes={oer?.total_likes}
     />
   );
 }

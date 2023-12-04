@@ -13,8 +13,8 @@ export type OerProps = {
   id: number;
   plain_text_summary: string;
   creator: OerAuthorsInfo[];
-  publisher: any[] | null;
-  contributor: any[] | null;
+  publisher: OerAuthorsInfo[];
+  contributor: OerAuthorsInfo[];
   coverage: OerAudienceInfo[];
   skills: OerSkillInfo[];
   concepts: OerConceptInfo[];
@@ -43,4 +43,7 @@ export type OerProps = {
   overall_score: number;
   detailed_media_type: number[];
   detailed_coverage: number[];
+  total_likes: number;
+  times_used: number;
+  search_rank: number;
 };

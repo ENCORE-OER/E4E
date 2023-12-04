@@ -203,22 +203,22 @@ const Discover = (props: DiscoverPageProps) => {
 
         if (oersResp?.length > 0) {
           // get all the oers data
-          const oers = await Promise.all(
-            oersResp?.map(async (oer: OerProps) => {
-              console.log(oer);
-              const oerFound = await getDataOerById(
-                oer?.id,
-                abortController.signal
-              );
-              console.log(oerFound);
-              return oerFound;
-            })
-          );
+          // const oers = await Promise.all(
+          //   oersResp?.map(async (oer: OerProps) => {
+          //     console.log(oer);
+          //     const oerFound = await getDataOerById(
+          //       oer?.id,
+          //       abortController.signal
+          //     );
+          //     console.log(oerFound);
+          //     return oerFound;
+          //   })
+          // );
 
           // Eventually, if the filtered search should not work with API, you should add the
           // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
 
-          setFiltered(oers);
+          setFiltered(oersResp);
         }
       } else if (
         // check if there are filters without keywords
@@ -261,7 +261,7 @@ const Discover = (props: DiscoverPageProps) => {
     alert('qui call back');
   };
 
-  const getDataOerById = async (id_oer: number, signal?: AbortSignal) => {
+  /*const getDataOerById = async (id_oer: number, signal?: AbortSignal) => {
     const api = new APIV2(props.accessToken);
 
     try {
@@ -270,7 +270,7 @@ const Discover = (props: DiscoverPageProps) => {
     } catch (error) {
       throw error;
     }
-  };
+  };*/
 
   useEffect(() => {
     setIsLoading(true);
@@ -361,7 +361,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>

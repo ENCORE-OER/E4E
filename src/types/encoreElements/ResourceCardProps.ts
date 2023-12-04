@@ -18,5 +18,7 @@ export type ResourceCardProps = {
   pyCardBody?: string;
   noOfLinesTextCardBody?: number;
   gapGridCardFooter?: number;
+  total_likes: number;
+  times_used: number;
   //isNormalSizeCard?: boolean;
 };

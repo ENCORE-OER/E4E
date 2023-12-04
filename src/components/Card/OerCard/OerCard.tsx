@@ -28,6 +28,8 @@ export default function OerCard({
   ptCardHeader,
   pyCardBody,
   checkBookmark,
+  times_used,
+  total_likes,
 }: OerCardProps) {
   return (
     <Card
@@ -41,7 +43,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-      //mb={mbCard || '5'}
+    //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}
@@ -64,8 +66,8 @@ export default function OerCard({
       <OerCardFooter
         lastUpdate={lastUpdate}
         qualityScore={qualityScore}
-        used={2}
-        liked={2}
+        used={times_used}
+        liked={total_likes}
         resourceType={resourceType}
         gapGrid={gapGridCardFooter}
       />

@@ -38,6 +38,8 @@ export default function SingleResourceCard({
       retrieval_date={oer?.retrieval_date}
       overall_score={oer?.overall_score}
       media_type={mediaTypes.length > 0 ? mediaTypes : []}
+      times_used={oer?.times_used}
+      total_likes={oer?.total_likes}
     />
   );
 }

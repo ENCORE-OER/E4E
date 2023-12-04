@@ -28,8 +28,10 @@ export default function SmallOerCard({
   ptCardHeader,
   pyCardBody,
   checkBookmark,
+  times_used,
+  total_likes,
 }: //dataOer
-SmallOerCardProps) {
+  SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -41,7 +43,7 @@ SmallOerCardProps) {
       key={idOer}
       borderColor="secondary"
       bg="white"
-      //mb={mbCard || '5'}
+    //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
@@ -64,8 +66,8 @@ SmallOerCardProps) {
       <SmallOerCardFooter
         lastUpdate={lastUpdate}
         qualityScore={qualityScore}
-        used={2}
-        liked={2}
+        used={times_used}
+        likes={total_likes}
         resourceType={resourceType}
         gapGrid={gapGridCardFooter}
       />
