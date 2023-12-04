@@ -14,7 +14,7 @@ const CONCEPT_URL =
 const POLYGLOT_URL =
   process.env.POLYGLOT_URL || 'https://polyglot-api.polyglot-edu.com';
 const POLYGLOT_DASHBOARD =
-  process.env.POLYGLOT_DASHBOARD || 'https://polyglot-edu.com';
+  process.env.POLYGLOT_DASHBOARD || 'http://staging.polyglot-edu.com/';
 
 module.exports = {
   env: {
