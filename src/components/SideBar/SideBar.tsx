@@ -19,7 +19,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Dashboard', icon: IconDashboard, link: '/' },
   { name: 'Discover', icon: IconTelescope, link: '/discover' },
   { name: 'Your resources', icon: IconBookmarkCheckCustom, link: '/resources' },
-  { name: 'Design', icon: IconPathEdit, link: '/plan' },
+  { name: 'Design', icon: IconPathEdit, link: '/design' },
 ];
 
 export default function Sidebar({

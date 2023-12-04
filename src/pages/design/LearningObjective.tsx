@@ -49,7 +49,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handlePrevButtonClick = () => {
     //handleResetStep0();
     router.push({
-      pathname: '/plan',
+      pathname: '/design',
     });
   };
 
@@ -167,7 +167,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       text?.trim() !== ''
                     ) {
                       router.push({
-                        pathname: '/plan/learningPathDesign',
+                        pathname: '/design/learningPathDesign',
                       });
                     } else {
                       addToast({

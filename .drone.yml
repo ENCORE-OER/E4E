@@ -34,7 +34,7 @@ steps:
       build_args:
         - 'CONCEPT_URL=https://concept.polyglot-edu.com'
         - 'POLYGLOT_URL=https://polyglot-api.polyglot-edu.com'
-        - 'POLYGLOT_DASHBOARD=https://polyglot-edu.com'
+        - 'POLYGLOT_DASHBOARD=https://staging.polyglot-edu.com/'
         - 'DEPLOY_URL=${DRONE_BRANCH}-e4e.polyglot-edu.com'
       <<: *docker_creds
     when:
