@@ -1,3 +1,5 @@
+// this type is used for creator, publisher, contributor
+
 export type OerAuthorsInfo = {
   id: number;
   full_name: string;
