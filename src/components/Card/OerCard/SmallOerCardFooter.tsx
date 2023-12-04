@@ -1,12 +1,12 @@
 import { Box, CardFooter, Flex } from '@chakra-ui/react';
-import GridMetadataCard from '../../Grids/GridMetadataCard';
+import GridMetadataOer from '../../Grids/GridMetadataOer';
 import TagResourceType from '../../Tags/TagReourceType';
 
 type SmallOerCardFooterProps = {
   resourceType: string[];
   lastUpdate: string;
   used: number;
-  liked: number;
+  likes: number;
   qualityScore: number;
   gapGrid?: number;
 };
@@ -15,19 +15,20 @@ export default function SmallOerCardFooter({
   resourceType,
   lastUpdate,
   used,
-  liked,
+  likes,
   gapGrid,
   qualityScore,
 }: SmallOerCardFooterProps) {
   return (
     <CardFooter pt="0">
       <Box w="100%">
-        <GridMetadataCard
+        <GridMetadataOer
           gap={gapGrid || 3}
           lastUpdate={lastUpdate}
           used={used}
-          liked={liked}
+          likes={likes}
           qualityScore={qualityScore}
+          isCardInfoModal={false}
         />
 
         <Flex>

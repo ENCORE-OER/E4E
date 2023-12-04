@@ -133,7 +133,7 @@ export default function SearchBarEncore({
           }
         }}
       >
-        <Flex align="center">
+        <Flex align="center" minW="20%">
           <SearchIcon color="gray.300" mr="3" />
           <AutoCompleteInput
             variant="filled"
