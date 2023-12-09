@@ -97,15 +97,15 @@ const Home = (props: DiscoverPageProps) => {
       ) {
         // advanced search selected
         searchData = {
+          page: 1,
           keywords: searchValue,
           //selectedSkills: selectedSkillIds,
-          advanced: true,
-          //andOption: checkboxAnd,
-          //orOption: checkboxOr,
-          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
+          order_by: 'title',
+          order_asc: 'true',
+          operator: operator,
         };
 
         /*throw new Error(
@@ -114,15 +114,15 @@ const Home = (props: DiscoverPageProps) => {
       } else {
         //normal search
         searchData = {
+          page: 1,
           keywords: searchValue,
           //selectedSkills: selectedSkillIds,
-          advanced: false,
-          //andOption: checkboxAnd,
-          //orOption: checkboxOr,
-          operator: operator,
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
+          order_by: 'search_rank',
+          order_asc: 'true',
+          operator: operator,
         };
       }
       if (

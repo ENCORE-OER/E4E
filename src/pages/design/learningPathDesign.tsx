@@ -1,28 +1,27 @@
-import React from 'react';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import {
   Box,
+  Button,
+  Card,
+  CardBody,
   Flex,
   Heading,
   Text,
-  Card,
-  CardBody,
-  Button,
 } from '@chakra-ui/react';
-import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
+import LearningStepper from '../../components/Stepper/Stepper';
 import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import LearningStepper from '../../components/Stepper/Stepper';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -41,7 +40,7 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter();
   const { collections } = useCollectionsContext();
 
-  const [oersById, setOersById] = useState<OerProps[]>([]);
+  const [oersById, setOersById] = useState<(OerProps | undefined)[]>([]);
 
   const { addToast } = CustomToast();
   //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
@@ -172,7 +171,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>

@@ -9,6 +9,7 @@ import {
   OerProps,
   OerSkillInfo,
   OerSubjectInfo,
+  RespDataProps,
 } from '../types/encoreElements';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
 
@@ -237,7 +238,7 @@ export class APIV2 {
     }
   }
 
-  async getOerById(id_oer: number, signal?: AbortSignal): Promise<any> {
+  async getOerById(id_oer: number, signal?: AbortSignal): Promise<OerProps[]> {
     try {
       const config: any = {
         singal: signal,
@@ -251,7 +252,7 @@ export class APIV2 {
       /*const oer = resp.data?.data.map((item: any) => item);
       return oer;*/
 
-      return resp.data?.data;
+      return resp.data?.data ?? [];
     } catch (error) {
       throw error;
     }
@@ -283,11 +284,6 @@ export class APIV2 {
       throw error;
     }
   }
-
-  //API to retrieve the resources with multiple skills in OR
-  //https://encore-db.grial.eu/api/boolean/oers/?or_skills=23304&or_skills=22529
-  // Without pagination
-  //https://encore-db.grial.eu/api/no_pagination/boolean/oers/?or_skills=23304&or_skills=22529
 
   async getDigitalOer(): Promise<OerProps> {
     try {
@@ -536,15 +532,16 @@ export class APIV2 {
     }
   }
 
-  async searchOers(
-    //page = 1,fn
+  async searchOERs(
+    page: number,
     //skillIds: string[],
-    //domainIds: string[],
+    domainIds: string[],
     resourceTypeIds: string[],
-    audienceIds: string[]
-
-    // Implement oer[] type
-  ): Promise<OerProps[]> {
+    audienceIds: string[],
+    order_by?: string,
+    order_asc?: string,
+    operator?: string
+  ): Promise<RespDataProps> {
     const ID_ALL = '0';
 
     try {
@@ -554,18 +551,17 @@ export class APIV2 {
         queryParams.append('skills', skillId);
       });*/
 
+      if (page > 0) {
+        queryParams.append('page', page.toString());
+      }
+
       // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
 
-      /*if (!domainIds?.includes(ID_ALL)) {
+      if (!domainIds?.includes(ID_ALL)) {
         domainIds?.forEach((domainId: string) => {
           queryParams.append('skill_domain', domainId);
         });
-      }*/
-      /*if (!subjectIds?.includes(ID_ALL)) {
-        subjectIds?.forEach((subjectId: string) => {
-          queryParams.append('subject', subjectId);
-        });
-      }*/
+      }
       if (!resourceTypeIds?.includes(ID_ALL)) {
         resourceTypeIds?.forEach((resourceTypeId: string) => {
           queryParams.append('media_type', resourceTypeId);
@@ -576,26 +572,90 @@ export class APIV2 {
           queryParams.append('coverage', audienceId);
         });
       }
+      if (order_by !== undefined) {
+        queryParams.append('order_by', order_by);
+      }
+      if (order_asc !== undefined) {
+        queryParams.append('order_asc', order_asc);
+      }
+      if (operator !== undefined) {
+        queryParams.append('operator', operator);
+      }
 
       const url = `https://encore-db.grial.eu/api/oers/?${queryParams}`;
       //alert('url to search OERS: ' + url);
 
-      /*const temp = await axiosNoCookie.get(url);
-      const recordsTotal = temp.data?.recordsTotal;
-      const num_pages = Math.ceil(recordsTotal / 10);
-      let updatedOERs: OerProps[] = [];
+      const resp = await axiosNoCookie.get(url);
 
-      for (let i = 1; i < num_pages + 1; i++) {
-        const url = `https://encore-db.grial.eu/api/oers/?page=${i}&${queryParams}`;
-        const resp = await axiosNoCookie.get(url);
+      return resp?.data || []; // return 'resp?.data' to be able to access to field 'recordsFiltered'
+      //return updatedOERs;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-        const oers = resp.data?.data || [];
-        updatedOERs = [...updatedOERs, ...oers]; // to create a new array combining two other array
-      }*/
+  async searchOERsNoKeywords(
+    page: number,
+    domainIds: string[],
+    resourceTypeIds: string[],
+    audienceIds: string[],
+    order_by?: string,
+    order_asc?: string,
+    operator?: string
+  ): Promise<RespDataProps> {
+    try {
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      /*skillIds?.forEach((skillId: any) => {
+        queryParams.append('skills', skillId);
+      });*/
+
+      if (page > 0) {
+        queryParams.append('page', page.toString());
+      }
+
+      // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
+
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append(
+            `${operator ? operator : 'and'}_skill_domain`,
+            domainId
+          );
+        });
+      }
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append(
+            `${operator ? operator : 'and'}_media_type`,
+            resourceTypeId
+          );
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append(
+            `${operator ? operator : 'and'}_coverage`,
+            audienceId
+          );
+        });
+      }
+      if (order_by !== undefined) {
+        queryParams.append(
+          'order_by',
+          order_by === 'search_rank' ? 'title' : order_by // 'search_rank' is not a field for this API
+        );
+      }
+      if (order_asc !== undefined) {
+        queryParams.append('order_asc', order_asc);
+      }
+
+      const url = `https://encore-db.grial.eu/api/boolean/oers/?${queryParams}`;
 
       const resp = await axiosNoCookie.get(url);
 
-      return resp.data?.data;
+      return resp?.data || []; // return 'resp?.data' to be able to access to field 'recordsFiltered'
       //return updatedOERs;
     } catch (error) {
       throw error;
@@ -604,12 +664,15 @@ export class APIV2 {
 
   // This has pagination (10 items per page)
   async freeSearchOers(
+    page: number,
     keywords: string[],
     domainIds?: string[],
     resourceTypeIds?: string[],
     audienceIds?: string[],
-    page?: number
-  ): Promise<OerProps[]> {
+    order_by?: string,
+    order_asc?: string,
+    operator?: string
+  ): Promise<RespDataProps> {
     try {
       /*const pageParams = page ? `page=${page.toString()}&` : '';
       const queryParams = keywords
@@ -619,15 +682,14 @@ export class APIV2 {
       const queryParams = new URLSearchParams();
       const ID_ALL = '0';
 
-      if (page) {
+      if (page > 0) {
         queryParams.append('page', page.toString());
       }
-
-      keywords?.forEach((keyword: string) => {
-        queryParams.append('keywords', keyword);
-      });
+      const queryParamsKeywords = keywords.join(',');
+      queryParams.append('keywords', queryParamsKeywords);
 
       // ------------------------------------------
+      // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
       // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
       if (!domainIds?.includes(ID_ALL)) {
         domainIds?.forEach((domainId: string) => {
@@ -645,15 +707,23 @@ export class APIV2 {
           queryParams.append('coverage', audienceId);
         });
       }
+      if (order_by !== undefined) {
+        queryParams.append('order_by', order_by);
+      }
+      if (order_asc !== undefined) {
+        queryParams.append('order_asc', order_asc);
+      }
+
+      if (operator !== undefined) {
+        queryParams.append('operator', operator);
+      }
+
       // ------------------------------------------
 
       const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${queryParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
-      if (!page) {
-        return resp.data?.data || [];
-      } else {
-        return resp?.data || [];
-      }
+
+      return resp?.data || []; // return 'resp?.data' to be able to access to field 'recordsFiltered'
     } catch (error) {
       throw error;
     }
@@ -665,7 +735,8 @@ export class APIV2 {
     domainIds?: string[],
     resourceTypeIds?: string[],
     audienceIds?: string[],
-    operator?: string
+    operator?: string,
+    order_by?: string
   ): Promise<OerProps[]> {
     try {
       /*const pageParams = page ? `page=${page.toString()}&` : '';
@@ -696,6 +767,10 @@ export class APIV2 {
         audienceIds?.forEach((audienceId: string) => {
           queryParams.append('coverage', audienceId);
         });
+      }
+
+      if (order_by !== undefined) {
+        queryParams.append('order_by', order_by);
       }
 
       if (operator !== undefined) {

@@ -16,7 +16,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const pagesToShow = Array.from(
     { length: prevNextItems * 2 + 1 },
     (_, index) => currentPage - prevNextItems + index
-  ).filter((pageNumber) => pageNumber > 0 && pageNumber <= totalPages);
+  ).filter((pageNumber: number) => pageNumber > 0 && pageNumber <= totalPages);
 
   return (
     <div className="pagination-container">
@@ -30,17 +30,15 @@ const Pagination: React.FC<PaginationProps> = ({
           </button>
         </li>
 
-        {pagesToShow.map((pageNumber) => (
+        {pagesToShow.map((pageNumber: number) => (
           <li
             key={pageNumber}
-            className={`pagination-item ${
-              currentPage === pageNumber ? 'active' : ''
-            }`}
+            className={`pagination-item ${currentPage === pageNumber ? 'active' : ''
+              }`}
           >
             <button
-              className={`pagination-item ${
-                currentPage === pageNumber ? 'active' : ''
-              }`}
+              className={`pagination-item ${currentPage === pageNumber ? 'active' : ''
+                }`}
               onClick={() => onPageChange(pageNumber)}
             >
               {pageNumber}

@@ -2,8 +2,9 @@
 
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { OerProps } from '../../../types/encoreElements';
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
@@ -11,14 +12,17 @@ import SingleResourceCard from './SingleResourceCard';
 import SmallSingleResourceCard from './SmallSingleResourceCard';
 
 type ResourceCardsListProps = {
-  oers: OerProps[];
+  oers: (OerProps | undefined | OerFreeSearchProps)[];
   isNormalSizeCard: boolean;
   itemsPerPage: number;
   collectionsColor: string[] | string;
   isResourcePage: boolean;
-  handleDeleteButtonClick?: (collectionIndex: number, idOer: number) => void;
+  handleDeleteButtonClick?: (collectionIndex: number, idOer: number | undefined) => void;
   collectionIndex?: number;
-  oersLength: number;
+  oersLength: number | undefined;
+  currentPage?: number;
+  setCurrentPage?: Dispatch<SetStateAction<number>>;
+  handlePageChange?: (newPage: number) => void;
 };
 
 export default function ResourceCardsList({
@@ -30,11 +34,14 @@ export default function ResourceCardsList({
   handleDeleteButtonClick,
   collectionIndex,
   oersLength,
+  currentPage,
+  //setCurrentPage,
+  handlePageChange,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [oerById, setOerById] = useState<OerProps | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [oerById, setOerById] = useState<OerProps | OerFreeSearchProps | null | undefined>(null);
+  //const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleCloseCardInfoModal = () => {
     //setCardInfoModalOpen(false);
@@ -44,21 +51,13 @@ export default function ResourceCardsList({
   // handle pagination of the oers
   //-----------------------------------------------------------
   //const itemsPerPage = 5;
-  const totalPages = Math.ceil(oersLength / itemsPerPage);
+  const totalPages = Math.ceil((oersLength ?? 1) / itemsPerPage);
 
-  const handlePageChange = (newPage: number) => {
+  /*const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-  };
+  };*/
   //-----------------------------------------------------------
 
-  /*useEffect(() => {
-    console.log("--- ResourceCardsList --- \n collectionIndex-1: ", collectionIndex);
-    console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
-  }, []);
-
-  useEffect(() => {
-    console.log("--- ResourceCardsList --- \n collectionIndex-2: ", collectionIndex);
-  }, [collectionIndex])*/
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -67,12 +66,12 @@ export default function ResourceCardsList({
       {isNormalSizeCard && hydrated && (
         <Box>
           <VStack h="full" spacing={4}>
-            {oers
-              ?.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
+            {currentPage && oers
+              ?.slice(isResourcePage ?
+                (currentPage - 1) * itemsPerPage : 0,
+                isResourcePage ? (currentPage * itemsPerPage) : 10
               )
-              .map((oer: OerProps, index: number) => (
+              .map((oer: OerProps | OerFreeSearchProps | undefined, index: number) => (
                 <HStack key={index}>
                   <Box
                     onClick={async (e: any) => {
@@ -91,10 +90,11 @@ export default function ResourceCardsList({
                           ? isResourcePage && collectionsColor[0]
                             ? collectionsColor[0]
                             : collectionsColor[
-                                currentPage > 1
-                                  ? index + itemsPerPage * (currentPage - 1)
-                                  : index
-                              ] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
+                            //(currentPage) > 1
+                            // ? index + itemsPerPage * (currentPage - 1)
+                            // : 
+                            index
+                            ] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
                           : ''
                       }
                       oer={oer}
@@ -113,13 +113,13 @@ export default function ResourceCardsList({
                           collectionIndex !== undefined &&
                           collectionIndex > -1
                         ) {
-                          handleDeleteButtonClick(collectionIndex, oer.id);
+                          handleDeleteButtonClick(collectionIndex, oer?.id);
                         } //else {
                         //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                         //}
                       }}
-                      //position="absolute"
-                      //right={'0px'}
+                    //position="absolute"
+                    //right={'0px'}
                     >
                       <DeleteIcon />
                     </Button>
@@ -129,9 +129,9 @@ export default function ResourceCardsList({
           </VStack>
           {oersLength !== 0 && (
             <Pagination
-              currentPage={currentPage}
+              currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange}
+              onPageChange={handlePageChange ?? (() => void 0)}
             />
           )}
         </Box>
@@ -142,12 +142,12 @@ export default function ResourceCardsList({
       {!isNormalSizeCard && hydrated && (
         <Box>
           <VStack h="full" spacing={4} className="scrollable-content">
-            {oers
+            {currentPage && oers
               ?.slice(
                 (currentPage - 1) * itemsPerPage,
                 currentPage * itemsPerPage
               )
-              .map((oer: OerProps, index: number) => (
+              ?.map((oer: OerProps | OerFreeSearchProps | undefined, index: number) => (
                 <Box
                   key={index}
                   onClick={async (e: any) => {
@@ -173,9 +173,9 @@ export default function ResourceCardsList({
           </VStack>
           {oers.length !== 0 && (
             <Pagination
-              currentPage={currentPage}
+              currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange}
+              onPageChange={handlePageChange ?? (() => void 0)}
             />
           )}
         </Box>

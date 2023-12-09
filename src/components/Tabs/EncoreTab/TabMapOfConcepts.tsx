@@ -15,7 +15,7 @@ type Tag = {
   count: number;
 };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [tags, setTags] = useState<Tag[]>([]);
@@ -95,7 +95,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
             value: String(text),
             count: Number(value),
           }))
-          .filter((tag) => tag.count > 6);
+          // Filter out the concepts that appear less than N times
+          .filter((tag) => tag.count > 1);  // 6 is the minimum number of times a concept should appear in the OERs to be considered relevant
 
         tagsArray.map((item: any) => {
           console.log(item.value);

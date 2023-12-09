@@ -1,20 +1,27 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
 import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import {
+  OerFreeSearchProps,
   OerProps,
-  SortingDropDownMenuItemProps,
+  SortingDropDownMenuItemProps
 } from '../../types/encoreElements';
 import SortingDropDownMenu from '../DropDownMenu/SortingDropDownMenu';
 
 type OerCardsSortingProps = {
   setIsLoading?: Dispatch<SetStateAction<boolean>>;
-  filtered: OerProps[];
-  setFiltered: Dispatch<SetStateAction<OerProps[]>>;
+  filtered?: (OerProps | undefined | OerFreeSearchProps)[];
+  setFiltered?: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
   viewChanged?: boolean;
   setViewChanged?: Dispatch<SetStateAction<boolean>>;
+  selectedSorting?: string;
+  setSelectedSorting?: Dispatch<SetStateAction<string>>;
+  handleSortingChange?: (newSorting: string) => void;
+  isAscending: boolean;
+  setAscending: Dispatch<SetStateAction<boolean>>;
+  handleItemSortingClick: (sortingName: string) => void;
 };
 
 export default function OerCardsSorting({
@@ -23,65 +30,98 @@ export default function OerCardsSorting({
   setFiltered,
   viewChanged,
   setViewChanged,
+  selectedSorting,
+  //setSelectedSorting,
+  // handleSortingChange,
+  isAscending,
+  setAscending,
+  handleItemSortingClick,
 }: OerCardsSortingProps) {
-  const [isAscending, setAscending] = useState<boolean>(true);
-  const [selectedSorting, setSelectedSorting] = useState<string>('Last Update');
+  //const [isAscending, setAscending] = useState<boolean>(true);
 
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
+    //{ icon: IconBezierCurve, name: 'Suggested' },
+    { icon: IconBezierCurve, name: 'Relevance' },
+    { icon: IconBezierCurve, name: 'Title' },
     { icon: IconCalendarCheck, name: 'Last Update' },
-    { icon: IconThumbsUp, name: 'Likes' },
     { icon: IconMedal, name: 'Quality Score' },
-    { icon: IconBezierCurve, name: 'Time Used' },
-    { icon: IconBezierCurve, name: 'A-Z' },
+    { icon: IconThumbsUp, name: 'Likes' },
+    { icon: IconBezierCurve, name: 'Times Used' },
   ];
-
-  const handleItemSortingClick = (sortingName: string) => {
-    if (sortingName === selectedSorting) {
-      setAscending(!isAscending);
-    } else {
-      setSelectedSorting(sortingName);
-      setAscending(true);
-    }
-  };
 
   // sorting of the OERs
   useEffect(() => {
-    try {
-      //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
-      if (setIsLoading !== undefined) {
-        setIsLoading(true);
-      }
-      const sortedData = [...filtered];
-      sortedData.sort((a: OerProps, b: OerProps) => {
-        if (selectedSorting === 'Last Update') {
-          return isAscending
-            ? a.retrieval_date.localeCompare(b.retrieval_date)
-            : b.retrieval_date.localeCompare(a.retrieval_date);
-        } else if (selectedSorting === 'A-Z') {
-          return isAscending
-            ? a.title.localeCompare(b.title)
-            : b.title.localeCompare(a.title);
-        } else if (selectedSorting === 'Quality Score') {
-          return isAscending
-            ? a.overall_score - b.overall_score
-            : b.overall_score - a.overall_score;
-        } else {
-          return 0;
+    // LOGIC: if filtered is passed as a prop, that means that the user is in the 'Your resources' page
+    if (filtered !== undefined) {
+      try {
+        console.log('Sto ordinando');
+
+        //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
+        if (setIsLoading !== undefined) {
+          setIsLoading(true);
         }
-      });
+        // if (setViewChanged !== undefined) {
+        //   setViewChanged(true);
+        // }
+        const sortedData = [...filtered ?? []];
+        sortedData?.sort((a: OerProps | undefined | OerFreeSearchProps, b: OerProps | undefined | OerFreeSearchProps) => {
+          if (a !== undefined && b !== undefined) {
+            switch (selectedSorting) {
+              case 'Relevance': return isAscending
+                ? a.title.localeCompare(b.title)
+                : b.title.localeCompare(a.title);
+              case 'Title': return isAscending
+                ? a.title.localeCompare(b.title)
+                : b.title.localeCompare(a.title);
+              case 'Last Update': return isAscending
+                ? a.retrieval_date.localeCompare(b.retrieval_date)
+                : b.retrieval_date.localeCompare(a.retrieval_date);
+              case 'Quality Score': return isAscending
+                ? (a.overall_score ?? 0) - (b.overall_score ?? 0)
+                : (b.overall_score ?? 0) - (a.overall_score ?? 0);
+              case 'Likes': return isAscending
+                ? (a.total_likes ?? 0) - b.total_likes ?? 0
+                : (b.total_likes ?? 0) - (a.total_likes ?? 0);
+              case 'Times Used': return isAscending
+                ? (a.times_used ?? 0) - (b.times_used ?? 0)
+                : (b.times_used ?? 0) - (a.times_used ?? 0);
+              default: return 0;
+            }
+          } else {
+            return 0;
+          }
+          // if (selectedSorting === 'Last Update') {
+          //   return isAscending
+          //     ? a.retrieval_date.localeCompare(b.retrieval_date)
+          //     : b.retrieval_date.localeCompare(a.retrieval_date);
+          // } else if (selectedSorting === 'Title') {
+          //   return isAscending
+          //     ? a.title.localeCompare(b.title)
+          //     : b.title.localeCompare(a.title);
+          // } else if (selectedSorting === 'Quality Score') {
+          //   return isAscending
+          //     ? a.overall_score - b.overall_score
+          //     : b.overall_score - a.overall_score;
+          // } else {
+          //   return 0;
+          // }
+        });
 
-      //console.log(filtered);
-      //console.log(sortedData);
+        //console.log(filtered);
+        //console.log(sortedData);
 
-      setFiltered(sortedData);
-      //console.log("I'm triggering oersById/filtered");
+        if (setFiltered !== undefined) {
+          setFiltered(sortedData);
+        }
+        //console.log("I'm triggering oersById/filtered");
 
-      if (setIsLoading !== undefined) {
-        setIsLoading(false);
+        if (setIsLoading !== undefined) {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
   }, [selectedSorting, isAscending]);
 
@@ -90,7 +130,7 @@ export default function OerCardsSorting({
     //alert("OerCardsSorting")
     //console.log('viewChanged: ' + viewChanged);
     if (viewChanged && setViewChanged !== undefined) {
-      setSelectedSorting('Last Update');
+      //setSelectedSorting('Relevance');
       setAscending(true);
       setViewChanged(false);
       //console.log("I'm triggering viewChanged to false");

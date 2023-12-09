@@ -8,6 +8,7 @@ import {
   OerInCollectionProps,
   OerProps,
 } from '../../../types/encoreElements';
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 import AddResourcesButton from '../../Buttons/AddResourcesButton';
 import ResourceCardsList from '../../Card/OerCard/ResourceCardsList';
@@ -19,8 +20,8 @@ import HeaderCollectionView from './HeaderCollectionView';
 interface CollectionViewProps extends BoxProps {
   collections: CollectionProps[];
   collectionIndex: number;
-  oersById: OerProps[];
-  setOersById: Dispatch<SetStateAction<OerProps[]>>;
+  oersById: (OerProps | undefined | OerFreeSearchProps)[];
+  setOersById: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
   isNewDataLoaded?: boolean;
@@ -33,7 +34,7 @@ interface CollectionViewProps extends BoxProps {
   ) => Promise<void>;
   isDeleteAlertDialogOpen: boolean;
   onCloseDeleteAlertDialog: () => void;
-  handleDeleteButtonClick: (collectionIndex: number, idOer: number) => void;
+  handleDeleteButtonClick: (collectionIndex: number, idOer: number | undefined) => void;
   OerItemToDelete: OerItemToDeleteProps | null;
   setOerItemToDelete: Dispatch<SetStateAction<OerItemToDeleteProps | null>>;
   setSelectedConceptsForCollection: (
@@ -68,6 +69,9 @@ export default function CollectionView({
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
+  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank');  // used for the sorting of the resources
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isAscending, setAscending] = useState<boolean>(true);
 
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
@@ -102,19 +106,33 @@ export default function CollectionView({
     );
   };
 
+
+
+  const handleSortingChange = (sortingName: string) => {
+    setSelectedSorting(sortingName);
+  }
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleItemSortingClick = (sortingName: string) => {
+    if (sortingName === selectedSorting) {
+      setAscending(!isAscending);
+    } else {
+      handleSortingChange(sortingName);
+      setAscending(true);
+    }
+  };
+
+
   useEffect(() => {
     //alert("CollectionView");
 
+
     setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
-    //console.log("I'm triggering viewChanged to true");
-    /*if (setIsNewDataLoaded) {
-      setIsNewDataLoaded(true);
-    }*/
 
     extractUniqueConcepts(collections[collectionIndex]);
-    //console.log("I'm extracting unique concepts after collectionIndex change");
-    //console.log("COLLECTION INDEX: " + collectionIndex);
-    //console.log(new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
 
     // "collections" is a dependency because we need to extract the unique concepts for the selected collection
     // But in this way we also reset the sorting of the OERs.
@@ -135,8 +153,8 @@ export default function CollectionView({
         collectionIndex
       ]?.conceptsSelected?.filter((concept: OerConceptInfo) => {
         return oersById?.some(
-          (oer: OerProps) =>
-            oer.concepts
+          (oer: OerProps | OerFreeSearchProps | undefined) =>
+            oer?.concepts
               ?.map((oerConcept: OerConceptInfo) => oerConcept.id)
               .includes(concept.id)
         );
@@ -156,6 +174,10 @@ export default function CollectionView({
     extractUniqueConcepts(collections[collectionIndex]);
     // console.log("I'm extracting unique concepts after deleting a resource");
   }, [collections]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [viewChanged, isAscending])
 
   return (
     <Box {...rest}>
@@ -177,6 +199,12 @@ export default function CollectionView({
               setFiltered={setOersById}
               viewChanged={viewChanged}
               setViewChanged={setViewChanged}
+              selectedSorting={selectedSorting}
+              setSelectedSorting={setSelectedSorting}
+              handleSortingChange={handleSortingChange}
+              isAscending={isAscending}
+              setAscending={setAscending}
+              handleItemSortingClick={handleItemSortingClick}
             />
           </Flex>
         </HStack>
@@ -198,6 +226,9 @@ export default function CollectionView({
                 handleDeleteButtonClick={handleDeleteButtonClick}
                 collectionIndex={collectionIndex}
                 oersLength={oersById.length}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                handlePageChange={handlePageChange}
               />
             )}
             <Flex justifyContent="center" padding="5">

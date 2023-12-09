@@ -12,13 +12,14 @@ import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 import { OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
 
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const [previousContent, setPreviousContent] = useState<OerProps[]>([]);
+  const [previousContent, setPreviousContent] = useState<OerProps[] | OerFreeSearchProps[]>([]);
   const hydrated = useHasHydrated();
 
   const resourceTypes: any[] = [];
