@@ -17,7 +17,9 @@ import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
   oers: (OerProps | OerFreeSearchProps | undefined)[];
-  setOers: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
+  setOers: Dispatch<
+    SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
+  >;
   domains: string[];
   searchCallBack: (domainIds: number[]) => Promise<void>;
 } & CustomTabStyleProps;

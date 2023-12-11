@@ -70,67 +70,73 @@ export default function ResourceCardsList({
       {isNormalSizeCard && hydrated && (
         <Box>
           <VStack h="full" spacing={4}>
-            {currentPage && oers
-              // ?.slice(isResourcePage ?
-              //   (currentPage - 1) * itemsPerPage : 0,
-              //   isResourcePage ? (currentPage * itemsPerPage) : 10
-              ?.slice(
-                (currentPage - 1) * itemsPerPage, (currentPage * itemsPerPage)
-              )
-              .map((oer: OerProps | OerFreeSearchProps | undefined, index: number) => (
-                <HStack key={index}>
-                  <Box
-                    onClick={async (e: any) => {
-                      e.preventDefault();
-                      onOpen();
-                      // handleOpenCardInfoModal();
+            {currentPage &&
+              oers
+                // ?.slice(isResourcePage ?
+                //   (currentPage - 1) * itemsPerPage : 0,
+                //   isResourcePage ? (currentPage * itemsPerPage) : 10
+                ?.slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                .map(
+                  (
+                    oer: OerProps | OerFreeSearchProps | undefined,
+                    index: number
+                  ) => (
+                    <HStack key={index}>
+                      <Box
+                        onClick={async (e: any) => {
+                          e.preventDefault();
+                          onOpen();
+                          // handleOpenCardInfoModal();
 
-                      setOerById(oer);
-                    }}
-                    as="button"
-                  >
-                    <SingleResourceCard
-                      collectionColor={
-                        //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
-                        collectionsColor
-                          ? isResourcePage && collectionsColor[0]
-                            ? collectionsColor[0]
-                            : //(currentPage) > 1
-                            // ? index + itemsPerPage * (currentPage - 1)
-                            // :
-                            collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                          : ''
-                      }
-                      oer={oer}
-                    />
-                  </Box>
-                  {isResourcePage && (
-                    <Button
-                      variant="ghost"
-                      _hover={{ bg: 'gray.300' }}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        //alert("Click su delete");
-                        //console.log("I'm triggering delete resource button");
-                        if (
-                          handleDeleteButtonClick &&
-                          collectionIndex !== undefined &&
-                          collectionIndex > -1
-                        ) {
-                          handleDeleteButtonClick(collectionIndex, oer?.id);
-                        } //else {
-                        //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
-                        //}
-                      }}
-                    //position="absolute"
-                    //right={'0px'}
-                    >
-                      <DeleteIcon />
-                    </Button>
-                  )}
-                </HStack>
-              )
-              )}
+                          setOerById(oer);
+                        }}
+                        as="button"
+                      >
+                        <SingleResourceCard
+                          collectionColor={
+                            //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
+                            collectionsColor
+                              ? isResourcePage && collectionsColor[0]
+                                ? collectionsColor[0]
+                                : //(currentPage) > 1
+                                  // ? index + itemsPerPage * (currentPage - 1)
+                                  // :
+                                  collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
+                              : ''
+                          }
+                          oer={oer}
+                        />
+                      </Box>
+                      {isResourcePage && (
+                        <Button
+                          variant="ghost"
+                          _hover={{ bg: 'gray.300' }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            //alert("Click su delete");
+                            //console.log("I'm triggering delete resource button");
+                            if (
+                              handleDeleteButtonClick &&
+                              collectionIndex !== undefined &&
+                              collectionIndex > -1
+                            ) {
+                              handleDeleteButtonClick(collectionIndex, oer?.id);
+                            } //else {
+                            //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
+                            //}
+                          }}
+                          //position="absolute"
+                          //right={'0px'}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      )}
+                    </HStack>
+                  )
+                )}
           </VStack>
           {oersLength !== 0 && (
             <Pagination

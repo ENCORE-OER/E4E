@@ -15,7 +15,7 @@ type Tag = {
   count: number;
 };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const hydrated = useHasHydrated();
   const [tags, setTags] = useState<Tag[]>([]);

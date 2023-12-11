@@ -40,9 +40,9 @@ const Discover = (props: DiscoverPageProps) => {
   //const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filtered, setFiltered] = useState<(OerProps | OerFreeSearchProps | undefined)[]>(
-    []
-  ); // used for the list of resourcess to show
+  const [filtered, setFiltered] = useState<
+    (OerProps | OerFreeSearchProps | undefined)[]
+  >([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
 
@@ -182,7 +182,7 @@ const Discover = (props: DiscoverPageProps) => {
     order_by: string,
     order_asc: string,
     operator: string,
-    concepts?: string[],
+    concepts?: string[]
   ) => {
     setIsLoading(true);
     setEndSearch(false);
@@ -201,10 +201,17 @@ const Discover = (props: DiscoverPageProps) => {
       ) {
         //with freeSearchOers(page, keywords) domains, types, audience, order_by, order_asc, operator
         // const resp = await api.freeSearchOers(page, keywords, domains, types, audience, order_by, order_asc, operator);
-        const resp = await api.freeSearchOersNoPagination(keywords, domains, types, audience, order_by, order_asc, operator);
+        const resp = await api.freeSearchOersNoPagination(
+          keywords,
+          domains,
+          types,
+          audience,
+          order_by,
+          order_asc,
+          operator
+        );
         setOersLengthTotal(resp?.recordsFiltered);
         const oers = resp?.data;
-
 
         // calling the API for the serch
         // oersResp = await api.freeSearchOersNoPagination(
@@ -247,7 +254,16 @@ const Discover = (props: DiscoverPageProps) => {
         // It's not an efficient solution, but it's the best for now
         // TODO: return only the first 10 OERs. Recall the API on click on the next page button
         //oers = await api.freeSearchOers(  // --> advanced search with these doesn't work
-        const resp = await api.searchOERsNoKeywords(0, domains, types, audience, order_by, order_asc, operator, concepts);
+        const resp = await api.searchOERsNoKeywords(
+          0,
+          domains,
+          types,
+          audience,
+          order_by,
+          order_asc,
+          operator,
+          concepts
+        );
         setOersLengthTotal(resp?.recordsFiltered);
         const oers = resp?.data;
         setFiltered(oers);
@@ -357,7 +373,6 @@ const Discover = (props: DiscoverPageProps) => {
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
   };
-
 
   // const handleSortingChange = (sortingName: string) => {
   //   setSelectedSorting(sortingName);
@@ -507,17 +522,18 @@ const Discover = (props: DiscoverPageProps) => {
     if (filtered !== undefined || collections !== undefined) {
       // return the color of the collection if the oer is in the collection
       // if the oer is in more than one collection, return the color of the first collection
-      const colors = filtered?.map((filteredOer: OerProps | OerFreeSearchProps | undefined) => {
-        const collectionColor =
-          collections.find(
-            (collection: CollectionProps) =>
-              collection.oers?.some(
-                (oer: OerInCollectionProps) => oer.id === filteredOer?.id
-              )
-          )?.color || '';
+      const colors = filtered?.map(
+        (filteredOer: OerProps | OerFreeSearchProps | undefined) => {
+          const collectionColor =
+            collections.find(
+              (collection: CollectionProps) =>
+                collection.oers?.some(
+                  (oer: OerInCollectionProps) => oer.id === filteredOer?.id
+                )
+            )?.color || '';
 
-        return collectionColor;
-      }
+          return collectionColor;
+        }
       );
       setIconBookmarkColor(colors ?? []);
     }
@@ -532,7 +548,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>

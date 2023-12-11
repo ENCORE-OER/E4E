@@ -13,7 +13,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
@@ -47,12 +47,18 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   // );
 
   filtered?.forEach(
-    (oer: {
-      green_domain: boolean;
-      digital_domain: boolean;
-      entrepreneurship_domain: boolean;
-      id: number;
-    } | OerProps | undefined | OerFreeSearchProps) => {
+    (
+      oer:
+        | {
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
+        | OerProps
+        | undefined
+        | OerFreeSearchProps
+    ) => {
       if (oer !== undefined) {
         if (
           oer.green_domain ||
@@ -149,8 +155,9 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter((oer: OerProps | undefined | OerFreeSearchProps) =>
-        selectedIds.includes(oer?.id.toString())
+      const filteredObjects = filtered.filter(
+        (oer: OerProps | undefined | OerFreeSearchProps) =>
+          selectedIds.includes(oer?.id.toString())
       );
       setFiltered(filteredObjects);
     }
