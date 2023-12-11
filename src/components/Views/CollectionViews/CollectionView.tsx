@@ -21,7 +21,9 @@ interface CollectionViewProps extends BoxProps {
   collections: CollectionProps[];
   collectionIndex: number;
   oersById: (OerProps | undefined | OerFreeSearchProps)[];
-  setOersById: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
+  setOersById: Dispatch<
+    SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
+  >;
   viewChanged: boolean;
   setViewChanged: Dispatch<SetStateAction<boolean>>;
   isNewDataLoaded?: boolean;
@@ -34,7 +36,10 @@ interface CollectionViewProps extends BoxProps {
   ) => Promise<void>;
   isDeleteAlertDialogOpen: boolean;
   onCloseDeleteAlertDialog: () => void;
-  handleDeleteButtonClick: (collectionIndex: number, idOer: number | undefined) => void;
+  handleDeleteButtonClick: (
+    collectionIndex: number,
+    idOer: number | undefined
+  ) => void;
   OerItemToDelete: OerItemToDeleteProps | null;
   setOerItemToDelete: Dispatch<SetStateAction<OerItemToDeleteProps | null>>;
   setSelectedConceptsForCollection: (
@@ -69,7 +74,7 @@ export default function CollectionView({
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
-  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank');  // used for the sorting of the resources
+  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isAscending, setAscending] = useState<boolean>(true);
 
@@ -106,11 +111,9 @@ export default function CollectionView({
     );
   };
 
-
-
   const handleSortingChange = (sortingName: string) => {
     setSelectedSorting(sortingName);
-  }
+  };
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -125,10 +128,8 @@ export default function CollectionView({
     }
   };
 
-
   useEffect(() => {
     //alert("CollectionView");
-
 
     setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
 
@@ -177,7 +178,7 @@ export default function CollectionView({
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [viewChanged, isAscending])
+  }, [viewChanged, isAscending]);
 
   return (
     <Box {...rest}>

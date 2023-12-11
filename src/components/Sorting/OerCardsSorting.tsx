@@ -6,14 +6,16 @@ import { IconThumbsUp } from '../../public/Icons/svgToIcons/iconThumbsUp';
 import {
   OerFreeSearchProps,
   OerProps,
-  SortingDropDownMenuItemProps
+  SortingDropDownMenuItemProps,
 } from '../../types/encoreElements';
 import SortingDropDownMenu from '../DropDownMenu/SortingDropDownMenu';
 
 type OerCardsSortingProps = {
   setIsLoading?: Dispatch<SetStateAction<boolean>>;
   filtered?: (OerProps | undefined | OerFreeSearchProps)[];
-  setFiltered?: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
+  setFiltered?: Dispatch<
+    SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
+  >;
   viewChanged?: boolean;
   setViewChanged?: Dispatch<SetStateAction<boolean>>;
   selectedSorting?: string;
@@ -64,49 +66,61 @@ export default function OerCardsSorting({
         // if (setViewChanged !== undefined) {
         //   setViewChanged(true);
         // }
-        const sortedData = [...filtered ?? []];
-        sortedData?.sort((a: OerProps | undefined | OerFreeSearchProps, b: OerProps | undefined | OerFreeSearchProps) => {
-          if (a !== undefined && b !== undefined) {
-            switch (selectedSorting) {
-              case 'Relevance': return isAscending
-                ? a.title.localeCompare(b.title)
-                : b.title.localeCompare(a.title);
-              case 'Title': return isAscending
-                ? a.title.localeCompare(b.title)
-                : b.title.localeCompare(a.title);
-              case 'Last Update': return isAscending
-                ? a.retrieval_date.localeCompare(b.retrieval_date)
-                : b.retrieval_date.localeCompare(a.retrieval_date);
-              case 'Quality Score': return isAscending
-                ? (a.overall_score ?? 0) - (b.overall_score ?? 0)
-                : (b.overall_score ?? 0) - (a.overall_score ?? 0);
-              case 'Likes': return isAscending
-                ? (a.total_likes ?? 0) - b.total_likes ?? 0
-                : (b.total_likes ?? 0) - (a.total_likes ?? 0);
-              case 'Times Used': return isAscending
-                ? (a.times_used ?? 0) - (b.times_used ?? 0)
-                : (b.times_used ?? 0) - (a.times_used ?? 0);
-              default: return 0;
+        const sortedData = [...(filtered ?? [])];
+        sortedData?.sort(
+          (
+            a: OerProps | undefined | OerFreeSearchProps,
+            b: OerProps | undefined | OerFreeSearchProps
+          ) => {
+            if (a !== undefined && b !== undefined) {
+              switch (selectedSorting) {
+                case 'Relevance':
+                  return isAscending
+                    ? a.title.localeCompare(b.title)
+                    : b.title.localeCompare(a.title);
+                case 'Title':
+                  return isAscending
+                    ? a.title.localeCompare(b.title)
+                    : b.title.localeCompare(a.title);
+                case 'Last Update':
+                  return isAscending
+                    ? a.retrieval_date.localeCompare(b.retrieval_date)
+                    : b.retrieval_date.localeCompare(a.retrieval_date);
+                case 'Quality Score':
+                  return isAscending
+                    ? (a.overall_score ?? 0) - (b.overall_score ?? 0)
+                    : (b.overall_score ?? 0) - (a.overall_score ?? 0);
+                case 'Likes':
+                  return isAscending
+                    ? (a.total_likes ?? 0) - b.total_likes ?? 0
+                    : (b.total_likes ?? 0) - (a.total_likes ?? 0);
+                case 'Times Used':
+                  return isAscending
+                    ? (a.times_used ?? 0) - (b.times_used ?? 0)
+                    : (b.times_used ?? 0) - (a.times_used ?? 0);
+                default:
+                  return 0;
+              }
+            } else {
+              return 0;
             }
-          } else {
-            return 0;
+            // if (selectedSorting === 'Last Update') {
+            //   return isAscending
+            //     ? a.retrieval_date.localeCompare(b.retrieval_date)
+            //     : b.retrieval_date.localeCompare(a.retrieval_date);
+            // } else if (selectedSorting === 'Title') {
+            //   return isAscending
+            //     ? a.title.localeCompare(b.title)
+            //     : b.title.localeCompare(a.title);
+            // } else if (selectedSorting === 'Quality Score') {
+            //   return isAscending
+            //     ? a.overall_score - b.overall_score
+            //     : b.overall_score - a.overall_score;
+            // } else {
+            //   return 0;
+            // }
           }
-          // if (selectedSorting === 'Last Update') {
-          //   return isAscending
-          //     ? a.retrieval_date.localeCompare(b.retrieval_date)
-          //     : b.retrieval_date.localeCompare(a.retrieval_date);
-          // } else if (selectedSorting === 'Title') {
-          //   return isAscending
-          //     ? a.title.localeCompare(b.title)
-          //     : b.title.localeCompare(a.title);
-          // } else if (selectedSorting === 'Quality Score') {
-          //   return isAscending
-          //     ? a.overall_score - b.overall_score
-          //     : b.overall_score - a.overall_score;
-          // } else {
-          //   return 0;
-          // }
-        });
+        );
 
         //console.log(filtered);
         //console.log(sortedData);

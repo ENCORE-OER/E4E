@@ -17,7 +17,7 @@ export default function SmallSingleResourceCard({
   checkBookmark,
   collectionColor,
 }: //dataOer
-  SmallSingleResourceCardProps) {
+SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 

@@ -171,7 +171,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>

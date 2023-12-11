@@ -4,6 +4,7 @@ import { EncoreConceptMap } from '../types/encore';
 import {
   MetricsOers,
   OerAudienceInfo,
+  OerConceptInfo,
   OerDomainInfo,
   OerMediaTypeInfo,
   OerProps,
@@ -601,7 +602,8 @@ export class APIV2 {
     audienceIds: string[],
     order_by?: string,
     order_asc?: string,
-    operator?: string
+    operator?: string,
+    concepts?: string[]
   ): Promise<RespDataProps> {
     try {
       const queryParams = new URLSearchParams();
@@ -650,8 +652,12 @@ export class APIV2 {
       if (order_asc !== undefined) {
         queryParams.append('order_asc', order_asc);
       }
+      concepts?.forEach((concept: string) => {
+        queryParams.append('concepts', concept);
+      });
 
-      const url = `https://encore-db.grial.eu/api/boolean/oers/?${queryParams}`;
+      const url = `https://encore-db.grial.eu/api/no_pagination/boolean/oers/?${queryParams}`;
+      //const url = `https://encore-db.grial.eu/api/boolean/oers/?${queryParams}`;
 
       const resp = await axiosNoCookie.get(url);
 
@@ -671,7 +677,8 @@ export class APIV2 {
     audienceIds?: string[],
     order_by?: string,
     order_asc?: string,
-    operator?: string
+    operator?: string,
+    concepts?: string[]
   ): Promise<RespDataProps> {
     try {
       /*const pageParams = page ? `page=${page.toString()}&` : '';
@@ -718,6 +725,10 @@ export class APIV2 {
         queryParams.append('operator', operator);
       }
 
+      concepts?.forEach((concept: string) => {
+        queryParams.append('concepts', concept);
+      });
+
       // ------------------------------------------
 
       const apiUrl = `https://encore-db.grial.eu/api/free-search/oers/?${queryParams}`;
@@ -735,9 +746,10 @@ export class APIV2 {
     domainIds?: string[],
     resourceTypeIds?: string[],
     audienceIds?: string[],
-    operator?: string,
-    order_by?: string
-  ): Promise<OerProps[]> {
+    order_by?: string,
+    order_asc?: string,
+    operator?: string
+  ): Promise<RespDataProps> {
     try {
       /*const pageParams = page ? `page=${page.toString()}&` : '';
       const queryParams = keywords
@@ -773,6 +785,10 @@ export class APIV2 {
         queryParams.append('order_by', order_by);
       }
 
+      if (order_asc !== undefined) {
+        queryParams.append('order_asc', order_asc);
+      }
+
       if (operator !== undefined) {
         queryParams.append('operator', operator);
       }
@@ -780,6 +796,83 @@ export class APIV2 {
       // ------------------------------------------
 
       const apiUrl = `https://encore-db.grial.eu/api/no_pagination/free-search/oers/?${queryParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      return resp?.data || [];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // return the list of concepts involved in the filtered queryset.
+  async getConceptsFreeSearch(
+    keywords?: string[],
+    domainIds?: string[],
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    operator?: string,
+    order_by?: string,
+    order_asc?: string,
+    concepts?: string[]
+  ): Promise<OerConceptInfo[]> {
+    try {
+      /*const pageParams = page ? `page=${page.toString()}&` : '';
+      const queryParams = keywords
+        .map((keyword) => `keywords=${keyword}`)
+        .join('&');*/
+
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      if (keywords !== undefined && keywords.length > 0) {
+        const queryParamsKeywords = keywords.join(',');
+        queryParams.append('keywords', queryParamsKeywords);
+      }
+
+      // ------------------------------------------
+      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
+
+      if (order_by !== undefined) {
+        queryParams.append('order_by', order_by);
+      }
+
+      if (order_asc !== undefined) {
+        queryParams.append('order_asc', order_asc);
+      }
+
+      if (operator !== undefined) {
+        queryParams.append('operator', operator);
+      }
+
+      concepts?.forEach((concept: string) => {
+        queryParams.append('concepts', concept);
+      });
+
+      // ------------------------------------------
+      // These API returns the list of concepts involved in the filtered queryset.
+      // They use the same sintax of '/api/free-search/oers/?'
+      // '/api/no_pagination/free-search/oer-concepts/? '
+      // '/api/free-search/oer-concepts/?'
+
+      // At the moment we use the API without pagination, beacuse we want to retrieve all the concepts involved in the filtered queryset, not only the first 10 concepts.
+
+      const apiUrl = `https://encore-db.grial.eu/api/no_pagination/free-search/oer-concepts/?${queryParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
 
       return resp.data?.data || [];

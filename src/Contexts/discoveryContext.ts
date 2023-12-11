@@ -3,13 +3,13 @@ import { OerMediaTypeInfo, OerProps } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 
 interface DiscoveryContextProps {
-  filtered: OerProps[] | OerFreeSearchProps[]; //not undefined to semplify the use of this array
+  filtered: (OerProps | undefined | OerFreeSearchProps)[]; //not undefined to semplify the use of this array
   setFiltered: React.Dispatch<
-    React.SetStateAction<OerProps[] | OerFreeSearchProps[]>
+    React.SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
   >;
   byResourceType: OerMediaTypeInfo[] | undefined;
   setByResourceType: React.Dispatch<
-    React.SetStateAction<OerMediaTypeInfo[] | undefined>
+    React.SetStateAction<OerMediaTypeInfo | undefined>
   >;
 }
 

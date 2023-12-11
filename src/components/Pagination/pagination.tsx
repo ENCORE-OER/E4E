@@ -33,12 +33,14 @@ const Pagination: React.FC<PaginationProps> = ({
         {pagesToShow.map((pageNumber: number) => (
           <li
             key={pageNumber}
-            className={`pagination-item ${currentPage === pageNumber ? 'active' : ''
-              }`}
+            className={`pagination-item ${
+              currentPage === pageNumber ? 'active' : ''
+            }`}
           >
             <button
-              className={`pagination-item ${currentPage === pageNumber ? 'active' : ''
-                }`}
+              className={`pagination-item ${
+                currentPage === pageNumber ? 'active' : ''
+              }`}
               onClick={() => onPageChange(pageNumber)}
             >
               {pageNumber}

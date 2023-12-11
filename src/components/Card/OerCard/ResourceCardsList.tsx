@@ -17,7 +17,10 @@ type ResourceCardsListProps = {
   itemsPerPage: number;
   collectionsColor: string[] | string;
   isResourcePage: boolean;
-  handleDeleteButtonClick?: (collectionIndex: number, idOer: number | undefined) => void;
+  handleDeleteButtonClick?: (
+    collectionIndex: number,
+    idOer: number | undefined
+  ) => void;
   collectionIndex?: number;
   oersLength: number | undefined;
   currentPage?: number;
@@ -40,7 +43,9 @@ export default function ResourceCardsList({
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [oerById, setOerById] = useState<OerProps | OerFreeSearchProps | null | undefined>(null);
+  const [oerById, setOerById] = useState<
+    OerProps | OerFreeSearchProps | null | undefined
+  >(null);
   //const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleCloseCardInfoModal = () => {
@@ -58,7 +63,6 @@ export default function ResourceCardsList({
   };*/
   //-----------------------------------------------------------
 
-
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
 
@@ -67,9 +71,11 @@ export default function ResourceCardsList({
         <Box>
           <VStack h="full" spacing={4}>
             {currentPage && oers
-              ?.slice(isResourcePage ?
-                (currentPage - 1) * itemsPerPage : 0,
-                isResourcePage ? (currentPage * itemsPerPage) : 10
+              // ?.slice(isResourcePage ?
+              //   (currentPage - 1) * itemsPerPage : 0,
+              //   isResourcePage ? (currentPage * itemsPerPage) : 10
+              ?.slice(
+                (currentPage - 1) * itemsPerPage, (currentPage * itemsPerPage)
               )
               .map((oer: OerProps | OerFreeSearchProps | undefined, index: number) => (
                 <HStack key={index}>
@@ -89,12 +95,10 @@ export default function ResourceCardsList({
                         collectionsColor
                           ? isResourcePage && collectionsColor[0]
                             ? collectionsColor[0]
-                            : collectionsColor[
-                            //(currentPage) > 1
+                            : //(currentPage) > 1
                             // ? index + itemsPerPage * (currentPage - 1)
-                            // : 
-                            index
-                            ] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
+                            // :
+                            collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
                           : ''
                       }
                       oer={oer}
@@ -125,7 +129,8 @@ export default function ResourceCardsList({
                     </Button>
                   )}
                 </HStack>
-              ))}
+              )
+              )}
           </VStack>
           {oersLength !== 0 && (
             <Pagination
@@ -142,34 +147,40 @@ export default function ResourceCardsList({
       {!isNormalSizeCard && hydrated && (
         <Box>
           <VStack h="full" spacing={4} className="scrollable-content">
-            {currentPage && oers
-              ?.slice(
-                (currentPage - 1) * itemsPerPage,
-                currentPage * itemsPerPage
-              )
-              ?.map((oer: OerProps | OerFreeSearchProps | undefined, index: number) => (
-                <Box
-                  key={index}
-                  onClick={async (e: any) => {
-                    e.preventDefault();
-                    onOpen();
-                    // handleOpenCardInfoModal();
-                    setOerById(oer);
-                  }}
-                  as="button"
-                >
-                  <SmallSingleResourceCard
-                    collectionColor={
-                      collectionsColor
-                        ? isResourcePage
-                          ? collectionsColor[0]
-                          : collectionsColor[index]
-                        : ''
-                    }
-                    oer={oer}
-                  />
-                </Box>
-              ))}
+            {currentPage &&
+              oers
+                ?.slice(
+                  (currentPage - 1) * itemsPerPage,
+                  currentPage * itemsPerPage
+                )
+                ?.map(
+                  (
+                    oer: OerProps | OerFreeSearchProps | undefined,
+                    index: number
+                  ) => (
+                    <Box
+                      key={index}
+                      onClick={async (e: any) => {
+                        e.preventDefault();
+                        onOpen();
+                        // handleOpenCardInfoModal();
+                        setOerById(oer);
+                      }}
+                      as="button"
+                    >
+                      <SmallSingleResourceCard
+                        collectionColor={
+                          collectionsColor
+                            ? isResourcePage
+                              ? collectionsColor[0]
+                              : collectionsColor[index]
+                            : ''
+                        }
+                        oer={oer}
+                      />
+                    </Box>
+                  )
+                )}
           </VStack>
           {oers.length !== 0 && (
             <Pagination

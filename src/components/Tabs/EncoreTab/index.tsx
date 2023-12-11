@@ -16,8 +16,8 @@ import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSea
 import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
-  oers: OerProps[] | OerFreeSearchProps[];
-  setOers: Dispatch<SetStateAction<OerProps[] | OerFreeSearchProps[]>>;
+  oers: (OerProps | OerFreeSearchProps | undefined)[];
+  setOers: Dispatch<SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>>;
   domains: string[];
   searchCallBack: (domainIds: number[]) => Promise<void>;
 } & CustomTabStyleProps;

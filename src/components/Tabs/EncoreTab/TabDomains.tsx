@@ -20,7 +20,9 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   const filteredOers: any = {};
 
-  const [previousContent, setPreviousContent] = useState<OerProps[] | OerFreeSearchProps[]>([]);
+  const [previousContent, setPreviousContent] = useState<
+    (OerProps | undefined | OerFreeSearchProps)[]
+  >([]);
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
 
@@ -45,16 +47,27 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   // );
 
   filtered?.forEach(
-    (oer: { green_domain: boolean; digital_domain: boolean; entrepreneurship_domain: boolean; id: number }) => {
-      if (oer.green_domain || oer.digital_domain || oer.entrepreneurship_domain) {
-        if (oer.green_domain) {
-          addToFilteredOers('Green', oer.id);
-        }
-        if (oer.digital_domain) {
-          addToFilteredOers('Digital', oer.id);
-        }
-        if (oer.entrepreneurship_domain) {
-          addToFilteredOers('Entrepreneurship', oer.id);
+    (oer: {
+      green_domain: boolean;
+      digital_domain: boolean;
+      entrepreneurship_domain: boolean;
+      id: number;
+    } | OerProps | undefined | OerFreeSearchProps) => {
+      if (oer !== undefined) {
+        if (
+          oer.green_domain ||
+          oer.digital_domain ||
+          oer.entrepreneurship_domain
+        ) {
+          if (oer.green_domain) {
+            addToFilteredOers('Green', oer.id);
+          }
+          if (oer.digital_domain) {
+            addToFilteredOers('Digital', oer.id);
+          }
+          if (oer.entrepreneurship_domain) {
+            addToFilteredOers('Entrepreneurship', oer.id);
+          }
         }
       }
     }
@@ -71,7 +84,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     filteredOers[domainName].elems.push(oerId + '');
   }
 
-
   const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {
     const revised = filteredOers[index];
     revised.elems = [...new Set(revised.elems)];
@@ -84,7 +96,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   const sets = useMemo(() => {
     const colors = [
-
       '#49B61A',
       '#03A8B9',
       '#FFCF24',
@@ -138,8 +149,8 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter((oer: { id: number }) =>
-        selectedIds.includes(oer.id.toString())
+      const filteredObjects = filtered.filter((oer: OerProps | undefined | OerFreeSearchProps) =>
+        selectedIds.includes(oer?.id.toString())
       );
       setFiltered(filteredObjects);
     }

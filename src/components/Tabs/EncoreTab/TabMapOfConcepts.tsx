@@ -5,7 +5,7 @@ import { TagCloud } from 'react-tagcloud';
 import 'reactflow/dist/style.css';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
-import { OerConceptInfo } from '../../../types/encoreElements';
+import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
@@ -73,9 +73,11 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     const fetchData = async () => {
       try {
         const oers_ids: number[] = [];
-        filtered?.forEach((oer: { id: number }) => {
+        filtered?.forEach((oer: OerProps | undefined | OerFreeSearchProps) => {
           //console.log(oer.id);
-          oers_ids.push(oer.id);
+          if (oer !== undefined) {
+            oers_ids.push(oer.id);
+          }
         });
         const respAPI = await API.getConceptsWords(oers_ids);
 
@@ -95,8 +97,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
             value: String(text),
             count: Number(value),
           }))
-          // Filter out the concepts that appear less than N times
-          .filter((tag) => tag.count > 1);  // 6 is the minimum number of times a concept should appear in the OERs to be considered relevant
+          .filter((tag) => tag.count > 6);
 
         tagsArray.map((item: any) => {
           console.log(item.value);
@@ -142,8 +143,8 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
               onClick={(tag: Tag) => {
                 // Filter the `filtered` array based on the selected word
                 const newFilteredObjects = filtered.filter(
-                  (oer: { concepts: OerConceptInfo[] }) => {
-                    return oer.concepts.some(
+                  (oer: OerProps | undefined | OerFreeSearchProps) => {
+                    return oer?.concepts.some(
                       (concept) => concept.label === tag.value
                     );
                   }

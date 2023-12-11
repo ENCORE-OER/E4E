@@ -169,7 +169,9 @@ export default function CardInfoModal({
             'Unknown',
           ]
         );
-        setSource_roer(oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []);
+        setSource_roer(
+          oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
+        );
 
         // set the color of the collections that has the oer selected
         const colors: ColorCollectionProps[] = [];
