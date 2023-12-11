@@ -25,6 +25,7 @@ import { APIV2 } from '../data/api';
 import {
   CollectionProps,
   OerConceptInfo,
+  OerFreeSearchProps,
   OerInCollectionProps,
   OerProps,
 } from '../types/encoreElements';
@@ -54,7 +55,9 @@ const Home = (props: DiscoverPageProps) => {
   } = useCollectionsContext();
   const collectionRef = useRef<HTMLDivElement>(null);
 
-  const [oersById, setOersById] = useState<OerProps[]>([]);
+  const [oersById, setOersById] = useState<
+    (OerProps | undefined | OerFreeSearchProps)[]
+  >([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
   const { addToast } = CustomToast();
 
@@ -141,7 +144,13 @@ const Home = (props: DiscoverPageProps) => {
       /*while (!hydrated) {
         console.log('hydrated: ' + hydrated);
       }*/
-      setOersById((prevOers) => prevOers.filter((oer) => oer.id !== idOer));
+      setOersById(
+        (prevOers) =>
+          prevOers?.filter(
+            (oer: OerProps | undefined | OerFreeSearchProps) =>
+              oer?.id !== idOer
+          )
+      );
       //console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
       addToast({
@@ -151,25 +160,44 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-  const handleDeleteButtonClick = (collectionIndex: number, idOer: number) => {
-    console.log('Delete button clicked');
-    const hasResourceAtLeastOneConceptSelected = oersById
-      .find((oer: OerProps) => oer.id === idOer)
-      ?.concepts?.some((oerConcept: OerConceptInfo) => {
-        return collections[collectionIndex]?.conceptsSelected?.some(
-          (concept: OerConceptInfo) => concept.id === oerConcept.id
-        );
-      });
-    const oer_title = oersById.find((oer: OerProps) => oer.id === idOer)?.title;
+  const handleDeleteButtonClick = (
+    collectionIndex: number,
+    idOer: number | undefined
+  ) => {
+    try {
+      if (idOer === undefined) {
+        throw new Error('idOer is undefined');
+      }
+      console.log('Delete button clicked');
+      const hasResourceAtLeastOneConceptSelected = oersById
+        ?.find(
+          (oer: OerProps | undefined | OerFreeSearchProps) => oer?.id === idOer
+        )
+        ?.concepts?.some((oerConcept: OerConceptInfo) => {
+          return collections[collectionIndex]?.conceptsSelected?.some(
+            (concept: OerConceptInfo) => concept.id === oerConcept.id
+          );
+        });
+      const oer_title =
+        oersById?.find(
+          (oer: OerProps | undefined | OerFreeSearchProps) => oer?.id === idOer
+        )?.title || '';
 
-    if (
-      collections[collectionIndex]?.conceptsSelected?.length > 0 &&
-      hasResourceAtLeastOneConceptSelected &&
-      oer_title
-    ) {
-      onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
-    } else {
-      handleDeleteResource(collectionIndex, idOer);
+      if (
+        collections[collectionIndex]?.conceptsSelected?.length > 0 &&
+        hasResourceAtLeastOneConceptSelected &&
+        oer_title
+      ) {
+        onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
+      } else {
+        handleDeleteResource(collectionIndex, idOer);
+      }
+    } catch (error) {
+      console.error(error);
+      // addToast({
+      //   message: `${error}`,
+      //   type: 'error',
+      // });
     }
   };
 

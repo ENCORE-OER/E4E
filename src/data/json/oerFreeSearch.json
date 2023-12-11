@@ -1,0 +1,75 @@
+{
+  "id": 1,
+  "creator": [
+    {
+      "id": 2,
+      "full_name": "Test Test"
+    }
+  ],
+  "publisher": [
+    {
+      "id": 3,
+      "full_name": "Test Test"
+    }
+  ],
+  "contributor": [],
+  "subject": [
+    {
+      "id": 4,
+      "name": "Test"
+    }
+  ],
+  "concepts": [
+    {
+      "id": 5,
+      "name": "Test"
+    }
+  ],
+  "coverage": [
+    {
+      "id": 6,
+      "order": 1,
+      "name": "Test"
+    }
+  ],
+  "resource_format": [
+    {
+      "id": 7,
+      "name": "Test"
+    }
+  ],
+  "media_type": [
+    {
+      "id": 8,
+      "name": "Test"
+    }
+  ],
+  "oer_url": [
+    {
+      "id": 1179313,
+      "url": "https://www.pbslearningmedia.org/resource/nasa11.sci.life.eco.uttc3/adopting-sustainable-food-practices/",
+      "source_roer_url": "https://nsdl.oercommons.org/courses/adopting-sustainable-food-practices",
+      "status_code": "200"
+    }
+  ],
+  "source_roer": [
+    {
+      "id": 118,
+      "name": "nsdl_oercommons",
+      "url": ""
+    }
+  ],
+  "search_rank": 0,
+  "title": "title",
+  "description": "description",
+  "publication_date": "2012-03-19",
+  "retrieval_date": "2022-11-22",
+  "total_likes": 0,
+  "times_used": 0,
+  "overall_score": 9,
+  "language": "English",
+  "rights": "Educational Use Permitted",
+  "green_domain": true,
+  "digital_domain": true,
+  "entrepreneurship_domain": true
+}

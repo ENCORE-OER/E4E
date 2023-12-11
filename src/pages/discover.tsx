@@ -19,6 +19,7 @@ import {
   OerInCollectionProps,
   OerProps,
 } from '../types/encoreElements';
+import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 import { CustomToast } from '../utils/Toast/CustomToast';
 
 type DiscoverPageProps = {
@@ -39,10 +40,16 @@ const Discover = (props: DiscoverPageProps) => {
   //const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filtered, setFiltered] = useState<OerProps[]>([]); // used for the list of resourcess to show
+  const [filtered, setFiltered] = useState<
+    (OerProps | OerFreeSearchProps | undefined)[]
+  >([]); // used for the list of resourcess to show
   const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
-  //const [filteredLength, setFilteredLength] = useState<number>(0);
+
+  const [isAscending, setAscending] = useState<boolean>(true);
+  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
+  const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
@@ -167,15 +174,18 @@ const Discover = (props: DiscoverPageProps) => {
   };*/
 
   const freeSearchOERs = async (
+    page: number,
     keywords: string[],
-    //andOption: boolean,
-    //orOption: boolean,
-    operator: string,
     domains: string[],
     types: string[],
-    audience: string[]
+    audience: string[],
+    order_by: string,
+    order_asc: string,
+    operator: string,
+    concepts?: string[]
   ) => {
     setIsLoading(true);
+    setEndSearch(false);
 
     //here we search the OERS using the query parameters
 
@@ -183,43 +193,58 @@ const Discover = (props: DiscoverPageProps) => {
 
     try {
       //let resp: RespDataProps | null = null;
-      let oersResp: OerProps[] | null = null;
+      //let oers: OerProps[] | undefined = [];
 
-      if (keywords.length > 0) {
-        //with freeSearchOers(keywords, page)
-        //resp = await api.freeSearchOers(keywords, 1); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
-        //setFilteredLength(resp?.recordsFiltered);
-        //const oers = resp?.data;
-
-        // calling the API for the serch
-        oersResp = await api.freeSearchOersNoPagination(
+      if (
+        keywords.length > 0
+        //|| domains.length > 0 || types.length > 0 || audience.length > 0
+      ) {
+        //with freeSearchOers(page, keywords) domains, types, audience, order_by, order_asc, operator
+        // const resp = await api.freeSearchOers(page, keywords, domains, types, audience, order_by, order_asc, operator);
+        const resp = await api.freeSearchOersNoPagination(
           keywords,
           domains,
           types,
           audience,
+          order_by,
+          order_asc,
           operator
-        ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
+        );
+        setOersLengthTotal(resp?.recordsFiltered);
+        const oers = resp?.data;
+
+        // calling the API for the serch
+        // oersResp = await api.freeSearchOersNoPagination(
+        //   keywords,
+        //   domains,
+        //   types,
+        //   audience,
+        //   operator,
+        //   order_item
+        // ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
         //setFilteredLength(oersResp?.length);
 
-        if (oersResp?.length > 0) {
-          // get all the oers data
-          // const oers = await Promise.all(
-          //   oersResp?.map(async (oer: OerProps) => {
-          //     console.log(oer);
-          //     const oerFound = await getDataOerById(
-          //       oer?.id,
-          //       abortController.signal
-          //     );
-          //     console.log(oerFound);
-          //     return oerFound;
-          //   })
-          // );
+        setFiltered(oers);
 
-          // Eventually, if the filtered search should not work with API, you should add the
-          // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
+        //if (oersResp?.length > 0) { // with freeSearchOersNoPagination() use oersResp?.length
+        // get all the oers data
+        // const oers = await Promise.all(
+        //   oersResp?.map(async (oer: OerProps) => {
+        //     console.log(oer);
+        //     const oerFound = await getDataOerById(
+        //       oer?.id,
+        //       abortController.signal
+        //     );
+        //     console.log(oerFound);
+        //     return oerFound;
+        //   })
+        // );
 
-          setFiltered(oersResp);
-        }
+        // Eventually, if the filtered search should not work with API, you should add the
+        // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
+
+        //   setFiltered(oersResp);
+        // }
       } else if (
         // check if there are filters without keywords
         domains.length > 0 ||
@@ -229,30 +254,34 @@ const Discover = (props: DiscoverPageProps) => {
         // It's not an efficient solution, but it's the best for now
         // TODO: return only the first 10 OERs. Recall the API on click on the next page button
         //oers = await api.freeSearchOers(  // --> advanced search with these doesn't work
-        oersResp = await api.searchOERbySkillNoPages(
-          //keywords,
+        const resp = await api.searchOERsNoKeywords(
+          0,
           domains,
           types,
-          audience
+          audience,
+          order_by,
+          order_asc,
+          operator,
+          concepts
         );
-        setFiltered(oersResp);
+        setOersLengthTotal(resp?.recordsFiltered);
+        const oers = resp?.data;
+        setFiltered(oers);
       } else {
         throw new Error('No keywords or filters provided');
       }
-
-      setEndSearch(true);
-      setIsLoading(false);
 
       return () => {
         abortController.abort();
       };
     } catch (error) {
-      setEndSearch(true);
-      setIsLoading(false);
       addToast({
         message: `${error}`,
         type: 'error',
       });
+    } finally {
+      setEndSearch(true);
+      setIsLoading(false);
     }
   };
 
@@ -272,9 +301,175 @@ const Discover = (props: DiscoverPageProps) => {
     }
   };*/
 
-  useEffect(() => {
-    setIsLoading(true);
+  // ==================================================================
+  // --------------------------- API WITH PAGINATION ---------------------------
 
+  // This code is used to manage the pagination of the resources
+
+  // const handlePageChange = (newPage: number) => {
+  //   // Update query parameter 'page'
+  //   setCurrentPage(newPage);
+
+  //   router.push({
+  //     pathname: router.pathname,
+  //     query: { ...router.query, page: newPage },
+  //   });
+  // };
+
+  const handleSortingChange = (newSorting: string, isAscending?: boolean) => {
+    // Update query parameters 'order_by' and 'order_asc', and reset 'page' to 1
+
+    setSelectedSorting(newSorting);
+    setCurrentPage(1);
+
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page: 1,
+        order_by: newSorting,
+        order_asc: isAscending?.toString() || 'true',
+      },
+    });
+  };
+
+  const handleItemSortingClick = (sortingName: string) => {
+    let order_item = '';
+    switch (sortingName) {
+      case 'Relevance':
+        order_item = 'search_rank';
+        break;
+      case 'Last Update':
+        order_item = 'retrieval_date';
+        break;
+      case 'Title':
+        order_item = 'title';
+        break;
+      case 'Quality Score':
+        order_item = 'overall_score';
+        break;
+      case 'Times Used':
+        order_item = 'times_used';
+        break;
+      case 'Likes':
+        order_item = 'total_likes';
+        break;
+      default:
+        order_item = 'title';
+        break;
+    }
+    if (order_item === selectedSorting) {
+      setAscending(!isAscending);
+      handleSortingChange(order_item, !isAscending);
+    } else {
+      //setSelectedSorting(sortingName);
+      setAscending(true);
+      handleSortingChange(order_item, true);
+    }
+  };
+
+  // ==================================================================
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  // const handleSortingChange = (sortingName: string) => {
+  //   setSelectedSorting(sortingName);
+  // }
+
+  // const handleItemSortingClick = (sortingName: string) => {
+  //   if (sortingName === selectedSorting) {
+  //     setAscending(!isAscending);
+  //   } else {
+  //     handleSortingChange(sortingName);
+  //     setAscending(true);
+  //   }
+  // };
+
+  /*useEffect(() => {
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: 1, order_asc: isAscending.toString() },
+    });
+  }, [isAscending])*/
+
+  /*useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedSorting]);*/
+
+  useEffect(() => {
+    console.log('filtered: ', filtered);
+  }, [filtered]);
+
+  useEffect(() => {
+    try {
+      setIsLoading(true);
+
+      const searchData = localStorage.getItem('searchData');
+
+      if (!searchData) {
+        // TODO: handle redirect
+        router.push({
+          pathname: '/',
+        });
+        return;
+      }
+
+      const convertedData = JSON.parse(searchData);
+
+      // TODO: add check if null
+      /*const skills = convertedData['selectedSkills'];
+      const andOption = convertedData['andOption'];
+      const orOption = convertedData['orOption'];
+      const domains = convertedData['domains'];
+      const types = convertedData['types'];
+      const audience = convertedData['audience'];
+  
+      searchOERs(skills, andOption, orOption, domains, types, audience);*/
+
+      const keywords = convertedData['keywords'];
+      //const andOption = convertedData['andOption'];
+      //const orOption = convertedData['orOption'];
+      const domains = convertedData['domains'];
+      const types = convertedData['types'];
+      const audience = convertedData['audience'];
+      //const order_by = convertedData['order_by'];
+      //const order_asc = convertedData['order_asc'];
+      const operator = convertedData['operator'];
+      const concepts = convertedData['concepts'];
+
+      freeSearchOERs(
+        currentPage,
+        keywords,
+        domains,
+        types,
+        audience,
+        selectedSorting,
+        isAscending.toString(),
+        operator,
+        concepts
+      );
+      // .then((oers) => {
+      // //   console.log('New value oers: ', oers);
+      // //   setFiltered(oers);
+      // //   setEndSearch(true);
+      // //   setIsLoading(false);
+      // // })
+      // // .catch((error) => {
+      // //   setEndSearch(true);
+      // //   setIsLoading(false);
+      // //   addToast({
+      // //     message: `${error}`,
+      // //     type: 'error',
+      // //   });
+      // // });
+    } catch (error) {
+      console.log(error);
+    }
+  }, [router.query]);
+
+  /*useEffect(() => {
     const searchData = localStorage.getItem('searchData');
 
     if (!searchData) {
@@ -285,32 +480,26 @@ const Discover = (props: DiscoverPageProps) => {
       return;
     }
 
-    const convertedData = JSON.parse(searchData);
+    const updatedSearchData = JSON.parse(searchData);
 
-    // TODO: add check if null
-    /*const skills = convertedData['selectedSkills'];
-    const andOption = convertedData['andOption'];
-    const orOption = convertedData['orOption'];
-    const domains = convertedData['domains'];
-    const types = convertedData['types'];
-    const audience = convertedData['audience'];
+    updatedSearchData.page = currentPage.toString();
 
-    searchOERs(skills, andOption, orOption, domains, types, audience);*/
+    localStorage.setItem('searchData', JSON.stringify(updatedSearchData));
 
-    const keywords = convertedData['keywords'];
-    //const andOption = convertedData['andOption'];
-    //const orOption = convertedData['orOption'];
-    const operator = convertedData['operator'];
-    const domains = convertedData['domains'];
-    const types = convertedData['types'];
-    const audience = convertedData['audience'];
-    freeSearchOERs(keywords, operator, domains, types, audience);
-  }, [router.query.searchData]);
+    router.push({
+      pathname: '/discover',
+      query: {
+        searchData: updatedSearchData,
+      },
+    });
+
+
+  }, [currentPage]);*/
 
   // redirect to home page if no resources are found
   useEffect(() => {
     //setIsLoading(false);
-    if (endSearch && filtered.length === 0) {
+    if (endSearch && OersLengthTotal === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',
         type: 'error',
@@ -333,24 +522,22 @@ const Discover = (props: DiscoverPageProps) => {
     if (filtered !== undefined || collections !== undefined) {
       // return the color of the collection if the oer is in the collection
       // if the oer is in more than one collection, return the color of the first collection
-      const colors = filtered.map((filteredOer: OerProps) => {
-        const collectionColor =
-          collections.find(
-            (collection: CollectionProps) =>
-              collection.oers?.some(
-                (oer: OerInCollectionProps) => oer.id === filteredOer.id
-              )
-          )?.color || '';
+      const colors = filtered?.map(
+        (filteredOer: OerProps | OerFreeSearchProps | undefined) => {
+          const collectionColor =
+            collections.find(
+              (collection: CollectionProps) =>
+                collection.oers?.some(
+                  (oer: OerInCollectionProps) => oer.id === filteredOer?.id
+                )
+            )?.color || '';
 
-        return collectionColor;
-      });
-      setIconBookmarkColor(colors);
+          return collectionColor;
+        }
+      );
+      setIconBookmarkColor(colors ?? []);
     }
   }, [filtered, collections]);
-
-  useEffect(() => {
-    console.log('IconBookmarkColor: ', IconBookmarkColor);
-  }, [IconBookmarkColor]);
 
   return (
     <Flex w="100%" h="100%">
@@ -370,13 +557,19 @@ const Discover = (props: DiscoverPageProps) => {
 
           <HStack mb="5">
             <Text flex="1" fontWeight="light" color="grey">
-              {`${filtered?.length} resources`}
+              {`${OersLengthTotal} resources`}
             </Text>
             <Flex flex="1" w="full" justifyContent="flex-end">
               <OerCardsSorting
-                filtered={filtered}
-                setFiltered={setFiltered}
-                setIsLoading={setIsLoading}
+                //filtered={filtered}
+                //setFiltered={setFiltered}
+                // // setIsLoading={setIsLoading}
+                // selectedSorting={selectedSorting}
+                // setSelectedSorting={setSelectedSorting}
+                // handleSortingChange={handleSortingChange}
+                isAscending={isAscending}
+                setAscending={setAscending}
+                handleItemSortingClick={handleItemSortingClick}
               />
             </Flex>
           </HStack>
@@ -388,14 +581,17 @@ const Discover = (props: DiscoverPageProps) => {
             </div>
           )}
 
-          {filtered && !isLoading && (
+          {!isLoading && endSearch && (
             <ResourceCardsList
               oers={filtered}
               isNormalSizeCard={true}
               itemsPerPage={10}
-              oersLength={filtered?.length}
+              oersLength={OersLengthTotal}
               isResourcePage={false}
               collectionsColor={IconBookmarkColor}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              handlePageChange={handlePageChange}
             />
           )}
         </Box>

@@ -27,9 +27,11 @@ import {
   OerInCollectionProps,
   OerMediaTypeInfo,
   OerProps,
+  OerSourceRoerInfo,
   OerSubjectInfo,
   OerUrlInfo,
 } from '../../types/encoreElements';
+import { OerFreeSearchProps } from '../../types/encoreElements/oer/OerFreeSearch';
 import GridMetadataOer from '../Grids/GridMetadataOer';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -39,7 +41,7 @@ import CollectionModal from './CollectionModals';
 type CardInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  oer: OerProps | null;
+  oer: OerProps | OerFreeSearchProps | null | undefined;
 };
 
 type ColorCollectionProps = {
@@ -74,6 +76,7 @@ export default function CardInfoModal({
   const [description, setDescription] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [coverage, setCoverage] = useState<string[]>([]);
+  const [source_roer, setSource_roer] = useState<string[]>([]);
   const [collectionsColor, setCollectionsColor] = useState<
     (ColorCollectionProps | undefined)[]
   >([]); // array of colors of the collections that has the oer selected
@@ -165,6 +168,9 @@ export default function CardInfoModal({
           oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || [
             'Unknown',
           ]
+        );
+        setSource_roer(
+          oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
         );
 
         // set the color of the collections that has the oer selected
@@ -342,7 +348,7 @@ export default function CardInfoModal({
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Retrieved from</Text>
-                <Text>{oer?.source}</Text>
+                <Text>{`${source_roer}`}</Text>
               </Box>
             </Flex>
 

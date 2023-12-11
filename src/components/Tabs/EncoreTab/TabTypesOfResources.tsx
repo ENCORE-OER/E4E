@@ -12,21 +12,30 @@ import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 
 import { OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
 
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
 export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const [previousContent, setPreviousContent] = useState<OerProps[]>([]);
+  const [previousContent, setPreviousContent] = useState<
+    (OerProps | undefined | OerFreeSearchProps)[]
+  >([]);
   const hydrated = useHasHydrated();
 
   const resourceTypes: any[] = [];
 
   //retrieve resourse types
   filtered?.forEach(
-    (oer: { media_type: OerMediaTypeInfo[] }) =>
-      oer.media_type?.map((item: OerMediaTypeInfo) =>
+    (
+      oer:
+        | { media_type: OerMediaTypeInfo[] }
+        | OerProps
+        | undefined
+        | OerFreeSearchProps
+    ) =>
+      oer?.media_type?.map((item: OerMediaTypeInfo) =>
         resourceTypes.push(item.name)
       )
   );
@@ -149,8 +158,14 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     const resources: any[] = [];
     setPreviousContent(filtered);
     filtered?.forEach(
-      (oer: { media_type: OerMediaTypeInfo[] }) =>
-        oer.media_type?.map((item: any) => {
+      (
+        oer:
+          | { media_type: OerMediaTypeInfo[] }
+          | OerProps
+          | undefined
+          | OerFreeSearchProps
+      ) =>
+        oer?.media_type?.map((item: any) => {
           if (item.name === label) {
             resources.push(oer);
           }

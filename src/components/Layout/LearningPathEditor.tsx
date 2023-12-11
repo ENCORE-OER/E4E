@@ -2,6 +2,7 @@ import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
+import { OerFreeSearchProps } from '../../types/encoreElements/oer/OerFreeSearch';
 import { PolyglotFlow } from '../../types/polyglot/PolyglotFlow';
 import { useHasHydrated } from '../../utils/utils';
 import ResourceCardList from '../Card/OerCard/ResourceCardsList';
@@ -10,7 +11,7 @@ import ResourceCardList from '../Card/OerCard/ResourceCardsList';
 type LearningPathEditorProps = {
   conceptSelectedIndex: number;
   //setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
-  oers: OerProps[];
+  oers: (OerProps | undefined | OerFreeSearchProps)[];
   collectionColor?: string;
   isLoading: boolean;
 };

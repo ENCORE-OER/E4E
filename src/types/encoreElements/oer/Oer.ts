@@ -23,6 +23,7 @@ export type OerProps = {
   subject: OerSubjectInfo[];
   oer_url: OerUrlInfo[];
   source_roer: OerSourceRoerInfo[];
+  aggregated_info: string;
   title: string;
   description: string;
   publisher_source: string;
@@ -43,7 +44,19 @@ export type OerProps = {
   overall_score: number;
   detailed_media_type: number[];
   detailed_coverage: number[];
+  external_likes: number;
   total_likes: number;
   times_used: number;
   search_rank: number;
+  added_externally: string;
+  level: any;
+  quiz_questions: any[];
+  coding_starter_code: any;
+  coding_test_cases: any[];
+  fill_template: any[];
+  fill_blanks: any[];
+  feedback: any[];
+  flags: any[];
+  instructional_oer: boolean;
+  assessment_oer: boolean;
 };

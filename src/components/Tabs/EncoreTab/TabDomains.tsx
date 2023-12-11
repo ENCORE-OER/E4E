@@ -2,7 +2,8 @@ import { Stack, Text } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
 import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
-import { OerDomainInfo, OerProps } from '../../../types/encoreElements';
+import { OerProps } from '../../../types/encoreElements';
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 export type TabDomainsProps = {};
 
@@ -19,7 +20,9 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
   const filteredOers: any = {};
 
-  const [previousContent, setPreviousContent] = useState<OerProps[]>([]);
+  const [previousContent, setPreviousContent] = useState<
+    (OerProps | undefined | OerFreeSearchProps)[]
+  >([]);
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
 
@@ -28,20 +31,64 @@ export const TabDomains = ({}: TabDomainsProps) => {
   /**
    * Like this {"GREEN" :[oer1,oer2,..], "DIGITAL": []}
    */
+  // filtered?.forEach(
+  //   (oer: { skills: { domain: OerDomainInfo[] }[]; id: number }) =>
+  //     oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
+  //       skill.domain?.forEach((domain) => {
+  //         if (!filteredOers[domain.name])
+  //           filteredOers[domain.name] = {
+  //             name: domain.name?.toUpperCase(),
+  //             elems: [],
+  //             domainId: domain.name,
+  //           };
+  //         filteredOers[domain.name].elems.push(oer.id + '');
+  //       });
+  //     })
+  // );
+
   filtered?.forEach(
-    (oer: { skills: { domain: OerDomainInfo[] }[]; id: number }) =>
-      oer.skills?.forEach((skill: { domain: OerDomainInfo[] }) => {
-        skill.domain?.forEach((domain) => {
-          if (!filteredOers[domain.name])
-            filteredOers[domain.name] = {
-              name: domain.name?.toUpperCase(),
-              elems: [],
-              domainId: domain.name,
-            };
-          filteredOers[domain.name].elems.push(oer.id + '');
-        });
-      })
+    (
+      oer:
+        | {
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
+        | OerProps
+        | undefined
+        | OerFreeSearchProps
+    ) => {
+      if (oer !== undefined) {
+        if (
+          oer.green_domain ||
+          oer.digital_domain ||
+          oer.entrepreneurship_domain
+        ) {
+          if (oer.green_domain) {
+            addToFilteredOers('Green', oer.id);
+          }
+          if (oer.digital_domain) {
+            addToFilteredOers('Digital', oer.id);
+          }
+          if (oer.entrepreneurship_domain) {
+            addToFilteredOers('Entrepreneurship', oer.id);
+          }
+        }
+      }
+    }
   );
+
+  function addToFilteredOers(domainName: string, oerId: number) {
+    if (!filteredOers[domainName]) {
+      filteredOers[domainName] = {
+        name: domainName.toUpperCase(),
+        elems: [],
+        domainId: domainName,
+      };
+    }
+    filteredOers[domainName].elems.push(oerId + '');
+  }
 
   const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {
     const revised = filteredOers[index];
@@ -55,8 +102,8 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
   const sets = useMemo(() => {
     const colors = [
-      '#03A8B9',
       '#49B61A',
+      '#03A8B9',
       '#FFCF24',
       'white',
       'white',
@@ -108,8 +155,9 @@ export const TabDomains = ({}: TabDomainsProps) => {
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter((oer: { id: number }) =>
-        selectedIds.includes(oer.id.toString())
+      const filteredObjects = filtered.filter(
+        (oer: OerProps | undefined | OerFreeSearchProps) =>
+          selectedIds.includes(oer?.id.toString())
       );
       setFiltered(filteredObjects);
     }

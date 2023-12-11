@@ -12,11 +12,14 @@ import { Dispatch, SetStateAction } from 'react';
 import typeResIcon from '../../../public/Icons/icon_bubble_outlined.svg';
 import mapOfConceptIcon from '../../../public/Icons/icon_map_outlined.svg';
 import { OerProps } from '../../../types/encoreElements';
+import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { TabDomains } from './TabDomains';
 
 export type EncoreTabProps = {
-  oers: OerProps[];
-  setOers: Dispatch<SetStateAction<OerProps[]>>;
+  oers: (OerProps | OerFreeSearchProps | undefined)[];
+  setOers: Dispatch<
+    SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
+  >;
   domains: string[];
   searchCallBack: (domainIds: number[]) => Promise<void>;
 } & CustomTabStyleProps;

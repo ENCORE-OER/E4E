@@ -3,6 +3,7 @@ export * from './OerAudience';
 export * from './OerAuthors';
 export * from './OerConcept';
 export * from './OerDomain';
+export * from './OerFreeSearch';
 export * from './OerInCollection';
 export * from './OerMediaType';
 export * from './OerResourceFormat';

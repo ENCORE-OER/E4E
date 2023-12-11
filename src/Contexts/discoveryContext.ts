@@ -1,11 +1,16 @@
 import React from 'react';
-import { OerProps } from '../types/encoreElements';
+import { OerMediaTypeInfo, OerProps } from '../types/encoreElements';
+import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 
 interface DiscoveryContextProps {
-  filtered: OerProps[]; //not undefined to semplify the use of this array
-  setFiltered: React.Dispatch<React.SetStateAction<OerProps[]>>;
-  byResourceType: any;
-  setByResourceType: React.Dispatch<React.SetStateAction<any>>;
+  filtered: (OerProps | undefined | OerFreeSearchProps)[]; //not undefined to semplify the use of this array
+  setFiltered: React.Dispatch<
+    React.SetStateAction<(OerProps | undefined | OerFreeSearchProps)[]>
+  >;
+  byResourceType: OerMediaTypeInfo[] | undefined;
+  setByResourceType: React.Dispatch<
+    React.SetStateAction<OerMediaTypeInfo | undefined>
+  >;
 }
 
 export const DiscoveryContext = React.createContext<DiscoveryContextProps>({

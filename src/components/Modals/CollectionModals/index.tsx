@@ -32,11 +32,11 @@ export default function CollectionModal({
   //console.log(isNewCollection);
 
   const newOer: OerInCollectionProps = {
-    id: oerToSave?.id,
-    title: oerToSave?.title,
-    description: oerToSave?.description,
-    skills: oerToSave?.skills,
-    concepts: oerToSave?.concepts,
+    id: oerToSave?.id ?? 0,
+    title: oerToSave?.title ?? '',
+    description: oerToSave?.description ?? '',
+    //skills: oerToSave?.skills,
+    concepts: oerToSave?.concepts ?? [],
   };
 
   const handleCloseCollectionModal = () => {
