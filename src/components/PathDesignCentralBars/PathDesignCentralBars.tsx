@@ -8,10 +8,12 @@ import CheckboxMenu from '../../components/CheckboxMenu/CheckboxMenu';
 
 interface PathDesignCentralBarsProps {
   collectionIndex: number;
+  isNextButtonClicked: boolean;
 }
 
 export default function PathDesignCentralBars({
   collectionIndex,
+  isNextButtonClicked,
 }: PathDesignCentralBarsProps) {
   const {
     DIMENSION,
@@ -60,14 +62,23 @@ export default function PathDesignCentralBars({
             initialTitle={initialBloomTitle}
             data={bloomLevels}
             onSelectionChange={handleBloomLevelChange}
+            isHighlighted={isNextButtonClicked}
+            isBloomLevel={true}
           />
         </Box>
 
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          <SearchBarPathDesign collectionIndex={collectionIndex} />
+          <SearchBarPathDesign
+            collectionIndex={collectionIndex}
+            isHighlighted={isNextButtonClicked}
+          />
         </Box>
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          <TextBox backgroundColor="#EDF2F7" placeholder="Add some text..." />
+          <TextBox
+            backgroundColor="#EDF2F7"
+            placeholder="Add some text..."
+            isHighlighted={isNextButtonClicked}
+          />
         </Box>
       </Flex>
 
@@ -96,6 +107,7 @@ export default function PathDesignCentralBars({
               onOptionsChange={handleOptionsChange}
               options={currentBloomOptions}
               reset={resetCheckBoxOptions}
+              isHighlighted={isNextButtonClicked}
             />
           </Box>
         </Flex>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CheckboxGroup, Checkbox, Stack, CSSReset } from '@chakra-ui/react';
+import { CheckboxGroup, Checkbox, Stack, Box } from '@chakra-ui/react';
 import { useHasHydrated } from '../../utils/utils';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
@@ -7,12 +7,14 @@ type CheckboxMenuProps = {
   onOptionsChange: (newSelectedOptions: string[]) => void;
   options: string[];
   reset: boolean;
+  isHighlighted: boolean;
 };
 
 export default function CheckboxMenu({
   onOptionsChange,
   options,
   reset,
+  isHighlighted,
 }: CheckboxMenuProps) {
   //const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const hydrated = useHasHydrated();
@@ -34,8 +36,16 @@ export default function CheckboxMenu({
   }, [reset]);
 
   return (
-    <>
-      <CSSReset />
+    <Box
+      w="100%"
+      padding={1}
+      border={
+        isHighlighted && selectedOptions.length === 0 && options.length > 0
+          ? '1.5px solid #bf5521ff'
+          : 'null'
+      }
+      borderRadius={'lg'}
+    >
       <CheckboxGroup value={selectedOptions} onChange={handleCheckboxChange}>
         <Stack spacing={2}>
           {hydrated &&
@@ -46,6 +56,6 @@ export default function CheckboxMenu({
             ))}
         </Stack>
       </CheckboxGroup>
-    </>
+    </Box>
   );
 }

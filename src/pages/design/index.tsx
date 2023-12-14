@@ -13,6 +13,7 @@ const Home = () => {
   const router = useRouter();
   const { user } = useUser();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
 
   const handleOptionsChange = (areComplete: boolean) => {
@@ -64,7 +65,10 @@ const Home = () => {
               </Text>
             </Box>
             <Box w="80%" paddingTop="2rem">
-              <SegmentedButtonGroup onOptionsChange={handleOptionsChange} />
+              <SegmentedButtonGroup
+                onOptionsChange={handleOptionsChange}
+                isNextButtonClicked={isNextButtonClicked}
+              />
             </Box>
 
             <Box w="5%" paddingRight="10%">
@@ -86,9 +90,9 @@ const Home = () => {
                         'Please ensure all required fields are filled out before proceeding.',
                       type: 'warning',
                     });
+                    setIsNextButtonClicked(true);
                   }
                 }}
-                //isDisabled={!areOptionsComplete}
               >
                 <Text fontWeight="bold" fontSize="lg">
                   Next

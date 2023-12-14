@@ -18,7 +18,7 @@ type LearnignPathDesignContextProps = {
   text: string;
   selectedSkillConceptsTags: string[];
   selectedOptions: string[];
-  bloomLevelIndex: number | null;
+  bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
   pathDesignData: PathDesign;
@@ -99,7 +99,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [collectionIndex, setcollectionIndex] = useState<number>(-1);
 
   //bloom level index selection
-  const [bloomLevelIndex, setBloomLevelIndex] = useState<number | null>(null);
+  const [bloomLevelIndex, setBloomLevelIndex] = useState<number>(-1);
 
   //bloom options selection for checkboxes
   const [currentBloomOptions, setCurrentBloomOptions] = useState<string[]>([]);
@@ -199,7 +199,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleCreatePath = () => {
-    if (bloomLevelIndex !== null) {
+    if (bloomLevelIndex !== -1) {
       setPathDesignData({
         collectionIndex: collectionIndex,
         bloomLevel: bloomLevels[bloomLevelIndex].name,
@@ -235,7 +235,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   useEffect(() => {
     console.log(bloomLevelIndex);
-    if (bloomLevelIndex !== null) {
+    if (bloomLevelIndex !== -1) {
       handleStepChange(2);
     }
   }, [bloomLevelIndex]);

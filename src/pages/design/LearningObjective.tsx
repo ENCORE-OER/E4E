@@ -34,6 +34,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
+  const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
@@ -113,6 +114,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 data={collections}
                 onData={handleCollectionSelection}
                 onSelectionChange={handleCollectionChange}
+                isHighlighted={isNextButtonClicked}
+                isBloomLevel={false}
               />
               {console.log(collectionIndex)}
             </Box>
@@ -128,7 +131,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   </Text>
                 </Flex>
                 <Box>
-                  <PathDesignCentralBars collectionIndex={collectionIndex} />
+                  <PathDesignCentralBars
+                    collectionIndex={collectionIndex}
+                    isNextButtonClicked={isNextButtonClicked}
+                  />
                 </Box>
               </>
             )}
@@ -163,8 +169,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       selectedCollection !== null &&
                       bloomLevelIndex !== null &&
                       selectedSkillConceptsTags.length > 0 &&
-                      selectedOptions.length > 0 &&
-                      text?.trim() !== ''
+                      text?.trim() !== '' &&
+                      ((bloomLevelIndex > 1 && selectedOptions.length === 0) ||
+                        bloomLevelIndex <= 1)
                     ) {
                       router.push({
                         pathname: '/design/learningPathDesign',
@@ -175,6 +182,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                           'Please ensure all required fields are filled out before proceeding.',
                         type: 'warning',
                       });
+                      setIsNextButtonClicked(true);
                     }
                   }}
                 >
