@@ -84,9 +84,14 @@ export default function SearchBarPathDesign({
   };
 
   return (
-    <Box 
-      border={(isHighlighted && selectedSkillConceptsTags.length === 0) ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'} 
-      borderRadius={'lg'}>
+    <Box
+      border={
+        isHighlighted && selectedSkillConceptsTags.length === 0
+          ? '1.5px solid #bf5521ff'
+          : '1px solid #CED4DA'
+      }
+      borderRadius={'lg'}
+    >
       <AutoComplete
         openOnFocus
         multiple

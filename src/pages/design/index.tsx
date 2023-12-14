@@ -65,7 +65,7 @@ const Home = () => {
               </Text>
             </Box>
             <Box w="80%" paddingTop="2rem">
-              <SegmentedButtonGroup 
+              <SegmentedButtonGroup
                 onOptionsChange={handleOptionsChange}
                 isNextButtonClicked={isNextButtonClicked}
               />

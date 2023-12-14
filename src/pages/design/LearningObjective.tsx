@@ -131,7 +131,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   </Text>
                 </Flex>
                 <Box>
-                  <PathDesignCentralBars 
+                  <PathDesignCentralBars
                     collectionIndex={collectionIndex}
                     isNextButtonClicked={isNextButtonClicked}
                   />
@@ -170,11 +170,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       bloomLevelIndex !== null &&
                       selectedSkillConceptsTags.length > 0 &&
                       text?.trim() !== '' &&
-                      (
-                        (bloomLevelIndex > 1 && selectedOptions.length === 0) ||
-                        (bloomLevelIndex <= 1)
-                      )
-                    )  {
+                      ((bloomLevelIndex > 1 && selectedOptions.length === 0) ||
+                        bloomLevelIndex <= 1)
+                    ) {
                       router.push({
                         pathname: '/design/learningPathDesign',
                       });

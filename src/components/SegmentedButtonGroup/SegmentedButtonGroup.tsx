@@ -58,7 +58,6 @@ export default function SegmentedButtonGroup({
     console.log('successo qualcosa');
   }, [highlightedOptions]);
 
-  
   useEffect(() => {
     if (isNextButtonClicked) {
       // Controlla le opzioni e aggiorna lo stato delle opzioni da evidenziare con il colore rosso

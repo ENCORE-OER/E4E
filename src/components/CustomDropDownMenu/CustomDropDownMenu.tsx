@@ -37,7 +37,7 @@ export default function CustomDropDownMenu({
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState(initialTitle);
-  const { collectionIndex, bloomLevelIndex } = useLearningPathDesignContext(); 
+  const { collectionIndex, bloomLevelIndex } = useLearningPathDesignContext();
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
@@ -64,7 +64,7 @@ export default function CustomDropDownMenu({
     } else {
       return collectionIndex === -1 ? true : false;
     }
-  }
+  };
 
   useEffect(() => {
     handleData();
@@ -73,10 +73,14 @@ export default function CustomDropDownMenu({
   }, [selectedOptions]);
   return (
     <>
-      <Box 
-        flex="1" 
-        border={(isHighlighted && handleHighlight()) ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'} 
-        borderRadius='7px'
+      <Box
+        flex="1"
+        border={
+          isHighlighted && handleHighlight()
+            ? '1.5px solid #bf5521ff'
+            : '1px solid #CED4DA'
+        }
+        borderRadius="7px"
       >
         <Menu
           isOpen={isOpen}

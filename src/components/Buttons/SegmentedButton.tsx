@@ -20,7 +20,7 @@ const SegmentedButton = <T extends {}>({
 }: SegmentedButtonProps<T>) => {
   const [colored, setColored] = useState<string | null>(null);
   const hydrated = useHasHydrated();
-  
+
   const handleOnChange = (
     value: T & { title: string; description?: string }
   ) => {
@@ -42,14 +42,14 @@ const SegmentedButton = <T extends {}>({
   }, [preselectedTitle]);
 
   return (
-    <ButtonGroup 
+    <ButtonGroup
       isAttached
-      size="lg" 
+      size="lg"
       w="100%"
       border={isHighlighted ? '1.5px solid #bf5521ff' : '1.5px solid darkgrey'}
       borderRadius="25"
       style={{ animation: isHighlighted ? 'blink 1s infinite' : 'none' }}
-     >
+    >
       {hydrated &&
         options?.map((option, index) => (
           <Button
@@ -59,7 +59,6 @@ const SegmentedButton = <T extends {}>({
             w="100%"
             borderRadius="25"
             borderLeft={index !== 0 ? '1px solid darkgrey' : 'none'}
-            
           >
             {colored === option.title && (
               <Flex align="center" justify="center" marginRight="2">

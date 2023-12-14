@@ -9,7 +9,6 @@ import CheckboxMenu from '../../components/CheckboxMenu/CheckboxMenu';
 interface PathDesignCentralBarsProps {
   collectionIndex: number;
   isNextButtonClicked: boolean;
-  
 }
 
 export default function PathDesignCentralBars({
@@ -69,14 +68,14 @@ export default function PathDesignCentralBars({
         </Box>
 
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          <SearchBarPathDesign 
+          <SearchBarPathDesign
             collectionIndex={collectionIndex}
             isHighlighted={isNextButtonClicked}
           />
         </Box>
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          <TextBox 
-            backgroundColor="#EDF2F7" 
+          <TextBox
+            backgroundColor="#EDF2F7"
             placeholder="Add some text..."
             isHighlighted={isNextButtonClicked}
           />

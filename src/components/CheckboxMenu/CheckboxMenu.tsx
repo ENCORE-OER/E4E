@@ -36,15 +36,17 @@ export default function CheckboxMenu({
   }, [reset]);
 
   return (
-    <Box 
+    <Box
       w="100%"
       padding={1}
-      border={((isHighlighted && selectedOptions.length === 0) && options.length > 0)  ? '1.5px solid #bf5521ff' : 'null'}
+      border={
+        isHighlighted && selectedOptions.length === 0 && options.length > 0
+          ? '1.5px solid #bf5521ff'
+          : 'null'
+      }
       borderRadius={'lg'}
     >
-      <CheckboxGroup
-        value={selectedOptions} 
-        onChange={handleCheckboxChange}>
+      <CheckboxGroup value={selectedOptions} onChange={handleCheckboxChange}>
         <Stack spacing={2}>
           {hydrated &&
             options.map((option) => (

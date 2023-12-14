@@ -8,7 +8,11 @@ type TextBoxProps = {
   isHighlighted: boolean;
 };
 
-const TextBox = ({ backgroundColor, placeholder, isHighlighted }: TextBoxProps) => {
+const TextBox = ({
+  backgroundColor,
+  placeholder,
+  isHighlighted,
+}: TextBoxProps) => {
   const { text, handleSetText } = useLearningPathDesignContext();
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -17,8 +21,12 @@ const TextBox = ({ backgroundColor, placeholder, isHighlighted }: TextBoxProps) 
   };
 
   return (
-    <Box 
-      border={(isHighlighted && text === '') ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'}
+    <Box
+      border={
+        isHighlighted && text === ''
+          ? '1.5px solid #bf5521ff'
+          : '1px solid #CED4DA'
+      }
       borderRadius={'lg'}
     >
       <Textarea
