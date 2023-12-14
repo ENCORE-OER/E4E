@@ -12,6 +12,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
 import { ArrayProps } from '../../types/encoreElements';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 export type onDataType = number | string;
 
@@ -21,6 +22,8 @@ type CollectionMenuProps = {
   options?: string[] | undefined;
   onData?: (data: string[] | number[]) => void;
   onSelectionChange?: (selectedItem: number) => void;
+  isHighlighted: boolean;
+  isBloomLevel?: boolean;
 };
 
 export default function CustomDropDownMenu({
@@ -29,10 +32,12 @@ export default function CustomDropDownMenu({
   options,
   onData,
   onSelectionChange,
+  isHighlighted,
+  isBloomLevel,
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState(initialTitle);
-
+  const { collectionIndex, bloomLevelIndex } = useLearningPathDesignContext(); 
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
@@ -53,12 +58,26 @@ export default function CustomDropDownMenu({
     setIsOpen(!isOpen); // invert open menu state
   };
 
+  const handleHighlight = () => {
+    if (isBloomLevel) {
+      return bloomLevelIndex === -1 ? true : false;
+    } else {
+      return collectionIndex === -1 ? true : false;
+    }
+  }
+
   useEffect(() => {
     handleData();
+    console.log(bloomLevelIndex);
+    console.log(collectionIndex);
   }, [selectedOptions]);
   return (
     <>
-      <Box flex="1" border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
+      <Box 
+        flex="1" 
+        border={(isHighlighted && handleHighlight()) ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'} 
+        borderRadius='7px'
+      >
         <Menu
           isOpen={isOpen}
           onOpen={handleToggleMenu}

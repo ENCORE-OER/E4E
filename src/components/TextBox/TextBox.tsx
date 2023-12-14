@@ -5,9 +5,10 @@ import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignC
 type TextBoxProps = {
   backgroundColor: string;
   placeholder: string;
+  isHighlighted: boolean;
 };
 
-const TextBox = ({ backgroundColor, placeholder }: TextBoxProps) => {
+const TextBox = ({ backgroundColor, placeholder, isHighlighted }: TextBoxProps) => {
   const { text, handleSetText } = useLearningPathDesignContext();
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -16,7 +17,10 @@ const TextBox = ({ backgroundColor, placeholder }: TextBoxProps) => {
   };
 
   return (
-    <Box border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
+    <Box 
+      border={(isHighlighted && text === '') ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'}
+      borderRadius={'lg'}
+    >
       <Textarea
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
         bg={backgroundColor}

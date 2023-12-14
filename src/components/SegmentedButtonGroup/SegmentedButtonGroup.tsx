@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import SegmentedButton from '../Buttons/SegmentedButton';
 //import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
@@ -11,9 +11,11 @@ type Option = {
 
 type SegmentedButtonProps = {
   onOptionsChange: (areComplete: boolean) => void;
+  isNextButtonClicked: boolean;
 };
 export default function SegmentedButtonGroup({
   onOptionsChange,
+  isNextButtonClicked,
 }: SegmentedButtonProps) {
   const {
     handleContextChange,
@@ -50,6 +52,51 @@ export default function SegmentedButtonGroup({
     { title: 'Experienced' },
   ];
 
+  const [highlightedOptions, setHighlightedOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log('successo qualcosa');
+  }, [highlightedOptions]);
+
+  
+  useEffect(() => {
+    if (isNextButtonClicked) {
+      // Controlla le opzioni e aggiorna lo stato delle opzioni da evidenziare con il colore rosso
+      const optionsToHighlight: string[] = [];
+
+      if (!selectedYourExperience) {
+        optionsToHighlight.push('YourExperience');
+      }
+
+      if (!selectedContext) {
+        optionsToHighlight.push('Context');
+      }
+
+      if (!selectedGroupDimension) {
+        optionsToHighlight.push('GroupDimension');
+      }
+
+      if (!selectedLeanerExperience) {
+        optionsToHighlight.push('LeanerExperience');
+      }
+
+      setHighlightedOptions(optionsToHighlight);
+    }
+  }, [
+    isNextButtonClicked,
+    selectedYourExperience,
+    selectedContext,
+    selectedGroupDimension,
+    selectedLeanerExperience,
+  ]);
+
+  useEffect(() => {
+    // Aggiorna lo stato delle opzioni evidenziate quando cambia isNextButtonClicked
+    if (!isNextButtonClicked) {
+      setHighlightedOptions([]);
+    }
+  }, [isNextButtonClicked]);
+
   useEffect(() => {
     const areComplete: boolean =
       !!selectedYourExperience &&
@@ -78,6 +125,7 @@ export default function SegmentedButtonGroup({
               selected={selectedYourExperience}
               onChange={handleYourExperienceChange}
               preselectedTitle={selectedYourExperience?.title}
+              isHighlighted={highlightedOptions.includes('YourExperience')}
             />
           </Box>
         </Box>
@@ -89,6 +137,7 @@ export default function SegmentedButtonGroup({
               selected={selectedContext}
               onChange={handleContextChange}
               preselectedTitle={selectedContext?.title}
+              isHighlighted={highlightedOptions.includes('Context')}
             />
           </Box>
         </Box>
@@ -103,6 +152,7 @@ export default function SegmentedButtonGroup({
               selected={selectedGroupDimension}
               onChange={handleGroupDimensionChange}
               preselectedTitle={selectedGroupDimension?.title}
+              isHighlighted={highlightedOptions.includes('GroupDimension')}
             />
           </Box>
         </Box>
@@ -114,6 +164,7 @@ export default function SegmentedButtonGroup({
               selected={selectedLeanerExperience}
               onChange={handleLeanerExperienceChange}
               preselectedTitle={selectedLeanerExperience?.title}
+              isHighlighted={highlightedOptions.includes('LeanerExperience')}
             />
           </Box>
         </Box>

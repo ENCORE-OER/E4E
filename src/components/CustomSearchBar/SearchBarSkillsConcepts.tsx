@@ -21,9 +21,11 @@ type SearchBarV2Props = {
   collectionIndex: number;
   selectedTags?: string[];
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
+  isHighlighted: boolean;
 };
 export default function SearchBarPathDesign({
   collectionIndex,
+  isHighlighted,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
   const { selectedSkillConceptsTags, handleSkillsChange } =
@@ -82,7 +84,9 @@ export default function SearchBarPathDesign({
   };
 
   return (
-    <Box border="1px" borderColor={'#CED4DA'} borderRadius={'7px'}>
+    <Box 
+      border={(isHighlighted && selectedSkillConceptsTags.length === 0) ? '1.5px solid #bf5521ff' : '1px solid #CED4DA'} 
+      borderRadius={'lg'}>
       <AutoComplete
         openOnFocus
         multiple
