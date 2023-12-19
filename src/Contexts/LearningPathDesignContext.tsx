@@ -53,13 +53,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     { name: 'Create' },
   ];
 
-  // Load or save data in `localStorage` //todo: delete this
-
   // Data for the checkbox menu
   const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
   const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
 
   // Use useLocalStorage to declare state variables with persistence
+
+  // Use for storage of the collection and bloom level indexes
   const [collectionIndex, setcollectionIndex] = useLocalStorage<number>(
     'collectionIndex',
     -1
@@ -68,13 +68,21 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     'bloomLevelIndex',
     -1
   );
+
+  // Use for storage of the tags in the skill and concept selection
   const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
     useLocalStorage<string[]>('selectedSkillConceptsTags', []);
+
+  // Use for storage of the text in the text input
   const [text, setText] = useLocalStorage<string>('text', '');
+
+  // Use for storage of the options in the checkbox menu
   const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>(
     'selectedOptions',
     []
   );
+
+  // Use for storage of the options in the segmented control
   const [selectedYourExperience, setSelectedYourExperience] =
     useLocalStorage<Option | null>('selectedYourExperience', null);
   const [selectedContext, setSelectedContext] = useLocalStorage<Option | null>(
@@ -92,6 +100,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //step selection for part of the learning objective page
   const [step, setStep] = useState<number>(0);
 
+  //reset checkbox options when bloom level is changed
   const [resetCheckBoxOptions, setResetCheckBoxOptions] =
     useState<boolean>(false);
 

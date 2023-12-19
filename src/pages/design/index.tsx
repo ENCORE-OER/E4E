@@ -82,22 +82,9 @@ const Home = () => {
                 right="11%"
               >
                 <Button
-                  marginRight={'1px'}
-                  border={'1px solid'}
-                  w="50%"
-                  colorScheme="yellow"
-                  onClick={() => {
-                    console.log('nothing happend');
-                  }}
-                >
-                  <Text fontWeight="bold" fontSize="lg">
-                    delete all???
-                  </Text>
-                </Button>
-                <Button
                   marginLeft={'1px'}
                   border={'1px solid'}
-                  w="50%"
+                  w="100%"
                   leftIcon={<IconPathEdit />}
                   colorScheme="yellow"
                   onClick={() => {
