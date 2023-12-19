@@ -60,7 +60,14 @@ export default function LearningPathEditor({
         conceptSelectedIndex !== -1 && (
           <Box p="10px">
             {/**/}
-            <Box p={0} m={0} w="100%" h="full" mt={5} border={'1px solid #CED4DA'}>
+            <Box
+              p={0}
+              m={0}
+              w="100%"
+              h="full"
+              mt={5}
+              border={'1px solid #CED4DA'}
+            >
               {isFrameLoading && (
                 <Center height="500px" bg={'white'}>
                   <VStack>

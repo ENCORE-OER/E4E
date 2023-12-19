@@ -31,7 +31,7 @@ const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
   const {
-    SPACING,    
+    SPACING,
     selectedSkillConceptsTags,
     selectedOptions,
     text,

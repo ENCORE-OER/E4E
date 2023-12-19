@@ -16,15 +16,12 @@ const Home = () => {
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
-  const { 
-    SPACING,
-  } = useLearningPathDesignContext();
+  const { SPACING } = useLearningPathDesignContext();
 
   const handleOptionsComplete = (areComplete: boolean) => {
     setAreOptionsComplete(areComplete);
   };
 
- 
   useEffect(() => {
     //console.log('cambiato qualcosa');
   }, [areOptionsComplete]);

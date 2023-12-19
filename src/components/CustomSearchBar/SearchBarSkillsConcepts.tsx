@@ -38,9 +38,8 @@ export default function SearchBarPathDesign({
 
   useEffect(() => {
     // Rimuovi le tag quando selectedSkillConceptsTags torna vuoto
-      setInputValue([]);
-
-  },[collectionIndex]); 
+    setInputValue([]);
+  }, [collectionIndex]);
 
   if (!collection || !collection.oers) {
     return null; // control that the collection is valid
@@ -73,7 +72,6 @@ export default function SearchBarPathDesign({
           uniqueItems.add(conceptLabel);
         });
       });
-
 
     return (
       <AutoCompleteList>

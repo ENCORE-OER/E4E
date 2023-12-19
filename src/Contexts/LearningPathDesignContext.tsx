@@ -30,12 +30,13 @@ type LearnignPathDesignContextProps = {
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
-};  
+};
 
 // Create the context and export it so that it can be used in other components
-export const LearningPathDesignContext = createContext<LearnignPathDesignContextProps>(
-  {} as LearnignPathDesignContextProps
-);
+export const LearningPathDesignContext =
+  createContext<LearnignPathDesignContextProps>(
+    {} as LearnignPathDesignContextProps
+  );
 
 // Create a custom hook to use the context
 export const useLearningPathDesignContext = () =>
@@ -59,15 +60,31 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
 
   // Use useLocalStorage to declare state variables with persistence
-  const [collectionIndex, setcollectionIndex] = useLocalStorage<number>('collectionIndex', -1);
-  const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>('bloomLevelIndex', -1);
-  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] = useLocalStorage<string[]>('selectedSkillConceptsTags', []);
+  const [collectionIndex, setcollectionIndex] = useLocalStorage<number>(
+    'collectionIndex',
+    -1
+  );
+  const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>(
+    'bloomLevelIndex',
+    -1
+  );
+  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
+    useLocalStorage<string[]>('selectedSkillConceptsTags', []);
   const [text, setText] = useLocalStorage<string>('text', '');
-  const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>('selectedOptions', []);
-  const [selectedYourExperience, setSelectedYourExperience] = useLocalStorage<Option | null>('selectedYourExperience', null);
-  const [selectedContext, setSelectedContext] = useLocalStorage<Option | null>('selectedContext', null);
-  const [selectedGroupDimension, setSelectedGroupDimension] = useLocalStorage<Option | null>('selectedGroupDimension', null);
-  const [selectedLeanerExperience, setSelectedLeanerExperience] = useLocalStorage<Option | null>('selectedLeanerExperience', null);
+  const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>(
+    'selectedOptions',
+    []
+  );
+  const [selectedYourExperience, setSelectedYourExperience] =
+    useLocalStorage<Option | null>('selectedYourExperience', null);
+  const [selectedContext, setSelectedContext] = useLocalStorage<Option | null>(
+    'selectedContext',
+    null
+  );
+  const [selectedGroupDimension, setSelectedGroupDimension] =
+    useLocalStorage<Option | null>('selectedGroupDimension', null);
+  const [selectedLeanerExperience, setSelectedLeanerExperience] =
+    useLocalStorage<Option | null>('selectedLeanerExperience', null);
 
   //bloom options selection for checkboxes
   const [currentBloomOptions, setCurrentBloomOptions] = useState<string[]>([]);
@@ -79,14 +96,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     useState<boolean>(false);
 
   const resetState = () => {
-      setBloomLevelIndex(-1);
-      // setStep(1);
-      setSelectedSkillConceptsTags([]);
-      setSelectedOptions([]);
-      setText('');
+    setBloomLevelIndex(-1);
+    // setStep(1);
+    setSelectedSkillConceptsTags([]);
+    setSelectedOptions([]);
+    setText('');
   };
 
-    
   //handlers for segmented control
   const handleYourExperienceChange = (selected: Option) => {
     setSelectedYourExperience(selected);
@@ -151,22 +167,22 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // Salva le variabili nello `localStorage` quando cambiano
     // Usa setLocalStorage per salvare i valori
   }, [
-    collectionIndex, 
-    bloomLevelIndex, 
+    collectionIndex,
+    bloomLevelIndex,
     selectedSkillConceptsTags,
     text,
     selectedOptions,
     selectedYourExperience,
     selectedContext,
     selectedGroupDimension,
-    selectedLeanerExperience,  
+    selectedLeanerExperience,
     resetCheckBoxOptions,
     step,
     currentBloomOptions,
   ]);
 
   useEffect(() => {
-    if(collectionIndex !== -1){
+    if (collectionIndex !== -1) {
       setStep(2);
     }
   }, []);
@@ -229,7 +245,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleOptionsChange,
         //handleResetStep0,
         //handleResetStep1,
-        handleCollectionIndexChange,    
+        handleCollectionIndexChange,
       }}
     >
       {children}

@@ -35,7 +35,8 @@ export default function CustomDropDownMenu({
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | null>(null);
-  const { collectionIndex, bloomLevelIndex, selectedSkillConceptsTags } = useLearningPathDesignContext();
+  const { collectionIndex, bloomLevelIndex, selectedSkillConceptsTags } =
+    useLearningPathDesignContext();
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
@@ -45,7 +46,7 @@ export default function CustomDropDownMenu({
     if (isBloomLevel) {
       // Se è un Bloom Level e l'indice è valido
       setMenuTitle(data[bloomLevelIndex]?.name || 'Select Bloom Level');
-    } else{
+    } else {
       // Se è una Collection e l'indice è valido
       setMenuTitle(data[collectionIndex]?.name || 'Select Collection');
     }
