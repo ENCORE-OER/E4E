@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
@@ -58,9 +58,9 @@ export default function LearningPathEditor({
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Flex p="10px">
+          <Box p="10px">
             {/**/}
-            <Box p={0} m={0} w="70%" h="400px" mt={5}>
+            <Box p={0} m={0} w="100%" h="full" mt={5} border={'1px solid #CED4DA'}>
               {isFrameLoading && (
                 <Center height="500px" bg={'white'}>
                   <VStack>
@@ -79,7 +79,7 @@ export default function LearningPathEditor({
               )}
               <iframe
                 width="100%"
-                height="500px"
+                height="750px"
                 hidden={isFrameLoading}
                 src={
                   process.env.POLYGLOT_DASHBOARD + '/flows/' + learningPath?._id
@@ -114,7 +114,7 @@ export default function LearningPathEditor({
                 />
               )}
             </Box>
-          </Flex>
+          </Box>
         )}
     </>
   );

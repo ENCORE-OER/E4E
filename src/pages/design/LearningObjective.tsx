@@ -1,7 +1,7 @@
 import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
@@ -23,7 +23,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     selectedSkillConceptsTags,
     handleStepChange,
     selectedOptions,
-    initialCollectionTitle,
     //handleResetStep0,
     handleCollectionIndexChange,
   } = useLearningPathDesignContext();
@@ -54,15 +53,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  useEffect(() => {
-    console.log(collectionIndex);
-  }, [collectionIndex]);
-
   return (
     <>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Plan" />
-        <SideBar pagePath={'/plan'} />
+        <Navbar user={user} pageName="Design" />
+        <SideBar pagePath={'/design'} />
 
         <Box
           ml="200px"
@@ -110,14 +105,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
             </Flex>
             <Box w={`${DIMENSION - SPACING}%`}>
               <CustomDropDownMenu
-                initialTitle={initialCollectionTitle}
                 data={collections}
                 onData={handleCollectionSelection}
                 onSelectionChange={handleCollectionChange}
                 isHighlighted={isNextButtonClicked}
                 isBloomLevel={false}
               />
-              {console.log(collectionIndex)}
             </Box>
 
             {step >= 1 && (

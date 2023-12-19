@@ -24,7 +24,6 @@ export default function PathDesignCentralBars({
     handleOptionsChange,
     step,
     resetCheckBoxOptions,
-    initialBloomTitle,
   } = useLearningPathDesignContext();
 
   return (
@@ -59,7 +58,6 @@ export default function PathDesignCentralBars({
       <Flex w="100%">
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <CustomDropDownMenu
-            initialTitle={initialBloomTitle}
             data={bloomLevels}
             onSelectionChange={handleBloomLevelChange}
             isHighlighted={isNextButtonClicked}

@@ -8,6 +8,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 const Home = () => {
   const router = useRouter();
@@ -15,18 +16,22 @@ const Home = () => {
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
+  const { 
+    SPACING,
+  } = useLearningPathDesignContext();
 
-  const handleOptionsChange = (areComplete: boolean) => {
+  const handleOptionsComplete = (areComplete: boolean) => {
     setAreOptionsComplete(areComplete);
   };
 
+ 
   useEffect(() => {
     //console.log('cambiato qualcosa');
   }, [areOptionsComplete]);
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Plan" />
+      <Navbar user={user} pageName="Design" />
       <SideBar pagePath={router.pathname} />
 
       <Box
@@ -66,39 +71,59 @@ const Home = () => {
             </Box>
             <Box w="80%" paddingTop="2rem">
               <SegmentedButtonGroup
-                onOptionsChange={handleOptionsChange}
+                onOptionsChange={handleOptionsComplete}
                 isNextButtonClicked={isNextButtonClicked}
               />
             </Box>
 
-            <Box w="5%" paddingRight="10%">
-              <Button
-                leftIcon={<IconPathEdit />}
-                border={'1px solid'}
-                colorScheme="yellow"
-                position={'absolute'}
+            <Flex paddingTop="1.5rem" w="100%">
+              <Flex
+                w="auto"
+                paddingRight={`${SPACING}%`}
+                position={'fixed'}
                 bottom="5%"
-                right="10%"
-                onClick={() => {
-                  if (areOptionsComplete) {
-                    router.push({
-                      pathname: '/design/LearningObjective',
-                    });
-                  } else {
-                    addToast({
-                      message:
-                        'Please ensure all required fields are filled out before proceeding.',
-                      type: 'warning',
-                    });
-                    setIsNextButtonClicked(true);
-                  }
-                }}
+                right="11%"
               >
-                <Text fontWeight="bold" fontSize="lg">
-                  Next
-                </Text>
-              </Button>
-            </Box>
+                <Button
+                  marginRight={'1px'}
+                  border={'1px solid'}
+                  w="50%"
+                  colorScheme="yellow"
+                  onClick={() => {
+                    console.log('nothing happend');
+                  }}
+                >
+                  <Text fontWeight="bold" fontSize="lg">
+                    delete all???
+                  </Text>
+                </Button>
+                <Button
+                  marginLeft={'1px'}
+                  border={'1px solid'}
+                  w="50%"
+                  leftIcon={<IconPathEdit />}
+                  colorScheme="yellow"
+                  onClick={() => {
+                    if (areOptionsComplete) {
+                      router.push({
+                        pathname: '/design/learningObjective',
+                      });
+                    } else {
+                      addToast({
+                        message:
+                          'Please ensure all required fields are filled out before proceeding.',
+                        type: 'warning',
+                      });
+                      setIsNextButtonClicked(true);
+                    }
+                  }}
+                >
+                  <Text fontWeight="bold" fontSize="lg">
+                    Next
+                  </Text>
+                </Button>
+              </Flex>
+            </Flex>
           </Box>
         </Box>
       </Box>

@@ -31,10 +31,11 @@ const Home = (props: DiscoverPageProps) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
   const {
-    SPACING,
-    pathDesignData,
-    handleCreatePath,
-    collectionIndex /*handleResetStep1*/,
+    SPACING,    
+    selectedSkillConceptsTags,
+    selectedOptions,
+    text,
+    collectionIndex,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -62,13 +63,9 @@ const Home = (props: DiscoverPageProps) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/LearningObjective',
+      pathname: '/design/learningObjective',
     });
   };
-
-  useEffect(() => {
-    console.log(collectionIndex);
-  }, [collectionIndex]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -76,13 +73,9 @@ const Home = (props: DiscoverPageProps) => {
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
-    handleCreatePath();
     setIsLoading(true);
     if (collections?.length > 0 && hydrated) {
-      console.log('passo 1');
-      console.log('collectionIndex: ' + collectionIndex);
       if (collections[collectionIndex]?.oers?.length > 0) {
-        console.log('passo 2');
         try {
           const fetchOerData = async () => {
             const oerData = await Promise.all(
@@ -156,8 +149,8 @@ const Home = (props: DiscoverPageProps) => {
   return (
     <LearningPathProvider>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Plan" />
-        <SideBar pagePath={'/plan'} />
+        <Navbar user={user} pageName="Design" />
+        <SideBar pagePath={'/design'} />
 
         <Box
           ml="200px"
@@ -201,16 +194,16 @@ const Home = (props: DiscoverPageProps) => {
                   borderRadius={'md'}
                 >
                   <Text>
-                    {console.log(pathDesignData)}
+                    {/* {console.log(pathDesignData)} */}
                     List key principle of:{' '}
                     {hydrated &&
-                      pathDesignData.skills &&
-                      pathDesignData.skills.join(', ')}
+                      selectedSkillConceptsTags &&
+                      selectedSkillConceptsTags.join(', ')}
                     {'. '}
                     {hydrated &&
-                      pathDesignData.verbsLearingObjective &&
-                      pathDesignData.verbsLearingObjective.join(' and ')}{' '}
-                    {hydrated && pathDesignData.textLearingObjective}
+                      selectedOptions &&
+                      selectedOptions.join(' and ')}{' '}
+                    {hydrated && text}
                   </Text>
                 </CardBody>
               </Card>
@@ -237,6 +230,7 @@ const Home = (props: DiscoverPageProps) => {
               <Button
                 marginRight={'1px'}
                 border={'1px solid'}
+                w="100%"
                 colorScheme="yellow"
                 onClick={handlePrevButtonClick}
               >
