@@ -9,7 +9,7 @@ import SelectConcepts from '../../Selects/SelectConcepts';
 type ConceptsCollectionViewProps = {
   uniqueConcepts: OerConceptInfo[];
   handleConceptsChange: (selectedOptions: MultiValue<OerConceptInfo>) => void;
-  conceptsSeletedLength: number;
+  conceptsSelectedLength: number;
   conceptsSelected: OerConceptInfo[];
   oersLength: number;
   label_tooltip: string;
@@ -18,7 +18,7 @@ type ConceptsCollectionViewProps = {
 export default function ConceptsCollectionView({
   uniqueConcepts,
   handleConceptsChange,
-  conceptsSeletedLength,
+  conceptsSelectedLength,
   conceptsSelected,
   oersLength,
   label_tooltip,
@@ -35,7 +35,7 @@ export default function ConceptsCollectionView({
       display="flex"
       flexDirection="column"
       h="full"
-      //justifyContent="center"
+    //justifyContent="center"
     >
       <Flex gap={1}>
         <Tooltip
@@ -58,9 +58,9 @@ export default function ConceptsCollectionView({
             path.
           </Heading>
           <Text fontWeight="light" color="grey">
-            {conceptsSeletedLength === 1
-              ? `${conceptsSeletedLength} concept selected`
-              : `${conceptsSeletedLength} concepts selected`}
+            {conceptsSelectedLength === 1
+              ? `${conceptsSelectedLength} concept selected`
+              : `${conceptsSelectedLength} concepts selected`}
           </Text>
         </Box>
       </Flex>

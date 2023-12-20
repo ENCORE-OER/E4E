@@ -43,7 +43,7 @@ export default function SortingDropDownMenu({
       setItemSorting(menuItemsSorting[0]);
       handleItemSortingClick(menuItemsSorting[0].name);
     }
-  }, [viewChanged, handleItemSortingClick, menuItemsSorting]);
+  }, [viewChanged]);
 
   return (
     <Menu isOpen={isOpen} onOpen={handleToggleMenu} onClose={handleToggleMenu}>
@@ -80,6 +80,7 @@ export default function SortingDropDownMenu({
                 setItemSorting(item);
                 handleItemSortingClick(item.name);
               }}
+              backgroundColor={item.name === itemSorting.name ? 'gray.200' : ''}
             >
               <SortingDropDownMenuItem icon={item.icon} name={item.name} />
             </MenuItem>

@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
@@ -12,7 +12,7 @@ type LearningPathEditorProps = {
   conceptSelectedIndex: number;
   //setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
   oers: (OerProps | undefined | OerFreeSearchProps)[];
-  collectionColor?: string;
+  collectionColor?: string | string[];
   isLoading: boolean;
 };
 
@@ -22,6 +22,8 @@ export default function LearningPathEditor({
   collectionColor,
   isLoading, //setConceptSelectedIndex,
 }: LearningPathEditorProps) {
+  const hydrated = useHasHydrated();
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
   const { getFragment } = useLearningPathContext();
   //const { collectionIndex } = useLearningPathDesignContext();
@@ -29,7 +31,6 @@ export default function LearningPathEditor({
   const [isFrameLoading, setIsFrameLoading] = useState<boolean>(true);
   // const [isChangeCollection, setChangeCollection] = useState<boolean>(false);
   //const [isChangeConcept, setChangeConcept] = useState<boolean>(false);
-  const hydrated = useHasHydrated();
 
   /* useEffect(() => {
     console.log('collection index in LearningPathEditor: ' + collectionIndex);
@@ -53,12 +54,17 @@ export default function LearningPathEditor({
     })();
   }, [conceptSelectedIndex, getFragment]);
 
+
+  useEffect(() => {
+    console.log(collectionColor);
+  }, [])
+
   return (
     <>
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Flex p="10px">
+          <Box p="10px">
             {/**/}
             <Box p={0} m={0} w="70%" h="400px" mt={5}>
               {isFrameLoading && (
@@ -111,10 +117,12 @@ export default function LearningPathEditor({
                   collectionsColor={collectionColor ? collectionColor : ''}
                   isResourcePage={false}
                   oersLength={oers.length}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
                 />
               )}
             </Box>
-          </Flex>
+          </Box>
         )}
     </>
   );

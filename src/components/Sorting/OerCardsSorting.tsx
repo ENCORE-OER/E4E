@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
@@ -41,10 +41,12 @@ export default function OerCardsSorting({
 }: OerCardsSortingProps) {
   //const [isAscending, setAscending] = useState<boolean>(true);
 
+  const isFirstRender = useRef<number>(0); // used to avoid the useEffect to be triggered at the first render
+
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
     //{ icon: IconBezierCurve, name: 'Suggested' },
-    { icon: IconBezierCurve, name: 'Relevance' },
+    //{ icon: IconBezierCurve, name: 'Relevance' },
     { icon: IconBezierCurve, name: 'Title' },
     { icon: IconCalendarCheck, name: 'Last Update' },
     { icon: IconMedal, name: 'Quality Score' },
@@ -54,11 +56,13 @@ export default function OerCardsSorting({
 
   // sorting of the OERs
   useEffect(() => {
+    if (isFirstRender.current < 2) {
+      console.log('Render OerCardsSorting.tsx');
+      isFirstRender.current++;
+    }
     // LOGIC: if filtered is passed as a prop, that means that the user is in the 'Your resources' page
-    if (filtered !== undefined) {
+    else if (filtered !== undefined) {
       try {
-        console.log('Sto ordinando');
-
         //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
         if (setIsLoading !== undefined) {
           setIsLoading(true);
@@ -128,13 +132,14 @@ export default function OerCardsSorting({
         if (setFiltered !== undefined) {
           setFiltered(sortedData);
         }
-        //console.log("I'm triggering oersById/filtered");
-
+        console.log("I'm triggering oersById/filtered");
+      } catch (error) {
+        console.error(error);
+      }
+      finally {
         if (setIsLoading !== undefined) {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.error(error);
       }
     }
   }, [selectedSorting, isAscending]);

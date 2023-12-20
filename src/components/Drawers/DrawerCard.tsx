@@ -45,7 +45,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
-  const [authors, setAuthors] = useState<string[]>([]);
+  const [authors, setAuthors] = useState<(string | null)[]>([]);
   const [linkOer, setLinkOer] = useState<string[]>();
   const [resourceType, setResourceType] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
@@ -108,7 +108,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
 
       setResourceType(
         oer.media_type?.flatMap((resType: OerMediaTypeInfo) => resType.name) ||
-          []
+        []
       );
 
       setSubjects(oer.subject?.map((item: OerSubjectInfo) => item.name) || []);
@@ -155,8 +155,8 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
         finalFocusRef={btnRef}
         size="lg"
         key={oer.id}
-        //container={drawerRef.current}
-        //getContainer={drawerRef.current}
+      //container={drawerRef.current}
+      //getContainer={drawerRef.current}
       >
         <DrawerContent mx="auto">
           <DrawerCloseButton />

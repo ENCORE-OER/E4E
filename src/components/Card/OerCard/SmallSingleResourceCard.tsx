@@ -8,7 +8,7 @@ import SmallOerCard from './SmallOerCard';
 
 type SmallSingleResourceCardProps = {
   oer: OerProps | OerFreeSearchProps | undefined;
-  collectionColor?: string;
+  collectionColor: string;
   checkBookmark?: boolean;
 };
 
@@ -17,7 +17,7 @@ export default function SmallSingleResourceCard({
   checkBookmark,
   collectionColor,
 }: //dataOer
-SmallSingleResourceCardProps) {
+  SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
@@ -25,7 +25,7 @@ SmallSingleResourceCardProps) {
     <SmallOerCard
       id={oer?.id ?? 0}
       checkBookmark={checkBookmark}
-      collection_color={collectionColor}
+      collection_color={collectionColor ?? ''}
       digital_domain={oer?.digital_domain || false}
       entrepreneurship_domain={oer?.entrepreneurship_domain || false}
       green_domain={oer?.green_domain || false}

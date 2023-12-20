@@ -17,19 +17,21 @@ import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
   OerInCollectionProps,
-  OerProps,
+  OerProps
 } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 import { CustomToast } from '../utils/Toast/CustomToast';
+import { useHasHydrated } from '../utils/utils';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
 };
 
 const Discover = (props: DiscoverPageProps) => {
+  const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
-  const abortController = new AbortController();
+  //const abortController = new AbortController();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
   const [endSearch, setEndSearch] = useState<boolean>(false);
@@ -47,7 +49,7 @@ const Discover = (props: DiscoverPageProps) => {
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
 
   const [isAscending, setAscending] = useState<boolean>(true);
-  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
+  const [selectedSorting, setSelectedSorting] = useState<string>('title'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -186,6 +188,7 @@ const Discover = (props: DiscoverPageProps) => {
   ) => {
     setIsLoading(true);
     setEndSearch(false);
+    //setFiltered([]);
 
     //here we search the OERS using the query parameters
 
@@ -196,19 +199,19 @@ const Discover = (props: DiscoverPageProps) => {
       //let oers: OerProps[] | undefined = [];
 
       if (
-        keywords.length > 0
+        keywords?.length > 0
         //|| domains.length > 0 || types.length > 0 || audience.length > 0
       ) {
-        //with freeSearchOers(page, keywords) domains, types, audience, order_by, order_asc, operator
-        // const resp = await api.freeSearchOers(page, keywords, domains, types, audience, order_by, order_asc, operator);
-        const resp = await api.freeSearchOersNoPagination(
+        const resp = await api.freeSearchOers(
+          page,
           keywords,
           domains,
           types,
           audience,
           order_by,
           order_asc,
-          operator
+          operator,
+          concepts ?? [],
         );
         setOersLengthTotal(resp?.recordsFiltered);
         const oers = resp?.data;
@@ -247,34 +250,33 @@ const Discover = (props: DiscoverPageProps) => {
         // }
       } else if (
         // check if there are filters without keywords
-        domains.length > 0 ||
-        audience.length > 0 ||
-        types.length > 0
+        domains?.length > 0 ||
+        audience?.length > 0 ||
+        types?.length > 0
       ) {
         // It's not an efficient solution, but it's the best for now
         // TODO: return only the first 10 OERs. Recall the API on click on the next page button
         //oers = await api.freeSearchOers(  // --> advanced search with these doesn't work
         const resp = await api.searchOERsNoKeywords(
-          0,
-          domains,
+          page,
+          //domains,  // at the moment the filterig by domain is not implemented by the API
           types,
           audience,
           order_by,
           order_asc,
           operator,
-          concepts
+          concepts ?? []
         );
         setOersLengthTotal(resp?.recordsFiltered);
         const oers = resp?.data;
+
         setFiltered(oers);
       } else {
         throw new Error('No keywords or filters provided');
       }
 
-      return () => {
-        abortController.abort();
-      };
     } catch (error) {
+      console.error(error);
       addToast({
         message: `${error}`,
         type: 'error',
@@ -306,15 +308,15 @@ const Discover = (props: DiscoverPageProps) => {
 
   // This code is used to manage the pagination of the resources
 
-  // const handlePageChange = (newPage: number) => {
-  //   // Update query parameter 'page'
-  //   setCurrentPage(newPage);
+  const handlePageChange = (newPage: number) => {
+    // Update query parameter 'page'
+    setCurrentPage(newPage);
 
-  //   router.push({
-  //     pathname: router.pathname,
-  //     query: { ...router.query, page: newPage },
-  //   });
-  // };
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: newPage || 1 },
+    });
+  };
 
   const handleSortingChange = (newSorting: string, isAscending?: boolean) => {
     // Update query parameters 'order_by' and 'order_asc', and reset 'page' to 1
@@ -337,7 +339,7 @@ const Discover = (props: DiscoverPageProps) => {
     let order_item = '';
     switch (sortingName) {
       case 'Relevance':
-        order_item = 'search_rank';
+        order_item = 'title';
         break;
       case 'Last Update':
         order_item = 'retrieval_date';
@@ -370,9 +372,9 @@ const Discover = (props: DiscoverPageProps) => {
 
   // ==================================================================
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
-  };
+  // const handlePageChange = (newPage: number) => {
+  //   setCurrentPage(newPage);
+  // };
 
   // const handleSortingChange = (sortingName: string) => {
   //   setSelectedSorting(sortingName);
@@ -403,7 +405,8 @@ const Discover = (props: DiscoverPageProps) => {
   }, [filtered]);
 
   useEffect(() => {
-    try {
+
+    const fetchOers = async () => {
       setIsLoading(true);
 
       const searchData = localStorage.getItem('searchData');
@@ -439,31 +442,37 @@ const Discover = (props: DiscoverPageProps) => {
       const operator = convertedData['operator'];
       const concepts = convertedData['concepts'];
 
-      freeSearchOERs(
+      await freeSearchOERs(
         currentPage,
         keywords,
         domains,
         types,
         audience,
         selectedSorting,
-        isAscending.toString(),
+        isAscending?.toString(),
         operator,
         concepts
       );
-      // .then((oers) => {
-      // //   console.log('New value oers: ', oers);
-      // //   setFiltered(oers);
-      // //   setEndSearch(true);
-      // //   setIsLoading(false);
-      // // })
-      // // .catch((error) => {
-      // //   setEndSearch(true);
-      // //   setIsLoading(false);
-      // //   addToast({
-      // //     message: `${error}`,
-      // //     type: 'error',
-      // //   });
-      // // });
+      // .then((oers: OerFreeSearchProps | OerProps | undefined) => {
+      //   console.log('New value oers: ', oers);
+      //   if (oers !== undefined) {
+      //     setFiltered(oers);
+      //   }
+
+      // })
+      // .catch((error) => {
+      //   addToast({
+      //     message: `${error}`,
+      //     type: 'error',
+      //   });
+      // })
+      // .finally(() => {
+      //   setEndSearch(true);
+      //   setIsLoading(false);
+      // });
+    }
+    try {
+      fetchOers();
     } catch (error) {
       console.log(error);
     }
@@ -548,7 +557,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -581,7 +590,7 @@ const Discover = (props: DiscoverPageProps) => {
             </div>
           )}
 
-          {!isLoading && endSearch && (
+          {!isLoading && endSearch && hydrated && (
             <ResourceCardsList
               oers={filtered}
               isNormalSizeCard={true}
@@ -604,6 +613,7 @@ const Discover = (props: DiscoverPageProps) => {
             setFiltered,
             byResourceType,
             setByResourceType,
+            setCurrentPage,
           }}
         >
           <EncoreTab

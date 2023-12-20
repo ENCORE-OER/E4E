@@ -60,12 +60,12 @@ export default function CardInfoModal({
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] =
     useState<boolean>(false);
   const [showTagGreen, setShowTagGreen] = useState<boolean>(false);
-  const [authors, setAuthors] = useState<string[]>([]);
+  const [authors, setAuthors] = useState<(string | null)[]>([]);
   const [linkOer, setLinkOer] = useState<string[]>();
   const [resourceType, setResourceType] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
-  const [publishers, setPublishers] = useState<string[]>([]);
-  const [contributors, setContributors] = useState<string[]>([]);
+  const [publishers, setPublishers] = useState<(string | null)[]>([]);
+  const [contributors, setContributors] = useState<(string | null)[]>([]);
   const [concepts, setConcepts] = useState<string[]>([]);
   const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
     useState<boolean>(false);
@@ -287,7 +287,7 @@ export default function CardInfoModal({
               </Box>
               <Box>
                 <Text color="grey" fontWeight="semibold" fontSize="sm">
-                  {`${authors}`} {/* Print the names with the commas*/}
+                  {authors.join(', ')} {/* Print the names with the commas*/}
                 </Text>
               </Box>
             </Flex>
@@ -324,14 +324,14 @@ export default function CardInfoModal({
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>
-                <Text> {`${coverage}`}</Text>
+                <Text> {coverage.join(', ')}</Text>
               </Box>
             </Flex>
 
             <Flex justifyContent={'flex-start'} mb="5">
               <Box>
                 <Text variant="label_drawer">Context</Text>
-                <Text>{`${subjects}`}</Text>
+                <Text>{subjects.join(', ')}</Text>
               </Box>
             </Flex>
             <Flex justifyContent={'left'} mb="5">
@@ -341,14 +341,14 @@ export default function CardInfoModal({
               </Box>
               <Box flex="1">
                 <Text variant="label_drawer">Contributor</Text>
-                <Text>{`${contributors}`}</Text>
+                <Text>{contributors.join(', ')}</Text>
               </Box>
             </Flex>
 
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Retrieved from</Text>
-                <Text>{`${source_roer}`}</Text>
+                <Text>{source_roer.join(', ')}</Text>
               </Box>
             </Flex>
 

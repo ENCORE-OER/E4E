@@ -4,7 +4,6 @@ import {
   OerConceptInfo,
   OerMediaTypeInfo,
   OerResourceFormatInfo,
-  OerSkillInfo,
   OerSourceRoerInfo,
   OerSubjectInfo,
   OerUrlInfo,
@@ -14,7 +13,7 @@ export type OerFreeSearchProps = {
   id: number;
   title: string;
   description: string;
-  publication_date: string;
+  publication_date: string | null;
   retrieval_date: string;
   total_likes: number;
   times_used: number;
@@ -24,7 +23,7 @@ export type OerFreeSearchProps = {
   green_domain: boolean;
   digital_domain: boolean;
   entrepreneurship_domain: boolean;
-  skills: OerSkillInfo[];
+  //skills: OerSkillInfo[];
   creator: OerAuthorsInfo[];
   publisher: OerAuthorsInfo[];
   contributor: OerAuthorsInfo[];

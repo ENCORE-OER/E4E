@@ -5,7 +5,7 @@ export type ResourceCardProps = {
   entrepreneurship_domain: boolean;
   green_domain: boolean;
   description: string;
-  creator: string[];
+  creator: (string | null)[];
   title: string;
   media_type: string[];
   retrieval_date: string;
