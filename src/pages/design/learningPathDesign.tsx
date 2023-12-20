@@ -1,12 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Card, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -21,7 +14,7 @@ import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import TextBox  from '../../components/TextBox/TextBox';
+import TextBox from '../../components/TextBox/TextBox';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -65,14 +58,17 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   const handleSaveLearningObjectiveButtonClick = () => {
-    if (customLearningObjective !== '' && customLearningObjective !== undefined && customLearningObjective !== null) {
+    if (
+      customLearningObjective !== '' &&
+      customLearningObjective !== undefined &&
+      customLearningObjective !== null
+    ) {
       handleStoredLearningObjective(customLearningObjective);
     }
     console.log(customLearningObjective);
-    
-    
+
     console.log(storedLearningObjective);
-  }
+  };
 
   const handlePrevButtonClick = () => {
     //handleResetStep1();
@@ -200,29 +196,27 @@ const Home = (props: DiscoverPageProps) => {
               <Card size="sm" shadow={0} backgroundColor={'#F8F9FA'}>
                 <Heading size={'sl'} fontFamily={'body'}>
                   Learning objective
-                </Heading>  
-                <Flex w="100%">     
-                <Box w="90%">   
-                  <TextBox
-                    backgroundColor={'#EDF2F7'}
-                    isHighlighted={false}
-                    text={customLearningObjective || ''}
-                    onTextChange={handleCustomLearningObjective}
-                  />
-                </Box>
-                <Box w="10%" paddingLeft={"1%"}>
-                  <Button
-                  marginRight={'1px'}
-                  border={'1px solid'}
-                  w="100%"
-                  colorScheme="yellow"
-                  onClick={handleSaveLearningObjectiveButtonClick}
-                  >
-                    <Text>
-                      Save Current
-                    </Text>
-                  </Button>
-                </Box>
+                </Heading>
+                <Flex w="100%">
+                  <Box w="90%">
+                    <TextBox
+                      backgroundColor={'#EDF2F7'}
+                      isHighlighted={false}
+                      text={customLearningObjective || ''}
+                      onTextChange={handleCustomLearningObjective}
+                    />
+                  </Box>
+                  <Box w="10%" paddingLeft={'1%'}>
+                    <Button
+                      marginRight={'1px'}
+                      border={'1px solid'}
+                      w="100%"
+                      colorScheme="yellow"
+                      onClick={handleSaveLearningObjectiveButtonClick}
+                    >
+                      <Text>Save Current</Text>
+                    </Button>
+                  </Box>
                 </Flex>
               </Card>
             </Box>

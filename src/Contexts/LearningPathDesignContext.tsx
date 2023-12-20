@@ -90,9 +90,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
-  const [learningObjective, setLearningObjective] = useState<string | null>(null);
-  const [customLearningObjective, setCustomLearningObjective] = useLocalStorage<string | null>('customLearningObjective', null);
-  const [storedLearningObjective, setStoredLearningObjective] = useLocalStorage<string | null>('storedLearningObjective', null);
+  const [learningObjective, setLearningObjective] = useState<string | null>(
+    null
+  );
+  const [customLearningObjective, setCustomLearningObjective] = useLocalStorage<
+    string | null
+  >('customLearningObjective', null);
+  const [storedLearningObjective, setStoredLearningObjective] = useLocalStorage<
+    string | null
+  >('storedLearningObjective', null);
 
   // Use for storage of the options in the segmented control
   const [selectedYourExperience, setSelectedYourExperience] =
@@ -143,27 +149,37 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleLearningObjective = () => {
-    const principleOfSkills = hydrated && selectedSkillConceptsTags ? selectedSkillConceptsTags.join(' ') : '';
-    const selectedOptionsText = hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
+    const principleOfSkills =
+      hydrated && selectedSkillConceptsTags
+        ? selectedSkillConceptsTags.join(' ')
+        : '';
+    const selectedOptionsText =
+      hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
     const learningObjectiveText = hydrated ? text : '';
 
     const learningObjective = `List key principles of ${principleOfSkills} ${selectedOptionsText} ${learningObjectiveText}`;
 
     setLearningObjective(learningObjective);
-  }
+  };
 
-  const handleCustomLearningObjective = (newCustomLearningObjective: string) => {
-    if (newCustomLearningObjective === null || newCustomLearningObjective === '') {
+  const handleCustomLearningObjective = (
+    newCustomLearningObjective: string
+  ) => {
+    if (
+      newCustomLearningObjective === null ||
+      newCustomLearningObjective === ''
+    ) {
       setCustomLearningObjective(learningObjective);
     } else {
       setCustomLearningObjective(newCustomLearningObjective);
     }
-  }
+  };
 
-  const handleStoredLearningObjective = (newStoredLearningObjective: string) => {
+  const handleStoredLearningObjective = (
+    newStoredLearningObjective: string
+  ) => {
     setStoredLearningObjective(newStoredLearningObjective);
-  }
-
+  };
 
   //handlers for text input
   const handleSetText = (newText: string) => {
@@ -227,8 +243,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   useEffect(() => {
     handleLearningObjective();
-    if (storedLearningObjective !== null) setCustomLearningObjective(storedLearningObjective);
-    else if (learningObjective !== null)    handleCustomLearningObjective(learningObjective);
+    if (storedLearningObjective !== null)
+      setCustomLearningObjective(storedLearningObjective);
+    else if (learningObjective !== null)
+      handleCustomLearningObjective(learningObjective);
   }, [learningObjective]);
 
   useEffect(() => {
