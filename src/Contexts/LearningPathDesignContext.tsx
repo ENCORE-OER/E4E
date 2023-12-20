@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { Option, ArrayProps } from '../types/encoreElements/index';
+import { ArrayProps, Option } from '../types/encoreElements/index';
+import { useHasHydrated } from '../utils/utils';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -19,6 +20,9 @@ type LearnignPathDesignContextProps = {
   step: number;
   collectionIndex: number;
   resetCheckBoxOptions: boolean;
+  learningObjective: string | null;
+  customLearningObjective: string | null;
+  storedLearningObjective: string | null;
   setSelectedSkillConceptsTags: (newSkills: string[]) => void;
   handleYourExperienceChange: (selected: Option) => void;
   handleContextChange: (selected: Option) => void;
@@ -30,6 +34,9 @@ type LearnignPathDesignContextProps = {
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
+  handleLearningObjective: () => void;
+  handleCustomLearningObjective: (newCustomLearningObjective: string) => void;
+  handleStoredLearningObjective: (newStoredLearningObjective: string) => void;
 };
 
 // Create the context and export it so that it can be used in other components
@@ -44,6 +51,7 @@ export const useLearningPathDesignContext = () =>
 
 // Create a provider to wrap the app and provide the context to all its children
 export const LearningPathDesignProvider = ({ children }: any) => {
+  const hydrated = useHasHydrated();
   const DIMENSION = 30;
   const SPACING = 3;
   const bloomLevels = [
@@ -81,6 +89,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     'selectedOptions',
     []
   );
+
+  const [learningObjective, setLearningObjective] = useState<string | null>(null);
+  const [customLearningObjective, setCustomLearningObjective] = useLocalStorage<string | null>('customLearningObjective', null);
+  const [storedLearningObjective, setStoredLearningObjective] = useLocalStorage<string | null>('storedLearningObjective', null);
 
   // Use for storage of the options in the segmented control
   const [selectedYourExperience, setSelectedYourExperience] =
@@ -129,6 +141,29 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const handleOptionsChange = (newSelectedOptions: string[]) => {
     setSelectedOptions(newSelectedOptions);
   };
+
+  const handleLearningObjective = () => {
+    const principleOfSkills = hydrated && selectedSkillConceptsTags ? selectedSkillConceptsTags.join(' ') : '';
+    const selectedOptionsText = hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
+    const learningObjectiveText = hydrated ? text : '';
+
+    const learningObjective = `List key principles of ${principleOfSkills} ${selectedOptionsText} ${learningObjectiveText}`;
+
+    setLearningObjective(learningObjective);
+  }
+
+  const handleCustomLearningObjective = (newCustomLearningObjective: string) => {
+    if (newCustomLearningObjective === null || newCustomLearningObjective === '') {
+      setCustomLearningObjective(learningObjective);
+    } else {
+      setCustomLearningObjective(newCustomLearningObjective);
+    }
+  }
+
+  const handleStoredLearningObjective = (newStoredLearningObjective: string) => {
+    setStoredLearningObjective(newStoredLearningObjective);
+  }
+
 
   //handlers for text input
   const handleSetText = (newText: string) => {
@@ -191,6 +226,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   ]);
 
   useEffect(() => {
+    handleLearningObjective();
+    if (storedLearningObjective !== null) setCustomLearningObjective(storedLearningObjective);
+    else if (learningObjective !== null)    handleCustomLearningObjective(learningObjective);
+  }, [learningObjective]);
+
+  useEffect(() => {
     if (collectionIndex !== -1) {
       setStep(2);
     }
@@ -243,6 +284,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedOptions,
         resetCheckBoxOptions,
         collectionIndex,
+        learningObjective,
+        customLearningObjective,
+        storedLearningObjective,
         handleYourExperienceChange,
         handleContextChange,
         handleGroupDimensionChange,
@@ -255,6 +299,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         //handleResetStep0,
         //handleResetStep1,
         handleCollectionIndexChange,
+        handleLearningObjective,
+        handleCustomLearningObjective,
+        handleStoredLearningObjective,
       }}
     >
       {children}

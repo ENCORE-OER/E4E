@@ -1,23 +1,24 @@
 import { Box, Textarea } from '@chakra-ui/react';
 import React, { ChangeEvent } from 'react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type TextBoxProps = {
   backgroundColor: string;
-  placeholder: string;
+  placeholder?: string;
   isHighlighted: boolean;
+  text: string;
+  onTextChange: (newText: string) => void;
 };
 
 const TextBox = ({
   backgroundColor,
   placeholder,
   isHighlighted,
+  text,
+  onTextChange,
 }: TextBoxProps) => {
-  const { text, handleSetText } = useLearningPathDesignContext();
-
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    handleSetText(newText);
+    onTextChange(newText);
   };
 
   return (

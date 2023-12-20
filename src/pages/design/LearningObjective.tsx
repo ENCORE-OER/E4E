@@ -64,7 +64,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           py="115px"
           pl="40px"
           w="full"
-          h={step === 2 ? 'full' : '100vh'}
+          h={'100vh'}
           bg="background"
         >
           <Box w="100%" h="100%">
@@ -163,8 +163,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       bloomLevelIndex !== null &&
                       selectedSkillConceptsTags.length > 0 &&
                       text?.trim() !== '' &&
+                      bloomLevelIndex !== -1 &&
                       ((bloomLevelIndex > 1 && selectedOptions.length === 0) ||
-                        bloomLevelIndex <= 1)
+                        (bloomLevelIndex <= 1 && selectedOptions.length > 0))
                     ) {
                       router.push({
                         pathname: '/design/learningPathDesign',

@@ -24,6 +24,8 @@ export default function PathDesignCentralBars({
     handleOptionsChange,
     step,
     resetCheckBoxOptions,
+    text,
+    handleSetText,
   } = useLearningPathDesignContext();
 
   return (
@@ -76,6 +78,8 @@ export default function PathDesignCentralBars({
             backgroundColor="#EDF2F7"
             placeholder="Add some text..."
             isHighlighted={isNextButtonClicked}
+            text={text}
+            onTextChange={handleSetText}
           />
         </Box>
       </Flex>
