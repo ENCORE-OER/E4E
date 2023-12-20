@@ -258,7 +258,7 @@ export const CollectionsProvider = ({ children }: any) => {
               conceptsSelected: concepts,
             };
           } else {
-            console.error("Concepts is undefined");
+            console.error('Concepts is undefined');
           }
         }
         return collection;

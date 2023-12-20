@@ -19,7 +19,11 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { APIV2 } from '../../data/api';
-import { OerFreeSearchProps, OerInCollectionProps, OerProps } from '../../types/encoreElements';
+import {
+  OerFreeSearchProps,
+  OerInCollectionProps,
+  OerProps,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
@@ -40,7 +44,9 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter();
   const { collections } = useCollectionsContext();
 
-  const [oersById, setOersById] = useState<(OerProps | OerFreeSearchProps | undefined)[]>([]);
+  const [oersById, setOersById] = useState<
+    (OerProps | OerFreeSearchProps | undefined)[]
+  >([]);
 
   const { addToast } = CustomToast();
   //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
@@ -171,7 +177,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>

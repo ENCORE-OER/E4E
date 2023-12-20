@@ -120,7 +120,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"

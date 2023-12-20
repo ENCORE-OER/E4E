@@ -207,7 +207,7 @@ const Home = (props: DiscoverPageProps) => {
   // recover all the oers of a collection
   useEffect(() => {
     //alert("Resources")
-    console.log("Collection index: " + collectionIndex);
+    console.log('Collection index: ' + collectionIndex);
     console.log(collections[collectionIndex]?.conceptsSelected);
 
     if (collections?.length > 0 && collectionIndex >= 0 && hydrated) {
@@ -218,7 +218,7 @@ const Home = (props: DiscoverPageProps) => {
         //console.log("I'm triggering isNewDataLoaded to false");
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers !== undefined) {
-            console.log("sono qua");
+            console.log('sono qua');
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
               collections[collectionIndex]?.oers?.map(
@@ -271,7 +271,7 @@ const Home = (props: DiscoverPageProps) => {
         <Flex
           w="100%"
           justifyContent="left"
-        //justify="space-between"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

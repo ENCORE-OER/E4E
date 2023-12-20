@@ -70,9 +70,10 @@ export default function ResourceCardsList({
           <VStack h="full" spacing={4}>
             {currentPage &&
               oers
-                ?.slice(isResourcePage ?
-                  (currentPage - 1) * itemsPerPage : 0,
-                  isResourcePage ? (currentPage * itemsPerPage) : 9)
+                ?.slice(
+                  isResourcePage ? (currentPage - 1) * itemsPerPage : 0,
+                  isResourcePage ? currentPage * itemsPerPage : 9
+                )
                 // ?.slice(
                 //   (currentPage - 1) * itemsPerPage,
                 //   currentPage * itemsPerPage
@@ -98,14 +99,13 @@ export default function ResourceCardsList({
                             collectionsColor
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
-                                // : collectionsColor[   // to handle when we use the API with pagination
-                                // (currentPage) > 1
-                                //   ? index + itemsPerPage * (currentPage - 1)
-                                //   : index]
-                                : collectionsColor[index]
-
-                              //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                              : ''
+                                : // : collectionsColor[   // to handle when we use the API with pagination
+                                  // (currentPage) > 1
+                                  //   ? index + itemsPerPage * (currentPage - 1)
+                                  //   : index]
+                                  collectionsColor[index]
+                              : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
+                                ''
                           }
                           oer={oer}
                         />
@@ -128,8 +128,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                        //position="absolute"
-                        //right={'0px'}
+                          //position="absolute"
+                          //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -142,7 +142,12 @@ export default function ResourceCardsList({
             <Pagination
               currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange ?? ((newPage: number) => { setCurrentPage && setCurrentPage(newPage) })}
+              onPageChange={
+                handlePageChange ??
+                ((newPage: number) => {
+                  setCurrentPage && setCurrentPage(newPage);
+                })
+              }
             />
           )}
         </Box>
@@ -152,7 +157,7 @@ export default function ResourceCardsList({
 
       {!isNormalSizeCard && hydrated && (
         <Box>
-          <HStack h="full" spacing={4} /*className="scrollable-content"*/ >
+          <HStack h="full" spacing={4} /*className="scrollable-content"*/>
             {currentPage &&
               oers
                 ?.slice(
@@ -187,7 +192,12 @@ export default function ResourceCardsList({
             <Pagination
               currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange ?? ((newPage: number) => { setCurrentPage && setCurrentPage(newPage) })}
+              onPageChange={
+                handlePageChange ??
+                ((newPage: number) => {
+                  setCurrentPage && setCurrentPage(newPage);
+                })
+              }
             />
           )}
         </Box>

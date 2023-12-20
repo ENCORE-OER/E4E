@@ -54,10 +54,9 @@ export default function LearningPathEditor({
     })();
   }, [conceptSelectedIndex, getFragment]);
 
-
   useEffect(() => {
     console.log(collectionColor);
-  }, [])
+  }, []);
 
   return (
     <>

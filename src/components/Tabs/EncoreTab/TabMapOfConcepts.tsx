@@ -16,7 +16,7 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -28,7 +28,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   //const [conceptCounts, setConceptCounts] = useState<Record<number, number>>({});
   const [visibleTags, setVisibleTags] = useState<number>(50); // Initial number of tags to show
   const loadMoreStep = 50; // Number of tags to load when clicking on "View More"
-
 
   const getBackgroundColor = (value: number) => {
     // Define a color mapping based on the size of the tag value
@@ -97,7 +96,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     });
     //window.location.reload();
 
-
     //}
   };
 
@@ -133,8 +131,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     // const conceptLabels = tags.map(tag => tag.label);
     // const conceptIds = tags.map(tag => tag.id);
 
-
-
     // // Find the index of the selected concept in the labels array
     // const selectedIndex = conceptLabels.indexOf(selectedTag.label);
 
@@ -142,7 +138,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
     // const selectedConceptId = conceptIds[selectedIndex];
 
     // localStorage.setItem('searchData', JSON.stringify(selectedConceptId));
-
 
     // Update the query with the selected concept id
     const updatedQuery = { ...router.query, concepts: updatedConcepts };
@@ -157,7 +152,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         // ------------------------------  Get the search data from the localStorage  --------------------------------------------
         // setTags([]);
         const searchData = localStorage.getItem('searchData');
@@ -176,7 +170,14 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
 
-        const respAPI = await API.getConceptsFreeSearch(keywords, domains, types, audience, operator, concepts);
+        const respAPI = await API.getConceptsFreeSearch(
+          keywords,
+          domains,
+          types,
+          audience,
+          operator,
+          concepts
+        );
         // At the moment is useless 'cause the API return every concept only one time and the count is always 1
         // respAPI.forEach(({ id }) => {
         //   setConceptCounts((prevConceptCounts) => ({
@@ -206,18 +207,16 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         // ===============================================================================================
 
         // const tagsArray = resultArray
-        const tagsArray = respAPI
-          .map(({ id, label }) => ({
-            //value: String(text),
-            //count: Number(value),
-            id,
-            label
-          }))
+        const tagsArray = respAPI.map(({ id, label }) => ({
+          //value: String(text),
+          //count: Number(value),
+          id,
+          label,
+        }));
         // Filter out the concepts that appear less than N times
         //.filter((tag) => tag.count > 2); // here we set the minimum number of times a concept should appear in the OERs to be considered relevant to be shown in the map of concepts
 
         setTags(tagsArray);
-
       } catch (err) {
         console.error(err);
       } finally {
@@ -229,7 +228,14 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       setIsLoading(true);
       fetchData();
     }
-  }, [API, router.query.concepts, router.query.keywords, router.query.domains, router.query.types, router.query.audience]);
+  }, [
+    API,
+    router.query.concepts,
+    router.query.keywords,
+    router.query.domains,
+    router.query.types,
+    router.query.audience,
+  ]);
 
   useEffect(() => {
     console.log('tags', tags);
@@ -273,7 +279,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       )}
       {!isLoading &&
         tags.length > 0 &&
-        //filtered?.length > 0 && 
+        //filtered?.length > 0 &&
         hydrated && (
           <div>
             <TagCloud
@@ -316,37 +322,26 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
               )}
             />
             {visibleTags < tags.length && (
-              <Flex
-                justifyContent={'center'}
-                p={5}
-              >
+              <Flex justifyContent={'center'} p={5}>
                 <Button
                   variant="ghost"
                   _hover={{ bg: 'none' }}
-                  color={"gray.400"}
+                  color={'gray.400'}
                   onClick={() => setVisibleTags((prev) => prev + loadMoreStep)}
                 >
-                  <Text
-                    borderBottom={1}
-                    borderBottomStyle="solid"
-                  >
+                  <Text borderBottom={1} borderBottomStyle="solid">
                     View More
                   </Text>
-
                 </Button>
               </Flex>
-            )
-            }
+            )}
           </div>
         )}
-      {!isLoading &&
-        tags.length === 0 &&
+      {!isLoading && tags.length === 0 && (
         <Flex justifyContent="center">
-          <Text variant="navbar_label">
-            No concepts found
-          </Text>
+          <Text variant="navbar_label">No concepts found</Text>
         </Flex>
-      }
+      )}
     </>
   );
 };

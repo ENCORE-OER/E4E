@@ -87,7 +87,9 @@ export default function OerCardHeader({
             </Text>
           </Box>
           <Box>
-            <Text variant="author_card" noOfLines={1}>{authors.join(', ')}</Text>
+            <Text variant="author_card" noOfLines={1}>
+              {authors.join(', ')}
+            </Text>
           </Box>
         </Flex>
       </Flex>

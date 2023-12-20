@@ -135,8 +135,7 @@ export default function OerCardsSorting({
         console.log("I'm triggering oersById/filtered");
       } catch (error) {
         console.error(error);
-      }
-      finally {
+      } finally {
         if (setIsLoading !== undefined) {
           setIsLoading(false);
         }

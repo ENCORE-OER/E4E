@@ -73,7 +73,7 @@ export default function CollectionView({
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
-  const isFirstRender = useRef<number>(0);  // used to avoid the useEffect to be triggered at the first render
+  const isFirstRender = useRef<number>(0); // used to avoid the useEffect to be triggered at the first render
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
   const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -134,8 +134,7 @@ export default function CollectionView({
   useEffect(() => {
     //alert("CollectionView");
     if (collectionIndex > -1) {
-
-      console.log("Use effect of CollectionIndex or collections");
+      console.log('Use effect of CollectionIndex or collections');
 
       setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
 
@@ -157,7 +156,7 @@ export default function CollectionView({
 
   useEffect(() => {
     if (isFirstRender.current < 1) {
-      console.log("First rendering");
+      console.log('First rendering');
       isFirstRender.current++;
     }
     try {
@@ -177,10 +176,9 @@ export default function CollectionView({
 
           if (remainingConcepts.length > 0) {
             remainingConcepts?.forEach((concept: OerConceptInfo) => {
-              console.log("Remaining concepts: " + concept.label);
+              console.log('Remaining concepts: ' + concept.label);
             });
-          } else
-            console.log("No remaining concepts");
+          } else console.log('No remaining concepts');
 
           setSelectedConceptsForCollection(
             collections[collectionIndex]?.id,
@@ -194,7 +192,6 @@ export default function CollectionView({
       if (collectionIndex >= 0 && isNewDataLoaded) {
         updatedConceptsSelected();
       }
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -212,7 +209,7 @@ export default function CollectionView({
   // to reset pagination when the collection is changed in 'Your resources' page
   useEffect(() => {
     if (currentPage !== 1) {
-      console.log("Setting current page to 1");
+      console.log('Setting current page to 1');
       setCurrentPage(1);
     }
   }, [viewChanged, isAscending]);
@@ -243,7 +240,7 @@ export default function CollectionView({
               isAscending={isAscending}
               setAscending={setAscending}
               handleItemSortingClick={handleItemSortingClick}
-            //setIsLoading={setIsLoading}
+              //setIsLoading={setIsLoading}
             />
           </Flex>
         </HStack>
@@ -279,18 +276,22 @@ export default function CollectionView({
         )}
       </Box>
 
-      {hydrated &&
+      {hydrated && (
         <ConceptsCollectionView
           handleConceptsChange={handleConceptsChange}
           uniqueConcepts={uniqueConcepts}
           conceptsSelectedLength={
             collections[collectionIndex]?.conceptsSelected?.length
           }
-          conceptsSelected={collectionIndex > -1 ? collections[collectionIndex]?.conceptsSelected : []}
+          conceptsSelected={
+            collectionIndex > -1
+              ? collections[collectionIndex]?.conceptsSelected
+              : []
+          }
           oersLength={collections[collectionIndex]?.oers?.length}
           label_tooltip="Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths"
         />
-      }
+      )}
 
       <DeleteOerAlertDialog
         handleDeleteResource={handleDeleteResource}

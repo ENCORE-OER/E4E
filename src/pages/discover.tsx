@@ -17,7 +17,7 @@ import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import {
   CollectionProps,
   OerInCollectionProps,
-  OerProps
+  OerProps,
 } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 import { CustomToast } from '../utils/Toast/CustomToast';
@@ -211,7 +211,7 @@ const Discover = (props: DiscoverPageProps) => {
           order_by,
           order_asc,
           operator,
-          concepts ?? [],
+          concepts ?? []
         );
         setOersLengthTotal(resp?.recordsFiltered);
         const oers = resp?.data;
@@ -274,7 +274,6 @@ const Discover = (props: DiscoverPageProps) => {
       } else {
         throw new Error('No keywords or filters provided');
       }
-
     } catch (error) {
       console.error(error);
       addToast({
@@ -405,7 +404,6 @@ const Discover = (props: DiscoverPageProps) => {
   }, [filtered]);
 
   useEffect(() => {
-
     const fetchOers = async () => {
       setIsLoading(true);
 
@@ -470,7 +468,7 @@ const Discover = (props: DiscoverPageProps) => {
       //   setEndSearch(true);
       //   setIsLoading(false);
       // });
-    }
+    };
     try {
       fetchOers();
     } catch (error) {
@@ -557,7 +555,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
