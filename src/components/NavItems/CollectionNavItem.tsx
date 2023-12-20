@@ -11,6 +11,7 @@ import {
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
+import { useHasHydrated } from '../../utils/utils';
 import DeleteAlertDialog from '../Modals/DeleteAlertDialog/DeleteAlertDialog';
 
 interface CollectionNavItemProps {
@@ -42,6 +43,8 @@ const CollectionNavItem = ({
   setCollectionIndex,
   deleteCollection,
 }: CollectionNavItemProps) => {
+  const hydrated = useHasHydrated();
+
   // handle the click on the collection
   //const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
   //const [collectionIndex, setCollectionIndex] = useState<number>(-1);
@@ -107,23 +110,28 @@ const CollectionNavItem = ({
     <>
       <HStack
         ref={collectionRef}
-        mb="3"
+        mb="2"
         w="100%"
         position="relative"
         borderLeft="5px"
         borderLeftColor={collection.color}
         borderLeftStyle={'solid'}
+        borderRadius={'5px'}
+        bg={collectionIndex === index ? 'gray.200' : ''}
+        p="1"
+        _hover={{ bg: 'gray.200', borderRadius: '5px' }}
         //overflow="hidden"
       >
         <Flex
           w="100%"
-          _hover={{ bg: 'gray.200', borderRadius: '5px' }}
           onClick={(e) => {
             e.preventDefault();
             //console.log("Click on CollectionNavItem");
-            setCollectionIndex(index);
-            //console.log("I'm triggering collectionIndex");
-            handleCollectionClick();
+            if (hydrated) {
+              setCollectionIndex(index);
+              //console.log("I'm triggering collectionIndex");
+              handleCollectionClick();
+            }
           }}
           cursor={'pointer'}
         >

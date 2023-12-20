@@ -93,9 +93,10 @@ const Home = (props: DiscoverPageProps) => {
         isClicked &&
         (selectedAudience.length > 0 ||
           selectedAudience.length > 0 ||
-          selectedResourceTypes.length > 0)
+          selectedResourceTypes.length > 0) &&
+        searchValue.length === 0
       ) {
-        // advanced search selected
+        // advanced search without keywords
         searchData = {
           page: 1,
           keywords: searchValue,
@@ -106,6 +107,7 @@ const Home = (props: DiscoverPageProps) => {
           order_by: 'title',
           order_asc: 'true',
           operator: operator,
+          concepts: [],
         };
 
         /*throw new Error(
@@ -120,9 +122,10 @@ const Home = (props: DiscoverPageProps) => {
           domains: selectedDomains,
           types: selectedResourceTypes,
           audience: selectedAudience,
-          order_by: 'search_rank',
+          order_by: 'title',
           order_asc: 'true',
           operator: operator,
+          concepts: [],
         };
       }
       if (
@@ -242,7 +245,7 @@ const Home = (props: DiscoverPageProps) => {
         console.error(error);
       }
     })();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     console.log('SELECTED DOMAINS: ' + selectedDomains);

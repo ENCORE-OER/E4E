@@ -18,7 +18,7 @@ type OerCardHeaderProps = {
   showTagEntrepreneurial: boolean;
   showTagGreen: boolean;
   title: string;
-  authors: string[];
+  authors: (string | null)[];
   collection_color?: string;
   checkBookmark?: boolean;
   //isSaved?: boolean;
@@ -87,7 +87,9 @@ export default function OerCardHeader({
             </Text>
           </Box>
           <Box>
-            <Text variant="author_card" noOfLines={1}>{`${authors}`}</Text>
+            <Text variant="author_card" noOfLines={1}>
+              {authors.join(', ')}
+            </Text>
           </Box>
         </Flex>
       </Flex>

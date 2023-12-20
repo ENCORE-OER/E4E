@@ -1,10 +1,10 @@
 // this type is used for creator, publisher, contributor
 
 export type OerAuthorsInfo = {
-  id: number;
-  full_name: string;
-  first_name: string;
-  last_name: string;
-  entity_type: string;
-  organization_name: string;
+  id: number | null;
+  full_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  entity_type: string | null;
+  organization_name: string | null;
 };

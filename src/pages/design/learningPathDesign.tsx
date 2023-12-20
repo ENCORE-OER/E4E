@@ -19,7 +19,11 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { APIV2 } from '../../data/api';
-import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
+import {
+  OerFreeSearchProps,
+  OerInCollectionProps,
+  OerProps,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
@@ -40,7 +44,9 @@ const Home = (props: DiscoverPageProps) => {
   const router = useRouter();
   const { collections } = useCollectionsContext();
 
-  const [oersById, setOersById] = useState<(OerProps | undefined)[]>([]);
+  const [oersById, setOersById] = useState<
+    (OerProps | OerFreeSearchProps | undefined)[]
+  >([]);
 
   const { addToast } = CustomToast();
   //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
@@ -222,7 +228,7 @@ const Home = (props: DiscoverPageProps) => {
                 isLoading={isLoading}
                 oers={oersById}
                 conceptSelectedIndex={0}
-                collectionColor={collections[collectionIndex]?.color}
+                collectionColor={[collections[collectionIndex]?.color]}
               />
             </Box>
           </Box>

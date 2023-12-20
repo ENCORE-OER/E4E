@@ -3,8 +3,7 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { OerProps } from '../../../types/encoreElements';
-import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
+import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
@@ -38,14 +37,14 @@ export default function ResourceCardsList({
   collectionIndex,
   oersLength,
   currentPage,
-  //setCurrentPage,
+  setCurrentPage,
   handlePageChange,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<
-    OerProps | OerFreeSearchProps | null | undefined
-  >(null);
+    OerProps | OerFreeSearchProps | undefined
+  >(undefined);
   //const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleCloseCardInfoModal = () => {
@@ -55,7 +54,6 @@ export default function ResourceCardsList({
 
   // handle pagination of the oers
   //-----------------------------------------------------------
-  //const itemsPerPage = 5;
   const totalPages = Math.ceil((oersLength ?? 1) / itemsPerPage);
 
   /*const handlePageChange = (newPage: number) => {
@@ -72,13 +70,14 @@ export default function ResourceCardsList({
           <VStack h="full" spacing={4}>
             {currentPage &&
               oers
-                // ?.slice(isResourcePage ?
-                //   (currentPage - 1) * itemsPerPage : 0,
-                //   isResourcePage ? (currentPage * itemsPerPage) : 10
                 ?.slice(
-                  (currentPage - 1) * itemsPerPage,
-                  currentPage * itemsPerPage
+                  isResourcePage ? (currentPage - 1) * itemsPerPage : 0,
+                  isResourcePage ? currentPage * itemsPerPage : 9
                 )
+                // ?.slice(
+                //   (currentPage - 1) * itemsPerPage,
+                //   currentPage * itemsPerPage
+                // )
                 .map(
                   (
                     oer: OerProps | OerFreeSearchProps | undefined,
@@ -90,7 +89,6 @@ export default function ResourceCardsList({
                           e.preventDefault();
                           onOpen();
                           // handleOpenCardInfoModal();
-
                           setOerById(oer);
                         }}
                         as="button"
@@ -101,11 +99,13 @@ export default function ResourceCardsList({
                             collectionsColor
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
-                                : //(currentPage) > 1
-                                  // ? index + itemsPerPage * (currentPage - 1)
-                                  // :
-                                  collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                              : ''
+                                : // : collectionsColor[   // to handle when we use the API with pagination
+                                  // (currentPage) > 1
+                                  //   ? index + itemsPerPage * (currentPage - 1)
+                                  //   : index]
+                                  collectionsColor[index]
+                              : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
+                                ''
                           }
                           oer={oer}
                         />
@@ -142,7 +142,12 @@ export default function ResourceCardsList({
             <Pagination
               currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange ?? (() => void 0)}
+              onPageChange={
+                handlePageChange ??
+                ((newPage: number) => {
+                  setCurrentPage && setCurrentPage(newPage);
+                })
+              }
             />
           )}
         </Box>
@@ -152,7 +157,7 @@ export default function ResourceCardsList({
 
       {!isNormalSizeCard && hydrated && (
         <Box>
-          <VStack h="full" spacing={4} className="scrollable-content">
+          <HStack h="full" spacing={4} /*className="scrollable-content"*/>
             {currentPage &&
               oers
                 ?.slice(
@@ -175,24 +180,24 @@ export default function ResourceCardsList({
                       as="button"
                     >
                       <SmallSingleResourceCard
-                        collectionColor={
-                          collectionsColor
-                            ? isResourcePage
-                              ? collectionsColor[0]
-                              : collectionsColor[index]
-                            : ''
-                        }
+                        collectionColor={collectionsColor[0]}
+                        //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
                         oer={oer}
                       />
                     </Box>
                   )
                 )}
-          </VStack>
+          </HStack>
           {oers.length !== 0 && (
             <Pagination
               currentPage={currentPage ?? 1}
               totalPages={totalPages}
-              onPageChange={handlePageChange ?? (() => void 0)}
+              onPageChange={
+                handlePageChange ??
+                ((newPage: number) => {
+                  setCurrentPage && setCurrentPage(newPage);
+                })
+              }
             />
           )}
         </Box>
