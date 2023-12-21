@@ -20,9 +20,11 @@ type LearnignPathDesignContextProps = {
   step: number;
   collectionIndex: number;
   resetCheckBoxOptions: boolean;
-  learningObjective: string | null;
-  customLearningObjective: string | null;
-  storedLearningObjective: string | null;
+  learningObjectives: string[];
+  customLearningObjectivePart0: string;
+  customLearningObjectivePart1: string;
+  customLearningObjectivePart2: string;
+  storedLearningObjectives: string[];
   setSelectedSkillConceptsTags: (newSkills: string[]) => void;
   handleYourExperienceChange: (selected: Option) => void;
   handleContextChange: (selected: Option) => void;
@@ -34,9 +36,14 @@ type LearnignPathDesignContextProps = {
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
-  handleLearningObjective: () => void;
-  handleCustomLearningObjective: (newCustomLearningObjective: string) => void;
-  handleStoredLearningObjective: (newStoredLearningObjective: string) => void;
+  handleLearningObjectives: () => void;
+  handleCustomLearningObjective0Change: (newValue: string) => void;
+  handleCustomLearningObjective1Change: (newValue: string) => void;
+  handleCustomLearningObjective2Change: (newValue: string) => void;
+  handleUseStoredLearningObjectives: () => void;
+  handleUseLearningObjectives: () => void;
+  handleSetCustomLearningObjectives: () => void;
+  handleNewStoredLearningObjectives: () => void;
 };
 
 // Create the context and export it so that it can be used in other components
@@ -90,15 +97,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
-  const [learningObjective, setLearningObjective] = useState<string | null>(
-    null
-  );
-  const [customLearningObjective, setCustomLearningObjective] = useLocalStorage<
-    string | null
-  >('customLearningObjective', null);
-  const [storedLearningObjective, setStoredLearningObjective] = useLocalStorage<
-    string | null
-  >('storedLearningObjective', null);
+  const [learningObjectives, setLearningObjectives] = useState<string[]>([]);
+  const [customLearningObjectivePart1, setCustomLearningObjectivePart1] = useLocalStorage<string>('customLearningObjective1', '');
+  const [customLearningObjectivePart2, setCustomLearningObjectivePart2] = useLocalStorage<string>('customLearningObjective2', '');
+  const [customLearningObjectivePart0, setCustomLearningObjectivePart0] = useLocalStorage<string>('customLearningObjective0', '');
+  const [storedLearningObjectives, setStoredLearningObjectives] = useLocalStorage<string[]>('storedLearningObjectives', []);
 
   // Use for storage of the options in the segmented control
   const [selectedYourExperience, setSelectedYourExperience] =
@@ -148,7 +151,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setSelectedOptions(newSelectedOptions);
   };
 
-  const handleLearningObjective = () => {
+  const handleLearningObjectives = () => {
     const principleOfSkills =
       hydrated && selectedSkillConceptsTags
         ? selectedSkillConceptsTags.join(' ')
@@ -156,30 +159,57 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     const selectedOptionsText =
       hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
     const learningObjectiveText = hydrated ? text : '';
-
-    const learningObjective = `List key principles of ${principleOfSkills} ${selectedOptionsText} ${learningObjectiveText}`;
-
-    setLearningObjective(learningObjective);
+  
+    const learningObjectives = [
+      `${principleOfSkills}`,
+      `${selectedOptionsText}`,
+      `${learningObjectiveText}`
+    ];
+  
+    setLearningObjectives(learningObjectives);
   };
 
-  const handleCustomLearningObjective = (
-    newCustomLearningObjective: string
-  ) => {
-    if (
-      newCustomLearningObjective === null ||
-      newCustomLearningObjective === ''
-    ) {
-      setCustomLearningObjective(learningObjective);
-    } else {
-      setCustomLearningObjective(newCustomLearningObjective);
+  const handleCustomLearningObjective0Change = (newValue: string) => {
+    setCustomLearningObjectivePart0(newValue);
+  };
+
+  const handleCustomLearningObjective1Change = (newValue: string) => {
+    setCustomLearningObjectivePart1(newValue);
+  };
+
+  const handleCustomLearningObjective2Change = (newValue: string) => {
+    setCustomLearningObjectivePart2(newValue);
+  };
+
+  const handleNewStoredLearningObjectives = () => {
+    const newStoredLearningObjectives = [
+      customLearningObjectivePart0,
+      customLearningObjectivePart1,
+      customLearningObjectivePart2
+    ];
+    setStoredLearningObjectives(newStoredLearningObjectives);
+  };
+
+  const handleUseStoredLearningObjectives = () => {
+    setCustomLearningObjectivePart0(storedLearningObjectives[0]);
+    setCustomLearningObjectivePart1(storedLearningObjectives[1]);
+    setCustomLearningObjectivePart2(storedLearningObjectives[2]);
+  }
+  const handleUseLearningObjectives = () => {
+    setCustomLearningObjectivePart0(learningObjectives[0]);
+    setCustomLearningObjectivePart1(learningObjectives[1]);
+    setCustomLearningObjectivePart2(learningObjectives[2]);
+  }
+
+  const handleSetCustomLearningObjectives = () => {
+    handleLearningObjectives();
+  
+    if (storedLearningObjectives.length > 0) {
+      handleUseStoredLearningObjectives();
+    } else if (learningObjectives.length > 0) {
+      handleUseLearningObjectives();
     }
-  };
-
-  const handleStoredLearningObjective = (
-    newStoredLearningObjective: string
-  ) => {
-    setStoredLearningObjective(newStoredLearningObjective);
-  };
+  }
 
   //handlers for text input
   const handleSetText = (newText: string) => {
@@ -241,13 +271,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     currentBloomOptions,
   ]);
 
-  useEffect(() => {
-    handleLearningObjective();
-    if (storedLearningObjective !== null)
-      setCustomLearningObjective(storedLearningObjective);
-    else if (learningObjective !== null)
-      handleCustomLearningObjective(learningObjective);
-  }, [learningObjective]);
+  // useEffect(() => {
+  //   handleLearningObjectives();
+  
+  //   if (storedLearningObjectives.length > 0) {
+  //     handleUseStoredLearningObjectives();
+  //   } else if (learningObjectives.length > 0) {
+  //     handleUseLearningObjectives();
+  //   }
+  // }, [learningObjectives]);
 
   useEffect(() => {
     if (collectionIndex !== -1) {
@@ -302,9 +334,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedOptions,
         resetCheckBoxOptions,
         collectionIndex,
-        learningObjective,
-        customLearningObjective,
-        storedLearningObjective,
+        learningObjectives,
+        customLearningObjectivePart0,
+        customLearningObjectivePart1,
+        customLearningObjectivePart2,
+        storedLearningObjectives,
         handleYourExperienceChange,
         handleContextChange,
         handleGroupDimensionChange,
@@ -317,9 +351,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         //handleResetStep0,
         //handleResetStep1,
         handleCollectionIndexChange,
-        handleLearningObjective,
-        handleCustomLearningObjective,
-        handleStoredLearningObjective,
+        handleLearningObjectives,
+        handleCustomLearningObjective0Change,
+        handleCustomLearningObjective1Change,
+        handleCustomLearningObjective2Change,
+        handleUseStoredLearningObjectives,
+        handleUseLearningObjectives,
+        handleSetCustomLearningObjectives,
+        handleNewStoredLearningObjectives,
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import { LearningPathProvider } from '../../Contexts/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
+import ThreeTextBoxes from '../../components/LearningObjectiveTextBoxes/LearningObjectiveTextBoxes';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
@@ -14,7 +15,12 @@ import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import TextBox from '../../components/TextBox/TextBox';
+import { Icon } from '@chakra-ui/react'
+import { MdUndo, MdSave } from 'react-icons/md'
+//import { useToast } from '@chakra-ui/react';
+
+//
+
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -25,14 +31,12 @@ const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
   const {
     SPACING,
-    // selectedSkillConceptsTags,
-    // selectedOptions,
-    // text,
     collectionIndex,
-    customLearningObjective,
-    handleCustomLearningObjective,
-    handleStoredLearningObjective,
-    storedLearningObjective,
+    handleUseLearningObjectives,
+    handleSetCustomLearningObjectives,
+    handleNewStoredLearningObjectives,
+    handleLearningObjectives,
+    //learningObjectives,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -58,17 +62,20 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   const handleSaveLearningObjectiveButtonClick = () => {
-    if (
-      customLearningObjective !== '' &&
-      customLearningObjective !== undefined &&
-      customLearningObjective !== null
-    ) {
-      handleStoredLearningObjective(customLearningObjective);
-    }
-    console.log(customLearningObjective);
-
-    console.log(storedLearningObjective);
+    handleNewStoredLearningObjectives();
+    addToast({
+      message: 'Learning objective saved!',
+      type: 'success',
+    });
   };
+
+  const handleUndoLearningObjectiveButtonClick = () => {
+    handleUseLearningObjectives();
+    addToast({
+      message: 'Learning objective restored',
+      type: 'info',
+    });
+  }
 
   const handlePrevButtonClick = () => {
     //handleResetStep1();
@@ -78,8 +85,13 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   useEffect(() => {
+    handleLearningObjectives();
     setIsLoading(false);
   }, [oersById]);
+
+  useEffect(() => {
+    handleSetCustomLearningObjectives();
+  }, []);
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
@@ -174,7 +186,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -198,15 +210,10 @@ const Home = (props: DiscoverPageProps) => {
                   Learning objective
                 </Heading>
                 <Flex w="100%">
-                  <Box w="90%">
-                    <TextBox
-                      backgroundColor={'#EDF2F7'}
-                      isHighlighted={false}
-                      text={customLearningObjective || ''}
-                      onTextChange={handleCustomLearningObjective}
-                    />
+                  <Box w="92%">
+                    <ThreeTextBoxes />
                   </Box>
-                  <Box w="10%" paddingLeft={'1%'}>
+                  <Box w="4%" paddingRight={'0.25%'}>
                     <Button
                       marginRight={'1px'}
                       border={'1px solid'}
@@ -214,7 +221,22 @@ const Home = (props: DiscoverPageProps) => {
                       colorScheme="yellow"
                       onClick={handleSaveLearningObjectiveButtonClick}
                     >
-                      <Text>Save Current</Text>
+                      <Flex align="center">
+                      <Icon as={MdSave} w={8} h={8} />
+                      </Flex>
+                    </Button>
+                  </Box>
+                  <Box w="4%" paddingLeft={'0.25%'}>
+                    <Button
+                      marginRight={'1px'}
+                      border={'1px solid'}
+                      w="100%"
+                      colorScheme="yellow"
+                      onClick={handleUndoLearningObjectiveButtonClick}
+                    >
+                      <Flex align="center">
+                        <Icon as={MdUndo} w={8} h={8} />
+                      </Flex>
                     </Button>
                   </Box>
                 </Flex>
