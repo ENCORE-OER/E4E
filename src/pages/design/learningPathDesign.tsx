@@ -1,13 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Button,
-  Card,
-  CardBody,
-  Flex,
-  Heading,
-  Text,
-} from '@chakra-ui/react';
+import { Box, Button, Card, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -15,6 +7,7 @@ import { LearningPathProvider } from '../../Contexts/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
+import ThreeTextBoxes from '../../components/LearningObjectiveTextBoxes/LearningObjectiveTextBoxes';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
@@ -26,6 +19,11 @@ import {
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
+import { Icon } from '@chakra-ui/react';
+import { MdUndo, MdSave } from 'react-icons/md';
+//import { useToast } from '@chakra-ui/react';
+
+//
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -36,9 +34,12 @@ const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
   const {
     SPACING,
-    pathDesignData,
-    handleCreatePath,
-    collectionIndex /*handleResetStep1*/,
+    collectionIndex,
+    handleUseLearningObjectives,
+    handleSetCustomLearningObjectives,
+    handleNewStoredLearningObjectives,
+    handleLearningObjectives,
+    //learningObjectives,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -65,30 +66,43 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
+  const handleSaveLearningObjectiveButtonClick = () => {
+    handleNewStoredLearningObjectives();
+    addToast({
+      message: 'Learning objective saved!',
+      type: 'success',
+    });
+  };
+
+  const handleUndoLearningObjectiveButtonClick = () => {
+    handleUseLearningObjectives();
+    addToast({
+      message: 'Learning objective restored',
+      type: 'info',
+    });
+  };
+
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/LearningObjective',
+      pathname: '/design/learningObjective',
     });
   };
 
   useEffect(() => {
-    console.log(collectionIndex);
-  }, [collectionIndex]);
-
-  useEffect(() => {
+    handleLearningObjectives();
     setIsLoading(false);
   }, [oersById]);
 
+  useEffect(() => {
+    handleSetCustomLearningObjectives();
+  }, []);
+
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
-    handleCreatePath();
     setIsLoading(true);
     if (collections?.length > 0 && hydrated) {
-      console.log('passo 1');
-      console.log('collectionIndex: ' + collectionIndex);
       if (collections[collectionIndex]?.oers?.length > 0) {
-        console.log('passo 2');
         try {
           const fetchOerData = async () => {
             const oerData = await Promise.all(
@@ -162,8 +176,8 @@ const Home = (props: DiscoverPageProps) => {
   return (
     <LearningPathProvider>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Plan" />
-        <SideBar pagePath={'/plan'} />
+        <Navbar user={user} pageName="Design" />
+        <SideBar pagePath={'/design'} />
 
         <Box
           ml="200px"
@@ -200,25 +214,37 @@ const Home = (props: DiscoverPageProps) => {
                 <Heading size={'sl'} fontFamily={'body'}>
                   Learning objective
                 </Heading>
-                <CardBody
-                  backgroundColor={'#EDF2F7'}
-                  border="1px"
-                  borderColor={'#CED4DA'}
-                  borderRadius={'md'}
-                >
-                  <Text>
-                    {console.log(pathDesignData)}
-                    List key principle of:{' '}
-                    {hydrated &&
-                      pathDesignData.skills &&
-                      pathDesignData.skills.join(', ')}
-                    {'. '}
-                    {hydrated &&
-                      pathDesignData.verbsLearingObjective &&
-                      pathDesignData.verbsLearingObjective.join(' and ')}{' '}
-                    {hydrated && pathDesignData.textLearingObjective}
-                  </Text>
-                </CardBody>
+                <Flex w="100%">
+                  <Box w="92%">
+                    <ThreeTextBoxes />
+                  </Box>
+                  <Box w="4%" paddingRight={'0.25%'}>
+                    <Button
+                      marginRight={'1px'}
+                      border={'1px solid'}
+                      w="100%"
+                      colorScheme="yellow"
+                      onClick={handleSaveLearningObjectiveButtonClick}
+                    >
+                      <Flex align="center">
+                        <Icon as={MdSave} w={8} h={8} />
+                      </Flex>
+                    </Button>
+                  </Box>
+                  <Box w="4%" paddingLeft={'0.25%'}>
+                    <Button
+                      marginRight={'1px'}
+                      border={'1px solid'}
+                      w="100%"
+                      colorScheme="yellow"
+                      onClick={handleUndoLearningObjectiveButtonClick}
+                    >
+                      <Flex align="center">
+                        <Icon as={MdUndo} w={8} h={8} />
+                      </Flex>
+                    </Button>
+                  </Box>
+                </Flex>
               </Card>
             </Box>
 
@@ -243,6 +269,7 @@ const Home = (props: DiscoverPageProps) => {
               <Button
                 marginRight={'1px'}
                 border={'1px solid'}
+                w="100%"
                 colorScheme="yellow"
                 onClick={handlePrevButtonClick}
               >

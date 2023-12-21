@@ -17,7 +17,6 @@ import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignC
 export type onDataType = number | string;
 
 type CollectionMenuProps = {
-  initialTitle: string; // Titolo iniziale del menu
   data: ArrayProps[]; // Array di dati da scorrere nel menu
   options?: string[] | undefined;
   onData?: (data: string[] | number[]) => void;
@@ -27,7 +26,6 @@ type CollectionMenuProps = {
 };
 
 export default function CustomDropDownMenu({
-  initialTitle,
   data, // Usa il prop data per popolare il menu
   options,
   onData,
@@ -36,11 +34,24 @@ export default function CustomDropDownMenu({
   isBloomLevel,
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [menuTitle, setMenuTitle] = useState(initialTitle);
-  const { collectionIndex, bloomLevelIndex } = useLearningPathDesignContext();
+  const [menuTitle, setMenuTitle] = useState<string | null>(null);
+  const { collectionIndex, bloomLevelIndex, selectedSkillConceptsTags } =
+    useLearningPathDesignContext();
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
+
+  useEffect(() => {
+    // Aggiorna il titolo in base agli indici
+    if (isBloomLevel) {
+      // Se è un Bloom Level e l'indice è valido
+      setMenuTitle(data[bloomLevelIndex]?.name || 'Select Bloom Level');
+    } else {
+      // Se è una Collection e l'indice è valido
+      setMenuTitle(data[collectionIndex]?.name || 'Select Collection');
+    }
+    // ... altri effetti necessari
+  }, [isBloomLevel, collectionIndex, bloomLevelIndex, data]);
 
   const handleData = () => {
     if (onData) {
@@ -52,6 +63,12 @@ export default function CustomDropDownMenu({
     if (onSelectionChange) onSelectionChange(index);
     setMenuTitle(item.name);
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
+
+    //todo fix this, the problem is that idk how to delete the tags without refreshing the page
+    if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
+      // Refresha la pagina
+      window.location.reload();
+    }
   };
 
   const handleToggleMenu = () => {
@@ -68,8 +85,8 @@ export default function CustomDropDownMenu({
 
   useEffect(() => {
     handleData();
-    console.log(bloomLevelIndex);
-    console.log(collectionIndex);
+    // console.log(bloomLevelIndex);
+    // console.log(collectionIndex);1
   }, [selectedOptions]);
   return (
     <>

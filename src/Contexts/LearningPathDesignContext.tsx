@@ -1,11 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-//import { useLocalStorage } from 'usehooks-ts';
-//import { useHasHydrated } from '../../utils/utils';
-import { Option, ArrayProps } from '../types/encoreElements/index';
-import { PathDesign } from '../types/encoreElements/index';
-import { useCollectionsContext } from './CollectionsContext/CollectionsContext';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
+import { ArrayProps, Option } from '../types/encoreElements/index';
+import { useHasHydrated } from '../utils/utils';
 
-//constext props
+// Context props
 type LearnignPathDesignContextProps = {
   DIMENSION: number;
   SPACING: number;
@@ -21,85 +19,105 @@ type LearnignPathDesignContextProps = {
   bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
-  pathDesignData: PathDesign;
   resetCheckBoxOptions: boolean;
-  initialCollectionTitle: string;
-  initialBloomTitle: string;
+  learningObjectives: string[];
+  customLearningObjectivePart0: string;
+  customLearningObjectivePart1: string;
+  customLearningObjectivePart2: string;
+  storedLearningObjectives: string[];
   setSelectedSkillConceptsTags: (newSkills: string[]) => void;
   handleYourExperienceChange: (selected: Option) => void;
   handleContextChange: (selected: Option) => void;
   handleGroupDimensionChange: (selected: Option) => void;
   handleLeanerExperienceChange: (selected: Option) => void;
   handleSetText: (newText: string) => void;
-  handleCreatePath: () => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
   handleSkillsChange: React.Dispatch<React.SetStateAction<string[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
-  // handleResetStep0: () => void;
-  // handleResetStep1: () => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
+  handleLearningObjectives: () => void;
+  handleCustomLearningObjective0Change: (newValue: string) => void;
+  handleCustomLearningObjective1Change: (newValue: string) => void;
+  handleCustomLearningObjective2Change: (newValue: string) => void;
+  handleUseStoredLearningObjectives: () => void;
+  handleUseLearningObjectives: () => void;
+  handleSetCustomLearningObjectives: () => void;
+  handleNewStoredLearningObjectives: () => void;
 };
 
-// create the context and export it so that it can be used in other components
+// Create the context and export it so that it can be used in other components
 export const LearningPathDesignContext =
   createContext<LearnignPathDesignContextProps>(
     {} as LearnignPathDesignContextProps
   );
 
-// create a custom hook to use the context
+// Create a custom hook to use the context
 export const useLearningPathDesignContext = () =>
   useContext(LearningPathDesignContext);
 
-// create a provider to wrap the app and provide the context to all its children
+// Create a provider to wrap the app and provide the context to all its children
 export const LearningPathDesignProvider = ({ children }: any) => {
-  const { collections } = useCollectionsContext();
+  const hydrated = useHasHydrated();
   const DIMENSION = 30;
   const SPACING = 3;
   const bloomLevels = [
-    //data for the bloomleve dropdown menu
     { name: 'Remember' },
     { name: 'Understand' },
     { name: 'Apply' },
     { name: 'Create' },
   ];
 
-  const [initialCollectionTitle, setInitialCollectionTitle] =
-    useState<string>('Select Collection');
-
-  const [initialBloomTitle, setInitialBloomTitle] =
-    useState<string>('Select Bloom Level');
-
-  //data for the checkboxe menu
+  // Data for the checkbox menu
   const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
   const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
-  // const Apply: string[] = ['Execute', 'Implement', 'Solve', 'Use'];
-  // const Create: string[] = ['Generate', 'Plan', 'Produce', 'Design'];
 
-  //segmented control data
+  // Use useLocalStorage to declare state variables with persistence
+
+  // Use for storage of the collection and bloom level indexes
+  const [collectionIndex, setcollectionIndex] = useLocalStorage<number>(
+    'collectionIndex',
+    -1
+  );
+  const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>(
+    'bloomLevelIndex',
+    -1
+  );
+
+  // Use for storage of the tags in the skill and concept selection
+  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
+    useLocalStorage<string[]>('selectedSkillConceptsTags', []);
+
+  // Use for storage of the text in the text input
+  const [text, setText] = useLocalStorage<string>('text', '');
+
+  // Use for storage of the options in the checkbox menu
+  const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>(
+    'selectedOptions',
+    []
+  );
+
+  const [learningObjectives, setLearningObjectives] = useState<string[]>([]);
+  const [customLearningObjectivePart1, setCustomLearningObjectivePart1] =
+    useLocalStorage<string>('customLearningObjective1', '');
+  const [customLearningObjectivePart2, setCustomLearningObjectivePart2] =
+    useLocalStorage<string>('customLearningObjective2', '');
+  const [customLearningObjectivePart0, setCustomLearningObjectivePart0] =
+    useLocalStorage<string>('customLearningObjective0', '');
+  const [storedLearningObjectives, setStoredLearningObjectives] =
+    useLocalStorage<string[]>('storedLearningObjectives', []);
+
+  // Use for storage of the options in the segmented control
   const [selectedYourExperience, setSelectedYourExperience] =
-    useState<Option | null>(null);
-  const [selectedContext, setSelectedContext] = useState<Option | null>(null);
+    useLocalStorage<Option | null>('selectedYourExperience', null);
+  const [selectedContext, setSelectedContext] = useLocalStorage<Option | null>(
+    'selectedContext',
+    null
+  );
   const [selectedGroupDimension, setSelectedGroupDimension] =
-    useState<Option | null>(null);
+    useLocalStorage<Option | null>('selectedGroupDimension', null);
   const [selectedLeanerExperience, setSelectedLeanerExperience] =
-    useState<Option | null>(null);
-
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-
-  //text input
-  const [text, setText] = useState<string>('');
-
-  //tags selection
-  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] = useState<
-    string[]
-  >([]);
-
-  //collection index selection
-  const [collectionIndex, setcollectionIndex] = useState<number>(-1);
-
-  //bloom level index selection
-  const [bloomLevelIndex, setBloomLevelIndex] = useState<number>(-1);
+    useLocalStorage<Option | null>('selectedLeanerExperience', null);
 
   //bloom options selection for checkboxes
   const [currentBloomOptions, setCurrentBloomOptions] = useState<string[]>([]);
@@ -107,16 +125,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //step selection for part of the learning objective page
   const [step, setStep] = useState<number>(0);
 
-  const [pathDesignData, setPathDesignData] = useState<PathDesign>({
-    collectionIndex: -1,
-    bloomLevel: '',
-    skills: [],
-    verbsLearingObjective: [],
-    textLearingObjective: '',
-  });
-
+  //reset checkbox options when bloom level is changed
   const [resetCheckBoxOptions, setResetCheckBoxOptions] =
     useState<boolean>(false);
+
+  const resetState = () => {
+    setBloomLevelIndex(-1);
+    // setStep(1);
+    setSelectedSkillConceptsTags([]);
+    setSelectedOptions([]);
+    setText('');
+  };
 
   //handlers for segmented control
   const handleYourExperienceChange = (selected: Option) => {
@@ -136,44 +155,79 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setSelectedOptions(newSelectedOptions);
   };
 
+  const handleLearningObjectives = () => {
+    const principleOfSkills =
+      hydrated && selectedSkillConceptsTags
+        ? selectedSkillConceptsTags.join(' ')
+        : '';
+    const selectedOptionsText =
+      hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
+    const learningObjectiveText = hydrated ? text : '';
+
+    const learningObjectives = [
+      `${principleOfSkills}`,
+      `${selectedOptionsText}`,
+      `${learningObjectiveText}`,
+    ];
+
+    setLearningObjectives(learningObjectives);
+  };
+
+  const handleCustomLearningObjective0Change = (newValue: string) => {
+    setCustomLearningObjectivePart0(newValue);
+  };
+
+  const handleCustomLearningObjective1Change = (newValue: string) => {
+    setCustomLearningObjectivePart1(newValue);
+  };
+
+  const handleCustomLearningObjective2Change = (newValue: string) => {
+    setCustomLearningObjectivePart2(newValue);
+  };
+
+  const handleNewStoredLearningObjectives = () => {
+    const newStoredLearningObjectives = [
+      customLearningObjectivePart0,
+      customLearningObjectivePart1,
+      customLearningObjectivePart2,
+    ];
+    setStoredLearningObjectives(newStoredLearningObjectives);
+  };
+
+  const handleUseStoredLearningObjectives = () => {
+    setCustomLearningObjectivePart0(storedLearningObjectives[0]);
+    setCustomLearningObjectivePart1(storedLearningObjectives[1]);
+    setCustomLearningObjectivePart2(storedLearningObjectives[2]);
+  };
+  const handleUseLearningObjectives = () => {
+    setCustomLearningObjectivePart0(learningObjectives[0]);
+    setCustomLearningObjectivePart1(learningObjectives[1]);
+    setCustomLearningObjectivePart2(learningObjectives[2]);
+  };
+
+  const handleSetCustomLearningObjectives = () => {
+    handleLearningObjectives();
+
+    if (storedLearningObjectives.length > 0) {
+      handleUseStoredLearningObjectives();
+    } else if (learningObjectives.length > 0) {
+      handleUseLearningObjectives();
+    }
+  };
+
   //handlers for text input
   const handleSetText = (newText: string) => {
     setText(newText);
   };
 
-  const handleCollectionTitleSelection = (newCollectionTitle: string) => {
-    setInitialCollectionTitle(newCollectionTitle);
-  };
-  const handleBloomTitleSelection = (newBloomTitle: string) => {
-    setInitialBloomTitle(newBloomTitle);
-  };
-
   const handleCollectionIndexChange = (newCollectionIndex: number) => {
     setcollectionIndex(newCollectionIndex);
-    handleCollectionTitleSelection(collections[newCollectionIndex].name);
+    resetState();
   };
 
   //handlers for bloom level selection
   const handleBloomLevelChange = (bloomLevelIndex: number) => {
     setBloomLevelIndex(bloomLevelIndex);
-    handleBloomTitleSelection(bloomLevels[bloomLevelIndex].name);
-
-    switch (bloomLevelIndex) {
-      case 0:
-        setCurrentBloomOptions(Remember);
-        break;
-      case 1:
-        setCurrentBloomOptions(Understand);
-        break;
-      // case 2:
-      //   setCurrentBloomOptions(Apply);
-      //   break;
-      // case 3:
-      //   setCurrentBloomOptions(Create);
-      //   break;
-      default:
-        setCurrentBloomOptions([]);
-    }
     setResetCheckBoxOptions(true); // Imposta il reset a true
 
     // Utilizza useEffect per eseguire l'effetto collaterale dopo l'aggiornamento di stato
@@ -198,43 +252,68 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setStep(newStep);
   };
 
-  const handleCreatePath = () => {
-    if (bloomLevelIndex !== -1) {
-      setPathDesignData({
-        collectionIndex: collectionIndex,
-        bloomLevel: bloomLevels[bloomLevelIndex].name,
-        skills: selectedSkillConceptsTags,
-        verbsLearingObjective: selectedOptions,
-        textLearingObjective: text,
-      });
-      console.log(pathDesignData);
-    } else {
-      console.error('bloomLevelIndex is null');
-    }
-  };
-
-  // const handleResetStep0 = () => {
-  //   setStep(0);
-  //   setBloomLevelIndex(null);
-  //   setSelectedSkillConceptsTags([]);
-  //   setSelectedOptions([]);
-  //   setText('');
-  //   setSelectedYourExperience(null);
-  //   setSelectedContext(null);
-  //   setSelectedGroupDimension(null);
-  //   setSelectedLeanerExperience(null);
-  // };
-
-  // const handleResetStep1 = () => {
-  //   setStep(0);
-  //   setBloomLevelIndex(null);
-  //   setSelectedSkillConceptsTags([]);
-  //   setSelectedOptions([]);
-  //   setText('');
-  // };
+  useEffect(() => {
+    // Carica i dati dallo `localStorage` e imposta le variabili di stato
+    // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
+  }, []);
 
   useEffect(() => {
-    console.log(bloomLevelIndex);
+    // Salva le variabili nello `localStorage` quando cambiano
+    // Usa setLocalStorage per salvare i valori
+  }, [
+    collectionIndex,
+    bloomLevelIndex,
+    selectedSkillConceptsTags,
+    text,
+    selectedOptions,
+    selectedYourExperience,
+    selectedContext,
+    selectedGroupDimension,
+    selectedLeanerExperience,
+    resetCheckBoxOptions,
+    step,
+    currentBloomOptions,
+  ]);
+
+  // useEffect(() => {
+  //   handleLearningObjectives();
+
+  //   if (storedLearningObjectives.length > 0) {
+  //     handleUseStoredLearningObjectives();
+  //   } else if (learningObjectives.length > 0) {
+  //     handleUseLearningObjectives();
+  //   }
+  // }, [learningObjectives]);
+
+  useEffect(() => {
+    if (collectionIndex !== -1) {
+      setStep(2);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (bloomLevelIndex !== -1) {
+      switch (bloomLevelIndex) {
+        case 0:
+          setCurrentBloomOptions(Remember);
+          break;
+        case 1:
+          setCurrentBloomOptions(Understand);
+          break;
+        // case 2:
+        //   setCurrentBloomOptions(Apply);
+        //   break;
+        // case 3:
+        //   setCurrentBloomOptions(Create);
+        //   break;
+        default:
+          setCurrentBloomOptions([]);
+      }
+    }
+  }, [bloomLevelIndex]);
+
+  useEffect(() => {
+    //console.log(bloomLevelIndex);
     if (bloomLevelIndex !== -1) {
       handleStepChange(2);
     }
@@ -258,16 +337,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         step,
         selectedOptions,
         resetCheckBoxOptions,
-        pathDesignData,
         collectionIndex,
-        initialCollectionTitle,
-        initialBloomTitle,
+        learningObjectives,
+        customLearningObjectivePart0,
+        customLearningObjectivePart1,
+        customLearningObjectivePart2,
+        storedLearningObjectives,
         handleYourExperienceChange,
         handleContextChange,
         handleGroupDimensionChange,
         handleLeanerExperienceChange,
         handleSetText,
-        handleCreatePath,
         handleBloomLevelChange,
         handleSkillsChange,
         handleStepChange,
@@ -275,6 +355,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         //handleResetStep0,
         //handleResetStep1,
         handleCollectionIndexChange,
+        handleLearningObjectives,
+        handleCustomLearningObjective0Change,
+        handleCustomLearningObjective1Change,
+        handleCustomLearningObjective2Change,
+        handleUseStoredLearningObjectives,
+        handleUseLearningObjectives,
+        handleSetCustomLearningObjectives,
+        handleNewStoredLearningObjectives,
       }}
     >
       {children}

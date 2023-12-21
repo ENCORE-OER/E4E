@@ -65,7 +65,14 @@ export default function LearningPathEditor({
         conceptSelectedIndex !== -1 && (
           <Box p="10px">
             {/**/}
-            <Box p={0} m={0} w="70%" h="400px" mt={5}>
+            <Box
+              p={0}
+              m={0}
+              w="80%"
+              h="full"
+              mt={5}
+              border={'1px solid #CED4DA'}
+            >
               {isFrameLoading && (
                 <Center height="500px" bg={'white'}>
                   <VStack>
@@ -84,7 +91,7 @@ export default function LearningPathEditor({
               )}
               <iframe
                 width="100%"
-                height="500px"
+                height="750px"
                 hidden={isFrameLoading}
                 src={
                   process.env.POLYGLOT_DASHBOARD + '/flows/' + learningPath?._id

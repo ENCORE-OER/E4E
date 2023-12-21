@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -35,6 +35,11 @@ export default function SearchBarPathDesign({
 
   // verify that the collectionIndex is valid
   const collection = collections[collectionIndex];
+
+  useEffect(() => {
+    // Rimuovi le tag quando selectedSkillConceptsTags torna vuoto
+    setInputValue([]);
+  }, [collectionIndex]);
 
   if (!collection || !collection.oers) {
     return null; // control that the collection is valid
