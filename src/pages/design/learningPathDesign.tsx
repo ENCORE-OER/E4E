@@ -15,12 +15,11 @@ import { APIV2 } from '../../data/api';
 import { OerInCollectionProps, OerProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import { Icon } from '@chakra-ui/react'
-import { MdUndo, MdSave } from 'react-icons/md'
+import { Icon } from '@chakra-ui/react';
+import { MdUndo, MdSave } from 'react-icons/md';
 //import { useToast } from '@chakra-ui/react';
 
 //
-
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -75,7 +74,7 @@ const Home = (props: DiscoverPageProps) => {
       message: 'Learning objective restored',
       type: 'info',
     });
-  }
+  };
 
   const handlePrevButtonClick = () => {
     //handleResetStep1();
@@ -186,7 +185,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -222,7 +221,7 @@ const Home = (props: DiscoverPageProps) => {
                       onClick={handleSaveLearningObjectiveButtonClick}
                     >
                       <Flex align="center">
-                      <Icon as={MdSave} w={8} h={8} />
+                        <Icon as={MdSave} w={8} h={8} />
                       </Flex>
                     </Button>
                   </Box>
