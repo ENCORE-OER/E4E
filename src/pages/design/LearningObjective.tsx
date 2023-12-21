@@ -64,7 +64,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           py="115px"
           pl="40px"
           w="full"
-          h={step >= 2 ? 'full' : '100hv'}
+          h={step >= 2 ? 'full' : '100vh'}
           bg="background"
         >
           <Box w="100%" h="100%">
