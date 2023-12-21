@@ -1,20 +1,28 @@
 {
-  "id": 1195042,
+  "id": 61967,
   "plain_text_summary": "",
   "creator": [
     {
-      "id": 702981,
-      "full_name": "Indy Johar",
-      "first_name": "Indy",
-      "last_name": "Johar",
+      "id": 940142,
+      "full_name": "Leslie Lamberson",
+      "first_name": "Leslie",
+      "last_name": "Lamberson",
       "entity_type": null,
       "organization_name": null
     },
     {
-      "id": 702981,
-      "full_name": "Indy Johar",
-      "first_name": "Indy",
-      "last_name": "Johar",
+      "id": 940141,
+      "full_name": "Isabella Mendoza",
+      "first_name": "Isabella",
+      "last_name": "Mendoza",
+      "entity_type": null,
+      "organization_name": null
+    },
+    {
+      "id": 940140,
+      "full_name": "Alexandria Will-Cole",
+      "first_name": "Alexandria",
+      "last_name": "Will-Cole",
       "entity_type": null,
       "organization_name": null
     }
@@ -23,89 +31,214 @@
   "contributor": [],
   "coverage": [
     {
-      "id": 227,
-      "name": "College General Ed"
+      "id": 303,
+      "order": 5,
+      "name": "Primary and Middle School"
     },
     {
-      "id": 231,
-      "name": "College Lower Division"
-    },
-    {
-      "id": 232,
-      "name": "College Upper Division"
+      "id": 304,
+      "order": 4,
+      "name": "High School"
     }
   ],
   "skills": [
     {
-      "id": 21691,
+      "id": 25069,
       "domain": [
         {
-          "id": 25,
+          "id": 37,
           "name": "Digital",
           "description": ""
         },
         {
-          "id": 26,
+          "id": 38,
           "name": "Green",
+          "description": ""
+        },
+        {
+          "id": 39,
+          "name": "Entrepreneurship",
           "description": ""
         }
       ],
-      "label": "economics",
-      "description": "Economic principles and practices, financial and commodity markets, banking and the analysis of financial data.",
-      "alt_label": "economics; banking; finances; financial data; economic practices; economy; financials; economic principles",
-      "relevance": 1026
+      "label": "packaging engineering",
+      "description": "The processes of packaging or protecting products for distribution, storage and sale.",
+      "alt_label": "engineering",
+      "relevance": 1771
+    },
+    {
+      "id": 25110,
+      "domain": [
+        {
+          "id": 37,
+          "name": "Digital",
+          "description": ""
+        },
+        {
+          "id": 38,
+          "name": "Green",
+          "description": ""
+        },
+        {
+          "id": 39,
+          "name": "Entrepreneurship",
+          "description": ""
+        }
+      ],
+      "label": "express yourself creatively",
+      "description": "Be able to use singing, dancing, instrumental music, acting or fine arts to express oneself creatively.",
+      "alt_label": "draw; dance",
+      "relevance": 513
+    },
+    {
+      "id": 25143,
+      "domain": [
+        {
+          "id": 37,
+          "name": "Digital",
+          "description": ""
+        },
+        {
+          "id": 38,
+          "name": "Green",
+          "description": ""
+        },
+        {
+          "id": 39,
+          "name": "Entrepreneurship",
+          "description": ""
+        }
+      ],
+      "label": "gather data",
+      "description": "Extract exportable data from multiple sources.",
+      "alt_label": "collect data; gather data; gathering data; aggregate data",
+      "relevance": 241
+    },
+    {
+      "id": 25157,
+      "domain": [
+        {
+          "id": 37,
+          "name": "Digital",
+          "description": ""
+        },
+        {
+          "id": 38,
+          "name": "Green",
+          "description": ""
+        },
+        {
+          "id": 39,
+          "name": "Entrepreneurship",
+          "description": ""
+        }
+      ],
+      "label": "mechanics",
+      "description": "Theoretical and practical applications of the science studying the action of displacements and forces on physical bodies to the development of machinery and mechanical devices.",
+      "alt_label": "mechanics",
+      "relevance": 36
+    }
+  ],
+  "concepts": [
+    {
+      "id": 671,
+      "label": "washington"
+    },
+    {
+      "id": 11811,
+      "label": "choreography"
+    },
+    {
+      "id": 3648,
+      "label": "inspire"
+    },
+    {
+      "id": 2253,
+      "label": "the arts"
+    },
+    {
+      "id": 12468,
+      "label": "fields of engineering"
+    },
+    {
+      "id": 826,
+      "label": "the goal"
     }
   ],
   "media_type": [
     {
-      "id": 1160,
-      "name": "Presentation"
+      "id": 1310,
+      "name": "Dataset"
+    },
+    {
+      "id": 1313,
+      "name": "Case studies"
     }
   ],
   "resource_format": [
     {
-      "id": 1201,
+      "id": 1498,
       "name": "Video"
     }
   ],
   "subject": [
     {
-      "id": 18459,
-      "name": "Arts/Design"
+      "id": 26721,
+      "name": "Education"
     },
     {
-      "id": 17397,
-      "name": "Arts/Architecture"
+      "id": 26696,
+      "name": "Engineering"
     }
   ],
   "oer_url": [
     {
-      "id": 759537,
-      "url": "http://videolectures.net/institutionalact2013_johar_organisation/",
-      "source_roer_url": "https://www.merlot.org/merlot/viewMaterial.htm?id=966433",
+      "id": 1177787,
+      "url": "https://vimeo.com/305808717",
+      "source_roer_url": "https://nsdl.oercommons.org/courses/mechanics-of-dance",
       "status_code": "200"
     }
   ],
   "source_roer": [
     {
-      "id": 77,
-      "name": "merlot",
+      "id": 118,
+      "name": "nsdl_oercommons",
       "url": ""
     }
   ],
-  "title": "00:/, London, United Kingdom",
-  "description": "This video was recorded at MAO Architecture Conference: The Institutional Act, Ljubljana 2013. 00:/ is a London based strategy & design practice. With a foundation in delivering award-winning architecture and commissioned research into the built environment, we are driven by an aspiration to create genuinely sustainable places founded on evidenced social, economic, and environmental principles",
+  "aggregated_info": "The Mechanics of Dance: Using Parametric Equations as Inspiration for Dance Choreography This video is the first of its kind to relate parametric equations, known as \"Lissajous Figures,\" to dance. The goal of this project was to show that the fields of engineering and the arts are not mutually exclusive; in fact, one can very easily be used to inspire the other. The choreography for the final piece was produced using only data gathered from accelerometers attached to the dancers' bodies, resulting in a performance that premiered at The Kennedy Center in Washington, DC last May 2019 packaging engineering express yourself creatively gather data mechanics washington choreography inspire the arts fields of engineering the goal",
+  "title": "The Mechanics of Dance: Using Parametric Equations as Inspiration for Dance Choreography",
+  "description": "This video is the first of its kind to relate parametric equations, known as \"Lissajous Figures,\" to dance. The goal of this project was to show that the fields of engineering and the arts are not mutually exclusive; in fact, one can very easily be used to inspire the other. The choreography for the final piece was produced using only data gathered from accelerometers attached to the dancers' bodies, resulting in a performance that premiered at The Kennedy Center in Washington, DC last May 2019",
   "publisher_source": "",
-  "publication_date": "2015-02-10",
+  "publication_date": "2020-07-09",
   "retrieval_date": "2022-11-22",
   "source": "",
   "language": "English",
   "related_to": null,
-  "rights": "Attribution-NonCommercial-NoDerivs 3.0 United States",
+  "rights": "",
+  "green_domain": true,
+  "digital_domain": true,
+  "entrepreneurship_domain": true,
   "table_of_contents": "",
-  "detailed_subject": "videolectures; ocwc; oec",
+  "detailed_subject": "Dance;Mechanics;Physics;STEAM;STEAM Curricula",
   "completeness_score": 8,
   "authority_score": 0,
   "readability_score": null,
-  "overall_score": 8
+  "overall_score": 8,
+  "added_externally": false,
+  "external_likes": 0,
+  "total_likes": 0,
+  "times_used": 0,
+  "instructional_oer": true,
+  "assessment_oer": false,
+  "level": null,
+  "quiz_questions": [],
+  "coding_starter_code": null,
+  "coding_test_cases": [],
+  "fill_template": null,
+  "fill_blanks": [],
+  "detailed_media_type": [14, 39],
+  "detailed_coverage": [10, 14, 17],
+  "feedback": [],
+  "flags": []
 }

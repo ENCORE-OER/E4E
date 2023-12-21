@@ -12,7 +12,7 @@ type LearningPathEditorProps = {
   conceptSelectedIndex: number;
   //setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
   oers: (OerProps | undefined | OerFreeSearchProps)[];
-  collectionColor?: string;
+  collectionColor?: string | string[];
   isLoading: boolean;
 };
 
@@ -22,6 +22,8 @@ export default function LearningPathEditor({
   collectionColor,
   isLoading, //setConceptSelectedIndex,
 }: LearningPathEditorProps) {
+  const hydrated = useHasHydrated();
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
   const { getFragment } = useLearningPathContext();
   //const { collectionIndex } = useLearningPathDesignContext();
@@ -29,7 +31,6 @@ export default function LearningPathEditor({
   const [isFrameLoading, setIsFrameLoading] = useState<boolean>(true);
   // const [isChangeCollection, setChangeCollection] = useState<boolean>(false);
   //const [isChangeConcept, setChangeConcept] = useState<boolean>(false);
-  const hydrated = useHasHydrated();
 
   /* useEffect(() => {
     console.log('collection index in LearningPathEditor: ' + collectionIndex);
@@ -52,6 +53,10 @@ export default function LearningPathEditor({
       setLearningPath(fragment);
     })();
   }, [conceptSelectedIndex, getFragment]);
+
+  useEffect(() => {
+    console.log(collectionColor);
+  }, []);
 
   return (
     <>
@@ -118,6 +123,8 @@ export default function LearningPathEditor({
                   collectionsColor={collectionColor ? collectionColor : ''}
                   isResourcePage={false}
                   oersLength={oers.length}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
                 />
               )}
             </Box>

@@ -11,6 +11,7 @@ interface DiscoveryContextProps {
   setByResourceType: React.Dispatch<
     React.SetStateAction<OerMediaTypeInfo | undefined>
   >;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const DiscoveryContext = React.createContext<DiscoveryContextProps>({
@@ -18,4 +19,5 @@ export const DiscoveryContext = React.createContext<DiscoveryContextProps>({
   setFiltered: () => void 0, // Set an empty function for 'setFiltered'
   byResourceType: undefined,
   setByResourceType: () => void 0,
+  setCurrentPage: () => void 0,
 });

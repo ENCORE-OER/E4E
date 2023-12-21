@@ -244,29 +244,34 @@ export const CollectionsProvider = ({ children }: any) => {
   };
 
   // used
-  const setSelectedConceptsForCollection = async (
+  const setSelectedConceptsForCollection = (
     collectionId: number,
     concepts: OerConceptInfo[]
-  ): Promise<void> => {
+  ) => {
     try {
       // Find the collection with the given ID
-      const updatedCollections = collections.map((collection) => {
+      const updatedCollections = collections?.map((collection) => {
         if (collection.id === collectionId) {
-          return {
-            ...collection,
-            conceptsSelected: concepts,
-          };
+          if (concepts !== undefined) {
+            return {
+              ...collection,
+              conceptsSelected: concepts,
+            };
+          } else {
+            console.error('Concepts is undefined');
+          }
         }
         return collection;
       });
 
       // Update the collections state with new selected concepts
-      //setCollections(updatedCollections);
-      return new Promise((resolve) => {
-        setCollections(updatedCollections);
-        //console.log("I'm triggering collections");
-        resolve();
-      });
+      setCollections(updatedCollections);
+      // return new Promise((resolve) => {
+      //   setCollections(updatedCollections);
+      //   console.log("I'm triggering collections");
+      //   console.log(concepts);
+      //   resolve();
+      // });
     } catch (error) {
       addToast({
         message: `${error}`,

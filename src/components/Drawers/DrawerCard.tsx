@@ -45,7 +45,7 @@ export default function DrawerCard({ isOpen, onClose, oer }: DrawerCardProps) {
   const [showTagDigital, setShowTagDigital] = useState(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] = useState(false);
   const [showTagGreen, setShowTagGreen] = useState(false);
-  const [authors, setAuthors] = useState<string[]>([]);
+  const [authors, setAuthors] = useState<(string | null)[]>([]);
   const [linkOer, setLinkOer] = useState<string[]>();
   const [resourceType, setResourceType] = useState<string[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);

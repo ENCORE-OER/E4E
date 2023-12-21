@@ -151,7 +151,8 @@ const Home = (props: DiscoverPageProps) => {
               oer?.id !== idOer
           )
       );
-      //console.log("I'm triggering oersById deleting a resource");
+
+      console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
       addToast({
         message: `${error}`,
@@ -206,16 +207,18 @@ const Home = (props: DiscoverPageProps) => {
   // recover all the oers of a collection
   useEffect(() => {
     //alert("Resources")
+    console.log('Collection index: ' + collectionIndex);
+    console.log(collections[collectionIndex]?.conceptsSelected);
 
-    if (collections?.length > 0) {
+    if (collections?.length > 0 && collectionIndex >= 0 && hydrated) {
       try {
         //setViewChanged(true); // set to true in CollectionView 'Cause from this page we don't trigger the OerCardsSorting useEffect.
-        //console.log("--- Collection index: " + collectionIndex + " --- " + new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds() + ":" + new Date().getMilliseconds());
         setIsNewDataLoaded(false);
         setIsLoading(true);
         //console.log("I'm triggering isNewDataLoaded to false");
         const fetchOerData = async () => {
-          if (collections[collectionIndex]?.oers) {
+          if (collections[collectionIndex]?.oers !== undefined) {
+            console.log('sono qua');
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
               collections[collectionIndex]?.oers?.map(
@@ -230,9 +233,11 @@ const Home = (props: DiscoverPageProps) => {
               )
             );
             setOersById(oerData);
-            //console.log("I'm triggering oersById");
-
+            console.log("I'm triggering oersById");
+            setIsNewDataLoaded(true);
             console.log('End fetchOerData()');
+          } else {
+            setIsLoading(false);
           }
         };
 
@@ -271,7 +276,7 @@ const Home = (props: DiscoverPageProps) => {
           <Heading>Your resources</Heading>
         </Flex>
 
-        <Flex w="full" minH="full" my="30px" gap={3}>
+        <Flex minW="full" minH="full" my="30px" gap={3}>
           <Box
             borderRight="2px"
             borderRightColor="secondary"
@@ -323,7 +328,7 @@ const Home = (props: DiscoverPageProps) => {
                 collections={collections}
                 oersById={oersById}
                 setOersById={setOersById}
-                minW={'550px'}
+                minW={'full'}
                 display="flex"
                 isNewDataLoaded={isNewDataLoaded}
                 setIsNewDataLoaded={setIsNewDataLoaded}
