@@ -48,6 +48,8 @@ interface CollectionViewProps extends BoxProps {
   ) => void;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  isDeletingResource: boolean;
+  setIsDeletingResource: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function CollectionView({
@@ -70,6 +72,8 @@ export default function CollectionView({
   //--------
   isLoading,
   setIsLoading,
+  isDeletingResource,
+  setIsDeletingResource,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -108,10 +112,12 @@ export default function CollectionView({
     //setSelectedConcepts(selectedOptions.map((option) => option));
 
     //recall the context function to store concept selected
-    setSelectedConceptsForCollection(
-      collections[collectionIndex]?.id,
-      selectedOptions?.map((option: OerConceptInfo) => option)
-    );
+    if (selectedOptions !== collections[collectionIndex]?.conceptsSelected) {
+      setSelectedConceptsForCollection(
+        collections[collectionIndex]?.id,
+        selectedOptions?.map((option: OerConceptInfo) => option)
+      );
+    }
   };
 
   const handleSortingChange = (sortingName: string) => {
@@ -134,16 +140,25 @@ export default function CollectionView({
   useEffect(() => {
     //alert("CollectionView");
     if (collectionIndex > -1) {
-      console.log('Use effect of CollectionIndex or collections');
+      console.log('Use effect of CollectionIndex');
 
       setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
 
       extractUniqueConcepts(collections[collectionIndex]);
     }
 
-    // "collections" is a dependency because we need to extract the unique concepts for the selected collection
     // But in this way we also reset the sorting of the OERs.
-  }, [collectionIndex, collections]);
+  }, [collectionIndex]);
+
+  // In this useEffect don't recall setViewChanged(true) because it will trigger the OerCardsSorting useEffect and we don't want reload the sorting
+  useEffect(() => {
+    if (isDeletingResource) {
+      //alert("CollectionView: I'm extracting unique concepts after deleting a resource");
+      extractUniqueConcepts(collections[collectionIndex]);
+      setIsDeletingResource(false);
+    }  // "collections" is a dependency because we need to extract the unique concepts for the selected collection
+  }, [collections]);
+
 
   // I have to decide where to put this useEffect. Here or in resources.tsx
   // useEffect(() => {
@@ -153,6 +168,7 @@ export default function CollectionView({
   //     console.log("I'm triggering isNewDataLoaded to true");
   //   }
   // }, [oersById]);
+
 
   useEffect(() => {
     if (isFirstRender.current < 1) {
@@ -180,16 +196,18 @@ export default function CollectionView({
             });
           } else console.log('No remaining concepts');
 
+
           setSelectedConceptsForCollection(
             collections[collectionIndex]?.id,
             remainingConcepts
           );
+
         }
       };
 
       // with 'oersById?.length > 0' it doesn't trigger the update of the conceptsSelected array of the collection after deleting the last resource
       // add a conditional variable to be sure that the rendering of the cards will be after oers are loaded
-      if (collectionIndex >= 0 && isNewDataLoaded) {
+      if (collectionIndex >= 0 && isNewDataLoaded && isDeletingResource) {
         updatedConceptsSelected();
       }
     } catch (error) {
@@ -240,7 +258,7 @@ export default function CollectionView({
               isAscending={isAscending}
               setAscending={setAscending}
               handleItemSortingClick={handleItemSortingClick}
-              //setIsLoading={setIsLoading}
+            //setIsLoading={setIsLoading}
             />
           </Flex>
         </HStack>
