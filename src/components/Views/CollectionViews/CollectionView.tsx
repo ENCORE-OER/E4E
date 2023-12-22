@@ -156,9 +156,8 @@ export default function CollectionView({
       //alert("CollectionView: I'm extracting unique concepts after deleting a resource");
       extractUniqueConcepts(collections[collectionIndex]);
       setIsDeletingResource(false);
-    }  // "collections" is a dependency because we need to extract the unique concepts for the selected collection
+    } // "collections" is a dependency because we need to extract the unique concepts for the selected collection
   }, [collections]);
-
 
   // I have to decide where to put this useEffect. Here or in resources.tsx
   // useEffect(() => {
@@ -168,7 +167,6 @@ export default function CollectionView({
   //     console.log("I'm triggering isNewDataLoaded to true");
   //   }
   // }, [oersById]);
-
 
   useEffect(() => {
     if (isFirstRender.current < 1) {
@@ -196,12 +194,10 @@ export default function CollectionView({
             });
           } else console.log('No remaining concepts');
 
-
           setSelectedConceptsForCollection(
             collections[collectionIndex]?.id,
             remainingConcepts
           );
-
         }
       };
 
@@ -258,7 +254,7 @@ export default function CollectionView({
               isAscending={isAscending}
               setAscending={setAscending}
               handleItemSortingClick={handleItemSortingClick}
-            //setIsLoading={setIsLoading}
+              //setIsLoading={setIsLoading}
             />
           </Flex>
         </HStack>

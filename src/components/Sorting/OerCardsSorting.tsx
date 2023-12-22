@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
-import { TiSortAlphabetically } from "react-icons/ti";
+import { TiSortAlphabetically } from 'react-icons/ti';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
