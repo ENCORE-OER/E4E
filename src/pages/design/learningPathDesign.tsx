@@ -85,7 +85,7 @@ const Home = (props: DiscoverPageProps) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/learningObjective',
+      pathname: '/design/LearningObjective',
     });
   };
 
