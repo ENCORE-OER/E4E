@@ -96,7 +96,7 @@ const Home = (props: DiscoverPageProps) => {
   }, [oersById]);
 
   // useEffect(() => {
-   
+
   // }, []);
 
   // setIndexCollectionClicked is used in CollectionMenu component
@@ -192,7 +192,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>

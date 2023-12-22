@@ -274,16 +274,19 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   ]);
 
   useEffect(() => {
-    if(customLearningObjectivePart0 === '' && customLearningObjectivePart1 === '' && customLearningObjectivePart2 === '' ){
+    if (
+      customLearningObjectivePart0 === '' &&
+      customLearningObjectivePart1 === '' &&
+      customLearningObjectivePart2 === ''
+    ) {
       handleLearningObjectives();
       if (storedLearningObjectives.length > 0) {
         handleUseStoredLearningObjectives();
       } else if (learningObjectives.length > 0) {
         handleUseLearningObjectives();
       }
-    }    
+    }
   }, []);
-  
 
   useEffect(() => {
     if (collectionIndex !== -1) {
