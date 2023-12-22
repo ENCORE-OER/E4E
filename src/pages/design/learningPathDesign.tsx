@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
+import { Icon } from '@chakra-ui/react';
+import { MdSave, MdUndo } from 'react-icons/md';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import LearningPathEditor from '../../components/Layout/LearningPathEditor';
 import ThreeTextBoxes from '../../components/LearningObjectiveTextBoxes/LearningObjectiveTextBoxes';
@@ -19,8 +21,6 @@ import {
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import { Icon } from '@chakra-ui/react';
-import { MdUndo, MdSave } from 'react-icons/md';
 //import { useToast } from '@chakra-ui/react';
 
 //
@@ -92,11 +92,12 @@ const Home = (props: DiscoverPageProps) => {
   useEffect(() => {
     handleLearningObjectives();
     setIsLoading(false);
+    handleSetCustomLearningObjectives();
   }, [oersById]);
 
-  useEffect(() => {
-    handleSetCustomLearningObjectives();
-  }, []);
+  // useEffect(() => {
+   
+  // }, []);
 
   // setIndexCollectionClicked is used in CollectionMenu component
   useEffect(() => {
@@ -191,7 +192,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
