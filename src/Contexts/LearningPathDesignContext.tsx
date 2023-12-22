@@ -169,7 +169,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       `${selectedOptionsText}`,
       `${learningObjectiveText}`,
     ];
-
     setLearningObjectives(learningObjectives);
   };
 
@@ -206,11 +205,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleSetCustomLearningObjectives = () => {
-    handleLearningObjectives();
-
+    //handleLearningObjectives();
     if (storedLearningObjectives.length > 0) {
       handleUseStoredLearningObjectives();
-    } else if (learningObjectives.length > 0) {
+    } else {
       handleUseLearningObjectives();
     }
   };
@@ -275,15 +273,20 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     currentBloomOptions,
   ]);
 
-  // useEffect(() => {
-  //   handleLearningObjectives();
-
-  //   if (storedLearningObjectives.length > 0) {
-  //     handleUseStoredLearningObjectives();
-  //   } else if (learningObjectives.length > 0) {
-  //     handleUseLearningObjectives();
-  //   }
-  // }, [learningObjectives]);
+  useEffect(() => {
+    if (
+      customLearningObjectivePart0 === '' &&
+      customLearningObjectivePart1 === '' &&
+      customLearningObjectivePart2 === ''
+    ) {
+      handleLearningObjectives();
+      if (storedLearningObjectives.length > 0) {
+        handleUseStoredLearningObjectives();
+      } else if (learningObjectives.length > 0) {
+        handleUseLearningObjectives();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (collectionIndex !== -1) {
