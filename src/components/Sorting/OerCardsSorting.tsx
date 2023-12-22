@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
+import { TiSortAlphabetically } from 'react-icons/ti';
 import { IconBezierCurve } from '../../public/Icons/svgToIcons/iconBezierCurve';
 import { IconCalendarCheck } from '../../public/Icons/svgToIcons/iconCalendarCheck';
 import { IconMedal } from '../../public/Icons/svgToIcons/iconMedal';
@@ -47,7 +48,7 @@ export default function OerCardsSorting({
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
     //{ icon: IconBezierCurve, name: 'Suggested' },
     //{ icon: IconBezierCurve, name: 'Relevance' },
-    { icon: IconBezierCurve, name: 'Title' },
+    { icon: TiSortAlphabetically, name: 'Title' },
     { icon: IconCalendarCheck, name: 'Last Update' },
     { icon: IconMedal, name: 'Quality Score' },
     { icon: IconThumbsUp, name: 'Likes' },
@@ -62,6 +63,7 @@ export default function OerCardsSorting({
     }
     // LOGIC: if filtered is passed as a prop, that means that the user is in the 'Your resources' page
     else if (filtered !== undefined) {
+      console.log("OerCardsSorting: I'm in 'Your resources' page");
       try {
         //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
         if (setIsLoading !== undefined) {
@@ -162,6 +164,7 @@ export default function OerCardsSorting({
       isAscending={isAscending}
       wMenu="250px"
       viewChanged={viewChanged}
+      setViewChanged={setViewChanged}
     />
   );
 }

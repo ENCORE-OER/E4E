@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useEffect, useState } from 'react';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import Navbar from '../../components/NavBars/NavBarEncore';
+import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
-import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 
 const Home = () => {
   const router = useRouter();
@@ -90,7 +90,7 @@ const Home = () => {
                   onClick={() => {
                     if (areOptionsComplete) {
                       router.push({
-                        pathname: '/design/learningObjective',
+                        pathname: '/design/LearningObjective',
                       });
                     } else {
                       addToast({

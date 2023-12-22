@@ -72,6 +72,7 @@ const Home = (props: DiscoverPageProps) => {
   const abortController = new AbortController();
   // used to know if the data are loaded
   const [isNewDataLoaded, setIsNewDataLoaded] = useState<boolean>(false);
+  const [isDeletingResource, setIsDeletingResource] = useState<boolean>(false);
 
   // for loading
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -151,6 +152,8 @@ const Home = (props: DiscoverPageProps) => {
               oer?.id !== idOer
           )
       );
+
+      setIsDeletingResource(true);
 
       console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
@@ -344,6 +347,8 @@ const Home = (props: DiscoverPageProps) => {
                 setOerItemToDelete={setOerItemToDelete}
                 isLoading={isLoading}
                 setIsLoading={setIsLoading}
+                isDeletingResource={isDeletingResource}
+                setIsDeletingResource={setIsDeletingResource}
               />
             )}
           </Box>

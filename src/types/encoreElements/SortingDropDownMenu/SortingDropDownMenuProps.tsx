@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { SortingDropDownMenuItemProps } from './SortingDropDownMenuItemProps';
 
 export type SortingDropDownMenuProps = {
@@ -7,4 +8,5 @@ export type SortingDropDownMenuProps = {
   handleItemSortingClick: (sortingName: string) => void;
   isAscending?: boolean;
   viewChanged?: boolean;
+  setViewChanged?: Dispatch<SetStateAction<boolean>>;
 };

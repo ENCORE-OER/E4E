@@ -28,6 +28,7 @@ export default function SortingDropDownMenu({
   handleItemSortingClick,
   isAscending,
   viewChanged,
+  setViewChanged,
 }: SortingDropDownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [itemSorting, setItemSorting] = useState<SortingDropDownMenuItemProps>(
@@ -40,8 +41,12 @@ export default function SortingDropDownMenu({
 
   useEffect(() => {
     if (viewChanged) {
+      // console.log('viewChanged is true');
       setItemSorting(menuItemsSorting[0]);
       handleItemSortingClick(menuItemsSorting[0].name);
+      if (setViewChanged) {
+        setViewChanged(false);
+      }
     }
   }, [viewChanged]);
 
