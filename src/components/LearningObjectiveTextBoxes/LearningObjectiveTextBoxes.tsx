@@ -31,16 +31,7 @@ const ThreeTextBoxes = () => {
       <Box w="33%">
         <TextBox
           backgroundColor="#FAD02E"
-          placeholder="Prima sezione"
-          isHighlighted={false}
-          text={customLearningObjectivePart0}
-          onTextChange={handleCustomLearningObjective0Change}
-        />
-      </Box>
-      <Box w="33%">
-        <TextBox
-          backgroundColor="#FF6384"
-          placeholder="Seconda sezione"
+          placeholder="Bloom Verbs"
           isHighlighted={false}
           text={customLearningObjectivePart1}
           onTextChange={handleCustomLearningObjective1Change}
@@ -48,8 +39,17 @@ const ThreeTextBoxes = () => {
       </Box>
       <Box w="33%">
         <TextBox
+          backgroundColor="#FF6384"
+          placeholder="Skills or concepts"
+          isHighlighted={false}
+          text={customLearningObjectivePart0}
+          onTextChange={handleCustomLearningObjective0Change}
+        />
+      </Box>
+      <Box w="33%">
+        <TextBox
           backgroundColor="#36A2EB"
-          placeholder="Terza sezione"
+          placeholder="Context"
           isHighlighted={false}
           text={customLearningObjectivePart2}
           onTextChange={handleCustomLearningObjective2Change}
