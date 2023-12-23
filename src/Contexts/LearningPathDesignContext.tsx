@@ -161,7 +161,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         ? selectedSkillConceptsTags.join(' ')
         : '';
     const selectedOptionsText =
-      hydrated && selectedOptions ? selectedOptions.join(' and ') : '';
+      hydrated && selectedOptions ? selectedOptions.join(' ') : '';
     const learningObjectiveText = hydrated ? text : '';
 
     const learningObjectives = [
