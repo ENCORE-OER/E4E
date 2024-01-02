@@ -214,6 +214,16 @@ const Discover = (props: DiscoverPageProps) => {
           concepts ?? []
         );
         setOersLengthTotal(resp?.recordsFiltered);
+
+        // saving the keywords used fot the search in the database if there are results
+
+        if (resp?.recordsFiltered > 0) {
+          const api = new APIV2(props.accessToken);
+          keywords.forEach(async (keyword: string) => {
+            await api.saveKeyword(keyword);
+          });
+        }
+
         const oers = resp?.data;
 
         // calling the API for the serch
@@ -228,6 +238,7 @@ const Discover = (props: DiscoverPageProps) => {
         //setFilteredLength(oersResp?.length);
 
         setFiltered(oers);
+
 
         //if (oersResp?.length > 0) { // with freeSearchOersNoPagination() use oersResp?.length
         // get all the oers data
@@ -555,7 +566,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>

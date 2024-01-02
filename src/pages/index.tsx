@@ -141,12 +141,6 @@ const Home = (props: DiscoverPageProps) => {
         });
         throw new Error('Error: you must set at least one skill or parameter!');
       } else {
-        if (searchValue.length > 0) {
-          const api = new APIV2(props.accessToken);
-          searchValue.forEach(async (keyword: string) => {
-            await api.saveKeyword(keyword);
-          });
-        }
         router.push({
           pathname: '/discover',
           query: searchData,
@@ -192,7 +186,7 @@ const Home = (props: DiscoverPageProps) => {
   const getAllKeywords = async () => {
     const api = new APIV2(props.accessToken);
     try {
-      const keywords = await api.getAllKeywords();  // get all keywords from the database
+      const keywords = await api.getAllKeywords(); // get all keywords from the database
       setSuggestions(keywords);
     } catch (error) {
       console.error(error);
