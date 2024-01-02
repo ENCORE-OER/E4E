@@ -885,4 +885,53 @@ export class APIV2 {
       throw error;
     }
   }
+
+  // =====================================================
+  // API ENCORE
+
+  // API to save keyword used by the user in the search bar
+  async saveKeyword(keyword: string) {
+    try {
+      await axiosNoCookie
+        .post('https://encore-api.polyglot-edu.com/api/saveKeyword', {
+          keyword: keyword,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAllKeywords(): Promise<string[]> {
+    try {
+      const apiUrl = 'https://encore-api.polyglot-edu.com/api/getAllKeywords';
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      return resp.data?.keywords || [];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async deleteAllKeywords() {
+    try {
+      await axiosNoCookie
+        .post('https://encore-api.polyglot-edu.com/api/deleteAllKeywords')
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // =====================================================
 }

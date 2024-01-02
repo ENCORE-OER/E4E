@@ -43,7 +43,7 @@ const Home = (props: DiscoverPageProps) => {
   //const [oerById] = useState<OerProps | null>(null);
 
   //const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
-  //const [suggestions, setSuggestions] = useState<OerSkillInfo[]>([]); // list of the skill selectable in the searchbar
+  const [suggestions, setSuggestions] = useState<string[]>([]); // list of the skill selectable in the searchbar
 
   const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
@@ -141,6 +141,12 @@ const Home = (props: DiscoverPageProps) => {
         });
         throw new Error('Error: you must set at least one skill or parameter!');
       } else {
+        if (searchValue.length > 0) {
+          const api = new APIV2(props.accessToken);
+          searchValue.forEach(async (keyword: string) => {
+            await api.saveKeyword(keyword);
+          });
+        }
         router.push({
           pathname: '/discover',
           query: searchData,
@@ -181,6 +187,16 @@ const Home = (props: DiscoverPageProps) => {
     //setCheckboxAnd(false);
     //setCheckboxOr(true);
     setOperator('or');
+  };
+
+  const getAllKeywords = async () => {
+    const api = new APIV2(props.accessToken);
+    try {
+      const keywords = await api.getAllKeywords();  // get all keywords from the database
+      setSuggestions(keywords);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // update metrics
@@ -276,6 +292,10 @@ const Home = (props: DiscoverPageProps) => {
     }
   }, [searchValue]);*/
 
+  useEffect(() => {
+    getAllKeywords();
+  }, []);
+
   return (
     <Flex w="100%" h="100%">
       <Navbar user={user} pageName="Discover" />
@@ -315,7 +335,7 @@ const Home = (props: DiscoverPageProps) => {
               setInputValue={setSearchValue}
               //inputValueIds={selectedSkillIds}
               //setInputValueIds={setSelectedSkillIds}
-              //items={suggestions}
+              items={suggestions}
               onSearchCallback={searchCallback1}
               placeholder="Search resources"
             />
