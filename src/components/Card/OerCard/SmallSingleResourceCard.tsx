@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { APIV2 } from '../../../data/api';
 import {
   OerAuthorsInfo,
   OerMediaTypeInfo,
@@ -10,16 +12,37 @@ type SmallSingleResourceCardProps = {
   oer: OerProps | OerFreeSearchProps | undefined;
   collectionColor: string;
   checkBookmark?: boolean;
+  collectionsColor: string[] | string;
 };
 
 export default function SmallSingleResourceCard({
   oer,
   checkBookmark,
   collectionColor,
+  collectionsColor,
 }: //dataOer
-SmallSingleResourceCardProps) {
+  SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
+
+  const [times_used, setTimes_used] = useState<number>(0);
+
+
+  const getCount = async (id: number) => {
+    const api = new APIV2(undefined);
+    const resp = await api.getCount(id);
+
+    return resp;
+  }
+
+  useEffect(() => {
+    if (oer !== undefined) {
+      const fetchData = async () => {
+        setTimes_used(await getCount(oer.id));
+      }
+      fetchData();
+    }
+  }, [collectionsColor]);
 
   return (
     <SmallOerCard
@@ -46,7 +69,7 @@ SmallSingleResourceCardProps) {
       pyCardBody="0px"
       noOfLinesTextCardBody={1}
       gapGridCardFooter={1}
-      times_used={oer?.times_used ?? 0}
+      times_used={times_used}
       total_likes={oer?.total_likes ?? 0}
     />
   );

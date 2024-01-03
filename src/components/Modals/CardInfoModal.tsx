@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
+import { APIV2 } from '../../data/api';
 import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
 import { IconLunchLinkOpen } from '../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import {
@@ -32,6 +33,7 @@ import {
   OerUrlInfo,
 } from '../../types/encoreElements';
 import { OerFreeSearchProps } from '../../types/encoreElements/oer/OerFreeSearch';
+import { useHasHydrated } from '../../utils/utils';
 import GridMetadataOer from '../Grids/GridMetadataOer';
 import TagConcept from '../Tags/TagConcept';
 import TagResourceType from '../Tags/TagReourceType';
@@ -55,6 +57,7 @@ export default function CardInfoModal({
   onClose,
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections } = useCollectionsContext();
+  const hydrated = useHasHydrated();
 
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
   const [showTagEntrepreneurial, setShowTagEntrepreneurial] =
@@ -102,104 +105,116 @@ export default function CardInfoModal({
     setAddCollectionModalOpen(false);
   };
 
+  const getCount = async (id: number) => {
+    const api = new APIV2(undefined);
+    const resp = await api.getCount(id);
+
+    return resp;
+  }
+
   useEffect(() => {
-    try {
-      /*setShowTagDigital(false);
-            setShowTagEntrepreneurial(false);
-            setShowTagGreen(false);
-            const domain = oer?.skills?.flatMap((skill: any) =>
-                skill?.domain?.map((item: any) => item.name)
-            );
-            
-            if (domain?.includes(digital)) {
-                setShowTagDigital(true);
-            }
-            if (domain?.includes(entr)) {
-                setShowTagEntrepreneurial(true);
-            }
-            if (domain?.includes(green)) {
-                setShowTagGreen(true);
-            }*/
-      if (oer) {
-        setShowTagDigital(oer?.digital_domain || false);
-        setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
-        setShowTagGreen(oer?.green_domain || false);
+    const fetchData = async () => {
+      try {
+        /*setShowTagDigital(false);
+              setShowTagEntrepreneurial(false);
+              setShowTagGreen(false);
+              const domain = oer?.skills?.flatMap((skill: any) =>
+                  skill?.domain?.map((item: any) => item.name)
+              );
+              
+              if (domain?.includes(digital)) {
+                  setShowTagDigital(true);
+              }
+              if (domain?.includes(entr)) {
+                  setShowTagEntrepreneurial(true);
+              }
+              if (domain?.includes(green)) {
+                  setShowTagGreen(true);
+              }*/
+        if (oer) {
+          setShowTagDigital(oer?.digital_domain || false);
+          setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
+          setShowTagGreen(oer?.green_domain || false);
 
-        setTitle(oer?.title || '');
+          setTitle(oer?.title || '');
 
-        const temp_auth = oer.creator?.map(
-          (creator_name: OerAuthorsInfo) => creator_name.full_name
-        );
+          const temp_auth = oer.creator?.map(
+            (creator_name: OerAuthorsInfo) => creator_name.full_name
+          );
 
-        setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
+          setAuthors(temp_auth?.length !== 0 ? temp_auth : ['Unknown']);
 
-        setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
+          setLinkOer(oer.oer_url.map((item: OerUrlInfo) => item.url) || []);
 
-        setDescription(oer?.description || '');
+          setDescription(oer?.description || '');
 
-        setResourceType(
-          oer.media_type?.flatMap(
-            (resType: OerMediaTypeInfo) => resType.name
-          ) || []
-        );
+          setResourceType(
+            oer.media_type?.flatMap(
+              (resType: OerMediaTypeInfo) => resType.name
+            ) || []
+          );
 
-        setSubjects(
-          oer.subject?.map((sub: OerSubjectInfo) => sub.name) || ['Unknown']
-        );
+          setSubjects(
+            oer.subject?.map((sub: OerSubjectInfo) => sub.name) || ['Unknown']
+          );
 
-        setPublishers(
-          oer.publisher?.map((pub: OerAuthorsInfo) => pub.full_name) || [
-            'Unknown',
-          ]
-        );
-        setContributors(
-          oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || [
-            'Unknown',
-          ]
-        );
-        setConcepts(
-          oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
-        );
-        setQualityScore(oer?.overall_score || 0);
-        setTimes_used(oer?.times_used || 0);
-        setTotal_likes(oer?.total_likes || 0);
-        setLastUpdate(oer?.retrieval_date || 'Unknown');
-        setCoverage(
-          oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || [
-            'Unknown',
-          ]
-        );
-        setSource_roer(
-          oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
-        );
+          setPublishers(
+            oer.publisher?.map((pub: OerAuthorsInfo) => pub.full_name) || [
+              'Unknown',
+            ]
+          );
+          setContributors(
+            oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || [
+              'Unknown',
+            ]
+          );
+          setConcepts(
+            oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
+          );
+          setQualityScore(oer?.overall_score || 0);
+          setTimes_used(await getCount(oer.id));
+          //setTimes_used(oer?.times_used || 0);
+          setTotal_likes(oer?.total_likes || 0);
+          setLastUpdate(oer?.retrieval_date || 'Unknown');
+          setCoverage(
+            oer.coverage?.map((audience: OerAudienceInfo) => audience.name) || [
+              'Unknown',
+            ]
+          );
+          setSource_roer(
+            oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
+          );
 
-        // set the color of the collections that has the oer selected
-        const colors: ColorCollectionProps[] = [];
-        collections?.map((collection: CollectionProps) => {
-          collection.oers?.map((oer_item: OerInCollectionProps) => {
-            if (oer_item.id === oer.id && collection.color !== undefined) {
-              //setCollectionsColor((prev: (string | undefined)[]) => [...prev, collection.color]);
-              colors.push({ name: collection.name, color: collection.color });
-            }
+          // set the color of the collections that has the oer selected
+          const colors: ColorCollectionProps[] = [];
+          collections?.map((collection: CollectionProps) => {
+            collection.oers?.map((oer_item: OerInCollectionProps) => {
+              if (oer_item.id === oer.id && collection.color !== undefined) {
+                //setCollectionsColor((prev: (string | undefined)[]) => [...prev, collection.color]);
+                colors.push({ name: collection.name, color: collection.color });
+              }
+            });
           });
-        });
 
-        setCollectionsColor(colors);
+          setCollectionsColor(colors);
 
-        /*Promise.all(
-          collections?.map(async (collection: CollectionProps) => {
-            if (collection.oers?.includes(oer)) {
-              return collection.color;
-            }
-          }) || []
-        ).then((colors) => {
-          if (!colors.includes(undefined))
-            setCollectionsColor(colors);
-        });*/
+          /*Promise.all(
+            collections?.map(async (collection: CollectionProps) => {
+              if (collection.oers?.includes(oer)) {
+                return collection.color;
+              }
+            }) || []
+          ).then((colors) => {
+            if (!colors.includes(undefined))
+              setCollectionsColor(colors);
+          });*/
+        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
     }
+
+    fetchData();
   }, [oer, collections]);
 
   /* useEffect(() => {
@@ -313,14 +328,15 @@ export default function CardInfoModal({
                 </Flex>
               </Box>
             </Flex>
-            <GridMetadataOer
-              gap={3}
-              lastUpdate={lastUpdate}
-              used={times_used}
-              likes={total_likes}
-              qualityScore={qualityScore}
-              isCardInfoModal={true}
-            />
+            {hydrated &&
+              <GridMetadataOer
+                gap={3}
+                lastUpdate={lastUpdate}
+                used={times_used}
+                likes={total_likes}
+                qualityScore={qualityScore}
+                isCardInfoModal={true}
+              />}
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>

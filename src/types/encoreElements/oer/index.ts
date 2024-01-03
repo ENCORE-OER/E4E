@@ -12,3 +12,4 @@ export * from './OerSourceRoer';
 export * from './OerSubject';
 export * from './OerUrl';
 export * from './RespDataProps';
+export * from './RespOersProps';

@@ -239,7 +239,6 @@ const Discover = (props: DiscoverPageProps) => {
 
         setFiltered(oers);
 
-
         //if (oersResp?.length > 0) { // with freeSearchOersNoPagination() use oersResp?.length
         // get all the oers data
         // const oers = await Promise.all(
@@ -566,7 +565,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>

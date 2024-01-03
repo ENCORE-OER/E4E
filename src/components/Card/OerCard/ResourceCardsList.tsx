@@ -40,6 +40,7 @@ export default function ResourceCardsList({
   setCurrentPage,
   handlePageChange,
 }: ResourceCardsListProps) {
+
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<
@@ -60,6 +61,7 @@ export default function ResourceCardsList({
     setCurrentPage(newPage);
   };*/
   //-----------------------------------------------------------
+
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -93,6 +95,7 @@ export default function ResourceCardsList({
                         }}
                         as="button"
                       >
+
                         <SingleResourceCard
                           collectionColor={
                             //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
@@ -100,15 +103,17 @@ export default function ResourceCardsList({
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
                                 : // : collectionsColor[   // to handle when we use the API with pagination
-                                  // (currentPage) > 1
-                                  //   ? index + itemsPerPage * (currentPage - 1)
-                                  //   : index]
-                                  collectionsColor[index]
+                                // (currentPage) > 1
+                                //   ? index + itemsPerPage * (currentPage - 1)
+                                //   : index]
+                                collectionsColor[index]
                               : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                                ''
+                              ''
                           }
                           oer={oer}
+                          collectionsColor={collectionsColor}
                         />
+
                       </Box>
                       {isResourcePage && (
                         <Button
@@ -128,8 +133,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -179,10 +184,12 @@ export default function ResourceCardsList({
                       }}
                       as="button"
                     >
+
                       <SmallSingleResourceCard
                         collectionColor={collectionsColor[0]}
                         //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
                         oer={oer}
+                        collectionsColor={collectionsColor}
                       />
                     </Box>
                   )
