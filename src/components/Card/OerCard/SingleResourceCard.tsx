@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { APIV2 } from '../../../data/api';
 import {
   OerAuthorsInfo,
   OerMediaTypeInfo,
@@ -10,12 +12,14 @@ type SingleResourceCardProps = {
   oer: OerProps | OerFreeSearchProps | undefined;
   collectionColor: string;
   checkBookmark?: boolean;
+  collectionsColor: string[] | string;
 };
 
 export default function SingleResourceCard({
   oer,
   collectionColor,
   checkBookmark,
+  collectionsColor,
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -25,6 +29,24 @@ export default function SingleResourceCard({
   ) ?? ['Unknwon'];
   const mediaTypes =
     oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) ?? [];
+
+  const [times_used, setTimes_used] = useState<number>(0);
+
+  const getCount = async (id: number) => {
+    const api = new APIV2(undefined);
+    const resp = await api.getCount(id);
+
+    return resp;
+  };
+
+  useEffect(() => {
+    if (oer !== undefined) {
+      const fetchData = async () => {
+        setTimes_used(await getCount(oer.id));
+      };
+      fetchData();
+    }
+  }, [collectionsColor]);
 
   return (
     <>
@@ -42,7 +64,7 @@ export default function SingleResourceCard({
           retrieval_date={oer?.retrieval_date}
           overall_score={oer?.overall_score}
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
-          times_used={oer?.times_used}
+          times_used={times_used}
           total_likes={oer?.total_likes}
         />
       )}

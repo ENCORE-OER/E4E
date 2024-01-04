@@ -8,7 +8,6 @@ import {
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { OerSkillInfo } from '../../types/encoreElements';
 
 //type SearchItems = any[];
 
@@ -18,7 +17,7 @@ type SearchBarProps = {
   //inputValueIds?: number[];
   //setInputValueIds?: Dispatch<SetStateAction<number[]>>;
   placeholder?: string;
-  items?: OerSkillInfo[]; // suggested skills
+  items?: string[]; // suggested skills
   px?: SpaceProps['px'];
   py?: SpaceProps['py'];
   pb?: SpacerProps['pb'];
@@ -38,7 +37,7 @@ export default function SearchBarEncore({
   //inputValueIds,
   //setInputValueIds,
   placeholder,
-  //items,
+  items,
   px, // padding orizonal
   py, //padding vertical
   pb, // padding bottom
@@ -226,15 +225,15 @@ export default function SearchBarEncore({
         </Flex>
         {freeText.length > 0 && (
           <AutoCompleteList>
-            {/*items.map((item) => (
-            <AutoCompleteItem
-              key={item.id}
-              value={item.label}
-              textTransform="capitalize"
-            >
-              {item.label}
-            </AutoCompleteItem>
-          ))*/}
+            {items?.map((item: string, index: number) => (
+              <AutoCompleteItem
+                key={index}
+                value={item}
+                textTransform="capitalize"
+              >
+                {item}
+              </AutoCompleteItem>
+            ))}
 
             {
               // could be possibile comment this part if we don't want text that appear like suggestion under the searchbar

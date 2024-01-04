@@ -108,6 +108,7 @@ export default function ResourceCardsList({
                                 ''
                           }
                           oer={oer}
+                          collectionsColor={collectionsColor}
                         />
                       </Box>
                       {isResourcePage && (
@@ -183,6 +184,7 @@ export default function ResourceCardsList({
                         collectionColor={collectionsColor[0]}
                         //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
                         oer={oer}
+                        collectionsColor={collectionsColor}
                       />
                     </Box>
                   )

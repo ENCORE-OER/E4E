@@ -11,6 +11,7 @@ import {
   OerProps,
   OerSkillInfo,
   OerSubjectInfo,
+  OersDBProps,
   RespDataProps,
 } from '../types/encoreElements';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
@@ -885,4 +886,135 @@ export class APIV2 {
       throw error;
     }
   }
+
+  // =====================================================
+  // API ENCORE
+
+  // ----------------------- Keywords -----------------------
+
+  // API to save keyword used by the user in the search bar
+  async saveKeyword(keyword: string) {
+    try {
+      await axiosNoCookie
+        .post('https://encore-api.polyglot-edu.com/api/saveKeyword', {
+          keyword: keyword,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // API to retrieve all keywords saved in the database
+  async getAllKeywords(): Promise<string[]> {
+    try {
+      const apiUrl = 'https://encore-api.polyglot-edu.com/api/getAllKeywords';
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      return resp.data?.keywords || [];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // API to delete all keywords saved in the database
+  async deleteAllKeywords() {
+    try {
+      await axiosNoCookie
+        .post('https://encore-api.polyglot-edu.com/api/deleteAllKeywords')
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // ----------------------- OERs -----------------------
+
+  // API to save OER saved by users in a collection
+  // we could save a OER multiple times: this allows us to count how many times a OER has been saved
+  async saveOER(id: number, title: string, description: string) {
+    try {
+      await axiosNoCookie
+        .post('https://encore-api.polyglot-edu.com/api/saveOER', {
+          id: id.toString(),
+          title: title,
+          description: description,
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // API to update the count of an OER by its ID. If the count reaches 0, the OER is removed from the database.
+  async updateCount(id: number) {
+    await axiosNoCookie
+      .put(`https://encore-api.polyglot-edu.com/api/updateCount/${id}`)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  }
+
+  // API to retrieve all saved OERs from the database.
+  async getAllOERs(): Promise<OersDBProps[]> {
+    try {
+      const apiUrl = 'https://encore-api.polyglot-edu.com/api/getAllOERs';
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      //const oers = resp.data?.oers?.forEach((oer: any) => Number(oer.id)) || [];
+
+      return resp.data?.oers || [];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // API to retrieve OERs with the maximum count from the database.
+  async getMaxCountOERs(): Promise<OersDBProps[]> {
+    try {
+      const apiUrl = 'https://encore-api.polyglot-edu.com/api/getMaxCountOERs';
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      const oers = resp.data?.oers || [];
+
+      return oers;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // API to retrieve the count of an OER by its ID.
+  async getCount(idOer: number): Promise<number> {
+    try {
+      const apiUrl = `https://encore-api.polyglot-edu.com/api/getCount/${idOer}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      const count = resp.data?.count || 0;
+
+      return count;
+    } catch (error) {
+      console.log('error in getCount: ' + error);
+      return 0;
+    }
+  }
+
+  // =====================================================
 }
