@@ -21,25 +21,24 @@ export default function SmallSingleResourceCard({
   collectionColor,
   collectionsColor,
 }: //dataOer
-  SmallSingleResourceCardProps) {
+SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
 
   const [times_used, setTimes_used] = useState<number>(0);
-
 
   const getCount = async (id: number) => {
     const api = new APIV2(undefined);
     const resp = await api.getCount(id);
 
     return resp;
-  }
+  };
 
   useEffect(() => {
     if (oer !== undefined) {
       const fetchData = async () => {
         setTimes_used(await getCount(oer.id));
-      }
+      };
       fetchData();
     }
   }, [collectionsColor]);

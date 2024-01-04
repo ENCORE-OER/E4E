@@ -109,12 +109,12 @@ export const CollectionsProvider = ({ children }: any) => {
         type: 'success',
       });
       return new Promise((resolve) => {
-        collections?.find((collection: CollectionProps) => collection.id === id)?.oers?.forEach((oer: OerInCollectionProps) => {
-          const api = new APIV2(undefined);
-          api.updateCount(
-            oer.id,
-          );
-        });
+        collections
+          ?.find((collection: CollectionProps) => collection.id === id)
+          ?.oers?.forEach((oer: OerInCollectionProps) => {
+            const api = new APIV2(undefined);
+            api.updateCount(oer.id);
+          });
         setCollections(updatedCollections);
         //console.log("I'm triggering collections");
         resolve();
@@ -185,11 +185,7 @@ export const CollectionsProvider = ({ children }: any) => {
       return new Promise((resolve) => {
         setCollections(updatedCollections);
         const api = new APIV2(undefined);
-        api.saveOER(
-          resource.id,
-          resource.title,
-          resource.description,
-        );
+        api.saveOER(resource.id, resource.title, resource.description);
         //console.log("I'm triggering collections");
         resolve();
       });
@@ -245,9 +241,7 @@ export const CollectionsProvider = ({ children }: any) => {
         return new Promise((resolve) => {
           setCollections(updatedCollections);
           const api = new APIV2(undefined);
-          api.updateCount(
-            idOer,
-          );
+          api.updateCount(idOer);
           //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
           resolve();
         });

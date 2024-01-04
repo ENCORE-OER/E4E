@@ -110,7 +110,7 @@ export default function CardInfoModal({
     const resp = await api.getCount(id);
 
     return resp;
-  }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,9 +164,9 @@ export default function CardInfoModal({
             ]
           );
           setContributors(
-            oer.contributor?.map((contr: OerAuthorsInfo) => contr.full_name) || [
-              'Unknown',
-            ]
+            oer.contributor?.map(
+              (contr: OerAuthorsInfo) => contr.full_name
+            ) || ['Unknown']
           );
           setConcepts(
             oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
@@ -212,7 +212,7 @@ export default function CardInfoModal({
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     fetchData();
   }, [oer, collections]);
@@ -328,7 +328,7 @@ export default function CardInfoModal({
                 </Flex>
               </Box>
             </Flex>
-            {hydrated &&
+            {hydrated && (
               <GridMetadataOer
                 gap={3}
                 lastUpdate={lastUpdate}
@@ -336,7 +336,8 @@ export default function CardInfoModal({
                 likes={total_likes}
                 qualityScore={qualityScore}
                 isCardInfoModal={true}
-              />}
+              />
+            )}
             <Flex justifyContent={'left'} mb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>
