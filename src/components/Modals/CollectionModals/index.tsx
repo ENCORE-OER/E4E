@@ -16,6 +16,9 @@ interface IndexCollectionModalProps extends CollectionModalProps {
   collections: CollectionProps[];
   addResource: AddResourceFunction;
   addCollection: AddCollectionFunction;
+  //times_used?: number;
+  //setTimes_used?: Dispatch<SetStateAction<number>>;
+  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function CollectionModal({
@@ -26,6 +29,9 @@ export default function CollectionModal({
   addResource,
   addCollection,
   collections,
+  //times_used,
+  //setTimes_used,
+  //getCount,
 }: IndexCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
@@ -57,6 +63,8 @@ export default function CollectionModal({
           setIsNewCollection={setIsNewCollection}
           collections={collections}
           addResource={addResource}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
 
@@ -70,6 +78,8 @@ export default function CollectionModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
     </>

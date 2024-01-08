@@ -31,6 +31,8 @@ interface NewCollectionModalProps extends CollectionModalProps {
   collections: CollectionProps[];
   addResource: AddResourceFunction;
   addCollection: AddCollectionFunction;
+  //setTimes_used?: Dispatch<SetStateAction<number>>;
+  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function NewCollectionModal({
@@ -42,6 +44,8 @@ export default function NewCollectionModal({
   collections,
   addResource,
   addCollection,
+  //setTimes_used,
+  //getCount,
 }: NewCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const [nameCollection, setNameCollection] = useState<string>('');
@@ -86,6 +90,9 @@ export default function NewCollectionModal({
 
         const fetchData = async () => {
           await addResource(newIdCollection, oerToAddCollection);
+          // const count = await getCount(oerToAddCollection.id);
+          // setTimes_used(count);
+          // console.log('count: ' + count);
         };
 
         fetchData();

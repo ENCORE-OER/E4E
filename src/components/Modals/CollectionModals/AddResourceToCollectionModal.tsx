@@ -26,6 +26,8 @@ interface AddCollectionModalProps extends CollectionModalProps {
   setIsNewCollection: Dispatch<SetStateAction<boolean>>;
   collections: CollectionProps[];
   addResource: AddResourceFunction;
+  //setTimes_used?: Dispatch<SetStateAction<number>>;
+  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function AddResourceToCollectionModal({
@@ -35,6 +37,8 @@ export default function AddResourceToCollectionModal({
   setIsNewCollection,
   collections,
   addResource,
+  //setTimes_used,
+  //getCount,
 }: AddCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const hydrated = useHasHydrated();
@@ -50,6 +54,11 @@ export default function AddResourceToCollectionModal({
       )
     );
     await addResource(idCollectionSelected, oerToAddCollection);
+
+    // TODO: see if this is useful
+    // const count = await getCount(oerToAddCollection.id);
+    // setTimes_used(count);
+    // console.log('count: ' + count);
 
     onClose();
   };

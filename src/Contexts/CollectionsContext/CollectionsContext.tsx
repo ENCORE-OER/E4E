@@ -11,6 +11,7 @@ import {
   OerConceptInfo,
   OerInCollectionProps,
   SelectedConceptsFunction,
+  ToggleLikeFunction,
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
@@ -24,6 +25,8 @@ type CollectionContextProps = {
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
   setSelectedConceptsForCollection: SelectedConceptsFunction;
+  toggleLikeOER: ToggleLikeFunction;
+  likedOers: number[];
 };
 
 const CollectionsContext = createContext<CollectionContextProps>(
@@ -42,6 +45,9 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const [indexCollectionClicked, setIndexCollectionClicked] =
     useLocalStorage<number>('indexCollectionClicked', -1);
+
+  const [likedOers, setLikedOers] = useLocalStorage<number[]>("likedOers", []); // to save the id of the liked oers
+
 
   const hydrated = useHasHydrated();
 
@@ -111,9 +117,9 @@ export const CollectionsProvider = ({ children }: any) => {
       return new Promise((resolve) => {
         collections
           ?.find((collection: CollectionProps) => collection.id === id)
-          ?.oers?.forEach((oer: OerInCollectionProps) => {
+          ?.oers?.forEach(async (oer: OerInCollectionProps) => {
             const api = new APIV2(undefined);
-            api.updateCount(oer.id);
+            await api.updateCount(oer.id);
           });
         setCollections(updatedCollections);
         //console.log("I'm triggering collections");
@@ -182,10 +188,11 @@ export const CollectionsProvider = ({ children }: any) => {
       }
 
       //console.log(updatedCollections);
-      return new Promise((resolve) => {
-        setCollections(updatedCollections);
+      return new Promise(async (resolve) => {
+        console.log("Saving OER");
         const api = new APIV2(undefined);
-        api.saveOER(resource.id, resource.title, resource.description);
+        await api.saveOER(resource.id, resource.title, resource.description);
+        setCollections(updatedCollections);
         //console.log("I'm triggering collections");
         resolve();
       });
@@ -238,10 +245,10 @@ export const CollectionsProvider = ({ children }: any) => {
           type: 'success',
         });
 
-        return new Promise((resolve) => {
-          setCollections(updatedCollections);
+        return new Promise(async (resolve) => {
           const api = new APIV2(undefined);
-          api.updateCount(idOer);
+          await api.updateCount(idOer);
+          setCollections(updatedCollections);
           //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
           resolve();
         });
@@ -291,6 +298,36 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
+  const toggleLikeOER = async (
+    idOer: number | undefined
+  ): Promise<void> => {
+    if (idOer === undefined) {
+      return;
+    }
+    try {
+      // To check if the resource is already liked
+      const isLiked = likedOers.includes(idOer);
+
+      // Add or remove like
+      const updatedLikedResources = isLiked
+        ? likedOers.filter(id => id !== idOer)
+        : [...likedOers, idOer];
+
+      setLikedOers(updatedLikedResources);
+
+      // To update the like on the database
+      const api = new APIV2(undefined);
+      if (isLiked) {
+        await api.reduceLikeOER(idOer);
+      } else {
+        await api.setLikeOER(idOer);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return (
     <CollectionsContext.Provider
       value={{
@@ -302,6 +339,8 @@ export const CollectionsProvider = ({ children }: any) => {
         indexCollectionClicked, //used in CollectionMenu component
         setIndexCollectionClicked,
         setSelectedConceptsForCollection,
+        toggleLikeOER,
+        likedOers,
       }}
     >
       {children}
