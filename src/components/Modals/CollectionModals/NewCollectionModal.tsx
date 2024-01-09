@@ -43,9 +43,8 @@ export default function NewCollectionModal({
   maxLength,
   collections,
   addResource,
-  addCollection,
-} //setTimes_used,
-//getCount,
+  addCollection, //setTimes_used,
+} //getCount,
 : NewCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const [nameCollection, setNameCollection] = useState<string>('');

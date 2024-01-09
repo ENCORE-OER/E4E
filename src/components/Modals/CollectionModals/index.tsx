@@ -28,9 +28,8 @@ export default function CollectionModal({
   isFromFolderButton,
   addResource,
   addCollection,
-  collections,
-} //times_used,
-//setTimes_used,
+  collections, //times_used,
+} //setTimes_used,
 //getCount,
 : IndexCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();

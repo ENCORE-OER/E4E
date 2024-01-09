@@ -53,13 +53,6 @@ export class APIV2 {
         Authorization: access_token ? 'Bearer ' + access_token : '',
       },
     });
-    // this.axiosNoCookie = axiosCreate.create({
-    //   baseURL: process.env.BACK_URL,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     //Authorization: access_token ? 'Bearer ' + access_token : '',
-    //   },
-    // });
   }
 
   setRedirect401(check: boolean, redirect_url?: string) {
