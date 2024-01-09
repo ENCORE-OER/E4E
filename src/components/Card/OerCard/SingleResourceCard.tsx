@@ -37,7 +37,7 @@ export default function SingleResourceCard({
 
   const [times_used, setTimes_used] = useState<number>(0);
   const [total_likes, setTotal_likes] = useState<number>(0);
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);  // to load the likes at the first render
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true); // to load the likes at the first render
 
   const getCount = async (id: number | undefined) => {
     if (id === undefined) {
@@ -62,8 +62,7 @@ export default function SingleResourceCard({
       const fetchData = async () => {
         const count = await getCount(oer.id);
         setTimes_used(count);
-        console.log('count: ' + count)
-
+        console.log('count: ' + count);
       };
       fetchData();
     }

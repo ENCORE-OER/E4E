@@ -2,7 +2,8 @@ FROM node:21-alpine
 
 ARG DEPLOY_URL=http://localhost:3000
 ARG CONCEPT_URL=https://concept.polyglot-edu.com
-ARG POLYGLOT_URL=https://polyglot-api.polyglot-edu.com
+#ARG POLYGLOT_URL=https://polyglot-api.polyglot-edu.com
+ARG POLYGLOT_URL=https://polyglot-api-staging.polyglot-edu.com
 ARG BACK_URL=http://localhost:5000
 
 COPY package.json .

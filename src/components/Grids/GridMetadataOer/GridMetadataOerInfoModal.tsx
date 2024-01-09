@@ -35,7 +35,6 @@ export default function GridMetadataOerInfoModal({
   isOERSaved,
   isOERLiked,
 }: GridMetadataCardProps) {
-
   //const [isLiked, setIsLiked] = useState(false);
 
   // TODO: create a context to save the like on the browser cache to know if a user has liked an OER. This because we have not a login system yet.
@@ -53,8 +52,6 @@ export default function GridMetadataOerInfoModal({
   //   }
 
   // }, [])
-
-
 
   return (
     <Flex w="100%" mb="5" gap={gap || 0}>
@@ -76,20 +73,24 @@ export default function GridMetadataOerInfoModal({
           </HStack>
         </Box>
       </Box>
-      <Box display="flex" flex="1" >
+      <Box display="flex" flex="1">
         <Box>
           <Text variant="label_drawer">Liked</Text>
           <HStack
-            cursor={isOERSaved ? "pointer" : ""}
-            onClick={
-              async () => {
-                if (isOERSaved && toggleLikeOER && setUpdateLikeOER) {
-                  await toggleLikeOER();
-                  setUpdateLikeOER(true);
-                }
+            cursor={isOERSaved ? 'pointer' : ''}
+            onClick={async () => {
+              if (isOERSaved && toggleLikeOER && setUpdateLikeOER) {
+                await toggleLikeOER();
+                setUpdateLikeOER(true);
               }
-            }>
-            {isOERLiked && <IconThumbsUp fill={transparentize(0.8, '#FFCC49')} stroke="#FFCC49" />}
+            }}
+          >
+            {isOERLiked && (
+              <IconThumbsUp
+                fill={transparentize(0.8, '#FFCC49')}
+                stroke="#FFCC49"
+              />
+            )}
             {!isOERLiked && <IconThumbsUp />}
             <Text>{likes}</Text>
           </HStack>

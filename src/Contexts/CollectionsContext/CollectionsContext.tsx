@@ -46,8 +46,7 @@ export const CollectionsProvider = ({ children }: any) => {
   const [indexCollectionClicked, setIndexCollectionClicked] =
     useLocalStorage<number>('indexCollectionClicked', -1);
 
-  const [likedOers, setLikedOers] = useLocalStorage<number[]>("likedOers", []); // to save the id of the liked oers
-
+  const [likedOers, setLikedOers] = useLocalStorage<number[]>('likedOers', []); // to save the id of the liked oers
 
   const hydrated = useHasHydrated();
 
@@ -189,7 +188,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
       //console.log(updatedCollections);
       return new Promise(async (resolve) => {
-        console.log("Saving OER");
+        console.log('Saving OER');
         const api = new APIV2(undefined);
         await api.saveOER(resource.id, resource.title, resource.description);
         setCollections(updatedCollections);
@@ -298,9 +297,7 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-  const toggleLikeOER = async (
-    idOer: number | undefined
-  ): Promise<void> => {
+  const toggleLikeOER = async (idOer: number | undefined): Promise<void> => {
     if (idOer === undefined) {
       return;
     }
@@ -310,7 +307,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
       // Add or remove like
       const updatedLikedResources = isLiked
-        ? likedOers.filter(id => id !== idOer)
+        ? likedOers.filter((id) => id !== idOer)
         : [...likedOers, idOer];
 
       setLikedOers(updatedLikedResources);
@@ -326,7 +323,6 @@ export const CollectionsProvider = ({ children }: any) => {
       console.error(error);
     }
   };
-
 
   return (
     <CollectionsContext.Provider

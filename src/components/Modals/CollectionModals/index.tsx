@@ -29,10 +29,10 @@ export default function CollectionModal({
   addResource,
   addCollection,
   collections,
-  //times_used,
-  //setTimes_used,
-  //getCount,
-}: IndexCollectionModalProps) {
+} //times_used,
+//setTimes_used,
+//getCount,
+: IndexCollectionModalProps) {
   //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
   //console.log(isNewCollection);
@@ -63,8 +63,8 @@ export default function CollectionModal({
           setIsNewCollection={setIsNewCollection}
           collections={collections}
           addResource={addResource}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
 
@@ -78,8 +78,8 @@ export default function CollectionModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
     </>

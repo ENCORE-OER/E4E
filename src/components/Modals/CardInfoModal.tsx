@@ -60,7 +60,8 @@ export default function CardInfoModal({
   updateLikeOER,
   setUpdateLikeOER,
 }: CardInfoModalProps) {
-  const { addCollection, addResource, collections, toggleLikeOER, likedOers } = useCollectionsContext();
+  const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
+    useCollectionsContext();
   const hydrated = useHasHydrated();
 
   const [showTagDigital, setShowTagDigital] = useState<boolean>(false);
@@ -114,7 +115,7 @@ export default function CardInfoModal({
     const api = new APIV2(undefined);
     const resp = await api.getCount(id);
 
-    console.log("count: " + resp)
+    console.log('count: ' + resp);
 
     return resp;
   };
@@ -207,9 +208,9 @@ export default function CardInfoModal({
             oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
           );
           setQualityScore(oer?.overall_score || 0);
-          setTimes_used(await getCount(oer?.id) ?? 0);
+          setTimes_used((await getCount(oer?.id)) ?? 0);
           //setTimes_used(oer?.times_used || 0);
-          setTotal_likes(await getLikes(oer?.id) ?? 0);
+          setTotal_likes((await getLikes(oer?.id)) ?? 0);
           //setTotal_likes(oer?.total_likes || 0);
           setLastUpdate(oer?.retrieval_date || 'Unknown');
           setCoverage(
@@ -255,19 +256,18 @@ export default function CardInfoModal({
 
   // gestire rendering dei like dopo che aggiorno il valore
   useEffect(() => {
-
     if (updateLikeOER) {
       const fetchData = async () => {
         try {
           if (oer !== undefined && oer?.id !== undefined) {
-            setTotal_likes(await getLikes(oer?.id) ?? 0);
+            setTotal_likes((await getLikes(oer?.id)) ?? 0);
           }
         } catch (error) {
           console.error(error);
         } finally {
           setUpdateLikeOER(false);
         }
-      }
+      };
 
       fetchData();
     }
@@ -384,8 +384,12 @@ export default function CardInfoModal({
                 </Flex>
               </Box>
             </Flex>
-            {collectionsColor?.length > 0 &&
-              <Text pb={1} variant="label"> Click on the like button to let us know if you enjoyed the OER</Text>}
+            {collectionsColor?.length > 0 && (
+              <Text pb={1} variant="label">
+                {' '}
+                Click on the like button to let us know if you enjoyed the OER
+              </Text>
+            )}
             {hydrated && (
               <GridMetadataOer
                 gap={3}
@@ -400,7 +404,9 @@ export default function CardInfoModal({
                 toggleLikeOER={() => toggleLikeOER(oer?.id)}
                 setUpdateLikeOER={setUpdateLikeOER}
                 isOERSaved={collectionsColor.length > 0}
-                isOERLiked={oer?.id === undefined ? false : likedOers?.includes(oer?.id)}
+                isOERLiked={
+                  oer?.id === undefined ? false : likedOers?.includes(oer?.id)
+                }
               />
             )}
             <Flex justifyContent={'left'} mb="5">
@@ -457,9 +463,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //times_used={times_used}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //times_used={times_used}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
     </Flex>

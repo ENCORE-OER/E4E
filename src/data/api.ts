@@ -38,7 +38,7 @@ type Tag = {
 
 export class APIV2 {
   axios: AxiosInstance;
-  axiosNoCookie: AxiosInstance;
+  //axiosNoCookie: AxiosInstance;
   redirect401: boolean;
   redirect401URL?: string;
   error401: boolean;
@@ -53,13 +53,13 @@ export class APIV2 {
         Authorization: access_token ? 'Bearer ' + access_token : '',
       },
     });
-    this.axiosNoCookie = axiosCreate.create({
-      baseURL: process.env.BACK_URL,
-      headers: {
-        'Content-Type': 'application/json',
-        //Authorization: access_token ? 'Bearer ' + access_token : '',
-      },
-    });
+    // this.axiosNoCookie = axiosCreate.create({
+    //   baseURL: process.env.BACK_URL,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     //Authorization: access_token ? 'Bearer ' + access_token : '',
+    //   },
+    // });
   }
 
   setRedirect401(check: boolean, redirect_url?: string) {
@@ -433,7 +433,7 @@ export class APIV2 {
   async createNewFlow(
     flow: Partial<PolyglotFlowInfo>
   ): Promise<AxiosResponse<PolyglotFlow>> {
-    return this.axiosNoCookie.post<{}, AxiosResponse, {}>(
+    return this.axios.post<{}, AxiosResponse, {}>(
       `${process.env.POLYGLOT_URL}/api/flows`,
       {
         _id: v4(),
@@ -448,7 +448,7 @@ export class APIV2 {
   }
 
   async updateFlow(flow: Partial<PolyglotFlow>) {
-    return this.axiosNoCookie.put<PolyglotFlow>(
+    return this.axios.put<PolyglotFlow>(
       `${process.env.POLYGLOT_URL}/api/flows/${flow._id}`,
       flow
     );

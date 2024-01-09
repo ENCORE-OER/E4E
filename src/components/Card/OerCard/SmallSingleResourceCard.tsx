@@ -24,16 +24,15 @@ export default function SmallSingleResourceCard({
   collectionsColor,
   updateLikeOER,
 }: //dataOer
-  SmallSingleResourceCardProps) {
+SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
-
 
   const hydrated = useHasHydrated();
 
   const [times_used, setTimes_used] = useState<number>(0);
   const [total_likes, setTotal_likes] = useState<number>(0);
-  const [isFirstRender, setIsFirstRender] = useState<boolean>(true);  // to load the likes at the first render
+  const [isFirstRender, setIsFirstRender] = useState<boolean>(true); // to load the likes at the first render
 
   const creators = oer?.creator?.map(
     (item: OerAuthorsInfo) => item.full_name
@@ -55,7 +54,6 @@ export default function SmallSingleResourceCard({
 
     return resp;
   };
-
 
   useEffect(() => {
     if (oer !== undefined) {
@@ -89,7 +87,7 @@ export default function SmallSingleResourceCard({
 
   return (
     <>
-      {hydrated &&
+      {hydrated && (
         <SmallOerCard
           id={oer?.id ?? 0}
           checkBookmark={checkBookmark}
@@ -113,7 +111,7 @@ export default function SmallSingleResourceCard({
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
         />
-      }
+      )}
     </>
   );
 }
