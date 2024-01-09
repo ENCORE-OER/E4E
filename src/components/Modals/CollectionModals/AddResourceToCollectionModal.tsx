@@ -36,13 +36,9 @@ export default function AddResourceToCollectionModal({
   isOpen,
   setIsNewCollection,
   collections,
-  addResource, //setTimes_used,
-} //getCount,
-: AddCollectionModalProps) {
-  //const { isOpen, onClose } = useDisclosure();
+  addResource,
+}: AddCollectionModalProps) {
   const hydrated = useHasHydrated();
-  //const [isNewCollection, setIsNewCollection] = useState<boolean>(false);
-  //console.log(isNewCollection);
   const [indexCollectionClicked, setIndexCollectionClicked] =
     useState<number>(-1);
 

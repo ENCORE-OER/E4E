@@ -43,10 +43,8 @@ export default function NewCollectionModal({
   maxLength,
   collections,
   addResource,
-  addCollection, //setTimes_used,
-} //getCount,
-: NewCollectionModalProps) {
-  //const { isOpen, onClose } = useDisclosure();
+  addCollection,
+}: NewCollectionModalProps) {
   const [nameCollection, setNameCollection] = useState<string>('');
   const [newIdCollection, setNewIdCollection] = useState<number>(-1);
   const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
@@ -78,11 +76,9 @@ export default function NewCollectionModal({
   };
 
   useEffect(() => {
+    // this to know if the collection is created
     if (hydrated) {
-      /*addToast({
-        message: `"${collections[newIdCollection]?.name}" collection created`,
-        status: "success"
-      })*/
+
       if (!isFolderButton) {
         //console.log("New Collection id: " + collections[collections.length - 1].id)
         //console.log("newIdCollection: " + newIdCollection);
