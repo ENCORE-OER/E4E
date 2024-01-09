@@ -78,7 +78,6 @@ export default function NewCollectionModal({
   useEffect(() => {
     // this to know if the collection is created
     if (hydrated) {
-
       if (!isFolderButton) {
         //console.log("New Collection id: " + collections[collections.length - 1].id)
         //console.log("newIdCollection: " + newIdCollection);
