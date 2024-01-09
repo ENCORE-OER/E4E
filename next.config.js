@@ -12,7 +12,8 @@ const BACK_URL = process.env.BACK_URL || 'http://localhost:5000';
 const CONCEPT_URL =
   process.env.CONCEPT_URL || 'https://concept.polyglot-edu.com';
 const POLYGLOT_URL =
-  process.env.POLYGLOT_URL || 'https://polyglot-api.polyglot-edu.com';
+  //process.env.POLYGLOT_URL || 'https://polyglot-api.polyglot-edu.com';
+  process.env.POLYGLOT_URL || 'https://polyglot-api-staging.polyglot-edu.com';
 const POLYGLOT_DASHBOARD =
   process.env.POLYGLOT_DASHBOARD || 'https://staging.polyglot-edu.com/';
 

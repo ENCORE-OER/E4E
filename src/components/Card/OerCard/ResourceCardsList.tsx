@@ -47,6 +47,9 @@ export default function ResourceCardsList({
   >(undefined);
   //const [currentPage, setCurrentPage] = useState<number>(1);
 
+  // To know if the user has liked or unliked an oer and to refresh the oer card
+  const [updateLikeOER, setUpdateLikeOER] = useState<boolean>(false);
+
   const handleCloseCardInfoModal = () => {
     //setCardInfoModalOpen(false);
     onClose();
@@ -109,6 +112,7 @@ export default function ResourceCardsList({
                           }
                           oer={oer}
                           collectionsColor={collectionsColor}
+                          updateLikeOER={updateLikeOER}
                         />
                       </Box>
                       {isResourcePage && (
@@ -185,6 +189,7 @@ export default function ResourceCardsList({
                         //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
                         oer={oer}
                         collectionsColor={collectionsColor}
+                        updateLikeOER={updateLikeOER}
                       />
                     </Box>
                   )
@@ -209,6 +214,8 @@ export default function ResourceCardsList({
         isOpen={isOpen}
         onClose={handleCloseCardInfoModal}
         oer={oerById}
+        updateLikeOER={updateLikeOER}
+        setUpdateLikeOER={setUpdateLikeOER}
       />
     </>
   );

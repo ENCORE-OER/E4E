@@ -31,6 +31,8 @@ interface NewCollectionModalProps extends CollectionModalProps {
   collections: CollectionProps[];
   addResource: AddResourceFunction;
   addCollection: AddCollectionFunction;
+  //setTimes_used?: Dispatch<SetStateAction<number>>;
+  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function NewCollectionModal({
@@ -43,7 +45,6 @@ export default function NewCollectionModal({
   addResource,
   addCollection,
 }: NewCollectionModalProps) {
-  //const { isOpen, onClose } = useDisclosure();
   const [nameCollection, setNameCollection] = useState<string>('');
   const [newIdCollection, setNewIdCollection] = useState<number>(-1);
   const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
@@ -75,17 +76,17 @@ export default function NewCollectionModal({
   };
 
   useEffect(() => {
+    // this to know if the collection is created
     if (hydrated) {
-      /*addToast({
-        message: `"${collections[newIdCollection]?.name}" collection created`,
-        status: "success"
-      })*/
       if (!isFolderButton) {
         //console.log("New Collection id: " + collections[collections.length - 1].id)
         //console.log("newIdCollection: " + newIdCollection);
 
         const fetchData = async () => {
           await addResource(newIdCollection, oerToAddCollection);
+          // const count = await getCount(oerToAddCollection.id);
+          // setTimes_used(count);
+          // console.log('count: ' + count);
         };
 
         fetchData();

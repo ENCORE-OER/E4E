@@ -38,6 +38,7 @@ type Tag = {
 
 export class APIV2 {
   axios: AxiosInstance;
+  //axiosNoCookie: AxiosInstance;
   redirect401: boolean;
   redirect401URL?: string;
   error401: boolean;
@@ -895,18 +896,15 @@ export class APIV2 {
   // API to save keyword used by the user in the search bar
   async saveKeyword(keyword: string) {
     try {
-      await axiosNoCookie
-        .post('https://encore-api.polyglot-edu.com/api/saveKeyword', {
+      const resp = await axiosNoCookie.post(
+        'https://encore-api.polyglot-edu.com/api/saveKeyword',
+        {
           keyword: keyword,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+        }
+      );
+      console.log(resp);
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 
@@ -925,16 +923,13 @@ export class APIV2 {
   // API to delete all keywords saved in the database
   async deleteAllKeywords() {
     try {
-      await axiosNoCookie
-        .post('https://encore-api.polyglot-edu.com/api/deleteAllKeywords')
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+      const resp = await axiosNoCookie.post(
+        'https://encore-api.polyglot-edu.com/api/deleteAllKeywords'
+      );
+
+      console.log(resp);
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 
@@ -942,35 +937,33 @@ export class APIV2 {
 
   // API to save OER saved by users in a collection
   // we could save a OER multiple times: this allows us to count how many times a OER has been saved
-  async saveOER(id: number, title: string, description: string) {
+  async saveOER(idOER: number, title: string, description: string) {
     try {
-      await axiosNoCookie
-        .post('https://encore-api.polyglot-edu.com/api/saveOER', {
-          id: id.toString(),
+      const resp = await axiosNoCookie.post(
+        'https://encore-api.polyglot-edu.com/api/saveOER',
+        {
+          id: idOER.toString(),
           title: title,
           description: description,
-        })
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+        }
+      );
+
+      console.log(resp.data);
     } catch (error) {
-      throw error;
+      console.error(error);
     }
   }
 
   // API to update the count of an OER by its ID. If the count reaches 0, the OER is removed from the database.
-  async updateCount(id: number) {
-    await axiosNoCookie
-      .put(`https://encore-api.polyglot-edu.com/api/updateCount/${id}`)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+  async updateCount(idOER: number) {
+    try {
+      const resp = await axiosNoCookie.put(
+        `https://encore-api.polyglot-edu.com/api/updateCount/${idOER}`
+      );
+      console.log(resp.data);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // API to retrieve all saved OERs from the database.
@@ -1002,12 +995,17 @@ export class APIV2 {
   }
 
   // API to retrieve the count of an OER by its ID.
-  async getCount(idOer: number): Promise<number> {
+  async getCount(idOER: number): Promise<number> {
     try {
-      const apiUrl = `https://encore-api.polyglot-edu.com/api/getCount/${idOer}`;
+      const apiUrl = `https://encore-api.polyglot-edu.com/api/getCount/${idOER}`;
       const resp = await axiosNoCookie.get(apiUrl);
 
-      const count = resp.data?.count || 0;
+      // if (resp.status === 404 || resp.status === 500) {
+      //   const count = 0;
+      //   return count;
+      // }
+
+      const count = resp.data?.count;
 
       return count;
     } catch (error) {
@@ -1016,5 +1014,43 @@ export class APIV2 {
     }
   }
 
+  // API to increment the like count of an OER by its ID.
+  async setLikeOER(idOER: number) {
+    try {
+      const resp = await axiosNoCookie.post(
+        `https://encore-api.polyglot-edu.com/api/likeOER/${idOER.toString()}`
+      );
+      console.log(resp?.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // API to reduce the likes count of an OER by one.
+  async reduceLikeOER(idOER: number) {
+    try {
+      const resp = await axiosNoCookie.put(
+        `https://encore-api.polyglot-edu.com/api/reduceLike/${idOER}`
+      );
+      console.log(resp.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // API to retrieve the likes count of an OER by its ID.
+  async getLikes(idOER: number): Promise<number> {
+    try {
+      const apiUrl = `https://encore-api.polyglot-edu.com/api/getLikes/${idOER}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      const likes = resp.data?.likes ?? 0;
+
+      return likes;
+    } catch (error) {
+      console.log(error);
+      return 0;
+    }
+  }
   // =====================================================
 }

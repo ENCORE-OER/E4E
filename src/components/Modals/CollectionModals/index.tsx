@@ -16,6 +16,9 @@ interface IndexCollectionModalProps extends CollectionModalProps {
   collections: CollectionProps[];
   addResource: AddResourceFunction;
   addCollection: AddCollectionFunction;
+  //times_used?: number;
+  //setTimes_used?: Dispatch<SetStateAction<number>>;
+  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function CollectionModal({
@@ -27,15 +30,12 @@ export default function CollectionModal({
   addCollection,
   collections,
 }: IndexCollectionModalProps) {
-  //const { isOpen, onClose } = useDisclosure();
   const [isCollectionNew, setIsNewCollection] = useState<boolean>(false);
-  //console.log(isNewCollection);
 
   const newOer: OerInCollectionProps = {
     id: oerToSave?.id ?? 0,
     title: oerToSave?.title ?? '',
     description: oerToSave?.description ?? '',
-    //skills: oerToSave?.skills,
     concepts: oerToSave?.concepts ?? [],
   };
 

@@ -8,4 +8,5 @@ export type OerInCollectionProps = {
   description: string;
   skills?: OerSkillInfo[];
   concepts: OerConceptInfo[];
+  //likes: boolean;
 };
