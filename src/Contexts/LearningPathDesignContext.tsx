@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { ArrayProps, Option } from '../types/encoreElements/index';
+import { ArrayProps, Option, SkillItemProps } from '../types/encoreElements/index';
 import { useHasHydrated } from '../utils/utils';
 
 // Context props
@@ -14,7 +14,7 @@ type LearnignPathDesignContextProps = {
   selectedGroupDimension: Option | null;
   selectedLeanerExperience: Option | null;
   text: string;
-  selectedSkillConceptsTags: string[];
+  selectedSkillConceptsTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
@@ -25,14 +25,14 @@ type LearnignPathDesignContextProps = {
   customLearningObjectivePart1: string;
   customLearningObjectivePart2: string;
   storedLearningObjectives: string[];
-  setSelectedSkillConceptsTags: (newSkills: string[]) => void;
+  setSelectedSkillConceptsTags: (newSkills: SkillItemProps[]) => void;
   handleYourExperienceChange: (selected: Option) => void;
   handleContextChange: (selected: Option) => void;
   handleGroupDimensionChange: (selected: Option) => void;
   handleLeanerExperienceChange: (selected: Option) => void;
   handleSetText: (newText: string) => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
-  handleSkillsChange: React.Dispatch<React.SetStateAction<string[]>>;
+  handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
@@ -86,7 +86,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Use for storage of the tags in the skill and concept selection
   const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
-    useLocalStorage<string[]>('selectedSkillConceptsTags', []);
+    useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
 
   // Use for storage of the text in the text input
   const [text, setText] = useLocalStorage<string>('text', '');
@@ -156,12 +156,16 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleLearningObjectives = () => {
+    const selectedSkillsLabels = selectedSkillConceptsTags.map((item: SkillItemProps) => item.label);
     const principleOfSkills =
-      hydrated && selectedSkillConceptsTags
-        ? selectedSkillConceptsTags.join(' ')
+      hydrated && selectedSkillsLabels
+        ? selectedSkillsLabels.join(' ')
         : '';
+    console.log(principleOfSkills);
     const selectedOptionsText =
       hydrated && selectedOptions ? selectedOptions.join(' ') : '';
+
+    console.log(selectedOptionsText);
     const learningObjectiveText = hydrated ? text : '';
 
     const learningObjectives = [
@@ -239,7 +243,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   }, [resetCheckBoxOptions]); // Dipendenza dell'effetto collaterale
 
   //handlers for tags selection
-  const handleSkillsChange: React.Dispatch<React.SetStateAction<string[]>> = (
+  const handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>> = (
     newSkills
   ) => {
     setSelectedSkillConceptsTags(newSkills);

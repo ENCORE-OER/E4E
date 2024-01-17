@@ -1052,5 +1052,52 @@ export class APIV2 {
       return 0;
     }
   }
+
+  // ----------------------- Learning Scenario -----------------------
+
+  async saveLearningScenario(
+    experienced: string,
+    educationContext: string,
+    dimension: string,
+    learnerExperience: string,
+    bloomLevel: string,
+    //verbsBloomLevel: string[],
+    skills: number[],
+    learningContext: string
+    //nodes?: any[],
+    //edges?: any[]
+  ) {
+    try {
+      const resp = await axiosNoCookie.post(
+        'https://encore-api.polyglot-edu.com/api/saveLearningScenario',
+        {
+          //id: 1,
+
+          LearningScenario: {
+            Context: {
+              EducatorExperience: experienced,
+              EducationContext: educationContext,
+              Dimension: dimension,
+              LearnerExperience: learnerExperience,
+            },
+            Objective: {
+              BloomLevel: bloomLevel,
+              Skills: skills,
+              LearningContext: learningContext,
+            },
+            Path: {
+              Nodes: [],
+              Edges: [],
+            },
+          },
+        }
+      );
+
+      console.log(resp.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // =====================================================
 }
