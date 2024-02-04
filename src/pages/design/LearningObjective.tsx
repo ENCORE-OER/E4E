@@ -1,16 +1,16 @@
-import { Box, Flex, Heading, Text, Button } from '@chakra-ui/react';
 import { useUser } from '@auth0/nextjs-auth0/client';
+import { Box, Button, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
-import SideBar from '../../components/SideBar/SideBar';
-import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
-import LearningStepper from '../../components/Stepper/Stepper';
-import { CustomToast } from '../../utils/Toast/CustomToast';
 import PathDesignCentralBars from '../../components/PathDesignCentralBars/PathDesignCentralBars';
+import SideBar from '../../components/SideBar/SideBar';
+import LearningStepper from '../../components/Stepper/Stepper';
+import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 
 const Home = (/*props: DiscoverPageProps*/) => {
   const {
@@ -30,6 +30,14 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { addToast } = CustomToast();
+
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+
+  // ==================================================================
+
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
@@ -56,13 +64,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
   return (
     <>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Design" />
         <SideBar pagePath={'/design'} />
+        <Navbar user={user} pageName="Design" />
 
         <Box
-          ml="200px"
+          //ml="200px"
           py="115px"
-          pl="40px"
+          pl={isSmallerScreen ? "90px" : "240px"}
           w="full"
           h={step >= 2 ? 'full' : '100vh'}
           bg="background"
@@ -71,7 +79,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -80,7 +88,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Box w="80% ">
                 <LearningStepper activeStep={1} />

@@ -1,4 +1,4 @@
-import { Box, BoxProps, useDisclosure } from '@chakra-ui/react';
+import { Box, BoxProps, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
 import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
 //import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
@@ -44,12 +44,10 @@ export default function Sidebar({
     <Box>
       <SidebarContent
         onClose={() => onClose}
-        display={{
-          base: 'vartical-flex',
-          md: 'vartical-flex',
-          /* questa dicitura serve a specificare 
-                    come deve essere mostrata la sidebar per i viewport 'base', quindi
-                    più piccoli (metà finestra), e per i viewport più grandi (md) */
+        display={{   // specify how to display the sidebar for different screen sizes
+          base: 'flex', // 'base' the smallest screen size (half window)
+          md: 'flex',  // 'md' the largest screen size (medium size window). This should be cover all the other screen sizes. 
+          flexDirection: 'column',
         }}
         selectedLink={selectedLink}
         setIsSelected={setIsSelected}
@@ -69,6 +67,9 @@ const SidebarContent = ({
   setIsSelected,
   ...rest
 }: SidebarProps) => {
+
+  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+
   return (
     <Box
       py="5px"
@@ -78,12 +79,12 @@ const SidebarContent = ({
       borderRightStyle="solid"
       //justifyContent="center"
       //w={{ base: 'flex', md: 'auto' }}
-      width="200px"
+      width={isSmallerScreen ? "50px" : "200px"}
       height="100vh"
       pos="fixed"
       zIndex="sticky"
       //position="sticky"
-      mt="60px"
+      pt="60px"
       left="0"
       {...rest}
     >
@@ -93,8 +94,9 @@ const SidebarContent = ({
           link={link}
           selectedLink={selectedLink}
           setIsSelected={setIsSelected}
+          isSmallerScreen={isSmallerScreen}
         >
-          {link.name}
+          {isSmallerScreen ? "" : link.name}
         </SideBarNavItem>
       ))}
     </Box>

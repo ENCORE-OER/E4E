@@ -9,6 +9,7 @@ type OerCardFooterProps = {
   liked: number;
   gapGrid?: number;
   qualityScore: number;
+  maxResTypeTags?: number;
 };
 
 export default function OerCardFooter({
@@ -18,6 +19,7 @@ export default function OerCardFooter({
   liked,
   gapGrid,
   qualityScore,
+  maxResTypeTags,
 }: OerCardFooterProps) {
   return (
     <CardFooter pt="0">
@@ -31,7 +33,7 @@ export default function OerCardFooter({
         />
 
         <Flex gap={0.5}>
-          <TagResourceType resourceType={resourceType} maxTags={3} />
+          <TagResourceType resourceType={resourceType} maxTags={maxResTypeTags || 2} />
         </Flex>
       </Box>
     </CardFooter>

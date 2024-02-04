@@ -50,6 +50,7 @@ interface CollectionViewProps extends BoxProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   isDeletingResource: boolean;
   setIsDeletingResource: Dispatch<SetStateAction<boolean>>;
+  isSmallerScreen?: boolean;
 }
 
 export default function CollectionView({
@@ -74,6 +75,7 @@ export default function CollectionView({
   setIsLoading,
   isDeletingResource,
   setIsDeletingResource,
+  isSmallerScreen,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -230,82 +232,85 @@ export default function CollectionView({
 
   return (
     <Box {...rest}>
-      <Box w="550px">
-        <HeaderCollectionView
-          collectionName={collections[collectionIndex]?.name}
-          data={collections[collectionIndex]}
-          fileName={collections[collectionIndex]?.name}
-        />
-        <HStack pb="3">
-          <Text
-            fontWeight="light"
-            fontSize="small"
-            color="grey"
-          >{`${collections[collectionIndex]?.oers?.length} resources`}</Text>
-          <Flex flex="1" w="full" justifyContent="flex-end">
-            <OerCardsSorting
-              filtered={oersById}
-              setFiltered={setOersById}
-              viewChanged={viewChanged}
-              setViewChanged={setViewChanged}
-              selectedSorting={selectedSorting}
-              setSelectedSorting={setSelectedSorting}
-              handleSortingChange={handleSortingChange}
-              isAscending={isAscending}
-              setAscending={setAscending}
-              handleItemSortingClick={handleItemSortingClick}
+      <Flex bg="background" direction={isSmallerScreen ? 'column' : 'row'}>
+        <Box>
+          <HeaderCollectionView
+            collectionName={collections[collectionIndex]?.name}
+            data={collections[collectionIndex]}
+            fileName={collections[collectionIndex]?.name}
+          />
+          <HStack pb="3">
+            <Text
+              fontWeight="light"
+              fontSize="small"
+              color="grey"
+            >{`${collections[collectionIndex]?.oers?.length} resources`}</Text>
+            <Flex flex="1" w="full" justifyContent="flex-end">
+              <OerCardsSorting
+                filtered={oersById}
+                setFiltered={setOersById}
+                viewChanged={viewChanged}
+                setViewChanged={setViewChanged}
+                selectedSorting={selectedSorting}
+                setSelectedSorting={setSelectedSorting}
+                handleSortingChange={handleSortingChange}
+                isAscending={isAscending}
+                setAscending={setAscending}
+                handleItemSortingClick={handleItemSortingClick}
               //setIsLoading={setIsLoading}
-            />
-          </Flex>
-        </HStack>
-        {isLoading && (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p>Loading...</p>
-          </div>
-        )}
-        {!isLoading && hydrated && isNewDataLoaded && (
-          <VStack>
-            <ResourceCardsList
-              oers={oersById}
-              isNormalSizeCard={true}
-              itemsPerPage={5}
-              collectionsColor={[collections[collectionIndex]?.color]}
-              isResourcePage={true}
-              handleDeleteButtonClick={handleDeleteButtonClick}
-              collectionIndex={collectionIndex}
-              oersLength={oersById?.length}
-              setCurrentPage={setCurrentPage}
-              currentPage={currentPage}
-              handlePageChange={handlePageChange}
-            />
-            <Flex justifyContent="center" padding="5">
-              <AddResourcesButton
-                text="Add Resources ..."
-                pathname="/"
-                variant="primary"
               />
             </Flex>
-          </VStack>
-        )}
-      </Box>
+          </HStack>
+          {isLoading && (
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading...</p>
+            </div>
+          )}
+          {!isLoading && hydrated && isNewDataLoaded && (
+            <VStack>
+              <ResourceCardsList
+                oers={oersById}
+                isNormalSizeCard={true}
+                itemsPerPage={5}
+                collectionsColor={[collections[collectionIndex]?.color]}
+                isResourcePage={true}
+                handleDeleteButtonClick={handleDeleteButtonClick}
+                collectionIndex={collectionIndex}
+                oersLength={oersById?.length}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                handlePageChange={handlePageChange}
+                isSmallerScreen={isSmallerScreen}
+              />
+              <Flex justifyContent="center" padding="5">
+                <AddResourcesButton
+                  text="Add Resources ..."
+                  pathname="/"
+                  variant="primary"
+                />
+              </Flex>
+            </VStack>
+          )}
+        </Box>
 
-      {hydrated && (
-        <ConceptsCollectionView
-          handleConceptsChange={handleConceptsChange}
-          uniqueConcepts={uniqueConcepts}
-          conceptsSelectedLength={
-            collections[collectionIndex]?.conceptsSelected?.length
-          }
-          conceptsSelected={
-            collectionIndex > -1
-              ? collections[collectionIndex]?.conceptsSelected
-              : []
-          }
-          oersLength={collections[collectionIndex]?.oers?.length}
-          label_tooltip="Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths"
-        />
-      )}
+        {hydrated && (
+          <ConceptsCollectionView
+            handleConceptsChange={handleConceptsChange}
+            uniqueConcepts={uniqueConcepts}
+            conceptsSelectedLength={
+              collections[collectionIndex]?.conceptsSelected?.length
+            }
+            conceptsSelected={
+              collectionIndex > -1
+                ? collections[collectionIndex]?.conceptsSelected
+                : []
+            }
+            oersLength={collections[collectionIndex]?.oers?.length}
+            label_tooltip="Here you will find all the concepts covered by the OERs in this collection. Select the concepts that interest you and start building new learning paths"
+          />
+        )}
+      </Flex>
 
       <DeleteOerAlertDialog
         handleDeleteResource={handleDeleteResource}

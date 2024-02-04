@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Card, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Card, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -44,6 +44,13 @@ const Home = (props: DiscoverPageProps) => {
 
   const router = useRouter();
   const { collections } = useCollectionsContext();
+
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+
+  // ==================================================================
 
   const [oersById, setOersById] = useState<
     (OerProps | OerFreeSearchProps | undefined)[]
@@ -177,13 +184,14 @@ const Home = (props: DiscoverPageProps) => {
   return (
     <LearningPathProvider>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Design" />
         <SideBar pagePath={'/design'} />
+        <Navbar user={user} pageName="Design" />
 
         <Box
-          ml="200px"
+          //ml="200px"
           py="115px"
-          px="40px"
+          pl={isSmallerScreen ? "90px" : "240px"}
+          //px="40px"
           w="full"
           h={'full'}
           bg="background"
@@ -192,7 +200,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>

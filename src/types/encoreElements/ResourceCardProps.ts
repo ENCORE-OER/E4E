@@ -12,6 +12,11 @@ export type ResourceCardProps = {
   overall_score: number;
   domain?: string[];
   maxHCard?: string;
+  maxWCard?: string;
+  minWCard?: string;
+  minHCard?: string;
+  wCard?: string;
+  hCard?: string;
   pxCard?: string;
   mbCard?: string;
   ptCardHeader?: string;
@@ -20,5 +25,6 @@ export type ResourceCardProps = {
   gapGridCardFooter?: number;
   total_likes: number;
   times_used: number;
+
   //isNormalSizeCard?: boolean;
 };

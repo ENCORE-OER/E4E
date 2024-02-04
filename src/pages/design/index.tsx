@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -18,6 +18,13 @@ const Home = () => {
   const { addToast } = CustomToast();
   const { SPACING } = useLearningPathDesignContext();
 
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+
+  // ==================================================================
+
   const handleOptionsComplete = (areComplete: boolean) => {
     setAreOptionsComplete(areComplete);
   };
@@ -28,13 +35,12 @@ const Home = () => {
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Design" />
       <SideBar pagePath={router.pathname} />
+      <Navbar user={user} pageName="Design" />
 
       <Box
-        ml="200px"
         py="115px"
-        pl="40px"
+        pl={isSmallerScreen ? "90px" : "240px"}
         w="full"
         minH="100vh"
         bg="background"
@@ -43,7 +49,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -52,7 +58,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box w="80% ">
               <LearningStepper activeStep={0} />

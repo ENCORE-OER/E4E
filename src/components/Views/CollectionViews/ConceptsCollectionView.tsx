@@ -35,9 +35,12 @@ export default function ConceptsCollectionView({
       display="flex"
       flexDirection="column"
       h="full"
-      //justifyContent="center"
+      w="full"
+      //minW="150px"
+      bg="background"
+    //justifyContent="center"
     >
-      <Flex gap={1}>
+      <Flex gap={1} bg="background" >
         <Tooltip
           hasArrow
           placement="top"
@@ -53,7 +56,7 @@ export default function ConceptsCollectionView({
           </span>
         </Tooltip>
         <Box>
-          <Heading fontSize="18px" fontWeight="semibold" mb="2">
+          <Heading fontSize="18px" fontWeight="semibold" pb="2">
             Choose the key concepts you wish to incorporate into the learning
             path.
           </Heading>
@@ -64,7 +67,7 @@ export default function ConceptsCollectionView({
           </Text>
         </Box>
       </Flex>
-      <Box w="full" p={3} h="full">
+      <Box minW={"250px"} p={3} h="full" bg="background">
         {hydrated && (
           <SelectConcepts
             collectionLength={oersLength}

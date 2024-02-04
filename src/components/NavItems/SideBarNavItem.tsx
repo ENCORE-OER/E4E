@@ -15,6 +15,7 @@ interface SideBarNavItemProps {
   selectedLink: string;
   setIsSelected: (value: string) => void;
   children: ReactText | string;
+  isSmallerScreen?: boolean;
 }
 
 const SideBarNavItem = ({
@@ -22,6 +23,7 @@ const SideBarNavItem = ({
   selectedLink,
   setIsSelected,
   children,
+  isSmallerScreen,
 }: SideBarNavItemProps) => {
   return (
     <NavItem
@@ -32,9 +34,10 @@ const SideBarNavItem = ({
       setIsSelected={() => setIsSelected(link.link)}
       gap={3}
       height="45px"
-      width="196px"
+      width={isSmallerScreen ? "48px" : "196px"}
       ml="1px"
-      pl="20px"
+      //pl="20px"
+      pl={isSmallerScreen ? "10px" : "20px"}
       my="15px"
       align="center"
       //p="4"

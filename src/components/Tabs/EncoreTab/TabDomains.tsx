@@ -1,4 +1,4 @@
-import { Stack, Text } from '@chakra-ui/react';
+import { Flex, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
 import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
 import { useContext, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
@@ -13,7 +13,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
@@ -25,6 +25,29 @@ export const TabDomains = ({}: TabDomainsProps) => {
   >([]);
 
   const [selectedOERIds, setSelectedOERIds] = useState([]);
+
+  // ============================ VENN DIAGRAM ============================
+  // To make the venn diagram responsive
+  const vennDiagramWidth = useBreakpointValue({
+    base: 450, // width for smaller screens
+    sm: 450, // width for small screens
+    md: 550, // width for medium screens
+    //lg: 600, // width for large screens
+    //xl: 650, // width for extra large screens
+  });
+
+  const vennDiagramHeight = useBreakpointValue({
+    base: 350, // height for smaller screens
+    sm: 350, // height for small screens
+    md: 450, // height for medium screens
+    //lg: 500, // height for large screens
+    //xl: 550, // height for extra large screens
+  });
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
+
+  // =======================================================================
 
   // here i sorted the oers per domain
 
@@ -50,11 +73,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (
       oer:
         | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -183,21 +206,32 @@ export const TabDomains = ({}: TabDomainsProps) => {
       </Stack>
 
       <br />
-      <div>
+      <Flex>
         {filtered.length > 0 && hydrated && (
           <VennDiagram
+            className='venn-diagram'
             sets={sets}
-            width={550}
-            height={450}
+            //style={{ maxWidth: 600 }}
+            width={Number(vennDiagramWidth)}
+            height={Number(vennDiagramHeight)}
             selection={selection}
             onHover={setSelection}
             combinations={combinations}
             hasSelectionOpacity={0.2}
             selectionColor=""
             onClick={onClickDiagram}
+            fontSizes={
+              isSmallerScreen
+                ? {
+                  setLabel: "12px",
+                }
+                : {
+                  setLabel: "15px",
+                }
+            }
           />
         )}
-      </div>
+      </Flex>
     </>
   );
 };

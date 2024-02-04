@@ -25,7 +25,7 @@ const NavItem = ({
     <Link
       href={link}
       style={{ textDecoration: 'none' }}
-      //_focus={{ boxShadow: 'none' }}
+    //_focus={{ boxShadow: 'none' }}
     >
       <Flex
         onClick={() => {

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
+import { Box, Flex, Heading, HStack, Text, useBreakpointValue } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -52,6 +52,28 @@ const Discover = (props: DiscoverPageProps) => {
   const [selectedSorting, setSelectedSorting] = useState<string>('title'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // ============================ VENN DIAGRAM ============================
+
+  // To make the venn diagram responsive
+  // const vennDiagramWidth = useBreakpointValue({
+  //   base: 420, 
+  //   md: 550,
+  //   lg: 600, 
+  // });
+
+  // const vennDiagramHeight = useBreakpointValue({
+  //   base: 350, 
+  //   md: 450, 
+  //   lg: 500,
+  // });
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
+  //const isSmallerThan600px = useBreakpointValue({ 1200: true, 2000: false });
+  //const isSmallerThan600px = useMediaQuery('(max-width: 600px)');
+
+  // =======================================================================
 
   //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
 
@@ -558,21 +580,21 @@ const Discover = (props: DiscoverPageProps) => {
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} />
       <SideBar pagePath={router.pathname} />
-      <Flex ml="200px" minH="100vh" pt="60px" w="full">
-        <Box flex="1" py="30px" px="30px" h="full" w="full">
+      <Navbar user={user} />
+      <Flex direction="row" pl={isSmallerScreen ? "50px" : "200px"} minH="100vh" pt="60px" w="full">
+        <Box flex="1" py={isSmallerScreen ? "15px" : "30px"} px={isSmallerScreen ? "15px" : "30px"} h="full" w="full">
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
             </Heading>
           </Flex>
 
-          <HStack mb="5">
+          <HStack pb="5">
             <Text flex="1" fontWeight="light" color="grey">
               {`${OersLengthTotal} resources`}
             </Text>
@@ -601,6 +623,7 @@ const Discover = (props: DiscoverPageProps) => {
           {!isLoading && endSearch && hydrated && (
             <ResourceCardsList
               oers={filtered}
+              //isNormalSizeCard={isSmallerThan600px ? false : true}
               isNormalSizeCard={true}
               itemsPerPage={10}
               oersLength={OersLengthTotal}
@@ -609,6 +632,8 @@ const Discover = (props: DiscoverPageProps) => {
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
+              isSmallerScreen={isSmallerScreen}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -630,8 +655,8 @@ const Discover = (props: DiscoverPageProps) => {
             domains={domain}
             searchCallBack={searchCallbackEncoreTab}
             flex="1" // "flex='1'" fill the rest of the page
-            py="30px"
-            px="30px"
+            py={isSmallerScreen ? "15px" : "30px"}
+            px={isSmallerScreen ? "15px" : "30px"}
             w="full"
             h="full"
             backgroundColor="background"

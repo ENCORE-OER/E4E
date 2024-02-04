@@ -9,13 +9,14 @@ import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSea
 import { useHasHydrated } from '../../../utils/utils';
 import OerCard from './OerCard';
 
-type SingleResourceCardProps = {
+interface SingleResourceCardProps {
   oer: OerProps | OerFreeSearchProps | undefined;
   collectionColor: string;
   checkBookmark?: boolean;
   collectionsColor: string[] | string;
   updateLikeOER: boolean;
-};
+  isSmallerScreen?: boolean;  // used for the responsive design of the page
+}
 
 export default function SingleResourceCard({
   oer,
@@ -23,6 +24,7 @@ export default function SingleResourceCard({
   checkBookmark,
   collectionsColor,
   updateLikeOER,
+  isSmallerScreen,
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -105,6 +107,12 @@ export default function SingleResourceCard({
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
+          //pxCard={isSmallerScreen ? '5px' : undefined}
+          //maxWCard={isSmallerScreen ? '550px' : undefined}
+          //minWCard={isSmallerScreen ? '0px' : '550px'}
+          //wCard={isSmallerScreen ? undefined : '550px'}
+          //maxWCard='550px'
+          isSmallerScreen={isSmallerScreen}
         />
       )}
     </>

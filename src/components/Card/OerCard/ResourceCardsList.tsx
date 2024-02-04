@@ -25,6 +25,7 @@ type ResourceCardsListProps = {
   currentPage?: number;
   setCurrentPage?: Dispatch<SetStateAction<number>>;
   handlePageChange?: (newPage: number) => void;
+  isSmallerScreen?: boolean;
 };
 
 export default function ResourceCardsList({
@@ -39,6 +40,7 @@ export default function ResourceCardsList({
   currentPage,
   setCurrentPage,
   handlePageChange,
+  isSmallerScreen,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -63,6 +65,7 @@ export default function ResourceCardsList({
     setCurrentPage(newPage);
   };*/
   //-----------------------------------------------------------
+
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -103,16 +106,17 @@ export default function ResourceCardsList({
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
                                 : // : collectionsColor[   // to handle when we use the API with pagination
-                                  // (currentPage) > 1
-                                  //   ? index + itemsPerPage * (currentPage - 1)
-                                  //   : index]
-                                  collectionsColor[index]
+                                // (currentPage) > 1
+                                //   ? index + itemsPerPage * (currentPage - 1)
+                                //   : index]
+                                collectionsColor[index]
                               : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                                ''
+                              ''
                           }
                           oer={oer}
                           collectionsColor={collectionsColor}
                           updateLikeOER={updateLikeOER}
+                          isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
                         />
                       </Box>
                       {isResourcePage && (
@@ -133,8 +137,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -162,7 +166,7 @@ export default function ResourceCardsList({
 
       {!isNormalSizeCard && hydrated && (
         <Box>
-          <HStack h="full" spacing={4} /*className="scrollable-content"*/>
+          <VStack h="full" spacing={4} /*className="scrollable-content"*/>
             {currentPage &&
               oers
                 ?.slice(
@@ -174,27 +178,53 @@ export default function ResourceCardsList({
                     oer: OerProps | OerFreeSearchProps | undefined,
                     index: number
                   ) => (
-                    <Box
-                      key={index}
-                      onClick={async (e: any) => {
-                        e.preventDefault();
-                        onOpen();
-                        // handleOpenCardInfoModal();
-                        setOerById(oer);
-                      }}
-                      as="button"
-                    >
-                      <SmallSingleResourceCard
-                        collectionColor={collectionsColor[0]}
-                        //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
-                        oer={oer}
-                        collectionsColor={collectionsColor}
-                        updateLikeOER={updateLikeOER}
-                      />
-                    </Box>
+                    <HStack key={index}>
+                      <Box
+                        //key={index}
+                        onClick={async (e: any) => {
+                          e.preventDefault();
+                          onOpen();
+                          // handleOpenCardInfoModal();
+                          setOerById(oer);
+                        }}
+                        as="button"
+                      >
+                        <SmallSingleResourceCard
+                          collectionColor={collectionsColor[0]}
+                          //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
+                          oer={oer}
+                          collectionsColor={collectionsColor}
+                          updateLikeOER={updateLikeOER}
+                        />
+                      </Box>
+                      {isResourcePage && (
+                        <Button
+                          variant="ghost"
+                          _hover={{ bg: 'gray.300' }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            //alert("Click su delete");
+                            //console.log("I'm triggering delete resource button");
+                            if (
+                              handleDeleteButtonClick &&
+                              collectionIndex !== undefined &&
+                              collectionIndex > -1
+                            ) {
+                              handleDeleteButtonClick(collectionIndex, oer?.id);
+                            } //else {
+                            //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
+                            //}
+                          }}
+                        //position="absolute"
+                        //right={'0px'}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      )}
+                    </HStack>
                   )
                 )}
-          </HStack>
+          </VStack>
           {oers.length !== 0 && (
             <Pagination
               currentPage={currentPage ?? 1}

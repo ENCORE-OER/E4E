@@ -6,6 +6,7 @@ import {
   HStack,
   Icon,
   Spacer,
+  useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -60,6 +61,14 @@ const Home = (props: DiscoverPageProps) => {
   >([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
   const { addToast } = CustomToast();
+
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
+
+
+  // ==================================================================
 
   // handle the click on the collection
   const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
@@ -261,35 +270,40 @@ const Home = (props: DiscoverPageProps) => {
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Your resources" />
       <SideBar pagePath={router.pathname} />
+      <Navbar user={user} pageName="Your resources" />
       <Box
-        ml="200px"
+        //ml="200px"
         py="115px"
-        pl="40px"
+        pl={isSmallerScreen ? "70px" : "240px"}
         w="full"
         minH="100vh"
         bg="background"
       >
         <Flex
-          w="100%"
+          //w="full"
           justifyContent="left"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
 
-        <Flex minW="full" minH="full" my="30px" gap={3}>
+        <Flex w="full" h="full" py={isSmallerScreen ? "15px" : "30px"} gap={3} bg="background">
           <Box
             borderRight="2px"
             borderRightColor="secondary"
-            w="300px"
-            p="25px"
-            minH="full"
+            w={isSmallerScreen ? "120px" : "300px"}
+            //p="25px"
+            px={isSmallerScreen ? "10px" : "25px"}
+            py="25px"
+            //minH="full"
+            //h="full"
+            bg="background"
           >
-            <HStack mb="3">
-              <Heading fontSize="25px">Collections</Heading>
-              <Spacer />
+            <HStack pb="3" bg="background">
+              <Heading fontSize="25px">{isSmallerScreen ? "" : "Collections"}</Heading>
+              {!isSmallerScreen && <Spacer />}
               <Button
                 variant="ghost"
                 _hover={{ bg: 'backgound' }}
@@ -301,7 +315,7 @@ const Home = (props: DiscoverPageProps) => {
                 <Icon as={LuFolderPlus} w="30px" h="30px" />
               </Button>
             </HStack>
-            <Box>
+            <Box bg="background">
               {hydrated &&
                 collections?.map(
                   (collection: CollectionProps, index: number) => (
@@ -315,6 +329,7 @@ const Home = (props: DiscoverPageProps) => {
                       collectionIndex={collectionIndex}
                       setCollectionIndex={setCollectionIndex}
                       deleteCollection={deleteCollection}
+                      isSmallerScreen={isSmallerScreen}
                     >
                       {collection.name}
                     </CollectionNavItem>
@@ -322,36 +337,41 @@ const Home = (props: DiscoverPageProps) => {
                 )}
             </Box>
           </Box>
-          <Box p="25px" flex="1" h="full">
-            {hydrated && collectionClicked && (
-              <CollectionView
-                viewChanged={viewChanged}
-                setViewChanged={setViewChanged}
-                collectionIndex={collectionIndex}
-                collections={collections}
-                oersById={oersById}
-                setOersById={setOersById}
-                minW={'full'}
-                display="flex"
-                isNewDataLoaded={isNewDataLoaded}
-                setIsNewDataLoaded={setIsNewDataLoaded}
-                setSelectedConceptsForCollection={
-                  setSelectedConceptsForCollection
-                }
-                // handle deleting of a Oer with alert dialog
-                handleDeleteResource={handleDeleteResource}
-                isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
-                onCloseDeleteAlertDialog={onCloseDeleteAlertDialog}
-                handleDeleteButtonClick={handleDeleteButtonClick}
-                OerItemToDelete={OerItemToDelete}
-                setOerItemToDelete={setOerItemToDelete}
-                isLoading={isLoading}
-                setIsLoading={setIsLoading}
-                isDeletingResource={isDeletingResource}
-                setIsDeletingResource={setIsDeletingResource}
-              />
-            )}
-          </Box>
+
+          {hydrated && collectionClicked && (
+            <CollectionView
+              bg="background"
+              px={isSmallerScreen ? '10px' : '25px'}
+              py='25px'
+              //minW={'full'}
+              // minH={'full'}
+              display="flex"
+              viewChanged={viewChanged}
+              setViewChanged={setViewChanged}
+              collectionIndex={collectionIndex}
+              collections={collections}
+              oersById={oersById}
+              setOersById={setOersById}
+              isNewDataLoaded={isNewDataLoaded}
+              setIsNewDataLoaded={setIsNewDataLoaded}
+              setSelectedConceptsForCollection={
+                setSelectedConceptsForCollection
+              }
+              // handle deleting of a Oer with alert dialog
+              handleDeleteResource={handleDeleteResource}
+              isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
+              onCloseDeleteAlertDialog={onCloseDeleteAlertDialog}
+              handleDeleteButtonClick={handleDeleteButtonClick}
+              OerItemToDelete={OerItemToDelete}
+              setOerItemToDelete={setOerItemToDelete}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              isDeletingResource={isDeletingResource}
+              setIsDeletingResource={setIsDeletingResource}
+              isSmallerScreen={isSmallerScreen}
+            />
+          )}
+
         </Flex>
       </Box>
 
