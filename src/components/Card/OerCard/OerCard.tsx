@@ -6,7 +6,7 @@ import OerCardHeader from './OerCardHeader';
 
 interface OerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
-  isSmallerScreen?: boolean;  // used for the responsive design of the page (reduce number of resource type tags)
+  isSmallerScreen?: boolean; // used for the responsive design of the page (reduce number of resource type tags)
 }
 
 export default function OerCard({
@@ -31,11 +31,12 @@ export default function OerCard({
   checkBookmark,
   times_used,
   total_likes,
-  maxWCard,
   //minWCard,
   //wCard,
   //isSmallerScreen,
-}: OerCardProps) {
+  maxWCard,
+}
+  : OerCardProps) {
   return (
     <Card
       display="flex"

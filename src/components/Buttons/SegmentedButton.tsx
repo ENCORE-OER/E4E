@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Button, ButtonGroup, Flex, Text, Box } from '@chakra-ui/react';
 import { CheckIcon } from '@chakra-ui/icons';
+import { Box, Button, ButtonGroup, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
 
 type SegmentedButtonProps<T> = {
@@ -9,6 +9,7 @@ type SegmentedButtonProps<T> = {
   onChange?: (value: T) => void;
   preselectedTitle?: string | null;
   isHighlighted: boolean;
+  isSmallerScreen?: boolean;
 };
 
 const SegmentedButton = <T extends {}>({
@@ -17,6 +18,7 @@ const SegmentedButton = <T extends {}>({
   onChange,
   preselectedTitle,
   isHighlighted,
+  isSmallerScreen,
 }: SegmentedButtonProps<T>) => {
   const [colored, setColored] = useState<string | null>(null);
   const hydrated = useHasHydrated();
@@ -49,6 +51,7 @@ const SegmentedButton = <T extends {}>({
       border={isHighlighted ? '1.5px solid #bf5521ff' : '1.5px solid darkgrey'}
       borderRadius="25"
       style={{ animation: isHighlighted ? 'blink 1s infinite' : 'none' }}
+      orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
     >
       {hydrated &&
         options?.map((option, index) => (
@@ -59,6 +62,7 @@ const SegmentedButton = <T extends {}>({
             w="100%"
             borderRadius="25"
             borderLeft={index !== 0 ? '1px solid darkgrey' : 'none'}
+            overflow='hidden'
           >
             {colored === option.title && (
               <Flex align="center" justify="center" marginRight="2">
@@ -66,7 +70,9 @@ const SegmentedButton = <T extends {}>({
               </Flex>
             )}
             <Box as="span" fontWeight="bold">
-              {option.title}
+              <Text as="span" fontSize="lg">
+                {option.title}
+              </Text>
 
               <Text as="span" fontSize="xs" color="gray.600">
                 {<br />}

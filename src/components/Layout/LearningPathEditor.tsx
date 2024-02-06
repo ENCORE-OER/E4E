@@ -14,6 +14,7 @@ type LearningPathEditorProps = {
   oers: (OerProps | undefined | OerFreeSearchProps)[];
   collectionColor?: string | string[];
   isLoading: boolean;
+  wPathEditor?: string;
 };
 
 export default function LearningPathEditor({
@@ -21,6 +22,7 @@ export default function LearningPathEditor({
   oers,
   collectionColor,
   isLoading, //setConceptSelectedIndex,
+  wPathEditor,
 }: LearningPathEditorProps) {
   const hydrated = useHasHydrated();
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -63,12 +65,12 @@ export default function LearningPathEditor({
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Box p="10px">
+          <Box p="10px" >
             {/**/}
             <Box
               p={0}
               m={0}
-              w="80%"
+              w={wPathEditor || "80%"}
               h="full"
               mt={5}
               border={'1px solid #CED4DA'}
@@ -103,7 +105,7 @@ export default function LearningPathEditor({
               />
             </Box>
 
-            <Box flex="1" p={5}>
+            <Box flex="1" p={5} w='90%'>
               <Text pb={5} fontSize="20" fontWeight="semibold">
                 Relevant OERs
               </Text>

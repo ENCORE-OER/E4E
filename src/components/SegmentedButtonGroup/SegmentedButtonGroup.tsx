@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import SegmentedButton from '../Buttons/SegmentedButton';
 //import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -12,10 +12,12 @@ type Option = {
 type SegmentedButtonProps = {
   onOptionsChange: (areComplete: boolean) => void;
   isNextButtonClicked: boolean;
+  isSmallerScreen?: boolean;
 };
 export default function SegmentedButtonGroup({
   onOptionsChange,
   isNextButtonClicked,
+  isSmallerScreen,
 }: SegmentedButtonProps) {
   const {
     handleContextChange,
@@ -116,7 +118,7 @@ export default function SegmentedButtonGroup({
   return (
     <>
       <Flex w="100%">
-        <Box w="50%" paddingLeft="0.5rem" paddingRight="2rem">
+        <Box w="50%" px="1.5rem">
           <Text as="b">Your experience</Text>
           <Box paddingTop="0.5rem">
             <SegmentedButton
@@ -125,10 +127,11 @@ export default function SegmentedButtonGroup({
               onChange={handleYourExperienceChange}
               preselectedTitle={selectedYourExperience?.title}
               isHighlighted={highlightedOptions.includes('YourExperience')}
+              isSmallerScreen={isSmallerScreen}
             />
           </Box>
         </Box>
-        <Box w="50%" paddingLeft="0.5rem" paddingRight="2rem">
+        <Box w="50%" px="1.5rem">
           <Text as="b">Educational context</Text>
           <Box paddingTop="0.5rem">
             <SegmentedButton
@@ -137,13 +140,14 @@ export default function SegmentedButtonGroup({
               onChange={handleContextChange}
               preselectedTitle={selectedContext?.title}
               isHighlighted={highlightedOptions.includes('Context')}
+              isSmallerScreen={isSmallerScreen}
             />
           </Box>
         </Box>
       </Flex>
 
       <Flex w="100%" paddingTop="1.5rem">
-        <Box w="50%" paddingLeft="0.5rem" paddingRight="2rem">
+        <Box w="50%" px="1.5rem">
           <Text as="b">Leaner{"'"}s group dimension</Text>
           <Box paddingTop="0.5rem">
             <SegmentedButton
@@ -152,10 +156,11 @@ export default function SegmentedButtonGroup({
               onChange={handleGroupDimensionChange}
               preselectedTitle={selectedGroupDimension?.title}
               isHighlighted={highlightedOptions.includes('GroupDimension')}
+              isSmallerScreen={isSmallerScreen}
             />
           </Box>
         </Box>
-        <Box w="50%" paddingLeft="0.5rem" paddingRight="2rem">
+        <Box w="50%" px="1.5rem">
           <Text as="b">Leaner{"'"}s experience</Text>
           <Box paddingTop="0.5rem">
             <SegmentedButton
@@ -164,6 +169,7 @@ export default function SegmentedButtonGroup({
               onChange={handleLeanerExperienceChange}
               preselectedTitle={selectedLeanerExperience?.title}
               isHighlighted={highlightedOptions.includes('LeanerExperience')}
+              isSmallerScreen={isSmallerScreen}
             />
           </Box>
         </Box>

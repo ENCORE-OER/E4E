@@ -65,8 +65,12 @@ const Home = (props: DiscoverPageProps) => {
   // ==================================================================
 
   // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
-
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
 
   // ==================================================================
 
@@ -269,14 +273,15 @@ const Home = (props: DiscoverPageProps) => {
   }, [collectionIndex]);
 
   return (
-    <Flex w="100%" h="100%">
+    <Flex w="100%" h="100%" bg="background">
       <SideBar pagePath={router.pathname} />
       <Navbar user={user} pageName="Your resources" />
       <Box
         //ml="200px"
         py="115px"
-        pl={isSmallerScreen ? "70px" : "240px"}
-        w="full"
+        pl={isSmallerScreen ? '70px' : '240px'}
+        //w="full"
+        flex="1"
         minH="100vh"
         bg="background"
       >
@@ -289,20 +294,28 @@ const Home = (props: DiscoverPageProps) => {
           <Heading>Your resources</Heading>
         </Flex>
 
-        <Flex w="full" h="full" py={isSmallerScreen ? "15px" : "30px"} gap={3} bg="background">
+        <Flex
+          w="full"
+          h="full"
+          py={isSmallerScreen ? '15px' : '30px'}
+          gap={3}
+          bg="background"
+        >
           <Box
             borderRight="2px"
             borderRightColor="secondary"
-            w={isSmallerScreen ? "120px" : "300px"}
+            w={isSmallerScreen ? '120px' : '300px'}
             //p="25px"
-            px={isSmallerScreen ? "10px" : "25px"}
+            px={isSmallerScreen ? '10px' : '25px'}
             py="25px"
-            //minH="full"
+            //minH="100vh"
             //h="full"
             bg="background"
           >
             <HStack pb="3" bg="background">
-              <Heading fontSize="25px">{isSmallerScreen ? "" : "Collections"}</Heading>
+              <Heading fontSize="25px">
+                {isSmallerScreen ? '' : 'Collections'}
+              </Heading>
               {!isSmallerScreen && <Spacer />}
               <Button
                 variant="ghost"
@@ -342,7 +355,7 @@ const Home = (props: DiscoverPageProps) => {
             <CollectionView
               bg="background"
               px={isSmallerScreen ? '10px' : '25px'}
-              py='25px'
+              py="25px"
               //minW={'full'}
               // minH={'full'}
               display="flex"
@@ -371,7 +384,6 @@ const Home = (props: DiscoverPageProps) => {
               isSmallerScreen={isSmallerScreen}
             />
           )}
-
         </Flex>
       </Box>
 

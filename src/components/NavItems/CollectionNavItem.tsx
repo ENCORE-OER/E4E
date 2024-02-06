@@ -123,7 +123,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -139,7 +139,7 @@ const CollectionNavItem = ({
           cursor={'pointer'}
         >
           <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-          {!isSmallerScreen &&
+          {!isSmallerScreen && (
             <Heading
               fontSize="22px"
               fontWeight="semibold"
@@ -149,8 +149,7 @@ const CollectionNavItem = ({
             >
               {children}
             </Heading>
-          }
-
+          )}
         </Flex>
         <Button
           variant="ghost"

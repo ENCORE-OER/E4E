@@ -1,5 +1,12 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -21,7 +28,12 @@ const Home = () => {
   // ==================================================================
 
   // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
 
   // ==================================================================
 
@@ -40,7 +52,7 @@ const Home = () => {
 
       <Box
         py="115px"
-        pl={isSmallerScreen ? "90px" : "240px"}
+        pl={isSmallerScreen ? '90px' : '240px'}
         w="full"
         minH="100vh"
         bg="background"
@@ -60,11 +72,11 @@ const Home = () => {
             justifyContent="left"
           //justify="space-between"
           >
-            <Box w="80% ">
-              <LearningStepper activeStep={0} />
+            <Box w={isSmallerScreen ? "95%" : "90%"}>
+              <LearningStepper activeStep={0} isSmallerScreen={isSmallerScreen} />
             </Box>
 
-            <Box w="80%" paddingTop="2rem">
+            <Box w={isSmallerScreen ? "95%" : "90%"} paddingTop="2rem">
               <Text>
                 This part will guide you in creating a tailored learning path to
                 meet your specific educational goals. Start by detailing the
@@ -72,10 +84,11 @@ const Home = () => {
                 your activities.
               </Text>
             </Box>
-            <Box w="80%" paddingTop="2rem">
+            <Box w={isSmallerScreen ? "95%" : "90%"} paddingTop="2rem">
               <SegmentedButtonGroup
                 onOptionsChange={handleOptionsComplete}
                 isNextButtonClicked={isNextButtonClicked}
+                isSmallerScreen={isSmallerScreen}
               />
             </Box>
 

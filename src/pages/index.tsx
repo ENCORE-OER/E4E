@@ -6,9 +6,8 @@ import {
   HStack,
   Text,
   useBreakpointValue,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
-
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -211,7 +210,6 @@ const Home = (props: DiscoverPageProps) => {
     }
   };
 
-
   // update metrics
   useEffect(() => {
     const api = new APIV2(props.accessToken);
@@ -313,8 +311,21 @@ const Home = (props: DiscoverPageProps) => {
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
       <Navbar user={user} pageName="Discover" />
-      <Box w="full" minH="100vh" pl={isSmallerScreen ? "50px" : "200px"} bg="background" pt="60px">
-        <VStack spacing="24px" px={isSmallerScreen ? "100px" : "170px"} py="50px" w="full" h="full" bg="background">
+      <Box
+        w="full"
+        minH="100vh"
+        pl={isSmallerScreen ? '50px' : '200px'}
+        bg="background"
+        pt="60px"
+      >
+        <VStack
+          spacing="24px"
+          px={isSmallerScreen ? '100px' : '170px'}
+          py="50px"
+          w="full"
+          h="full"
+          bg="background"
+        >
           <Flex w="100%" justifyContent="center">
             <Heading>Discover</Heading>
           </Flex>
@@ -384,7 +395,7 @@ const Home = (props: DiscoverPageProps) => {
           <div style={{ minWidth: vennDiagramWidth }}>
             {hydrated ? (
               <VennDiagram
-                className='venn-diagram'
+                className="venn-diagram"
                 sets={metrics}
                 width={Number(vennDiagramWidth)}
                 height={Number(vennDiagramHeight)}
@@ -396,11 +407,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: "12px",
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: "15px",
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (

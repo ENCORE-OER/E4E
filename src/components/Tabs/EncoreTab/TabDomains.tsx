@@ -13,7 +13,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
@@ -45,7 +45,12 @@ export const TabDomains = ({ }: TabDomainsProps) => {
   });
 
   // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
 
   // =======================================================================
 
@@ -73,11 +78,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     (
       oer:
         | {
-          green_domain: boolean;
-          digital_domain: boolean;
-          entrepreneurship_domain: boolean;
-          id: number;
-        }
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -209,7 +214,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       <Flex>
         {filtered.length > 0 && hydrated && (
           <VennDiagram
-            className='venn-diagram'
+            className="venn-diagram"
             sets={sets}
             //style={{ maxWidth: 600 }}
             width={Number(vennDiagramWidth)}
@@ -223,11 +228,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
             fontSizes={
               isSmallerScreen
                 ? {
-                  setLabel: "12px",
-                }
+                    setLabel: '12px',
+                  }
                 : {
-                  setLabel: "15px",
-                }
+                    setLabel: '15px',
+                  }
             }
           />
         )}

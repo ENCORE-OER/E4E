@@ -232,7 +232,7 @@ export default function CollectionView({
 
   return (
     <Box {...rest}>
-      <Flex bg="background" direction={isSmallerScreen ? 'column' : 'row'}>
+      <Flex bg="background" direction={isSmallerScreen ? 'column' : 'row'} flexWrap={'wrap'} overflowY="auto">
         <Box>
           <HeaderCollectionView
             collectionName={collections[collectionIndex]?.name}

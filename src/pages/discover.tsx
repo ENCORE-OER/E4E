@@ -1,4 +1,11 @@
-import { Box, Flex, Heading, HStack, Text, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -57,19 +64,24 @@ const Discover = (props: DiscoverPageProps) => {
 
   // To make the venn diagram responsive
   // const vennDiagramWidth = useBreakpointValue({
-  //   base: 420, 
+  //   base: 420,
   //   md: 550,
-  //   lg: 600, 
+  //   lg: 600,
   // });
 
   // const vennDiagramHeight = useBreakpointValue({
-  //   base: 350, 
-  //   md: 450, 
+  //   base: 350,
+  //   md: 450,
   //   lg: 500,
   // });
 
   // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({ base: true, sm: true, md: false, lg: false });
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
   //const isSmallerThan600px = useBreakpointValue({ 1200: true, 2000: false });
   //const isSmallerThan600px = useMediaQuery('(max-width: 600px)');
 
@@ -582,12 +594,24 @@ const Discover = (props: DiscoverPageProps) => {
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
       <Navbar user={user} />
-      <Flex direction="row" pl={isSmallerScreen ? "50px" : "200px"} minH="100vh" pt="60px" w="full">
-        <Box flex="1" py={isSmallerScreen ? "15px" : "30px"} px={isSmallerScreen ? "15px" : "30px"} h="full" w="full">
+      <Flex
+        direction="row"
+        pl={isSmallerScreen ? '50px' : '200px'}
+        minH="100vh"
+        pt="60px"
+        w="full"
+      >
+        <Box
+          flex="1"
+          py={isSmallerScreen ? '15px' : '30px'}
+          px={isSmallerScreen ? '15px' : '30px'}
+          h="full"
+          w="full"
+        >
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -633,7 +657,7 @@ const Discover = (props: DiscoverPageProps) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -655,8 +679,8 @@ const Discover = (props: DiscoverPageProps) => {
             domains={domain}
             searchCallBack={searchCallbackEncoreTab}
             flex="1" // "flex='1'" fill the rest of the page
-            py={isSmallerScreen ? "15px" : "30px"}
-            px={isSmallerScreen ? "15px" : "30px"}
+            py={isSmallerScreen ? '15px' : '30px'}
+            px={isSmallerScreen ? '15px' : '30px'}
             w="full"
             h="full"
             backgroundColor="background"

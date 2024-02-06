@@ -1,4 +1,9 @@
-import { Box, BoxProps, useBreakpointValue, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  BoxProps,
+  useBreakpointValue,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { ReactNode, useEffect } from 'react';
 import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookmarkCheckCustom';
 //import { IconBookmarkCheck } from '../../public/Icons/svgToIcons/iconBookmarkCheck';
@@ -44,9 +49,10 @@ export default function Sidebar({
     <Box>
       <SidebarContent
         onClose={() => onClose}
-        display={{   // specify how to display the sidebar for different screen sizes
+        display={{
+          // specify how to display the sidebar for different screen sizes
           base: 'flex', // 'base' the smallest screen size (half window)
-          md: 'flex',  // 'md' the largest screen size (medium size window). This should be cover all the other screen sizes. 
+          md: 'flex', // 'md' the largest screen size (medium size window). This should be cover all the other screen sizes.
           flexDirection: 'column',
         }}
         selectedLink={selectedLink}
@@ -67,7 +73,6 @@ const SidebarContent = ({
   setIsSelected,
   ...rest
 }: SidebarProps) => {
-
   const isSmallerScreen = useBreakpointValue({ base: true, md: false });
 
   return (
@@ -79,7 +84,7 @@ const SidebarContent = ({
       borderRightStyle="solid"
       //justifyContent="center"
       //w={{ base: 'flex', md: 'auto' }}
-      width={isSmallerScreen ? "50px" : "200px"}
+      width={isSmallerScreen ? '50px' : '200px'}
       height="100vh"
       pos="fixed"
       zIndex="sticky"
@@ -96,7 +101,7 @@ const SidebarContent = ({
           setIsSelected={setIsSelected}
           isSmallerScreen={isSmallerScreen}
         >
-          {isSmallerScreen ? "" : link.name}
+          {isSmallerScreen ? '' : link.name}
         </SideBarNavItem>
       ))}
     </Box>

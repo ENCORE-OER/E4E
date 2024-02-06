@@ -15,7 +15,7 @@ interface SingleResourceCardProps {
   checkBookmark?: boolean;
   collectionsColor: string[] | string;
   updateLikeOER: boolean;
-  isSmallerScreen?: boolean;  // used for the responsive design of the page
+  isSmallerScreen?: boolean; // used for the responsive design of the page
 }
 
 export default function SingleResourceCard({

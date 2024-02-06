@@ -1,7 +1,7 @@
 /* To show all the oer cards */
 
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, HStack, Stack, VStack, useDisclosure } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
@@ -65,7 +65,6 @@ export default function ResourceCardsList({
     setCurrentPage(newPage);
   };*/
   //-----------------------------------------------------------
-
 
   return (
     /* Usage of 2 differents SingleCard ("SingleResourceCard" and "SmallSingleResourceCard") just beacause the OerCardFooter is different. Problems using conditional variables */
@@ -166,7 +165,7 @@ export default function ResourceCardsList({
 
       {!isNormalSizeCard && hydrated && (
         <Box>
-          <VStack h="full" spacing={4} /*className="scrollable-content"*/>
+          <Stack h="full" spacing={4} flexWrap={'wrap'} justify={'center'} direction={isSmallerScreen ? 'column' : 'row'}/*className="scrollable-content"*/>
             {currentPage &&
               oers
                 ?.slice(
@@ -224,7 +223,7 @@ export default function ResourceCardsList({
                     </HStack>
                   )
                 )}
-          </VStack>
+          </Stack>
           {oers.length !== 0 && (
             <Pagination
               currentPage={currentPage ?? 1}

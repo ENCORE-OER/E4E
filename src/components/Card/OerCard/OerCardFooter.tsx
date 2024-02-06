@@ -33,7 +33,10 @@ export default function OerCardFooter({
         />
 
         <Flex gap={0.5}>
-          <TagResourceType resourceType={resourceType} maxTags={maxResTypeTags || 2} />
+          <TagResourceType
+            resourceType={resourceType}
+            maxTags={maxResTypeTags || 2}
+          />
         </Flex>
       </Box>
     </CardFooter>

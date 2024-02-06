@@ -34,10 +34,10 @@ const SideBarNavItem = ({
       setIsSelected={() => setIsSelected(link.link)}
       gap={3}
       height="45px"
-      width={isSmallerScreen ? "48px" : "196px"}
+      width={isSmallerScreen ? '48px' : '196px'}
       ml="1px"
       //pl="20px"
-      pl={isSmallerScreen ? "10px" : "20px"}
+      pl={isSmallerScreen ? '10px' : '20px'}
       my="15px"
       align="center"
       //p="4"

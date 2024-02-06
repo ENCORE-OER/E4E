@@ -34,13 +34,13 @@ export default function ConceptsCollectionView({
       flex="1"
       display="flex"
       flexDirection="column"
-      h="full"
-      w="full"
+      //h="full"
+      //w="full"
       //minW="150px"
       bg="background"
     //justifyContent="center"
     >
-      <Flex gap={1} bg="background" >
+      <Flex gap={1} bg="background">
         <Tooltip
           hasArrow
           placement="top"
@@ -67,7 +67,7 @@ export default function ConceptsCollectionView({
           </Text>
         </Box>
       </Flex>
-      <Box minW={"250px"} p={3} h="full" bg="background">
+      <Box minW='250px' p={3} h="full" bg="background">
         {hydrated && (
           <SelectConcepts
             collectionLength={oersLength}
