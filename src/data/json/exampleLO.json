@@ -1,0 +1,18 @@
+{
+  "learningScenarios": {
+    "Context": {
+      "EducatorExperience": "Advanced",
+      "EducationContext": "University",
+      "Dimension": "Medium",
+      "LearnerExperience": "Advanced"
+    },
+    "Objective": {
+      "BloomLevel": {
+        "name": "Understand",
+        "verbs": ["Explain", "Compare"]
+      },
+      "Skills": ["Java", "Computer Science"],
+      "LearningContext": "Teaching Java"
+    }
+  }
+}

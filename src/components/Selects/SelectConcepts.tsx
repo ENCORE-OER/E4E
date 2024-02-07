@@ -43,7 +43,7 @@ export default function SelectConcepts({
         }),
         menuList: (base) => ({
           ...base,
-          maxHeight: '550px', // here to extend optionsList height
+          maxHeight: '350px', // here to extend optionsList height
         }),
         option: (provided) => ({
           ...provided,

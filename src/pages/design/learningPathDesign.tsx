@@ -1,5 +1,13 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Card, Flex, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -44,6 +52,18 @@ const Home = (props: DiscoverPageProps) => {
 
   const router = useRouter();
   const { collections } = useCollectionsContext();
+
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
+
+  // ==================================================================
 
   const [oersById, setOersById] = useState<
     (OerProps | OerFreeSearchProps | undefined)[]
@@ -177,13 +197,14 @@ const Home = (props: DiscoverPageProps) => {
   return (
     <LearningPathProvider>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Design" />
         <SideBar pagePath={'/design'} />
+        <Navbar user={user} pageName="Design" />
 
         <Box
-          ml="200px"
+          //ml="200px"
           py="115px"
-          px="40px"
+          pl={isSmallerScreen ? '90px' : '240px'}
+          //px="40px"
           w="full"
           h={'full'}
           bg="background"
@@ -196,66 +217,86 @@ const Home = (props: DiscoverPageProps) => {
             >
               <Heading>Learning path design</Heading>
             </Flex>
-            <Box paddingTop="1.5rem" w="100%" justifyContent="left">
-              <Box w="80% ">
-                <LearningStepper activeStep={2} />
+            <Box w={isSmallerScreen ? '95%' : '90%'}>
+              <Box paddingTop="1.5rem" justifyContent="left">
+                <Box>
+                  <LearningStepper
+                    activeStep={2}
+                    isSmallerScreen={isSmallerScreen}
+                  />
+                </Box>
+                <Box paddingTop="2rem">
+                  <Text>
+                    Based on the information provided this a potential learning
+                    objective and a suggested learning path. You have the
+                    flexibility to modify and customize both the description of
+                    the learning objective and the types and sequence of the
+                    proposed activities
+                  </Text>
+                </Box>
               </Box>
-              <Box w="80%" paddingTop="2rem">
-                <Text>
-                  Based on the information provided this a potential learning
-                  objective and a suggested learning path. You have the
-                  flexibility to modify and customize both the description of
-                  the learning objective and the types and sequence of the
-                  proposed activities
-                </Text>
+              <Box paddingTop="0.5rem">
+                <Card size="sm" shadow={0} backgroundColor={'#F8F9FA'}>
+                  <Heading size={'sl'} fontFamily={'body'}>
+                    Learning objective
+                  </Heading>
+                  <Flex
+                    w="100%"
+                    pr={isSmallerScreen ? '0' : `${SPACING}%`}
+                    direction={isSmallerScreen ? 'column' : 'row'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
+                  >
+                    <Box
+                      w={isSmallerScreen ? '100%' : '90%'}
+                      pb={isSmallerScreen ? '2' : '0'}
+                      pr={isSmallerScreen ? '0' : `5`}
+                    >
+                      <ThreeTextBoxes />
+                    </Box>
+                    <Flex
+                      w={isSmallerScreen ? '100%' : '10%'}
+                      gap="3%"
+                      justifyContent={'flex-end'}
+                    >
+                      <Button
+                        //marginRight={'1px'}
+                        border={'1px solid'}
+                        w={isSmallerScreen ? '20%' : '50%'}
+                        colorScheme="yellow"
+                        onClick={handleSaveLearningObjectiveButtonClick}
+                      >
+                        <Flex align="center">
+                          <Icon as={MdSave} w={8} h={8} />
+                        </Flex>
+                      </Button>
+                      <Button
+                        //marginRight={'1px'}
+                        border={'1px solid'}
+                        w={isSmallerScreen ? '20%' : '50%'}
+                        colorScheme="yellow"
+                        onClick={handleUndoLearningObjectiveButtonClick}
+                      >
+                        <Flex align="center">
+                          <Icon as={MdUndo} w={8} h={8} />
+                        </Flex>
+                      </Button>
+                    </Flex>
+                  </Flex>
+                </Card>
               </Box>
             </Box>
-            <Box paddingTop="0.5rem" w="80%">
-              <Card size="sm" shadow={0} backgroundColor={'#F8F9FA'}>
-                <Heading size={'sl'} fontFamily={'body'}>
-                  Learning objective
-                </Heading>
-                <Flex w="100%">
-                  <Box w="92%">
-                    <ThreeTextBoxes />
-                  </Box>
-                  <Box w="4%" paddingRight={'0.25%'}>
-                    <Button
-                      marginRight={'1px'}
-                      border={'1px solid'}
-                      w="100%"
-                      colorScheme="yellow"
-                      onClick={handleSaveLearningObjectiveButtonClick}
-                    >
-                      <Flex align="center">
-                        <Icon as={MdSave} w={8} h={8} />
-                      </Flex>
-                    </Button>
-                  </Box>
-                  <Box w="4%" paddingLeft={'0.25%'}>
-                    <Button
-                      marginRight={'1px'}
-                      border={'1px solid'}
-                      w="100%"
-                      colorScheme="yellow"
-                      onClick={handleUndoLearningObjectiveButtonClick}
-                    >
-                      <Flex align="center">
-                        <Icon as={MdUndo} w={8} h={8} />
-                      </Flex>
-                    </Button>
-                  </Box>
-                </Flex>
-              </Card>
-            </Box>
-
-            <Box position="relative" paddingTop="2rem">
+            <Box
+              position="relative"
+              paddingTop={isSmallerScreen ? '1rem' : '2rem'}
+            >
               <LearningPathEditor
                 //setConceptSelectedIndex={setConceptSelectedIndex}
                 isLoading={isLoading}
                 oers={oersById}
                 conceptSelectedIndex={0}
                 collectionColor={[collections[collectionIndex]?.color]}
+                wPathEditor={isSmallerScreen ? '90%' : '85%'}
               />
             </Box>
           </Box>
@@ -265,7 +306,7 @@ const Home = (props: DiscoverPageProps) => {
               paddingRight={`${SPACING}%`}
               position={'fixed'}
               bottom="5%"
-              right="11%"
+              right="8%"
             >
               <Button
                 marginRight={'1px'}

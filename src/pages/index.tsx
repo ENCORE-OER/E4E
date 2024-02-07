@@ -3,13 +3,10 @@ import {
   Button,
   Flex,
   Heading,
-  HStack,
   Text,
-  Tooltip,
+  useBreakpointValue,
   VStack,
 } from '@chakra-ui/react';
-
-import Image from 'next/image';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -18,10 +15,9 @@ import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
 import Navbar from '../components/NavBars/NavBarEncore';
-import SearchBarEncore from '../components/SearchBar/SearchBarEncore';
 import SideBar from '../components/SideBar/SideBar';
+import SearchView from '../components/Views/SearchView';
 import { APIV2 } from '../data/api';
-import icon_infocircle from '../public/Icons/icon_infocircle.svg';
 import {
   OerAudienceInfo,
   OerDomainInfo,
@@ -72,6 +68,31 @@ const Home = (props: DiscoverPageProps) => {
   const [operator, setOperator] = useState('and'); // operator used for the search
 
   const combinations = useMemo(() => ({ mergeColors }), []);
+
+  // ============================ VENN DIAGRAM ============================
+  // To make the venn diagram responsive
+  const vennDiagramWidth = useBreakpointValue({
+    base: 420, // Larghezza a schermo intero per le dimensioni più piccole
+    md: 570, // Larghezza fissa per schermi di dimensioni medie
+    lg: 620, // Larghezza fissa per schermi più grandi
+  });
+
+  const vennDiagramHeight = useBreakpointValue({
+    base: 370, // Altezza più piccola per le dimensioni più piccole
+    md: 470, // Altezza fissa per schermi di dimensioni medie
+    lg: 520, // Altezza fissa per schermi più grandi
+  });
+  // =======================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
+
+  // =======================================================================
 
   const handleDomainFromDropDownMenu = (data: string[] | number[]) => {
     setSelectedDomains(data);
@@ -292,78 +313,74 @@ const Home = (props: DiscoverPageProps) => {
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Discover" />
       <SideBar pagePath={router.pathname} />
-      <Box w="full" minH="100vh" ml="200px" bg="background" pt="60px">
-        <VStack spacing="24px" px="170px" py="50px" w="full" h="full">
+      <Navbar user={user} pageName="Discover" />
+      <Box
+        w="full"
+        minH="100vh"
+        pl={isSmallerScreen ? '50px' : '200px'}
+        bg="background"
+        pt="60px"
+      >
+        <VStack
+          spacing="24px"
+          px={isSmallerScreen ? '90px' : '160px'}
+          py="50px"
+          w="full"
+          h="full"
+          bg="background"
+        >
           <Flex w="100%" justifyContent="center">
             <Heading>Discover</Heading>
           </Flex>
 
-          {/* TODO: Create SearchView component*/}
-          <Box w="full">
-            <HStack>
-              <Text variant="label" my="6px">
-                Keywords
+          <SearchView
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            suggestions={suggestions}
+            searchCallback1={searchCallback1}
+          />
+
+          <Box w="100%">
+            <Flex
+              w="100%"
+              justifyContent="center"
+              direction={isSmallerScreen ? 'column' : 'row'}
+              align="center"
+              gap={isSmallerScreen ? '3' : '0'}
+            >
+              <Text variant="text_searchFor" textAlign="center">
+                <span>Search for:</span>
               </Text>
-              <Tooltip
-                hasArrow
-                placement="top"
-                label="Keywords. Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
-                aria-label="Search resources in Green, Digital and Entrepreneurial skills from ENCORE OERs database."
-                ml="1px"
-                bg="white"
-                color="primary"
-                p={2}
-              >
-                <span>
-                  {' '}
-                  {/*use span element to fix problem of communication between Tooltip element and svg image*/}
-                  <Image src={icon_infocircle} alt="infocircle" />
-                </span>
-              </Tooltip>
-            </HStack>
-
-            <SearchBarEncore
-              inputValue={searchValue}
-              setInputValue={setSearchValue}
-              //inputValueIds={selectedSkillIds}
-              //setInputValueIds={setSelectedSkillIds}
-              items={suggestions}
-              onSearchCallback={searchCallback1}
-              placeholder="Search resources"
-            />
-          </Box>
-
-          <Box w="100%" px="5px">
-            <HStack>
-              <Flex w="100%" justifyContent="center">
-                <Text variant="text_searchFor">
-                  <span>Search for:</span>
-                </Text>
-
+              <Flex direction="row" align="center">
                 <input
                   type="radio"
                   id="checkboxAll"
                   checked={operator === 'and'}
                   onChange={handleCheckboxAndChange}
                 />
-                <Text variant="text_searchFor_secondary">All keywords</Text>
+                <Text variant="text_searchFor_secondary" textAlign="center">
+                  All keywords
+                </Text>
+              </Flex>
 
+              <Flex direction="row" align="center">
                 <input
                   type="radio"
                   id="checkboxOr"
                   checked={operator === 'or'}
                   onChange={handleCheckboxOrChange}
                 />
-                <Text variant="text_searchFor_secondary">Any keyword</Text>
+                <Text variant="text_searchFor_secondary" textAlign="center">
+                  Any keyword
+                </Text>
               </Flex>
-            </HStack>
+            </Flex>
           </Box>
 
           <div>
             {showBox && (
-              <Box w="100%" px="5px">
+              <Box w="100%">
                 <AdvancedSearch
                   domain={domain}
                   resourceType={resourceTypes}
@@ -373,11 +390,16 @@ const Home = (props: DiscoverPageProps) => {
                     handleResourceTypeFromDropDownMenu
                   }
                   onAudienceFromDropDownMenu={handleAudienceFromDropDownMenu}
+                  isSmallerScreen={isSmallerScreen}
                 />
               </Box>
             )}
 
-            <Flex justifyContent="center" pt={isClicked ? '70px' : '5px'}>
+            <Flex
+              justifyContent="center"
+              pt={isClicked ? '60px' : '5px'}
+              pb="10px"
+            >
               <Button
                 variant="link"
                 rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
@@ -387,20 +409,30 @@ const Home = (props: DiscoverPageProps) => {
               </Button>
             </Flex>
           </div>
-          <Text variant="text_before_venn">
+          <Text variant="text_before_venn" textAlign="center">
             Search among {totalOers} resources
           </Text>
-          <div>
+          <div style={{ minWidth: vennDiagramWidth }}>
             {hydrated ? (
               <VennDiagram
+                className="venn-diagram"
                 sets={metrics}
-                width={550}
-                height={450}
+                width={Number(vennDiagramWidth)}
+                height={Number(vennDiagramHeight)}
                 // selection={selection}
                 // onHover={setSelection}
                 combinations={combinations}
                 hasSelectionOpacity={0.2}
                 selectionColor=""
+                fontSizes={
+                  isSmallerScreen
+                    ? {
+                        setLabel: '12px',
+                      }
+                    : {
+                        setLabel: '15px',
+                      }
+                }
               />
             ) : (
               'loading...'

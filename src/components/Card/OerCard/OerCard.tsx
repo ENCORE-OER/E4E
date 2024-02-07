@@ -6,6 +6,7 @@ import OerCardHeader from './OerCardHeader';
 
 interface OerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
+  isSmallerScreen?: boolean; // used for the responsive design of the page (reduce number of resource type tags)
 }
 
 export default function OerCard({
@@ -30,12 +31,18 @@ export default function OerCard({
   checkBookmark,
   times_used,
   total_likes,
+  //minWCard,
+  //wCard,
+  //isSmallerScreen,
+  maxWCard,
 }: OerCardProps) {
   return (
     <Card
       display="flex"
       h={maxHCard || '195px'}
-      w="550px"
+      //w={wCard}
+      maxW={maxWCard || '550px'}
+      //minW={minWCard || '550px'}
       px={pxCard || '20px'}
       py={0}
       //p={0}
@@ -70,6 +77,7 @@ export default function OerCard({
         liked={total_likes}
         resourceType={resourceType}
         gapGrid={gapGridCardFooter}
+        //maxResTypeTags={isSmallerScreen ? 2 : 3}
       />
     </Card>
   );

@@ -1,33 +1,38 @@
-import React from 'react';
-import { Flex, Text, Box } from '@chakra-ui/react';
-import TextBox from '../../components/TextBox/TextBox';
-import SearchBarPathDesign from '../../components/CustomSearchBar/SearchBarSkillsConcepts';
-import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
-import CheckboxMenu from '../../components/CheckboxMenu/CheckboxMenu';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import { PathDesignCentralBarsProps } from '.';
+import { ArrayProps } from '../../types/encoreElements';
+import CheckboxMenu from '../CheckboxMenu/CheckboxMenu';
+import CustomDropDownMenu from '../CustomDropDownMenu/CustomDropDownMenu';
+import SearchBarPathDesign from '../CustomSearchBar/SearchBarSkillsConcepts';
+import TextBox from '../TextBox/TextBox';
 
-interface PathDesignCentralBarsProps {
-  collectionIndex: number;
-  isNextButtonClicked: boolean;
+export interface CentralBarsProps extends PathDesignCentralBarsProps {
+  SPACING: number;
+  DIMENSION: number;
+  bloomLevels: ArrayProps[];
+  handleBloomLevelChange: (index: number) => void;
+  currentBloomOptions: string[];
+  handleOptionsChange: (newSelectedOptions: string[]) => void;
+  step: number;
+  resetCheckBoxOptions: boolean;
+  text: string;
+  handleSetText: (newText: string) => void;
 }
 
-export default function PathDesignCentralBars({
-  collectionIndex,
+export default function CentralBars({
+  SPACING,
+  DIMENSION,
+  bloomLevels,
+  handleBloomLevelChange,
+  handleOptionsChange,
+  resetCheckBoxOptions,
+  text,
+  handleSetText,
   isNextButtonClicked,
-}: PathDesignCentralBarsProps) {
-  const {
-    DIMENSION,
-    SPACING,
-    bloomLevels,
-    handleBloomLevelChange,
-    currentBloomOptions,
-    handleOptionsChange,
-    step,
-    resetCheckBoxOptions,
-    text,
-    handleSetText,
-  } = useLearningPathDesignContext();
-
+  collectionIndex,
+  currentBloomOptions,
+  step,
+}: CentralBarsProps) {
   return (
     <>
       <Flex paddingTop="1.5rem" w="100%">
@@ -57,7 +62,7 @@ export default function PathDesignCentralBars({
         </Text>
       </Flex>
 
-      <Flex w="100%">
+      <Flex w="100%" pt={1}>
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <CustomDropDownMenu
             data={bloomLevels}
@@ -84,7 +89,7 @@ export default function PathDesignCentralBars({
         </Box>
       </Flex>
 
-      <Flex w="100%">
+      <Flex w="100%" pt={1}>
         <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           This level indicates the cognitive complexity or depth of
           understanding associated with a particular learning objective
@@ -102,7 +107,12 @@ export default function PathDesignCentralBars({
       {step >= 2 && (
         <Flex paddingTop="1.5rem" w="100%">
           <Box w={`${DIMENSION}%`}>
-            <Text fontSize="sm" fontWeight="bold" paddingRight={`${SPACING}%`}>
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              paddingRight={`${SPACING}%`}
+              pb={1}
+            >
               Select the verbs related to your learning objective
             </Text>
             <CheckboxMenu

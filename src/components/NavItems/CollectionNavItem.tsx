@@ -25,6 +25,7 @@ interface CollectionNavItemProps {
   collectionIndex: number;
   deleteCollection: (id: number, name: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
+  isSmallerScreen?: boolean;
 }
 
 interface ItemToDeleteProps {
@@ -42,6 +43,7 @@ const CollectionNavItem = ({
   collectionIndex,
   setCollectionIndex,
   deleteCollection,
+  isSmallerScreen,
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
 
@@ -112,6 +114,7 @@ const CollectionNavItem = ({
         ref={collectionRef}
         mb="2"
         w="100%"
+        minW={isSmallerScreen ? '100px' : '0px'}
         position="relative"
         borderLeft="5px"
         borderLeftColor={collection.color}
@@ -136,17 +139,18 @@ const CollectionNavItem = ({
           cursor={'pointer'}
         >
           <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-          <Heading
-            fontSize="22px"
-            fontWeight="semibold"
-            noOfLines={1}
-            //overflow={"hidden"}
-            w={'65%'}
-          >
-            {children}
-          </Heading>
+          {!isSmallerScreen && (
+            <Heading
+              fontSize="22px"
+              fontWeight="semibold"
+              noOfLines={1}
+              //overflow={"hidden"}
+              w={'65%'}
+            >
+              {children}
+            </Heading>
+          )}
         </Flex>
-
         <Button
           variant="ghost"
           _hover={{ bg: 'gray.300' }}

@@ -21,6 +21,7 @@ export default function SmallOerCard({
   entrepreneurship_domain: showTagEntrepreneurial,
   green_domain: showTagGreen,
   maxHCard,
+  maxWCard,
   //mbCard,
   pxCard,
   gapGridCardFooter,
@@ -36,7 +37,7 @@ SmallOerCardProps) {
     <Card
       display="flex"
       maxH={maxHCard || '190px'}
-      maxW="550px"
+      maxW={maxWCard || '350px'}
       px={pxCard || '20px'}
       py={0}
       border="1px"

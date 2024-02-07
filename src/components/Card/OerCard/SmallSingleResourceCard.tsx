@@ -102,6 +102,7 @@ SmallSingleResourceCardProps) {
           overall_score={oer?.overall_score ?? 0}
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
           maxHCard="155px"
+          maxWCard="350px"
           mbCard="2"
           pxCard="0px"
           ptCardHeader="0px"
