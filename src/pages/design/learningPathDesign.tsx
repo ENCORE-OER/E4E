@@ -213,7 +213,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -244,8 +244,8 @@ const Home = (props: DiscoverPageProps) => {
                     w="100%"
                     pr={isSmallerScreen ? '0' : `${SPACING}%`}
                     direction={isSmallerScreen ? 'column' : 'row'}
-                  // flexWrap="wrap"
-                  //wrap={'wrap'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
                   >
                     <Box
                       w={isSmallerScreen ? '100%' : '90%'}
