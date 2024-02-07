@@ -3,10 +3,9 @@ import {
   Button,
   Flex,
   Heading,
-  HStack,
   Text,
   useBreakpointValue,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -86,7 +85,12 @@ const Home = (props: DiscoverPageProps) => {
   // =======================================================================
 
   // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({ base: true, md: false });
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
 
   // =======================================================================
 
@@ -320,7 +324,7 @@ const Home = (props: DiscoverPageProps) => {
       >
         <VStack
           spacing="24px"
-          px={isSmallerScreen ? '100px' : '170px'}
+          px={isSmallerScreen ? '90px' : '160px'}
           py="50px"
           w="full"
           h="full"
@@ -337,35 +341,36 @@ const Home = (props: DiscoverPageProps) => {
             searchCallback1={searchCallback1}
           />
 
-          <Box w="100%" px="5px">
-            <HStack>
-              <Flex w="100%" justifyContent="center">
-                <Text variant="text_searchFor">
-                  <span>Search for:</span>
-                </Text>
-
+          <Box w="100%">
+            <Flex w="100%" justifyContent="center" direction={isSmallerScreen ? 'column' : 'row'} align='center' gap={isSmallerScreen ? '3' : '0'}>
+              <Text variant="text_searchFor" textAlign='center'>
+                <span>Search for:</span>
+              </Text>
+              <Flex direction='row' align='center'>
                 <input
                   type="radio"
                   id="checkboxAll"
                   checked={operator === 'and'}
                   onChange={handleCheckboxAndChange}
                 />
-                <Text variant="text_searchFor_secondary">All keywords</Text>
+                <Text variant="text_searchFor_secondary" textAlign='center'>All keywords</Text>
+              </Flex>
 
+              <Flex direction='row' align='center'>
                 <input
                   type="radio"
                   id="checkboxOr"
                   checked={operator === 'or'}
                   onChange={handleCheckboxOrChange}
                 />
-                <Text variant="text_searchFor_secondary">Any keyword</Text>
+                <Text variant="text_searchFor_secondary" textAlign='center'>Any keyword</Text>
               </Flex>
-            </HStack>
+            </Flex>
           </Box>
 
           <div>
             {showBox && (
-              <Box w="100%" px="5px">
+              <Box w="100%">
                 <AdvancedSearch
                   domain={domain}
                   resourceType={resourceTypes}
@@ -375,11 +380,12 @@ const Home = (props: DiscoverPageProps) => {
                     handleResourceTypeFromDropDownMenu
                   }
                   onAudienceFromDropDownMenu={handleAudienceFromDropDownMenu}
+                  isSmallerScreen={isSmallerScreen}
                 />
               </Box>
             )}
 
-            <Flex justifyContent="center" pt={isClicked ? '70px' : '5px'}>
+            <Flex justifyContent="center" pt={isClicked ? '60px' : '5px'} pb='10px'>
               <Button
                 variant="link"
                 rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
@@ -389,7 +395,7 @@ const Home = (props: DiscoverPageProps) => {
               </Button>
             </Flex>
           </div>
-          <Text variant="text_before_venn">
+          <Text variant="text_before_venn" textAlign='center'>
             Search among {totalOers} resources
           </Text>
           <div style={{ minWidth: vennDiagramWidth }}>
@@ -407,11 +413,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

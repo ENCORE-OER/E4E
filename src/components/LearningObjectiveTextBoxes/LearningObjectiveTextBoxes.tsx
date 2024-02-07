@@ -18,11 +18,11 @@ const ThreeTextBoxes = () => {
   useEffect(() => {
     console.log(
       'customLearningObjectives: ' +
-      customLearningObjectivePart0 +
-      ' ' +
-      customLearningObjectivePart1 +
-      ' ' +
-      customLearningObjectivePart2
+        customLearningObjectivePart0 +
+        ' ' +
+        customLearningObjectivePart1 +
+        ' ' +
+        customLearningObjectivePart2
     );
   }, []);
 

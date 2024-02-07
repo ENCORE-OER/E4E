@@ -213,14 +213,17 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
-            <Box w={isSmallerScreen ? "95%" : "90%"}>
+            <Box w={isSmallerScreen ? '95%' : '90%'}>
               <Box paddingTop="1.5rem" justifyContent="left">
                 <Box>
-                  <LearningStepper activeStep={2} isSmallerScreen={isSmallerScreen} />
+                  <LearningStepper
+                    activeStep={2}
+                    isSmallerScreen={isSmallerScreen}
+                  />
                 </Box>
                 <Box paddingTop="2rem">
                   <Text>
@@ -241,25 +244,25 @@ const Home = (props: DiscoverPageProps) => {
                     w="100%"
                     pr={isSmallerScreen ? '0' : `${SPACING}%`}
                     direction={isSmallerScreen ? 'column' : 'row'}
-                  // flexWrap="wrap"
-                  //wrap={'wrap'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
                   >
                     <Box
-                      w={isSmallerScreen ? "100%" : "90%"}
+                      w={isSmallerScreen ? '100%' : '90%'}
                       pb={isSmallerScreen ? '2' : '0'}
                       pr={isSmallerScreen ? '0' : `5`}
                     >
                       <ThreeTextBoxes />
                     </Box>
                     <Flex
-                      w={isSmallerScreen ? "100%" : "10%"}
-                      gap='3%'
-                      justifyContent={"flex-end"}
+                      w={isSmallerScreen ? '100%' : '10%'}
+                      gap="3%"
+                      justifyContent={'flex-end'}
                     >
                       <Button
                         //marginRight={'1px'}
                         border={'1px solid'}
-                        w={isSmallerScreen ? "20%" : "50%"}
+                        w={isSmallerScreen ? '20%' : '50%'}
                         colorScheme="yellow"
                         onClick={handleSaveLearningObjectiveButtonClick}
                       >
@@ -270,7 +273,7 @@ const Home = (props: DiscoverPageProps) => {
                       <Button
                         //marginRight={'1px'}
                         border={'1px solid'}
-                        w={isSmallerScreen ? "20%" : "50%"}
+                        w={isSmallerScreen ? '20%' : '50%'}
                         colorScheme="yellow"
                         onClick={handleUndoLearningObjectiveButtonClick}
                       >
@@ -283,14 +286,17 @@ const Home = (props: DiscoverPageProps) => {
                 </Card>
               </Box>
             </Box>
-            <Box position="relative" paddingTop={isSmallerScreen ? "1rem" : "2rem"}>
+            <Box
+              position="relative"
+              paddingTop={isSmallerScreen ? '1rem' : '2rem'}
+            >
               <LearningPathEditor
                 //setConceptSelectedIndex={setConceptSelectedIndex}
                 isLoading={isLoading}
                 oers={oersById}
                 conceptSelectedIndex={0}
                 collectionColor={[collections[collectionIndex]?.color]}
-                wPathEditor={isSmallerScreen ? "90%" : "85%"}
+                wPathEditor={isSmallerScreen ? '90%' : '85%'}
               />
             </Box>
           </Box>

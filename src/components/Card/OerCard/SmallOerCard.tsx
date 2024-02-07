@@ -32,19 +32,19 @@ export default function SmallOerCard({
   times_used,
   total_likes,
 }: //dataOer
-  SmallOerCardProps) {
+SmallOerCardProps) {
   return (
     <Card
       display="flex"
       maxH={maxHCard || '190px'}
-      maxW={maxWCard || "350px"}
+      maxW={maxWCard || '350px'}
       px={pxCard || '20px'}
       py={0}
       border="1px"
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}

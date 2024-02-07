@@ -35,8 +35,7 @@ export default function OerCard({
   //wCard,
   //isSmallerScreen,
   maxWCard,
-}
-  : OerCardProps) {
+}: OerCardProps) {
   return (
     <Card
       display="flex"
@@ -51,7 +50,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}
@@ -78,7 +77,7 @@ export default function OerCard({
         liked={total_likes}
         resourceType={resourceType}
         gapGrid={gapGridCardFooter}
-      //maxResTypeTags={isSmallerScreen ? 2 : 3}
+        //maxResTypeTags={isSmallerScreen ? 2 : 3}
       />
     </Card>
   );

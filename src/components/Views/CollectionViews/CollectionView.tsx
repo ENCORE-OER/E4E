@@ -232,7 +232,12 @@ export default function CollectionView({
 
   return (
     <Box {...rest}>
-      <Flex bg="background" direction={isSmallerScreen ? 'column' : 'row'} flexWrap={'wrap'} overflowY="auto">
+      <Flex
+        bg="background"
+        direction={isSmallerScreen ? 'column' : 'row'}
+        flexWrap={'wrap'}
+        overflowY="auto"
+      >
         <Box>
           <HeaderCollectionView
             collectionName={collections[collectionIndex]?.name}
@@ -257,7 +262,7 @@ export default function CollectionView({
                 isAscending={isAscending}
                 setAscending={setAscending}
                 handleItemSortingClick={handleItemSortingClick}
-              //setIsLoading={setIsLoading}
+                //setIsLoading={setIsLoading}
               />
             </Flex>
           </HStack>

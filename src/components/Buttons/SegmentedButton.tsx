@@ -62,7 +62,7 @@ const SegmentedButton = <T extends {}>({
             w="100%"
             borderRadius="25"
             borderLeft={index !== 0 ? '1px solid darkgrey' : 'none'}
-            overflow='hidden'
+            overflow="hidden"
           >
             {colored === option.title && (
               <Flex align="center" justify="center" marginRight="2">

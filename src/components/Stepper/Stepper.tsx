@@ -9,7 +9,7 @@ import {
   StepSeparator,
   StepStatus,
   StepTitle,
-  Stepper
+  Stepper,
 } from '@chakra-ui/react';
 
 const steps = [
@@ -37,10 +37,17 @@ type LearningStepperProps = {
 
 function LearningStepper({
   activeStep,
-  isSmallerScreen
+  isSmallerScreen,
 }: LearningStepperProps) {
   return (
-    <Stepper minH={isSmallerScreen ? "220px" : "0px"} size="lg" colorScheme="yellow" index={activeStep} orientation={isSmallerScreen ? 'vertical' : 'horizontal'} gap='2'>
+    <Stepper
+      minH={isSmallerScreen ? '220px' : '0px'}
+      size="lg"
+      colorScheme="yellow"
+      index={activeStep}
+      orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
+      gap="2"
+    >
       {steps.map((step, index) => (
         <Step key={index} style={{ overflow: 'hidden' }}>
           <StepIndicator>
@@ -52,10 +59,9 @@ function LearningStepper({
           </StepIndicator>
 
           <Box flexShrink="0">
-            <StepTitle >{step.title}</StepTitle>
-            <StepDescription >{step.description}</StepDescription>
+            <StepTitle>{step.title}</StepTitle>
+            <StepDescription>{step.description}</StepDescription>
           </Box>
-
 
           {/* <Box flexShrink="0">
             <Link to={index <= activeStep ? step.path : "/"} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -66,7 +72,6 @@ function LearningStepper({
 
           <StepSeparator />
         </Step>
-
       ))}
     </Stepper>
   );

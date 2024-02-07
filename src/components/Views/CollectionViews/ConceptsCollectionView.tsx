@@ -67,7 +67,7 @@ export default function ConceptsCollectionView({
           </Text>
         </Box>
       </Flex>
-      <Box minW='250px' p={3} h="full" bg="background">
+      <Box minW="250px" p={3} h="full" bg="background">
         {hydrated && (
           <SelectConcepts
             collectionLength={oersLength}

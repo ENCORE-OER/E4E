@@ -48,7 +48,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     lg: false,
   });
 
-
   // ==================================================================
 
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
@@ -92,7 +91,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -101,10 +100,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
-              <Box w={isSmallerScreen ? "95%" : "90%"}>
-                <LearningStepper activeStep={1} isSmallerScreen={isSmallerScreen} />
+              <Box w={isSmallerScreen ? '95%' : '90%'}>
+                <LearningStepper
+                  activeStep={1}
+                  isSmallerScreen={isSmallerScreen}
+                />
               </Box>
               <Box w="100% " paddingTop="1.5rem">
                 <Text>
