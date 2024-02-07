@@ -71,10 +71,10 @@ export default function AdvancedSearch({
         flexWrap={isSmallerScreen ? 'nowrap' : 'wrap'}
         justify={'center'}
         flexDirection={isSmallerScreen ? 'column' : 'row'}
-      //pt={isSmallerScreen ? '0' : '4'}
+        //pt={isSmallerScreen ? '0' : '4'}
       >
         <Box w="220px">
-          <Text variant="text_field_label" py='6px'>
+          <Text variant="text_field_label" py="6px">
             Domain
           </Text>
           <DropDownMenu
@@ -91,7 +91,7 @@ export default function AdvancedSearch({
             onData={handleResourceTypeFromDropDownMenu}
           />
         </Box>
-        <Box w="220px" >
+        <Box w="220px">
           <Text variant="text_field_label" py="6px">
             Audience
           </Text>

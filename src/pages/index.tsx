@@ -5,7 +5,7 @@ import {
   Heading,
   Text,
   useBreakpointValue,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -342,28 +342,38 @@ const Home = (props: DiscoverPageProps) => {
           />
 
           <Box w="100%">
-            <Flex w="100%" justifyContent="center" direction={isSmallerScreen ? 'column' : 'row'} align='center' gap={isSmallerScreen ? '3' : '0'}>
-              <Text variant="text_searchFor" textAlign='center'>
+            <Flex
+              w="100%"
+              justifyContent="center"
+              direction={isSmallerScreen ? 'column' : 'row'}
+              align="center"
+              gap={isSmallerScreen ? '3' : '0'}
+            >
+              <Text variant="text_searchFor" textAlign="center">
                 <span>Search for:</span>
               </Text>
-              <Flex direction='row' align='center'>
+              <Flex direction="row" align="center">
                 <input
                   type="radio"
                   id="checkboxAll"
                   checked={operator === 'and'}
                   onChange={handleCheckboxAndChange}
                 />
-                <Text variant="text_searchFor_secondary" textAlign='center'>All keywords</Text>
+                <Text variant="text_searchFor_secondary" textAlign="center">
+                  All keywords
+                </Text>
               </Flex>
 
-              <Flex direction='row' align='center'>
+              <Flex direction="row" align="center">
                 <input
                   type="radio"
                   id="checkboxOr"
                   checked={operator === 'or'}
                   onChange={handleCheckboxOrChange}
                 />
-                <Text variant="text_searchFor_secondary" textAlign='center'>Any keyword</Text>
+                <Text variant="text_searchFor_secondary" textAlign="center">
+                  Any keyword
+                </Text>
               </Flex>
             </Flex>
           </Box>
@@ -385,7 +395,11 @@ const Home = (props: DiscoverPageProps) => {
               </Box>
             )}
 
-            <Flex justifyContent="center" pt={isClicked ? '60px' : '5px'} pb='10px'>
+            <Flex
+              justifyContent="center"
+              pt={isClicked ? '60px' : '5px'}
+              pb="10px"
+            >
               <Button
                 variant="link"
                 rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
@@ -395,7 +409,7 @@ const Home = (props: DiscoverPageProps) => {
               </Button>
             </Flex>
           </div>
-          <Text variant="text_before_venn" textAlign='center'>
+          <Text variant="text_before_venn" textAlign="center">
             Search among {totalOers} resources
           </Text>
           <div style={{ minWidth: vennDiagramWidth }}>
@@ -413,11 +427,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: '12px',
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: '15px',
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (
