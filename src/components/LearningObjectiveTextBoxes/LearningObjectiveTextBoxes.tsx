@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
-import TextBox from '../TextBox/TextBox';
+import { useEffect } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import TextBox from '../TextBox/TextBox';
 
 //type ThreeTextBoxesProps = {};
 
@@ -28,7 +28,7 @@ const ThreeTextBoxes = () => {
 
   return (
     <Flex>
-      <Box w="33%">
+      <Box flex="1">
         <TextBox
           backgroundColor="#FAD02E"
           placeholder="Bloom Verbs"
@@ -37,7 +37,7 @@ const ThreeTextBoxes = () => {
           onTextChange={handleCustomLearningObjective1Change}
         />
       </Box>
-      <Box w="33%">
+      <Box flex="1">
         <TextBox
           backgroundColor="#FF6384"
           placeholder="Skills or concepts"
@@ -46,7 +46,7 @@ const ThreeTextBoxes = () => {
           onTextChange={handleCustomLearningObjective0Change}
         />
       </Box>
-      <Box w="33%">
+      <Box flex="1">
         <TextBox
           backgroundColor="#36A2EB"
           placeholder="Context"

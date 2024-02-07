@@ -1,7 +1,14 @@
 /* To show all the oer cards */
 
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Box, Button, HStack, VStack, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Stack,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
@@ -25,6 +32,7 @@ type ResourceCardsListProps = {
   currentPage?: number;
   setCurrentPage?: Dispatch<SetStateAction<number>>;
   handlePageChange?: (newPage: number) => void;
+  isSmallerScreen?: boolean;
 };
 
 export default function ResourceCardsList({
@@ -39,6 +47,7 @@ export default function ResourceCardsList({
   currentPage,
   setCurrentPage,
   handlePageChange,
+  isSmallerScreen,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -113,6 +122,7 @@ export default function ResourceCardsList({
                           oer={oer}
                           collectionsColor={collectionsColor}
                           updateLikeOER={updateLikeOER}
+                          isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
                         />
                       </Box>
                       {isResourcePage && (
@@ -162,7 +172,15 @@ export default function ResourceCardsList({
 
       {!isNormalSizeCard && hydrated && (
         <Box>
-          <HStack h="full" spacing={4} /*className="scrollable-content"*/>
+          <Stack
+            h="full"
+            spacing={4}
+            flexWrap={'wrap'}
+            justify={'center'}
+            direction={
+              isSmallerScreen ? 'column' : 'row'
+            } /*className="scrollable-content"*/
+          >
             {currentPage &&
               oers
                 ?.slice(
@@ -174,27 +192,53 @@ export default function ResourceCardsList({
                     oer: OerProps | OerFreeSearchProps | undefined,
                     index: number
                   ) => (
-                    <Box
-                      key={index}
-                      onClick={async (e: any) => {
-                        e.preventDefault();
-                        onOpen();
-                        // handleOpenCardInfoModal();
-                        setOerById(oer);
-                      }}
-                      as="button"
-                    >
-                      <SmallSingleResourceCard
-                        collectionColor={collectionsColor[0]}
-                        //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
-                        oer={oer}
-                        collectionsColor={collectionsColor}
-                        updateLikeOER={updateLikeOER}
-                      />
-                    </Box>
+                    <HStack key={index}>
+                      <Box
+                        //key={index}
+                        onClick={async (e: any) => {
+                          e.preventDefault();
+                          onOpen();
+                          // handleOpenCardInfoModal();
+                          setOerById(oer);
+                        }}
+                        as="button"
+                      >
+                        <SmallSingleResourceCard
+                          collectionColor={collectionsColor[0]}
+                          //collectionsColor[index] !== undefined ? collectionsColor[index] : ''
+                          oer={oer}
+                          collectionsColor={collectionsColor}
+                          updateLikeOER={updateLikeOER}
+                        />
+                      </Box>
+                      {isResourcePage && (
+                        <Button
+                          variant="ghost"
+                          _hover={{ bg: 'gray.300' }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            //alert("Click su delete");
+                            //console.log("I'm triggering delete resource button");
+                            if (
+                              handleDeleteButtonClick &&
+                              collectionIndex !== undefined &&
+                              collectionIndex > -1
+                            ) {
+                              handleDeleteButtonClick(collectionIndex, oer?.id);
+                            } //else {
+                            //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
+                            //}
+                          }}
+                          //position="absolute"
+                          //right={'0px'}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      )}
+                    </HStack>
                   )
                 )}
-          </HStack>
+          </Stack>
           {oers.length !== 0 && (
             <Pagination
               currentPage={currentPage ?? 1}

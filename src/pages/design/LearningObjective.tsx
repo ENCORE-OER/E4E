@@ -1,12 +1,19 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
-import PathDesignCentralBars from '../../components/PathDesignCentralBars/PathDesignCentralBars';
+import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { APIV2 } from '../../data/api';
@@ -39,6 +46,19 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { addToast } = CustomToast();
+
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
+
+  // ==================================================================
+
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
@@ -85,13 +105,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
   return (
     <>
       <Flex w="100%" h="100%">
-        <Navbar user={user} pageName="Design" />
         <SideBar pagePath={'/design'} />
+        <Navbar user={user} pageName="Design" />
 
         <Box
-          ml="200px"
+          //ml="200px"
           py="115px"
-          pl="40px"
+          pl={isSmallerScreen ? '90px' : '240px'}
           w="full"
           h={step >= 2 ? 'full' : '100vh'}
           bg="background"
@@ -111,8 +131,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
               justifyContent="left"
             //justify="space-between"
             >
-              <Box w="80% ">
-                <LearningStepper activeStep={1} />
+              <Box w={isSmallerScreen ? '95%' : '90%'}>
+                <LearningStepper
+                  activeStep={1}
+                  isSmallerScreen={isSmallerScreen}
+                />
               </Box>
               <Box w="100% " paddingTop="1.5rem">
                 <Text>
@@ -132,7 +155,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 resources
               </Text>
             </Flex>
-            <Box w={`${DIMENSION - SPACING}%`}>
+            <Box w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}>
               <CustomDropDownMenu
                 data={collections}
                 onData={handleCollectionSelection}
@@ -156,6 +179,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   <PathDesignCentralBars
                     collectionIndex={collectionIndex}
                     isNextButtonClicked={isNextButtonClicked}
+                    isSmallerScreen={isSmallerScreen}
                   />
                 </Box>
               </>
@@ -166,7 +190,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 paddingRight={`${SPACING}%`}
                 position={'fixed'}
                 bottom="5%"
-                right="11%"
+                right="8%"
               >
                 <Button
                   marginRight={'1px'}

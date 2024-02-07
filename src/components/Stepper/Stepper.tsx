@@ -1,6 +1,6 @@
-import React from 'react';
 //import { Link } from 'react-router-dom';
 import {
+  Box,
   Step,
   StepDescription,
   StepIcon,
@@ -10,7 +10,6 @@ import {
   StepStatus,
   StepTitle,
   Stepper,
-  Box,
 } from '@chakra-ui/react';
 
 const steps = [
@@ -31,11 +30,26 @@ const steps = [
   },
 ];
 
-function LearningStepper({ activeStep }: { activeStep: number }) {
+type LearningStepperProps = {
+  activeStep: number;
+  isSmallerScreen?: boolean;
+};
+
+function LearningStepper({
+  activeStep,
+  isSmallerScreen,
+}: LearningStepperProps) {
   return (
-    <Stepper size="lg" colorScheme="yellow" index={activeStep}>
+    <Stepper
+      minH={isSmallerScreen ? '220px' : '0px'}
+      size="lg"
+      colorScheme="yellow"
+      index={activeStep}
+      orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
+      gap="2"
+    >
       {steps.map((step, index) => (
-        <Step key={index}>
+        <Step key={index} style={{ overflow: 'hidden' }}>
           <StepIndicator>
             <StepStatus
               complete={<StepIcon />}

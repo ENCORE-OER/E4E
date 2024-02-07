@@ -1,5 +1,12 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -18,6 +25,18 @@ const Home = () => {
   const { addToast } = CustomToast();
   const { SPACING } = useLearningPathDesignContext();
 
+  // ==================================================================
+
+  // Use this for the responsive design of the page
+  const isSmallerScreen = useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  });
+
+  // ==================================================================
+
   const handleOptionsComplete = (areComplete: boolean) => {
     setAreOptionsComplete(areComplete);
   };
@@ -28,13 +47,12 @@ const Home = () => {
 
   return (
     <Flex w="100%" h="100%">
-      <Navbar user={user} pageName="Design" />
       <SideBar pagePath={router.pathname} />
+      <Navbar user={user} pageName="Design" />
 
       <Box
-        ml="200px"
         py="115px"
-        pl="40px"
+        pl={isSmallerScreen ? '90px' : '240px'}
         w="full"
         minH="100vh"
         bg="background"
@@ -54,11 +72,14 @@ const Home = () => {
             justifyContent="left"
             //justify="space-between"
           >
-            <Box w="80% ">
-              <LearningStepper activeStep={0} />
+            <Box w={isSmallerScreen ? '95%' : '90%'}>
+              <LearningStepper
+                activeStep={0}
+                isSmallerScreen={isSmallerScreen}
+              />
             </Box>
 
-            <Box w="80%" paddingTop="2rem">
+            <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>
                 This part will guide you in creating a tailored learning path to
                 meet your specific educational goals. Start by detailing the
@@ -66,10 +87,11 @@ const Home = () => {
                 your activities.
               </Text>
             </Box>
-            <Box w="80%" paddingTop="2rem">
+            <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <SegmentedButtonGroup
                 onOptionsChange={handleOptionsComplete}
                 isNextButtonClicked={isNextButtonClicked}
+                isSmallerScreen={isSmallerScreen}
               />
             </Box>
 
@@ -79,7 +101,7 @@ const Home = () => {
                 paddingRight={`${SPACING}%`}
                 position={'fixed'}
                 bottom="5%"
-                right="11%"
+                right="8%"
               >
                 <Button
                   marginLeft={'1px'}

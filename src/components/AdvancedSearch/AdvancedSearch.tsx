@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 
 import { useEffect } from 'react';
 import {
@@ -18,6 +18,7 @@ type AdvancedSearchProps = {
   onDomainFromDropDownMenu?: (domain: string[] | number[]) => void;
   onResourceTypeFromDropDownMenu?: (resType: string[] | number[]) => void;
   onAudienceFromDropDownMenu?: (audience: string[] | number[]) => void;
+  isSmallerScreen?: boolean;
 };
 
 const ALL = { id: 0, name: 'All' };
@@ -30,6 +31,7 @@ export default function AdvancedSearch({
   onDomainFromDropDownMenu,
   onResourceTypeFromDropDownMenu,
   onAudienceFromDropDownMenu,
+  isSmallerScreen,
 }: AdvancedSearchProps) {
   // adding "All" checkbox
   useEffect(() => {
@@ -63,42 +65,42 @@ export default function AdvancedSearch({
 
   return (
     <>
-      <Box display="flex">
-        <Grid
-          w="100%"
-          templateColumns="repeat(3, 1fr)"
-          gap={4}
-          flexWrap="nowrap"
-        >
-          <GridItem w="220px" h="10">
-            <Text variant="text_field_label" my="6px">
-              Domain
-            </Text>
-            <DropDownMenu
-              optionsObj={domain}
-              onData={handleDomainFromDropDownMenu}
-            />
-          </GridItem>
-          <GridItem w="220px" h="10">
-            <Text variant="text_field_label" my="6px">
-              Type of resources
-            </Text>
-            <DropDownMenu
-              optionsObj={resourceType}
-              onData={handleResourceTypeFromDropDownMenu}
-            />
-          </GridItem>
-          <GridItem w="220px" h="10">
-            <Text variant="text_field_label" my="6px">
-              Audience
-            </Text>
-            <DropDownMenu
-              optionsObj={audience}
-              onData={handleAudienceFromDropDownMenu}
-            />
-          </GridItem>
-        </Grid>
-      </Box>
+      <Flex
+        w="100%"
+        gap={4}
+        flexWrap={isSmallerScreen ? 'nowrap' : 'wrap'}
+        justify={'center'}
+        flexDirection={isSmallerScreen ? 'column' : 'row'}
+        //pt={isSmallerScreen ? '0' : '4'}
+      >
+        <Box w="220px">
+          <Text variant="text_field_label" py="6px">
+            Domain
+          </Text>
+          <DropDownMenu
+            optionsObj={domain}
+            onData={handleDomainFromDropDownMenu}
+          />
+        </Box>
+        <Box w="220px">
+          <Text variant="text_field_label" py="6px">
+            Type of resources
+          </Text>
+          <DropDownMenu
+            optionsObj={resourceType}
+            onData={handleResourceTypeFromDropDownMenu}
+          />
+        </Box>
+        <Box w="220px">
+          <Text variant="text_field_label" py="6px">
+            Audience
+          </Text>
+          <DropDownMenu
+            optionsObj={audience}
+            onData={handleAudienceFromDropDownMenu}
+          />
+        </Box>
+      </Flex>
     </>
   );
 }

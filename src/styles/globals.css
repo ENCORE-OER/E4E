@@ -7,6 +7,11 @@ code {
     monospace;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 .loading-spinner {
   display: flex;
   flex-direction: column;
@@ -92,3 +97,7 @@ code {
   overflow-y: hidden;
   padding-right: 16px;  // Add a space to avoid that page move to right when there is not the scroll
 }*/
+
+.venn-diagram {
+  transition: all 0.3s ease;
+}

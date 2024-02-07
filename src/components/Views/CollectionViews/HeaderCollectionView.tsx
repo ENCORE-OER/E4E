@@ -15,9 +15,9 @@ export default function HeaderCollectionView({
   fileName,
 }: HeaderCollectionViewProps) {
   return (
-    <Flex w="100%" mb="3">
-      <Icon as={FcFolder} w="30px" h="30px" mr="3" />
-      <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'}>
+    <Flex w="100%" pb="3" bg="background">
+      <Icon as={FcFolder} w="30px" h="30px" />
+      <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'} pl="3">
         {collectionName}
       </Heading>
       <Spacer />
