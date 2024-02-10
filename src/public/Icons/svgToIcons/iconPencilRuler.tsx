@@ -1,4 +1,4 @@
-import { FaPencilRuler } from "react-icons/fa";
+import { FaPencilRuler } from 'react-icons/fa';
 
 type IconPencilRulerProps = {
   color?: string;
@@ -8,10 +8,7 @@ type IconPencilRulerProps = {
 
 export const IconPencilRuler = ({ color, w, h }: IconPencilRulerProps) => (
   <>
-    <FaPencilRuler
-      color={color || '#000028'}
-      size={w || h || 20}
-    />
+    <FaPencilRuler color={color || '#000028'} size={w || h || 20} />
   </>
 
   // <svg
