@@ -10,6 +10,7 @@ import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookm
 import { IconDashboard } from '../../public/Icons/svgToIcons/iconDashboard';
 import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import { IconTelescope } from '../../public/Icons/svgToIcons/iconTelescope';
+import { IconPencilRuler } from '../../public/Icons/svgToIcons/iconPencilRuler';
 
 import { useState } from 'react';
 import { IconType } from 'react-icons';
@@ -23,6 +24,7 @@ interface LinkItemProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: 'Dashboard', icon: IconDashboard, link: '/' },
   { name: 'Discover', icon: IconTelescope, link: '/discover' },
+  { name: 'Create', icon: IconPencilRuler, link: '/create' },
   { name: 'Your resources', icon: IconBookmarkCheckCustom, link: '/resources' },
   { name: 'Design', icon: IconPathEdit, link: '/design' },
 ];
