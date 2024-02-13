@@ -33,7 +33,7 @@ const sizes = {
 };
 
 // define custom variants
-const colorfulVariant = definePartsStyle(props => {
+const colorfulVariant = definePartsStyle((props) => {
   const { colorScheme: c } = props; // add colorScheme as a prop
 
   return {

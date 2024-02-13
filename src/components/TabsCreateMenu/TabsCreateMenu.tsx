@@ -1,15 +1,9 @@
-import {
-  Tabs,
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
-} from '@chakra-ui/react';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
 //import { tabsTheme } from './TabsTheme';
 
 export default function TabsCreateMenu() {
   return (
-    <Tabs colorScheme='yellow'/*{...tabsTheme}*/>
+    <Tabs colorScheme="yellow" /*{...tabsTheme}*/>
       <TabList>
         <Tab>Fill-Gaps</Tab>
         <Tab>Open Question</Tab>
@@ -29,4 +23,3 @@ export default function TabsCreateMenu() {
     </Tabs>
   );
 }
-
