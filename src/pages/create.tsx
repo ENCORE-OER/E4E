@@ -1,8 +1,15 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  useBreakpointValue,
+} from '@chakra-ui/react';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import TextBox from '../components/TextBox/TextBox';
+import TabsCreateMenu from '../components/TabsCreateMenu/TabsCreateMenu';
 
 const Create = () => {
   const { user } = useUser();
@@ -30,7 +37,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -58,6 +65,9 @@ const Create = () => {
                     null;
                   }}
                 />
+              </Box>
+              <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
+                <TabsCreateMenu />
               </Box>
             </Box>
           </Box>
