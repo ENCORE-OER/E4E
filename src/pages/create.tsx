@@ -61,9 +61,7 @@ const Create = () => {
                 />
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-                <TabsCreateMenu
-                  isSmallerScreen={isSmallerScreen}
-                />
+                <TabsCreateMenu isSmallerScreen={isSmallerScreen} />
               </Box>
             </Box>
           </Box>

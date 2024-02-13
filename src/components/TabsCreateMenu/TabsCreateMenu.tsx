@@ -9,10 +9,11 @@ type TabsCreateMenuProps = {
   isSmallerScreen?: boolean;
 };
 
-export default function TabsCreateMenu({ isSmallerScreen }: TabsCreateMenuProps) {
-
+export default function TabsCreateMenu({
+  isSmallerScreen,
+}: TabsCreateMenuProps) {
   return (
-    <Tabs colorScheme="yellow" size={"lg"} /*{...tabsTheme}*/>
+    <Tabs colorScheme="yellow" size={'lg'} /*{...tabsTheme}*/>
       <TabList>
         <Tab>Fill-Gaps</Tab>
         <Tab>Open Question</Tab>
@@ -20,19 +21,13 @@ export default function TabsCreateMenu({ isSmallerScreen }: TabsCreateMenuProps)
       </TabList>
       <TabPanels>
         <TabPanel>
-          <FillGapsPanel
-            isSmallerScreen={isSmallerScreen}
-          />
+          <FillGapsPanel isSmallerScreen={isSmallerScreen} />
         </TabPanel>
         <TabPanel>
-          <OpenQuestionPanel
-            isSmallerScreen={isSmallerScreen}
-          />
+          <OpenQuestionPanel isSmallerScreen={isSmallerScreen} />
         </TabPanel>
         <TabPanel>
-          <MultipleChoicePanel
-            isSmallerScreen={isSmallerScreen}
-          />
+          <MultipleChoicePanel isSmallerScreen={isSmallerScreen} />
         </TabPanel>
       </TabPanels>
     </Tabs>

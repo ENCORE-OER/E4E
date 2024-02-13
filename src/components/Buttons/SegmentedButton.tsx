@@ -20,7 +20,7 @@ const SegmentedButton = <T extends {}>({
   preselectedTitle,
   isHighlighted,
   isSmallerScreen,
-  fontSize
+  fontSize,
 }: SegmentedButtonProps<T>) => {
   const [colored, setColored] = useState<string | null>(null);
   const hydrated = useHasHydrated();
@@ -72,7 +72,7 @@ const SegmentedButton = <T extends {}>({
               </Flex>
             )}
             <Box as="span" fontWeight="bold">
-              <Text as="span" fontSize={fontSize || "lg"}>
+              <Text as="span" fontSize={fontSize || 'lg'}>
                 {option.title}
               </Text>
 
