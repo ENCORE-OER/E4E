@@ -1,9 +1,18 @@
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import FillGapsPanel from './FillGapsPanel';
+import OpenQuestionPanel from './OpenQuestionPanel';
+import MultipleChoicePanel from './MultipleChiocePanel';
+// import SegmentedButton from '../Buttons/SegmentedButton';
 //import { tabsTheme } from './TabsTheme';
 
-export default function TabsCreateMenu() {
+type TabsCreateMenuProps = {
+  isSmallerScreen?: boolean;
+};
+
+export default function TabsCreateMenu({ isSmallerScreen }: TabsCreateMenuProps) {
+
   return (
-    <Tabs colorScheme="yellow" /*{...tabsTheme}*/>
+    <Tabs colorScheme="yellow" size={"lg"} /*{...tabsTheme}*/>
       <TabList>
         <Tab>Fill-Gaps</Tab>
         <Tab>Open Question</Tab>
@@ -11,13 +20,19 @@ export default function TabsCreateMenu() {
       </TabList>
       <TabPanels>
         <TabPanel>
-          <p>one!</p>
+          <FillGapsPanel
+            isSmallerScreen={isSmallerScreen}
+          />
         </TabPanel>
         <TabPanel>
-          <p>two!</p>
+          <OpenQuestionPanel
+            isSmallerScreen={isSmallerScreen}
+          />
         </TabPanel>
         <TabPanel>
-          <p>trhee!</p>
+          <MultipleChoicePanel
+            isSmallerScreen={isSmallerScreen}
+          />
         </TabPanel>
       </TabPanels>
     </Tabs>

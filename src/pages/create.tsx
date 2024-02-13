@@ -24,7 +24,7 @@ const Create = () => {
           py="115px"
           pl={isSmallerScreen ? '90px' : '240px'}
           w="full"
-          h={'100vh'}
+          h={'full'}
           bg="background"
         >
           <Box w="100%" h="100%">
@@ -52,7 +52,7 @@ const Create = () => {
                   <Text as="b">Educational resource input (text or URL)</Text>
                 </Flex>
                 <TextBox
-                  backgroundColor="#EDF2F7"
+                  //backgroundColor="#EDF2F7"
                   placeholder="Add text or URL"
                   rows={5}
                   onTextChange={() => {
@@ -61,7 +61,9 @@ const Create = () => {
                 />
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-                <TabsCreateMenu />
+                <TabsCreateMenu
+                  isSmallerScreen={isSmallerScreen}
+                />
               </Box>
             </Box>
           </Box>

@@ -10,6 +10,7 @@ type SegmentedButtonProps<T> = {
   preselectedTitle?: string | null;
   isHighlighted: boolean;
   isSmallerScreen?: boolean;
+  fontSize?: string;
 };
 
 const SegmentedButton = <T extends {}>({
@@ -19,6 +20,7 @@ const SegmentedButton = <T extends {}>({
   preselectedTitle,
   isHighlighted,
   isSmallerScreen,
+  fontSize
 }: SegmentedButtonProps<T>) => {
   const [colored, setColored] = useState<string | null>(null);
   const hydrated = useHasHydrated();
@@ -49,7 +51,7 @@ const SegmentedButton = <T extends {}>({
       size="lg"
       w="100%"
       border={isHighlighted ? '1.5px solid #bf5521ff' : '1.5px solid darkgrey'}
-      borderRadius="25"
+      borderRadius="26"
       style={{ animation: isHighlighted ? 'blink 1s infinite' : 'none' }}
       orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
     >
@@ -70,7 +72,7 @@ const SegmentedButton = <T extends {}>({
               </Flex>
             )}
             <Box as="span" fontWeight="bold">
-              <Text as="span" fontSize="lg">
+              <Text as="span" fontSize={fontSize || "lg"}>
                 {option.title}
               </Text>
 
