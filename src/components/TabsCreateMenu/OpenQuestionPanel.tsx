@@ -1,11 +1,7 @@
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
-
-type Option = {
-  title: string;
-  description?: string;
-};
+import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 
 type OpenQuestionPanelProps = {
   isSmallerScreen?: boolean;
@@ -14,50 +10,38 @@ type OpenQuestionPanelProps = {
 export default function OpenQuestionPanel({
   isSmallerScreen,
 }: OpenQuestionPanelProps) {
-  const targetLevel: Option[] = [
-    { title: 'Primary' },
-    { title: 'Middle School' },
-    { title: 'High School' },
-    { title: 'Academic' },
-    { title: 'Professional' },
-  ];
+    const {
+        targetLevelOptions,
+        //difficultLevelOptions,
+        questionTypeOptions,
+        questionCategoryOptions,
+        targetLevel,
+        handleSetTargetLevel,
+        questionType,
+        handleSetQuestionType,
+        questionCategory,
+        handleSetQuestionCategory,
 
-  const difficultLevel: Option[] = [
-    { title: 'Easy' },
-    { title: 'Medium' },
-    { title: 'Hard' },
-  ];
-
-  const questionType: Option[] = [
-    { title: 'Open' },
-    { title: 'Short Answer' },
-    { title: 'True False' },
-  ];
-
-  const QuestionCategory: Option[] = [
-    { title: 'Factual Knowledge' },
-    { title: 'Understanding of Concepts' },
-    { title: 'Application of Skills' },
-    { title: 'Analysys And Evaluation' },
-  ];
+        } = useCreateOERsContext();
 
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'60%'}>
+        <Box w={'70%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={targetLevel}
+            options={targetLevelOptions}
+            preselectedTitle={targetLevel?.title}
             selected={null}
-            onChange={() => null}
+            onChange={handleSetTargetLevel}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
-        <Box w={'35%'} paddingLeft={'2rem'}>
+        {/* <Box w={'35%'} paddingLeft={'2rem'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Difficult level</Text>
           </Flex>
@@ -69,7 +53,7 @@ export default function OpenQuestionPanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
@@ -78,9 +62,10 @@ export default function OpenQuestionPanel({
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={questionType}
+            options={questionTypeOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={questionType?.title}
+            onChange={handleSetQuestionType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -93,9 +78,10 @@ export default function OpenQuestionPanel({
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={QuestionCategory}
+            options={questionCategoryOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={questionCategory?.title}
+            onChange={handleSetQuestionCategory}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />

@@ -1,65 +1,60 @@
-import { Flex, Box, Text, Button } from '@chakra-ui/react';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
-
-type Option = {
-  title: string;
-  description?: string;
-};
+import SliderInput from '../NumberInput/SliderNumberInput';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
 };
 
 export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
-  const targetLevel: Option[] = [
-    { title: 'Primary' },
-    { title: 'Middle School' },
-    { title: 'High School' },
-    { title: 'Academic' },
-    { title: 'Professional' },
-  ];
+  const {
+    targetLevelOptions,
+    //difficultLevelOptions,
+    lengthOptions: lenghtOptions,
+    targetLevel,
+    handleSetTargetLevel,
+    //handleSetDifficultLevel,
+    length,
+    handleSetLength,
+    distractors,
+    handleSetDistractors,
+    blanks,
+    handleSetBlanks,
+    //handleResetOptions,
+  } = useCreateOERsContext();
 
-  const difficultLevel: Option[] = [
-    { title: 'Easy' },
-    { title: 'Medium' },
-    { title: 'Hard' },
-  ];
-
-  const lenght: Option[] = [
-    { title: 'Short', description: '(~150 words)' },
-    { title: 'Medium', description: '(~250 words)' },
-    { title: 'Long', description: '(~350 words)' },
-  ];
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'60%'}>
+        <Box w={'70%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={targetLevel}
+            options={targetLevelOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={targetLevel?.title}
+            onChange={handleSetTargetLevel}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
-        <Box w={'35%'} paddingLeft={'2rem'}>
+        {/* <Box w={'35%'} paddingLeft={'2rem'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Difficult level</Text>
           </Flex>
           <SegmentedButton //
             isHighlighted={false}
-            options={difficultLevel}
+            options={difficultLevelOptions}
             selected={null}
             onChange={() => null}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
@@ -68,31 +63,36 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={lenght}
+            options={lenghtOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={length?.title}
+            onChange={handleSetLength}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
-        <Box w={'20%'} marginLeft="2rem">
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        <Box w={'40%'}>
           <Flex margin="0.4rem">
             <Text as="b">Number Of Blanks</Text>
           </Flex>
-          <TextBox
-            onTextChange={() => {
-              null;
-            }}
+          <SliderInput
+            value={blanks}
+            onChange={handleSetBlanks}
+            min={1}
+            max={8}
           />
         </Box>
-        <Box w={'20%'} marginLeft="2rem">
+        <Box w={'40%'} marginLeft="2rem">
           <Flex margin="0.4rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
-          <TextBox
-            onTextChange={() => {
-              null;
-            }}
+          <SliderInput
+            value={distractors}
+            onChange={handleSetDistractors}
+            min={0}
+            max={5}
           />
         </Box>
       </Flex>

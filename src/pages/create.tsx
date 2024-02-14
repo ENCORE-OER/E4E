@@ -1,11 +1,15 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+//import React, { useState, useEffect } from 'react';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import TextBox from '../components/TextBox/TextBox';
 import TabsCreateMenu from '../components/TabsCreateMenu/TabsCreateMenu';
+//import { useCreateOERsContextContext } from '../Contexts/CreateOERsCotext';
+
 
 const Create = () => {
+  //const [data, setData] = useState(null);
   const { user } = useUser();
   const isSmallerScreen = useBreakpointValue({
     base: true,
@@ -13,6 +17,23 @@ const Create = () => {
     md: false,
     lg: false,
   });
+
+  // useEffect(() => {
+  //   // Funzione asincrona per effettuare la chiamata API
+  //   const fetchData = async () => {
+  //     try {
+  //       // Se stai usando fetch
+  //       const response = await fetch('https://huggingface.co/spaces/polyglot-edu/generative-ai-for-ed');
+  //       const result = await response.json();
+
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error('Errore durante la chiamata API:', error);
+  //     }
+  //   };
+  //   fetchData(); // Chiamata API al caricamento del componente o in base a condizioni specifiche
+  // }, []); // L'array vuoto come secondo argomento fa sì che useEffect si esegua solo al montaggio del componente
+
   return (
     <>
       <Flex w="100%" h="100%">
@@ -31,7 +52,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>

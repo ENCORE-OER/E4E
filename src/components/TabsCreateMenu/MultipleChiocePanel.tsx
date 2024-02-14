@@ -1,11 +1,8 @@
 import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
-
-type Option = {
-  title: string;
-  description?: string;
-};
+import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import SliderInput from '../NumberInput/SliderNumberInput';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
@@ -14,47 +11,45 @@ type MultipleChoicePanelProps = {
 export default function MultipleChoicePanel({
   isSmallerScreen,
 }: MultipleChoicePanelProps) {
-  const targetLevel: Option[] = [
-    { title: 'Primary' },
-    { title: 'Middle School' },
-    { title: 'High School' },
-    { title: 'Academic' },
-    { title: 'Professional' },
-  ];
 
-  const difficultLevel: Option[] = [
-    { title: 'Easy' },
-    { title: 'Medium' },
-    { title: 'Hard' },
-  ];
+  const {
+    targetLevelOptions,
+    //difficultLevelOptions,
+    exerciseTypeOptions,
+    questionCategoryOptions,
+    targetLevel,
+    handleSetTargetLevel,
+    exerciseType,
+    handleSetExerciseType,
+    questionCategory,
+    handleSetQuestionCategory,
+    correctAnswer,
+    handleSetCorrectAnswer,
+    easyDistractors,
+    handleSetEasyDistractors,
+    distractors,
+    handleSetDistractors,
+  } = useCreateOERsContext();
 
-  const exerciseType: Option[] = [
-    { title: 'Theoretical' },
-    { title: 'Pratical' },
-  ];
-  const QuestionCategory: Option[] = [
-    { title: 'Factual Knowledge' },
-    { title: 'Understanding of Concepts' },
-    { title: 'Application of Skills' },
-    { title: 'Analysys And Evaluation' },
-  ];
+
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'60%'}>
+        <Box w={'70%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={targetLevel}
+            options={targetLevelOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={targetLevel?.title}
+            onChange={handleSetTargetLevel}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
-        <Box w={'35%'} paddingLeft={'2rem'}>
+        {/* <Box w={'35%'} paddingLeft={'2rem'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Difficult level</Text>
           </Flex>
@@ -66,18 +61,19 @@ export default function MultipleChoicePanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Question Type</Text>
+            <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={exerciseType}
+            options={exerciseTypeOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={exerciseType?.title}
+            onChange={handleSetExerciseType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -90,43 +86,47 @@ export default function MultipleChoicePanel({
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={QuestionCategory}
+            options={questionCategoryOptions}
             selected={null}
-            onChange={() => null}
+            preselectedTitle={questionCategory?.title}
+            onChange={handleSetQuestionCategory}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'25%'}>
+        <Box w={'30%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Correct Answers</Text>
           </Flex>
-          <TextBox
-            onTextChange={() => {
-              null;
-            }}
+          <SliderInput
+            min={1}
+            max={3}
+            value={correctAnswer}
+            onChange={handleSetCorrectAnswer}
           />
         </Box>
-        <Box w={'25%'} marginLeft="2rem">
+        <Box w={'30%'} marginLeft="2rem">
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Easy Distractors</Text>
           </Flex>
-          <TextBox
-            onTextChange={() => {
-              null;
-            }}
+          <SliderInput
+            min={0}
+            max={8}
+            value={easyDistractors}
+            onChange={handleSetEasyDistractors}
           />
         </Box>
-        <Box w={'25%'} marginLeft="2rem">
+        <Box w={'30%'} marginLeft="2rem">
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
-          <TextBox
-            onTextChange={() => {
-              null;
-            }}
+          <SliderInput
+            min={0}
+            max={8}
+            value={distractors}
+            onChange={handleSetDistractors}
           />
         </Box>
       </Flex>
