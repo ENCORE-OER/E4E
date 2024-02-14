@@ -10,19 +10,18 @@ type OpenQuestionPanelProps = {
 export default function OpenQuestionPanel({
   isSmallerScreen,
 }: OpenQuestionPanelProps) {
-    const {
-        targetLevelOptions,
-        //difficultLevelOptions,
-        questionTypeOptions,
-        questionCategoryOptions,
-        targetLevel,
-        handleSetTargetLevel,
-        questionType,
-        handleSetQuestionType,
-        questionCategory,
-        handleSetQuestionCategory,
-
-        } = useCreateOERsContext();
+  const {
+    targetLevelOptions,
+    //difficultLevelOptions,
+    questionTypeOptions,
+    questionCategoryOptions,
+    targetLevel,
+    handleSetTargetLevel,
+    questionType,
+    handleSetQuestionType,
+    questionCategory,
+    handleSetQuestionCategory,
+  } = useCreateOERsContext();
 
   return (
     <>

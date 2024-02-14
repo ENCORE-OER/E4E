@@ -11,7 +11,6 @@ type MultipleChoicePanelProps = {
 export default function MultipleChoicePanel({
   isSmallerScreen,
 }: MultipleChoicePanelProps) {
-
   const {
     targetLevelOptions,
     //difficultLevelOptions,
@@ -30,7 +29,6 @@ export default function MultipleChoicePanel({
     distractors,
     handleSetDistractors,
   } = useCreateOERsContext();
-
 
   return (
     <>
