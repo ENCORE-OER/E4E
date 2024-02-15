@@ -16,7 +16,6 @@ const Create = () => {
     lg: false,
   });
 
-
   return (
     <>
       <Flex w="100%" h="100%">

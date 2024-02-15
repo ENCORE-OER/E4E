@@ -169,14 +169,14 @@ export const CreateOERsProvider = ({ children }: any) => {
       default:
         return 8;
     }
-  }
+  };
 
   const [maxValue, setMaxValue] = useState(8);
 
   const handleSetMaxValue = (selected: Option) => {
     // Calcola il nuovo valore massimo in base all'altro valore
     const nuovoMaxValue = calculateMaxValue(selected);
-    // Aggiorna il valore massimo 
+    // Aggiorna il valore massimo
     setMaxValue(nuovoMaxValue);
   };
 
