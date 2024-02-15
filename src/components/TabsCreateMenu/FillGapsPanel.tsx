@@ -26,14 +26,13 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     //handleResetOptions,
   } = useCreateOERsContext();
 
-  
   // useEffect(() => {
   //   // Recupera il valore da localStorage al montaggio del componente padre
   //   const storedValue = localStorage.getItem('distractorsFillGaps');
   //   if (storedValue) {
   //     handleSetDistractorsFillGaps(storedValue);
   //   }
-  // }, []); 
+  // }, []);
 
   return (
     <>

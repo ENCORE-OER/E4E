@@ -85,9 +85,12 @@ export const CreateOERsProvider = ({ children }: any) => {
     { title: 'Theoretical' },
     { title: 'Pratical' },
   ];
-  const [targetLevelFillGaps, setTargetLevelFillGaps] = useLocalStorage<Option | null>('targetLevelFillGaps', null);
-  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] = useLocalStorage<Option | null>('targetLevelOpenQuestion',null);
-  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] = useLocalStorage<Option | null>('targetLevelMultipleChoice',null);
+  const [targetLevelFillGaps, setTargetLevelFillGaps] =
+    useLocalStorage<Option | null>('targetLevelFillGaps', null);
+  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
+    useLocalStorage<Option | null>('targetLevelOpenQuestion', null);
+  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] =
+    useLocalStorage<Option | null>('targetLevelMultipleChoice', null);
   // const [difficultLevel, setDifficultLevel] = useLocalStorage<Option>('difficultLevel', {
   //     title: '',
   // });
@@ -100,18 +103,14 @@ export const CreateOERsProvider = ({ children }: any) => {
       title: '',
     }
   );
-  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] = useLocalStorage<Option>(
-    'questionCategoryOpenQuestion',
-    {
+  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
+    useLocalStorage<Option>('questionCategoryOpenQuestion', {
       title: '',
-    }
-  );
-  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] = useLocalStorage<Option>(
-    'questionCategoryMultipleChoice',
-    {
+    });
+  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
+    useLocalStorage<Option>('questionCategoryMultipleChoice', {
       title: '',
-    }
-  );
+    });
   const [exerciseType, setExerciseType] = useLocalStorage<Option>(
     'exerciseType',
     {
@@ -123,10 +122,8 @@ export const CreateOERsProvider = ({ children }: any) => {
     'distractorsFillGaps',
     0
   );
-  const [distractorsMultipleChioce, setDistractorsMultipleChoice] = useLocalStorage<number>(
-    'distractorsMultipleChoice',
-    0
-  );
+  const [distractorsMultipleChioce, setDistractorsMultipleChoice] =
+    useLocalStorage<number>('distractorsMultipleChoice', 0);
   const [easyDistractors, setEasyDistractors] = useLocalStorage<number>(
     'easyDistractors',
     0
@@ -142,10 +139,10 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleSetTargetLevelOpenQuestion = (selected: Option) => {
     setTargetLevelOpenQuestion(selected);
-  }
+  };
   const handleSetTargetLevelMultipleChoice = (selected: Option) => {
     setTargetLevelMultipleChoice(selected);
-  }
+  };
   // const handleSetDifficultLevel = (selected: Option) => {
   //     setDifficultLevel(selected);
   // }
