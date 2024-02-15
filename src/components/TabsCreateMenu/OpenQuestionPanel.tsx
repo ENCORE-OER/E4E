@@ -1,9 +1,9 @@
-import { Flex, Box, Text, Button } from '@chakra-ui/react';
-import SegmentedButton from '../Buttons/SegmentedButton';
-import TextBox from '../TextBox/TextBox';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useState, useEffect } from 'react';
+import SegmentedButton from '../Buttons/SegmentedButton';
+import TextBox from '../TextBox/TextBox';
 
 type OpenQuestionPanelProps = {
   isSmallerScreen?: boolean;
@@ -20,11 +20,11 @@ export default function OpenQuestionPanel({
     questionTypeOptions,
     questionCategoryOptions,
     targetLevelOpenQuestion,
-    handleSetTargetLevelOpenQuestion,
+    handleTargetLevelOpenQuestion,
     questionType,
-    handleSetQuestionType,
+    handleQuestionType,
     questionCategoryOpenQuestion,
-    handleSetQuestionCategoryOpenQuestion,
+    handleQuestionCategoryOpenQuestion,
   } = useCreateOERsContext();
 
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
@@ -58,7 +58,7 @@ export default function OpenQuestionPanel({
             options={targetLevelOptions}
             selected={targetLevelOpenQuestion}
             preselectedTitle={targetLevelOpenQuestion?.title}
-            onChange={handleSetTargetLevelOpenQuestion}
+            onChange={handleTargetLevelOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -87,7 +87,7 @@ export default function OpenQuestionPanel({
             options={questionTypeOptions}
             selected={questionType}
             preselectedTitle={questionType?.title}
-            onChange={handleSetQuestionType}
+            onChange={handleQuestionType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -105,7 +105,7 @@ export default function OpenQuestionPanel({
             options={questionCategoryOptions}
             selected={questionCategoryOpenQuestion}
             preselectedTitle={questionCategoryOpenQuestion?.title}
-            onChange={handleSetQuestionCategoryOpenQuestion}
+            onChange={handleQuestionCategoryOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />

@@ -23,7 +23,7 @@ export default function PathDesignCentralBars({
     step,
     resetCheckBoxOptions,
     text,
-    handleSetText,
+    handleText,
   } = useLearningPathDesignContext();
 
   return (
@@ -38,7 +38,7 @@ export default function PathDesignCentralBars({
           handleOptionsChange={handleOptionsChange}
           resetCheckBoxOptions={resetCheckBoxOptions}
           text={text}
-          handleSetText={handleSetText}
+          handleText={handleText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
           step={step}
@@ -55,7 +55,7 @@ export default function PathDesignCentralBars({
           handleOptionsChange={handleOptionsChange}
           resetCheckBoxOptions={resetCheckBoxOptions}
           text={text}
-          handleSetText={handleSetText}
+          handleText={handleText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
           step={step}

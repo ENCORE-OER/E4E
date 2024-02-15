@@ -12,7 +12,7 @@ export default function CentralBarsSmallerScreen({
   handleOptionsChange,
   resetCheckBoxOptions,
   text,
-  handleSetText,
+  handleText,
   isNextButtonClicked,
   collectionIndex,
   currentBloomOptions,
@@ -97,29 +97,29 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           fontWeight="bold"
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
           Add here the context
         </Text>
         <Box
           pt={1}
-          // paddingRight={`${SPACING}%`}
-          // w={`${DIMENSION}%`}
+        // paddingRight={`${SPACING}%`}
+        // w={`${DIMENSION}%`}
         >
           <TextBox
             backgroundColor="#EDF2F7"
             placeholder="Add some text..."
             isHighlighted={isNextButtonClicked}
             text={text}
-            onTextChange={handleSetText}
+            onTextChange={handleText}
           />
         </Box>
         <Text
           fontSize="sm"
           pt={1}
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
           Here the contextual information that will assist in delineating the
           specific context of the educational activity

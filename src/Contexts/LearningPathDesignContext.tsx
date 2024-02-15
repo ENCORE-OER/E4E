@@ -30,7 +30,7 @@ type LearnignPathDesignContextProps = {
   handleContextChange: (selected: Option) => void;
   handleGroupDimensionChange: (selected: Option) => void;
   handleLeanerExperienceChange: (selected: Option) => void;
-  handleSetText: (newText: string) => void;
+  handleText: (newText: string) => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
   handleSkillsChange: React.Dispatch<React.SetStateAction<string[]>>;
   handleStepChange: (newStep: number) => void;
@@ -42,7 +42,7 @@ type LearnignPathDesignContextProps = {
   handleCustomLearningObjective2Change: (newValue: string) => void;
   handleUseStoredLearningObjectives: () => void;
   handleUseLearningObjectives: () => void;
-  handleSetCustomLearningObjectives: () => void;
+  handleCustomLearningObjectives: () => void;
   handleNewStoredLearningObjectives: () => void;
 };
 
@@ -204,7 +204,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setCustomLearningObjectivePart2(learningObjectives[2]);
   };
 
-  const handleSetCustomLearningObjectives = () => {
+  const handleCustomLearningObjectives = () => {
     //handleLearningObjectives();
     if (storedLearningObjectives.length > 0) {
       handleUseStoredLearningObjectives();
@@ -214,7 +214,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   //handlers for text input
-  const handleSetText = (newText: string) => {
+  const handleText = (newText: string) => {
     setText(newText);
   };
 
@@ -350,7 +350,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleContextChange,
         handleGroupDimensionChange,
         handleLeanerExperienceChange,
-        handleSetText,
+        handleText,
         handleBloomLevelChange,
         handleSkillsChange,
         handleStepChange,
@@ -364,7 +364,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleCustomLearningObjective2Change,
         handleUseStoredLearningObjectives,
         handleUseLearningObjectives,
-        handleSetCustomLearningObjectives,
+        handleCustomLearningObjectives,
         handleNewStoredLearningObjectives,
       }}
     >

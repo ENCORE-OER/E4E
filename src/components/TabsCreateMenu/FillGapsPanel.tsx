@@ -18,14 +18,14 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     //difficultLevelOptions,
     lengthOptions,
     targetLevelFillGaps,
-    handleSetTargetLevelFillGaps,
-    //handleSetDifficultLevel,
+    handleTargetLevelFillGaps,
+    //handleDifficultLevel,
     length,
-    handleSetLength,
+    handleLength,
     distractorsFillGaps,
-    handleSetDistractorsFillGaps,
+    handleDistractorsFillGaps,
     blanks,
-    handleSetBlanks,
+    handleBlanks,
     //handleResetOptions,
     maxValue,
   } = useCreateOERsContext();
@@ -56,7 +56,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             options={targetLevelOptions}
             selected={targetLevelFillGaps}
             preselectedTitle={targetLevelFillGaps?.title}
-            onChange={handleSetTargetLevelFillGaps}
+            onChange={handleTargetLevelFillGaps}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -85,7 +85,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             options={lengthOptions}
             selected={length}
             preselectedTitle={length?.title}
-            onChange={handleSetLength}
+            onChange={handleLength}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -98,7 +98,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           </Flex>
           <SliderInput
             value={blanks}
-            onChange={handleSetBlanks}
+            onChange={handleBlanks}
             min={1}
             max={maxValue}
           />
@@ -109,7 +109,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           </Flex>
           <SliderInput
             value={distractorsFillGaps}
-            onChange={handleSetDistractorsFillGaps}
+            onChange={handleDistractorsFillGaps}
             min={0}
             max={blanks}
           />

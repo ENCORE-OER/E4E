@@ -16,31 +16,31 @@ type CreateOERsContextProps = {
   targetLevelFillGaps: Option | null;
   targetLevelOpenQuestion: Option | null;
   targetLevelMultipleChoice: Option | null;
-  handleSetTargetLevelFillGaps: (selected: Option) => void;
-  handleSetTargetLevelOpenQuestion: (selected: Option) => void;
-  handleSetTargetLevelMultipleChoice: (selected: Option) => void;
+  handleTargetLevelFillGaps: (selected: Option) => void;
+  handleTargetLevelOpenQuestion: (selected: Option) => void;
+  handleTargetLevelMultipleChoice: (selected: Option) => void;
   // difficultLevel: Option;
-  // handleSetDifficultLevel: (selected: Option) => void;
+  // handleDifficultLevel: (selected: Option) => void;
   questionType: Option | null;
-  handleSetQuestionType: (selected: Option) => void;
+  handleQuestionType: (selected: Option) => void;
   exerciseType: Option | null;
-  handleSetExerciseType: (selected: Option) => void;
+  handleExerciseType: (selected: Option) => void;
   questionCategoryOpenQuestion: Option | null;
-  handleSetQuestionCategoryOpenQuestion: (selected: Option) => void;
+  handleQuestionCategoryOpenQuestion: (selected: Option) => void;
   questionCategoryMultipleChoice: Option | null;
-  handleSetQuestionCategoryMultipleChoice: (selected: Option) => void;
+  handleQuestionCategoryMultipleChoice: (selected: Option) => void;
   length: Option | null;
-  handleSetLength: (selected: Option) => void;
+  handleLength: (selected: Option) => void;
   distractorsFillGaps: number;
-  handleSetDistractorsFillGaps: (selected: number | string) => void;
+  handleDistractorsFillGaps: (selected: number | string) => void;
   distractorsMultipleChoice: number;
-  handleSetDistractorsMultipleChoice: (selected: number | string) => void;
+  handleDistractorsMultipleChoice: (selected: number | string) => void;
   easyDistractors: number;
-  handleSetEasyDistractors: (selected: number | string) => void;
+  handleEasyDistractors: (selected: number | string) => void;
   blanks: number;
-  handleSetBlanks: (selected: number | string) => void;
+  handleBlanks: (selected: number | string) => void;
   correctAnswer: number;
-  handleSetCorrectAnswer: (selected: number | string) => void;
+  handleCorrectAnswer: (selected: number | string) => void;
   handleResetOptions: () => void;
   maxValue: number;
 };
@@ -173,7 +173,7 @@ export const CreateOERsProvider = ({ children }: any) => {
 
   const [maxValue, setMaxValue] = useState(8);
 
-  const handleSetMaxValue = (selected: Option) => {
+  const handleMaxValue = (selected: Option) => {
     // Calcola il nuovo valore massimo in base all'altro valore
     const nuovoMaxValue = calculateMaxValue(selected);
     // Aggiorna il valore massimo
@@ -186,49 +186,49 @@ export const CreateOERsProvider = ({ children }: any) => {
     setIsGenerateButtonClicked(bool);
   };
 
-  const handleSetTargetLevelFillGaps = (selected: Option) => {
+  const handleTargetLevelFillGaps = (selected: Option) => {
     setTargetLevelFillGaps(selected);
   };
-  const handleSetTargetLevelOpenQuestion = (selected: Option) => {
+  const handleTargetLevelOpenQuestion = (selected: Option) => {
     setTargetLevelOpenQuestion(selected);
   };
-  const handleSetTargetLevelMultipleChoice = (selected: Option) => {
+  const handleTargetLevelMultipleChoice = (selected: Option) => {
     setTargetLevelMultipleChoice(selected);
   };
-  // const handleSetDifficultLevel = (selected: Option) => {
+  // const handleDifficultLevel = (selected: Option) => {
   //     setDifficultLevel(selected);
   // }
-  const handleSetQuestionType = (selected: Option) => {
+  const handleQuestionType = (selected: Option) => {
     setQuestionType(selected);
   };
-  const handleSetExerciseType = (selected: Option) => {
+  const handleExerciseType = (selected: Option) => {
     setExerciseType(selected);
   };
-  const handleSetQuestionCategoryOpenQuestion = (selected: Option) => {
+  const handleQuestionCategoryOpenQuestion = (selected: Option) => {
     setQuestionCategoryOpenQuestion(selected);
   };
-  const handleSetQuestionCategoryMultipleChoice = (selected: Option) => {
+  const handleQuestionCategoryMultipleChoice = (selected: Option) => {
     setQuestionCategoryMultipleChoice(selected);
   };
-  const handleSetLength = (selected: Option) => {
+  const handleLength = (selected: Option) => {
     setLength(selected);
     // console.log('length nell handele', length);
     // console.log('selected nell handele', selected);
-    handleSetMaxValue(selected);
+    handleMaxValue(selected);
   };
-  const handleSetDistractorsFillGaps = (number: number | string) => {
+  const handleDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
   };
-  const handleSetDistractorsMultipleChoice = (number: number | string) => {
+  const handleDistractorsMultipleChoice = (number: number | string) => {
     setDistractorsMultipleChoice(number as number);
   };
-  const handleSetEasyDistractors = (number: number | string) => {
+  const handleEasyDistractors = (number: number | string) => {
     setEasyDistractors(number as number);
   };
-  const handleSetBlanks = (number: number | string) => {
+  const handleBlanks = (number: number | string) => {
     setBlanks(number as number);
   };
-  const handleSetCorrectAnswer = (number: number | string) => {
+  const handleCorrectAnswer = (number: number | string) => {
     setCorrectAnswer(number as number);
   };
 
@@ -286,31 +286,31 @@ export const CreateOERsProvider = ({ children }: any) => {
         targetLevelFillGaps,
         targetLevelOpenQuestion,
         targetLevelMultipleChoice,
-        handleSetTargetLevelFillGaps,
-        handleSetTargetLevelOpenQuestion,
-        handleSetTargetLevelMultipleChoice,
+        handleTargetLevelFillGaps,
+        handleTargetLevelOpenQuestion,
+        handleTargetLevelMultipleChoice,
         // difficultLevel,
-        //handleSetDifficultLevel,
+        //handleDifficultLevel,
         questionType,
-        handleSetQuestionType,
+        handleQuestionType,
         exerciseType,
-        handleSetExerciseType,
+        handleExerciseType,
         questionCategoryMultipleChoice,
-        handleSetQuestionCategoryMultipleChoice,
+        handleQuestionCategoryMultipleChoice,
         questionCategoryOpenQuestion,
-        handleSetQuestionCategoryOpenQuestion,
+        handleQuestionCategoryOpenQuestion,
         length,
-        handleSetLength,
+        handleLength,
         distractorsFillGaps,
-        handleSetDistractorsFillGaps,
+        handleDistractorsFillGaps,
         distractorsMultipleChoice,
-        handleSetDistractorsMultipleChoice,
+        handleDistractorsMultipleChoice,
         easyDistractors,
-        handleSetEasyDistractors,
+        handleEasyDistractors,
         blanks,
-        handleSetBlanks,
+        handleBlanks,
         correctAnswer,
-        handleSetCorrectAnswer,
+        handleCorrectAnswer,
         handleResetOptions,
         maxValue,
       }}

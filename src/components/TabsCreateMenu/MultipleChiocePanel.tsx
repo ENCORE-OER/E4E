@@ -1,10 +1,10 @@
-import { Flex, Box, Text, Button } from '@chakra-ui/react';
-import SegmentedButton from '../Buttons/SegmentedButton';
-import TextBox from '../TextBox/TextBox';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
-import SliderInput from '../NumberInput/SliderNumberInput';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useState, useEffect } from 'react';
+import SegmentedButton from '../Buttons/SegmentedButton';
+import SliderInput from '../NumberInput/SliderNumberInput';
+import TextBox from '../TextBox/TextBox';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
@@ -21,17 +21,17 @@ export default function MultipleChoicePanel({
     exerciseTypeOptions,
     questionCategoryOptions,
     targetLevelMultipleChoice,
-    handleSetTargetLevelMultipleChoice,
+    handleTargetLevelMultipleChoice,
     exerciseType,
-    handleSetExerciseType,
+    handleExerciseType,
     questionCategoryMultipleChoice,
-    handleSetQuestionCategoryMultipleChoice,
+    handleQuestionCategoryMultipleChoice,
     correctAnswer,
-    handleSetCorrectAnswer,
+    handleCorrectAnswer,
     easyDistractors,
-    handleSetEasyDistractors,
+    handleEasyDistractors,
     distractorsMultipleChoice,
-    handleSetDistractorsMultipleChoice,
+    handleDistractorsMultipleChoice,
   } = useCreateOERsContext();
 
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
@@ -65,7 +65,7 @@ export default function MultipleChoicePanel({
             options={targetLevelOptions}
             selected={targetLevelMultipleChoice}
             preselectedTitle={targetLevelMultipleChoice?.title}
-            onChange={handleSetTargetLevelMultipleChoice}
+            onChange={handleTargetLevelMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -94,7 +94,7 @@ export default function MultipleChoicePanel({
             options={exerciseTypeOptions}
             selected={exerciseType}
             preselectedTitle={exerciseType?.title}
-            onChange={handleSetExerciseType}
+            onChange={handleExerciseType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -112,7 +112,7 @@ export default function MultipleChoicePanel({
             options={questionCategoryOptions}
             selected={questionCategoryMultipleChoice}
             preselectedTitle={questionCategoryMultipleChoice?.title}
-            onChange={handleSetQuestionCategoryMultipleChoice}
+            onChange={handleQuestionCategoryMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -127,7 +127,7 @@ export default function MultipleChoicePanel({
             min={1}
             max={3}
             value={correctAnswer}
-            onChange={handleSetCorrectAnswer}
+            onChange={handleCorrectAnswer}
           />
         </Box>
         <Box w={'30%'} marginLeft="2rem">
@@ -138,7 +138,7 @@ export default function MultipleChoicePanel({
             min={0}
             max={8}
             value={easyDistractors}
-            onChange={handleSetEasyDistractors}
+            onChange={handleEasyDistractors}
           />
         </Box>
         <Box w={'30%'} marginLeft="2rem">
@@ -149,7 +149,7 @@ export default function MultipleChoicePanel({
             min={0}
             max={8}
             value={distractorsMultipleChoice}
-            onChange={handleSetDistractorsMultipleChoice}
+            onChange={handleDistractorsMultipleChoice}
           />
         </Box>
       </Flex>
