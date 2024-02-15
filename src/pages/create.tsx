@@ -8,7 +8,6 @@ import TabsCreateMenu from '../components/TabsCreateMenu/TabsCreateMenu';
 //import { useCreateOERsContextContext } from '../Contexts/CreateOERsCotext';
 
 const Create = () => {
-  //const [data, setData] = useState(null);
   const { user } = useUser();
   const isSmallerScreen = useBreakpointValue({
     base: true,
@@ -17,21 +16,6 @@ const Create = () => {
     lg: false,
   });
 
-  // useEffect(() => {
-  //   // Funzione asincrona per effettuare la chiamata API
-  //   const fetchData = async () => {
-  //     try {
-  //       // Se stai usando fetch
-  //       const response = await fetch('https://huggingface.co/spaces/polyglot-edu/generative-ai-for-ed');
-  //       const result = await response.json();
-
-  //       setData(result);
-  //     } catch (error) {
-  //       console.error('Errore durante la chiamata API:', error);
-  //     }
-  //   };
-  //   fetchData(); // Chiamata API al caricamento del componente o in base a condizioni specifiche
-  // }, []); // L'array vuoto come secondo argomento fa sì che useEffect si esegua solo al montaggio del componente
 
   return (
     <>

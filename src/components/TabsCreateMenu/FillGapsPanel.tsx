@@ -27,8 +27,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     blanks,
     handleSetBlanks,
     //handleResetOptions,
+    maxValue,
   } = useCreateOERsContext();
-
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
 
@@ -100,7 +100,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             value={blanks}
             onChange={handleSetBlanks}
             min={1}
-            max={8}
+            max={maxValue}
           />
         </Box>
         <Box w={'40%'} marginLeft="2rem">
@@ -111,7 +111,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             value={distractorsFillGaps}
             onChange={handleSetDistractorsFillGaps}
             min={0}
-            max={5}
+            max={blanks}
           />
         </Box>
       </Flex>

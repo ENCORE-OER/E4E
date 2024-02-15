@@ -42,6 +42,7 @@ type CreateOERsContextProps = {
   correctAnswer: number;
   handleSetCorrectAnswer: (selected: number | string) => void;
   handleResetOptions: () => void;
+  maxValue: number;
 };
 
 export const CreateOERsContext = createContext<CreateOERsContextProps>(
@@ -153,6 +154,34 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [blanks, setBlanks] = useState<number>(1);
   const [correctAnswer, setCorrectAnswer] = useState<number>(1);
 
+  const calculateMaxValue = (selected: Option) => {
+    // console.log('length', length);
+    // if (length === lengthOptions[0]) console.log('8');
+    // if (length === lengthOptions[1]) console.log('10');
+    // if (length === lengthOptions[2]) console.log('12');
+    switch (selected) {
+      case lengthOptions[0]:
+        return 8;
+      case lengthOptions[1]:
+        return 10;
+      case lengthOptions[2]:
+        return 12;
+      default:
+        return 8;
+    }
+  }
+
+  const [maxValue, setMaxValue] = useState(8);
+
+  const handleSetMaxValue = (selected: Option) => {
+    // Calcola il nuovo valore massimo in base all'altro valore
+    const nuovoMaxValue = calculateMaxValue(selected);
+    // Aggiorna il valore massimo 
+    setMaxValue(nuovoMaxValue);
+  };
+
+  // const [data, setData] = useState(null);
+
   const handleIsGenerateButtonClicked = (bool: boolean) => {
     setIsGenerateButtonClicked(bool);
   };
@@ -183,6 +212,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleSetLength = (selected: Option) => {
     setLength(selected);
+    // console.log('length nell handele', length);
+    // console.log('selected nell handele', selected);
+    handleSetMaxValue(selected);
   };
   const handleSetDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
@@ -216,6 +248,29 @@ export const CreateOERsProvider = ({ children }: any) => {
     setEasyDistractors(0);
     setCorrectAnswer(1);
   };
+
+  // todo: fatch call
+  // useEffect(() => {
+  //   //console.log('data', data);
+  // }, [data]);
+
+  // useEffect(() => {
+  //   // Funzione asincrona per effettuare la chiamata API
+  //   const fetchData = async () => {
+  //     try {
+  //       // Se stai usando fetch
+  //       const response = await fetch('https://huggingface.co/spaces/polyglot-edu/generative-ai-for-ed');
+  //       const result = await response.json();
+
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error('Errore durante la chiamata API:', error);
+  //     }
+  //   };
+  //   fetchData(); // Chiamata API al caricamento del componente o in base a condizioni specifiche
+  // }, []); // L'array vuoto come secondo argomento fa sì che useEffect si esegua solo al montaggio del componente
+
+  // todo: write on database
 
   return (
     <CreateOERsContext.Provider
@@ -257,6 +312,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         correctAnswer,
         handleSetCorrectAnswer,
         handleResetOptions,
+        maxValue,
       }}
     >
       {children}
