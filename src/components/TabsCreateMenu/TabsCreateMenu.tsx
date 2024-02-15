@@ -13,6 +13,7 @@ export default function TabsCreateMenu({
   isSmallerScreen,
 }: TabsCreateMenuProps) {
   const {
+    handleIsGenerateButtonClicked,
     // handleResetOptions,
     // targetLevelFillGaps,
     // targetLevelOpenQuestion,
@@ -24,6 +25,7 @@ export default function TabsCreateMenu({
     // easyDistractors,
     // blanks,
     // correctAnswer,
+    // length
   } = useCreateOERsContext();
 
   const [selectedIndex, setSelectedIndex] = useLocalStorage<number>(
@@ -32,10 +34,9 @@ export default function TabsCreateMenu({
   );
 
   const handleChangeTab = (index: number) => {
-    // Chiamare la funzione handleResetOptions qui
     // handleResetOptions();
     setSelectedIndex(index);
-    // console.log('Selected index: ', index);
+    //console.log('Selected index: ', index);
     // console.log(targetLevelFillGaps);
     // console.log(targetLevelOpenQuestion);
     // console.log(targetLevelMultipleChoice);
@@ -46,6 +47,8 @@ export default function TabsCreateMenu({
     // console.log('easy distractors: ', easyDistractors);
     // console.log('blanks: ', blanks);
     // console.log('correct answer: ', correctAnswer);
+    // console.log(length)
+    handleIsGenerateButtonClicked(false);
   };
 
   return (

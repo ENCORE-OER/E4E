@@ -28,7 +28,7 @@ const SegmentedButton = <T extends {}>({
   const handleOnChange = (
     value: T & { title: string; description?: string }
   ) => {
-    console.log('Selected value:', value);
+    //console.log('Selected value:', value);
     if (onChange) {
       onChange(value);
       setColored(value.title);

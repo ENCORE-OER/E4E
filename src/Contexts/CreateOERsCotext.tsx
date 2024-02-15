@@ -1,10 +1,12 @@
-import { createContext, useContext } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
+import { createContext, useContext, useState } from 'react';
+//import { useLocalStorage } from 'usehooks-ts';
 import { Option } from '../types/encoreElements/index';
 //import { useHasHydrated } from '../utils/utils';
 
 //context props
 type CreateOERsContextProps = {
+  isGenerateButtonClicked: boolean;
+  handleIsGenerateButtonClicked: (bool: boolean) => void;
   targetLevelOptions: Option[];
   // difficultLevelOptions: Option[];
   lengthOptions: Option[];
@@ -19,19 +21,19 @@ type CreateOERsContextProps = {
   handleSetTargetLevelMultipleChoice: (selected: Option) => void;
   // difficultLevel: Option;
   // handleSetDifficultLevel: (selected: Option) => void;
-  questionType: Option;
+  questionType: Option | null;
   handleSetQuestionType: (selected: Option) => void;
-  exerciseType: Option;
+  exerciseType: Option | null;
   handleSetExerciseType: (selected: Option) => void;
-  questionCategoryOpenQuestion: Option;
+  questionCategoryOpenQuestion: Option | null;
   handleSetQuestionCategoryOpenQuestion: (selected: Option) => void;
-  questionCategoryMultipleChoice: Option;
+  questionCategoryMultipleChoice: Option | null;
   handleSetQuestionCategoryMultipleChoice: (selected: Option) => void;
-  length: Option;
+  length: Option | null;
   handleSetLength: (selected: Option) => void;
   distractorsFillGaps: number;
   handleSetDistractorsFillGaps: (selected: number | string) => void;
-  distractorsMultipleChioce: number;
+  distractorsMultipleChoice: number;
   handleSetDistractorsMultipleChoice: (selected: number | string) => void;
   easyDistractors: number;
   handleSetEasyDistractors: (selected: number | string) => void;
@@ -85,7 +87,11 @@ export const CreateOERsProvider = ({ children }: any) => {
     { title: 'Theoretical' },
     { title: 'Pratical' },
   ];
-  const [targetLevelFillGaps, setTargetLevelFillGaps] =
+
+  const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
+
+  // *stesse identiche variabili che ci sono sotto ma salvate nel local storage (chace), rimangono anche se si refresha la pagina 
+  /*const [targetLevelFillGaps, setTargetLevelFillGaps] =
     useLocalStorage<Option | null>('targetLevelFillGaps', null);
   const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
     useLocalStorage<Option | null>('targetLevelOpenQuestion', null);
@@ -94,35 +100,25 @@ export const CreateOERsProvider = ({ children }: any) => {
   // const [difficultLevel, setDifficultLevel] = useLocalStorage<Option>('difficultLevel', {
   //     title: '',
   // });
-  const [length, setLength] = useLocalStorage<Option>('lenght', {
-    title: '',
-  });
-  const [questionType, setQuestionType] = useLocalStorage<Option>(
+  const [length, setLength] = useLocalStorage<Option | null>('lenght', null);
+  const [questionType, setQuestionType] = useLocalStorage<Option | null>(
     'questionType',
-    {
-      title: '',
-    }
+    null
   );
   const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
-    useLocalStorage<Option>('questionCategoryOpenQuestion', {
-      title: '',
-    });
+    useLocalStorage<Option | null>('questionCategoryOpenQuestion', null);
   const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
-    useLocalStorage<Option>('questionCategoryMultipleChoice', {
-      title: '',
-    });
-  const [exerciseType, setExerciseType] = useLocalStorage<Option>(
+    useLocalStorage<Option | null>('questionCategoryMultipleChoice', null);
+  const [exerciseType, setExerciseType] = useLocalStorage<Option | null>(
     'exerciseType',
-    {
-      title: '',
-    }
+    null
   );
 
   const [distractorsFillGaps, setDistractorsFillGaps] = useLocalStorage<number>(
     'distractorsFillGaps',
     0
   );
-  const [distractorsMultipleChioce, setDistractorsMultipleChoice] =
+  const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
     useLocalStorage<number>('distractorsMultipleChoice', 0);
   const [easyDistractors, setEasyDistractors] = useLocalStorage<number>(
     'easyDistractors',
@@ -132,7 +128,34 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [correctAnswer, setCorrectAnswer] = useLocalStorage<number>(
     'correctAnswer',
     1
+  );*/
+
+// *stesse identiche variabili che ci sono sopra ma salvate nello useState, si resettano se  si refresha la pagina 
+  const [targetLevelFillGaps, setTargetLevelFillGaps] = useState<Option | null>(
+    null
   );
+  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
+    useState<Option | null>(null);
+  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] =
+    useState<Option | null>(null);
+  const [length, setLength] = useState<Option | null>(null);
+  const [questionType, setQuestionType] = useState<Option | null>(null);
+  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
+    useState<Option | null>(null);
+  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
+    useState<Option | null>(null);
+  const [exerciseType, setExerciseType] = useState<Option | null>(null);
+
+  const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
+  const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
+    useState<number>(0);
+  const [easyDistractors, setEasyDistractors] = useState<number>(0);
+  const [blanks, setBlanks] = useState<number>(1);
+  const [correctAnswer, setCorrectAnswer] = useState<number>(1);
+
+  const handleIsGenerateButtonClicked = (bool: boolean) => {
+    setIsGenerateButtonClicked(bool);
+  }
 
   const handleSetTargetLevelFillGaps = (selected: Option) => {
     setTargetLevelFillGaps(selected);
@@ -197,6 +220,8 @@ export const CreateOERsProvider = ({ children }: any) => {
   return (
     <CreateOERsContext.Provider
       value={{
+        isGenerateButtonClicked,
+        handleIsGenerateButtonClicked,
         targetLevelOptions,
         // difficultLevelOptions,
         lengthOptions,
@@ -223,7 +248,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleSetLength,
         distractorsFillGaps,
         handleSetDistractorsFillGaps,
-        distractorsMultipleChioce,
+        distractorsMultipleChoice,
         handleSetDistractorsMultipleChoice,
         easyDistractors,
         handleSetEasyDistractors,

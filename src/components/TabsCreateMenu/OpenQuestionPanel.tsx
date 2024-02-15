@@ -2,6 +2,8 @@ import { Flex, Box, Text, Button } from '@chakra-ui/react';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useState, useEffect } from 'react';
 
 type OpenQuestionPanelProps = {
   isSmallerScreen?: boolean;
@@ -11,6 +13,8 @@ export default function OpenQuestionPanel({
   isSmallerScreen,
 }: OpenQuestionPanelProps) {
   const {
+    isGenerateButtonClicked,
+    handleIsGenerateButtonClicked,
     targetLevelOptions,
     //difficultLevelOptions,
     questionTypeOptions,
@@ -23,6 +27,19 @@ export default function OpenQuestionPanel({
     handleSetQuestionCategoryOpenQuestion,
   } = useCreateOERsContext();
 
+  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const { addToast } = CustomToast();
+
+  const handleOptionsComplete = () => {
+    if ( targetLevelOpenQuestion != null && questionType != null && questionCategoryOpenQuestion != null) {
+      setAreOptionsComplete(true);
+    }
+  };
+
+  useEffect(() => {
+    handleOptionsComplete();
+  }, [targetLevelOpenQuestion, questionType, questionCategoryOpenQuestion]);
+
   return (
     <>
       <Flex w={'100%'}>
@@ -31,10 +48,10 @@ export default function OpenQuestionPanel({
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && targetLevelOpenQuestion == null}
             options={targetLevelOptions}
+            selected={targetLevelOpenQuestion}
             preselectedTitle={targetLevelOpenQuestion?.title}
-            selected={null}
             onChange={handleSetTargetLevelOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
@@ -60,9 +77,9 @@ export default function OpenQuestionPanel({
             <Text as="b">Question Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && questionType == null}
             options={questionTypeOptions}
-            selected={null}
+            selected={questionType}
             preselectedTitle={questionType?.title}
             onChange={handleSetQuestionType}
             isSmallerScreen={isSmallerScreen || false}
@@ -76,9 +93,9 @@ export default function OpenQuestionPanel({
             <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && questionCategoryOpenQuestion == null}
             options={questionCategoryOptions}
-            selected={null}
+            selected={questionCategoryOpenQuestion}
             preselectedTitle={questionCategoryOpenQuestion?.title}
             onChange={handleSetQuestionCategoryOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
@@ -92,6 +109,19 @@ export default function OpenQuestionPanel({
           colorScheme="yellow"
           border="solid 1px"
           borderRadius="lg"
+          onClick={() => {
+            handleOptionsComplete();
+            if (areOptionsComplete) {
+              handleIsGenerateButtonClicked(false);
+            } else {
+              addToast({
+                message:
+                  'Please ensure all required fields are filled out before proceeding.',
+                type: 'warning',
+              });
+              handleIsGenerateButtonClicked(true);
+            }
+          }}
         >
           <Text as="b">Generate</Text>
         </Button>

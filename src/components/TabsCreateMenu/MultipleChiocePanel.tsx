@@ -3,6 +3,8 @@ import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import SliderInput from '../NumberInput/SliderNumberInput';
+import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useState, useEffect } from 'react';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
@@ -12,6 +14,8 @@ export default function MultipleChoicePanel({
   isSmallerScreen,
 }: MultipleChoicePanelProps) {
   const {
+    isGenerateButtonClicked,
+    handleIsGenerateButtonClicked,
     targetLevelOptions,
     //difficultLevelOptions,
     exerciseTypeOptions,
@@ -26,9 +30,22 @@ export default function MultipleChoicePanel({
     handleSetCorrectAnswer,
     easyDistractors,
     handleSetEasyDistractors,
-    distractorsMultipleChioce,
+    distractorsMultipleChoice,
     handleSetDistractorsMultipleChoice,
   } = useCreateOERsContext();
+
+  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const { addToast } = CustomToast();
+
+  const handleOptionsComplete = () => {
+    if (targetLevelMultipleChoice != null && exerciseType != null && questionCategoryMultipleChoice != null) {
+      setAreOptionsComplete(true);
+    }
+  };
+
+  useEffect(() => {
+    handleOptionsComplete();
+  }, [targetLevelMultipleChoice, exerciseType, questionCategoryMultipleChoice]);
 
   return (
     <>
@@ -38,9 +55,9 @@ export default function MultipleChoicePanel({
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && targetLevelMultipleChoice == null}
             options={targetLevelOptions}
-            selected={null}
+            selected={targetLevelMultipleChoice}
             preselectedTitle={targetLevelMultipleChoice?.title}
             onChange={handleSetTargetLevelMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
@@ -67,9 +84,9 @@ export default function MultipleChoicePanel({
             <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && exerciseType == null}
             options={exerciseTypeOptions}
-            selected={null}
+            selected={exerciseType}
             preselectedTitle={exerciseType?.title}
             onChange={handleSetExerciseType}
             isSmallerScreen={isSmallerScreen || false}
@@ -83,9 +100,9 @@ export default function MultipleChoicePanel({
             <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && questionCategoryMultipleChoice == null}
             options={questionCategoryOptions}
-            selected={null}
+            selected={questionCategoryMultipleChoice}
             preselectedTitle={questionCategoryMultipleChoice?.title}
             onChange={handleSetQuestionCategoryMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
@@ -123,7 +140,7 @@ export default function MultipleChoicePanel({
           <SliderInput
             min={0}
             max={8}
-            value={distractorsMultipleChioce}
+            value={distractorsMultipleChoice}
             onChange={handleSetDistractorsMultipleChoice}
           />
         </Box>
@@ -134,6 +151,19 @@ export default function MultipleChoicePanel({
           colorScheme="yellow"
           border="solid 1px"
           borderRadius="lg"
+          onClick={() => {
+            handleOptionsComplete();
+            if (areOptionsComplete) {
+              handleIsGenerateButtonClicked(false);
+            } else {
+              addToast({
+                message:
+                  'Please ensure all required fields are filled out before proceeding.',
+                type: 'warning',
+              });
+              handleIsGenerateButtonClicked(true);
+            }
+          }}
         >
           <Text as="b">Generate</Text>
         </Button>

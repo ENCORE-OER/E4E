@@ -1,9 +1,10 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/SegmentedButton';
-import TextBox from '../TextBox/TextBox';
 import SliderInput from '../NumberInput/SliderNumberInput';
-// import { useEffect } from 'react';
+import TextBox from '../TextBox/TextBox';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
@@ -11,6 +12,8 @@ type FillGapsPanelProps = {
 
 export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
   const {
+    isGenerateButtonClicked,
+    handleIsGenerateButtonClicked,
     targetLevelOptions,
     //difficultLevelOptions,
     lengthOptions,
@@ -26,13 +29,18 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     //handleResetOptions,
   } = useCreateOERsContext();
 
-  // useEffect(() => {
-  //   // Recupera il valore da localStorage al montaggio del componente padre
-  //   const storedValue = localStorage.getItem('distractorsFillGaps');
-  //   if (storedValue) {
-  //     handleSetDistractorsFillGaps(storedValue);
-  //   }
-  // }, []);
+  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const { addToast } = CustomToast();
+
+  const handleOptionsComplete = () => {
+    if (targetLevelFillGaps != null && length != null) {
+      setAreOptionsComplete(true);
+    }
+  };
+
+  useEffect(() => {
+    handleOptionsComplete();
+  }, [targetLevelFillGaps, length]);
 
   return (
     <>
@@ -42,7 +50,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && targetLevelFillGaps == null}
             options={targetLevelOptions}
             selected={targetLevelFillGaps}
             preselectedTitle={targetLevelFillGaps?.title}
@@ -71,7 +79,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text as="b">Lenght</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={false}
+            isHighlighted={isGenerateButtonClicked && length == null}
             options={lengthOptions}
             selected={length}
             preselectedTitle={length?.title}
@@ -111,6 +119,19 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           colorScheme="yellow"
           border="solid 1px"
           borderRadius="lg"
+          onClick={() => {
+            handleOptionsComplete();
+            if (areOptionsComplete) {
+              handleIsGenerateButtonClicked(false);
+            } else {
+              addToast({
+                message:
+                  'Please ensure all required fields are filled out before proceeding.',
+                type: 'warning',
+              });
+              handleIsGenerateButtonClicked(true);
+            }
+          }}
         >
           <Text as="b">Generate</Text>
         </Button>

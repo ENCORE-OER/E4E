@@ -26,7 +26,7 @@ export default function SliderInput({
   max,
 }: SliderInputProps) {
   const hydrated = useHasHydrated();
-  console.log('SliderInput value:', value);
+  //console.log('SliderInput value:', value);
 
   return (
     <Flex>
