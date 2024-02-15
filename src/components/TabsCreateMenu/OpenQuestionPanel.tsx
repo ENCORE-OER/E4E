@@ -31,7 +31,11 @@ export default function OpenQuestionPanel({
   const { addToast } = CustomToast();
 
   const handleOptionsComplete = () => {
-    if ( targetLevelOpenQuestion != null && questionType != null && questionCategoryOpenQuestion != null) {
+    if (
+      targetLevelOpenQuestion != null &&
+      questionType != null &&
+      questionCategoryOpenQuestion != null
+    ) {
       setAreOptionsComplete(true);
     }
   };
@@ -48,7 +52,9 @@ export default function OpenQuestionPanel({
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && targetLevelOpenQuestion == null}
+            isHighlighted={
+              isGenerateButtonClicked && targetLevelOpenQuestion == null
+            }
             options={targetLevelOptions}
             selected={targetLevelOpenQuestion}
             preselectedTitle={targetLevelOpenQuestion?.title}
@@ -93,7 +99,9 @@ export default function OpenQuestionPanel({
             <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && questionCategoryOpenQuestion == null}
+            isHighlighted={
+              isGenerateButtonClicked && questionCategoryOpenQuestion == null
+            }
             options={questionCategoryOptions}
             selected={questionCategoryOpenQuestion}
             preselectedTitle={questionCategoryOpenQuestion?.title}

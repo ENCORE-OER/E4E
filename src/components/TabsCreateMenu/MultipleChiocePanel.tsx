@@ -38,7 +38,11 @@ export default function MultipleChoicePanel({
   const { addToast } = CustomToast();
 
   const handleOptionsComplete = () => {
-    if (targetLevelMultipleChoice != null && exerciseType != null && questionCategoryMultipleChoice != null) {
+    if (
+      targetLevelMultipleChoice != null &&
+      exerciseType != null &&
+      questionCategoryMultipleChoice != null
+    ) {
       setAreOptionsComplete(true);
     }
   };
@@ -55,7 +59,9 @@ export default function MultipleChoicePanel({
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && targetLevelMultipleChoice == null}
+            isHighlighted={
+              isGenerateButtonClicked && targetLevelMultipleChoice == null
+            }
             options={targetLevelOptions}
             selected={targetLevelMultipleChoice}
             preselectedTitle={targetLevelMultipleChoice?.title}
@@ -100,7 +106,9 @@ export default function MultipleChoicePanel({
             <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && questionCategoryMultipleChoice == null}
+            isHighlighted={
+              isGenerateButtonClicked && questionCategoryMultipleChoice == null
+            }
             options={questionCategoryOptions}
             selected={questionCategoryMultipleChoice}
             preselectedTitle={questionCategoryMultipleChoice?.title}

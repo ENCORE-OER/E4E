@@ -50,7 +50,9 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && targetLevelFillGaps == null}
+            isHighlighted={
+              isGenerateButtonClicked && targetLevelFillGaps == null
+            }
             options={targetLevelOptions}
             selected={targetLevelFillGaps}
             preselectedTitle={targetLevelFillGaps?.title}

@@ -90,7 +90,7 @@ export const CreateOERsProvider = ({ children }: any) => {
 
   const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
 
-  // *stesse identiche variabili che ci sono sotto ma salvate nel local storage (chace), rimangono anche se si refresha la pagina 
+  // *stesse identiche variabili che ci sono sotto ma salvate nel local storage (chace), rimangono anche se si refresha la pagina
   /*const [targetLevelFillGaps, setTargetLevelFillGaps] =
     useLocalStorage<Option | null>('targetLevelFillGaps', null);
   const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
@@ -130,7 +130,7 @@ export const CreateOERsProvider = ({ children }: any) => {
     1
   );*/
 
-// *stesse identiche variabili che ci sono sopra ma salvate nello useState, si resettano se  si refresha la pagina 
+  // *stesse identiche variabili che ci sono sopra ma salvate nello useState, si resettano se  si refresha la pagina
   const [targetLevelFillGaps, setTargetLevelFillGaps] = useState<Option | null>(
     null
   );
@@ -155,7 +155,7 @@ export const CreateOERsProvider = ({ children }: any) => {
 
   const handleIsGenerateButtonClicked = (bool: boolean) => {
     setIsGenerateButtonClicked(bool);
-  }
+  };
 
   const handleSetTargetLevelFillGaps = (selected: Option) => {
     setTargetLevelFillGaps(selected);
