@@ -15,12 +15,12 @@ export default function OpenQuestionPanel({
     //difficultLevelOptions,
     questionTypeOptions,
     questionCategoryOptions,
-    targetLevel,
-    handleSetTargetLevel,
+    targetLevelOpenQuestion,
+    handleSetTargetLevelOpenQuestion,
     questionType,
     handleSetQuestionType,
-    questionCategory,
-    handleSetQuestionCategory,
+    questionCategoryOpenQuestion,
+    handleSetQuestionCategoryOpenQuestion,
   } = useCreateOERsContext();
 
   return (
@@ -33,9 +33,9 @@ export default function OpenQuestionPanel({
           <SegmentedButton
             isHighlighted={false}
             options={targetLevelOptions}
-            preselectedTitle={targetLevel?.title}
+            preselectedTitle={targetLevelOpenQuestion?.title}
             selected={null}
-            onChange={handleSetTargetLevel}
+            onChange={handleSetTargetLevelOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -79,8 +79,8 @@ export default function OpenQuestionPanel({
             isHighlighted={false}
             options={questionCategoryOptions}
             selected={null}
-            preselectedTitle={questionCategory?.title}
-            onChange={handleSetQuestionCategory}
+            preselectedTitle={questionCategoryOpenQuestion?.title}
+            onChange={handleSetQuestionCategoryOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />

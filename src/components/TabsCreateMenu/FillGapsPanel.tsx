@@ -3,6 +3,7 @@ import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import TextBox from '../TextBox/TextBox';
 import SliderInput from '../NumberInput/SliderNumberInput';
+// import { useEffect } from 'react';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
@@ -12,18 +13,27 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
   const {
     targetLevelOptions,
     //difficultLevelOptions,
-    lengthOptions: lenghtOptions,
-    targetLevel,
-    handleSetTargetLevel,
+    lengthOptions,
+    targetLevelFillGaps,
+    handleSetTargetLevelFillGaps,
     //handleSetDifficultLevel,
     length,
     handleSetLength,
-    distractors,
-    handleSetDistractors,
+    distractorsFillGaps,
+    handleSetDistractorsFillGaps,
     blanks,
     handleSetBlanks,
     //handleResetOptions,
   } = useCreateOERsContext();
+
+  
+  // useEffect(() => {
+  //   // Recupera il valore da localStorage al montaggio del componente padre
+  //   const storedValue = localStorage.getItem('distractorsFillGaps');
+  //   if (storedValue) {
+  //     handleSetDistractorsFillGaps(storedValue);
+  //   }
+  // }, []); 
 
   return (
     <>
@@ -35,9 +45,9 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           <SegmentedButton
             isHighlighted={false}
             options={targetLevelOptions}
-            selected={null}
-            preselectedTitle={targetLevel?.title}
-            onChange={handleSetTargetLevel}
+            selected={targetLevelFillGaps}
+            preselectedTitle={targetLevelFillGaps?.title}
+            onChange={handleSetTargetLevelFillGaps}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -63,8 +73,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           </Flex>
           <SegmentedButton
             isHighlighted={false}
-            options={lenghtOptions}
-            selected={null}
+            options={lengthOptions}
+            selected={length}
             preselectedTitle={length?.title}
             onChange={handleSetLength}
             isSmallerScreen={isSmallerScreen || false}
@@ -89,8 +99,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text as="b">Number Of Distractors</Text>
           </Flex>
           <SliderInput
-            value={distractors}
-            onChange={handleSetDistractors}
+            value={distractorsFillGaps}
+            onChange={handleSetDistractorsFillGaps}
             min={0}
             max={5}
           />

@@ -16,18 +16,18 @@ export default function MultipleChoicePanel({
     //difficultLevelOptions,
     exerciseTypeOptions,
     questionCategoryOptions,
-    targetLevel,
-    handleSetTargetLevel,
+    targetLevelMultipleChoice,
+    handleSetTargetLevelMultipleChoice,
     exerciseType,
     handleSetExerciseType,
-    questionCategory,
-    handleSetQuestionCategory,
+    questionCategoryMultipleChoice,
+    handleSetQuestionCategoryMultipleChoice,
     correctAnswer,
     handleSetCorrectAnswer,
     easyDistractors,
     handleSetEasyDistractors,
-    distractors,
-    handleSetDistractors,
+    distractorsMultipleChioce,
+    handleSetDistractorsMultipleChoice,
   } = useCreateOERsContext();
 
   return (
@@ -41,8 +41,8 @@ export default function MultipleChoicePanel({
             isHighlighted={false}
             options={targetLevelOptions}
             selected={null}
-            preselectedTitle={targetLevel?.title}
-            onChange={handleSetTargetLevel}
+            preselectedTitle={targetLevelMultipleChoice?.title}
+            onChange={handleSetTargetLevelMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -86,8 +86,8 @@ export default function MultipleChoicePanel({
             isHighlighted={false}
             options={questionCategoryOptions}
             selected={null}
-            preselectedTitle={questionCategory?.title}
-            onChange={handleSetQuestionCategory}
+            preselectedTitle={questionCategoryMultipleChoice?.title}
+            onChange={handleSetQuestionCategoryMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -123,8 +123,8 @@ export default function MultipleChoicePanel({
           <SliderInput
             min={0}
             max={8}
-            value={distractors}
-            onChange={handleSetDistractors}
+            value={distractorsMultipleChioce}
+            onChange={handleSetDistractorsMultipleChoice}
           />
         </Box>
       </Flex>

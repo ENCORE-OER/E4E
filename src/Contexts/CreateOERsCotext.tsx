@@ -11,20 +11,28 @@ type CreateOERsContextProps = {
   questionTypeOptions: Option[];
   questionCategoryOptions: Option[];
   exerciseTypeOptions: Option[];
-  targetLevel: Option;
-  handleSetTargetLevel: (selected: Option) => void;
+  targetLevelFillGaps: Option | null;
+  targetLevelOpenQuestion: Option | null;
+  targetLevelMultipleChoice: Option | null;
+  handleSetTargetLevelFillGaps: (selected: Option) => void;
+  handleSetTargetLevelOpenQuestion: (selected: Option) => void;
+  handleSetTargetLevelMultipleChoice: (selected: Option) => void;
   // difficultLevel: Option;
   // handleSetDifficultLevel: (selected: Option) => void;
   questionType: Option;
   handleSetQuestionType: (selected: Option) => void;
   exerciseType: Option;
   handleSetExerciseType: (selected: Option) => void;
-  questionCategory: Option;
-  handleSetQuestionCategory: (selected: Option) => void;
+  questionCategoryOpenQuestion: Option;
+  handleSetQuestionCategoryOpenQuestion: (selected: Option) => void;
+  questionCategoryMultipleChoice: Option;
+  handleSetQuestionCategoryMultipleChoice: (selected: Option) => void;
   length: Option;
   handleSetLength: (selected: Option) => void;
-  distractors: number;
-  handleSetDistractors: (selected: number | string) => void;
+  distractorsFillGaps: number;
+  handleSetDistractorsFillGaps: (selected: number | string) => void;
+  distractorsMultipleChioce: number;
+  handleSetDistractorsMultipleChoice: (selected: number | string) => void;
   easyDistractors: number;
   handleSetEasyDistractors: (selected: number | string) => void;
   blanks: number;
@@ -77,9 +85,9 @@ export const CreateOERsProvider = ({ children }: any) => {
     { title: 'Theoretical' },
     { title: 'Pratical' },
   ];
-  const [targetLevel, setTargetLevel] = useLocalStorage<Option>('targetLevel', {
-    title: '',
-  });
+  const [targetLevelFillGaps, setTargetLevelFillGaps] = useLocalStorage<Option | null>('targetLevelFillGaps', null);
+  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] = useLocalStorage<Option | null>('targetLevelOpenQuestion',null);
+  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] = useLocalStorage<Option | null>('targetLevelMultipleChoice',null);
   // const [difficultLevel, setDifficultLevel] = useLocalStorage<Option>('difficultLevel', {
   //     title: '',
   // });
@@ -92,8 +100,14 @@ export const CreateOERsProvider = ({ children }: any) => {
       title: '',
     }
   );
-  const [questionCategory, setQuestionCategory] = useLocalStorage<Option>(
-    'questionCategory',
+  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] = useLocalStorage<Option>(
+    'questionCategoryOpenQuestion',
+    {
+      title: '',
+    }
+  );
+  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] = useLocalStorage<Option>(
+    'questionCategoryMultipleChoice',
     {
       title: '',
     }
@@ -105,8 +119,12 @@ export const CreateOERsProvider = ({ children }: any) => {
     }
   );
 
-  const [distractors, setDistractors] = useLocalStorage<number>(
-    'distractors',
+  const [distractorsFillGaps, setDistractorsFillGaps] = useLocalStorage<number>(
+    'distractorsFillGaps',
+    0
+  );
+  const [distractorsMultipleChioce, setDistractorsMultipleChoice] = useLocalStorage<number>(
+    'distractorsMultipleChoice',
     0
   );
   const [easyDistractors, setEasyDistractors] = useLocalStorage<number>(
@@ -119,9 +137,15 @@ export const CreateOERsProvider = ({ children }: any) => {
     1
   );
 
-  const handleSetTargetLevel = (selected: Option) => {
-    setTargetLevel(selected);
+  const handleSetTargetLevelFillGaps = (selected: Option) => {
+    setTargetLevelFillGaps(selected);
   };
+  const handleSetTargetLevelOpenQuestion = (selected: Option) => {
+    setTargetLevelOpenQuestion(selected);
+  }
+  const handleSetTargetLevelMultipleChoice = (selected: Option) => {
+    setTargetLevelMultipleChoice(selected);
+  }
   // const handleSetDifficultLevel = (selected: Option) => {
   //     setDifficultLevel(selected);
   // }
@@ -131,14 +155,20 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleSetExerciseType = (selected: Option) => {
     setExerciseType(selected);
   };
-  const handleSetQuestionCategory = (selected: Option) => {
-    setQuestionCategory(selected);
+  const handleSetQuestionCategoryOpenQuestion = (selected: Option) => {
+    setQuestionCategoryOpenQuestion(selected);
+  };
+  const handleSetQuestionCategoryMultipleChoice = (selected: Option) => {
+    setQuestionCategoryMultipleChoice(selected);
   };
   const handleSetLength = (selected: Option) => {
     setLength(selected);
   };
-  const handleSetDistractors = (number: number | string) => {
-    setDistractors(number as number);
+  const handleSetDistractorsFillGaps = (number: number | string) => {
+    setDistractorsFillGaps(number as number);
+  };
+  const handleSetDistractorsMultipleChoice = (number: number | string) => {
+    setDistractorsMultipleChoice(number as number);
   };
   const handleSetEasyDistractors = (number: number | string) => {
     setEasyDistractors(number as number);
@@ -151,15 +181,20 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
 
   const handleResetOptions = () => {
-    setTargetLevel({ title: '' });
+    setTargetLevelFillGaps(null);
+    setTargetLevelOpenQuestion(null);
+    setTargetLevelMultipleChoice(null);
     // setDifficultLevel({ title: '' });
     setQuestionType({ title: '' });
     setExerciseType({ title: '' });
-    setQuestionCategory({ title: '' });
+    setQuestionCategoryOpenQuestion({ title: '' });
+    setQuestionCategoryMultipleChoice({ title: '' });
     setLength({ title: '' });
-    setDistractors(0);
+    setDistractorsFillGaps(0);
+    setDistractorsMultipleChoice(0);
     setBlanks(1);
     setEasyDistractors(0);
+    setCorrectAnswer(1);
   };
 
   return (
@@ -171,20 +206,28 @@ export const CreateOERsProvider = ({ children }: any) => {
         questionTypeOptions,
         questionCategoryOptions,
         exerciseTypeOptions,
-        targetLevel,
-        handleSetTargetLevel,
+        targetLevelFillGaps,
+        targetLevelOpenQuestion,
+        targetLevelMultipleChoice,
+        handleSetTargetLevelFillGaps,
+        handleSetTargetLevelOpenQuestion,
+        handleSetTargetLevelMultipleChoice,
         // difficultLevel,
         //handleSetDifficultLevel,
         questionType,
         handleSetQuestionType,
         exerciseType,
         handleSetExerciseType,
-        questionCategory,
-        handleSetQuestionCategory,
+        questionCategoryMultipleChoice,
+        handleSetQuestionCategoryMultipleChoice,
+        questionCategoryOpenQuestion,
+        handleSetQuestionCategoryOpenQuestion,
         length,
         handleSetLength,
-        distractors,
-        handleSetDistractors,
+        distractorsFillGaps,
+        handleSetDistractorsFillGaps,
+        distractorsMultipleChioce,
+        handleSetDistractorsMultipleChoice,
         easyDistractors,
         handleSetEasyDistractors,
         blanks,
