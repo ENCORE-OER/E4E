@@ -11,7 +11,7 @@ type TextBoxProps = {
 };
 
 const TextBox = ({
-  backgroundColor,  
+  backgroundColor,
   placeholder,
   isHighlighted,
   text,

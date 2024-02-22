@@ -12,9 +12,7 @@ type TabsCreateMenuProps = {
 export default function TabsCreateMenu({
   isSmallerScreen,
 }: TabsCreateMenuProps) {
-  const {
-    handleIsGenerateButtonClicked,
-  } = useCreateOERsContext();
+  const { handleIsGenerateButtonClicked } = useCreateOERsContext();
 
   // const [selectedIndex, setSelectedIndex] = useLocalStorage<number>(
   //   'selectedIndex',

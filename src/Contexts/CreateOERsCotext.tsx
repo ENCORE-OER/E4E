@@ -49,7 +49,7 @@ type CreateOERsContextProps = {
   blanks: number;
   handleBlanks: (selected: number | string) => void;
   temperatureFillGaps: Option | null;
-  handleTemperatureFillGaps: (selected: Option) => void;  
+  handleTemperatureFillGaps: (selected: Option) => void;
 
   // * variabili Open Question
   targetLevelOpenQuestion: Option | null;
@@ -77,7 +77,7 @@ type CreateOERsContextProps = {
   temperatureMultipleChoice: Option | null;
   handleTemperatureMultipleChoice: (selected: Option) => void;
 
-  // * dati per il json 
+  // * dati per il json
   // todo: metterle sul local storage e fare una funzione per resettarle
   exercise: string;
   handleExercise: (selected: number) => void;
@@ -98,7 +98,6 @@ type CreateOERsContextProps = {
   // handleChosenDistractorsEasy: (selected: number) => void;
   // chosenCorrectAnswer: number;
   // handleChosenCorrectAnswer: (selected: number) => void;
-
 
   // * altro
   maxValue: number; //numero per definire il numero massimo di gaps
@@ -204,7 +203,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [length, setLength] = useState<Option | null>(null);
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
   const [blanks, setBlanks] = useState<number>(1);
-  const [temperatureFillGaps, setTemperatureFillGaps] = useState<Option | null>(null);
+  const [temperatureFillGaps, setTemperatureFillGaps] = useState<Option | null>(
+    null
+  );
 
   // * variabili per l'Open Question
   const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
@@ -212,7 +213,8 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [questionType, setQuestionType] = useState<Option | null>(null);
   const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
     useState<Option | null>(null);
-  const [temperatureOpenQuestion, setTemperatureOpenQuestion] = useState<Option | null>(null);
+  const [temperatureOpenQuestion, setTemperatureOpenQuestion] =
+    useState<Option | null>(null);
 
   // * variabili per il Multiple Choice
   const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] =
@@ -224,14 +226,18 @@ export const CreateOERsProvider = ({ children }: any) => {
     useState<number>(0);
   const [easyDistractors, setEasyDistractors] = useState<number>(0);
   const [correctAnswer, setCorrectAnswer] = useState<number>(1);
-  const [temperatureMultipleChoice, setTemperatureMultipleChoice] = useState<Option | null>(null);
+  const [temperatureMultipleChoice, setTemperatureMultipleChoice] =
+    useState<Option | null>(null);
 
   // * dati per il json
-  const [chosenTargetLevel, setChosenTargetLevel] = useState<TargetLevel | null>(null);
-  const [exercise, setExercise] = useState<string>("");
-  const [temperature, setTemperature] = useState<Temperature>(Temperature.Medium);
+  const [chosenTargetLevel, setChosenTargetLevel] =
+    useState<TargetLevel | null>(null);
+  const [exercise, setExercise] = useState<string>('');
+  const [temperature, setTemperature] = useState<Temperature>(
+    Temperature.Medium
+  );
   const [distractors, setDistractors] = useState<number>(0);
-  const [questionCategory, setQuestionCategory] = useState<string>("");
+  const [questionCategory, setQuestionCategory] = useState<string>('');
 
   // * altro
   const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
@@ -249,7 +255,6 @@ export const CreateOERsProvider = ({ children }: any) => {
     }
   };
   const [maxValue, setMaxValue] = useState(8);
-
 
   // * handle functions
 
@@ -291,7 +296,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleTemperatureFillGaps = (selected: Option) => {
     setTemperatureFillGaps(selected);
-  }
+  };
 
   // * Open Question
   const handleTargetLevelOpenQuestion = (selected: Option) => {
@@ -305,7 +310,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleTemperatureOpenQuestion = (selected: Option) => {
     setTemperatureOpenQuestion(selected);
-  }
+  };
 
   // * Multiple Choice
   const handleTargetLevelMultipleChoice = (selected: Option) => {
@@ -328,7 +333,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleTemperatureMultipleChoice = (selected: Option) => {
     setTemperatureMultipleChoice(selected);
-  }
+  };
 
   // * dati per il json
   const handleChosenTargetLevel = (selected: Option) => {
@@ -351,19 +356,19 @@ export const CreateOERsProvider = ({ children }: any) => {
       default:
         setChosenTargetLevel(null);
     }
-  }
+  };
   const handleExercise = (selected: number) => {
     switch (selected) {
       case 0:
-        setExercise("Fill the gaps");
+        setExercise('Fill the gaps');
         break;
       case 1:
-        setExercise("Open Question");
+        setExercise('Open Question');
         break;
       default:
-        setExercise("Multiple Choice");
+        setExercise('Multiple Choice');
     }
-  }
+  };
   const handleTemperature = (selected: Option) => {
     switch (selected.title) {
       case 'Low':
@@ -378,13 +383,13 @@ export const CreateOERsProvider = ({ children }: any) => {
       default:
         setTemperature(Temperature.Medium);
     }
-  }
+  };
   const handleDistractors = (selected: number) => {
     setDistractors(selected);
-  }
+  };
   const handleQuestionCategory = (selected: Option) => {
     setQuestionCategory(selected.title);
-  }
+  };
 
   // * altro
   const handleMaxValue = (selected: Option) => {

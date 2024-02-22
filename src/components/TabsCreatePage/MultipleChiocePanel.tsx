@@ -102,7 +102,7 @@ export default function MultipleChoicePanel({
             fontSize={'md'}
           />
         </Box>
-        <Box w={'42%'} paddingLeft={"2%"}>
+        <Box w={'42%'} paddingLeft={'2%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
           </Flex>

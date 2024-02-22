@@ -46,7 +46,6 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     handleOptionsComplete();
   }, [targetLevelFillGaps, length]);
 
-
   return (
     <>
       <Flex w={'100%'}>
@@ -100,7 +99,9 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text as="b">Creativity of AI</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && temperatureFillGaps == null}
+            isHighlighted={
+              isGenerateButtonClicked && temperatureFillGaps == null
+            }
             options={temperatureOptions}
             selected={temperatureFillGaps}
             preselectedTitle={temperatureFillGaps?.title}
