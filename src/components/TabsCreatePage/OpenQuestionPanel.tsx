@@ -16,6 +16,9 @@ export default function OpenQuestionPanel({
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
     targetLevelOptions,
+    temperatureOptions,
+    temperatureOpenQuestion,
+    handleTemperatureOpenQuestion,
     //difficultLevelOptions,
     questionTypeOptions,
     questionCategoryOptions,
@@ -88,6 +91,22 @@ export default function OpenQuestionPanel({
             selected={questionType}
             preselectedTitle={questionType?.title}
             onChange={handleQuestionType}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+        <Box w={'42%'} paddingLeft={"2%"}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && temperatureOpenQuestion == null
+            }
+            options={temperatureOptions}
+            selected={temperatureOpenQuestion}
+            preselectedTitle={temperatureOpenQuestion?.title}
+            onChange={handleTemperatureOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />

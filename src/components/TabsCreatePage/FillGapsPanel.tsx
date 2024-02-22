@@ -4,7 +4,8 @@ import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
-import TextBox from '../TextBox/TextBox';
+//import TextBox from '../TextBox/TextBox';
+//import FillGapsOutputTextBox from './FillGapsOutputTextBox';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
@@ -15,6 +16,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
     targetLevelOptions,
+    temperatureOptions,
+    temperatureFillGaps,
     //difficultLevelOptions,
     lengthOptions,
     targetLevelFillGaps,
@@ -28,6 +31,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     handleBlanks,
     //handleResetOptions,
     maxValue,
+    //fillGapsData,
   } = useCreateOERsContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
@@ -41,6 +45,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
   useEffect(() => {
     handleOptionsComplete();
   }, [targetLevelFillGaps, length]);
+
 
   return (
     <>
@@ -90,6 +95,20 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             fontSize={'md'}
           />
         </Box>
+        <Box w={'42%'} paddingLeft="2%">
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={isGenerateButtonClicked && temperatureFillGaps == null}
+            options={temperatureOptions}
+            selected={temperatureFillGaps}
+            preselectedTitle={temperatureFillGaps?.title}
+            onChange={handleTargetLevelFillGaps}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
@@ -103,7 +122,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             max={maxValue}
           />
         </Box>
-        <Box w={'40%'} marginLeft="2rem">
+        <Box w={'42%'} paddingLeft="2rem">
           <Flex margin="0.4rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
@@ -142,12 +161,12 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         <Flex paddingBottom="0.5rem">
           <Text as="b">Output</Text>
         </Flex>
-        <TextBox
+        {/* <TextBox
           rows={10}
           onTextChange={() => {
             null;
           }}
-        />
+        /> */}
       </Box>
     </>
   );

@@ -4,7 +4,7 @@ import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import TextBox from '../components/TextBox/TextBox';
-import TabsCreateMenu from '../components/TabsCreateMenu/TabsCreateMenu';
+import TabsCreateMenu from '../components/TabsCreatePage/TabsCreateMenu';
 //import { useCreateOERsContextContext } from '../Contexts/CreateOERsCotext';
 
 const Create = () => {

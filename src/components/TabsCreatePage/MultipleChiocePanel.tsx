@@ -17,6 +17,9 @@ export default function MultipleChoicePanel({
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
     targetLevelOptions,
+    temperatureOptions,
+    temperatureMultipleChoice,
+    handleTemperatureMultipleChoice,
     //difficultLevelOptions,
     exerciseTypeOptions,
     questionCategoryOptions,
@@ -95,6 +98,22 @@ export default function MultipleChoicePanel({
             selected={exerciseType}
             preselectedTitle={exerciseType?.title}
             onChange={handleExerciseType}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+        <Box w={'42%'} paddingLeft={"2%"}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && temperatureMultipleChoice == null
+            }
+            options={temperatureOptions}
+            selected={temperatureMultipleChoice}
+            preselectedTitle={temperatureMultipleChoice?.title}
+            onChange={handleTemperatureMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
