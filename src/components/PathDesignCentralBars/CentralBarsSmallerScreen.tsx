@@ -59,9 +59,8 @@ export default function CentralBarsSmallerScreen({
         </Box>
         {step >= 2 &&
           currentBloomOptions.length > 0 &&
-          collectionIndex > -1 &&
-          (
-            <Box flex="1" w="100%" flexDirection='column'>
+          collectionIndex > -1 && (
+            <Box flex="1" w="100%" flexDirection="column">
               <Box>
                 <Text fontSize="sm" fontWeight="bold" pb={`${SPACING}%`}>
                   {verbsTitleTextBox}
@@ -106,15 +105,15 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           fontWeight="bold"
-        //paddingRight={`${SPACING}%`}
-        //w={`${DIMENSION}%`}
+          //paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION}%`}
         >
           {contextTitleTextBox}
         </Text>
         <Box
           pt={1}
-        // paddingRight={`${SPACING}%`}
-        // w={`${DIMENSION}%`}
+          // paddingRight={`${SPACING}%`}
+          // w={`${DIMENSION}%`}
         >
           <TextBox
             backgroundColor="#EDF2F7"
@@ -127,8 +126,8 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           pt={1}
-        //paddingRight={`${SPACING}%`}
-        //w={`${DIMENSION}%`}
+          //paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION}%`}
         >
           {contextDescriptionTextBox}
         </Text>

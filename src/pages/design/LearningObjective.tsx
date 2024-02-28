@@ -1,11 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  useBreakpointValue
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -70,9 +64,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
-  const [isNextButtonClicked, setIsNextButtonClicked] = useState<boolean>(false);  // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
+  const [isNextButtonClicked, setIsNextButtonClicked] =
+    useState<boolean>(false); // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
 
-  const [generatedLOs, setGeneratedLOs] = useState<string[]>([]);     // Array to keep track of the generated learning objectives
+  const [generatedLOs, setGeneratedLOs] = useState<string[]>([]); // Array to keep track of the generated learning objectives
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
@@ -124,7 +119,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           selectedGroupDimension?.title,
           selectedLearnerExperience?.title,
           bloomLevels[bloomLevelIndex]?.name,
-          selectedOptions,  // verbsBloomLevel
+          selectedOptions, // verbsBloomLevel
           selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
           learningTextContext,
           //selectedCustomLearningObjective
@@ -157,8 +152,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
       selectedLearningObjectiveIndex > -1 &&
       generatedLOs.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
     ) {
-      handleSelectedCustomLearningObjectiveChange(generatedLOs[selectedLearningObjectiveIndex]);
-      console.log('selectedCustomLearningObjective: ' + selectedCustomLearningObjective);
+      handleSelectedCustomLearningObjectiveChange(
+        generatedLOs[selectedLearningObjectiveIndex]
+      );
+      console.log(
+        'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
+      );
       saveLearningScenario();
       router.push({
         pathname: '/design/learningPathDesign',
@@ -171,7 +170,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       });
       setIsNextButtonClicked(true);
     }
-  }
+  };
 
   return (
     <>
@@ -191,7 +190,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -200,7 +199,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Box w={isSmallerScreen ? '95%' : '90%'}>
                 <LearningStepper
@@ -214,8 +213,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   personalized learning journey to achieve specific learning
                   objectives.
                   <br />
-                  It does so by seamlessly integrating various activities
-                  and learning resources focused on your chosen topics.
+                  It does so by seamlessly integrating various activities and
+                  learning resources focused on your chosen topics.
                 </Text>
               </Box>
             </Box>
@@ -237,7 +236,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             </Box>
 
             {step >= 1 && (
-              <Flex direction='column' w={isSmallerScreen ? '95%' : '90%'}>
+              <Flex direction="column" w={isSmallerScreen ? '95%' : '90%'}>
                 <Flex paddingTop="1.5rem" w="90%">
                   <Text>
                     To define a learning path effectively, it is crucial to
@@ -251,17 +250,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
                     collectionIndex={collectionIndex}
                     isNextButtonClicked={isNextButtonClicked}
                     isSmallerScreen={isSmallerScreen}
-                    bloomLevelTitleTextBox='Select the Bloom level for the learning objective'
-                    skillConceptTitleTextBox='Add here the skill or the concepts to be covered'
-                    skillConceptDescriptionTextBox='The selection of skills and concepts here is informed by the
-                    collection of Open Educational Resources (OERs)'
-                    contextTitleTextBox='Add here the context'
-                    contextDescriptionTextBox='Here the contextual information that will assist in delineating the
-                    specific context of the educational activity'
-                    placeholderContextBox='Add any relevant information you want to specify in the learning objective(s)...'
-                    verbsTitleTextBox='Select the verbs related to your learning objective'
-                    bloomLevelDescriptionTextBox='This level indicates the cognitive complexity or depth of
-                    understanding associated with a particular learning objective'
+                    bloomLevelTitleTextBox="Select the Bloom level for the learning objective"
+                    skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
+                    skillConceptDescriptionTextBox="The selection of skills and concepts here is informed by the
+                    collection of Open Educational Resources (OERs)"
+                    contextTitleTextBox="Add here the context"
+                    contextDescriptionTextBox="Here the contextual information that will assist in delineating the
+                    specific context of the educational activity"
+                    placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
+                    verbsTitleTextBox="Select the verbs related to your learning objective"
+                    bloomLevelDescriptionTextBox="This level indicates the cognitive complexity or depth of
+                    understanding associated with a particular learning objective"
                   />
                 </Box>
                 <PathDesignGenLO
@@ -277,7 +276,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   learningTextContext={learningTextContext}
                   generatedLOs={generatedLOs}
                   setGeneratedLOs={setGeneratedLOs}
-                  handleSelectedLearningObjectiveIndexChange={handleSelectedLearningObjectiveIndexChange}
+                  handleSelectedLearningObjectiveIndexChange={
+                    handleSelectedLearningObjectiveIndexChange
+                  }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
                 />

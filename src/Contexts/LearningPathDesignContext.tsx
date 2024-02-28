@@ -29,7 +29,7 @@ type LearnignPathDesignContextProps = {
   selectedLearningObjectiveIndex: number;
   resetCheckBoxOptions: boolean;
   learningObjectives: string[];
-  selectedCustomLearningObjective: string;  // selected and edited learning objective in step 2 and 3
+  selectedCustomLearningObjective: string; // selected and edited learning objective in step 2 and 3
   storedLearningObjective: string; // Learning Objective stored with save button
   customLearningObjectivePart0: string;
   customLearningObjectivePart1: string;
@@ -93,18 +93,20 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
   const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
   const Apply: string[] = ['Execute', 'Implement', 'Solve', 'Use'];
-  const Analyze: string[] = ['Differentiate', 'Organize', 'Relate', 'Deconstruct'];
+  const Analyze: string[] = [
+    'Differentiate',
+    'Organize',
+    'Relate',
+    'Deconstruct',
+  ];
   const Evaluate: string[] = ['Check', 'Judge', 'Review', 'Test'];
   const Create: string[] = ['Build', 'Compose', 'Design', 'Develop'];
 
   // Use useLocalStorage to declare state variables with persistence
 
-  const [resetAll, setResetAll] = useLocalStorage<boolean>(
-    'resetAll',
-    false
-  );
+  const [resetAll, setResetAll] = useLocalStorage<boolean>('resetAll', false);
 
-  // Use to store the id of the last saved learning scenario 
+  // Use to store the id of the last saved learning scenario
   const [idLearningScenario, setIdLearningScenario] = useLocalStorage<string>(
     'idLearningScenario',
     ''
@@ -125,7 +127,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
 
   // Use for storage of the text in the text input
-  const [learningTextContext, setLearningTextContext] = useLocalStorage<string>('text', '');
+  const [learningTextContext, setLearningTextContext] = useLocalStorage<string>(
+    'text',
+    ''
+  );
 
   // Use for storage of the options in the verbs checkbox menu
   const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>(
@@ -133,14 +138,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
-  const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] = useLocalStorage<number>(
-    'selectedLearningObjectiveIndex',
-    -1
-  );
-
-
-
-
+  const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
+    useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
 
   const [learningObjectives, setLearningObjectives] = useState<string[]>([]);
 
@@ -149,7 +148,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     useLocalStorage<string>('customLearningObjective', '');
 
   // Learning Objective stored with save button
-  const [storedLearningObjective, setStoredLearningObjective] = useLocalStorage<string>('storedLearningObjective', '');
+  const [storedLearningObjective, setStoredLearningObjective] =
+    useLocalStorage<string>('storedLearningObjective', '');
 
   const [customLearningObjectivePart1, setCustomLearningObjectivePart1] =
     useLocalStorage<string>('customLearningObjective1', '');
@@ -196,23 +196,25 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     handleLearnerExperienceChange(null);
     handleGroupDimensionChange(null);
     handleContextChange(null);
-    handleCollectionIndexChange(-1);  // this trigger resetState() fuction
-  }
+    handleCollectionIndexChange(-1); // this trigger resetState() fuction
+  };
 
   const handleResetAll = (value: boolean) => {
-    if (value) {  // if resetAll is true, reset all the parameters
+    if (value) {
+      // if resetAll is true, reset all the parameters
       resetAllParams();
       setResetAll(value);
-    } else {    // if resetAll is false, reset only the state of the current page
+    } else {
+      // if resetAll is false, reset only the state of the current page
       setResetAll(value);
     }
 
     // resetState();
-  }
+  };
 
   const handleIdLearningScenario = (id: string) => {
     setIdLearningScenario(id);
-  }
+  };
 
   //handlers for segmented control
   const handleEducatorExperienceChange = (selected: Option | null) => {
@@ -234,12 +236,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const handleSelectedLearningObjectiveIndexChange = (index: number) => {
     setSelectedLearningObjectiveIndex(index);
-  }
+  };
 
   // Used to recover the learning objective to show from the stored learning objective
   const handleLearningObjective = () => {
     setCustomLearningObjective(storedLearningObjective);
-  }
+  };
 
   const handleLearningObjectives = () => {
     const selectedSkillsLabels = selectedSkillConceptsTags.map(
@@ -264,7 +266,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const handleSelectedCustomLearningObjectiveChange = (newValue: string) => {
     setCustomLearningObjective(newValue);
-  }
+  };
 
   const handleCustomLearningObjective0Change = (newValue: string) => {
     setCustomLearningObjectivePart0(newValue);
@@ -293,7 +295,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Used to store the learning objetive after that the Educator has clicked the save button in 'Learning Path Deisgn' page
   const handleStoredLearningObjective = () => {
     setStoredLearningObjective(selectedCustomLearningObjective);
-  }
+  };
 
   const handleUseStoredLearningObjectives = () => {
     setCustomLearningObjectivePart0(storedLearningObjectives[0]);
@@ -307,9 +309,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setCustomLearningObjectivePart1(learningObjectives[1]);
     setCustomLearningObjectivePart2(learningObjectives[2]);
     // --------------------------------------------------
-
   };
-
 
   const handleSetCustomLearningObjectives = () => {
     //handleLearningObjectives();
@@ -459,7 +459,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         resetCheckBoxOptions,
         collectionIndex,
         learningObjectives,
-        selectedCustomLearningObjective,  // selected and edited learning objective in step 2 and 3
+        selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
         storedLearningObjective, // Learning Objective stored with save button
         customLearningObjectivePart0,
         customLearningObjectivePart1,
@@ -482,7 +482,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleCollectionIndexChange,
         handleSelectedLearningObjectiveIndexChange,
         handleLearningObjectives,
-        handleSelectedCustomLearningObjectiveChange,  // handler for the selected learning objective in step 2
+        handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
         handleCustomLearningObjective0Change,
         handleCustomLearningObjective1Change,
         handleCustomLearningObjective2Change,

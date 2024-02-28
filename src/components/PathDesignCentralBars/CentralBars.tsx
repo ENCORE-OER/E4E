@@ -41,7 +41,6 @@ export default function CentralBars({
   contextDescriptionTextBox,
   verbsTitleTextBox,
 }: CentralBarsProps) {
-
   return (
     <>
       <Flex paddingTop="1.5rem" w="100%">
@@ -110,33 +109,26 @@ export default function CentralBars({
         </Text>
       </Flex>
 
-      {step >= 2 &&
-        currentBloomOptions.length > 0 &&
-        collectionIndex > -1 &&
-        (
-          <Flex paddingTop="1.5rem" w="100%">
-            <Box w={`${DIMENSION}%`} flexDirection='column'>
-              <Text
-                fontSize="sm"
-                fontWeight="bold"
-                paddingRight={`${SPACING}%`}
-                pb={1}
-              >
-                {verbsTitleTextBox}
-              </Text>
-              <CheckboxMenu
-                onOptionsChange={handleOptionsChange}
-                options={currentBloomOptions}
-                reset={resetCheckBoxOptions}
-                isHighlighted={isNextButtonClicked}
-              />
-            </Box>
-          </Flex >
-        )
-      }
-
-
-
+      {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (
+        <Flex paddingTop="1.5rem" w="100%">
+          <Box w={`${DIMENSION}%`} flexDirection="column">
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              paddingRight={`${SPACING}%`}
+              pb={1}
+            >
+              {verbsTitleTextBox}
+            </Text>
+            <CheckboxMenu
+              onOptionsChange={handleOptionsChange}
+              options={currentBloomOptions}
+              reset={resetCheckBoxOptions}
+              isHighlighted={isNextButtonClicked}
+            />
+          </Box>
+        </Flex>
+      )}
     </>
   );
 }

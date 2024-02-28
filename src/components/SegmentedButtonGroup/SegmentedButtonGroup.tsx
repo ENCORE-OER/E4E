@@ -68,7 +68,10 @@ export default function SegmentedButtonGroup({
       // Check the options and update the state of the options to be highlighted with the red color
       const optionsToHighlight: string[] = [];
 
-      if (!selectedEducatorExperience || optionsToHighlight.includes('YourExperience')) {
+      if (
+        !selectedEducatorExperience ||
+        optionsToHighlight.includes('YourExperience')
+      ) {
         optionsToHighlight.push('YourExperience');
       }
 
@@ -76,11 +79,17 @@ export default function SegmentedButtonGroup({
         optionsToHighlight.push('Context');
       }
 
-      if (!selectedGroupDimension || optionsToHighlight.includes('GroupDimension')) {
+      if (
+        !selectedGroupDimension ||
+        optionsToHighlight.includes('GroupDimension')
+      ) {
         optionsToHighlight.push('GroupDimension');
       }
 
-      if (!selectedLearnerExperience || optionsToHighlight.includes('LeanerExperience')) {
+      if (
+        !selectedLearnerExperience ||
+        optionsToHighlight.includes('LeanerExperience')
+      ) {
         optionsToHighlight.push('LeanerExperience');
       }
 
@@ -95,7 +104,7 @@ export default function SegmentedButtonGroup({
   ]);
 
   useEffect(() => {
-    console.log('Triggering resetAll in SegmentedButtonGroup: ', resetAll)
+    console.log('Triggering resetAll in SegmentedButtonGroup: ', resetAll);
     if (resetAll && handleResetAll) {
       setHighlightedOptions([]);
       handleResetAll(false);
@@ -185,7 +194,9 @@ export default function SegmentedButtonGroup({
                   selected={selectedLearnerExperience}
                   onChange={handleLearnerExperienceChange}
                   preselectedTitle={selectedLearnerExperience?.title}
-                  isHighlighted={highlightedOptions.includes('LeanerExperience')}
+                  isHighlighted={highlightedOptions.includes(
+                    'LeanerExperience'
+                  )}
                   isSmallerScreen={isSmallerScreen}
                 />
               </Box>

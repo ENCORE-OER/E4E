@@ -30,10 +30,8 @@ export default function CustomButton({
       variant={variant}
       onClick={(e: any) => {
         e.preventDefault();
-        if (handleCustomClick)
-          handleCustomClick();
-        if (pathname)
-          handleClick();
+        if (handleCustomClick) handleCustomClick();
+        if (pathname) handleClick();
       }}
     >
       {text}

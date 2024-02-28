@@ -55,7 +55,7 @@ const Home = (props: DiscoverPageProps) => {
     bloomLevelIndex,
     selectedSkillConceptsTags,
     learningTextContext,
-    selectedOptions,  // verbsBloomLevel
+    selectedOptions, // verbsBloomLevel
     // ----------------------------------------
     // This are used with <ThreeTextBoxes /> component
     // handleUseLearningObjectives,
@@ -90,9 +90,9 @@ const Home = (props: DiscoverPageProps) => {
 
   const { addToast } = CustomToast();
   //const [conceptSelectedIndex, setConceptSelectedIndex] = useState<number>(-1);
-  const [isLoading, setIsLoading] = useState(false);  // used to show the loading spinner for the learning objective boxes
-  const [isLearningObjectiveChanged, setIsLearningObjectiveChanged] = useState(false);  // used to say if the learning objective has been changed 
-
+  const [isLoading, setIsLoading] = useState(false); // used to show the loading spinner for the learning objective boxes
+  const [isLearningObjectiveChanged, setIsLearningObjectiveChanged] =
+    useState(false); // used to say if the learning objective has been changed
 
   const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
@@ -123,12 +123,12 @@ const Home = (props: DiscoverPageProps) => {
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   const handleSaveLearningObjectiveButtonClick = () => {
-    //handleNewStoredLearningObjectives();  
+    //handleNewStoredLearningObjectives();
 
-    // Check if all the required fields are filled out. 
+    // Check if all the required fields are filled out.
     // This also for the handleStoredLearningObjective() function to hav the same data locally and on the database
     if (
       idLearningScenario?.trim() !== '' &&
@@ -139,7 +139,6 @@ const Home = (props: DiscoverPageProps) => {
       selectedOptions.length > 0 &&
       selectedCustomLearningObjective?.trim() !== ''
     ) {
-
       handleStoredLearningObjective(); // store the actual selected learning objective in the context
 
       // update the learning objective in the learning scenario on the database
@@ -151,8 +150,7 @@ const Home = (props: DiscoverPageProps) => {
       });
     } else if (selectedCustomLearningObjective?.trim() === '') {
       addToast({
-        message:
-          'The learning objective can\'t be empty! ',
+        message: "The learning objective can't be empty! ",
         type: 'error',
       });
     } else {
@@ -166,7 +164,7 @@ const Home = (props: DiscoverPageProps) => {
 
   const handleUndoLearningObjectiveButtonClick = () => {
     //handleUseLearningObjectives();
-    handleLearningObjective();  // restore the last stored learning objective
+    handleLearningObjective(); // restore the last stored learning objective
     setIsLearningObjectiveChanged(false);
 
     addToast({
@@ -286,7 +284,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -310,17 +308,18 @@ const Home = (props: DiscoverPageProps) => {
               </Box>
               <Box paddingTop="1rem">
                 <Card size="sm" shadow={0} backgroundColor={'#F8F9FA'}>
-
-                  <Flex direction='row' w='100%'>
-                    <Heading size={'sl'} fontFamily={'body'} pl='3'>
+                  <Flex direction="row" w="100%">
+                    <Heading size={'sl'} fontFamily={'body'} pl="3">
                       Learning objective
                     </Heading>
                     {isLearningObjectiveChanged && (
-                      <Text pl='5%' color="red">{'Unsaved changes. Don\'t forget to save!'}</Text>
+                      <Text pl="5%" color="red">
+                        {"Unsaved changes. Don't forget to save!"}
+                      </Text>
                     )}
                   </Flex>
 
-                  < Flex
+                  <Flex
                     w="100%"
                     pr={isSmallerScreen ? '0' : `${SPACING}%`}
                     //pr='0'
@@ -328,8 +327,8 @@ const Home = (props: DiscoverPageProps) => {
                     //direction='column'
                     align={'center'}
 
-                  // flexWrap="wrap"
-                  //wrap={'wrap'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
                   >
                     <Box
                       w={isSmallerScreen ? '100%' : '90%'}
@@ -339,14 +338,20 @@ const Home = (props: DiscoverPageProps) => {
                       {
                         //<ThreeTextBoxes />
                       }
-                      {hydrated &&
+                      {hydrated && (
                         <BoxSelectedLearningObjective
                           text={selectedCustomLearningObjective}
-                          onTextChange={handleSelectedCustomLearningObjectiveChange}
-                          isLearningObjectiveChanged={isLearningObjectiveChanged}
-                          setIsLearningObjectiveChanged={setIsLearningObjectiveChanged}
+                          onTextChange={
+                            handleSelectedCustomLearningObjectiveChange
+                          }
+                          isLearningObjectiveChanged={
+                            isLearningObjectiveChanged
+                          }
+                          setIsLearningObjectiveChanged={
+                            setIsLearningObjectiveChanged
+                          }
                         />
-                      }
+                      )}
 
                       {/* TODO: this is the best solution? I could also let BoxSelectedLearningObjective and use the save button to update the text */}
 
@@ -364,21 +369,20 @@ const Home = (props: DiscoverPageProps) => {
                       gap={isSmallerScreen ? '3%' : '2%'}
                       justifyContent={'flex-end'}
                       direction={isSmallerScreen ? 'row' : 'column'}
-                    //columnGap={isSmallerScreen ? '3%' : '2%'}
+                      //columnGap={isSmallerScreen ? '3%' : '2%'}
                     >
                       <Flex py={1} w={isSmallerScreen ? '15%' : '100%'}>
                         <Tooltip
                           display={'flex'}
-                          label='Save the updated learning objective'
+                          label="Save the updated learning objective"
                           bg={'accent.900'}
-                          color='black'
+                          color="black"
                           placement={'top'}
                           borderRadius={'md'}
                         >
                           <Button
                             //marginRight={'1px'}
                             border={'1px solid'}
-
                             // w='100%'
                             colorScheme="yellow"
                             onClick={handleSaveLearningObjectiveButtonClick}
@@ -392,15 +396,15 @@ const Home = (props: DiscoverPageProps) => {
                       <Flex py={1} w={isSmallerScreen ? '15%' : '100%'}>
                         <Tooltip
                           display={'flex'}
-                          label='Restore the last saved learning objective'
+                          label="Restore the last saved learning objective"
                           bg={'accent.900'}
-                          color='black'
+                          color="black"
                           placement={'top'}
-                          borderRadius={'md'}>
+                          borderRadius={'md'}
+                        >
                           <Button
                             //marginRight={'1px'}
                             border={'1px solid'}
-
                             // w='100%'
                             colorScheme="yellow"
                             onClick={handleUndoLearningObjectiveButtonClick}
@@ -437,7 +441,7 @@ const Home = (props: DiscoverPageProps) => {
           />
         </Box>
       </Flex>
-    </LearningPathProvider >
+    </LearningPathProvider>
   );
 };
 

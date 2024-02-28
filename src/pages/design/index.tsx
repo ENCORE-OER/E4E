@@ -1,11 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  useBreakpointValue
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
@@ -64,7 +58,7 @@ const Home = () => {
       });
       setIsNextButtonClicked(true);
     }
-  }
+  };
 
   // We put this in the ReserButton component
   // const handleResetClick = () => {
@@ -78,7 +72,6 @@ const Home = () => {
   //   setResetAll(true);
 
   // }
-
 
   // useEffect(() => {
   //   //console.log('cambiato qualcosa');
@@ -100,7 +93,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -109,7 +102,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box w={isSmallerScreen ? '95%' : '90%'}>
               <LearningStepper
@@ -127,14 +120,15 @@ const Home = () => {
               </Text>
             </Box>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-              {hydrated &&
+              {hydrated && (
                 <SegmentedButtonGroup
                   onOptionsChange={handleOptionsComplete}
                   isNextButtonClicked={isNextButtonClicked}
                   isSmallerScreen={isSmallerScreen}
                   resetAll={resetAll}
                   handleResetAll={handleResetAll}
-                />}
+                />
+              )}
             </Box>
 
             <FooterButtonsGroup

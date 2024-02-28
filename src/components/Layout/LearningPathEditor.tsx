@@ -58,7 +58,7 @@ export default function LearningPathEditor({
 
   useEffect(() => {
     console.log(learningPath);
-  }, [learningPath])
+  }, [learningPath]);
 
   useEffect(() => {
     console.log(collectionColor);

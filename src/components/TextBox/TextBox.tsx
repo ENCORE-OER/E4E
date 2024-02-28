@@ -33,7 +33,6 @@ const TextBox = ({
       borderRadius={'lg'}
     >
       <Textarea
-
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
         bg={backgroundColor}
         variant="solid"

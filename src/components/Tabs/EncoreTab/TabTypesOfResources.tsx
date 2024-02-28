@@ -17,7 +17,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
   const [previousContent, setPreviousContent] = useState<
     (OerProps | undefined | OerFreeSearchProps)[]
@@ -111,7 +111,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         const clickedSliceLabel = transformedData[clickedIndex].label;
         console.log('Clicked Slice Label:', clickedSliceLabel);
 
-        if ((selectedSlice === clickedIndex) || (selectedSlice !== null)) {
+        if (selectedSlice === clickedIndex || selectedSlice !== null) {
           setSelectedSlice(null);
           setFiltered(previousContent);
         } else {

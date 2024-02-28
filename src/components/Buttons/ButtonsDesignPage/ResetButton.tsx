@@ -1,5 +1,6 @@
-import { ButtonProps } from "@chakra-ui/react";
-import CustomButton from "../CustomButton";
+import { ButtonProps } from '@chakra-ui/react';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import CustomButton from '../CustomButton';
 
 interface ResetButtonProps extends ButtonProps {
     textButton: string;
@@ -11,12 +12,20 @@ export default function ResetButton({
     textButton,
     pathname,
     handleResetAll,
-    //...rest
-}: ResetButtonProps) {
+} //...rest
+    : ResetButtonProps) {
+
+    const { addToast } = CustomToast();
+
     const handleResetClick = () => {
         console.log('Reset clicked');
         handleResetAll(true);
-    }
+        addToast({
+            message: 'All values have been reset.',
+            type: 'info',
+        });
+
+    };
 
     return (
         <CustomButton

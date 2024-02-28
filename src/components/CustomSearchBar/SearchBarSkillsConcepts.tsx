@@ -93,7 +93,6 @@ export default function SearchBarPathDesign({
     setInputValue([]);
   }, [collectionIndex]);
 
-
   useEffect(() => {
     if (selectedSkillConceptsTags && uniqueItems) {
       renderSkillAndConceptItems();
