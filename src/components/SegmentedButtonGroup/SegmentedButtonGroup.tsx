@@ -1,8 +1,9 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import SegmentedButton from '../Buttons/SegmentedButton';
+import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 //import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useHasHydrated } from '../../utils/utils';
 
 type Option = {
   title: string;
@@ -13,22 +14,28 @@ type SegmentedButtonProps = {
   onOptionsChange: (areComplete: boolean) => void;
   isNextButtonClicked: boolean;
   isSmallerScreen?: boolean;
+  resetAll?: boolean;
+  handleResetAll?: (value: boolean) => void;
 };
 export default function SegmentedButtonGroup({
   onOptionsChange,
   isNextButtonClicked,
   isSmallerScreen,
+  resetAll,
+  handleResetAll,
 }: SegmentedButtonProps) {
   const {
     handleContextChange,
-    handleYourExperienceChange,
+    handleEducatorExperienceChange,
     handleGroupDimensionChange,
-    handleLeanerExperienceChange,
-    selectedYourExperience,
+    handleLearnerExperienceChange,
+    selectedEducatorExperience,
     selectedContext,
     selectedGroupDimension,
-    selectedLeanerExperience,
+    selectedLearnerExperience,
   } = useLearningPathDesignContext();
+
+  const hydrated = useHasHydrated();
 
   const YourExperience: Option[] = [
     { title: 'Junior' },
@@ -57,27 +64,23 @@ export default function SegmentedButtonGroup({
   const [highlightedOptions, setHighlightedOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log('successo qualcosa');
-  }, [highlightedOptions]);
-
-  useEffect(() => {
     if (isNextButtonClicked) {
-      // Controlla le opzioni e aggiorna lo stato delle opzioni da evidenziare con il colore rosso
+      // Check the options and update the state of the options to be highlighted with the red color
       const optionsToHighlight: string[] = [];
 
-      if (!selectedYourExperience) {
+      if (!selectedEducatorExperience || optionsToHighlight.includes('YourExperience')) {
         optionsToHighlight.push('YourExperience');
       }
 
-      if (!selectedContext) {
+      if (!selectedContext || optionsToHighlight.includes('Context')) {
         optionsToHighlight.push('Context');
       }
 
-      if (!selectedGroupDimension) {
+      if (!selectedGroupDimension || optionsToHighlight.includes('GroupDimension')) {
         optionsToHighlight.push('GroupDimension');
       }
 
-      if (!selectedLeanerExperience) {
+      if (!selectedLearnerExperience || optionsToHighlight.includes('LeanerExperience')) {
         optionsToHighlight.push('LeanerExperience');
       }
 
@@ -85,14 +88,26 @@ export default function SegmentedButtonGroup({
     }
   }, [
     isNextButtonClicked,
-    selectedYourExperience,
+    selectedEducatorExperience,
     selectedContext,
     selectedGroupDimension,
-    selectedLeanerExperience,
+    selectedLearnerExperience,
   ]);
 
   useEffect(() => {
-    // Aggiorna lo stato delle opzioni evidenziate quando cambia isNextButtonClicked
+    console.log('Triggering resetAll in SegmentedButtonGroup: ', resetAll)
+    if (resetAll && handleResetAll) {
+      setHighlightedOptions([]);
+      handleResetAll(false);
+    }
+  }, [resetAll]);
+
+  useEffect(() => {
+    console.log('successo qualcosa: ', highlightedOptions);
+  }, [highlightedOptions]);
+
+  useEffect(() => {
+    // Update the state of the highlighted options when isNextButtonClicked changes
     if (!isNextButtonClicked) {
       setHighlightedOptions([]);
     }
@@ -100,80 +115,84 @@ export default function SegmentedButtonGroup({
 
   useEffect(() => {
     const areComplete: boolean =
-      !!selectedYourExperience &&
+      !!selectedEducatorExperience &&
       !!selectedContext &&
       !!selectedGroupDimension &&
-      !!selectedLeanerExperience;
+      !!selectedLearnerExperience;
 
     onOptionsChange(areComplete);
     console.log('areComplete: ' + areComplete);
   }, [
-    selectedYourExperience,
+    selectedEducatorExperience,
     selectedContext,
     selectedGroupDimension,
-    selectedLeanerExperience,
+    selectedLearnerExperience,
     onOptionsChange,
   ]);
 
   return (
     <>
-      <Flex w="100%">
-        <Box w="50%" px="1.5rem">
-          <Text as="b">Your experience</Text>
-          <Box paddingTop="0.5rem">
-            <SegmentedButton
-              options={YourExperience}
-              selected={selectedYourExperience}
-              onChange={handleYourExperienceChange}
-              preselectedTitle={selectedYourExperience?.title}
-              isHighlighted={highlightedOptions.includes('YourExperience')}
-              isSmallerScreen={isSmallerScreen}
-            />
-          </Box>
-        </Box>
-        <Box w="50%" px="1.5rem">
-          <Text as="b">Educational context</Text>
-          <Box paddingTop="0.5rem">
-            <SegmentedButton
-              options={Context}
-              selected={selectedContext}
-              onChange={handleContextChange}
-              preselectedTitle={selectedContext?.title}
-              isHighlighted={highlightedOptions.includes('Context')}
-              isSmallerScreen={isSmallerScreen}
-            />
-          </Box>
-        </Box>
-      </Flex>
+      {hydrated && (
+        <>
+          <Flex w="100%">
+            <Box w="50%" px="1.5rem">
+              <Text as="b">Your experience</Text>
+              <Box paddingTop="0.5rem">
+                <SegmentedButton
+                  options={YourExperience}
+                  selected={selectedEducatorExperience}
+                  onChange={handleEducatorExperienceChange}
+                  preselectedTitle={selectedEducatorExperience?.title}
+                  isHighlighted={highlightedOptions.includes('YourExperience')}
+                  isSmallerScreen={isSmallerScreen}
+                />
+              </Box>
+            </Box>
+            <Box w="50%" px="1.5rem">
+              <Text as="b">Educational context</Text>
+              <Box paddingTop="0.5rem">
+                <SegmentedButton
+                  options={Context}
+                  selected={selectedContext}
+                  onChange={handleContextChange}
+                  preselectedTitle={selectedContext?.title}
+                  isHighlighted={highlightedOptions.includes('Context')}
+                  isSmallerScreen={isSmallerScreen}
+                />
+              </Box>
+            </Box>
+          </Flex>
 
-      <Flex w="100%" paddingTop="1.5rem">
-        <Box w="50%" px="1.5rem">
-          <Text as="b">Leaner{"'"}s group dimension</Text>
-          <Box paddingTop="0.5rem">
-            <SegmentedButton
-              options={GroupDimension}
-              selected={selectedGroupDimension}
-              onChange={handleGroupDimensionChange}
-              preselectedTitle={selectedGroupDimension?.title}
-              isHighlighted={highlightedOptions.includes('GroupDimension')}
-              isSmallerScreen={isSmallerScreen}
-            />
-          </Box>
-        </Box>
-        <Box w="50%" px="1.5rem">
-          <Text as="b">Leaner{"'"}s experience</Text>
-          <Box paddingTop="0.5rem">
-            <SegmentedButton
-              options={LeanerExperience}
-              selected={selectedLeanerExperience}
-              onChange={handleLeanerExperienceChange}
-              preselectedTitle={selectedLeanerExperience?.title}
-              isHighlighted={highlightedOptions.includes('LeanerExperience')}
-              isSmallerScreen={isSmallerScreen}
-            />
-          </Box>
-        </Box>
-      </Flex>
+          <Flex w="100%" paddingTop="1.5rem">
+            <Box w="50%" px="1.5rem">
+              <Text as="b">Leaner{"'"}s group dimension</Text>
+              <Box paddingTop="0.5rem">
+                <SegmentedButton
+                  options={GroupDimension}
+                  selected={selectedGroupDimension}
+                  onChange={handleGroupDimensionChange}
+                  preselectedTitle={selectedGroupDimension?.title}
+                  isHighlighted={highlightedOptions.includes('GroupDimension')}
+                  isSmallerScreen={isSmallerScreen}
+                />
+              </Box>
+            </Box>
+            <Box w="50%" px="1.5rem">
+              <Text as="b">Leaner{"'"}s experience</Text>
+              <Box paddingTop="0.5rem">
+                <SegmentedButton
+                  options={LeanerExperience}
+                  selected={selectedLearnerExperience}
+                  onChange={handleLearnerExperienceChange}
+                  preselectedTitle={selectedLearnerExperience?.title}
+                  isHighlighted={highlightedOptions.includes('LeanerExperience')}
+                  isSmallerScreen={isSmallerScreen}
+                />
+              </Box>
+            </Box>
+          </Flex>
+        </>
+      )}
     </>
   );
 }

@@ -109,7 +109,7 @@ export default function CustomDropDownMenu({
             <Text align="left" noOfLines={1}>
               {
                 selectedOptions.includes('All') &&
-                  options?.length === selectedOptions.length
+                options?.length === selectedOptions.length
                   ? 'All'
                   : selectedOptions.length > 0
                     ? selectedOptions.join(', ')

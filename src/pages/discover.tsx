@@ -21,6 +21,7 @@ import { useCollectionsContext } from '../Contexts/CollectionsContext/Collection
 import { DiscoveryContext } from '../Contexts/discoveryContext';
 
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import {
   CollectionProps,
   OerInCollectionProps,
@@ -611,7 +612,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -638,10 +639,7 @@ const Discover = (props: DiscoverPageProps) => {
           </HStack>
 
           {isLoading && (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading...</p>
-            </div>
+            <LoadingSpinner textLoading='Loading...' />
           )}
 
           {!isLoading && endSearch && hydrated && (
@@ -657,7 +655,7 @@ const Discover = (props: DiscoverPageProps) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

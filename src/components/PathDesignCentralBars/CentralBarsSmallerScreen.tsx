@@ -18,6 +18,14 @@ export default function CentralBarsSmallerScreen({
   currentBloomOptions,
   step,
   isSmallerScreen,
+  contextTitleTextBox: contextTitleTextBox,
+  skillConceptTitleTextBox: skillConceptTitleTextBox,
+  bloomLevelTitleTextBox: bloomLevelTitleTextBox,
+  placeholderContextBox,
+  bloomLevelDescriptionTextBox,
+  verbsTitleTextBox,
+  contextDescriptionTextBox,
+  skillConceptDescriptionTextBox,
 }: CentralBarsProps) {
   return (
     <Flex
@@ -34,7 +42,7 @@ export default function CentralBarsSmallerScreen({
       >
         <Box w="100%" flexDirection={'column'} flex="1">
           <Text fontSize="sm" fontWeight="bold">
-            Select the Bloom level for the learning objective
+            {bloomLevelTitleTextBox}
           </Text>
           <Box pt={1}>
             <CustomDropDownMenu
@@ -46,25 +54,27 @@ export default function CentralBarsSmallerScreen({
           </Box>
 
           <Text fontSize="sm" pt={1}>
-            This level indicates the cognitive complexity or depth of
-            understanding associated with a particular learning objective
+            {bloomLevelDescriptionTextBox}
           </Text>
         </Box>
-        {step >= 2 && (
-          <Box flex="1" w="100%">
-            <Box>
-              <Text fontSize="sm" fontWeight="bold" pb={`${SPACING}%`}>
-                Select the verbs related to your learning objective
-              </Text>
-              <CheckboxMenu
-                onOptionsChange={handleOptionsChange}
-                options={currentBloomOptions}
-                reset={resetCheckBoxOptions}
-                isHighlighted={isNextButtonClicked}
-              />
+        {step >= 2 &&
+          currentBloomOptions.length > 0 &&
+          collectionIndex > -1 &&
+          (
+            <Box flex="1" w="100%" flexDirection='column'>
+              <Box>
+                <Text fontSize="sm" fontWeight="bold" pb={`${SPACING}%`}>
+                  {verbsTitleTextBox}
+                </Text>
+                <CheckboxMenu
+                  onOptionsChange={handleOptionsChange}
+                  options={currentBloomOptions}
+                  reset={resetCheckBoxOptions}
+                  isHighlighted={isNextButtonClicked}
+                />
+              </Box>
             </Box>
-          </Box>
-        )}
+          )}
       </Flex>
       <Box
         flex="1"
@@ -74,7 +84,7 @@ export default function CentralBarsSmallerScreen({
         pt={`${SPACING}%`}
       >
         <Text fontSize="sm" fontWeight="bold">
-          Add here the skill or the concepts to be covered
+          {skillConceptTitleTextBox}
         </Text>
         <Box pt={1}>
           <SearchBarPathDesign
@@ -83,8 +93,7 @@ export default function CentralBarsSmallerScreen({
           />
         </Box>
         <Text fontSize="sm" pt={1}>
-          The selection of skills and concepts here is informed by the
-          collection of Open Educational Resources (OERs).
+          {skillConceptDescriptionTextBox}
         </Text>
       </Box>
       <Box
@@ -97,19 +106,19 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           fontWeight="bold"
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
-          Add here the context
+          {contextTitleTextBox}
         </Text>
         <Box
           pt={1}
-          // paddingRight={`${SPACING}%`}
-          // w={`${DIMENSION}%`}
+        // paddingRight={`${SPACING}%`}
+        // w={`${DIMENSION}%`}
         >
           <TextBox
             backgroundColor="#EDF2F7"
-            placeholder="Add some text..."
+            placeholder={placeholderContextBox}
             isHighlighted={isNextButtonClicked}
             text={text}
             onTextChange={handleSetText}
@@ -118,11 +127,10 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           pt={1}
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
-          Here the contextual information that will assist in delineating the
-          specific context of the educational activity
+          {contextDescriptionTextBox}
         </Text>
       </Box>
     </Flex>

@@ -1,23 +1,23 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Text,
-  useBreakpointValue,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
+import PathDesignGenLO from '../../components/PathDesignGenLO';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { APIV2 } from '../../data/api';
-import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import { SkillItemProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
@@ -25,8 +25,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const {
     DIMENSION,
     SPACING,
+    LANGUAGE_GEN_LO_API,
+    TEMPERATURE_GEN_LO_API,
     bloomLevelIndex,
-    text,
+    //learningTextContext: text,
     step,
     collectionIndex,
     selectedSkillConceptsTags,
@@ -35,12 +37,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
     //handleResetStep0,
     handleCollectionIndexChange,
     // takes the value of the selected option in "Educational Scenario"
-    selectedContext,  // used for the api call
-    selectedLeanerExperience, // used for the api call
-    selectedYourExperience, // used for the api call
+    selectedContext, // used for the api call
+    selectedLearnerExperience, // used for the api call
+    selectedEducatorExperience, // used for the api call
     selectedGroupDimension, // used for the api call
-    bloomLevels,  // used for the api call
-    text: learningObjectiveText, // used for the api call
+    bloomLevels, // used for the api call
+    learningTextContext, // used for the api call (learning context)
+    selectedCustomLearningObjective,
+    handleSelectedCustomLearningObjectiveChange,
+    selectedLearningObjectiveIndex,
+    handleSelectedLearningObjectiveIndexChange,
+    handleResetAll,
+    handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -62,7 +70,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
-  const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
+  const [isNextButtonClicked, setIsNextButtonClicked] = useState<boolean>(false);  // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
+
+  const [generatedLOs, setGeneratedLOs] = useState<string[]>([]);     // Array to keep track of the generated learning objectives
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
@@ -84,21 +94,82 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const saveLearningScenario = async () => {
     //console.log('saveLearningScenario');
+    // console.log('selectedEducatorExperience?.title: ' + selectedEducatorExperience?.title);
+    //   console.log('selectedContext?.title: ' + selectedContext?.title);
+    //   console.log('selectedGroupDimension?.title: ' + selectedGroupDimension?.title);
+    //   console.log('selectedLearnerExperience?.title: ' + selectedLearnerExperience?.title);
+    //   console.log('bloomLevels[bloomLevelIndex]?.name: ' + bloomLevels[bloomLevelIndex]?.name);
+    //   console.log('selectedOptions: ' + selectedOptions);
+    //   console.log('selectedSkillConceptsTags: ' + selectedSkillConceptsTags);
+    //   console.log('learningTextContext: ' + learningTextContext);
+    //console.log('selectedCustomLearningObjective: ' + selectedCustomLearningObjective);
 
-    try {
-      const api = new APIV2(undefined);
-      await api.saveLearningScenario(
-        selectedYourExperience?.title ?? '',
-        selectedContext?.title ?? '',
-        selectedGroupDimension?.title ?? '',
-        selectedLeanerExperience?.title ?? '',
-        bloomLevels[bloomLevelIndex]?.name ?? '',
-        selectedSkillConceptsTags.map((item: SkillItemProps) => item.id) ?? [],
-        learningObjectiveText ?? '',
-      );
-      //console.log(resp);
-    } catch (error) {
-      console.log(error);
+    if (
+      selectedEducatorExperience?.title !== undefined &&
+      selectedContext?.title !== undefined &&
+      selectedGroupDimension?.title !== undefined &&
+      selectedLearnerExperience?.title !== undefined &&
+      bloomLevels[bloomLevelIndex]?.name !== undefined &&
+      selectedOptions !== undefined &&
+      selectedSkillConceptsTags !== undefined &&
+      learningTextContext !== undefined &&
+      generatedLOs[selectedLearningObjectiveIndex] !== undefined
+    ) {
+      try {
+        const api = new APIV2(undefined);
+        const resp = await api.saveLearningScenario(
+          // objectiveId
+          selectedEducatorExperience?.title,
+          selectedContext?.title,
+          selectedGroupDimension?.title,
+          selectedLearnerExperience?.title,
+          bloomLevels[bloomLevelIndex]?.name,
+          selectedOptions,  // verbsBloomLevel
+          selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
+          learningTextContext,
+          //selectedCustomLearningObjective
+          generatedLOs[selectedLearningObjectiveIndex]
+        );
+        console.log(resp);
+        console.log('Learning scenario id: ' + resp?._id);
+        handleIdLearningScenario(resp?._id ?? '');
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleNextClick = () => {
+    // console.log(selectedCollection);
+    // console.log(bloomLevelIndex);
+    // console.log(selectedSkillConceptsTags.length);
+    // console.log(text);
+    // console.log(selectedOptions);
+    // console.log(selectedLearningObjectiveIndex);
+
+    if (
+      selectedCollection !== null &&
+      bloomLevelIndex !== null &&
+      bloomLevelIndex > -1 &&
+      selectedSkillConceptsTags.length > 0 &&
+      learningTextContext?.trim() !== '' &&
+      selectedOptions.length > 0 && // verbsBloomLevel
+      selectedLearningObjectiveIndex > -1 &&
+      generatedLOs.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
+    ) {
+      handleSelectedCustomLearningObjectiveChange(generatedLOs[selectedLearningObjectiveIndex]);
+      console.log('selectedCustomLearningObjective: ' + selectedCustomLearningObjective);
+      saveLearningScenario();
+      router.push({
+        pathname: '/design/learningPathDesign',
+      });
+    } else {
+      addToast({
+        message:
+          'Please ensure all required fields are filled out before proceeding.',
+        type: 'warning',
+      });
+      setIsNextButtonClicked(true);
     }
   }
 
@@ -143,8 +214,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   personalized learning journey to achieve specific learning
                   objectives.
                   <br />
-                  It does so by suggesting potential educational activities and
-                  learning resources based on the desired learning objectives.
+                  It does so by seamlessly integrating various activities
+                  and learning resources focused on your chosen topics.
                 </Text>
               </Box>
             </Box>
@@ -166,13 +237,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
             </Box>
 
             {step >= 1 && (
-              <>
+              <Flex direction='column' w={isSmallerScreen ? '95%' : '90%'}>
                 <Flex paddingTop="1.5rem" w="90%">
                   <Text>
                     To define a learning path effectively, it is crucial to
                     choose the desired level within the Bloom taxonomy and
                     provide indications of the skills, concepts, and contextual
-                    information that need to be achieved
+                    information that need to be achieved.
                   </Text>
                 </Flex>
                 <Box>
@@ -180,66 +251,44 @@ const Home = (/*props: DiscoverPageProps*/) => {
                     collectionIndex={collectionIndex}
                     isNextButtonClicked={isNextButtonClicked}
                     isSmallerScreen={isSmallerScreen}
+                    bloomLevelTitleTextBox='Select the Bloom level for the learning objective'
+                    skillConceptTitleTextBox='Add here the skill or the concepts to be covered'
+                    skillConceptDescriptionTextBox='The selection of skills and concepts here is informed by the
+                    collection of Open Educational Resources (OERs)'
+                    contextTitleTextBox='Add here the context'
+                    contextDescriptionTextBox='Here the contextual information that will assist in delineating the
+                    specific context of the educational activity'
+                    placeholderContextBox='Add any relevant information you want to specify in the learning objective(s)...'
+                    verbsTitleTextBox='Select the verbs related to your learning objective'
+                    bloomLevelDescriptionTextBox='This level indicates the cognitive complexity or depth of
+                    understanding associated with a particular learning objective'
                   />
                 </Box>
-              </>
-            )}
-            <Flex paddingTop="1.5rem" w="100%">
-              <Flex
-                w="auto"
-                paddingRight={`${SPACING}%`}
-                position={'fixed'}
-                bottom="5%"
-                right="8%"
-              >
-                <Button
-                  marginRight={'1px'}
-                  border={'1px solid'}
-                  w="50%"
-                  colorScheme="yellow"
-                  onClick={handlePrevButtonClick}
-                >
-                  <Text fontWeight="bold" fontSize="lg">
-                    Previous
-                  </Text>
-                </Button>
-
-                <Button
-                  marginLeft={'1px'}
-                  border={'1px solid'}
-                  w="50%"
-                  leftIcon={<IconPathEdit />}
-                  colorScheme="yellow"
-                  onClick={() => {
-                    if (
-                      selectedCollection !== null &&
-                      bloomLevelIndex !== null &&
-                      selectedSkillConceptsTags.length > 0 &&
-                      text?.trim() !== '' &&
-                      bloomLevelIndex !== -1 &&
-                      ((bloomLevelIndex > 1 && selectedOptions.length === 0) ||
-                        (bloomLevelIndex <= 1 && selectedOptions.length > 0))
-                    ) {
-                      saveLearningScenario();
-                      router.push({
-                        pathname: '/design/learningPathDesign',
-                      });
-                    } else {
-                      addToast({
-                        message:
-                          'Please ensure all required fields are filled out before proceeding.',
-                        type: 'warning',
-                      });
-                      setIsNextButtonClicked(true);
-                    }
-                  }}
-                >
-                  <Text fontWeight="bold" fontSize="lg">
-                    Next
-                  </Text>
-                </Button>
+                <PathDesignGenLO
+                  LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
+                  TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
+                  bloomLevelIndex={bloomLevelIndex}
+                  selectedContext={selectedContext}
+                  selectedSkillConceptsTags={selectedSkillConceptsTags}
+                  selectedOptions={selectedOptions}
+                  selectedGroupDimension={selectedGroupDimension}
+                  selectedLearnerExperience={selectedLearnerExperience}
+                  selectedEducatorExperience={selectedEducatorExperience}
+                  learningTextContext={learningTextContext}
+                  generatedLOs={generatedLOs}
+                  setGeneratedLOs={setGeneratedLOs}
+                  handleSelectedLearningObjectiveIndexChange={handleSelectedLearningObjectiveIndexChange}
+                  setIsNextButtonClicked={setIsNextButtonClicked}
+                  isHighligted={isNextButtonClicked}
+                />
               </Flex>
-            </Flex>
+            )}
+            <FooterButtonsGroup
+              SPACING={SPACING}
+              handleResetAll={handleResetAll}
+              handleNextClick={handleNextClick}
+              handlePrevButtonClick={handlePrevButtonClick}
+            />
           </Box>
         </Box>
       </Flex>

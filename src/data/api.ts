@@ -2,6 +2,7 @@ import axiosCreate, { AxiosInstance, AxiosResponse } from 'axios';
 import { v4 } from 'uuid';
 import { EncoreConceptMap } from '../types/encore';
 import {
+  LearningScenarioProps,
   MetricsOers,
   OerAudienceInfo,
   OerConceptInfo,
@@ -25,7 +26,7 @@ const axios = axiosCreate.create({
 });
 
 const axiosNoCookie = axiosCreate.create({
-  baseURL: process.env.BACK_URL,
+  baseURL: process.env.BACK_URL, //TODO change to the encore URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -124,6 +125,7 @@ export class APIV2 {
     }
   }
 
+  // TODO: move this api to Server side
   async getConceptMapOersNLP(
     oers_ids: number[]
   ): Promise<AxiosResponse<EncoreConceptMap>> {
@@ -135,6 +137,7 @@ export class APIV2 {
     );
   }
 
+  // TODO: move this api to Server side
   async getConceptMapOers(
     filteredOers: OerProps
   ): Promise<AxiosResponse<EncoreConceptMap>> {
@@ -143,6 +146,7 @@ export class APIV2 {
     });
   }
 
+  // TODO: move this api to Server side
   async getConceptMapSkill(
     skill: string
   ): Promise<AxiosResponse<EncoreConceptMap>> {
@@ -893,6 +897,7 @@ export class APIV2 {
 
   // ----------------------- Keywords -----------------------
 
+  // TODO: move this api to Server side
   // API to save keyword used by the user in the search bar
   async saveKeyword(keyword: string) {
     try {
@@ -920,6 +925,7 @@ export class APIV2 {
     }
   }
 
+  // TODO: move this api to Server side
   // API to delete all keywords saved in the database
   async deleteAllKeywords() {
     try {
@@ -935,6 +941,7 @@ export class APIV2 {
 
   // ----------------------- OERs -----------------------
 
+  // TODO: move this api to Server side
   // API to save OER saved by users in a collection
   // we could save a OER multiple times: this allows us to count how many times a OER has been saved
   async saveOER(idOER: number, title: string, description: string) {
@@ -1014,6 +1021,7 @@ export class APIV2 {
     }
   }
 
+  // TODO: move this api to Server side
   // API to increment the like count of an OER by its ID.
   async setLikeOER(idOER: number) {
     try {
@@ -1055,41 +1063,77 @@ export class APIV2 {
 
   // ----------------------- Learning Scenario -----------------------
 
+  // TODO: move this api to Server side
+  // API to save a learning scenario to the database
   async saveLearningScenario(
+    // objectiveId: number,
     experienced: string,
     educationContext: string,
     dimension: string,
     learnerExperience: string,
-    bloomLevel: string,
-    //verbsBloomLevel: string[],
+    nameBloomLevel: string,
+    verbsBloomLevel: string[],
     skills: number[],
-    learningContext: string
+    learningContext: string,
+    textLearningObjective: string
     //nodes?: any[],
     //edges?: any[]
-  ) {
+  ): Promise<LearningScenarioProps | undefined> {
     try {
       const resp = await axiosNoCookie.post(
         'https://encore-api.polyglot-edu.com/api/saveLearningScenario',
         {
-          //id: 1,
-
-          LearningScenario: {
-            Context: {
-              EducatorExperience: experienced,
-              EducationContext: educationContext,
-              Dimension: dimension,
-              LearnerExperience: learnerExperience,
-            },
-            Objective: {
-              BloomLevel: bloomLevel,
-              Skills: skills,
-              LearningContext: learningContext,
-            },
-            Path: {
-              Nodes: [],
-              Edges: [],
-            },
+          Context: {
+            EducatorExperience: experienced,
+            EducationContext: educationContext,
+            Dimension: dimension,
+            LearnerExperience: learnerExperience,
           },
+          Objective: {
+            //id: objectiveId,
+            BloomLevel: {
+              name: nameBloomLevel,
+              verbs: verbsBloomLevel,
+            },
+            Skills: skills,
+            LearningContext: learningContext,
+            textLearningObjective: textLearningObjective,
+          },
+          Path: {
+            Nodes: [],
+            Edges: [],
+          },
+        }
+      );
+
+      console.log(resp.data);
+      return resp?.data?.learningScenario;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // TODO: move this api to Server side
+  // API to update the learning objective of a learning scenario in the database
+  async updateLearningScenario(
+    idLearningScenario: string,
+    nameBloomLevel: string,
+    verbsBloomLevel: string[],
+    skills: number[],
+    learningContext: string,
+    textLearningObjective: string
+  ) {
+    try {
+      const resp = await axiosNoCookie.put(
+        `https://encore-api.polyglot-edu.com/api/updateLearningObjective/${idLearningScenario}`,
+        {
+          BloomLevel: {
+            name: nameBloomLevel,
+            verbs: verbsBloomLevel,
+          },
+          Skills: skills,
+          LearningContext: learningContext,
+          textLearningObjective: textLearningObjective,
         }
       );
 
@@ -1099,5 +1143,17 @@ export class APIV2 {
     }
   }
 
-  // =====================================================
+  // API to retrieve all learning scenarios from the database
+  async getAllLearningScenarios(): Promise<LearningScenarioProps[]> {
+    try {
+      const resp = await axiosNoCookie.get(
+        'https://encore-api.polyglot-edu.com/api/getAllLearningScenarios'
+      );
+
+      console.log(resp.data);
+      return resp.data?.learningScenarios || [];
+    } catch (error) {
+      throw error;
+    }
+  }
 }

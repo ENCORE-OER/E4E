@@ -9,7 +9,10 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
-import { OerInCollectionProps, SkillItemProps } from '../../types/encoreElements';
+import {
+  OerInCollectionProps,
+  SkillItemProps,
+} from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 
 interface Tag {
@@ -36,19 +39,6 @@ export default function SearchBarPathDesign({
 
   // verify that the collectionIndex is valid
   const collection = collections[collectionIndex];
-
-  useEffect(() => {
-    renderSkillAndConceptItems();
-  }, [selectedSkillConceptsTags, uniqueItems]);
-
-  useEffect(() => {
-    // Rimuovi le tag quando selectedSkillConceptsTags torna vuoto
-    setInputValue([]);
-  }, [collectionIndex]);
-
-  if (!collection || !collection.oers) {
-    return null; // control that the collection is valid
-  }
 
   const oers = collection.oers ?? [];
   //console.log(oers);
@@ -80,19 +70,39 @@ export default function SearchBarPathDesign({
 
     return (
       <AutoCompleteList>
-        {[...uniqueItems].map((uniqueItem: SkillItemProps) =>
-          !selectedSkillConceptsTags?.some((item: SkillItemProps) => item.id === uniqueItem.id) &&
-          <AutoCompleteItem
-            key={`item-${uniqueItem.id}`}
-            value={uniqueItem.label}
-            textTransform="capitalize"
-          >
-            {uniqueItem.label}
-          </AutoCompleteItem>
+        {[...uniqueItems].map(
+          (uniqueItem: SkillItemProps) =>
+            !selectedSkillConceptsTags?.some(
+              (item: SkillItemProps) => item.id === uniqueItem.id
+            ) && (
+              <AutoCompleteItem
+                key={`item-${uniqueItem.id}`}
+                value={uniqueItem.label}
+                textTransform="capitalize"
+              >
+                {uniqueItem.label}
+              </AutoCompleteItem>
+            )
         )}
       </AutoCompleteList>
     );
   };
+
+  useEffect(() => {
+    // Remove the selected tags when the collectionIndex changes and the selectedSkillConceptTags is empty
+    setInputValue([]);
+  }, [collectionIndex]);
+
+
+  useEffect(() => {
+    if (selectedSkillConceptsTags && uniqueItems) {
+      renderSkillAndConceptItems();
+    }
+  }, [selectedSkillConceptsTags, uniqueItems]);
+
+  if (!collection || !collection.oers) {
+    return null; // control that the collection is valid
+  }
 
   return (
     <Box
@@ -107,12 +117,14 @@ export default function SearchBarPathDesign({
         openOnFocus
         multiple
         // defaultValues={selectedSkillConceptsTags}
-        defaultValues={selectedSkillConceptsTags?.map((item: SkillItemProps) => item.label) ?? []}
+        defaultValues={
+          selectedSkillConceptsTags?.map(
+            (item: SkillItemProps) => item.label
+          ) ?? []
+        }
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
           //console.log(selectedValue);
-
-
 
           handleSkillsChange((prev: SkillItemProps[]) => {
             // const updatedValues = prev.filter(
@@ -120,11 +132,15 @@ export default function SearchBarPathDesign({
             //   (value: SkillItemProps) => value.label !== selectedValue
             // );
             // return [...updatedValues, selectedValue];
-            const selectedItem = [...uniqueItems].find((item) => item.label === selectedValue);
-            const isAlreadySelected = prev.some((item) => item === selectedItem);
+            const selectedItem = [...uniqueItems].find(
+              (item) => item.label === selectedValue
+            );
+            const isAlreadySelected = prev.some(
+              (item) => item === selectedItem
+            );
 
             if (selectedItem && !isAlreadySelected) {
-              return [...prev, selectedItem]
+              return [...prev, selectedItem];
             }
 
             return prev;
@@ -155,6 +171,6 @@ export default function SearchBarPathDesign({
         </AutoCompleteInput>
         {renderSkillAndConceptItems()}
       </AutoComplete>
-    </Box >
+    </Box>
   );
 }

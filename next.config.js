@@ -16,6 +16,8 @@ const POLYGLOT_URL =
   process.env.POLYGLOT_URL || 'https://polyglot-api-staging.polyglot-edu.com';
 const POLYGLOT_DASHBOARD =
   process.env.POLYGLOT_DASHBOARD || 'https://staging.polyglot-edu.com/';
+const GENERATIVE_AI_URL =
+  process.env.GENERATIVE_AI_URL || 'https://skapi.polyglot-edu.com';
 
 module.exports = {
   env: {
@@ -24,5 +26,6 @@ module.exports = {
     POLYGLOT_URL: POLYGLOT_URL,
     POLYGLOT_DASHBOARD: POLYGLOT_DASHBOARD,
     CONCEPT_URL: CONCEPT_URL,
+    GENERATIVE_AI_URL: GENERATIVE_AI_URL,
   },
 };
