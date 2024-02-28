@@ -48,7 +48,7 @@ const Home = (props: DiscoverPageProps) => {
     collectionIndex,
     selectedCustomLearningObjective,
     handleSelectedCustomLearningObjectiveChange,
-
+    storedLearningObjective,
     // Used for updateLearningScenario API call
     idLearningScenario,
     bloomLevels,
@@ -284,7 +284,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -327,8 +327,8 @@ const Home = (props: DiscoverPageProps) => {
                     //direction='column'
                     align={'center'}
 
-                    // flexWrap="wrap"
-                    //wrap={'wrap'}
+                  // flexWrap="wrap"
+                  //wrap={'wrap'}
                   >
                     <Box
                       w={isSmallerScreen ? '100%' : '90%'}
@@ -350,6 +350,9 @@ const Home = (props: DiscoverPageProps) => {
                           setIsLearningObjectiveChanged={
                             setIsLearningObjectiveChanged
                           }
+                          storedLearningObjective={
+                            storedLearningObjective
+                          }
                         />
                       )}
 
@@ -369,7 +372,7 @@ const Home = (props: DiscoverPageProps) => {
                       gap={isSmallerScreen ? '3%' : '2%'}
                       justifyContent={'flex-end'}
                       direction={isSmallerScreen ? 'row' : 'column'}
-                      //columnGap={isSmallerScreen ? '3%' : '2%'}
+                    //columnGap={isSmallerScreen ? '3%' : '2%'}
                     >
                       <Flex py={1} w={isSmallerScreen ? '15%' : '100%'}>
                         <Tooltip
