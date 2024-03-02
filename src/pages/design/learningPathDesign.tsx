@@ -130,7 +130,9 @@ const Home = (props: DiscoverPageProps) => {
             name: bloomLevels[bloomLevelIndex]?.name,
             verbs: selectedOptions,
           },
-          Skills: selectedSkillConceptsTags?.map((item: SkillItemProps) => item.id),
+          Skills: selectedSkillConceptsTags?.map(
+            (item: SkillItemProps) => item.id
+          ),
           LearningContext: learningTextContext,
           textLearningObjective: selectedCustomLearningObjective,
         }
@@ -299,7 +301,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -328,16 +330,18 @@ const Home = (props: DiscoverPageProps) => {
                       Learning objective
                     </Heading>
                     {hydrated && isOriginalLOSelected ? (
-                      <Flex flexWrap={'wrap'} flex='1'>
+                      <Flex flexWrap={'wrap'} flex="1">
                         <Text pl="5%" color="red.500">
-                          {"New learning objective selected."}
+                          {'New learning objective selected.'}
                         </Text>
                         <Text color="red.500">
-                          {"Save to retrieve it after eventually changes!"}
+                          {'Save to retrieve it after eventually changes!'}
                         </Text>
                       </Flex>
                     ) : null}
-                    {hydrated && isLearningObjectiveChanged && !isOriginalLOSelected ? (
+                    {hydrated &&
+                    isLearningObjectiveChanged &&
+                    !isOriginalLOSelected ? (
                       <Text pl="5%" color="red">
                         {"Unsaved changes. Don't forget to save!"}
                       </Text>
@@ -352,8 +356,8 @@ const Home = (props: DiscoverPageProps) => {
                     //direction='column'
                     align={'center'}
 
-                  // flexWrap="wrap"
-                  //wrap={'wrap'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
                   >
                     <Box
                       w={isSmallerScreen ? '100%' : '90%'}
@@ -397,7 +401,7 @@ const Home = (props: DiscoverPageProps) => {
                       gap={isSmallerScreen ? '3%' : '2%'}
                       justifyContent={'flex-end'}
                       direction={isSmallerScreen ? 'row' : 'column'}
-                    //columnGap={isSmallerScreen ? '3%' : '2%'}
+                      //columnGap={isSmallerScreen ? '3%' : '2%'}
                     >
                       <Flex py={1} w={isSmallerScreen ? '15%' : '100%'}>
                         <Tooltip

@@ -1,5 +1,11 @@
 import { Box, Flex, Textarea } from '@chakra-ui/react';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 
 type BoxSelectedLearningObjectiveProps = {
   text: string;
@@ -20,8 +26,8 @@ export default function BoxSelectedLearningObjective({
   isOriginalLOSelected,
   setIsOriginalLOSelected,
 }: BoxSelectedLearningObjectiveProps) {
-
-  const [originalLearningObjective, setOriginalLearningObjective] = useState<string>(''); // to know the original learning objective, before any changes
+  const [originalLearningObjective, setOriginalLearningObjective] =
+    useState<string>(''); // to know the original learning objective, before any changes
 
   useEffect(() => {
     setOriginalLearningObjective(text);
@@ -34,11 +40,12 @@ export default function BoxSelectedLearningObjective({
 
   useEffect(() => {
     console.log('original: ', originalLearningObjective);
-  }, [originalLearningObjective])
+  }, [originalLearningObjective]);
 
   useEffect(() => {
-    if (  // Check if the learning objective has been changed
-      text.trim() !== storedLearningObjective.trim() &&  // Check if the text is different from the original learning objective
+    if (
+      // Check if the learning objective has been changed
+      text.trim() !== storedLearningObjective.trim() && // Check if the text is different from the original learning objective
       !isLearningObjectiveChanged
     ) {
       if (
@@ -48,10 +55,10 @@ export default function BoxSelectedLearningObjective({
         setIsOriginalLOSelected(false);
       }
       setIsLearningObjectiveChanged(true);
-
     } else if (
       text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the original learning objective
-      isLearningObjectiveChanged) {
+      isLearningObjectiveChanged
+    ) {
       if (
         text.trim() === originalLearningObjective.trim() && // Check if the text is the same as the original selected learning objective
         !isOriginalLOSelected
@@ -71,7 +78,7 @@ export default function BoxSelectedLearningObjective({
         borderRadius={'md'}
         alignItems="center"
         p={2}
-      //flexDirection={'column'}
+        //flexDirection={'column'}
       >
         <Textarea
           //display={'flex'}
