@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -6,11 +6,14 @@ import {
   AutoCompleteList,
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useHasHydrated } from '../../utils/utils';
-import { OerInCollectionProps } from '../../types/encoreElements';
-import { Box } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import {
+  OerInCollectionProps,
+  SkillItemProps,
+} from '../../types/encoreElements';
+import { useHasHydrated } from '../../utils/utils';
 
 interface Tag {
   label: string;
@@ -32,61 +35,73 @@ export default function SearchBarPathDesign({
     useLearningPathDesignContext();
   const hydrated = useHasHydrated();
   const [inputValue, setInputValue] = useState<string[]>([]);
+  const uniqueItems = new Set<SkillItemProps>(); // Utilizza un Set per evitare duplicati
 
   // verify that the collectionIndex is valid
   const collection = collections[collectionIndex];
 
-  useEffect(() => {
-    // Rimuovi le tag quando selectedSkillConceptsTags torna vuoto
-    setInputValue([]);
-  }, [collectionIndex]);
-
-  if (!collection || !collection.oers) {
-    return null; // control that the collection is valid
-  }
-
-  const oers = collection.oers ?? [];
+  const oers = collection?.oers ?? [];
   //console.log(oers);
 
   const handleTagsRemove = async (tag: Tag) => {
     const tagLabel = tag.label;
 
-    handleSkillsChange((prev: string[]) => {
-      return prev.filter((value: string) => value !== tagLabel);
+    handleSkillsChange((prev: SkillItemProps[]) => {
+      return prev.filter((value: SkillItemProps) => value.label !== tagLabel);
     });
     tag.onRemove();
   };
 
   const renderSkillAndConceptItems = () => {
-    const uniqueItems = new Set(); // Utilizza un Set per evitare duplicati
-
     hydrated &&
       oers?.forEach((oer: OerInCollectionProps) => {
         oer?.skills?.forEach((skill) => {
+          const skillId = skill.id;
           const skillLabel = skill.label;
-          uniqueItems.add(skillLabel);
+          uniqueItems.add({ id: skillId, label: skillLabel });
         });
 
         oer?.concepts?.forEach((concept) => {
+          const conceptId = concept.id;
           const conceptLabel = concept.label;
-          uniqueItems.add(conceptLabel);
+          uniqueItems.add({ id: conceptId, label: conceptLabel });
         });
       });
 
     return (
       <AutoCompleteList>
-        {[...uniqueItems].map((item) => (
-          <AutoCompleteItem
-            key={`item-${item}`}
-            value={item}
-            textTransform="capitalize"
-          >
-            {item}
-          </AutoCompleteItem>
-        ))}
+        {[...uniqueItems].map(
+          (uniqueItem: SkillItemProps) =>
+            !selectedSkillConceptsTags?.some(
+              (item: SkillItemProps) => item.id === uniqueItem.id
+            ) && (
+              <AutoCompleteItem
+                key={`item-${uniqueItem.id}`}
+                value={uniqueItem.label}
+                textTransform="capitalize"
+              >
+                {uniqueItem.label}
+              </AutoCompleteItem>
+            )
+        )}
       </AutoCompleteList>
     );
   };
+
+  useEffect(() => {
+    // Remove the selected tags when the collectionIndex changes and the selectedSkillConceptTags is empty
+    setInputValue([]);
+  }, [collectionIndex]);
+
+  useEffect(() => {
+    if (selectedSkillConceptsTags && uniqueItems) {
+      renderSkillAndConceptItems();
+    }
+  }, [selectedSkillConceptsTags, uniqueItems]);
+
+  if (!collection || !collection.oers) {
+    return null; // control that the collection is valid
+  }
 
   return (
     <Box
@@ -100,16 +115,34 @@ export default function SearchBarPathDesign({
       <AutoComplete
         openOnFocus
         multiple
-        defaultValues={selectedSkillConceptsTags}
+        // defaultValues={selectedSkillConceptsTags}
+        defaultValues={
+          selectedSkillConceptsTags?.map(
+            (item: SkillItemProps) => item.label
+          ) ?? []
+        }
         onSelectOption={(e) => {
           const selectedValue = e.item.value;
+          //console.log(selectedValue);
 
-          handleSkillsChange((prev: string[]) => {
-            const updatedValues = prev.filter(
-              // to avoid duplicate
-              (value: string) => value !== selectedValue
+          handleSkillsChange((prev: SkillItemProps[]) => {
+            // const updatedValues = prev.filter(
+            //   // to avoid duplicate
+            //   (value: SkillItemProps) => value.label !== selectedValue
+            // );
+            // return [...updatedValues, selectedValue];
+            const selectedItem = [...uniqueItems].find(
+              (item) => item.label === selectedValue
             );
-            return [...updatedValues, selectedValue];
+            const isAlreadySelected = prev.some(
+              (item) => item === selectedItem
+            );
+
+            if (selectedItem && !isAlreadySelected) {
+              return [...prev, selectedItem];
+            }
+
+            return prev;
           });
           setInputValue([]); // Reset the input value
         }}
@@ -121,6 +154,7 @@ export default function SearchBarPathDesign({
           onChange={(e) => {
             e.preventDefault();
             const currentValue = e.currentTarget.value;
+            console.log(currentValue);
             setInputValue([currentValue]); // Imposta il valore di inputValue con il nuovo valore
           }}
         >

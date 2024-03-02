@@ -6,12 +6,28 @@ export interface PathDesignCentralBarsProps {
   collectionIndex: number;
   isNextButtonClicked: boolean;
   isSmallerScreen?: boolean;
+  bloomLevelTitleTextBox: string;
+  verbsTitleTextBox: string;
+  bloomLevelDescriptionTextBox: string;
+  skillConceptTitleTextBox: string;
+  skillConceptDescriptionTextBox: string;
+  contextTitleTextBox: string;
+  contextDescriptionTextBox: string;
+  placeholderContextBox: string;
 }
 
 export default function PathDesignCentralBars({
   collectionIndex,
   isNextButtonClicked,
   isSmallerScreen,
+  bloomLevelTitleTextBox,
+  skillConceptTitleTextBox,
+  contextTitleTextBox,
+  placeholderContextBox,
+  bloomLevelDescriptionTextBox,
+  verbsTitleTextBox,
+  contextDescriptionTextBox,
+  skillConceptDescriptionTextBox,
 }: PathDesignCentralBarsProps) {
   const {
     DIMENSION,
@@ -22,8 +38,8 @@ export default function PathDesignCentralBars({
     handleOptionsChange,
     step,
     resetCheckBoxOptions,
-    text,
-    handleSetText,
+    learningTextContext: text,
+    handleSetLearningTextContext: handleSetText,
   } = useLearningPathDesignContext();
 
   return (
@@ -42,6 +58,14 @@ export default function PathDesignCentralBars({
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
           step={step}
+          bloomLevelTitleTextBox={bloomLevelTitleTextBox}
+          verbsTitleTextBox={verbsTitleTextBox}
+          bloomLevelDescriptionTextBox={bloomLevelDescriptionTextBox}
+          skillConceptTitleTextBox={skillConceptTitleTextBox}
+          skillConceptDescriptionTextBox={skillConceptDescriptionTextBox}
+          contextTitleTextBox={contextTitleTextBox}
+          contextDescriptionTextBox={contextDescriptionTextBox}
+          placeholderContextBox={placeholderContextBox}
         />
       )}
 
@@ -60,6 +84,14 @@ export default function PathDesignCentralBars({
           collectionIndex={collectionIndex}
           step={step}
           isSmallerScreen={isSmallerScreen}
+          bloomLevelTitleTextBox={bloomLevelTitleTextBox}
+          verbsTitleTextBox={verbsTitleTextBox}
+          bloomLevelDescriptionTextBox={bloomLevelDescriptionTextBox}
+          skillConceptTitleTextBox={skillConceptTitleTextBox}
+          skillConceptDescriptionTextBox={skillConceptDescriptionTextBox}
+          contextTitleTextBox={contextTitleTextBox}
+          contextDescriptionTextBox={contextDescriptionTextBox}
+          placeholderContextBox={placeholderContextBox}
         />
       )}
     </>

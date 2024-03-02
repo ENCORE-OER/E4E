@@ -32,6 +32,14 @@ export default function CentralBars({
   collectionIndex,
   currentBloomOptions,
   step,
+  bloomLevelTitleTextBox: bloomLevelTextBox,
+  skillConceptTitleTextBox: skillConceptTextBox,
+  contextTitleTextBox: contextTextBox,
+  placeholderContextBox,
+  bloomLevelDescriptionTextBox,
+  skillConceptDescriptionTextBox,
+  contextDescriptionTextBox,
+  verbsTitleTextBox,
 }: CentralBarsProps) {
   return (
     <>
@@ -42,7 +50,7 @@ export default function CentralBars({
           paddingRight={`${SPACING}%`}
           w={`${DIMENSION}%`}
         >
-          Select the Bloom level for the learning objective
+          {bloomLevelTextBox}
         </Text>
         <Text
           fontSize="sm"
@@ -50,7 +58,7 @@ export default function CentralBars({
           paddingRight={`${SPACING}%`}
           w={`${DIMENSION}%`}
         >
-          Add here the skill or the concepts to be covered
+          {skillConceptTextBox}
         </Text>
         <Text
           fontSize="sm"
@@ -58,7 +66,7 @@ export default function CentralBars({
           paddingRight={`${SPACING}%`}
           w={`${DIMENSION}%`}
         >
-          Add here the context
+          {contextTextBox}
         </Text>
       </Flex>
 
@@ -81,7 +89,7 @@ export default function CentralBars({
         <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
           <TextBox
             backgroundColor="#EDF2F7"
-            placeholder="Add some text..."
+            placeholder={placeholderContextBox}
             isHighlighted={isNextButtonClicked}
             text={text}
             onTextChange={handleSetText}
@@ -91,29 +99,26 @@ export default function CentralBars({
 
       <Flex w="100%" pt={1}>
         <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          This level indicates the cognitive complexity or depth of
-          understanding associated with a particular learning objective
+          {bloomLevelDescriptionTextBox}
         </Text>
         <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          The selection of skills and concepts here is informed by the
-          collection of Open Educational Resources (OERs).
+          {skillConceptDescriptionTextBox}
         </Text>
         <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
-          Here the contextual information that will assist in delineating the
-          specific context of the educational activity
+          {contextDescriptionTextBox}
         </Text>
       </Flex>
 
-      {step >= 2 && (
+      {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (
         <Flex paddingTop="1.5rem" w="100%">
-          <Box w={`${DIMENSION}%`}>
+          <Box w={`${DIMENSION}%`} flexDirection="column">
             <Text
               fontSize="sm"
               fontWeight="bold"
               paddingRight={`${SPACING}%`}
               pb={1}
             >
-              Select the verbs related to your learning objective
+              {verbsTitleTextBox}
             </Text>
             <CheckboxMenu
               onOptionsChange={handleOptionsChange}
