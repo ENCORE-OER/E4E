@@ -1,5 +1,6 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -11,7 +12,6 @@ import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
 import PathDesignGenLO from '../../components/PathDesignGenLO';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import { APIV2 } from '../../data/api';
 import { SkillItemProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
@@ -111,23 +111,45 @@ const Home = (/*props: DiscoverPageProps*/) => {
       generatedLOs[selectedLearningObjectiveIndex] !== undefined
     ) {
       try {
-        const api = new APIV2(undefined);
-        const resp = await api.saveLearningScenario(
-          // objectiveId
-          selectedEducatorExperience?.title,
-          selectedContext?.title,
-          selectedGroupDimension?.title,
-          selectedLearnerExperience?.title,
-          bloomLevels[bloomLevelIndex]?.name,
-          selectedOptions, // verbsBloomLevel
-          selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
-          learningTextContext,
-          //selectedCustomLearningObjective
-          generatedLOs[selectedLearningObjectiveIndex]
-        );
-        console.log(resp);
-        console.log('Learning scenario id: ' + resp?._id);
-        handleIdLearningScenario(resp?._id ?? '');
+        // const api = new APIV2(undefined);
+        // const resp = await api.saveLearningScenario(
+        //   // objectiveId
+        //   selectedEducatorExperience?.title,
+        //   selectedContext?.title,
+        //   selectedGroupDimension?.title,
+        //   selectedLearnerExperience?.title,
+        //   bloomLevels[bloomLevelIndex]?.name,
+        //   selectedOptions, // verbsBloomLevel
+        //   selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
+        //   learningTextContext,
+        //   //selectedCustomLearningObjective
+        //   generatedLOs[selectedLearningObjectiveIndex]
+        // );
+        const resp = await axios.post('/api/encore/saveLearningScenario', {
+          Context: {
+            EducatorExperience: selectedEducatorExperience?.title,
+            EducationContext: selectedContext?.title,
+            Dimension: selectedGroupDimension?.title,
+            LearnerExperience: selectedLearnerExperience?.title,
+          },
+          Objective: {
+            //id: objectiveId,
+            BloomLevel: {
+              name: bloomLevels[bloomLevelIndex]?.name,
+              verbs: selectedOptions,
+            },
+            Skills: selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
+            LearningContext: learningTextContext,
+            textLearningObjective: generatedLOs[selectedLearningObjectiveIndex],
+          },
+          Path: {
+            Nodes: [],
+            Edges: [],
+          },
+        });
+        console.log(resp?.data);
+        console.log('Learning scenario id: ' + resp?.data?._id);
+        handleIdLearningScenario(resp?.data?._id ?? '');
       } catch (error) {
         console.log(error);
       }
@@ -190,7 +212,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -199,7 +221,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Box w={isSmallerScreen ? '95%' : '90%'}>
                 <LearningStepper

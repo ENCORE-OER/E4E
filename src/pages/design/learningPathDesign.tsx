@@ -15,6 +15,7 @@ import { useCollectionsContext } from '../../Contexts/CollectionsContext/Collect
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { Icon } from '@chakra-ui/react';
+import axios from 'axios';
 import { MdSave, MdUndo } from 'react-icons/md';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import BoxSelectedLearningObjective from '../../components/Boxes/BoxSelectedLearningObjective';
@@ -93,6 +94,7 @@ const Home = (props: DiscoverPageProps) => {
   const [isLoading, setIsLoading] = useState(false); // used to show the loading spinner for the learning objective boxes
   const [isLearningObjectiveChanged, setIsLearningObjectiveChanged] =
     useState(false); // used to say if the learning objective has been changed
+  const [isOriginalLOSelected, setIsOriginalLOSelected] = useState(true); // used to say if there is a new learning objective selected
 
   const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
@@ -109,16 +111,29 @@ const Home = (props: DiscoverPageProps) => {
 
   // update the learning objective in the learning scenario on the database
   const updateLearningScenario = async () => {
-    const api = new APIV2(props.accessToken);
+    // const api = new APIV2(props.accessToken);
 
     try {
-      await api.updateLearningScenario(
-        idLearningScenario,
-        bloomLevels[bloomLevelIndex]?.name ?? '',
-        selectedOptions ?? [],
-        selectedSkillConceptsTags?.map((item: SkillItemProps) => item.id) ?? [],
-        learningTextContext ?? '',
-        selectedCustomLearningObjective ?? ''
+      // await api.updateLearningScenario(
+      //   idLearningScenario,
+      //   bloomLevels[bloomLevelIndex]?.name ?? '',
+      //   selectedOptions ?? [],
+      //   selectedSkillConceptsTags?.map((item: SkillItemProps) => item.id) ?? [],
+      //   learningTextContext ?? '',
+      //   selectedCustomLearningObjective ?? ''
+      // );
+
+      await axios.put(
+        `/api/encore/updateLearningObjective/${idLearningScenario}`,
+        {
+          BloomLevel: {
+            name: bloomLevels[bloomLevelIndex]?.name,
+            verbs: selectedOptions,
+          },
+          Skills: selectedSkillConceptsTags?.map((item: SkillItemProps) => item.id),
+          LearningContext: learningTextContext,
+          textLearningObjective: selectedCustomLearningObjective,
+        }
       );
     } catch (error) {
       throw error;
@@ -312,11 +327,21 @@ const Home = (props: DiscoverPageProps) => {
                     <Heading size={'sl'} fontFamily={'body'} pl="3">
                       Learning objective
                     </Heading>
-                    {isLearningObjectiveChanged && (
+                    {hydrated && isOriginalLOSelected ? (
+                      <Flex flexWrap={'wrap'} flex='1'>
+                        <Text pl="5%" color="red.500">
+                          {"New learning objective selected."}
+                        </Text>
+                        <Text color="red.500">
+                          {"Save to retrieve it after eventually changes!"}
+                        </Text>
+                      </Flex>
+                    ) : null}
+                    {hydrated && isLearningObjectiveChanged && !isOriginalLOSelected ? (
                       <Text pl="5%" color="red">
                         {"Unsaved changes. Don't forget to save!"}
                       </Text>
-                    )}
+                    ) : null}
                   </Flex>
 
                   <Flex
@@ -350,9 +375,9 @@ const Home = (props: DiscoverPageProps) => {
                           setIsLearningObjectiveChanged={
                             setIsLearningObjectiveChanged
                           }
-                          storedLearningObjective={
-                            storedLearningObjective
-                          }
+                          storedLearningObjective={storedLearningObjective}
+                          isOriginalLOSelected={isOriginalLOSelected}
+                          setIsOriginalLOSelected={setIsOriginalLOSelected}
                         />
                       )}
 
@@ -410,6 +435,7 @@ const Home = (props: DiscoverPageProps) => {
                             border={'1px solid'}
                             // w='100%'
                             colorScheme="yellow"
+                            //isDisabled={storedLearningObjective === selectedCustomLearningObjective}
                             onClick={handleUndoLearningObjectiveButtonClick}
                           >
                             <Flex align="center">

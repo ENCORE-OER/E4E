@@ -1,60 +1,91 @@
 import { Box, Flex, Textarea } from '@chakra-ui/react';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 type BoxSelectedLearningObjectiveProps = {
-    text: string;
-    onTextChange: (newText: string) => void;
-    isLearningObjectiveChanged: boolean;
-    setIsLearningObjectiveChanged: Dispatch<SetStateAction<boolean>>;
-    storedLearningObjective: string;
+  text: string;
+  onTextChange: (newText: string) => void;
+  isLearningObjectiveChanged: boolean;
+  setIsLearningObjectiveChanged: Dispatch<SetStateAction<boolean>>;
+  storedLearningObjective: string;
+  isOriginalLOSelected: boolean;
+  setIsOriginalLOSelected: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function BoxSelectedLearningObjective({
-    text,
-    onTextChange,
-    isLearningObjectiveChanged,
-    setIsLearningObjectiveChanged,
-    storedLearningObjective,
+  text,
+  onTextChange,
+  isLearningObjectiveChanged,
+  setIsLearningObjectiveChanged,
+  storedLearningObjective,
+  isOriginalLOSelected,
+  setIsOriginalLOSelected,
 }: BoxSelectedLearningObjectiveProps) {
-    // TODO: think a way to say to the Educator to save the new learning objective when he changes it
 
-    const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        const newText = e.target.value;
-        onTextChange(newText);
-    };
+  const [originalLearningObjective, setOriginalLearningObjective] = useState<string>(''); // to know the original learning objective, before any changes
 
-    useEffect(() => {
-        if (text.trim() !== storedLearningObjective.trim() && !isLearningObjectiveChanged) {
-            setIsLearningObjectiveChanged(true);
-        } else if (text.trim() === storedLearningObjective.trim()) {
-            setIsLearningObjectiveChanged(false);
-        }
-    }, [text])
+  useEffect(() => {
+    setOriginalLearningObjective(text);
+  }, []);
 
-    return (
-        <Flex py="10px" align="center" direction="column">
-            <Box
-                display="flex"
-                w="95%"
-                border="3px solid black"
-                borderRadius={'md'}
-                alignItems="center"
-                p={2}
-            //flexDirection={'column'}
-            >
-                <Textarea
-                    //display={'flex'}
-                    //w="100%"
-                    //h={'100%'}
-                    pr="10"
-                    py="3"
-                    pl="3"
-                    resize="none"
-                    border="none"
-                    value={text}
-                    onChange={handleTextChange}
-                />
-            </Box>
-        </Flex>
-    );
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    onTextChange(newText);
+  };
+
+  useEffect(() => {
+    console.log('original: ', originalLearningObjective);
+  }, [originalLearningObjective])
+
+  useEffect(() => {
+    if (  // Check if the learning objective has been changed
+      text.trim() !== storedLearningObjective.trim() &&  // Check if the text is different from the original learning objective
+      !isLearningObjectiveChanged
+    ) {
+      if (
+        text.trim() !== originalLearningObjective.trim() && // Check if the text is different from the original selected learning objective
+        isOriginalLOSelected
+      ) {
+        setIsOriginalLOSelected(false);
+      }
+      setIsLearningObjectiveChanged(true);
+
+    } else if (
+      text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the original learning objective
+      isLearningObjectiveChanged) {
+      if (
+        text.trim() === originalLearningObjective.trim() && // Check if the text is the same as the original selected learning objective
+        !isOriginalLOSelected
+      ) {
+        setIsOriginalLOSelected(true);
+      }
+      setIsLearningObjectiveChanged(false);
+    }
+  }, [text]);
+
+  return (
+    <Flex py="10px" align="center" direction="column">
+      <Box
+        display="flex"
+        w="95%"
+        border="3px solid black"
+        borderRadius={'md'}
+        alignItems="center"
+        p={2}
+      //flexDirection={'column'}
+      >
+        <Textarea
+          //display={'flex'}
+          //w="100%"
+          //h={'100%'}
+          pr="10"
+          py="3"
+          pl="3"
+          resize="none"
+          border="none"
+          value={text}
+          onChange={handleTextChange}
+        />
+      </Box>
+    </Flex>
+  );
 }

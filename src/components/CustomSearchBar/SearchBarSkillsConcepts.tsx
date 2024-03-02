@@ -40,7 +40,7 @@ export default function SearchBarPathDesign({
   // verify that the collectionIndex is valid
   const collection = collections[collectionIndex];
 
-  const oers = collection.oers ?? [];
+  const oers = collection?.oers ?? [];
   //console.log(oers);
 
   const handleTagsRemove = async (tag: Tag) => {

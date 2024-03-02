@@ -32,6 +32,13 @@ const axiosNoCookie = axiosCreate.create({
   },
 });
 
+const axiosEncore = axiosCreate.create({
+  baseURL: process.env.ENCORE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 type Tag = {
   value: string;
   count: number;
@@ -1124,8 +1131,8 @@ export class APIV2 {
     textLearningObjective: string
   ) {
     try {
-      const resp = await axiosNoCookie.put(
-        `https://encore-api.polyglot-edu.com/api/updateLearningObjective/${idLearningScenario}`,
+      const resp = await axiosEncore.put(
+        `/api/updateLearningObjective/${idLearningScenario}`,
         {
           BloomLevel: {
             name: nameBloomLevel,

@@ -9,7 +9,8 @@ const axiosGenerativeAI = axiosCreate.create({
   },
 });
 
-export default async function serverSideCall(
+// Server side call
+export default async function generateLearningObjective(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
