@@ -17,6 +17,7 @@ import {
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
+import InputAPIKey from '../Inputs/InputAPIKey';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
@@ -36,6 +37,8 @@ type PathDesignGenLOProps = {
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted: boolean;
+  apiKey: string | undefined;
+  handleApiKey: (apiKey: string) => void;
 };
 
 export default function PathDesignGenLO({
@@ -55,6 +58,8 @@ export default function PathDesignGenLO({
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
+  apiKey,
+  handleApiKey,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
@@ -87,6 +92,12 @@ export default function PathDesignGenLO({
 
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
+    // if (apiKey === undefined || apiKey === '') {
+    //   addToast({
+    //     message: 'Please enter your OpenAI API Key.',
+    //     type: 'warning',
+    //   });
+    // } else 
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
@@ -127,8 +138,10 @@ export default function PathDesignGenLO({
 
           for (let i = 0; i < numberOfLO; i++) {
             console.log('LO number ' + i);
+            console.log('apiKey', apiKey);
 
             const resp = await postGenerateLearningObjective(
+              apiKey, // apiKey
               LANGUAGE_GEN_LO_API, // language
               mapOptionToNumber(
                 selectedEducatorExperience,
@@ -184,6 +197,7 @@ export default function PathDesignGenLO({
   };
 
   const postGenerateLearningObjective = async (
+    apiKey: string | undefined,
     language: string,
     educatorExperience: number,
     learnerExperience: number,
@@ -196,6 +210,7 @@ export default function PathDesignGenLO({
     temperature: number
   ): Promise<string | undefined> => {
     try {
+      console.log('apiKey', apiKey);
       const resp = await axios.post('/api/encore/generateLearningObjective', {
         language: language,
         educatorExperience: educatorExperience,
@@ -207,9 +222,18 @@ export default function PathDesignGenLO({
         bloomLevel: bloomLevel,
         verbs: verbs,
         temperature: temperature,
-      });
+      }, {
+        headers: {
+          ApiKey: apiKey,
+        },
+      }
+      );
 
-      console.log('Success:', resp?.data);
+      console.log('Success - resp.data.error:', resp?.data?.error);
+      console.log('Success - resp.data:', resp?.data);
+      console.log('Success - resp:', resp);
+
+
       return resp?.data;
     } catch (error) {
       console.error('Error:', error);
@@ -269,8 +293,15 @@ export default function PathDesignGenLO({
   }, [generatedLOs]);
 
   return (
-    <>
-      <Flex flexDirection="row" align="center" pt="50px" pb="5">
+    <Flex pt='30px' direction='column'>
+      <Flex direction='column'>
+        <Text pl='1' fontSize='sm' fontWeight="bold" color='gray'>Insert the API Key</Text>
+        <InputAPIKey
+          apiKey={apiKey}
+          handleApiKey={handleApiKey}
+        />
+      </Flex>
+      <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
           <Tooltip
@@ -306,6 +337,8 @@ export default function PathDesignGenLO({
         <Button variant="primary" onClick={handleGenerateLO}>
           Generate
         </Button>
+
+
       </Flex>
 
       {isLoading && (
@@ -335,6 +368,6 @@ export default function PathDesignGenLO({
             />
           ))}
       </Flex>
-    </>
+    </Flex>
   );
 }

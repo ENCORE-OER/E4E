@@ -14,6 +14,7 @@ type LearnignPathDesignContextProps = {
   LANGUAGE_GEN_LO_API: string;
   TEMPERATURE_GEN_LO_API: number;
   bloomLevels: ArrayProps[];
+  apiKey: string | undefined;
   currentBloomOptions: string[];
   idLearningScenario: string;
   selectedEducatorExperience: Option | null;
@@ -37,6 +38,7 @@ type LearnignPathDesignContextProps = {
   storedLearningObjectives: string[];
   resetAll: boolean;
   handleResetAll: (value: boolean) => void;
+  handleApiKey: (value: string) => void;
   handleIdLearningScenario: (id: string) => void;
   setSelectedSkillConceptsTags: (newSkills: SkillItemProps[]) => void;
   handleEducatorExperienceChange: (selected: Option | null) => void;
@@ -103,6 +105,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const Create: string[] = ['Build', 'Compose', 'Design', 'Develop'];
 
   // Use useLocalStorage to declare state variables with persistence
+
+  const [apiKey, setApiKey] = useLocalStorage<string | undefined>('apiKey', undefined);
 
   const [resetAll, setResetAll] = useLocalStorage<boolean>('resetAll', false);
 
@@ -181,6 +185,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //reset checkbox options when bloom level is changed
   const [resetCheckBoxOptions, setResetCheckBoxOptions] =
     useState<boolean>(false);
+
+  const handleApiKey = (value: string) => {
+    setApiKey(value)
+  }
 
   const resetState = () => {
     setBloomLevelIndex(-1);
@@ -443,6 +451,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         LANGUAGE_GEN_LO_API,
         TEMPERATURE_GEN_LO_API,
         bloomLevels,
+        apiKey,
         idLearningScenario,
         selectedEducatorExperience,
         selectedContext,
@@ -467,6 +476,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         storedLearningObjectives,
         resetAll,
         handleResetAll,
+        handleApiKey,
         handleIdLearningScenario,
         handleEducatorExperienceChange,
         handleContextChange,
