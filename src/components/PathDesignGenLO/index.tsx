@@ -300,7 +300,7 @@ export default function PathDesignGenLO({
         <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
           Insert the API Key
         </Text>
-        <InputAPIKey w='400px' apiKey={apiKey} handleApiKey={handleApiKey} />
+        <InputAPIKey w="400px" apiKey={apiKey} handleApiKey={handleApiKey} />
       </Flex>
       <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>

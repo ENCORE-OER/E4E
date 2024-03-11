@@ -12,7 +12,7 @@ import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSea
 import { useHasHydrated } from '../../../utils/utils';
 import AddResourcesButton from '../../Buttons/AddResourcesButton';
 import ResourceCardsList from '../../Card/OerCard/ResourceCardsList';
-import DeleteOerAlertDialog from '../../Modals/DeleteAlertDialog/DeleteOerAlertDialog';
+import DeleteOerAlertDialog from '../../Modals/AlertDialogs/DeleteAlertDialog/DeleteOerAlertDialog';
 import OerCardsSorting from '../../Sorting/OerCardsSorting';
 import ConceptsCollectionView from './ConceptsCollectionView';
 import HeaderCollectionView from './HeaderCollectionView';
@@ -262,7 +262,7 @@ export default function CollectionView({
                 isAscending={isAscending}
                 setAscending={setAscending}
                 handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+              //setIsLoading={setIsLoading}
               />
             </Flex>
           </HStack>

@@ -1,4 +1,10 @@
-import { Button, Input, InputGroup, InputGroupProps, InputRightElement } from '@chakra-ui/react';
+import {
+  Button,
+  Input,
+  InputGroup,
+  InputGroupProps,
+  InputRightElement,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 
 interface InputAPIKeyProps extends InputGroupProps {

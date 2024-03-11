@@ -36,9 +36,11 @@ export default function BoxSelectedLearningObjective({
 
   useEffect(() => {
     setOriginalLearningObjective(text);
-    if (text.trim() !== storedLearningObjective.trim() &&
+    if (
+      text.trim() !== storedLearningObjective.trim() &&
       text.trim() === originalLearningObjective.trim() &&
-      !isLearningObjectiveChanged) {
+      !isLearningObjectiveChanged
+    ) {
       console.log('is original selected?: ', true);
       setIsOriginalLOSelected(true);
     } else {
@@ -95,7 +97,7 @@ export default function BoxSelectedLearningObjective({
         borderRadius={'md'}
         alignItems="center"
         p={2}
-      //flexDirection={'column'}
+        //flexDirection={'column'}
       >
         <Textarea
           //display={'flex'}

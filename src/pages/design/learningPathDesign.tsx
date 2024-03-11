@@ -301,7 +301,7 @@ const Home = (props: DiscoverPageProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -333,8 +333,8 @@ const Home = (props: DiscoverPageProps) => {
                       // TODO: simplify and leave only one text if is different from the stored learning objective???
                     }
                     {hydrated &&
-                      isOriginalLOSelected &&
-                      !isLearningObjectiveChanged ? (
+                    isOriginalLOSelected &&
+                    !isLearningObjectiveChanged ? (
                       <Flex flexWrap={'wrap'} flex="1">
                         <Text pl="5%" color="red.500">
                           {'New learning objective selected.'}
@@ -344,8 +344,7 @@ const Home = (props: DiscoverPageProps) => {
                         </Text>
                       </Flex>
                     ) : null}
-                    {hydrated &&
-                      isLearningObjectiveChanged ? (
+                    {hydrated && isLearningObjectiveChanged ? (
                       <Text pl="5%" color="red">
                         {"Unsaved changes. Don't forget to save!"}
                       </Text>
@@ -360,8 +359,8 @@ const Home = (props: DiscoverPageProps) => {
                     //direction='column'
                     align={'center'}
 
-                  // flexWrap="wrap"
-                  //wrap={'wrap'}
+                    // flexWrap="wrap"
+                    //wrap={'wrap'}
                   >
                     <Box
                       w={isSmallerScreen ? '100%' : '90%'}
@@ -405,7 +404,7 @@ const Home = (props: DiscoverPageProps) => {
                       gap={isSmallerScreen ? '3%' : '2%'}
                       justifyContent={'flex-end'}
                       direction={isSmallerScreen ? 'row' : 'column'}
-                    //columnGap={isSmallerScreen ? '3%' : '2%'}
+                      //columnGap={isSmallerScreen ? '3%' : '2%'}
                     >
                       <Flex py={1} w={isSmallerScreen ? '15%' : '100%'}>
                         <Tooltip
