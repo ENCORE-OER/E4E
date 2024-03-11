@@ -67,6 +67,7 @@ export default function PathDesignGenLO({
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
   const [isInvalid, setIsInvalid] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
+  const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let newNumber = Number(e.target.value);
@@ -167,6 +168,7 @@ export default function PathDesignGenLO({
             if (!resp) {
               console.log('No response');
               learningObjectives.push('');
+              setIsApiKeyInvalid(true);
             } else {
               const textLO = cutResponse(resp);
               learningObjectives.push(textLO);
@@ -175,10 +177,18 @@ export default function PathDesignGenLO({
             console.log('learningObjectives', learningObjectives);
           }
           setGeneratedLOs(learningObjectives || []);
-          addToast({
-            message: 'Learning objectives generated!',
-            type: 'info',
-          });
+
+          if (isApiKeyInvalid) {
+            addToast({
+              message: 'Invalid API Key. Please enter a valid OpenAI API Key.',
+              type: 'error',
+            });
+          } else {
+            addToast({
+              message: 'Learning objectives generated!',
+              type: 'info',
+            });
+          }
         } else {
           setIsInvalid(true);
           console.log('Number of learning objectives is 0');
