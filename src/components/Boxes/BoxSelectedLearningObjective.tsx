@@ -29,14 +29,23 @@ export default function BoxSelectedLearningObjective({
   const [originalLearningObjective, setOriginalLearningObjective] =
     useState<string>(''); // to know the original learning objective, before any changes
 
-  useEffect(() => {
-    setOriginalLearningObjective(text);
-  }, []);
-
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     onTextChange(newText);
   };
+
+  useEffect(() => {
+    setOriginalLearningObjective(text);
+    if (text.trim() !== storedLearningObjective.trim() &&
+      text.trim() === originalLearningObjective.trim() &&
+      !isLearningObjectiveChanged) {
+      console.log('is original selected?: ', true);
+      setIsOriginalLOSelected(true);
+    } else {
+      console.log('is original selected?: ', false);
+      setIsOriginalLOSelected(false);
+    }
+  }, []);
 
   useEffect(() => {
     console.log('original: ', originalLearningObjective);
@@ -45,25 +54,33 @@ export default function BoxSelectedLearningObjective({
   useEffect(() => {
     if (
       // Check if the learning objective has been changed
-      text.trim() !== storedLearningObjective.trim() && // Check if the text is different from the original learning objective
+      text.trim() !== storedLearningObjective.trim() && // Check if the text is different from the stored learning objective
       !isLearningObjectiveChanged
     ) {
       if (
         text.trim() !== originalLearningObjective.trim() && // Check if the text is different from the original selected learning objective
         isOriginalLOSelected
       ) {
+        console.log('is original selected?: ', false);
         setIsOriginalLOSelected(false);
+      } else {
+        console.log('is original selected?: ', true);
+        setIsOriginalLOSelected(true);
       }
       setIsLearningObjectiveChanged(true);
     } else if (
-      text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the original learning objective
+      text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the stored learning objective
       isLearningObjectiveChanged
     ) {
       if (
         text.trim() === originalLearningObjective.trim() && // Check if the text is the same as the original selected learning objective
         !isOriginalLOSelected
       ) {
+        console.log('is original selected?: ', true);
         setIsOriginalLOSelected(true);
+      } else {
+        console.log('is original selected?: ', false);
+        setIsOriginalLOSelected(false);
       }
       setIsLearningObjectiveChanged(false);
     }
@@ -78,7 +95,7 @@ export default function BoxSelectedLearningObjective({
         borderRadius={'md'}
         alignItems="center"
         p={2}
-        //flexDirection={'column'}
+      //flexDirection={'column'}
       >
         <Textarea
           //display={'flex'}

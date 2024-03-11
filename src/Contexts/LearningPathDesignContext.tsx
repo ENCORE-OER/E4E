@@ -106,7 +106,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Use useLocalStorage to declare state variables with persistence
 
-  const [apiKey, setApiKey] = useLocalStorage<string | undefined>('apiKey', undefined);
+  const [apiKey, setApiKey] = useLocalStorage<string | undefined>(
+    'apiKey',
+    undefined
+  );
 
   const [resetAll, setResetAll] = useLocalStorage<boolean>('resetAll', false);
 
@@ -187,8 +190,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     useState<boolean>(false);
 
   const handleApiKey = (value: string) => {
-    setApiKey(value)
-  }
+    setApiKey(value);
+  };
 
   const resetState = () => {
     setBloomLevelIndex(-1);

@@ -121,6 +121,7 @@ export default function BoxGeneratedLO({
             bg="accent.900"
             color={'black'}
             borderRadius="md"
+            isDisabled={editedText === '' ? true : false}
             isChecked={
               selectedLO && index !== undefined ? selectedLO[index] : false
             } //TODO: reset the checkbox after clicking the generate buttons

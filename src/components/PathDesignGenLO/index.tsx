@@ -97,7 +97,7 @@ export default function PathDesignGenLO({
     //     message: 'Please enter your OpenAI API Key.',
     //     type: 'warning',
     //   });
-    // } else 
+    // } else
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
@@ -211,28 +211,30 @@ export default function PathDesignGenLO({
   ): Promise<string | undefined> => {
     try {
       console.log('apiKey', apiKey);
-      const resp = await axios.post('/api/encore/generateLearningObjective', {
-        language: language,
-        educatorExperience: educatorExperience,
-        learnerExperience: learnerExperience,
-        dimension: dimension,
-        educationContext: educationContext,
-        learningContext: learningContext,
-        skills: skills,
-        bloomLevel: bloomLevel,
-        verbs: verbs,
-        temperature: temperature,
-      }, {
-        headers: {
-          ApiKey: apiKey,
+      const resp = await axios.post(
+        '/api/encore/generateLearningObjective',
+        {
+          language: language,
+          educatorExperience: educatorExperience,
+          learnerExperience: learnerExperience,
+          dimension: dimension,
+          educationContext: educationContext,
+          learningContext: learningContext,
+          skills: skills,
+          bloomLevel: bloomLevel,
+          verbs: verbs,
+          temperature: temperature,
         },
-      }
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
       );
 
       console.log('Success - resp.data.error:', resp?.data?.error);
       console.log('Success - resp.data:', resp?.data);
       console.log('Success - resp:', resp);
-
 
       return resp?.data;
     } catch (error) {
@@ -293,13 +295,12 @@ export default function PathDesignGenLO({
   }, [generatedLOs]);
 
   return (
-    <Flex pt='30px' direction='column'>
-      <Flex direction='column'>
-        <Text pl='1' fontSize='sm' fontWeight="bold" color='gray'>Insert the API Key</Text>
-        <InputAPIKey
-          apiKey={apiKey}
-          handleApiKey={handleApiKey}
-        />
+    <Flex pt="30px" direction="column">
+      <Flex direction="column">
+        <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
+          Insert the API Key
+        </Text>
+        <InputAPIKey w='400px' apiKey={apiKey} handleApiKey={handleApiKey} />
       </Flex>
       <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
@@ -337,8 +338,6 @@ export default function PathDesignGenLO({
         <Button variant="primary" onClick={handleGenerateLO}>
           Generate
         </Button>
-
-
       </Flex>
 
       {isLoading && (
