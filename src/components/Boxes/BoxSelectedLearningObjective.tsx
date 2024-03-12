@@ -91,7 +91,7 @@ export default function BoxSelectedLearningObjective({
         borderRadius={'md'}
         alignItems="center"
         p={2}
-      //flexDirection={'column'}
+        //flexDirection={'column'}
       >
         <Textarea
           //display={'flex'}
