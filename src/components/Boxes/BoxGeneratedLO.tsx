@@ -27,7 +27,7 @@ export default function BoxGeneratedLO({
 
   const handleEditClick = () => {
     console.log('Edit clicked');
-    console.log(editedText);
+    //console.log(editedText);
     try {
       if (isEditClicked) {
         // Confirm the edit
@@ -52,7 +52,6 @@ export default function BoxGeneratedLO({
   // Update the edited text when we restore the old learning objective with the 'Undo' button
   useEffect(() => {
     if (textLearningObjective !== editedText) {
-      console.log('aggiorno setEditedText');
       setEditedText(textLearningObjective);
     }
   }, [textLearningObjective]);

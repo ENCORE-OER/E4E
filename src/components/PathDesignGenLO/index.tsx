@@ -66,7 +66,7 @@ export default function PathDesignGenLO({
   const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
-  const [isInvalid, setIsInvalid] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
+  const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -78,7 +78,7 @@ export default function PathDesignGenLO({
     console.log('number modified', newNumber);
     setNumberOfLO(newNumber);
     if (newNumber > 0) {
-      setIsInvalid(false);
+      setIsNumberOfLOZero(false);
     }
   };
 
@@ -139,7 +139,6 @@ export default function PathDesignGenLO({
 
           for (let i = 0; i < numberOfLO; i++) {
             console.log('LO number ' + i);
-            console.log('apiKey', apiKey);
 
             const resp = await postGenerateLearningObjective(
               apiKey, // apiKey
@@ -168,10 +167,17 @@ export default function PathDesignGenLO({
             if (!resp) {
               console.log('No response');
               learningObjectives.push('');
+              // if (isApiKeyInvalid === false) {
+              //   setIsApiKeyInvalid(true);
+              // }
               setIsApiKeyInvalid(true);
             } else {
               const textLO = cutResponse(resp);
               learningObjectives.push(textLO);
+              // if (isApiKeyInvalid === true) {
+              //   setIsApiKeyInvalid(false);
+              // }
+              setIsApiKeyInvalid(false);
             }
 
             console.log('learningObjectives', learningObjectives);
@@ -190,7 +196,7 @@ export default function PathDesignGenLO({
             });
           }
         } else {
-          setIsInvalid(true);
+          setIsNumberOfLOZero(true);
           console.log('Number of learning objectives is 0');
           addToast({
             message:
@@ -220,7 +226,7 @@ export default function PathDesignGenLO({
     temperature: number
   ): Promise<string | undefined> => {
     try {
-      console.log('apiKey', apiKey);
+      //console.log('apiKey', apiKey);
       const resp = await axios.post(
         '/api/encore/generateLearningObjective',
         {
@@ -242,9 +248,9 @@ export default function PathDesignGenLO({
         }
       );
 
-      console.log('Success - resp.data.error:', resp?.data?.error);
+      // console.log('Success - resp.data.error:', resp?.data?.error);
       console.log('Success - resp.data:', resp?.data);
-      console.log('Success - resp:', resp);
+      // console.log('Success - resp:', resp);
 
       return resp?.data;
     } catch (error) {
@@ -272,7 +278,7 @@ export default function PathDesignGenLO({
     // // Extract main text until the first double newline
     // textLO = textLO.substring(0, endIndex).trim();
 
-    console.log(textLO);
+    // console.log(textLO);
 
     return textLO;
   };
@@ -280,9 +286,9 @@ export default function PathDesignGenLO({
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
     const updatedGeneratedLOs = [...generatedLOs];
-    console.log('GeneratedLOs', updatedGeneratedLOs);
+    // console.log('GeneratedLOs', updatedGeneratedLOs);
     updatedGeneratedLOs[index] = updatedText; // Update the learning objective
-    console.log('updatedGeneratedLOs', updatedGeneratedLOs);
+    // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
     setGeneratedLOs(updatedGeneratedLOs);
   };
 
@@ -331,7 +337,7 @@ export default function PathDesignGenLO({
               //size="sm"
               w="70px"
               //h='50px'
-              border={isInvalid ? '1.5px solid #bf5521ff' : '1px solid'}
+              border={isNumberOfLOZero ? '1.5px solid #bf5521ff' : '1px solid'}
               borderRadius="lg"
               rows={1}
               flexWrap="nowrap"

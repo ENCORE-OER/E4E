@@ -15,8 +15,6 @@ export default async function generateLearningObjective(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    console.log(process.env.SK_API_KEY);
-
     // get the data from the request body
     const {
       language,
@@ -34,7 +32,7 @@ export default async function generateLearningObjective(
     //const { ApiKey } = req.headers;
     const { apikey } = req.headers; // Express normalizes all request headers to lowercase
 
-    console.log('apiKey from context', apikey);
+    console.log('apiKey from context: ', apikey);
 
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
@@ -71,7 +69,7 @@ export default async function generateLearningObjective(
       );
       res.status(200).json(respLearningObjective?.data);
       console.log('respLearningObjective', respLearningObjective?.data);
-      console.log(respLearningObjective);
+      //console.log(respLearningObjective);
     } catch (error) {
       console.error('Error: ' + error);
       res.status(500).json({ error: 'Internal server error!' });

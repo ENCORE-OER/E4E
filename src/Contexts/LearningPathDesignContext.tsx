@@ -260,11 +260,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     );
     const principleOfSkills =
       hydrated && selectedSkillsLabels ? selectedSkillsLabels.join(' ') : '';
-    console.log(principleOfSkills);
+    console.log('principle of skills: ', principleOfSkills);
     const selectedOptionsText =
       hydrated && selectedOptions ? selectedOptions.join(' ') : '';
 
-    console.log(selectedOptionsText);
+    console.log('selected options: ', selectedOptionsText);
     const learningObjectiveText = hydrated ? learningTextContext : '';
 
     const learningObjectives = [

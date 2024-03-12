@@ -64,9 +64,6 @@ const CollectionNavItem = ({
 
   // handle which collection is clicked to show the right data
   const handleCollectionClick = () => {
-    //console.log('1: ' + collectionClicked);
-    //console.log('1 index: ' + collectionIndex);
-    //console.log('1 prev index: ' + prevCollectionIndex);
 
     if (!collectionClicked) {
       setCollectionClicked(true);
@@ -75,10 +72,6 @@ const CollectionNavItem = ({
     }
 
     setPrevCollectionIndex(collectionIndex);
-
-    //console.log('2: ' + collectionClicked);
-    //console.log('2 index: ' + collectionIndex);
-    //console.log('2 prev index: ' + prevCollectionIndex);
   };
 
   const onCloseDeleteAlertDialog = () => {
@@ -123,7 +116,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"

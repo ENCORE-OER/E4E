@@ -41,10 +41,8 @@ export default function BoxSelectedLearningObjective({
       text.trim() === originalLearningObjective.trim() &&
       !isLearningObjectiveChanged
     ) {
-      console.log('is original selected?: ', true);
       setIsOriginalLOSelected(true);
     } else {
-      console.log('is original selected?: ', false);
       setIsOriginalLOSelected(false);
     }
   }, []);
@@ -63,10 +61,8 @@ export default function BoxSelectedLearningObjective({
         text.trim() !== originalLearningObjective.trim() && // Check if the text is different from the original selected learning objective
         isOriginalLOSelected
       ) {
-        console.log('is original selected?: ', false);
         setIsOriginalLOSelected(false);
       } else {
-        console.log('is original selected?: ', true);
         setIsOriginalLOSelected(true);
       }
       setIsLearningObjectiveChanged(true);
@@ -78,10 +74,8 @@ export default function BoxSelectedLearningObjective({
         text.trim() === originalLearningObjective.trim() && // Check if the text is the same as the original selected learning objective
         !isOriginalLOSelected
       ) {
-        console.log('is original selected?: ', true);
         setIsOriginalLOSelected(true);
       } else {
-        console.log('is original selected?: ', false);
         setIsOriginalLOSelected(false);
       }
       setIsLearningObjectiveChanged(false);
@@ -97,7 +91,7 @@ export default function BoxSelectedLearningObjective({
         borderRadius={'md'}
         alignItems="center"
         p={2}
-        //flexDirection={'column'}
+      //flexDirection={'column'}
       >
         <Textarea
           //display={'flex'}
