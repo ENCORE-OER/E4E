@@ -29,14 +29,23 @@ export default function BoxSelectedLearningObjective({
   const [originalLearningObjective, setOriginalLearningObjective] =
     useState<string>(''); // to know the original learning objective, before any changes
 
-  useEffect(() => {
-    setOriginalLearningObjective(text);
-  }, []);
-
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     onTextChange(newText);
   };
+
+  useEffect(() => {
+    setOriginalLearningObjective(text);
+    if (
+      text.trim() !== storedLearningObjective.trim() &&
+      text.trim() === originalLearningObjective.trim() &&
+      !isLearningObjectiveChanged
+    ) {
+      setIsOriginalLOSelected(true);
+    } else {
+      setIsOriginalLOSelected(false);
+    }
+  }, []);
 
   useEffect(() => {
     console.log('original: ', originalLearningObjective);
@@ -45,7 +54,7 @@ export default function BoxSelectedLearningObjective({
   useEffect(() => {
     if (
       // Check if the learning objective has been changed
-      text.trim() !== storedLearningObjective.trim() && // Check if the text is different from the original learning objective
+      text.trim() !== storedLearningObjective.trim() && // Check if the text is different from the stored learning objective
       !isLearningObjectiveChanged
     ) {
       if (
@@ -53,10 +62,12 @@ export default function BoxSelectedLearningObjective({
         isOriginalLOSelected
       ) {
         setIsOriginalLOSelected(false);
+      } else {
+        setIsOriginalLOSelected(true);
       }
       setIsLearningObjectiveChanged(true);
     } else if (
-      text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the original learning objective
+      text.trim() === storedLearningObjective.trim() && // Check if the text is the same as the stored learning objective
       isLearningObjectiveChanged
     ) {
       if (
@@ -64,6 +75,8 @@ export default function BoxSelectedLearningObjective({
         !isOriginalLOSelected
       ) {
         setIsOriginalLOSelected(true);
+      } else {
+        setIsOriginalLOSelected(false);
       }
       setIsLearningObjectiveChanged(false);
     }

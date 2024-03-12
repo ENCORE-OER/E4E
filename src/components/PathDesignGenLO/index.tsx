@@ -17,6 +17,7 @@ import {
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
+import InputAPIKey from '../Inputs/InputAPIKey';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
@@ -36,6 +37,8 @@ type PathDesignGenLOProps = {
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted: boolean;
+  apiKey: string | undefined;
+  handleApiKey: (apiKey: string) => void;
 };
 
 export default function PathDesignGenLO({
@@ -55,13 +58,16 @@ export default function PathDesignGenLO({
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
+  apiKey,
+  handleApiKey,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
-  const [isInvalid, setIsInvalid] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
+  const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
+  const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let newNumber = Number(e.target.value);
@@ -72,7 +78,7 @@ export default function PathDesignGenLO({
     console.log('number modified', newNumber);
     setNumberOfLO(newNumber);
     if (newNumber > 0) {
-      setIsInvalid(false);
+      setIsNumberOfLOZero(false);
     }
   };
 
@@ -87,6 +93,12 @@ export default function PathDesignGenLO({
 
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
+    // if (apiKey === undefined || apiKey === '') {
+    //   addToast({
+    //     message: 'Please enter your OpenAI API Key.',
+    //     type: 'warning',
+    //   });
+    // } else
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
@@ -129,6 +141,7 @@ export default function PathDesignGenLO({
             console.log('LO number ' + i);
 
             const resp = await postGenerateLearningObjective(
+              apiKey, // apiKey
               LANGUAGE_GEN_LO_API, // language
               mapOptionToNumber(
                 selectedEducatorExperience,
@@ -154,20 +167,36 @@ export default function PathDesignGenLO({
             if (!resp) {
               console.log('No response');
               learningObjectives.push('');
+              // if (isApiKeyInvalid === false) {
+              //   setIsApiKeyInvalid(true);
+              // }
+              setIsApiKeyInvalid(true);
             } else {
               const textLO = cutResponse(resp);
               learningObjectives.push(textLO);
+              // if (isApiKeyInvalid === true) {
+              //   setIsApiKeyInvalid(false);
+              // }
+              setIsApiKeyInvalid(false);
             }
 
             console.log('learningObjectives', learningObjectives);
           }
           setGeneratedLOs(learningObjectives || []);
-          addToast({
-            message: 'Learning objectives generated!',
-            type: 'info',
-          });
+
+          if (isApiKeyInvalid) {
+            addToast({
+              message: 'Invalid API Key. Please enter a valid OpenAI API Key.',
+              type: 'error',
+            });
+          } else {
+            addToast({
+              message: 'Learning objectives generated!',
+              type: 'info',
+            });
+          }
         } else {
-          setIsInvalid(true);
+          setIsNumberOfLOZero(true);
           console.log('Number of learning objectives is 0');
           addToast({
             message:
@@ -184,6 +213,7 @@ export default function PathDesignGenLO({
   };
 
   const postGenerateLearningObjective = async (
+    apiKey: string | undefined,
     language: string,
     educatorExperience: number,
     learnerExperience: number,
@@ -196,20 +226,32 @@ export default function PathDesignGenLO({
     temperature: number
   ): Promise<string | undefined> => {
     try {
-      const resp = await axios.post('/api/encore/generateLearningObjective', {
-        language: language,
-        educatorExperience: educatorExperience,
-        learnerExperience: learnerExperience,
-        dimension: dimension,
-        educationContext: educationContext,
-        learningContext: learningContext,
-        skills: skills,
-        bloomLevel: bloomLevel,
-        verbs: verbs,
-        temperature: temperature,
-      });
+      //console.log('apiKey', apiKey);
+      const resp = await axios.post(
+        '/api/encore/generateLearningObjective',
+        {
+          language: language,
+          educatorExperience: educatorExperience,
+          learnerExperience: learnerExperience,
+          dimension: dimension,
+          educationContext: educationContext,
+          learningContext: learningContext,
+          skills: skills,
+          bloomLevel: bloomLevel,
+          verbs: verbs,
+          temperature: temperature,
+        },
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
+      );
 
-      console.log('Success:', resp?.data);
+      // console.log('Success - resp.data.error:', resp?.data?.error);
+      console.log('Success - resp.data:', resp?.data);
+      // console.log('Success - resp:', resp);
+
       return resp?.data;
     } catch (error) {
       console.error('Error:', error);
@@ -236,7 +278,7 @@ export default function PathDesignGenLO({
     // // Extract main text until the first double newline
     // textLO = textLO.substring(0, endIndex).trim();
 
-    console.log(textLO);
+    // console.log(textLO);
 
     return textLO;
   };
@@ -244,9 +286,9 @@ export default function PathDesignGenLO({
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
     const updatedGeneratedLOs = [...generatedLOs];
-    console.log('GeneratedLOs', updatedGeneratedLOs);
+    // console.log('GeneratedLOs', updatedGeneratedLOs);
     updatedGeneratedLOs[index] = updatedText; // Update the learning objective
-    console.log('updatedGeneratedLOs', updatedGeneratedLOs);
+    // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
     setGeneratedLOs(updatedGeneratedLOs);
   };
 
@@ -269,8 +311,14 @@ export default function PathDesignGenLO({
   }, [generatedLOs]);
 
   return (
-    <>
-      <Flex flexDirection="row" align="center" pt="50px" pb="5">
+    <Flex pt="30px" direction="column">
+      <Flex direction="column">
+        <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
+          Insert the API Key
+        </Text>
+        <InputAPIKey w="400px" apiKey={apiKey} handleApiKey={handleApiKey} />
+      </Flex>
+      <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
           <Tooltip
@@ -289,7 +337,7 @@ export default function PathDesignGenLO({
               //size="sm"
               w="70px"
               //h='50px'
-              border={isInvalid ? '1.5px solid #bf5521ff' : '1px solid'}
+              border={isNumberOfLOZero ? '1.5px solid #bf5521ff' : '1px solid'}
               borderRadius="lg"
               rows={1}
               flexWrap="nowrap"
@@ -335,6 +383,6 @@ export default function PathDesignGenLO({
             />
           ))}
       </Flex>
-    </>
+    </Flex>
   );
 }

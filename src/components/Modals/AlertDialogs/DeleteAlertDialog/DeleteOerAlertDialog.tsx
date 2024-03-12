@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { OerItemToDeleteProps } from '../../../pages/resources';
+import { OerItemToDeleteProps } from '../../../../pages/resources';
 import DeleteAlertDialog from './DeleteAlertDialog';
 
 type DeleteOerAlertDialogProps = {

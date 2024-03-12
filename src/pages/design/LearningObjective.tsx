@@ -43,6 +43,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
     handleIdLearningScenario,
+    apiKey,
+    handleApiKey,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -75,7 +77,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const handleCollectionChange = (collectionIndex: number) => {
-    //console.log('COLLECTION INDEX: ' + collectionIndex);
     handleCollectionIndexChange(collectionIndex);
     handleStepChange(1); // Update the state to show the text when a collection is selected
   };
@@ -88,17 +89,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const saveLearningScenario = async () => {
-    //console.log('saveLearningScenario');
-    // console.log('selectedEducatorExperience?.title: ' + selectedEducatorExperience?.title);
-    //   console.log('selectedContext?.title: ' + selectedContext?.title);
-    //   console.log('selectedGroupDimension?.title: ' + selectedGroupDimension?.title);
-    //   console.log('selectedLearnerExperience?.title: ' + selectedLearnerExperience?.title);
-    //   console.log('bloomLevels[bloomLevelIndex]?.name: ' + bloomLevels[bloomLevelIndex]?.name);
-    //   console.log('selectedOptions: ' + selectedOptions);
-    //   console.log('selectedSkillConceptsTags: ' + selectedSkillConceptsTags);
-    //   console.log('learningTextContext: ' + learningTextContext);
-    //console.log('selectedCustomLearningObjective: ' + selectedCustomLearningObjective);
-
     if (
       selectedEducatorExperience?.title !== undefined &&
       selectedContext?.title !== undefined &&
@@ -159,13 +149,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const handleNextClick = () => {
-    // console.log(selectedCollection);
-    // console.log(bloomLevelIndex);
-    // console.log(selectedSkillConceptsTags.length);
-    // console.log(text);
-    // console.log(selectedOptions);
-    // console.log(selectedLearningObjectiveIndex);
-
     if (
       selectedCollection !== null &&
       bloomLevelIndex !== null &&
@@ -305,6 +288,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
+                  apiKey={apiKey}
+                  handleApiKey={handleApiKey}
                 />
               </Flex>
             )}

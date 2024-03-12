@@ -94,7 +94,7 @@ const Home = (props: DiscoverPageProps) => {
   const [isLoading, setIsLoading] = useState(false); // used to show the loading spinner for the learning objective boxes
   const [isLearningObjectiveChanged, setIsLearningObjectiveChanged] =
     useState(false); // used to say if the learning objective has been changed
-  const [isOriginalLOSelected, setIsOriginalLOSelected] = useState(true); // used to say if there is a new learning objective selected
+  const [isOriginalLOSelected, setIsOriginalLOSelected] = useState(false); // used to say if there is a new learning objective selected
 
   const getDataOerById = async (id_oer?: number) => {
     const api = new APIV2(props.accessToken);
@@ -329,7 +329,12 @@ const Home = (props: DiscoverPageProps) => {
                     <Heading size={'sl'} fontFamily={'body'} pl="3">
                       Learning objective
                     </Heading>
-                    {hydrated && isOriginalLOSelected ? (
+                    {
+                      // TODO: simplify and leave only one text if is different from the stored learning objective???
+                    }
+                    {hydrated &&
+                    isOriginalLOSelected &&
+                    !isLearningObjectiveChanged ? (
                       <Flex flexWrap={'wrap'} flex="1">
                         <Text pl="5%" color="red.500">
                           {'New learning objective selected.'}
@@ -339,9 +344,7 @@ const Home = (props: DiscoverPageProps) => {
                         </Text>
                       </Flex>
                     ) : null}
-                    {hydrated &&
-                    isLearningObjectiveChanged &&
-                    !isOriginalLOSelected ? (
+                    {hydrated && isLearningObjectiveChanged ? (
                       <Text pl="5%" color="red">
                         {"Unsaved changes. Don't forget to save!"}
                       </Text>
