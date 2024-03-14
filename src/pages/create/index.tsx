@@ -119,8 +119,8 @@ const Create = () => {
                 mt={4}
                 w="100%"
                 onClick={() => {
-                  if(exercise == 'Fill the gaps'){
-                  handleOptionsChange(apiFillGapsData.words);
+                  if (exercise == 'Fill the gaps') {
+                    handleOptionsChange(apiFillGapsData.words);
                   }
                   if (isGenerateButtonClicked) {
                     router.push({

@@ -7,7 +7,6 @@ import SegmentedButton from '../Buttons/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
 // import { useLocalStorage } from 'usehooks-ts';
 
-
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
 };
@@ -23,7 +22,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
     temperatureFillGaps,
     handleTemperatureFillGaps,
-    
+
     targetLevelFillGaps,
     handleTargetLevelFillGaps,
 
@@ -47,7 +46,6 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
     apiFillGapsData: apiData,
     handleTextToJSONFillGaps: handleTextToJSON,
-    
   } = useCreateOERsContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
@@ -81,7 +79,10 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
     try {
       // Esegui la chiamata API
-      const apiResponse = await axios.post('/api/encore/fillGapsExercise', requestData);
+      const apiResponse = await axios.post(
+        '/api/encore/fillGapsExercise',
+        requestData
+      );
 
       responseRef.current = apiResponse.data;
       // Gestisci la risposta
@@ -104,7 +105,6 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
       }
     }
   };
-
 
   useEffect(() => {
     handleOptionsComplete();
@@ -198,14 +198,12 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
             handleExercise(0);
             if (areOptionsComplete) {
-              if(sourceText != ''){
+              if (sourceText != '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
-              }
-              else {
+              } else {
                 addToast({
-                  message:
-                    'Please add a resource for the exercise.',
+                  message: 'Please add a resource for the exercise.',
                   type: 'warning',
                 });
               }
@@ -223,10 +221,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         </Button>
         {loading && (
           <Box ml={4}>
-            <CircularProgress
-              isIndeterminate
-              color="yellow.400"
-            />
+            <CircularProgress isIndeterminate color="yellow.400" />
           </Box>
         )}
       </Flex>

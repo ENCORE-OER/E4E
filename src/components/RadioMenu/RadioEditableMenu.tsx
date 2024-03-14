@@ -17,36 +17,41 @@ type EditableRadioMenuProps = {
   onOptionsChange: (newOptions: { [key: string]: boolean }) => void;
 };
 
-
-function EditableRadioMenu({ initialOptions, onChange, onOptionsChange }: EditableRadioMenuProps) {
+function EditableRadioMenu({
+  initialOptions,
+  onChange,
+  onOptionsChange,
+}: EditableRadioMenuProps) {
   const [options, setOptions] = useState(initialOptions || []);
   const [selectedValue, setSelectedValue] = useState('1');
   const [inputText, setInputText] = useState('');
   const hydrated = useHasHydrated();
 
   useEffect(() => {
-    const selectedKey = Object.keys(options).find((key) => options[key] === true);
+    const selectedKey = Object.keys(options).find(
+      (key) => options[key] === true
+    );
     setSelectedValue(selectedKey || '');
   }, [options]);
 
   const handleRadioChange = (key: string) => {
     setOptions((prevOptions) => {
       const updatedOptions = { ...prevOptions };
-  
+
       // Imposta tutte le opzioni a false
       Object.keys(updatedOptions).forEach((optionKey) => {
         updatedOptions[optionKey] = false;
       });
-  
+
       // Imposta la voce selezionata a true
       updatedOptions[key] = true;
-  
+
       // Notifica al componente padre le modifiche di tutte le opzioni
       onOptionsChange(updatedOptions);
-  
+
       return updatedOptions;
     });
-  
+
     setSelectedValue(key);
     onChange(key, true); // Notifica al componente padre le modifiche della voce selezionata
   };
@@ -94,11 +99,7 @@ function EditableRadioMenu({ initialOptions, onChange, onOptionsChange }: Editab
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
-        <Button
-          colorScheme="yellow"
-          size="md"
-          onClick={handleAddOption}
-        >
+        <Button colorScheme="yellow" size="md" onClick={handleAddOption}>
           <Flex align="center">
             <Icon as={AddIcon} w={4} h={4} />
           </Flex>

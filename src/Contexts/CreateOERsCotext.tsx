@@ -102,45 +102,44 @@ type CreateOERsContextProps = {
   fillTemplateWithGaps: string;
   handleFillTemplateWithGaps: (selected: string) => void;
 
-
   // * altro
   maxValue: number; //numero per definire il numero massimo di gaps
   apiKey: string;
   handleApiKey: (selected: string) => void;
   apiOpenQuestionData: {
-    language: string,
-    date: string,
-    level: string,
-    type_of_question: string,
-    category: string,
-    temperature: number,
-    question: string,
-    correctAnswer: string,
+    language: string;
+    date: string;
+    level: string;
+    type_of_question: string;
+    category: string;
+    temperature: number;
+    question: string;
+    correctAnswer: string;
   };
   handleTextToJSONOpenQuestion: (text: string) => void;
   apiFillGapsData: {
-    language: string,
-    date: string,
-    temperature: number,
-    words: { [key: string]: boolean },
-    level: string,
-    text: string,
-    textWithGaps: string,
-    wordsAndAnswers: string,
+    language: string;
+    date: string;
+    temperature: number;
+    words: { [key: string]: boolean };
+    level: string;
+    text: string;
+    textWithGaps: string;
+    wordsAndAnswers: string;
   };
   handleTextToJSONFillGaps: (text: string) => void;
   apiMultipleChiocesData: {
-    language: string,
-    date: string,
-    level: string,
-    temperature: number,
-    nedd: number,
-    n_o_d: number,
-    category: string,
-    question: string,
-    correctAnswer: string,
-    answers: { [key: string]: boolean },
-    solution: string,
+    language: string;
+    date: string;
+    level: string;
+    temperature: number;
+    nedd: number;
+    n_o_d: number;
+    category: string;
+    question: string;
+    correctAnswer: string;
+    answers: { [key: string]: boolean };
+    solution: string;
   };
   handleTextToJSONMultipleChoice: (text: string) => void;
 };
@@ -277,7 +276,10 @@ export const CreateOERsProvider = ({ children }: any) => {
   );
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [exercise, setExercise] = useLocalStorage<string | null>('Fill the gaps', null);
+  const [exercise, setExercise] = useLocalStorage<string | null>(
+    'Fill the gaps',
+    null
+  );
   const [temperature, setTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
@@ -326,7 +328,6 @@ export const CreateOERsProvider = ({ children }: any) => {
     answers: {},
     solution: '',
   });
-
 
   // * altro
   const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
@@ -579,10 +580,12 @@ export const CreateOERsProvider = ({ children }: any) => {
     const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
     const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
     const levelMatch = text.match(/Level: (.+?)(?=\s\d|\b|$)/);
-    const typeOfQuestionMatch = text.match(/Type of question: (.+?)(?=\s\d|\b|$)/);
+    const typeOfQuestionMatch = text.match(
+      /Type of question: (.+?)(?=\s\d|\b|$)/
+    );
     const categoryMatch = text.match(/Category: (.+?)(?=\s\d|\b|$)/);
     const temperatureMatch = text.match(/Temperature: (.+?)(?=\s|$)/);
-    const questionMatch = text.match(/Question: (.+?)(?=\n8\.\))/)
+    const questionMatch = text.match(/Question: (.+?)(?=\n8\.\))/);
     const correctAnswerMatch = text.match(/CorrectAnswer: (.+?)(?:\n|$)/);
 
     const newApiData = {
@@ -641,14 +644,19 @@ export const CreateOERsProvider = ({ children }: any) => {
     const neddMatch = text.match(/Nedd: ([^\n]*)(?=\n)/);
     const n_o_dMatch = text.match(/N_o_d: ([^\n]*)(?=\n)/);
     const categoryMatch = text.match(/Category:(.+?)(?=\s\d|\b|$)/);
-    const questionMatch = text.match(/Question: ((?:[^\n]|\n(?!CorrectAnswerIndex|\d{1,2}\.\)))+)/);
+    const questionMatch = text.match(
+      /Question: ((?:[^\n]|\n(?!CorrectAnswerIndex|\d{1,2}\.\)))+)/
+    );
     const correctAnswerMatch = text.match(/CorrectAnswerIndex: ([^\n]*)(?=\n)/);
     const answersMatch = text.match(/Answers:\n([\s\S]*?)(?=\n[A-Z]|$)/);
-    const solutionMatch = text.match(/Solution: ((?:[^\n]|\n(?!.*\d{1,2}\.\)))+)/);
+    const solutionMatch = text.match(
+      /Solution: ((?:[^\n]|\n(?!.*\d{1,2}\.\)))+)/
+    );
 
     if (correctAnswerMatch !== null) {
-
-      const correctAnswerIndex = correctAnswerMatch ? parseInt(correctAnswerMatch[1]) : -1;
+      const correctAnswerIndex = correctAnswerMatch
+        ? parseInt(correctAnswerMatch[1])
+        : -1;
       const answersArray = answersMatch ? answersMatch[1].split('\n') : [];
       const answersObject = {} as { [key: string]: boolean };
       answersArray.forEach((line, index) => {

@@ -1,11 +1,4 @@
-import {
-  Button,
-  Flex,
-  Input,
-  Checkbox,
-  Stack,
-  Icon,
-} from '@chakra-ui/react';
+import { Button, Flex, Input, Checkbox, Stack, Icon } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
@@ -16,7 +9,11 @@ type EditableCheckboxMenuProps = {
   onOptionsChange?: (newOptions: { [key: string]: boolean }) => void;
 };
 
-function EditableCheckboxMenu({ initialOptions, onChange, onOptionsChange }: EditableCheckboxMenuProps) {
+function EditableCheckboxMenu({
+  initialOptions,
+  onChange,
+  onOptionsChange,
+}: EditableCheckboxMenuProps) {
   const [options, setOptions] = useState(initialOptions || {});
   const [inputText, setInputText] = useState('');
   const hydrated = useHasHydrated();
@@ -41,7 +38,7 @@ function EditableCheckboxMenu({ initialOptions, onChange, onOptionsChange }: Edi
     const { [key]: _, ...newOptions } = options;
     console.log(_);
     setOptions(newOptions);
-    if(onOptionsChange) onOptionsChange(newOptions);
+    if (onOptionsChange) onOptionsChange(newOptions);
   };
 
   return (

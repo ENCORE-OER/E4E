@@ -23,8 +23,8 @@ export default function MultipleChoicePanel({
 
     targetLevelOptions,
     temperatureOptions,
-    questionCategoryOptions,  
-    exerciseTypeOptions,    
+    questionCategoryOptions,
+    exerciseTypeOptions,
 
     temperatureMultipleChoice,
     handleTemperatureMultipleChoice,
@@ -85,7 +85,10 @@ export default function MultipleChoicePanel({
 
     try {
       // Esegui la chiamata API
-      const apiResponse = await axios.post('/api/encore/multipleChoiceExercise', requestData);
+      const apiResponse = await axios.post(
+        '/api/encore/multipleChoiceExercise',
+        requestData
+      );
       responseRef.current = apiResponse.data;
       // Gestisci la risposta
       setResponse(apiResponse.data);
@@ -235,7 +238,7 @@ export default function MultipleChoicePanel({
           borderRadius="lg"
           //isDisabled={sourceText === ''}
           onClick={() => {
-            // console.log(sourceText); 
+            // console.log(sourceText);
             // console.log(chosenTargetLevel);
             // console.log(temperature);
             // console.log(chosenType);
@@ -246,14 +249,12 @@ export default function MultipleChoicePanel({
             handleOptionsComplete();
             handleExercise(2);
             if (areOptionsComplete) {
-              if(sourceText != ''){
+              if (sourceText != '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
-              }
-              else {
+              } else {
                 addToast({
-                  message:
-                    'Please add a resource for the exercise.',
+                  message: 'Please add a resource for the exercise.',
                   type: 'warning',
                 });
               }
@@ -271,10 +272,7 @@ export default function MultipleChoicePanel({
         </Button>
         {loading && (
           <Box ml={4}>
-            <CircularProgress
-              isIndeterminate
-              color="yellow.400"
-            />
+            <CircularProgress isIndeterminate color="yellow.400" />
           </Box>
         )}
       </Flex>
@@ -345,5 +343,3 @@ export default function MultipleChoicePanel({
     </>
   );
 }
-
-

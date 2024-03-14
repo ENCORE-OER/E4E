@@ -38,7 +38,7 @@ export default function EditOpenQuestion({
   useEffect(() => {
     handleQuestion(openQuestionData.question);
     handleSolution(openQuestionData.correctAnswer);
-  }, []); 
+  }, []);
 
   return (
     <>

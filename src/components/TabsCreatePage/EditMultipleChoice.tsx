@@ -21,17 +21,17 @@ type MultipleChoiceData = {
   // correctAnswerIndex: number;
   // answers: string[];
   // solution: string;
-  language: string,
-  date: string,
-  level: string,
-  temperature: number,
-  nedd: number,
-  n_o_d: number,
-  category: string,
-  question: string,
-  correctAnswer: string,
-  answers: { [key: string]: boolean },
-  solution: string,
+  language: string;
+  date: string;
+  level: string;
+  temperature: number;
+  nedd: number;
+  n_o_d: number;
+  category: string;
+  question: string;
+  correctAnswer: string;
+  answers: { [key: string]: boolean };
+  solution: string;
 };
 
 type EditMultipleChoiceProps = {
@@ -61,7 +61,8 @@ export default function EditMultipleChoice({
   useEffect(() => {
     handleSolution(multipleChoiceData.solution);
     handleQuestion(multipleChoiceData.question);
-    handleOptionsChange(multipleChoiceData.answers
+    handleOptionsChange(
+      multipleChoiceData.answers
       // multipleChoiceData.answers.reduce(
       //   (acc, answer, index) => {
       //     acc[answer] = index === multipleChoiceData.correctAnswerIndex;
@@ -109,8 +110,6 @@ export default function EditMultipleChoice({
   // const handleQuestion = (newQuestion: string) => {
   //   setQuestion(newQuestion);
   // };
-
-  
 
   return (
     <>
