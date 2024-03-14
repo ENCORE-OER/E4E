@@ -6,9 +6,6 @@ import {
   Text,
   useBreakpointValue,
   Button,
-  InputGroup,
-  Input,
-  InputRightElement,
 } from '@chakra-ui/react';
 import React from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';
@@ -18,6 +15,7 @@ import TabsCreateMenu from '../../components/TabsCreatePage/TabsCreateMenu';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import { useRouter } from 'next/router';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import InputAPIKey from '../../components/Inputs/InputAPIKey';
 
 const Create = () => {
   const { user } = useUser();
@@ -39,9 +37,6 @@ const Create = () => {
     apiFillGapsData,
   } = useCreateOERsContext();
   const { addToast } = CustomToast();
-  const [show, setShow] = React.useState(true);
-
-  const handleClick = () => setShow(!show);
 
   return (
     <>
@@ -80,21 +75,10 @@ const Create = () => {
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
                 <Flex paddingBottom="0.5rem">
                   <Text as="b">Educational resource input (text or URL)</Text>
-                  <InputGroup size="sm" w="40%" ml="auto">
-                    <Input
-                      variant="flushed"
-                      type={show ? 'text' : 'password'}
-                      placeholder="Enter your OpenAI API Key"
-                      focusBorderColor="yellow.500"
-                      value={apiKey}
-                      onChange={(e) => handleApiKey(e.target.value)}
-                    />
-                    <InputRightElement width="4.5rem">
-                      <Button h="1.75rem" size="sm" onClick={handleClick}>
-                        {show ? 'Hide' : 'Show'}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
+                  <InputAPIKey 
+                    apiKey={apiKey}
+                    handleApiKey={handleApiKey}
+                  />
                 </Flex>
                 <TextBox
                   //backgroundColor="#EDF2F7"
