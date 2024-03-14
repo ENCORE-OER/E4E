@@ -31,7 +31,6 @@ export default async function serverSideCall(
 
     const { apikey } = req.headers; // Express normalizes all request headers to lowercase
 
-
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
@@ -56,7 +55,6 @@ export default async function serverSideCall(
             ApiKey: apikey || process.env.SK_API_KEY,
           },
         }
-
       );
       res.status(200).json(multipleChoiceExercise?.data);
       console.log('multipleChoiceExercise', multipleChoiceExercise?.data);

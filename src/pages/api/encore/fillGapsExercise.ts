@@ -22,7 +22,6 @@ export default async function serverSideCall(
 
     const { apikey } = req.headers; // Express normalizes all request headers to lowercase
 
-
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
