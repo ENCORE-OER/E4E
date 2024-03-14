@@ -1,8 +1,8 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import FillGapsPanel from './FillGapsPanel';
-import OpenQuestionPanel from './OpenQuestionPanel';
 import MultipleChoicePanel from './MultipleChiocePanel';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import OpenQuestionPanel from './OpenQuestionPanel';
 //import { useLocalStorage } from 'usehooks-ts';
 
 type TabsCreateMenuProps = {
@@ -31,7 +31,7 @@ export default function TabsCreateMenu({
       colorScheme="yellow"
       size={'lg'}
       onChange={(index) => handleChangeTab(index)}
-      // defaultIndex={selectedIndex}
+    // defaultIndex={selectedIndex}
     >
       <TabList>
         <Tab>Fill-Gaps</Tab>

@@ -104,8 +104,8 @@ type CreateOERsContextProps = {
 
   // * altro
   maxValue: number; //numero per definire il numero massimo di gaps
-  apiKey: string;
-  handleApiKey: (selected: string) => void;
+  // apiKey: string;
+  // handleApiKey: (selected: string) => void;
   apiOpenQuestionData: {
     language: string;
     date: string;
@@ -345,7 +345,7 @@ export const CreateOERsProvider = ({ children }: any) => {
     }
   };
   const [maxValue, setMaxValue] = useState(8);
-  const [apiKey, setApiKey] = useState('');
+  // const [apiKey, setApiKey] = useState('');
 
   // * handle functions
 
@@ -740,9 +740,9 @@ export const CreateOERsProvider = ({ children }: any) => {
     setIsGenerateButtonClicked(bool);
   };
 
-  const handleApiKey = (selected: string) => {
-    setApiKey(selected);
-  };
+  // const handleApiKey = (selected: string) => {
+  //   setApiKey(selected);
+  // };
 
   return (
     <CreateOERsContext.Provider
@@ -756,8 +756,8 @@ export const CreateOERsProvider = ({ children }: any) => {
         isGenerateButtonClicked,
         handleIsGenerateButtonClicked,
         maxValue,
-        apiKey,
-        handleApiKey,
+        // apiKey,
+        // handleApiKey,
         apiOpenQuestionData,
         handleTextToJSONOpenQuestion,
         apiFillGapsData,

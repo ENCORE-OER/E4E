@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 // import { useLocalStorage } from 'usehooks-ts';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 //import TextBox from '../TextBox/TextBox';

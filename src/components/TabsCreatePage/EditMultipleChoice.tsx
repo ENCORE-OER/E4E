@@ -2,7 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 //import axios from 'axios';
 import { useEffect } from 'react';
 //import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useHasHydrated } from '../../utils/utils';
 import CheckboxEditableMenu from '../CheckboxMenu/CheckboxEditableMenu';
 import RadioEditableMenu from '../RadioMenu/RadioEditableMenu';

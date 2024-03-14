@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
   Box,
@@ -10,16 +9,17 @@ import {
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
-import { useHasHydrated } from '../../utils/utils';
-import axios from 'axios';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useRouter } from 'next/router';
-import EditOpenQuestion from '../../components/TabsCreatePage/EditOpenQuestion';
-import EditMultipleChoice from '../../components/TabsCreatePage/EditMultipleChoice';
 import EditFillGaps from '../../components/TabsCreatePage/EditFillGaps';
+import EditMultipleChoice from '../../components/TabsCreatePage/EditMultipleChoice';
+import EditOpenQuestion from '../../components/TabsCreatePage/EditOpenQuestion';
+import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useHasHydrated } from '../../utils/utils';
 
 // import FillGapsPrototipo from '../../components/TabsCreatePage/FillGapsPrototipo.json';
 // import OpenQuestionPrototipo from '../../components/TabsCreatePage/OpenQuestionPrototipo.json';
@@ -105,7 +105,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the {hydrated && exercise} exercise</Heading>
             </Flex>

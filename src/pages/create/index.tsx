@@ -1,21 +1,22 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import {
   Box,
+  Button,
   Flex,
   Heading,
   Text,
-  useBreakpointValue,
-  Button,
+  useBreakpointValue
 } from '@chakra-ui/react';
-import React from 'react';
+import { useRouter } from 'next/router';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
+
+import InputAPIKey from '../../components/Inputs/InputAPIKey';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
-import TextBox from '../../components/TextBox/TextBox';
 import TabsCreateMenu from '../../components/TabsCreatePage/TabsCreateMenu';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
-import { useRouter } from 'next/router';
+import TextBox from '../../components/TextBox/TextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import InputAPIKey from '../../components/Inputs/InputAPIKey';
 
 const Create = () => {
   const { user } = useUser();
@@ -30,12 +31,13 @@ const Create = () => {
     sourceText,
     handleSourceText,
     isGenerateButtonClicked,
-    apiKey,
-    handleApiKey,
     handleOptionsChange,
     exercise,
     apiFillGapsData,
   } = useCreateOERsContext();
+  const { apiKey, handleApiKey } = useGeneralContext();
+
+
   const { addToast } = CustomToast();
 
   return (
@@ -56,7 +58,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -73,9 +75,15 @@ const Create = () => {
                 </Text>
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-                <Flex paddingBottom="0.5rem">
+                <Flex paddingBottom="0.5rem" flexWrap="wrap" direction={isSmallerScreen ? "column" : "row"}>
                   <Text as="b">Educational resource input (text or URL)</Text>
-                  <InputAPIKey apiKey={apiKey} handleApiKey={handleApiKey} />
+                  <InputAPIKey
+                    apiKey={apiKey}
+                    handleApiKey={handleApiKey}
+                    size="sm"
+                    w={isSmallerScreen ? '100%' : '40%'}
+                    ml="auto"
+                  />
                 </Flex>
                 <TextBox
                   //backgroundColor="#EDF2F7"
