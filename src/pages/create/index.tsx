@@ -75,10 +75,7 @@ const Create = () => {
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
                 <Flex paddingBottom="0.5rem">
                   <Text as="b">Educational resource input (text or URL)</Text>
-                  <InputAPIKey 
-                    apiKey={apiKey}
-                    handleApiKey={handleApiKey}
-                  />
+                  <InputAPIKey apiKey={apiKey} handleApiKey={handleApiKey} />
                 </Flex>
                 <TextBox
                   //backgroundColor="#EDF2F7"
