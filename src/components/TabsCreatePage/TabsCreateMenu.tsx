@@ -12,24 +12,24 @@ type TabsCreateMenuProps = {
 export default function TabsCreateMenu({
   isSmallerScreen,
 }: TabsCreateMenuProps) {
-  const { handleIsGenerateButtonClicked } = useCreateOERsContext();
+  const { handleIsGenerateButtonClicked, handleExercise, exercise } = useCreateOERsContext();
 
   // const [selectedIndex, setSelectedIndex] = useLocalStorage<number>(
   //   'selectedIndex',
   //   0
   // );
 
-  const handleChangeTab = (/*index: number*/) => {
-    // handleResetOptions();
-    // setSelectedIndex(index);
+  const handleChangeTab = (index: number) => {
+    handleExercise(index);
     handleIsGenerateButtonClicked(false);
+    console.log('exercise: ', exercise);
   };
 
   return (
     <Tabs
       colorScheme="yellow"
       size={'lg'}
-      onChange={(/*index*/) => handleChangeTab(/*index*/)}
+      onChange={(index) => handleChangeTab(index)}
       // defaultIndex={selectedIndex}
     >
       <TabList>

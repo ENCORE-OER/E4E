@@ -39,7 +39,6 @@ const TextBox = ({
         value={text}
         onChange={handleTextChange}
         placeholder={placeholder}
-        resize="none"
         rows={rows || 1}
       />
     </Box>
