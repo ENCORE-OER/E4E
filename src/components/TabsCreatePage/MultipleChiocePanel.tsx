@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import SegmentedButton from '../Buttons/SegmentedButton';
+import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
 //import { useLocalStorage } from 'usehooks-ts';
 //import { useHasHydrated } from '../../utils/utils';

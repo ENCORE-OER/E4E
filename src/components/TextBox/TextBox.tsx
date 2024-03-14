@@ -2,7 +2,7 @@ import { Box, BoxProps, Textarea } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 
 interface TextBoxProps extends BoxProps {
-  backgroundColor: string;
+  backgroundColor?: string;
   placeholder?: string;
   isHighlighted?: boolean;
   text?: string;

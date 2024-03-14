@@ -54,7 +54,7 @@ export default function PathDesignCentralBars({
           handleOptionsChange={handleOptionsChange}
           resetCheckBoxOptions={resetCheckBoxOptions}
           text={text}
-          handleText={handleText}
+          handleText={handleSetText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
           step={step}
@@ -79,7 +79,7 @@ export default function PathDesignCentralBars({
           handleOptionsChange={handleOptionsChange}
           resetCheckBoxOptions={resetCheckBoxOptions}
           text={text}
-          handleText={handleText}
+          handleText={handleSetText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
           step={step}

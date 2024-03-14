@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 // import { useLocalStorage } from 'usehooks-ts';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsCotext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import SegmentedButton from '../Buttons/SegmentedButton';
+import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 //import TextBox from '../TextBox/TextBox';
 
 type OpenQuestionPanelProps = {
