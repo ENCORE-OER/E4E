@@ -111,10 +111,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
         const clickedSliceLabel = transformedData[clickedIndex].label;
         console.log('Clicked Slice Label:', clickedSliceLabel);
 
-        if (selectedSlice === clickedIndex) {
-          setSelectedSlice(null);
-          setFiltered(previousContent);
-        } else if (selectedSlice !== null) {
+        if (selectedSlice === clickedIndex || selectedSlice !== null) {
           setSelectedSlice(null);
           setFiltered(previousContent);
         } else {
@@ -165,7 +162,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
           | undefined
           | OerFreeSearchProps
       ) =>
-        oer?.media_type?.map((item: any) => {
+        oer?.media_type?.map((item: OerMediaTypeInfo) => {
           if (item.name === label) {
             resources.push(oer);
           }

@@ -12,7 +12,7 @@ import {
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
-import DeleteAlertDialog from '../Modals/DeleteAlertDialog/DeleteAlertDialog';
+import DeleteAlertDialog from '../Modals/AlertDialogs/DeleteAlertDialog/DeleteAlertDialog';
 
 interface CollectionNavItemProps {
   collection: CollectionProps;
@@ -64,10 +64,6 @@ const CollectionNavItem = ({
 
   // handle which collection is clicked to show the right data
   const handleCollectionClick = () => {
-    //console.log('1: ' + collectionClicked);
-    //console.log('1 index: ' + collectionIndex);
-    //console.log('1 prev index: ' + prevCollectionIndex);
-
     if (!collectionClicked) {
       setCollectionClicked(true);
     } else if (collectionClicked && collectionIndex !== prevCollectionIndex) {
@@ -75,10 +71,6 @@ const CollectionNavItem = ({
     }
 
     setPrevCollectionIndex(collectionIndex);
-
-    //console.log('2: ' + collectionClicked);
-    //console.log('2 index: ' + collectionIndex);
-    //console.log('2 prev index: ' + prevCollectionIndex);
   };
 
   const onCloseDeleteAlertDialog = () => {

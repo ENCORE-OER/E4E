@@ -1,7 +1,7 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import { Box, Button, ButtonGroup, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated } from '../../../utils/utils';
 
 type SegmentedButtonProps<T> = {
   options: Array<T & { title: string; description?: string }>;
@@ -44,6 +44,12 @@ const SegmentedButton = <T extends {}>({
       setColored(preselectedTitle);
     }
   }, [preselectedTitle]);
+
+  useEffect(() => {
+    if (selected === null) {
+      setColored(null);
+    }
+  }, [selected]);
 
   return (
     <ButtonGroup

@@ -1,21 +1,15 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useHasHydrated } from '../../utils/utils';
 
 const Home = () => {
   const router = useRouter();
@@ -23,7 +17,17 @@ const Home = () => {
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
-  const { SPACING } = useLearningPathDesignContext();
+  const hydrated = useHasHydrated();
+  const {
+    SPACING,
+    // handleEducatorExperienceChange,
+    // handleLearnerExperienceChange,
+    // handleGroupDimensionChange,
+    // handleContextChange,
+    // handleCollectionIndexChange,
+    resetAll,
+    handleResetAll,
+  } = useLearningPathDesignContext();
 
   // ==================================================================
 
@@ -41,9 +45,37 @@ const Home = () => {
     setAreOptionsComplete(areComplete);
   };
 
-  useEffect(() => {
-    //console.log('cambiato qualcosa');
-  }, [areOptionsComplete]);
+  const handleNextClick = () => {
+    if (areOptionsComplete) {
+      router.push({
+        pathname: '/design/LearningObjective',
+      });
+    } else {
+      addToast({
+        message:
+          'Please ensure all required fields are filled out before proceeding.',
+        type: 'warning',
+      });
+      setIsNextButtonClicked(true);
+    }
+  };
+
+  // We put this in the ReserButton component
+  // const handleResetClick = () => {
+  //   console.log('Reset clicked');
+
+  //   handleEducatorExperienceChange(null);
+  //   handleLearnerExperienceChange(null);
+  //   handleGroupDimensionChange(null);
+  //   handleContextChange(null);
+  //   handleCollectionIndexChange(-1);
+  //   setResetAll(true);
+
+  // }
+
+  // useEffect(() => {
+  //   //console.log('cambiato qualcosa');
+  // }, [areOptionsComplete]);
 
   return (
     <Flex w="100%" h="100%">
@@ -88,48 +120,22 @@ const Home = () => {
               </Text>
             </Box>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-              <SegmentedButtonGroup
-                onOptionsChange={handleOptionsComplete}
-                isNextButtonClicked={isNextButtonClicked}
-                isSmallerScreen={isSmallerScreen}
-              />
+              {hydrated && (
+                <SegmentedButtonGroup
+                  onOptionsChange={handleOptionsComplete}
+                  isNextButtonClicked={isNextButtonClicked}
+                  isSmallerScreen={isSmallerScreen}
+                  resetAll={resetAll}
+                  handleResetAll={handleResetAll}
+                />
+              )}
             </Box>
 
-            <Flex paddingTop="1.5rem" w="100%">
-              <Flex
-                w="auto"
-                paddingRight={`${SPACING}%`}
-                position={'fixed'}
-                bottom="5%"
-                right="8%"
-              >
-                <Button
-                  marginLeft={'1px'}
-                  border={'1px solid'}
-                  w="100%"
-                  leftIcon={<IconPathEdit />}
-                  colorScheme="yellow"
-                  onClick={() => {
-                    if (areOptionsComplete) {
-                      router.push({
-                        pathname: '/design/LearningObjective',
-                      });
-                    } else {
-                      addToast({
-                        message:
-                          'Please ensure all required fields are filled out before proceeding.',
-                        type: 'warning',
-                      });
-                      setIsNextButtonClicked(true);
-                    }
-                  }}
-                >
-                  <Text fontWeight="bold" fontSize="lg">
-                    Next
-                  </Text>
-                </Button>
-              </Flex>
-            </Flex>
+            <FooterButtonsGroup
+              SPACING={SPACING}
+              handleResetAll={handleResetAll}
+              handleNextClick={handleNextClick}
+            />
           </Box>
         </Box>
       </Box>

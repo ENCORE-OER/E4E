@@ -10,14 +10,14 @@ import {
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
-import { useHasHydrated } from '../../utils/utils';
-import { ArrayProps } from '../../types/encoreElements';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { ArrayProps } from '../../types/encoreElements';
+import { useHasHydrated } from '../../utils/utils';
 
 export type onDataType = number | string;
 
 type CollectionMenuProps = {
-  data: ArrayProps[]; // Array di dati da scorrere nel menu
+  data: ArrayProps[]; // data array to scroll through the menu
   options?: string[] | undefined;
   onData?: (data: string[] | number[]) => void;
   onSelectionChange?: (selectedItem: number) => void;
@@ -26,7 +26,7 @@ type CollectionMenuProps = {
 };
 
 export default function CustomDropDownMenu({
-  data, // Usa il prop data per popolare il menu
+  data, // use this to populate the menu
   options,
   onData,
   onSelectionChange,

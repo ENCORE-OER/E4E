@@ -1,14 +1,14 @@
-import { Box, Textarea } from '@chakra-ui/react';
-import React, { ChangeEvent } from 'react';
+import { Box, BoxProps, Textarea } from '@chakra-ui/react';
+import { ChangeEvent } from 'react';
 
-type TextBoxProps = {
-  backgroundColor?: string;
+interface TextBoxProps extends BoxProps {
+  backgroundColor: string;
   placeholder?: string;
   isHighlighted?: boolean;
   text?: string;
   rows?: number;
   onTextChange: (newText: string) => void;
-};
+}
 
 const TextBox = ({
   backgroundColor,
@@ -17,6 +17,7 @@ const TextBox = ({
   text,
   onTextChange,
   rows,
+  ...rest
 }: TextBoxProps) => {
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -25,6 +26,7 @@ const TextBox = ({
 
   return (
     <Box
+      {...rest}
       border={
         isHighlighted && text === ''
           ? '1.5px solid #bf5521ff'
