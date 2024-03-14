@@ -2,6 +2,7 @@ import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
@@ -47,6 +48,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     apiFillGapsData: apiData,
     handleTextToJSONFillGaps: handleTextToJSON,
   } = useCreateOERsContext();
+  const { apiKey } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
   const [response, setResponse] = useState(null);
@@ -81,7 +83,12 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
         '/api/encore/fillGapsExercise',
-        requestData
+        requestData,
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
       );
 
       responseRef.current = apiResponse.data;

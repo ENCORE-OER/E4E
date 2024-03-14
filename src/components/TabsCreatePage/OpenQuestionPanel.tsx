@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 // import { useLocalStorage } from 'usehooks-ts';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 //import TextBox from '../TextBox/TextBox';
@@ -44,6 +45,7 @@ export default function OpenQuestionPanel({
     apiOpenQuestionData: apiData,
     handleTextToJSONOpenQuestion: handleTextToJSON,
   } = useCreateOERsContext();
+  const { apiKey } = useGeneralContext();
 
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
@@ -75,7 +77,12 @@ export default function OpenQuestionPanel({
       // Esegui la chiamata API
       const apiResponse = await axios.post(
         '/api/encore/openQuestionExercise',
-        requestData
+        requestData,
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
       );
       responseRef.current = apiResponse.data;
       // Gestisci la risposta

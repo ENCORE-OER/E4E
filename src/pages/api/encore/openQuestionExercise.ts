@@ -5,7 +5,7 @@ const axiosGenerativeAI = axiosCreate.create({
   baseURL: process.env.GENERATIVE_AI_URL, // TODO: change to the generative AI URL
   headers: {
     'Content-Type': 'application/json',
-    ApiKey: process.env.SK_API_KEY,
+    //ApiKey: process.env.SK_API_KEY,
   },
 });
 
@@ -18,6 +18,9 @@ export default async function serverSideCall(
 
     // get the data from the request body
     const { language, text, type, level, category, temperature } = req.body;
+
+    const { apikey } = req.headers; // Express normalizes all request headers to lowercase
+
 
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
@@ -34,6 +37,11 @@ export default async function serverSideCall(
           level: level,
           category: category,
           temperature: temperature,
+        },
+        {
+          headers: {
+            ApiKey: apikey || process.env.SK_API_KEY,
+          },
         }
         // {
         //   headers: {

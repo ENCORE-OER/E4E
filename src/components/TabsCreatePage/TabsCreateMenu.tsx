@@ -31,7 +31,7 @@ export default function TabsCreateMenu({
       colorScheme="yellow"
       size={'lg'}
       onChange={(index) => handleChangeTab(index)}
-    // defaultIndex={selectedIndex}
+      // defaultIndex={selectedIndex}
     >
       <TabList>
         <Tab>Fill-Gaps</Tab>

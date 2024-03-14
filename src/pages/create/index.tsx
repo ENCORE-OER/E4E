@@ -5,7 +5,7 @@ import {
   Flex,
   Heading,
   Text,
-  useBreakpointValue
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
@@ -37,7 +37,6 @@ const Create = () => {
   } = useCreateOERsContext();
   const { apiKey, handleApiKey } = useGeneralContext();
 
-
   const { addToast } = CustomToast();
 
   return (
@@ -58,7 +57,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -75,7 +74,11 @@ const Create = () => {
                 </Text>
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-                <Flex paddingBottom="0.5rem" flexWrap="wrap" direction={isSmallerScreen ? "column" : "row"}>
+                <Flex
+                  paddingBottom="0.5rem"
+                  flexWrap="wrap"
+                  direction={isSmallerScreen ? 'column' : 'row'}
+                >
                   <Text as="b">Educational resource input (text or URL)</Text>
                   <InputAPIKey
                     apiKey={apiKey}

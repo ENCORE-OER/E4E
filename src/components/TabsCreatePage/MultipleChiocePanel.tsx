@@ -5,6 +5,7 @@ import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 //import { useLocalStorage } from 'usehooks-ts';
 //import { useHasHydrated } from '../../utils/utils';
 
@@ -57,6 +58,7 @@ export default function MultipleChoicePanel({
     apiMultipleChiocesData: apiData,
     handleTextToJSONMultipleChoice: handleTextToJSON,
   } = useCreateOERsContext();
+  const { apiKey } = useGeneralContext();
 
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
@@ -87,7 +89,12 @@ export default function MultipleChoicePanel({
       // Esegui la chiamata API
       const apiResponse = await axios.post(
         '/api/encore/multipleChoiceExercise',
-        requestData
+        requestData,
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
       );
       responseRef.current = apiResponse.data;
       // Gestisci la risposta
