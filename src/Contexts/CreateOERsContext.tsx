@@ -154,48 +154,6 @@ export const useCreateOERsContext = () => useContext(CreateOERsContext);
 // Create a provider to wrap the app and provide the context to all its children
 export const CreateOERsProvider = ({ children }: any) => {
   //const hydrated = useHasHydrated();
-
-  // *stesse variabili ma salvate nel local storage, rimangono anche se si refresha la pagina
-  /*
-  const [targetLevelFillGaps, setTargetLevelFillGaps] =
-    useLocalStorage<Option | null>('targetLevelFillGaps', null);
-  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
-    useLocalStorage<Option | null>('targetLevelOpenQuestion', null);
-  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] =
-    useLocalStorage<Option | null>('targetLevelMultipleChoice', null);
-  // const [difficultLevel, setDifficultLevel] = useLocalStorage<Option>('difficultLevel', {
-  //     title: '',
-  // });
-  const [length, setLength] = useLocalStorage<Option | null>('lenght', null);
-  const [questionType, setQuestionType] = useLocalStorage<Option | null>(
-    'questionType',
-    null
-  );
-  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
-    useLocalStorage<Option | null>('questionCategoryOpenQuestion', null);
-  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
-    useLocalStorage<Option | null>('questionCategoryMultipleChoice', null);
-  const [exerciseType, setExerciseType] = useLocalStorage<Option | null>(
-    'exerciseType',
-    null
-  );
-
-  const [distractorsFillGaps, setDistractorsFillGaps] = useLocalStorage<number>(
-    'distractorsFillGaps',
-    0
-  );
-  const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
-    useLocalStorage<number>('distractorsMultipleChoice', 0);
-  const [easyDistractors, setEasyDistractors] = useLocalStorage<number>(
-    'easyDistractors',
-    0
-  );
-  const [blanks, setBlanks] = useLocalStorage<number>('blanks', 1);
-  const [correctAnswer, setCorrectAnswer] = useLocalStorage<number>(
-    'correctAnswer',
-    1
-  );
-  */
   // * difficoltà, da aggiungere forse in futuro
   /*const difficultLevelOptions: Option[] = [
       { title: 'Easy' },
@@ -374,7 +332,6 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleTargetLevelFillGaps = (selected: Option) => {
     setTargetLevelFillGaps(selected);
     handleChosenTargetLevel(selected);
-    console.log('target level:', chosenTargetLevel);
   };
   const handleLength = (selected: Option) => {
     setLength(selected);
@@ -701,20 +658,20 @@ export const CreateOERsProvider = ({ children }: any) => {
         '',
       temperature: temperature,
       exercise_value: {
-        question: question,
-        fill_template: '',
-        fill_template_with_gaps: '',
+        question: question || null,
+        fill_template: fillTemplate || null,
+        fill_template_with_gaps: fillTemplateWithGaps || null,
         category:
           questionCategoryMultipleChoice?.title ||
           questionCategoryOpenQuestion?.title ||
-          '',
-        type: exerciseType?.title || questionType?.title || '',
-        number_of_correct_answer: correctAnswer,
-        number_of_easy_distractors: easyDistractors,
-        number_of_distractors: distractors,
-        number_of_words: chosenLenght,
-        options: [],
-        solution: solution,
+          null,
+        type: exerciseType?.title || questionType?.title || null,
+        number_of_correct_answer: correctAnswer || null,
+        number_of_easy_distractors: easyDistractors || null,
+        number_of_distractors: distractors || null,
+        number_of_words: chosenLenght || null,
+        options: options || null,
+        solution: solution || null,
       },
     };
     setData(temp);

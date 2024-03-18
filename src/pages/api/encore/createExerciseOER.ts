@@ -16,10 +16,8 @@ export default async function serverSideCall(
 ) {
   if (req.method === 'POST') {
     // get the data from the request body
-    const { oerData }: { oerData: OerData } = req.body;
-
+    const oerData: OerData = req.body;
     console.log('req.body', req.body);
-    // console.log('req.body stringified', JSON.stringify(req.body));
 
     //const url = 'https://encore-db.grial.eu/api/oer/create/';
 
@@ -37,22 +35,7 @@ export default async function serverSideCall(
           source: oerData.source,
           level: oerData.level,
           temperature: oerData.temperature,
-          exercise_values: {
-            question: oerData.exercise_value.question,
-            category: oerData.exercise_value.category,
-            type: oerData.exercise_value.type,
-            number_of_correct_answer:
-              oerData.exercise_value.number_of_correct_answer,
-            number_of_easy_distractors:
-              oerData.exercise_value.number_of_easy_distractors,
-            number_of_words: oerData.exercise_value.number_of_words,
-            number_of_distractors: oerData.exercise_value.number_of_distractors,
-            fill_template: oerData.exercise_value.fill_template,
-            fill_template_with_gaps:
-              oerData.exercise_value.fill_template_with_gaps,
-            options: oerData.exercise_value.options,
-            solution: oerData.exercise_value.solution,
-          },
+          exercise_values: oerData.exercise_value,
         }
         // {
         //   headers: {

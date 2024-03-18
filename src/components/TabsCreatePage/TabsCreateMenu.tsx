@@ -3,7 +3,6 @@ import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import FillGapsPanel from './FillGapsPanel';
 import MultipleChoicePanel from './MultipleChiocePanel';
 import OpenQuestionPanel from './OpenQuestionPanel';
-//import { useLocalStorage } from 'usehooks-ts';
 
 type TabsCreateMenuProps = {
   isSmallerScreen?: boolean;
@@ -12,18 +11,12 @@ type TabsCreateMenuProps = {
 export default function TabsCreateMenu({
   isSmallerScreen,
 }: TabsCreateMenuProps) {
-  const { handleIsGenerateButtonClicked, handleExercise, exercise } =
+  const { handleIsGenerateButtonClicked, handleExercise } =
     useCreateOERsContext();
-
-  // const [selectedIndex, setSelectedIndex] = useLocalStorage<number>(
-  //   'selectedIndex',
-  //   0
-  // );
 
   const handleChangeTab = (index: number) => {
     handleExercise(index);
     handleIsGenerateButtonClicked(false);
-    console.log('exercise: ', exercise);
   };
 
   return (
@@ -31,7 +24,6 @@ export default function TabsCreateMenu({
       colorScheme="yellow"
       size={'lg'}
       onChange={(index) => handleChangeTab(index)}
-      // defaultIndex={selectedIndex}
     >
       <TabList>
         <Tab>Fill-Gaps</Tab>

@@ -6,14 +6,10 @@ import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-//import { useLocalStorage } from 'usehooks-ts';
-//import { useHasHydrated } from '../../utils/utils';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
 };
-
-//todo: mettere un valore massimo anche per questi distractors
 
 export default function MultipleChoicePanel({
   isSmallerScreen,
@@ -65,13 +61,9 @@ export default function MultipleChoicePanel({
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
   const responseRef = useRef(null);
-  //const hydrated = useHasHydrated();
-
-  //const [rispostaTipo, setRispostaTipo] = useLocalStorage<string | null>('rispostaTipo', '');
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    console.log('sourceText:', sourceText);
     // Costruisci l'oggetto di dati da inviare nella richiesta
     const requestData = {
       language: 'English',
@@ -122,7 +114,8 @@ export default function MultipleChoicePanel({
     if (
       targetLevelMultipleChoice != null &&
       exerciseType != null &&
-      questionCategoryMultipleChoice != null
+      questionCategoryMultipleChoice != null &&
+      temperatureMultipleChoice != null
     ) {
       setAreOptionsComplete(true);
     }
@@ -245,14 +238,6 @@ export default function MultipleChoicePanel({
           borderRadius="lg"
           //isDisabled={sourceText === ''}
           onClick={() => {
-            // console.log(sourceText);
-            // console.log(chosenTargetLevel);
-            // console.log(temperature);
-            // console.log(chosenType);
-            // console.log(chosenCategory);
-            // console.log(correctAnswer);
-            // console.log(easyDistractors);
-            // console.log(distractorsMultipleChoice);
             handleOptionsComplete();
             handleExercise(2);
             if (areOptionsComplete) {
@@ -294,7 +279,6 @@ export default function MultipleChoicePanel({
         ) : (
           response && (
             <div>
-              {console.log(apiData)}
               <Text>Risposta API:</Text>
               <Text>
                 {apiData.language} <br />
@@ -316,37 +300,6 @@ export default function MultipleChoicePanel({
           )
         )}
       </Box>
-      {/* <div>
-        {console.log(apiData)}
-        <Text>Risposta API:</Text>
-        <Text>
-          ============================================== <br />
-          {apiData.language} <br />
-          {apiData.date} <br />
-          {apiData.level} <br />
-          {apiData.temperature} <br />
-          {apiData.nedd} <br />
-          {apiData.n_o_d} <br />
-          {apiData.category} <br />
-          {apiData.question} <br />
-          {apiData.correctAnswer} <br />
-
-          {apiData.solution} <br />
-          <br />
-          risposta: <br />
-          {hydrated && rispostaTipo}
-        </Text>
-      </div>
-      <Button
-        onClick={() => {
-          console.log('response:', response);
-          if (response) setRispostaTipo(response);
-          if (rispostaTipo) handleTextToJSON(rispostaTipo);
-          console.log('rispostaTipo:', rispostaTipo);
-        }
-        }>
-        setRispostaTipo
-      </Button> */}
     </>
   );
 }

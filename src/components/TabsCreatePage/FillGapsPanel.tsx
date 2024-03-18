@@ -6,7 +6,6 @@ import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
-// import { useLocalStorage } from 'usehooks-ts';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
@@ -55,19 +54,14 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
   const [loading, setLoading] = useState(false);
   const responseRef = useRef(null);
 
-  // const [rispostaTipo, setRispostaTipo] = useLocalStorage<string | null>('rispostaTipo', '');
-
-  //console.log(FillGapsPrototipo);
-
   const handleOptionsComplete = () => {
-    if (targetLevelFillGaps != null && length != null) {
+    if (targetLevelFillGaps != null && length != null && temperatureFillGaps != null) {
       setAreOptionsComplete(true);
     }
   };
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    console.log('sourceText:', sourceText);
     // Costruisci l'oggetto di dati da inviare nella richiesta
     const requestData = {
       language: 'English',
@@ -243,7 +237,6 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         ) : (
           response && (
             <div>
-              {console.log(apiData)}
               <Text>Risposta API:</Text>
               <Text>
                 {apiData.language} <br />
@@ -261,34 +254,6 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
           )
         )}
       </Box>
-      {/* <div>
-        {console.log(apiData)}
-        <Text>Risposta API:</Text>
-        <Text>
-          ============================================== <br />
-          {apiData.language} <br />
-          {apiData.date} <br />
-          {apiData.temperature} <br />
-          {apiData.level} <br />
-          {apiData.text} <br />
-          {apiData.textWithGaps} <br />
-          {apiData.wordsAndAnswers} <br />
-          <br />
-          risposta: <br />
-          {response}
-        </Text>
-      </div>
-      <Button
-        onClick={() => {
-          console.log('response:', response);
-          if (response) setRispostaTipo(response);
-          if (rispostaTipo) handleTextToJSON(rispostaTipo);
-          console.log('apiData:', apiData);
-          console.log('rispostaTipo:', rispostaTipo);
-        }
-        }>
-        setRispostaTipo
-      </Button>  */}
     </>
   );
 }

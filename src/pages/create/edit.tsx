@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -20,12 +20,7 @@ import EditMultipleChoice from '../../components/TabsCreatePage/EditMultipleChoi
 import EditOpenQuestion from '../../components/TabsCreatePage/EditOpenQuestion';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-
-// import FillGapsPrototipo from '../../components/TabsCreatePage/FillGapsPrototipo.json';
-// import OpenQuestionPrototipo from '../../components/TabsCreatePage/OpenQuestionPrototipo.json';
-//import MultipleChoicePrototipo from '../../components/TabsCreatePage/MultipleChoicePrototipo.json';
 import { MdSave } from 'react-icons/md';
-// import openQuestion from '../../components/TabsCreatePage/openQuestion.json';
 
 const Edit = () => {
   const { user } = useUser();
@@ -88,6 +83,15 @@ const Edit = () => {
     }
   };
 
+  useEffect(() => {
+    if (areOptionsComplete) handleSaveButtonClick();
+  }, [data]);
+
+  useEffect(() => {
+    if (title && description) handleOptionsComplete();
+  }, [title, description]);
+
+
   return (
     <>
       <Flex w="100%" h="100%">
@@ -105,7 +109,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the {hydrated && exercise} exercise</Heading>
             </Flex>
@@ -167,7 +171,6 @@ const Edit = () => {
                   if (areOptionsComplete) {
                     handleData();
                     console.log('Save');
-                    handleSaveButtonClick();
                   } else {
                     addToast({
                       message:

@@ -1,8 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-//import axios from 'axios';
 import { useEffect } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-//import { CustomToast } from '../../utils/Toast/CustomToast';
 import TextBox from '../TextBox/TextBox';
 
 type OpenQuestionData = {

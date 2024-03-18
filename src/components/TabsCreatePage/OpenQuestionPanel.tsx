@@ -53,16 +53,8 @@ export default function OpenQuestionPanel({
   const [loading, setLoading] = useState(false);
   const responseRef = useRef(null);
 
-  // const [rispostaTipo, setRispostaTipo] = useLocalStorage<string | null>('rispostaTipo', '');
-
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    console.log('sourceText:', sourceText);
-    console.log('temperature:', temperature);
-    console.log('chosenTargetLevel:', chosenTargetLevel);
-    console.log('chosenType:', chosenType);
-    console.log('chosenCategory:', chosenCategory);
-
     // Costruisci l'oggetto di dati da inviare nella richiesta
     const requestData = {
       language: 'English',
@@ -110,7 +102,8 @@ export default function OpenQuestionPanel({
     if (
       targetLevelOpenQuestion != null &&
       questionType != null &&
-      questionCategoryOpenQuestion != null
+      questionCategoryOpenQuestion != null &&
+      temperatureOpenQuestion != null
     ) {
       setAreOptionsComplete(true);
     }
@@ -198,11 +191,6 @@ export default function OpenQuestionPanel({
           borderRadius="lg"
           //isDisabled={sourceText === ''}
           onClick={() => {
-            // console.log('sourceText:', sourceText);
-            // console.log('chosenTargetLevel:', chosenTargetLevel);
-            // console.log('chosenType:', chosenType);
-            // console.log('chosenCategory:', chosenCategory);
-            // console.log('temperature:', temperature);
             handleExercise(1);
             handleOptionsComplete();
             if (areOptionsComplete) {
@@ -244,7 +232,6 @@ export default function OpenQuestionPanel({
         ) : (
           response && (
             <div>
-              {console.log(apiData)}
               <Text>Risposta API:</Text>
               <Text>
                 {apiData.language} <br />
@@ -263,34 +250,6 @@ export default function OpenQuestionPanel({
           )
         )}
       </Box>
-      {/* <div>
-        {console.log(apiData)}
-        <Text>Risposta API:</Text>
-        <Text>
-          ============================================== <br />
-          {apiData.language} <br />
-          {apiData.date} <br />
-          {apiData.level} <br />
-          {apiData.type_of_question} <br />
-          {apiData.category} <br />
-          {apiData.temperature} <br />
-          {apiData.question} <br />
-          {apiData.correctAnswer} <br />
-          <br />
-          risposta: <br />
-          {rispostaTipo}
-        </Text>
-      </div>
-      <Button
-        onClick={() => {
-          console.log('response:', response);
-          if (response) setRispostaTipo(response);
-          if (rispostaTipo) handleTextToJSON(rispostaTipo);
-          console.log('rispostaTipo:', rispostaTipo);
-        }
-        }>
-        setRispostaTipo
-      </Button> */}
     </>
   );
 }
