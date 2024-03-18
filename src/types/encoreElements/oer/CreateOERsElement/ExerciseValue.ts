@@ -8,7 +8,7 @@ export type ExerciseValue = {
   type: string | null;
   number_of_correct_answer: number | null;
   number_of_easy_distractors: number | null;
-  number_of_distractors: number  | null;
+  number_of_distractors: number | null;
   number_of_words: number | null;
   options: OptionsData | null;
   solution: string | null;

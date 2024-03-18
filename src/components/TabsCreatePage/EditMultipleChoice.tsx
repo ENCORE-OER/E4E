@@ -47,9 +47,7 @@ export default function EditMultipleChoice({
   useEffect(() => {
     handleSolution(multipleChoiceData.solution);
     handleQuestion(multipleChoiceData.question);
-    handleOptionsChange(
-      multipleChoiceData.answers
-    );
+    handleOptionsChange(multipleChoiceData.answers);
   }, []);
 
   useEffect(() => {

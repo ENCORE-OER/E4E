@@ -55,7 +55,11 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
   const responseRef = useRef(null);
 
   const handleOptionsComplete = () => {
-    if (targetLevelFillGaps != null && length != null && temperatureFillGaps != null) {
+    if (
+      targetLevelFillGaps != null &&
+      length != null &&
+      temperatureFillGaps != null
+    ) {
       setAreOptionsComplete(true);
     }
   };

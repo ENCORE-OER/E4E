@@ -91,7 +91,6 @@ const Edit = () => {
     if (title && description) handleOptionsComplete();
   }, [title, description]);
 
-
   return (
     <>
       <Flex w="100%" h="100%">
@@ -109,7 +108,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the {hydrated && exercise} exercise</Heading>
             </Flex>
