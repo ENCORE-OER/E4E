@@ -16,7 +16,7 @@ export interface CentralBarsProps extends PathDesignCentralBarsProps {
   step: number;
   resetCheckBoxOptions: boolean;
   text: string;
-  handleSetText: (newText: string) => void;
+  handleText: (newText: string) => void;
 }
 
 export default function CentralBars({
@@ -27,7 +27,7 @@ export default function CentralBars({
   handleOptionsChange,
   resetCheckBoxOptions,
   text,
-  handleSetText,
+  handleText,
   isNextButtonClicked,
   collectionIndex,
   currentBloomOptions,
@@ -92,7 +92,7 @@ export default function CentralBars({
             placeholder={placeholderContextBox}
             isHighlighted={isNextButtonClicked}
             text={text}
-            onTextChange={handleSetText}
+            onTextChange={handleText}
           />
         </Box>
       </Flex>

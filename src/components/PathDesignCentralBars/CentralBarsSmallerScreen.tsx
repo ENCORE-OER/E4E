@@ -12,7 +12,7 @@ export default function CentralBarsSmallerScreen({
   handleOptionsChange,
   resetCheckBoxOptions,
   text,
-  handleSetText,
+  handleText,
   isNextButtonClicked,
   collectionIndex,
   currentBloomOptions,
@@ -120,7 +120,7 @@ export default function CentralBarsSmallerScreen({
             placeholder={placeholderContextBox}
             isHighlighted={isNextButtonClicked}
             text={text}
-            onTextChange={handleSetText}
+            onTextChange={handleText}
           />
         </Box>
         <Text
