@@ -6,14 +6,6 @@ import { OerData, Option, OptionsData } from '../types/encoreElements/index';
 
 //context props
 type CreateOERsContextProps = {
-  // * difficoltà, da aggiungere forse in futuro
-  // difficultLevelOptions: Option[];
-  // difficultLevel: Option;
-  // handleDifficultLevel: (selected: Option) => void;
-
-  // * funzioni per il reset dei dati, per ora inutilizzata
-  // handleResetOptions: () => void;
-
   // * controllo delle variabili dopo il click del bottone generate
   isGenerateButtonClicked: boolean;
   handleIsGenerateButtonClicked: (bool: boolean) => void;
@@ -104,8 +96,6 @@ type CreateOERsContextProps = {
 
   // * altro
   maxValue: number; //numero per definire il numero massimo di gaps
-  // apiKey: string;
-  // handleApiKey: (selected: string) => void;
   apiOpenQuestionData: {
     language: string;
     date: string;
@@ -155,11 +145,6 @@ export const useCreateOERsContext = () => useContext(CreateOERsContext);
 export const CreateOERsProvider = ({ children }: any) => {
   //const hydrated = useHasHydrated();
   // * difficoltà, da aggiungere forse in futuro
-  /*const difficultLevelOptions: Option[] = [
-      { title: 'Easy' },
-      { title: 'Medium' },
-      { title: 'Hard' },
-  ];*/
 
   // * dati per i segmented buttons
   const targetLevelOptions: Option[] = [
@@ -303,30 +288,8 @@ export const CreateOERsProvider = ({ children }: any) => {
     }
   };
   const [maxValue, setMaxValue] = useState(8);
-  // const [apiKey, setApiKey] = useState('');
 
   // * handle functions
-
-  // * difficulty level e reset inutilizzati per ora
-  // const handleDifficultLevel = (selected: Option) => {
-  //     setDifficultLevel(selected);
-  // }
-  // const handleResetOptions = () => {
-  //   setTargetLevelFillGaps(null);
-  //   setTargetLevelOpenQuestion(null);
-  //   setTargetLevelMultipleChoice(null);
-  //   // setDifficultLevel({ title: '' });
-  //   setQuestionType({ title: '' });
-  //   setExerciseType({ title: '' });
-  //   setQuestionCategoryOpenQuestion({ title: '' });
-  //   setQuestionCategoryMultipleChoice({ title: '' });
-  //   setLength({ title: '' });
-  //   setDistractorsFillGaps(0);
-  //   setDistractorsMultipleChoice(0);
-  //   setBlanks(1);
-  //   setEasyDistractors(0);
-  //   setCorrectAnswer(1);
-  // };
 
   // * Fill Gaps
   const handleTargetLevelFillGaps = (selected: Option) => {
@@ -697,24 +660,13 @@ export const CreateOERsProvider = ({ children }: any) => {
     setIsGenerateButtonClicked(bool);
   };
 
-  // const handleApiKey = (selected: string) => {
-  //   setApiKey(selected);
-  // };
-
   return (
     <CreateOERsContext.Provider
       value={{
-        // * cose inutilizzate per ora
-        //difficultLevelOptions,
-        //difficultLevel,
-        //handleDifficultLevel,
-        //handleResetOptions,
         // * altre variabili
         isGenerateButtonClicked,
         handleIsGenerateButtonClicked,
         maxValue,
-        // apiKey,
-        // handleApiKey,
         apiOpenQuestionData,
         handleTextToJSONOpenQuestion,
         apiFillGapsData,
