@@ -305,6 +305,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
+    handleDistractors(number as number);
   };
   const handleBlanks = (number: number | string) => {
     setBlanks(number as number);
@@ -347,6 +348,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleDistractorsMultipleChoice = (number: number | string) => {
     setDistractorsMultipleChoice(number as number);
+    handleDistractors(number as number);
   };
   const handleEasyDistractors = (number: number | string) => {
     setEasyDistractors(number as number);
@@ -605,39 +607,110 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
 
   const handleData = () => {
-    const temp: OerData = {
-      title: title,
-      description: description,
-      publication_date: new Date().toISOString(),
-      language: 'English',
-      generated_by_ai: true,
-      assessment_oer: true,
-      assessment_oer_type: exercise || '',
-      source: sourceText,
-      level:
-        targetLevelFillGaps?.title ||
-        targetLevelOpenQuestion?.title ||
-        targetLevelMultipleChoice?.title ||
-        '',
-      temperature: temperature,
-      exercise_value: {
-        question: question || null,
-        fill_template: fillTemplate || null,
-        fill_template_with_gaps: fillTemplateWithGaps || null,
-        category:
-          questionCategoryMultipleChoice?.title ||
-          questionCategoryOpenQuestion?.title ||
-          null,
-        type: exerciseType?.title || questionType?.title || null,
-        number_of_correct_answer: correctAnswer || null,
-        number_of_easy_distractors: easyDistractors || null,
-        number_of_distractors: distractors || null,
-        number_of_words: chosenLenght || null,
-        options: options || null,
-        solution: solution || null,
-      },
-    };
-    setData(temp);
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0'); 
+    const currentDateString = `${year}-${month}-${day}`;
+
+    switch (exercise) {
+      case 'Fill the gaps':
+        const temp: OerData = {
+          title: title,
+          description: description,
+          publication_date: currentDateString,
+          language: 'English',
+          generated_by_ai: true,
+          assessment_oer: true,
+          assessment_oer_type: exercise,
+          source: sourceText,
+          level:
+            targetLevelFillGaps?.title || '',
+          temperature: temperature,
+          exercise_values: {
+            question: null,
+            fill_template: fillTemplate,
+            fill_template_with_gaps: fillTemplateWithGaps,
+            category: null,
+            type: null,
+            number_of_correct_answer: null,
+            number_of_easy_distractors: null,
+            number_of_distractors: distractors,
+            number_of_words: chosenLenght,
+            options: options || null,
+            solution: null,
+          },
+        };
+        console.log('fill gaps', temp);
+        setData(temp);
+        break;
+      case 'Open Question':
+        const temp0: OerData = {
+          title: title,
+          description: description,
+          publication_date: currentDateString,
+          language: 'English',
+          generated_by_ai: true,
+          assessment_oer: true,
+          assessment_oer_type: exercise,
+          source: sourceText,
+          level:
+            targetLevelOpenQuestion?.title || '',
+          temperature: temperature,
+          exercise_values: {
+            question: question || null,
+            fill_template: null,
+            fill_template_with_gaps: null,
+            category: questionCategory || null,
+            type: questionType?.title || null,
+            number_of_correct_answer: null,
+            number_of_easy_distractors: null,
+            number_of_distractors: null,
+            number_of_words: null,
+            options: null,
+            solution: solution || null,
+          },
+        };
+        console.log('open question', temp0);
+        setData(temp0);
+        
+        break;
+      case 'Multiple Choice':
+        const temp1: OerData = {
+          title: title,
+          description: description,
+          publication_date: currentDateString,
+          language: 'English',
+          generated_by_ai: true,
+          assessment_oer: true,
+          assessment_oer_type: exercise,
+          source: sourceText,
+          level:
+            targetLevelMultipleChoice?.title || '',
+          temperature: temperature,
+          exercise_values: {
+            question: question || null,
+            fill_template: null,
+            fill_template_with_gaps: null,
+            category: questionCategory || null,
+            type: exerciseType?.title || null,
+            number_of_correct_answer: correctAnswer || null,
+            number_of_easy_distractors: easyDistractors || null,
+            number_of_distractors: distractors || null,
+            number_of_words: null,
+            options: options || null,
+            solution: solution || null,
+          },
+        };
+        console.log('multiple choice', temp1);
+        setData(temp1);
+        
+        break;
+      default:
+        console.log('error in chosen Exercise');
+    }
+    
+    
   };
 
   const handleTitle = (selected: string) => {

@@ -1,4 +1,4 @@
-import { ExerciseValue } from './ExerciseValue';
+import { ExerciseValues } from './ExerciseValues';
 
 export type OerData = {
   title: string;
@@ -11,5 +11,5 @@ export type OerData = {
   source: string;
   level: string;
   temperature: number;
-  exercise_value: ExerciseValue;
+  exercise_values: ExerciseValues | null;
 };
