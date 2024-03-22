@@ -610,7 +610,7 @@ export const CreateOERsProvider = ({ children }: any) => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0'); 
+    const day = String(currentDate.getDate()).padStart(2, '0');
     const currentDateString = `${year}-${month}-${day}`;
 
     switch (exercise) {
@@ -624,8 +624,7 @@ export const CreateOERsProvider = ({ children }: any) => {
           assessment_oer: true,
           assessment_oer_type: exercise,
           source: sourceText,
-          level:
-            targetLevelFillGaps?.title || '',
+          level: targetLevelFillGaps?.title || '',
           temperature: temperature,
           exercise_values: {
             question: null,
@@ -654,8 +653,7 @@ export const CreateOERsProvider = ({ children }: any) => {
           assessment_oer: true,
           assessment_oer_type: exercise,
           source: sourceText,
-          level:
-            targetLevelOpenQuestion?.title || '',
+          level: targetLevelOpenQuestion?.title || '',
           temperature: temperature,
           exercise_values: {
             question: question || null,
@@ -673,7 +671,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         };
         console.log('open question', temp0);
         setData(temp0);
-        
+
         break;
       case 'Multiple Choice':
         const temp1: OerData = {
@@ -685,8 +683,7 @@ export const CreateOERsProvider = ({ children }: any) => {
           assessment_oer: true,
           assessment_oer_type: exercise,
           source: sourceText,
-          level:
-            targetLevelMultipleChoice?.title || '',
+          level: targetLevelMultipleChoice?.title || '',
           temperature: temperature,
           exercise_values: {
             question: question || null,
@@ -704,13 +701,11 @@ export const CreateOERsProvider = ({ children }: any) => {
         };
         console.log('multiple choice', temp1);
         setData(temp1);
-        
+
         break;
       default:
         console.log('error in chosen Exercise');
     }
-    
-    
   };
 
   const handleTitle = (selected: string) => {

@@ -67,7 +67,7 @@ const Edit = () => {
     setLoading(true);
     // Costruisci l'oggetto di dati da inviare nella richiesta
     const requestData = {
-      data:data
+      data: data,
     };
     console.log('requestData', requestData);
 
@@ -111,7 +111,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the {hydrated && exercise} exercise</Heading>
             </Flex>
