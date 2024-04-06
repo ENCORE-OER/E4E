@@ -108,7 +108,11 @@ export default function ExerciseInfoModal({
                     direction="column"
                   >
                     <Text variant="label_drawer">Distractors</Text>
-                    <Text>{options?.join(', ')}</Text>{' '}
+                    <UnorderedList>
+                      {options?.map((option: string, index: number) => (
+                        <ListItem key={index}>{option}</ListItem>
+                      ))}
+                    </UnorderedList>
                     {/* Check if "option" is the right field */}
                   </Flex>
                 )}

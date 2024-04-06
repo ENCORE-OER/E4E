@@ -17,31 +17,24 @@ export default function TagsDomain({
   mb,
 }: TagsDomainProps) {
   return (
-    <>
-      <HStack w="100%" mb={mb}>
-        <div>
-          {showTagDigital && (
-            <Tag bg="digital_light.200" borderRadius="3">
-              <Text variant="label_tag_digital">Digital</Text>
-            </Tag>
-          )}
-        </div>
-        <div>
-          {showTagEntrepreneurial && (
-            <Tag bg="entrepreneurial_light.200" borderRadius="3">
-              <Text variant="label_tag_entrepreneurial">Entrepreneurial</Text>
-            </Tag>
-          )}
-        </div>
-        <div>
-          {showTagGreen && (
-            <Tag bg="green_light.200" borderRadius="3">
-              <Text variant="label_tag_green">Green</Text>
-            </Tag>
-          )}
-        </div>
-        <div>{showTagGenAI && <TagGenAI />}</div>
-      </HStack>
-    </>
+    <HStack w="100%" mb={mb} justifyContent='flex-start'>
+      {showTagDigital && (
+        <Tag bg="digital_light.200" borderRadius="3">
+          <Text variant="label_tag_digital">Digital</Text>
+        </Tag>
+      )}
+      {showTagEntrepreneurial && (
+        <Tag bg="entrepreneurial_light.200" borderRadius="3">
+          <Text variant="label_tag_entrepreneurial">Entrepreneurial</Text>
+        </Tag>
+      )}
+      {showTagGreen && (
+        <Tag bg="green_light.200" borderRadius="3">
+          <Text variant="label_tag_green">Green</Text>
+        </Tag>
+      )}
+      {showTagGenAI && <TagGenAI />}
+
+    </HStack>
   );
 }
