@@ -17,7 +17,7 @@ export default function TagsDomain({
   mb,
 }: TagsDomainProps) {
   return (
-    <HStack w="100%" mb={mb} justifyContent='flex-start'>
+    <HStack w="100%" mb={mb} justifyContent="flex-start">
       {showTagDigital && (
         <Tag bg="digital_light.200" borderRadius="3">
           <Text variant="label_tag_digital">Digital</Text>
@@ -34,7 +34,6 @@ export default function TagsDomain({
         </Tag>
       )}
       {showTagGenAI && <TagGenAI />}
-
     </HStack>
   );
 }
