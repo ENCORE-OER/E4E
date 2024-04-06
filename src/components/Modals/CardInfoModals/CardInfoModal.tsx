@@ -23,6 +23,7 @@ import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmark
 import { IconLunchLinkOpen } from '../../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import {
   CollectionProps,
+  ColorCollectionProps,
   OerAudienceInfo,
   OerAuthorsInfo,
   OerConceptInfo,
@@ -49,11 +50,6 @@ type CardInfoModalProps = {
   oer: OerProps | OerFreeSearchProps | null | undefined;
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
-};
-
-type ColorCollectionProps = {
-  name: string;
-  color: string | undefined;
 };
 
 export default function CardInfoModal({
@@ -257,7 +253,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-              []
+            []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -564,9 +560,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-          //times_used={times_used}
-          //setTimes_used={setTimes_used}
-          //getCount={getCount}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
       <ExerciseInfoModal
@@ -590,6 +586,11 @@ export default function CardInfoModal({
         fill_template={fill_template}
         fill_template_with_gaps={fill_template_with_gaps}
         options={options}
+        showTagDigital={showTagDigital}
+        showTagEntrepreneurial={showTagEntrepreneurial}
+        showTagGreen={showTagGreen}
+        isGeneratedByAI={isGeneratedByAI}
+        collectionsColor={collectionsColor}
       />
     </Flex>
   );
