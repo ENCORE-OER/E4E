@@ -3,8 +3,8 @@ import GridMetadataOer from '../../Grids/GridMetadataOer';
 import TagResourceType from '../../Tags/TagReourceType';
 
 type SmallOerCardFooterProps = {
-  resourceType: string[];
-  lastUpdate: string;
+  resourceType: (string | null)[];
+  lastUpdate: string | null;
   used: number;
   likes: number;
   qualityScore: number;

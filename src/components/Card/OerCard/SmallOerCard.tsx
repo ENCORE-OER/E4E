@@ -20,6 +20,7 @@ export default function SmallOerCard({
   digital_domain: showTagDigital,
   entrepreneurship_domain: showTagEntrepreneurial,
   green_domain: showTagGreen,
+  isGeneratedByAI,
   maxHCard,
   maxWCard,
   //mbCard,
@@ -54,6 +55,7 @@ SmallOerCardProps) {
         showTagDigital={showTagDigital}
         showTagEntrepreneurial={showTagEntrepreneurial}
         showTagGreen={showTagGreen}
+        isGeneratedByAI={isGeneratedByAI}
         ptCardHeader={ptCardHeader}
         collection_color={collection_color}
         checkBookmark={checkBookmark}

@@ -1,9 +1,11 @@
 import { HStack, Tag, Text } from '@chakra-ui/react';
+import TagGenAI from './TagGenAI';
 
 type TagsDomainProps = {
   showTagDigital: boolean;
   showTagEntrepreneurial: boolean;
   showTagGreen: boolean;
+  showTagGenAI: boolean;
   mb?: string | number;
 };
 
@@ -11,6 +13,7 @@ export default function TagsDomain({
   showTagDigital,
   showTagEntrepreneurial,
   showTagGreen,
+  showTagGenAI,
   mb,
 }: TagsDomainProps) {
   return (
@@ -37,6 +40,7 @@ export default function TagsDomain({
             </Tag>
           )}
         </div>
+        <div>{showTagGenAI && <TagGenAI />}</div>
       </HStack>
     </>
   );

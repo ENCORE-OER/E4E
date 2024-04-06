@@ -17,6 +17,7 @@ type OerCardHeaderProps = {
   showTagDigital: boolean;
   showTagEntrepreneurial: boolean;
   showTagGreen: boolean;
+  isGeneratedByAI: boolean;
   title: string;
   authors: (string | null)[];
   collection_color?: string;
@@ -31,6 +32,7 @@ export default function OerCardHeader({
   showTagDigital,
   showTagEntrepreneurial,
   showTagGreen,
+  isGeneratedByAI,
   title,
   collection_color,
   checkBookmark,
@@ -43,6 +45,7 @@ export default function OerCardHeader({
             showTagDigital={showTagDigital}
             showTagEntrepreneurial={showTagEntrepreneurial}
             showTagGreen={showTagGreen}
+            showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
           {

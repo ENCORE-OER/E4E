@@ -3,7 +3,7 @@ import GridMetadataCard from '../../Grids/GridMetadataOer/GridMetadataCard';
 import TagResourceType from '../../Tags/TagReourceType';
 
 type OerCardFooterProps = {
-  resourceType: string[];
+  resourceType: (string | null)[];
   lastUpdate: string;
   used: number;
   liked: number;
