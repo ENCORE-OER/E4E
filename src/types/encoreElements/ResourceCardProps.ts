@@ -4,11 +4,13 @@ export type ResourceCardProps = {
   digital_domain: boolean;
   entrepreneurship_domain: boolean;
   green_domain: boolean;
+  isGeneratedByAI: boolean;
   description: string;
   creator: (string | null)[];
   title: string;
-  media_type: string[];
-  retrieval_date: string;
+  media_type: (string | null)[];
+  retrieval_date: string | null;
+  publication_date: string | null;
   overall_score: number;
   domain?: string[];
   maxHCard?: string;
@@ -25,6 +27,7 @@ export type ResourceCardProps = {
   gapGridCardFooter?: number;
   total_likes: number;
   times_used: number;
+  assessment_oer_type: string | null;
 
   //isNormalSizeCard?: boolean;
 };

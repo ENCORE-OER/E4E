@@ -99,12 +99,15 @@ export default function SingleResourceCard({
           digital_domain={oer?.digital_domain ?? false}
           entrepreneurship_domain={oer?.entrepreneurship_domain ?? false}
           green_domain={oer?.green_domain ?? false}
+          isGeneratedByAI={oer?.generated_by_ai ?? false}
           title={oer?.title ?? ''}
           creator={(creators?.length ?? 0) > 0 ? creators : ['Unknown']}
           description={oer?.description ?? ''}
           retrieval_date={oer?.retrieval_date ?? ''}
+          publication_date={oer?.publication_date ?? ''}
           overall_score={oer?.overall_score ?? 0}
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
+          assessment_oer_type={oer?.assessment_oer_type ?? ''}
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
           //pxCard={isSmallerScreen ? '5px' : undefined}

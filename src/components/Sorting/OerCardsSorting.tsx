@@ -79,6 +79,16 @@ export default function OerCardsSorting({
             b: OerProps | undefined | OerFreeSearchProps
           ) => {
             if (a !== undefined && b !== undefined) {
+              // handling null retrieval_date values
+              const dateA =
+                a.retrieval_date === null
+                  ? a.publication_date
+                  : a.retrieval_date;
+              const dateB =
+                b.retrieval_date === null
+                  ? b.publication_date
+                  : b.retrieval_date;
+
               switch (selectedSorting) {
                 case 'Relevance':
                   return isAscending
@@ -90,8 +100,8 @@ export default function OerCardsSorting({
                     : b.title.localeCompare(a.title);
                 case 'Last Update':
                   return isAscending
-                    ? a.retrieval_date.localeCompare(b.retrieval_date)
-                    : b.retrieval_date.localeCompare(a.retrieval_date);
+                    ? dateA.localeCompare(dateB)
+                    : dateB.localeCompare(dateA);
                 case 'Quality Score':
                   return isAscending
                     ? (a.overall_score ?? 0) - (b.overall_score ?? 0)

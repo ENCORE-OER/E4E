@@ -233,6 +233,7 @@ const Discover = (props: DiscoverPageProps) => {
       //let resp: RespDataProps | null = null;
       //let oers: OerProps[] | undefined = [];
 
+      // Check if there are keywords used for the search
       if (
         keywords?.length > 0
         //|| domains.length > 0 || types.length > 0 || audience.length > 0
@@ -462,6 +463,7 @@ const Discover = (props: DiscoverPageProps) => {
         return;
       }
 
+      // convert the string to JSON
       const convertedData = JSON.parse(searchData);
 
       // TODO: add check if null
