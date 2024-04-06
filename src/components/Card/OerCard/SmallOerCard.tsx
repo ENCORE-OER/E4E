@@ -14,6 +14,7 @@ export default function SmallOerCard({
   description,
   creator: authors,
   retrieval_date: lastUpdate,
+  publication_date,
   overall_score: qualityScore,
   media_type: resourceType,
   title,
@@ -32,8 +33,9 @@ export default function SmallOerCard({
   checkBookmark,
   times_used,
   total_likes,
+  assessment_oer_type,
 }: //dataOer
-SmallOerCardProps) {
+  SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -45,7 +47,7 @@ SmallOerCardProps) {
       key={idOer}
       borderColor="secondary"
       bg="white"
-      //mb={mbCard || '5'}
+    //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
@@ -67,11 +69,13 @@ SmallOerCardProps) {
         minHCardBody="22px"
       />
       <SmallOerCardFooter
-        lastUpdate={lastUpdate}
+        lastUpdate={lastUpdate || publication_date || ''}
         qualityScore={qualityScore}
         used={times_used}
         likes={total_likes}
-        resourceType={resourceType}
+        resourceType={
+          assessment_oer_type ? [assessment_oer_type] : resourceType || []
+        }
         gapGrid={gapGridCardFooter}
       />
     </Card>
