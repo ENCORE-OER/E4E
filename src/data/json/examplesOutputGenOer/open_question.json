@@ -50,7 +50,7 @@
   "times_used": 0,
   "instructional_oer": false,
   "assessment_oer": true,
-  "assessment_oer_type": "Exercise",
+  "assessment_oer_type": "Open Question",
   "generated_by_ai": true,
   "level": "Academic",
   "number_of_distractors": null,

@@ -25,4 +25,5 @@ export type ExerciseInfoModalProps = {
   showTagGreen: boolean;
   isGeneratedByAI: boolean;
   collectionsColor?: (ColorCollectionProps | undefined)[];
+  assessment_oer_type?: string | null;
 };

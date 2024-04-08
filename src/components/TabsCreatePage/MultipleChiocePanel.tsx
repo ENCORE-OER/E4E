@@ -151,7 +151,7 @@ export default function MultipleChoicePanel({
             <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && exerciseType == null}
+            isHighlighted={isGenerateButtonClicked && exerciseType === null}
             options={exerciseTypeOptions}
             selected={exerciseType}
             preselectedTitle={exerciseType?.title}

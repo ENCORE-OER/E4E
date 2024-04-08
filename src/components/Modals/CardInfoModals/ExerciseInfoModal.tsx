@@ -48,6 +48,7 @@ export default function ExerciseInfoModal({
   showTagGreen,
   isGeneratedByAI,
   collectionsColor,
+  assessment_oer_type,
 }: ExerciseInfoModalProps) {
   return (
     <Flex>
@@ -98,6 +99,7 @@ export default function ExerciseInfoModal({
             </HStack>
             <Heading size="lg" pb="5">
               {/* Specify the type of exercise (Fill the Gaps, Open Question, Multiple Choice) */}
+              {assessment_oer_type} Exercise
             </Heading>
             <Heading size="md" pb="5">
               {title}
