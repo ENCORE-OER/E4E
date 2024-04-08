@@ -17,7 +17,10 @@ import {
   UnorderedList,
 } from '@chakra-ui/react';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
-import { ColorCollectionProps, ExerciseInfoModalProps } from '../../../types/encoreElements';
+import {
+  ColorCollectionProps,
+  ExerciseInfoModalProps,
+} from '../../../types/encoreElements';
 import TagsDomain from '../../Tags/TagsDomain';
 
 export default function ExerciseInfoModal({

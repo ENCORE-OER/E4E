@@ -80,7 +80,7 @@ export default function MultipleChoicePanel({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/multipleChoiceExercise',
+        '/api/encore/genAI/multipleChoiceExercise',
         requestData,
         {
           headers: {
