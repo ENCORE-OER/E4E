@@ -80,7 +80,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/fillGapsExercise',
+        '/api/encore/genAI/fillGapsExercise',
         requestData,
         {
           headers: {

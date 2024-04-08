@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { MdSave } from 'react-icons/md';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -20,7 +21,6 @@ import EditMultipleChoice from '../../components/TabsCreatePage/EditMultipleChoi
 import EditOpenQuestion from '../../components/TabsCreatePage/EditOpenQuestion';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
-import { MdSave } from 'react-icons/md';
 
 const Edit = () => {
   const { user } = useUser();
@@ -115,7 +115,7 @@ const Edit = () => {
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {hydrated && exercise === 'Fill the gaps' && (
+            {hydrated && exercise === 'Fill the Gaps' && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditFillGaps fillGapsData={apiFillGapsData} />

@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Heading,
+  HStack,
   ListItem,
   Modal,
   ModalBody,
@@ -12,30 +13,15 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   UnorderedList,
 } from '@chakra-ui/react';
-
-type ExerciseInfoModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  authors: (string | null)[];
-  coverage: string[];
-  fill_template?: string | null;
-  fill_template_with_gaps?: string | null;
-  n_o_w?: number | null;
-  n_o_d?: number | null;
-  n_o_ed?: number | null;
-  n_o_ca?: number | null;
-  options?: string[];
-  question?: string | null;
-  question_response?: string | null;
-  source?: string;
-  language?: string;
-  type_of_exercise?: string | null; // This is used only for the multiple choice exercises
-  type_of_question?: string | null; // This is used only for the open question exercises
-  category?: string | null;
-};
+import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
+import {
+  ColorCollectionProps,
+  ExerciseInfoModalProps,
+} from '../../../types/encoreElements';
+import TagsDomain from '../../Tags/TagsDomain';
 
 export default function ExerciseInfoModal({
   isOpen,
@@ -57,6 +43,12 @@ export default function ExerciseInfoModal({
   type_of_exercise,
   type_of_question,
   category,
+  showTagDigital,
+  showTagEntrepreneurial,
+  showTagGreen,
+  isGeneratedByAI,
+  collectionsColor,
+  assessment_oer_type,
 }: ExerciseInfoModalProps) {
   return (
     <Flex>
@@ -70,8 +62,44 @@ export default function ExerciseInfoModal({
         <ModalContent overflow="auto">
           <ModalCloseButton />
           <ModalHeader>
+            <HStack pb="5" pr="10">
+              <TagsDomain
+                showTagDigital={showTagDigital}
+                showTagEntrepreneurial={showTagEntrepreneurial}
+                showTagGreen={showTagGreen}
+                showTagGenAI={isGeneratedByAI}
+              />
+              {collectionsColor?.length &&
+                collectionsColor?.map(
+                  (
+                    collection_color: ColorCollectionProps | undefined,
+                    index: number
+                  ) => (
+                    <Tooltip
+                      key={index}
+                      aria-label={collection_color?.name}
+                      label={collection_color?.name}
+                      hasArrow
+                      placement="bottom"
+                      bg="gray.200"
+                      color="primary"
+                      fontSize={'md'}
+                      p={2}
+                    >
+                      <span>
+                        <IconBookmarkCheck
+                          //key={index}
+                          colorBookMark={collection_color?.color}
+                          size="25px"
+                        />
+                      </span>
+                    </Tooltip>
+                  )
+                )}
+            </HStack>
             <Heading size="lg" pb="5">
               {/* Specify the type of exercise (Fill the Gaps, Open Question, Multiple Choice) */}
+              {assessment_oer_type} Exercise
             </Heading>
             <Heading size="md" pb="5">
               {title}

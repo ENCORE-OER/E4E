@@ -450,7 +450,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleChosenType = (selected: Option) => {
     switch (selected.title) {
-      case 'Pratical':
+      case 'Practical':
         setChosenType(true);
         break;
       case 'Theoretical':

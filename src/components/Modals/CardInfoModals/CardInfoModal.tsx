@@ -23,6 +23,7 @@ import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmark
 import { IconLunchLinkOpen } from '../../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import {
   CollectionProps,
+  ColorCollectionProps,
   OerAudienceInfo,
   OerAuthorsInfo,
   OerConceptInfo,
@@ -49,11 +50,6 @@ type CardInfoModalProps = {
   oer: OerProps | OerFreeSearchProps | null | undefined;
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
-};
-
-type ColorCollectionProps = {
-  name: string;
-  color: string | undefined;
 };
 
 export default function CardInfoModal({
@@ -590,6 +586,12 @@ export default function CardInfoModal({
         fill_template={fill_template}
         fill_template_with_gaps={fill_template_with_gaps}
         options={options}
+        showTagDigital={showTagDigital}
+        showTagEntrepreneurial={showTagEntrepreneurial}
+        showTagGreen={showTagGreen}
+        isGeneratedByAI={isGeneratedByAI}
+        collectionsColor={collectionsColor}
+        assessment_oer_type={assessment_oer_type}
       />
     </Flex>
   );
