@@ -8,9 +8,7 @@ import {
   useState,
 } from 'react';
 import { Option, SkillItemProps } from '../../types/encoreElements';
-import {
-  EducationContextEnum
-} from '../../types/encoreElements/PathDesignElement/enums';
+import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
@@ -99,13 +97,10 @@ export default function PathDesignGenLO({
     return enumObject[option.title];
   };
 
-  const mapStringToString = (
-    string: string,
-    enumObject: any
-  ): string => {
+  const mapStringToString = (string: string, enumObject: any): string => {
     if (!string) return ''; // TODO: before to call the API, check if the options are not null
     return enumObject[string];
-  }
+  };
 
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
@@ -154,7 +149,7 @@ export default function PathDesignGenLO({
           );
           console.log('Text: ', learningTextContext);
 
-          // The API returns an array of 2 learning objectives for each bloom level, 
+          // The API returns an array of 2 learning objectives for each bloom level,
           // so I have to call the API only half the number of learning objectives
           for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
@@ -178,10 +173,7 @@ export default function PathDesignGenLO({
                 .join(', '), // skills
               // bloomLevelIndex, // bloomLevel
               // selectedBloomLevel, // bloomLevel
-              mapStringToString(
-                selectedBloomLevel,
-                BloomLevelString
-              ), // bloomLevel
+              mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel
               // selectedOptions, // verbs
               // TEMPERATURE_GEN_LO_API // temperature
             );
@@ -190,11 +182,9 @@ export default function PathDesignGenLO({
 
             if (!resp) {
               console.log('No response');
-              learningObjectives.push('');
-              // if (isApiKeyInvalid === false) {
-              //   setIsApiKeyInvalid(true);
-              // }
+              //learningObjectives.push('');
               setIsApiKeyInvalid(true);
+              setIsLoading(false)
             } else {
               // const textLO = cutResponse(resp);
               // learningObjectives.push(textLO);
@@ -203,7 +193,10 @@ export default function PathDesignGenLO({
               for (const textLO of resp) {
                 // Check if the learning objective is not already in the list and if the number of learning objectives is not reached
                 // Avoid duplicates
-                if (!learningObjectives.includes(textLO) && learningObjectives.length < numberOfLO) {
+                if (
+                  !learningObjectives.includes(textLO) &&
+                  learningObjectives.length < numberOfLO
+                ) {
                   learningObjectives.push(textLO);
                   //console.log('textLO', textLO);
                 }
@@ -252,10 +245,10 @@ export default function PathDesignGenLO({
     educationContext: number,
     learningContext: string,
     skills: string,
-    bloomLevel: string,
+    bloomLevel: string
     // verbs: string[],
     // temperature: number
-  ): Promise<(string[] | undefined)> => {
+  ): Promise<string[] | undefined> => {
     try {
       //console.log('apiKey', apiKey);
       const resp = await axios.post(
@@ -288,7 +281,7 @@ export default function PathDesignGenLO({
       console.log('Success - resp.data:', resp?.data);
       // console.log('Success - resp:', resp);
 
-      return resp?.data[bloomLevel];  // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
+      return resp?.data[bloomLevel]; // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
     } catch (error) {
       console.error('Error:', error);
     }
@@ -410,7 +403,7 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {numberOfLO > 0 &&
+        {//numberOfLO > 0 &&
           generatedLOs.length > 0 &&
           hydrated &&
           generatedLOs.map((lo: string, index: number) => (
