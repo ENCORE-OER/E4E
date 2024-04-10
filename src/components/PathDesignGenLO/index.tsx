@@ -9,10 +9,7 @@ import {
 } from 'react';
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import {
-  EducationContextEnum,
-  YourExperienceEnum as EducatorExperienceEnum,
-  GroupDimensionEnum,
-  LearnerExperienceEnum,
+  EducationContextEnum
 } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
@@ -21,16 +18,17 @@ import InputAPIKey from '../Inputs/InputAPIKey';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
-  LANGUAGE_GEN_LO_API: string;
-  TEMPERATURE_GEN_LO_API: number;
+  // LANGUAGE_GEN_LO_API: string;
+  // TEMPERATURE_GEN_LO_API: number;
   bloomLevelIndex: number;
+  selectedBloomLevel: string;
   //learningObjectives,
   selectedContext: Option | null;
   selectedSkillConceptsTags: SkillItemProps[];
   selectedOptions: string[];
-  selectedGroupDimension: Option | null;
-  selectedLearnerExperience: Option | null;
-  selectedEducatorExperience: Option | null;
+  // selectedGroupDimension: Option | null;
+  // selectedLearnerExperience: Option | null;
+  // selectedEducatorExperience: Option | null;
   learningTextContext: string;
   generatedLOs: string[];
   setGeneratedLOs: Dispatch<SetStateAction<string[]>>;
@@ -41,17 +39,27 @@ type PathDesignGenLOProps = {
   handleApiKey: (apiKey: string) => void;
 };
 
+enum BloomLevelString {
+  Remember = 'Remembering',
+  Understand = 'Understanding',
+  Apply = 'Applying',
+  Analyze = 'Analyzing',
+  Evaluate = 'Evaluating',
+  Create = 'Creating',
+}
+
 export default function PathDesignGenLO({
-  LANGUAGE_GEN_LO_API,
-  TEMPERATURE_GEN_LO_API,
+  // LANGUAGE_GEN_LO_API,
+  // TEMPERATURE_GEN_LO_API,
   bloomLevelIndex,
+  selectedBloomLevel,
   //learningObjectives,
   selectedContext,
   selectedSkillConceptsTags,
   selectedOptions,
-  selectedGroupDimension,
-  selectedLearnerExperience,
-  selectedEducatorExperience,
+  // selectedGroupDimension,
+  // selectedLearnerExperience,
+  // selectedEducatorExperience,
   learningTextContext,
   generatedLOs,
   setGeneratedLOs,
@@ -91,6 +99,14 @@ export default function PathDesignGenLO({
     return enumObject[option.title];
   };
 
+  const mapStringToString = (
+    string: string,
+    enumObject: any
+  ): string => {
+    if (!string) return ''; // TODO: before to call the API, check if the options are not null
+    return enumObject[string];
+  }
+
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
     // if (apiKey === undefined || apiKey === '') {
@@ -123,12 +139,13 @@ export default function PathDesignGenLO({
           handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: any[] = [];
           console.log('Generate learning objectives');
-          console.log('Educator experience: ', selectedEducatorExperience);
-          console.log('Learner experience: ', selectedLearnerExperience);
-          console.log('Group dimension: ', selectedGroupDimension);
+          // console.log('Educator experience: ', selectedEducatorExperience);
+          // console.log('Learner experience: ', selectedLearnerExperience);
+          // console.log('Group dimension: ', selectedGroupDimension);
           console.log('Education context: ', selectedContext);
-          console.log('Bloom level: ', bloomLevelIndex);
-          console.log('Verbs: ', selectedOptions);
+          // console.log('Bloom level: ', bloomLevelIndex);
+          // console.log('Verbs: ', selectedOptions);
+          console.log('Bloom level: ', selectedBloomLevel);
           console.log(
             'Skills: ',
             selectedSkillConceptsTags
@@ -137,29 +154,36 @@ export default function PathDesignGenLO({
           );
           console.log('Text: ', learningTextContext);
 
-          for (let i = 0; i < numberOfLO; i++) {
+          // The API returns an array of 2 learning objectives for each bloom level, 
+          // so I have to call the API only half the number of learning objectives
+          for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
             const resp = await postGenerateLearningObjective(
               apiKey, // apiKey
-              LANGUAGE_GEN_LO_API, // language
-              mapOptionToNumber(
-                selectedEducatorExperience,
-                EducatorExperienceEnum
-              ), // educatorExperience
-              mapOptionToNumber(
-                selectedLearnerExperience,
-                LearnerExperienceEnum
-              ), // learnerExperience
-              mapOptionToNumber(selectedGroupDimension, GroupDimensionEnum), // dimension
+              // LANGUAGE_GEN_LO_API, // language
+              // mapOptionToNumber(
+              //   selectedEducatorExperience,
+              //   EducatorExperienceEnum
+              // ), // educatorExperience
+              // mapOptionToNumber(
+              //   selectedLearnerExperience,
+              //   LearnerExperienceEnum
+              // ), // learnerExperience
+              // mapOptionToNumber(selectedGroupDimension, GroupDimensionEnum), // dimension
               mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext
               learningTextContext, // learningContext
               selectedSkillConceptsTags
                 .map((skill: SkillItemProps) => skill.label)
                 .join(', '), // skills
-              bloomLevelIndex, // bloomLevel
-              selectedOptions, // verbs
-              TEMPERATURE_GEN_LO_API // temperature
+              // bloomLevelIndex, // bloomLevel
+              // selectedBloomLevel, // bloomLevel
+              mapStringToString(
+                selectedBloomLevel,
+                BloomLevelString
+              ), // bloomLevel
+              // selectedOptions, // verbs
+              // TEMPERATURE_GEN_LO_API // temperature
             );
 
             console.log('resp', resp);
@@ -172,11 +196,18 @@ export default function PathDesignGenLO({
               // }
               setIsApiKeyInvalid(true);
             } else {
-              const textLO = cutResponse(resp);
-              learningObjectives.push(textLO);
-              // if (isApiKeyInvalid === true) {
-              //   setIsApiKeyInvalid(false);
-              // }
+              // const textLO = cutResponse(resp);
+              // learningObjectives.push(textLO);
+
+              // The API returns an array of 2 learning objectives
+              for (const textLO of resp) {
+                // Check if the learning objective is not already in the list and if the number of learning objectives is not reached
+                // Avoid duplicates
+                if (!learningObjectives.includes(textLO) && learningObjectives.length < numberOfLO) {
+                  learningObjectives.push(textLO);
+                  //console.log('textLO', textLO);
+                }
+              }
               setIsApiKeyInvalid(false);
             }
 
@@ -214,32 +245,37 @@ export default function PathDesignGenLO({
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
-    language: string,
-    educatorExperience: number,
-    learnerExperience: number,
-    dimension: number,
+    // language: string,
+    // educatorExperience: number,
+    // learnerExperience: number,
+    // dimension: number,
     educationContext: number,
     learningContext: string,
     skills: string,
-    bloomLevel: number,
-    verbs: string[],
-    temperature: number
-  ): Promise<string | undefined> => {
+    bloomLevel: string,
+    // verbs: string[],
+    // temperature: number
+  ): Promise<(string[] | undefined)> => {
     try {
       //console.log('apiKey', apiKey);
       const resp = await axios.post(
         '/api/encore/genAI/generateLearningObjective',
+        // {
+        //   language: language,
+        //   educatorExperience: educatorExperience,
+        //   learnerExperience: learnerExperience,
+        //   dimension: dimension,
+        //   educationContext: educationContext,
+        //   learningContext: learningContext,
+        //   skills: skills,
+        //   bloomLevel: bloomLevel,
+        //   verbs: verbs,
+        //   temperature: temperature,
+        // },
         {
-          language: language,
-          educatorExperience: educatorExperience,
-          learnerExperience: learnerExperience,
-          dimension: dimension,
-          educationContext: educationContext,
-          learningContext: learningContext,
-          skills: skills,
-          bloomLevel: bloomLevel,
-          verbs: verbs,
-          temperature: temperature,
+          topic: skills,
+          context: learningContext,
+          level: educationContext,
         },
         {
           headers: {
@@ -252,37 +288,40 @@ export default function PathDesignGenLO({
       console.log('Success - resp.data:', resp?.data);
       // console.log('Success - resp:', resp);
 
-      return resp?.data;
+      return resp?.data[bloomLevel];  // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  // function to cut the response of the API to get only the significant learning objective text
-  const cutResponse = (resp: string) => {
-    // TODO: modify the API response to get receive only the text of the learning objective
-    // AT THE MOMENT: the response is a string with the config and the learning objective,
-    // so i have to cut the string to get only the learning objective
+  // --------- This function was used to cut the response of the API to get only the significant learning objective text ---------
 
-    // Find the index of the start of the learning objective in the string
-    const startIndex =
-      resp.indexOf(`Temperature: ${TEMPERATURE_GEN_LO_API}`) +
-      `Temperature: ${TEMPERATURE_GEN_LO_API}`.length +
-      1;
+  // // function to cut the response of the API to get only the significant learning objective text
+  // const cutResponse = (resp: string) => {
+  //   // TODO: modify the API response to get receive only the text of the learning objective
+  //   // AT THE MOMENT: the response is a string with the config and the learning objective,
+  //   // so i have to cut the string to get only the learning objective
 
-    // Extract only the learning objective
-    const textLO = resp?.substring(startIndex);
+  //   // Find the index of the start of the learning objective in the string
+  //   const startIndex =
+  //     resp.indexOf(`Temperature: ${TEMPERATURE_GEN_LO_API}`) +
+  //     `Temperature: ${TEMPERATURE_GEN_LO_API}`.length +
+  //     1;
 
-    // const endIndex = textLO.indexOf('\n\n');
+  //   // Extract only the learning objective
+  //   const textLO = resp?.substring(startIndex);
 
-    // // Extract main text until the first double newline
-    // textLO = textLO.substring(0, endIndex).trim();
+  //   // const endIndex = textLO.indexOf('\n\n');
 
-    // console.log(textLO);
+  //   // // Extract main text until the first double newline
+  //   // textLO = textLO.substring(0, endIndex).trim();
 
-    return textLO;
-  };
+  //   // console.log(textLO);
 
+  //   return textLO;
+  // };
+
+  // Function to update the learning objective when the user edits it
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
     const updatedGeneratedLOs = [...generatedLOs];
@@ -292,6 +331,7 @@ export default function PathDesignGenLO({
     setGeneratedLOs(updatedGeneratedLOs);
   };
 
+  // Function to handle the click on the checkbox to select the learning objective
   const handleCheckBoxClick = (index: number) => {
     console.log('Checkbox clicked');
     try {
@@ -370,7 +410,8 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {generatedLOs.length > 0 &&
+        {numberOfLO > 0 &&
+          generatedLOs.length > 0 &&
           hydrated &&
           generatedLOs.map((lo: string, index: number) => (
             <BoxGeneratedLO
