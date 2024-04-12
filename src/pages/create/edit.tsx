@@ -118,7 +118,7 @@ const Edit = () => {
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {hydrated && exercise === 'Fill the gaps' && (
+            {hydrated && exercise === 'Fill the Gaps' && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditFillGaps fillGapsData={apiFillGapsData} />

@@ -15,12 +15,15 @@ export default function OerCard({
   description,
   creator: authors,
   retrieval_date: lastUpdate,
+  publication_date,
   overall_score: qualityScore,
   media_type: resourceType,
+  assessment_oer_type,
   title,
   digital_domain: showTagDigital,
   entrepreneurship_domain: showTagEntrepreneurial,
   green_domain: showTagGreen,
+  isGeneratedByAI,
   maxHCard,
   //mbCard,
   pxCard,
@@ -61,6 +64,7 @@ export default function OerCard({
         showTagDigital={showTagDigital}
         showTagEntrepreneurial={showTagEntrepreneurial}
         showTagGreen={showTagGreen}
+        isGeneratedByAI={isGeneratedByAI}
         collection_color={collection_color}
         checkBookmark={checkBookmark}
       />
@@ -71,11 +75,13 @@ export default function OerCard({
         minHCardBody="55px"
       />
       <OerCardFooter
-        lastUpdate={lastUpdate}
+        lastUpdate={lastUpdate || publication_date || ''}
         qualityScore={qualityScore}
         used={times_used}
         liked={total_likes}
-        resourceType={resourceType}
+        resourceType={
+          assessment_oer_type ? [assessment_oer_type] : resourceType || []
+        }
         gapGrid={gapGridCardFooter}
         //maxResTypeTags={isSmallerScreen ? 2 : 3}
       />

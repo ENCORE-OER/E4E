@@ -110,45 +110,46 @@ const Home = (props: DiscoverPageProps) => {
     let searchData = {};
 
     try {
-      if (
-        isClicked &&
-        (selectedAudience.length > 0 ||
-          selectedAudience.length > 0 ||
-          selectedResourceTypes.length > 0) &&
-        searchValue.length === 0
-      ) {
-        // advanced search without keywords
-        searchData = {
-          page: 1,
-          keywords: searchValue,
-          //selectedSkills: selectedSkillIds,
-          domains: selectedDomains,
-          types: selectedResourceTypes,
-          audience: selectedAudience,
-          order_by: 'title',
-          order_asc: 'true',
-          operator: operator,
-          concepts: [],
-        };
+      // if (
+      //   isClicked &&
+      //   (selectedAudience.length > 0 ||
+      //     // selectedDomains.length > 0 || // at the moment the filterig by domain is not implemented by the API
+      //     selectedResourceTypes.length > 0) &&
+      //   searchValue.length === 0
+      // ) {
+      //   // advanced search without keywords
+      //   searchData = {
+      //     page: 1,
+      //     keywords: searchValue,
+      //     //selectedSkills: selectedSkillIds,
+      //     domains: selectedDomains,
+      //     types: selectedResourceTypes,
+      //     audience: selectedAudience,
+      //     order_by: 'title',
+      //     order_asc: 'true',
+      //     operator: operator,
+      //     concepts: [],
+      //   };
 
-        /*throw new Error(
-          'Advanced search is not available yet! \n Close the advanced search and try again.'
-        );*/
-      } else {
-        //normal search
-        searchData = {
-          page: 1,
-          keywords: searchValue,
-          //selectedSkills: selectedSkillIds,
-          domains: selectedDomains,
-          types: selectedResourceTypes,
-          audience: selectedAudience,
-          order_by: 'title',
-          order_asc: 'true',
-          operator: operator,
-          concepts: [],
-        };
-      }
+      //   /*throw new Error(
+      //     'Advanced search is not available yet! \n Close the advanced search and try again.'
+      //   );*/
+      // } else {
+      //normal search
+      searchData = {
+        page: 1,
+        keywords: searchValue,
+        //selectedSkills: selectedSkillIds,
+        domains: selectedDomains,
+        types: selectedResourceTypes,
+        audience: selectedAudience,
+        order_by: 'title',
+        order_asc: 'true',
+        operator: operator,
+        concepts: [],
+      };
+      // }
+
       if (
         searchValue.length === 0 &&
         selectedDomains.length === 0 &&

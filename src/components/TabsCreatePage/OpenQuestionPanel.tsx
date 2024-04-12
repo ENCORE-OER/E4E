@@ -68,7 +68,7 @@ export default function OpenQuestionPanel({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/openQuestionExercise',
+        '/api/encore/genAI/openQuestionExercise',
         requestData,
         {
           headers: {

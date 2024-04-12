@@ -32,6 +32,11 @@ const config = {
       900: '#F6EC8D',
     },
     entrepreneurial_dark: '#FFCF24',
+    genAI_light: {
+      200: transparentize(0.8, '#FFA1A1'),
+      900: '#FFA1A1',
+    },
+    genAI_dark: '#FF6B6B',
   },
   fonts: {
     heading: 'Exo, sans-serif',
@@ -213,6 +218,13 @@ const config = {
           lineHeight: '19px',
           textAlign: 'center',
           color: 'entrepreneurial_dark',
+        },
+        label_tag_genAI: {
+          fontSize: '14px',
+          fontWeight: '600',
+          lineHeight: '19px',
+          textAlign: 'center',
+          color: 'genAI_dark',
         },
         label_tag_resType: {
           fontSize: '14px',

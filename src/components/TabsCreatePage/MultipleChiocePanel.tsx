@@ -2,10 +2,10 @@ import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
@@ -80,7 +80,7 @@ export default function MultipleChoicePanel({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/multipleChoiceExercise',
+        '/api/encore/genAI/multipleChoiceExercise',
         requestData,
         {
           headers: {
@@ -151,7 +151,7 @@ export default function MultipleChoicePanel({
             <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && exerciseType == null}
+            isHighlighted={isGenerateButtonClicked && exerciseType === null}
             options={exerciseTypeOptions}
             selected={exerciseType}
             preselectedTitle={exerciseType?.title}

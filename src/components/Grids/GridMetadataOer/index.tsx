@@ -4,7 +4,7 @@ import GridMetadataOerInfoModal from './GridMetadataOerInfoModal';
 
 type GridMetadataOerProps = {
   gap?: number;
-  lastUpdate: string;
+  lastUpdate: string | null;
   used: number;
   likes: number;
   qualityScore: number;

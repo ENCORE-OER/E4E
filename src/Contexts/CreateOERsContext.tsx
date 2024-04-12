@@ -147,6 +147,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   // * difficoltà, da aggiungere forse in futuro
 
   // * dati per i segmented buttons
+  // TODO: aggiungere commento descrittivo per ogni gruppo di opzioni per sapere a cosa serve e dove viene usata
   const targetLevelOptions: Option[] = [
     { title: 'Primary' },
     { title: 'Middle School' },
@@ -172,7 +173,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   ];
   const exerciseTypeOptions: Option[] = [
     { title: 'Theoretical' },
-    { title: 'Pratical' },
+    { title: 'Practical' },
   ];
   const temperatureOptions: Option[] = [
     { title: 'Low' },
@@ -220,7 +221,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [exercise, setExercise] = useLocalStorage<string | null>(
-    'Fill the gaps',
+    'exercise',
     null
   );
   const [temperature, setTemperature] = useState<number>(0.2);
@@ -389,7 +390,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleExercise = (selected: number) => {
     switch (selected) {
       case 0:
-        setExercise('Fill the gaps');
+        setExercise('Fill the Gaps');
         break;
       case 1:
         setExercise('Open Question');
@@ -451,7 +452,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleChosenType = (selected: Option) => {
     switch (selected.title) {
-      case 'Pratical':
+      case 'Practical':
         setChosenType(true);
         break;
       case 'Theoretical':

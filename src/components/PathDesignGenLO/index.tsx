@@ -228,7 +228,7 @@ export default function PathDesignGenLO({
     try {
       //console.log('apiKey', apiKey);
       const resp = await axios.post(
-        '/api/encore/generateLearningObjective',
+        '/api/encore/genAI/generateLearningObjective',
         {
           language: language,
           educatorExperience: educatorExperience,

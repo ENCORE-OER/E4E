@@ -2,7 +2,7 @@ import { default as axiosCreate } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const axiosGenerativeAI = axiosCreate.create({
-  baseURL: process.env.GENERATIVE_AI_URL, // TODO: change to the generative AI URL
+  baseURL: process.env.GENERATIVE_AI_URL,
   headers: {
     'Content-Type': 'application/json',
     //ApiKey: process.env.SK_API_KEY,

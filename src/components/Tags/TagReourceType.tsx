@@ -1,7 +1,7 @@
 import { Tag, Text } from '@chakra-ui/react';
 
 type TagResourceTypeProps = {
-  resourceType: string[];
+  resourceType: (string | null)[];
   maxTags?: number; // set max nummber of tags to show in a card
 };
 
@@ -14,7 +14,7 @@ export default function TagResourceType({
       {resourceType &&
         resourceType
           .slice(0, maxTags ? maxTags : resourceType.length)
-          .map((name: string, id: number) => (
+          .map((name: string | null, id: number) => (
             <Tag
               key={id}
               gap={1}
