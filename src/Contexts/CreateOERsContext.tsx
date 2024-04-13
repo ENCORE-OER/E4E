@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { OerData, Option, OptionsData } from '../types/encoreElements/index';
+import { GeneratedExerciseProps, OerData, Option, OptionsData } from '../types/encoreElements/index';
 // import { OerData } from '../types/encoreElements/oer/CreateOERsElement/OerData';
 // import { useHasHydrated } from '../utils/utils';
 
@@ -12,11 +12,16 @@ type CreateOERsContextProps = {
 
   // * dati dentro i segmented buttons
   targetLevelOptions: Option[];
+  bloomLevelOptions: Option[];
   lengthOptions: Option[];
   questionTypeOptions: Option[];
   questionCategoryOptions: Option[];
   exerciseTypeOptions: Option[];
   temperatureOptions: Option[];
+
+  // * General variables
+  bloomLevelExercise: Option | null;
+  handleBloomLevelExercise: (selected: Option) => void;
 
   // * variabili Fill Gaps
   targetLevelFillGaps: Option | null;
@@ -25,6 +30,8 @@ type CreateOERsContextProps = {
   handleLength: (selected: Option) => void;
   distractorsFillGaps: number;
   handleDistractorsFillGaps: (selected: number | string) => void;
+  easyDistractorsFillGaps: number;
+  handleEasyDistractorsFillGaps: (selected: number | string) => void;
   blanks: number;
   handleBlanks: (selected: number | string) => void;
   temperatureFillGaps: Option | null;
@@ -68,7 +75,7 @@ type CreateOERsContextProps = {
   handleDistractors: (selected: number) => void;
   questionCategory: string;
   handleQuestionCategory: (selected: Option) => void;
-  sourceText: string;
+  sourceText: string; // material
   handleSourceText: (selected: string) => void;
   chosenLenght: number;
   //handleChosenLenght: (selected: Option) => void;
@@ -107,17 +114,15 @@ type CreateOERsContextProps = {
     correctAnswer: string;
   };
   handleTextToJSONOpenQuestion: (text: string) => void;
-  apiFillGapsData: {
-    language: string;
-    date: string;
-    temperature: number;
-    words: { [key: string]: boolean };
-    level: string;
-    text: string;
-    textWithGaps: string;
-    wordsAndAnswers: string;
-  };
-  handleTextToJSONFillGaps: (text: string) => void;
+  apiFillGapsData: GeneratedExerciseProps;
+  //handleTextToJSONFillGaps: (text: string) => void;
+  handleFillGapsData: (
+    Assignment: string,
+    Plus: string,
+    Solutions: string[],
+    Distractors: string[],
+    EasilyDiscardableDistractors: string[],
+  ) => void;
   apiMultipleChiocesData: {
     language: string;
     date: string;
@@ -155,6 +160,15 @@ export const CreateOERsProvider = ({ children }: any) => {
     { title: 'Academic' },
     { title: 'Professional' },
   ];
+  // This is used to give a set of options to the user to choose the bloom level before generate the exercise
+  const bloomLevelOptions: Option[] = [
+    { title: 'Remember' },
+    { title: 'Understand' },
+    { title: 'Apply' },
+    { title: 'Analyze' },
+    { title: 'Evaluate' },
+    { title: 'Create' },
+  ];
   const lengthOptions: Option[] = [
     { title: 'Short', description: '(~150 words)' },
     { title: 'Medium', description: '(~250 words)' },
@@ -181,12 +195,18 @@ export const CreateOERsProvider = ({ children }: any) => {
     { title: 'High' },
   ];
 
+  // General variables
+  const [bloomLevelExercise, setBloomLevelExercise] = useState<Option | null>(
+    null
+  );
+
   // * variabili per il Fill Gaps
   const [targetLevelFillGaps, setTargetLevelFillGaps] = useState<Option | null>(
     null
   );
   const [length, setLength] = useState<Option | null>(null);
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
+  const [easyDistractorsFillGaps, setEasyDistractorsFillGaps] = useState<number>(0);
   const [blanks, setBlanks] = useState<number>(1);
   const [temperatureFillGaps, setTemperatureFillGaps] = useState<Option | null>(
     null
@@ -227,15 +247,13 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [temperature, setTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
-  const [sourceText, setSourceText] = useState<string>('');
+  const [sourceText, setSourceText] = useState<string>('');  // url or text. Used to generate the exercise (material)
   const [chosenLenght, setChosenLenght] = useState<number>(150);
   const [chosenCategory, setChosenCategory] = useState<number>(0);
   const [chosenType, setChosenType] = useState<number | boolean>(0);
   const [question, setQuestion] = useState<string>('');
   const [solution, setSolution] = useState<string>('');
-  const [options, setOptions] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [options, setOptions] = useState<OptionsData>({});
   const [fillTemplate, setFillTemplate] = useState<string>('');
   const [fillTemplateWithGaps, setFillTemplateWithGaps] = useState<string>('');
   const [data, setData] = useState({} as OerData);
@@ -249,15 +267,20 @@ export const CreateOERsProvider = ({ children }: any) => {
     question: '',
     correctAnswer: '',
   });
-  const [apiFillGapsData, setApiFillGapsData] = useState({
-    language: '',
-    date: '',
-    temperature: 0,
-    words: {} as { [key: string]: boolean },
-    level: '',
-    text: '',
-    textWithGaps: '',
-    wordsAndAnswers: '',
+  const [apiFillGapsData, setApiFillGapsData] = useState<GeneratedExerciseProps>({
+    // language: '',
+    // date: '',
+    // temperature: 0,
+    // words: {} as { [key: string]: boolean },
+    // level: '',
+    // text: '',
+    // textWithGaps: '',
+    // wordsAndAnswers: '',
+    Assignment: '',
+    Plus: '',
+    Solutions: [],
+    Distractors: [],
+    EasilyDiscardableDistractors: [],
   });
   const [apiMultipleChiocesData, setApiMultipleChiocesData] = useState({
     language: '',
@@ -292,6 +315,11 @@ export const CreateOERsProvider = ({ children }: any) => {
 
   // * handle functions
 
+  // * General
+  const handleBloomLevelExercise = (selected: Option) => {
+    setBloomLevelExercise(selected);
+  };
+
   // * Fill Gaps
   const handleTargetLevelFillGaps = (selected: Option) => {
     setTargetLevelFillGaps(selected);
@@ -307,6 +335,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
   };
+  const handleEasyDistractorsFillGaps = (number: number | string) => {
+    setEasyDistractorsFillGaps(number as number);
+  }
   const handleBlanks = (number: number | string) => {
     setBlanks(number as number);
   };
@@ -522,39 +553,55 @@ export const CreateOERsProvider = ({ children }: any) => {
 
     setApiOpenQuestionData(newApiData);
   };
-  const handleTextToJSONFillGaps = (text: string) => {
-    const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
-    const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
-    const temperatureMatch = text.match(/Temperature: ([^\n]*)(?=\n)/);
-    const wordsMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
-    const levelMatch = text.match(/Level: ([^\n]*)(?=\n)/);
-    const textMatch = text.match(/Text: ([^\n]*)(?=\n)/);
-    const textWithGapsMatch = text.match(/TextWithGaps: ([^\n]*)(?=\n)/);
-    const wordsAndAnswersMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
+  // const handleTextToJSONFillGaps = (text: string) => {
+  //   const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
+  //   const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
+  //   const temperatureMatch = text.match(/Temperature: ([^\n]*)(?=\n)/);
+  //   const wordsMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
+  //   const levelMatch = text.match(/Level: ([^\n]*)(?=\n)/);
+  //   const textMatch = text.match(/Text: ([^\n]*)(?=\n)/);
+  //   const textWithGapsMatch = text.match(/TextWithGaps: ([^\n]*)(?=\n)/);
+  //   const wordsAndAnswersMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
 
-    const wordsArray = wordsMatch ? wordsMatch[1].split('\n') : [];
-    const wordsObject = {} as { [key: string]: boolean };
-    wordsArray.forEach((line) => {
-      const wordsInLine = line.trim().split(/\s+/);
-      wordsInLine.forEach((word) => {
-        const cleanedWord = word.replace(/^\(A\)/, '').trim(); // Rimuove (A) dalla parola
-        if (cleanedWord !== '') {
-          wordsObject[cleanedWord] = false;
-        }
-      });
-    });
+  //   const wordsArray = wordsMatch ? wordsMatch[1].split('\n') : [];
+  //   const wordsObject = {} as { [key: string]: boolean };
+  //   wordsArray.forEach((line) => {
+  //     const wordsInLine = line.trim().split(/\s+/);
+  //     wordsInLine.forEach((word) => {
+  //       const cleanedWord = word.replace(/^\(A\)/, '').trim(); // Rimuove (A) dalla parola
+  //       if (cleanedWord !== '') {
+  //         wordsObject[cleanedWord] = false;
+  //       }
+  //     });
+  //   });
 
+  //   setApiFillGapsData({
+  //     language: languageMatch ? languageMatch[1] : '',
+  //     date: dateMatch ? dateMatch[1] : '',
+  //     temperature: temperatureMatch ? parseFloat(temperatureMatch[1]) : 0,
+  //     words: wordsObject,
+  //     level: levelMatch ? levelMatch[1] : '',
+  //     text: textMatch ? textMatch[1] : '',
+  //     textWithGaps: textWithGapsMatch ? textWithGapsMatch[1] : '',
+  //     wordsAndAnswers: wordsAndAnswersMatch ? wordsAndAnswersMatch[1] : '',
+  //   });
+  // };
+
+  const handleFillGapsData = (
+    Assignment: string,
+    Plus: string,
+    Solutions: string[],
+    Distractors: string[],
+    EasilyDiscardableDistractors: string[]
+  ) => {
     setApiFillGapsData({
-      language: languageMatch ? languageMatch[1] : '',
-      date: dateMatch ? dateMatch[1] : '',
-      temperature: temperatureMatch ? parseFloat(temperatureMatch[1]) : 0,
-      words: wordsObject,
-      level: levelMatch ? levelMatch[1] : '',
-      text: textMatch ? textMatch[1] : '',
-      textWithGaps: textWithGapsMatch ? textWithGapsMatch[1] : '',
-      wordsAndAnswers: wordsAndAnswersMatch ? wordsAndAnswersMatch[1] : '',
+      Assignment: Assignment,
+      Plus: Plus,
+      Solutions: Solutions,
+      Distractors: Distractors,
+      EasilyDiscardableDistractors: EasilyDiscardableDistractors,
     });
-  };
+  }
 
   //todo togliere le (A)
   const handleTextToJSONMultipleChoice = (text: string) => {
@@ -634,7 +681,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         number_of_easy_distractors: easyDistractors || null,
         number_of_distractors: distractors || null,
         number_of_words: chosenLenght || null,
-        options: options || null,
+        options: options || null,  // see wordsOptions
         solution: solution || null,
       },
     };
@@ -671,16 +718,21 @@ export const CreateOERsProvider = ({ children }: any) => {
         apiOpenQuestionData,
         handleTextToJSONOpenQuestion,
         apiFillGapsData,
-        handleTextToJSONFillGaps,
+        //handleTextToJSONFillGaps,
+        handleFillGapsData,
         apiMultipleChiocesData,
         handleTextToJSONMultipleChoice,
         // * dati per i segmented buttons
         targetLevelOptions,
+        bloomLevelOptions,
         lengthOptions,
         questionTypeOptions,
         questionCategoryOptions,
         exerciseTypeOptions,
         temperatureOptions,
+        // * General variables and handle functions
+        bloomLevelExercise,
+        handleBloomLevelExercise,
         // * variabili e handle functions Fill Gaps
         targetLevelFillGaps,
         handleTargetLevelFillGaps,
@@ -688,6 +740,8 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleLength,
         distractorsFillGaps,
         handleDistractorsFillGaps,
+        easyDistractorsFillGaps,
+        handleEasyDistractorsFillGaps,
         blanks,
         handleBlanks,
         temperatureFillGaps,

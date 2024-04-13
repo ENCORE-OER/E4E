@@ -17,6 +17,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import TabsCreateMenu from '../../components/TabsCreatePage/TabsCreateMenu';
 import TextBox from '../../components/TextBox/TextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { stringArrayToOptionsObject } from '../../utils/utils';
 
 const Create = () => {
   const { user } = useUser();
@@ -57,7 +58,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -112,7 +113,7 @@ const Create = () => {
                 w="100%"
                 onClick={() => {
                   if (exercise == 'Fill the gaps') {
-                    handleOptionsChange(apiFillGapsData.words);
+                    handleOptionsChange(stringArrayToOptionsObject(apiFillGapsData));
                   }
                   if (isGenerateButtonClicked) {
                     router.push({

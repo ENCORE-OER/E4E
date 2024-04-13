@@ -3,7 +3,9 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { GeneratedExerciseProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
 
@@ -16,9 +18,13 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
+    bloomLevelOptions,
     targetLevelOptions,
     temperatureOptions,
-    lengthOptions,
+    // lengthOptions,
+
+    bloomLevelExercise,
+    handleBloomLevelExercise,
 
     temperatureFillGaps,
     handleTemperatureFillGaps,
@@ -26,61 +32,110 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     targetLevelFillGaps,
     handleTargetLevelFillGaps,
 
-    length,
-    handleLength,
+    // length,
+    // handleLength,
 
     distractorsFillGaps,
     handleDistractorsFillGaps,
 
+    easyDistractorsFillGaps,
+    handleEasyDistractorsFillGaps,
+
     blanks,
     handleBlanks,
 
-    sourceText,
+    sourceText, // material
     maxValue,
 
     chosenTargetLevel,
-    chosenLenght,
+    // chosenLenght,
     temperature,
 
     handleExercise,
 
     apiFillGapsData: apiData,
-    handleTextToJSONFillGaps: handleTextToJSON,
+    //handleTextToJSONFillGaps: handleTextToJSON,
+    handleFillGapsData
   } = useCreateOERsContext();
   const { apiKey } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
   const [loading, setLoading] = useState(false);
-  const responseRef = useRef(null);
+  const responseRef = useRef<GeneratedExerciseProps | null>(null);
 
   const handleOptionsComplete = () => {
     if (
       targetLevelFillGaps != null &&
-      length != null &&
+      bloomLevelExercise != null &&
+      //length != null &&
       temperatureFillGaps != null
     ) {
       setAreOptionsComplete(true);
     }
   };
 
+  // Use this function to analyze the material and get the macroSubject, title, topic, assignmentType
+  const analyzeMaterial = async (material: string) => {
+    console.log("Analyzing material: ");
+
+    try {
+      const resp = await axios.post('api/encore/genAI/materialAnalyzer',
+        {
+          material: material
+        },
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
+      );
+
+      return resp.data;
+    } catch (error) {
+      console.error('Error during the API call:', error);
+    }
+  }
+
+
   const handleGenerateButtonClick = async () => {
     setLoading(true);
     // Costruisci l'oggetto di dati da inviare nella richiesta
+    // const requestData = {
+    //   language: 'English',  
+    //   text: sourceText,
+    //   level: chosenTargetLevel,
+    //   n_o_w: chosenLenght,
+    //   n_o_g: blanks,
+    //   n_o_d: distractorsFillGaps,
+    //   temperature: temperature,
+    // };
+
+    // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
+    const analyzedMaterial = await analyzeMaterial(sourceText);
+
     const requestData = {
-      language: 'English',
-      text: sourceText,
+      macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
+      title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      n_o_w: chosenLenght,
-      n_o_g: blanks,
-      n_o_d: distractorsFillGaps,
+      typeOfExercise: 3,  // fill_in_the_blanks exercise
+      learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`,  // TODO: add a component in frontend to set the learning objective???
+      bloomLevel: mapOptionToNumber(bloomLevelExercise, bloomLevelOptions),
+      // language: language, // English by default
+      material: sourceText,
+      correctAnswersNumber: blanks,
+      distractorsNumber: distractorsFillGaps,
+      easilyDiscardableDistractorsNumber: easyDistractorsFillGaps,
+      assignmentType: analyzedMaterial.MainTopics[0].Type,  // 0 is for theoretical assignment
+      topic: analyzedMaterial.MainTopics[0].Topic,  // from materialAnalyzer API
       temperature: temperature,
-    };
+    }
 
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/genAI/fillGapsExercise',
+        //'/api/encore/genAI/fillGapsExercise',
+        '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
@@ -89,9 +144,9 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         }
       );
 
-      responseRef.current = apiResponse.data;
+      responseRef.current = apiResponse?.data;
       // Gestisci la risposta
-      setResponse(apiResponse.data);
+      setResponse(apiResponse?.data);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
@@ -101,7 +156,13 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
       if (responseRef.current) {
         // setRispostaTipo(responseRef.current);
-        handleTextToJSON(responseRef.current);
+        //handleTextToJSON(responseRef.current);
+        handleFillGapsData(
+          responseRef.current.Assignment,
+          responseRef.current.Plus,
+          responseRef.current.Solutions,
+          responseRef.current.Distractors,
+          responseRef.current.EasilyDiscardableDistractors);
       } else {
         addToast({
           message: 'Error during the API call.',
@@ -113,7 +174,10 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelFillGaps, length]);
+  }, [
+    targetLevelFillGaps,
+    // length
+  ]);
 
   return (
     <>
@@ -136,7 +200,25 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
+        <Box w={'70%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Bloom Level</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && bloomLevelExercise == null
+            }
+            options={bloomLevelOptions}
+            selected={bloomLevelExercise}
+            preselectedTitle={bloomLevelExercise?.title}
+            onChange={handleBloomLevelExercise}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        {/* <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Lenght</Text>
           </Flex>
@@ -149,8 +231,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
-        <Box w={'42%'} paddingLeft="2%">
+        </Box> */}
+        <Box w={'70%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
           </Flex>
@@ -177,6 +259,17 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             onChange={handleBlanks}
             min={1}
             max={maxValue}
+          />
+        </Box>
+        <Box w={'42%'} paddingLeft="2rem">
+          <Flex margin="0.4rem">
+            <Text as="b">Number Of Easy Distractors</Text>
+          </Flex>
+          <SliderInput
+            value={easyDistractorsFillGaps}
+            onChange={handleEasyDistractorsFillGaps}
+            min={0}
+            max={blanks}
           />
         </Box>
         <Box w={'42%'} paddingLeft="2rem">
@@ -241,8 +334,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         ) : (
           response && (
             <div>
-              <Text>Risposta API:</Text>
-              <Text>
+              <Text fontSize={"lg"} fontWeight={"bold"}>Risposta API:</Text>
+              {/* <Text>
                 {apiData.language} <br />
                 {apiData.date} <br />
                 {apiData.temperature} <br />
@@ -253,6 +346,21 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
                 <br />
                 risposta: <br />
                 {response}
+              </Text> */}
+              <Text>
+                Assignment: <br />
+                {apiData.Assignment} <br />
+                Plus: <br />
+                {apiData.Plus} <br />
+                Solutions: <br />
+                {apiData.Solutions} <br />
+                Distractors: <br />
+                {apiData.Distractors} <br />
+                Easily Discardable Distractors: <br />
+                {apiData.EasilyDiscardableDistractors} <br />
+                <br />
+                risposta: <br />
+                {JSON.stringify(response)}
               </Text>
             </div>
           )

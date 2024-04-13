@@ -17,31 +17,56 @@ export default async function serverSideCall(
     console.log(process.env.SK_API_KEY);
 
     // get the data from the request body
-    const { language, text, level, n_o_w, n_o_g, n_o_d, temperature } =
-      req.body;
+    const {
+      macroSubject,
+      title,
+      level,
+      //typeOfExercise,
+      learningObjective,
+      bloomLevel,
+      language,
+      material,
+      correctAnswersNumber,
+      distractorsNumber,
+      easilyDiscardableDistractorsNumber,
+      //assignmentType,
+      topic,
+      temperature,
+    } = req.body;
 
     const { apikey } = req.headers; // Express normalizes all request headers to lowercase
 
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/FillTheGaps/generateexercise';
+    //const analyzedMaterial = await post('/MaterialAnalyzer', {
+
+    const url = '/Exercises/GenerateExercise';
 
     try {
       const fillGapsExercise = await axiosGenerativeAI.post(
         url,
         {
-          language: language,
-          text: text,
+          macroSubject: macroSubject,
+          title: title,
           level: level,
-          n_o_w: n_o_w,
-          n_o_g: n_o_g,
-          n_o_d: n_o_d,
+          typeOfExercise: 3, // 3 is for fill_in_the_gaps exercise
+          learningObjective: learningObjective,
+          bloomLevel: bloomLevel,
+          language: language,
+          material: material,
+          correctAnswersNumber: correctAnswersNumber,
+          distractorsNumber: distractorsNumber,
+          easilyDiscardableDistractorsNumber:
+            easilyDiscardableDistractorsNumber,
+          assignmentType: 0, // 0 is for theoretical assignment. Usually the fill_in_the_gaps exercise is to check the understanding of the material
+          topic: topic,
           temperature: temperature,
         },
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
+            SetupModel: process.env.SETUP_MODEL,
           },
         }
         // {

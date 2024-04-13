@@ -1,23 +1,25 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { GeneratedExerciseProps } from '../../types/encoreElements';
+import { stringArrayToOptionsObject } from '../../utils/utils';
 import CheckboxEditableMenu from '../CheckboxMenu/CheckboxEditableMenu';
 import TextBox from '../TextBox/TextBox';
 
-type FillGapsData = {
-  language: string;
-  date: string;
-  temperature: number;
-  words: { [key: string]: boolean };
-  level: string;
-  text: string;
-  textWithGaps: string;
-  wordsAndAnswers: string;
-};
+// type FillGapsData = {
+//   language: string;
+//   date: string;
+//   temperature: number;
+//   words: { [key: string]: boolean };
+//   level: string;
+//   text: string;
+//   textWithGaps: string;
+//   wordsAndAnswers: string;
+// };
 
 type EditFillGapsProps = {
   isSmallerScreen?: boolean;
-  fillGapsData: FillGapsData;
+  fillGapsData: GeneratedExerciseProps;
 };
 
 export default function EditFillGaps({ fillGapsData }: EditFillGapsProps) {
@@ -35,10 +37,12 @@ export default function EditFillGaps({ fillGapsData }: EditFillGapsProps) {
     handleOptionsChange,
   } = useCreateOERsContext();
 
+  const optionsObject = stringArrayToOptionsObject(fillGapsData);
+
   useEffect(() => {
-    handleOptionsChange(fillGapsData.words);
-    handleFillTemplate(fillGapsData.text);
-    handleFillTemplateWithGaps(fillGapsData.textWithGaps);
+    handleOptionsChange(optionsObject);
+    handleFillTemplate(fillGapsData.Assignment);
+    handleFillTemplateWithGaps(fillGapsData.Assignment);
   }, []);
 
   return (

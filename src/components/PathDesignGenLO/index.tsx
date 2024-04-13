@@ -10,7 +10,7 @@ import {
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { mapOptionToNumber, mapStringToString, useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
 import InputAPIKey from '../Inputs/InputAPIKey';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -88,20 +88,6 @@ export default function PathDesignGenLO({
     }
   };
 
-  // Function to map the selected option to the corresponding index to give to the API
-  const mapOptionToNumber = (
-    option: Option | null,
-    enumObject: any
-  ): number => {
-    if (!option) return -1; // TODO: before to call the API, check if the options are not null
-    return enumObject[option.title];
-  };
-
-  const mapStringToString = (string: string, enumObject: any): string => {
-    if (!string) return ''; // TODO: before to call the API, check if the options are not null
-    return enumObject[string];
-  };
-
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
     // if (apiKey === undefined || apiKey === '') {
@@ -166,14 +152,14 @@ export default function PathDesignGenLO({
               //   LearnerExperienceEnum
               // ), // learnerExperience
               // mapOptionToNumber(selectedGroupDimension, GroupDimensionEnum), // dimension
-              mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext
+              mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
               learningTextContext, // learningContext
               selectedSkillConceptsTags
                 .map((skill: SkillItemProps) => skill.label)
                 .join(', '), // skills
               // bloomLevelIndex, // bloomLevel
               // selectedBloomLevel, // bloomLevel
-              mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel
+              mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
               // selectedOptions, // verbs
               // TEMPERATURE_GEN_LO_API // temperature
             );
@@ -184,7 +170,7 @@ export default function PathDesignGenLO({
               console.log('No response');
               //learningObjectives.push('');
               setIsApiKeyInvalid(true);
-              setIsLoading(false)
+              setIsLoading(false);
             } else {
               // const textLO = cutResponse(resp);
               // learningObjectives.push(textLO);
@@ -403,7 +389,8 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {//numberOfLO > 0 &&
+        {
+          //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
           hydrated &&
           generatedLOs.map((lo: string, index: number) => (
@@ -415,7 +402,8 @@ export default function PathDesignGenLO({
               handleCheckBoxClick={handleCheckBoxClick}
               handleUpdateLO={handleUpdateLO}
             />
-          ))}
+          ))
+        }
       </Flex>
     </Flex>
   );
