@@ -1,5 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
+import axios from 'axios';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import FillGapsPanel from './FillGapsPanel';
 import MultipleChoicePanel from './MultipleChiocePanel';
 import OpenQuestionPanel from './OpenQuestionPanel';
@@ -14,9 +16,34 @@ export default function TabsCreateMenu({
   const { handleIsGenerateButtonClicked, handleExercise } =
     useCreateOERsContext();
 
+  const { apiKey } = useGeneralContext();
+
   const handleChangeTab = (index: number) => {
     handleExercise(index);
     handleIsGenerateButtonClicked(false);
+  };
+
+  // Use this function to analyze the material and get the macroSubject, title, topic, assignmentType
+  const analyzeMaterial = async (material: string) => {
+    console.log('Analyzing material: ');
+
+    try {
+      const resp = await axios.post(
+        'api/encore/genAI/materialAnalyzer',
+        {
+          material: material,
+        },
+        {
+          headers: {
+            ApiKey: apiKey,
+          },
+        }
+      );
+
+      return resp.data;
+    } catch (error) {
+      console.error('Error during the API call:', error);
+    }
   };
 
   return (
@@ -32,13 +59,13 @@ export default function TabsCreateMenu({
       </TabList>
       <TabPanels>
         <TabPanel>
-          <FillGapsPanel isSmallerScreen={isSmallerScreen} />
+          <FillGapsPanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
         </TabPanel>
         <TabPanel>
-          <OpenQuestionPanel isSmallerScreen={isSmallerScreen} />
+          <OpenQuestionPanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
         </TabPanel>
         <TabPanel>
-          <MultipleChoicePanel isSmallerScreen={isSmallerScreen} />
+          <MultipleChoicePanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
         </TabPanel>
       </TabPanels>
     </Tabs>

@@ -10,7 +10,11 @@ import {
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { mapOptionToNumber, mapStringToString, useHasHydrated } from '../../utils/utils';
+import {
+  mapOptionToNumber,
+  mapStringToString,
+  useHasHydrated,
+} from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
 import InputAPIKey from '../Inputs/InputAPIKey';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
@@ -392,17 +396,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))
+            hydrated &&
+            generatedLOs.map((lo: string, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                textLearningObjective={lo}
+                index={index}
+                selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
         }
       </Flex>
     </Flex>

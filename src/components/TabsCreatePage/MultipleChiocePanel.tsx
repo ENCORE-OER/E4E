@@ -3,16 +3,21 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { AnalyzedMaterialProps, BloomLevelsEnum, GeneratedExerciseProps, TypeOfExerciseEnum } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
+import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
 
 type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
+  analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
 export default function MultipleChoicePanel({
   isSmallerScreen,
+  analyzeMaterial
 }: MultipleChoicePanelProps) {
   const {
     isGenerateButtonClicked,
@@ -20,8 +25,12 @@ export default function MultipleChoicePanel({
 
     targetLevelOptions,
     temperatureOptions,
-    questionCategoryOptions,
+    // questionCategoryOptions,
     exerciseTypeOptions,
+    bloomLevelOptions,
+
+    bloomLevelExercise,
+    handleBloomLevelExercise,
 
     temperatureMultipleChoice,
     handleTemperatureMultipleChoice,
@@ -33,7 +42,7 @@ export default function MultipleChoicePanel({
     handleExerciseType,
 
     questionCategoryMultipleChoice,
-    handleQuestionCategoryMultipleChoice,
+    // handleQuestionCategoryMultipleChoice,
 
     correctAnswer,
     handleCorrectAnswer,
@@ -47,40 +56,67 @@ export default function MultipleChoicePanel({
     temperature,
     sourceText,
     chosenTargetLevel,
-    chosenType,
-    chosenCategory,
+    chosenTypeOfExercise,
+    // chosenCategory,
     handleExercise,
 
-    apiMultipleChiocesData: apiData,
-    handleTextToJSONMultipleChoice: handleTextToJSON,
+    // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
+    // handleTextToJSONMultipleChoice: handleTextToJSON,
+    handleGeneratedExerciseData,
   } = useCreateOERsContext();
-  const { apiKey } = useGeneralContext();
 
+  const { apiKey } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
   const [loading, setLoading] = useState(false);
-  const responseRef = useRef(null);
+  const responseRef = useRef<GeneratedExerciseProps | null>(null);
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    // Costruisci l'oggetto di dati da inviare nella richiesta
+
+    // // Costruisci l'oggetto di dati da inviare nella richiesta
+    // const requestData = {
+    //   language: 'English',
+    //   type: chosenType,
+    //   text: sourceText,
+    //   level: chosenTargetLevel,
+    //   category: chosenCategory,
+    //   temperature: temperature,
+    //   n_o_ca: correctAnswer,
+    //   nedd: easyDistractors,
+    //   n_o_d: distractorsMultipleChoice,
+    // };
+
+    // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
+    const analyzedMaterial = await analyzeMaterial(sourceText);
+    const exerciseTypeNumber =
+      correctAnswer === 1
+        ? mapOptionToNumber({ title: 'single_choice' }, TypeOfExerciseEnum)
+        : mapOptionToNumber({ title: 'multiple_choice' }, TypeOfExerciseEnum)
+
     const requestData = {
-      language: 'English',
-      type: chosenType,
-      text: sourceText,
+      macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
+      title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      category: chosenCategory,
+      typeOfExercise: exerciseTypeNumber, // fill_in_the_blanks exercise
+      learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
+      bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
+      // language: language, // English by default
+      material: sourceText,
+      correctAnswersNumber: correctAnswer,
+      distractorsNumber: distractorsMultipleChoice,
+      easilyDiscardableDistractorsNumber: easyDistractors,
+      assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
+      topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
       temperature: temperature,
-      n_o_ca: correctAnswer,
-      nedd: easyDistractors,
-      n_o_d: distractorsMultipleChoice,
     };
 
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/genAI/multipleChoiceExercise',
+        // '/api/encore/genAI/multipleChoiceExercise',
+        '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
@@ -88,19 +124,26 @@ export default function MultipleChoicePanel({
           },
         }
       );
-      responseRef.current = apiResponse.data;
+      responseRef.current = apiResponse.data ?? null;
       // Gestisci la risposta
-      setResponse(apiResponse.data);
+      setResponse(apiResponse.data ?? null);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
     } finally {
       setLoading(false);
-      setResponse(responseRef.current);
+      setResponse(responseRef.current ?? null);
 
       if (responseRef.current) {
         //setRispostaTipo(responseRef.current);
-        handleTextToJSON(responseRef.current);
+        //handleTextToJSON(responseRef.current);
+        handleGeneratedExerciseData(
+          responseRef.current.Assignment,
+          responseRef.current.Plus,
+          responseRef.current.Solutions,
+          responseRef.current.Distractors,
+          responseRef.current.EasilyDiscardableDistractors
+        );
       } else {
         addToast({
           message: 'Error during the API call.',
@@ -112,10 +155,11 @@ export default function MultipleChoicePanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelMultipleChoice != null &&
-      exerciseType != null &&
-      questionCategoryMultipleChoice != null &&
-      temperatureMultipleChoice != null
+      targetLevelMultipleChoice !== null &&
+      exerciseType !== null &&
+      // questionCategoryMultipleChoice !== null &&
+      temperatureMultipleChoice !== null &&
+      bloomLevelExercise !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -123,18 +167,18 @@ export default function MultipleChoicePanel({
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelMultipleChoice, exerciseType, questionCategoryMultipleChoice]);
+  }, [targetLevelMultipleChoice, exerciseType, questionCategoryMultipleChoice, bloomLevelExercise, temperatureMultipleChoice]);
 
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'70%'}>
+        <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={
-              isGenerateButtonClicked && targetLevelMultipleChoice == null
+              isGenerateButtonClicked && targetLevelMultipleChoice === null
             }
             options={targetLevelOptions}
             selected={targetLevelMultipleChoice}
@@ -180,6 +224,22 @@ export default function MultipleChoicePanel({
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
+            <Text as="b">Bloom Level</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && bloomLevelExercise == null
+            }
+            options={bloomLevelOptions}
+            selected={bloomLevelExercise}
+            preselectedTitle={bloomLevelExercise?.title}
+            onChange={handleBloomLevelExercise}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+        {/* <Box w={'90%'}>
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
@@ -193,7 +253,7 @@ export default function MultipleChoicePanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'30%'}>
@@ -202,7 +262,7 @@ export default function MultipleChoicePanel({
           </Flex>
           <SliderInput
             min={1}
-            max={chosenType ? 1 : 3}
+            max={chosenTypeOfExercise ? 1 : 3}
             value={correctAnswer}
             onChange={handleCorrectAnswer}
           />
@@ -278,25 +338,7 @@ export default function MultipleChoicePanel({
           </Box>
         ) : (
           response && (
-            <div>
-              <Text>Risposta API:</Text>
-              <Text>
-                {apiData.language} <br />
-                {apiData.date} <br />
-                {apiData.level} <br />
-                {apiData.temperature} <br />
-                {apiData.nedd} <br />
-                {apiData.n_o_d} <br />
-                {apiData.category} <br />
-                {apiData.question} <br />
-                {apiData.correctAnswer} <br />
-                {/* {apiData.answers} <br /> */}
-                {apiData.solution} <br />
-                <br />
-                risposta: <br />
-                {response}
-              </Text>
-            </div>
+            <GenerateExerciseResponseView response={response} />
           )
         )}
       </Box>

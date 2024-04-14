@@ -34,7 +34,7 @@ const Create = () => {
     isGenerateButtonClicked,
     handleOptionsChange,
     exercise,
-    apiFillGapsData,
+    apiGeneratedExerciseData: apiFillGapsData,
   } = useCreateOERsContext();
   const { apiKey, handleApiKey } = useGeneralContext();
 
@@ -113,7 +113,9 @@ const Create = () => {
                 w="100%"
                 onClick={() => {
                   if (exercise == 'Fill the gaps') {
-                    handleOptionsChange(stringArrayToOptionsObject(apiFillGapsData));
+                    handleOptionsChange(
+                      stringArrayToOptionsObject(apiFillGapsData)
+                    );
                   }
                   if (isGenerateButtonClicked) {
                     router.push({

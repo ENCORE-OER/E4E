@@ -1,4 +1,5 @@
 export * from './CreateOERsElement/index';
+export * from './enums';
 export * from './Oer';
 export * from './OerAudience';
 export * from './OerAuthors';
