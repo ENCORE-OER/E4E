@@ -14,7 +14,7 @@ import { useGeneralContext } from '../../Contexts/GeneralContext';
 import InputsGenerateAI from '../../components/Inputs/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
-import TabsCreateMenu from '../../components/TabsCreatePage/TabsCreateMenu';
+import TabsCreateMenu from '../../components/Tabs/TabsCreatePage/TabsCreateMenu';
 import TextBox from '../../components/TextBox/TextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { stringArrayToOptionsObject } from '../../utils/utils';
@@ -33,7 +33,7 @@ const Create = () => {
     handleSourceText,
     isGenerateButtonClicked,
     handleOptionsChange,
-    exercise,
+    typeOfExercisePanel,
     apiGeneratedExerciseData: apiFillGapsData,
   } = useCreateOERsContext();
   const { apiKey, handleApiKey, setupModel, handleSetupModel } =
@@ -123,7 +123,7 @@ const Create = () => {
                 mt={4}
                 w="100%"
                 onClick={() => {
-                  if (exercise == 'Fill the gaps') {
+                  if (typeOfExercisePanel === 'Fill the Gaps') {
                     handleOptionsChange(
                       stringArrayToOptionsObject(apiFillGapsData)
                     );

@@ -1,8 +1,8 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { GeneratedExerciseProps } from '../../types/encoreElements';
-import TextBox from '../TextBox/TextBox';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { GeneratedExerciseProps } from '../../../types/encoreElements';
+import TextBox from '../../TextBox/TextBox';
 
 // type OpenQuestionData = {
 //   language: string;

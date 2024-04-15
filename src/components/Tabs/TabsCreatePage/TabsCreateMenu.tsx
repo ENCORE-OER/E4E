@@ -1,7 +1,7 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import axios from 'axios';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import FillGapsPanel from './FillGapsPanel';
 import MultipleChoicePanel from './MultipleChiocePanel';
 import OpenQuestionPanel from './OpenQuestionPanel';
@@ -13,13 +13,13 @@ type TabsCreateMenuProps = {
 export default function TabsCreateMenu({
   isSmallerScreen,
 }: TabsCreateMenuProps) {
-  const { handleIsGenerateButtonClicked, handleExercise } =
+  const { handleIsGenerateButtonClicked, handleTypeOfExercisePanel } =
     useCreateOERsContext();
 
-  const { apiKey } = useGeneralContext();
+  const { apiKey, setupModel } = useGeneralContext();
 
   const handleChangeTab = (index: number) => {
-    handleExercise(index);
+    handleTypeOfExercisePanel(index);
     handleIsGenerateButtonClicked(false);
   };
 
@@ -36,6 +36,7 @@ export default function TabsCreateMenu({
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
@@ -53,19 +54,19 @@ export default function TabsCreateMenu({
       onChange={(index) => handleChangeTab(index)}
     >
       <TabList>
-        <Tab>Fill-Gaps</Tab>
         <Tab>Open Question</Tab>
+        <Tab>Fill-Gaps</Tab>
         <Tab>Multiple-Choice</Tab>
       </TabList>
       <TabPanels>
         <TabPanel>
-          <FillGapsPanel
+          <OpenQuestionPanel
             isSmallerScreen={isSmallerScreen}
             analyzeMaterial={analyzeMaterial}
           />
         </TabPanel>
         <TabPanel>
-          <OpenQuestionPanel
+          <FillGapsPanel
             isSmallerScreen={isSmallerScreen}
             analyzeMaterial={analyzeMaterial}
           />
