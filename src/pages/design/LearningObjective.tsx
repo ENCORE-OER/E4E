@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
@@ -20,8 +19,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const {
     DIMENSION,
     SPACING,
-    LANGUAGE_GEN_LO_API,
-    TEMPERATURE_GEN_LO_API,
+    // LANGUAGE_GEN_LO_API,
+    // TEMPERATURE_GEN_LO_API,
     bloomLevelIndex,
     //learningTextContext: text,
     step,
@@ -46,7 +45,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
-  const { apiKey, handleApiKey } = useGeneralContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { addToast } = CustomToast();
@@ -271,15 +269,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   />
                 </Box>
                 <PathDesignGenLO
-                  LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
-                  TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
+                  // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
+                  // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
                   bloomLevelIndex={bloomLevelIndex}
+                  selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name}
                   selectedContext={selectedContext}
                   selectedSkillConceptsTags={selectedSkillConceptsTags}
                   selectedOptions={selectedOptions}
-                  selectedGroupDimension={selectedGroupDimension}
-                  selectedLearnerExperience={selectedLearnerExperience}
-                  selectedEducatorExperience={selectedEducatorExperience}
+                  // selectedGroupDimension={selectedGroupDimension}
+                  // selectedLearnerExperience={selectedLearnerExperience}
+                  // selectedEducatorExperience={selectedEducatorExperience}
                   learningTextContext={learningTextContext}
                   generatedLOs={generatedLOs}
                   setGeneratedLOs={setGeneratedLOs}
@@ -288,8 +287,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
-                  apiKey={apiKey}
-                  handleApiKey={handleApiKey}
+                  // apiKey={apiKey}
+                  // handleApiKey={handleApiKey}
                 />
               </Flex>
             )}

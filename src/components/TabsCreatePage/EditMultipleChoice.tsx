@@ -1,28 +1,29 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { useHasHydrated } from '../../utils/utils';
+import { GeneratedExerciseProps } from '../../types/encoreElements';
+import { stringArrayToOptionsObject, useHasHydrated } from '../../utils/utils';
 import CheckboxEditableMenu from '../CheckboxMenu/CheckboxEditableMenu';
 import RadioEditableMenu from '../RadioMenu/RadioEditableMenu';
 import TextBox from '../TextBox/TextBox';
 
-type MultipleChoiceData = {
-  language: string;
-  date: string;
-  level: string;
-  temperature: number;
-  nedd: number;
-  n_o_d: number;
-  category: string;
-  question: string;
-  correctAnswer: string;
-  answers: { [key: string]: boolean };
-  solution: string;
-};
+// type MultipleChoiceData = {
+//   language: string;
+//   date: string;
+//   level: string;
+//   temperature: number;
+//   nedd: number;
+//   n_o_d: number;
+//   category: string;
+//   question: string;
+//   correctAnswer: string;
+//   answers: { [key: string]: boolean };
+//   solution: string;
+// };
 
 type EditMultipleChoiceProps = {
   isSmallerScreen?: boolean;
-  multipleChoiceData: MultipleChoiceData;
+  multipleChoiceData: GeneratedExerciseProps;
 };
 
 export default function EditMultipleChoice({
@@ -41,13 +42,15 @@ export default function EditMultipleChoice({
     options,
     handleOptions,
     handleOptionsChange,
-    chosenType,
+    chosenTypeOfExercise: chosenType,
   } = useCreateOERsContext();
 
+  const optionsObject = stringArrayToOptionsObject(multipleChoiceData);
+
   useEffect(() => {
-    handleSolution(multipleChoiceData.solution);
-    handleQuestion(multipleChoiceData.question);
-    handleOptionsChange(multipleChoiceData.answers);
+    handleSolution(multipleChoiceData.Solutions[0]); // TODO: check if this is correct
+    handleQuestion(multipleChoiceData.Assignment);
+    handleOptionsChange(optionsObject);
   }, []);
 
   useEffect(() => {

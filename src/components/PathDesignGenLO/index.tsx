@@ -7,67 +7,80 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { PiSmileySadLight } from 'react-icons/pi';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { Option, SkillItemProps } from '../../types/encoreElements';
-import {
-  EducationContextEnum,
-  YourExperienceEnum as EducatorExperienceEnum,
-  GroupDimensionEnum,
-  LearnerExperienceEnum,
-} from '../../types/encoreElements/PathDesignElement/enums';
+import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import {
+  mapOptionToNumber,
+  mapStringToString,
+  useHasHydrated,
+} from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
-import InputAPIKey from '../Inputs/InputAPIKey';
+import InputsGenerateAI from '../Inputs/InputsGenerateAI';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
-  LANGUAGE_GEN_LO_API: string;
-  TEMPERATURE_GEN_LO_API: number;
+  // LANGUAGE_GEN_LO_API: string;
+  // TEMPERATURE_GEN_LO_API: number;
   bloomLevelIndex: number;
+  selectedBloomLevel: string;
   //learningObjectives,
   selectedContext: Option | null;
   selectedSkillConceptsTags: SkillItemProps[];
   selectedOptions: string[];
-  selectedGroupDimension: Option | null;
-  selectedLearnerExperience: Option | null;
-  selectedEducatorExperience: Option | null;
+  // selectedGroupDimension: Option | null;
+  // selectedLearnerExperience: Option | null;
+  // selectedEducatorExperience: Option | null;
   learningTextContext: string;
   generatedLOs: string[];
   setGeneratedLOs: Dispatch<SetStateAction<string[]>>;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted: boolean;
-  apiKey: string | undefined;
-  handleApiKey: (apiKey: string) => void;
 };
 
+enum BloomLevelString {
+  Remember = 'Remembering',
+  Understand = 'Understanding',
+  Apply = 'Applying',
+  Analyze = 'Analyzing',
+  Evaluate = 'Evaluating',
+  Create = 'Creating',
+}
+
 export default function PathDesignGenLO({
-  LANGUAGE_GEN_LO_API,
-  TEMPERATURE_GEN_LO_API,
+  // LANGUAGE_GEN_LO_API,
+  // TEMPERATURE_GEN_LO_API,
   bloomLevelIndex,
+  selectedBloomLevel,
   //learningObjectives,
   selectedContext,
   selectedSkillConceptsTags,
   selectedOptions,
-  selectedGroupDimension,
-  selectedLearnerExperience,
-  selectedEducatorExperience,
+  // selectedGroupDimension,
+  // selectedLearnerExperience,
+  // selectedEducatorExperience,
   learningTextContext,
   generatedLOs,
   setGeneratedLOs,
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
-  apiKey,
-  handleApiKey,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
+
+  const { apiKey, setupModel, handleApiKey, handleSetupModel } =
+    useGeneralContext();
+
   const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
+  const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
 
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let newNumber = Number(e.target.value);
@@ -82,15 +95,6 @@ export default function PathDesignGenLO({
     }
   };
 
-  // Function to map the selected option to the corresponding index to give to the API
-  const mapOptionToNumber = (
-    option: Option | null,
-    enumObject: any
-  ): number => {
-    if (!option) return -1; // TODO: before to call the API, check if the options are not null
-    return enumObject[option.title];
-  };
-
   const handleGenerateLO = async (e: any) => {
     e.preventDefault();
     // if (apiKey === undefined || apiKey === '') {
@@ -99,6 +103,8 @@ export default function PathDesignGenLO({
     //     type: 'warning',
     //   });
     // } else
+    setIsLessGeneratedLO(false);
+
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
@@ -123,12 +129,8 @@ export default function PathDesignGenLO({
           handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: any[] = [];
           console.log('Generate learning objectives');
-          console.log('Educator experience: ', selectedEducatorExperience);
-          console.log('Learner experience: ', selectedLearnerExperience);
-          console.log('Group dimension: ', selectedGroupDimension);
           console.log('Education context: ', selectedContext);
-          console.log('Bloom level: ', bloomLevelIndex);
-          console.log('Verbs: ', selectedOptions);
+          console.log('Bloom level: ', selectedBloomLevel);
           console.log(
             'Skills: ',
             selectedSkillConceptsTags
@@ -137,50 +139,58 @@ export default function PathDesignGenLO({
           );
           console.log('Text: ', learningTextContext);
 
-          for (let i = 0; i < numberOfLO; i++) {
+          // The API returns an array of 2 learning objectives for each bloom level,
+          // so I have to call the API only half the number of learning objectives
+          let i = 0;
+          const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
+          // Call the API until the number of learning objectives is reached.
+          while (learningObjectives.length < numberOfLO && i < MAX_API_CALL) {
+            //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
             const resp = await postGenerateLearningObjective(
               apiKey, // apiKey
-              LANGUAGE_GEN_LO_API, // language
-              mapOptionToNumber(
-                selectedEducatorExperience,
-                EducatorExperienceEnum
-              ), // educatorExperience
-              mapOptionToNumber(
-                selectedLearnerExperience,
-                LearnerExperienceEnum
-              ), // learnerExperience
-              mapOptionToNumber(selectedGroupDimension, GroupDimensionEnum), // dimension
-              mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext
+              setupModel, // setupModel
+              mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
               learningTextContext, // learningContext
               selectedSkillConceptsTags
                 .map((skill: SkillItemProps) => skill.label)
                 .join(', '), // skills
-              bloomLevelIndex, // bloomLevel
-              selectedOptions, // verbs
-              TEMPERATURE_GEN_LO_API // temperature
+              mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
             );
 
             console.log('resp', resp);
 
             if (!resp) {
               console.log('No response');
-              learningObjectives.push('');
-              // if (isApiKeyInvalid === false) {
-              //   setIsApiKeyInvalid(true);
-              // }
+              //learningObjectives.push('');
               setIsApiKeyInvalid(true);
+              setIsLoading(false);
             } else {
-              const textLO = cutResponse(resp);
-              learningObjectives.push(textLO);
-              // if (isApiKeyInvalid === true) {
-              //   setIsApiKeyInvalid(false);
-              // }
+              // const textLO = cutResponse(resp);
+              // learningObjectives.push(textLO);
+
+              // The API returns an array of 2 learning objectives
+              for (const textLO of resp) {
+                // Check if the learning objective is not already in the list
+                // and if the number of learning objectives is not reached
+                // Avoid duplicates
+                if (
+                  !learningObjectives.includes(textLO) &&
+                  learningObjectives.length < numberOfLO
+                ) {
+                  learningObjectives.push(textLO);
+                  //console.log('textLO', textLO);
+                }
+              }
               setIsApiKeyInvalid(false);
             }
 
             console.log('learningObjectives', learningObjectives);
+            i++;
+          }
+          if (learningObjectives.length < numberOfLO) {
+            setIsLessGeneratedLO(true);
           }
           setGeneratedLOs(learningObjectives || []);
 
@@ -214,36 +224,25 @@ export default function PathDesignGenLO({
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
-    language: string,
-    educatorExperience: number,
-    learnerExperience: number,
-    dimension: number,
+    setupModel: string | undefined,
     educationContext: number,
     learningContext: string,
     skills: string,
-    bloomLevel: number,
-    verbs: string[],
-    temperature: number
-  ): Promise<string | undefined> => {
+    bloomLevel: string
+  ): Promise<string[] | undefined> => {
     try {
       //console.log('apiKey', apiKey);
       const resp = await axios.post(
         '/api/encore/genAI/generateLearningObjective',
         {
-          language: language,
-          educatorExperience: educatorExperience,
-          learnerExperience: learnerExperience,
-          dimension: dimension,
-          educationContext: educationContext,
-          learningContext: learningContext,
-          skills: skills,
-          bloomLevel: bloomLevel,
-          verbs: verbs,
-          temperature: temperature,
+          topic: skills,
+          context: learningContext,
+          level: educationContext,
         },
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
@@ -252,37 +251,40 @@ export default function PathDesignGenLO({
       console.log('Success - resp.data:', resp?.data);
       // console.log('Success - resp:', resp);
 
-      return resp?.data;
+      return resp?.data[bloomLevel]; // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  // function to cut the response of the API to get only the significant learning objective text
-  const cutResponse = (resp: string) => {
-    // TODO: modify the API response to get receive only the text of the learning objective
-    // AT THE MOMENT: the response is a string with the config and the learning objective,
-    // so i have to cut the string to get only the learning objective
+  // --------- This function was used to cut the response of the API to get only the significant learning objective text ---------
 
-    // Find the index of the start of the learning objective in the string
-    const startIndex =
-      resp.indexOf(`Temperature: ${TEMPERATURE_GEN_LO_API}`) +
-      `Temperature: ${TEMPERATURE_GEN_LO_API}`.length +
-      1;
+  // // function to cut the response of the API to get only the significant learning objective text
+  // const cutResponse = (resp: string) => {
+  //   // TODO: modify the API response to get receive only the text of the learning objective
+  //   // AT THE MOMENT: the response is a string with the config and the learning objective,
+  //   // so i have to cut the string to get only the learning objective
 
-    // Extract only the learning objective
-    const textLO = resp?.substring(startIndex);
+  //   // Find the index of the start of the learning objective in the string
+  //   const startIndex =
+  //     resp.indexOf(`Temperature: ${TEMPERATURE_GEN_LO_API}`) +
+  //     `Temperature: ${TEMPERATURE_GEN_LO_API}`.length +
+  //     1;
 
-    // const endIndex = textLO.indexOf('\n\n');
+  //   // Extract only the learning objective
+  //   const textLO = resp?.substring(startIndex);
 
-    // // Extract main text until the first double newline
-    // textLO = textLO.substring(0, endIndex).trim();
+  //   // const endIndex = textLO.indexOf('\n\n');
 
-    // console.log(textLO);
+  //   // // Extract main text until the first double newline
+  //   // textLO = textLO.substring(0, endIndex).trim();
 
-    return textLO;
-  };
+  //   // console.log(textLO);
 
+  //   return textLO;
+  // };
+
+  // Function to update the learning objective when the user edits it
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
     const updatedGeneratedLOs = [...generatedLOs];
@@ -292,6 +294,7 @@ export default function PathDesignGenLO({
     setGeneratedLOs(updatedGeneratedLOs);
   };
 
+  // Function to handle the click on the checkbox to select the learning objective
   const handleCheckBoxClick = (index: number) => {
     console.log('Checkbox clicked');
     try {
@@ -312,12 +315,12 @@ export default function PathDesignGenLO({
 
   return (
     <Flex pt="30px" direction="column">
-      <Flex direction="column">
-        <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
-          Insert the API Key
-        </Text>
-        <InputAPIKey w="400px" apiKey={apiKey} handleApiKey={handleApiKey} />
-      </Flex>
+      <InputsGenerateAI
+        apiKey={apiKey}
+        handleApiKey={handleApiKey}
+        setupModel={setupModel}
+        handleSetupModel={handleSetupModel}
+      />
       <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
@@ -337,14 +340,14 @@ export default function PathDesignGenLO({
               //size="sm"
               w="70px"
               //h='50px'
-              border={isNumberOfLOZero ? '1.5px solid #bf5521ff' : '1px solid'}
+              border={isNumberOfLOZero ? '2.5px solid #bf5521ff' : '1px solid'}
               borderRadius="lg"
               rows={1}
               flexWrap="nowrap"
               overflowWrap={'break-word'}
               typeof="number"
               errorBorderColor={
-                numberOfLO === 0 ? '1.5px solid #bf5521ff' : 'none'
+                numberOfLO === 0 ? '2.5px solid #bf5521ff' : 'none'
               }
               value={numberOfLO}
               onChange={handleNumberChange}
@@ -370,18 +373,35 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))}
+        {isLessGeneratedLO && (
+          <Flex direction={'row'} align={'center'} pb={5}>
+            <PiSmileySadLight />
+            <Text
+              pl={2}
+              fontSize={'md'}
+              fontWeight={'bold'}
+              textColor={'orange.300'}
+            >
+              {' '}
+              {`Sorry, but we were unable to generate N different required learning objectives.`}{' '}
+            </Text>
+          </Flex>
+        )}
+        {
+          //numberOfLO > 0 &&
+          generatedLOs.length > 0 &&
+            hydrated &&
+            generatedLOs.map((lo: string, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                textLearningObjective={lo}
+                index={index}
+                selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
+        }
       </Flex>
     </Flex>
   );

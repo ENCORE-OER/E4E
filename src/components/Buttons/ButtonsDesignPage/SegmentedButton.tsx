@@ -78,7 +78,12 @@ const SegmentedButton = <T extends {}>({
               </Flex>
             )}
             <Box as="span" fontWeight="bold">
-              <Text as="span" fontSize={fontSize || 'lg'}>
+              <Text
+                as="span"
+                fontSize={fontSize || 'lg'}
+                overflow={''}
+                style={{ whiteSpace: 'normal' }}
+              >
                 {option.title}
               </Text>
 

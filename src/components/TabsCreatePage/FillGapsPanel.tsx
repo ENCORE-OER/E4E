@@ -3,22 +3,38 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
+import {
+  AnalyzedMaterialProps,
+  BloomLevelsEnum,
+  GeneratedExerciseProps,
+  TypeOfExerciseEnum,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../NumberInput/SliderNumberInput';
+import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
+  analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
-export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
+export default function FillGapsPanel({
+  isSmallerScreen,
+  analyzeMaterial,
+}: FillGapsPanelProps) {
   const {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
+    bloomLevelOptions,
     targetLevelOptions,
     temperatureOptions,
-    lengthOptions,
+    // lengthOptions,
+
+    bloomLevelExercise,
+    handleBloomLevelExercise,
 
     temperatureFillGaps,
     handleTemperatureFillGaps,
@@ -26,61 +42,80 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     targetLevelFillGaps,
     handleTargetLevelFillGaps,
 
-    length,
-    handleLength,
+    // length,
+    // handleLength,
 
     distractorsFillGaps,
     handleDistractorsFillGaps,
 
+    easyDistractorsFillGaps,
+    handleEasyDistractorsFillGaps,
+
     blanks,
     handleBlanks,
 
-    sourceText,
+    sourceText, // material
     maxValue,
 
     chosenTargetLevel,
-    chosenLenght,
+    // chosenLenght,
     temperature,
 
     handleExercise,
 
-    apiFillGapsData: apiData,
-    handleTextToJSONFillGaps: handleTextToJSON,
+    // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
+    //handleTextToJSONFillGaps: handleTextToJSON,
+    handleGeneratedExerciseData,
   } = useCreateOERsContext();
+
   const { apiKey } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
   const [loading, setLoading] = useState(false);
-  const responseRef = useRef(null);
-
-  const handleOptionsComplete = () => {
-    if (
-      targetLevelFillGaps != null &&
-      length != null &&
-      temperatureFillGaps != null
-    ) {
-      setAreOptionsComplete(true);
-    }
-  };
+  const responseRef = useRef<GeneratedExerciseProps | null>(null);
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
     // Costruisci l'oggetto di dati da inviare nella richiesta
+    // const requestData = {
+    //   language: 'English',
+    //   text: sourceText,
+    //   level: chosenTargetLevel,
+    //   n_o_w: chosenLenght,
+    //   n_o_g: blanks,
+    //   n_o_d: distractorsFillGaps,
+    //   temperature: temperature,
+    // };
+
+    // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
+    const analyzedMaterial = await analyzeMaterial(sourceText);
+
     const requestData = {
-      language: 'English',
-      text: sourceText,
+      macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
+      title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      n_o_w: chosenLenght,
-      n_o_g: blanks,
-      n_o_d: distractorsFillGaps,
+      typeOfExercise: mapOptionToNumber(
+        { title: 'fill_in_the_blanks' },
+        TypeOfExerciseEnum
+      ), // fill_in_the_blanks exercise
+      learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
+      bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
+      // language: language, // English by default
+      material: sourceText,
+      correctAnswersNumber: blanks,
+      distractorsNumber: distractorsFillGaps,
+      easilyDiscardableDistractorsNumber: easyDistractorsFillGaps,
+      assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
+      topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
       temperature: temperature,
     };
 
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/genAI/fillGapsExercise',
+        //'/api/encore/genAI/fillGapsExercise',
+        '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
@@ -89,19 +124,26 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         }
       );
 
-      responseRef.current = apiResponse.data;
+      responseRef.current = apiResponse.data ?? null;
       // Gestisci la risposta
-      setResponse(apiResponse.data);
+      setResponse(apiResponse.data ?? null);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
     } finally {
       setLoading(false);
-      setResponse(responseRef.current);
+      setResponse(responseRef.current ?? null);
 
       if (responseRef.current) {
         // setRispostaTipo(responseRef.current);
-        handleTextToJSON(responseRef.current);
+        //handleTextToJSON(responseRef.current);
+        handleGeneratedExerciseData(
+          responseRef.current.Assignment,
+          responseRef.current.Plus,
+          responseRef.current.Solutions,
+          responseRef.current.Distractors,
+          responseRef.current.EasilyDiscardableDistractors
+        );
       } else {
         addToast({
           message: 'Error during the API call.',
@@ -111,20 +153,36 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
     }
   };
 
+  const handleOptionsComplete = () => {
+    if (
+      targetLevelFillGaps !== null &&
+      bloomLevelExercise !== null &&
+      //length !== null &&
+      temperatureFillGaps !== null
+    ) {
+      setAreOptionsComplete(true);
+    }
+  };
+
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelFillGaps, length]);
+  }, [
+    targetLevelFillGaps,
+    temperature,
+    bloomLevelExercise,
+    // length
+  ]);
 
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'70%'}>
+        <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={
-              isGenerateButtonClicked && targetLevelFillGaps == null
+              isGenerateButtonClicked && targetLevelFillGaps === null
             }
             options={targetLevelOptions}
             selected={targetLevelFillGaps}
@@ -136,7 +194,25 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
+        <Box w={'90%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Bloom Level</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && bloomLevelExercise == null
+            }
+            options={bloomLevelOptions}
+            selected={bloomLevelExercise}
+            preselectedTitle={bloomLevelExercise?.title}
+            onChange={handleBloomLevelExercise}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        {/* <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Lenght</Text>
           </Flex>
@@ -149,8 +225,8 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
-        <Box w={'42%'} paddingLeft="2%">
+        </Box> */}
+        <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
           </Flex>
@@ -181,6 +257,17 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
         </Box>
         <Box w={'42%'} paddingLeft="2rem">
           <Flex margin="0.4rem">
+            <Text as="b">Number Of Easy Distractors</Text>
+          </Flex>
+          <SliderInput
+            value={easyDistractorsFillGaps}
+            onChange={handleEasyDistractorsFillGaps}
+            min={0}
+            max={blanks}
+          />
+        </Box>
+        <Box w={'42%'} paddingLeft="2rem">
+          <Flex margin="0.4rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
           <SliderInput
@@ -203,7 +290,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
 
             handleExercise(0);
             if (areOptionsComplete) {
-              if (sourceText != '') {
+              if (sourceText !== '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
               } else {
@@ -239,23 +326,7 @@ export default function FillGapsPanel({ isSmallerScreen }: FillGapsPanelProps) {
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && (
-            <div>
-              <Text>Risposta API:</Text>
-              <Text>
-                {apiData.language} <br />
-                {apiData.date} <br />
-                {apiData.temperature} <br />
-                {apiData.level} <br />
-                {apiData.text} <br />
-                {apiData.textWithGaps} <br />
-                {apiData.wordsAndAnswers} <br />
-                <br />
-                risposta: <br />
-                {response}
-              </Text>
-            </div>
-          )
+          response && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>

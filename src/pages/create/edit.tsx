@@ -39,9 +39,10 @@ const Edit = () => {
     description,
     data,
     handleData,
-    apiFillGapsData,
-    apiOpenQuestionData,
-    apiMultipleChiocesData,
+    apiGeneratedExerciseData,
+    // apiFillGapsData
+    // apiOpenQuestionData,
+    // apiMultipleChiocesData,
   } = useCreateOERsContext();
 
   const [response, setResponse] = useState(null);
@@ -118,20 +119,20 @@ const Edit = () => {
             {hydrated && exercise === 'Fill the Gaps' && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
-                <EditFillGaps fillGapsData={apiFillGapsData} />
+                <EditFillGaps fillGapsData={apiGeneratedExerciseData} />
               </Box>
             )}
             {hydrated && exercise === 'Open Question' && (
               /* Genera il secondo elemento in base alla tua variabile */
               <Box w="80%">
-                <EditOpenQuestion openQuestionData={apiOpenQuestionData} />
+                <EditOpenQuestion openQuestionData={apiGeneratedExerciseData} />
               </Box>
             )}
             {hydrated && exercise === 'Multiple Choice' && (
               /* Genera il terzo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditMultipleChoice
-                  multipleChoiceData={apiMultipleChiocesData}
+                  multipleChoiceData={apiGeneratedExerciseData}
                 />
               </Box>
             )}

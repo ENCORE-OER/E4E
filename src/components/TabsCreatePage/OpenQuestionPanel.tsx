@@ -4,16 +4,25 @@ import { useEffect, useRef, useState } from 'react';
 // import { useLocalStorage } from 'usehooks-ts';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
+import {
+  AnalyzedMaterialProps,
+  BloomLevelsEnum,
+  GeneratedExerciseProps,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
+import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
 //import TextBox from '../TextBox/TextBox';
 
 type OpenQuestionPanelProps = {
   isSmallerScreen?: boolean;
+  analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
 export default function OpenQuestionPanel({
   isSmallerScreen,
+  analyzeMaterial,
 }: OpenQuestionPanelProps) {
   const {
     isGenerateButtonClicked,
@@ -21,8 +30,14 @@ export default function OpenQuestionPanel({
 
     targetLevelOptions,
     temperatureOptions,
-    questionCategoryOptions,
+    // questionCategoryOptions,
+    exerciseTypeOptions,
+    bloomLevelOptions,
+
     temperatureOpenQuestion,
+
+    bloomLevelExercise,
+    handleBloomLevelExercise,
 
     handleTemperatureOpenQuestion,
     questionTypeOptions,
@@ -33,42 +48,67 @@ export default function OpenQuestionPanel({
     questionType,
     handleQuestionType,
 
-    questionCategoryOpenQuestion,
-    handleQuestionCategoryOpenQuestion,
+    exerciseType,
+    handleExerciseType,
+
+    // questionCategoryOpenQuestion,
+    // handleQuestionCategoryOpenQuestion,
 
     temperature,
     sourceText,
     chosenTargetLevel,
-    chosenCategory,
-    chosenType,
+    // chosenCategory,
+    chosenTypeOfExercise,
+    chosenTypeOfAssignment,
     handleExercise,
-    apiOpenQuestionData: apiData,
-    handleTextToJSONOpenQuestion: handleTextToJSON,
+    // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
+    handleGeneratedExerciseData,
+    // handleTextToJSONOpenQuestion: handleTextToJSON,
   } = useCreateOERsContext();
   const { apiKey } = useGeneralContext();
-
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
   const [loading, setLoading] = useState(false);
-  const responseRef = useRef(null);
+  const responseRef = useRef<GeneratedExerciseProps | null>(null);
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    // Costruisci l'oggetto di dati da inviare nella richiesta
+    // // Costruisci l'oggetto di dati da inviare nella richiesta
+    // const requestData = {
+    //   language: 'English',
+    //   text: sourceText,
+    //   level: chosenTargetLevel,
+    //   type: chosenType,
+    //   category: chosenCategory,
+    //   temperature: temperature,
+    // };
+
+    const analyzedMaterial = await analyzeMaterial(sourceText);
+
     const requestData = {
-      language: 'English',
-      text: sourceText,
+      macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
+      title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      type: chosenType,
-      category: chosenCategory,
+      typeOfExercise: chosenTypeOfExercise, // 0 = open question, 1 = short answer, 2 = true or false
+      learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
+      bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
+      // language: language, // English by default
+      material: sourceText,
+      // correctAnswersNumber: 1,
+      // distractorsNumber: 0,
+      // easilyDiscardableDistractorsNumber: 0,
+      // assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
+      assignmentType: chosenTypeOfAssignment,
+      topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
       temperature: temperature,
     };
 
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/genAI/openQuestionExercise',
+        // '/api/encore/genAI/openQuestionExercise',
+        '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
@@ -76,9 +116,9 @@ export default function OpenQuestionPanel({
           },
         }
       );
-      responseRef.current = apiResponse.data;
+      responseRef.current = apiResponse.data ?? null;
       // Gestisci la risposta
-      setResponse(apiResponse.data);
+      setResponse(apiResponse.data ?? null);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
@@ -88,7 +128,14 @@ export default function OpenQuestionPanel({
 
       if (responseRef.current) {
         // setRispostaTipo(responseRef.current);
-        handleTextToJSON(responseRef.current);
+        // handleTextToJSON(responseRef.current);
+        handleGeneratedExerciseData(
+          responseRef.current.Assignment,
+          responseRef.current.Plus,
+          responseRef.current.Solutions,
+          responseRef.current.Distractors,
+          responseRef.current.EasilyDiscardableDistractors
+        );
       } else {
         addToast({
           message: 'Error during the API call.',
@@ -100,10 +147,11 @@ export default function OpenQuestionPanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelOpenQuestion != null &&
-      questionType != null &&
-      questionCategoryOpenQuestion != null &&
-      temperatureOpenQuestion != null
+      targetLevelOpenQuestion !== null &&
+      questionType !== null &&
+      // questionCategoryOpenQuestion !== null &&
+      bloomLevelExercise !== null &&
+      temperatureOpenQuestion !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -111,12 +159,17 @@ export default function OpenQuestionPanel({
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelOpenQuestion, questionType, questionCategoryOpenQuestion]);
+  }, [
+    targetLevelOpenQuestion,
+    questionType,
+    bloomLevelExercise,
+    temperatureOpenQuestion,
+  ]);
 
   return (
     <>
       <Flex w={'100%'}>
-        <Box w={'70%'}>
+        <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
           </Flex>
@@ -150,23 +203,21 @@ export default function OpenQuestionPanel({
         </Box>
         <Box w={'42%'} paddingLeft={'2%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Creativity of AI</Text>
+            <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={
-              isGenerateButtonClicked && temperatureOpenQuestion == null
-            }
-            options={temperatureOptions}
-            selected={temperatureOpenQuestion}
-            preselectedTitle={temperatureOpenQuestion?.title}
-            onChange={handleTemperatureOpenQuestion}
+            isHighlighted={isGenerateButtonClicked && exerciseType === null}
+            options={exerciseTypeOptions}
+            selected={exerciseType}
+            preselectedTitle={exerciseType?.title}
+            onChange={handleExerciseType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'90%'}>
+        {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Question Category</Text>
           </Flex>
@@ -178,6 +229,40 @@ export default function OpenQuestionPanel({
             selected={questionCategoryOpenQuestion}
             preselectedTitle={questionCategoryOpenQuestion?.title}
             onChange={handleQuestionCategoryOpenQuestion}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box> */}
+        <Box w={'90%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Bloom Level</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && bloomLevelExercise == null
+            }
+            options={bloomLevelOptions}
+            selected={bloomLevelExercise}
+            preselectedTitle={bloomLevelExercise?.title}
+            onChange={handleBloomLevelExercise}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        <Box w={'80%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && temperatureOpenQuestion == null
+            }
+            options={temperatureOptions}
+            selected={temperatureOpenQuestion}
+            preselectedTitle={temperatureOpenQuestion?.title}
+            onChange={handleTemperatureOpenQuestion}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -194,7 +279,7 @@ export default function OpenQuestionPanel({
             handleExercise(1);
             handleOptionsComplete();
             if (areOptionsComplete) {
-              if (sourceText != '') {
+              if (sourceText !== '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
               } else {
@@ -230,24 +315,7 @@ export default function OpenQuestionPanel({
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && (
-            <div>
-              <Text>Risposta API:</Text>
-              <Text>
-                {apiData.language} <br />
-                {apiData.date} <br />
-                {apiData.level} <br />
-                {apiData.type_of_question} <br />
-                {apiData.category} <br />
-                {apiData.temperature} <br />
-                {apiData.question} <br />
-                {apiData.correctAnswer} <br />
-                <br />
-                risposta: <br />
-                {response}
-              </Text>
-            </div>
-          )
+          response && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>
