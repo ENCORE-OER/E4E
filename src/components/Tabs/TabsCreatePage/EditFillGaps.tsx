@@ -1,10 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { GeneratedExerciseProps } from '../../types/encoreElements';
-import { stringArrayToOptionsObject } from '../../utils/utils';
-import CheckboxEditableMenu from '../CheckboxMenu/CheckboxEditableMenu';
-import TextBox from '../TextBox/TextBox';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { GeneratedExerciseProps } from '../../../types/encoreElements';
+import { stringArrayToOptionsObject } from '../../../utils/utils';
+import CheckboxEditableMenu from '../../CheckboxMenu/CheckboxEditableMenu';
+import TextBox from '../../TextBox/TextBox';
 
 // type FillGapsData = {
 //   language: string;

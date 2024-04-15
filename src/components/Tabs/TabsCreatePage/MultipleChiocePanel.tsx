@@ -1,74 +1,79 @@
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
-  GeneratedExerciseProps,
-  TypeOfExerciseEnum,
-} from '../../types/encoreElements';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { mapOptionToNumber } from '../../utils/utils';
-import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
-import SliderInput from '../NumberInput/SliderNumberInput';
-import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
+  GeneratedExerciseProps
+} from '../../../types/encoreElements';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../../utils/utils';
+import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
+import SliderInput from '../../NumberInput/SliderNumberInput';
+import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
-type FillGapsPanelProps = {
+type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
   analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
-export default function FillGapsPanel({
+export default function MultipleChoicePanel({
   isSmallerScreen,
   analyzeMaterial,
-}: FillGapsPanelProps) {
+}: MultipleChoicePanelProps) {
   const {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
-    bloomLevelOptions,
     targetLevelOptions,
     temperatureOptions,
-    // lengthOptions,
+    // questionCategoryOptions,
+    exerciseTypeOptions,
+    bloomLevelOptions,
+
+    handleTitle,
+    handleDescription,
 
     bloomLevelExercise,
     handleBloomLevelExercise,
 
-    temperatureFillGaps,
-    handleTemperatureFillGaps,
+    temperatureMultipleChoice,
+    handleTemperatureMultipleChoice,
 
-    targetLevelFillGaps,
-    handleTargetLevelFillGaps,
+    targetLevelMultipleChoice,
+    handleTargetLevelMultipleChoice,
 
-    // length,
-    // handleLength,
+    assignmentType,
+    handleAssignmentType,
 
-    distractorsFillGaps,
-    handleDistractorsFillGaps,
+    questionCategoryMultipleChoice,
+    // handleQuestionCategoryMultipleChoice,
 
-    easyDistractorsFillGaps,
-    handleEasyDistractorsFillGaps,
+    correctAnswerQuiz,
+    handleCorrectAnswerQuiz,
 
-    blanks,
-    handleBlanks,
+    easyDistractors,
+    handleEasyDistractors,
 
-    sourceText, // material
-    maxValue,
+    distractorsMultipleChoice,
+    handleDistractorsMultipleChoice,
 
-    chosenTargetLevel,
-    // chosenLenght,
     temperature,
-
-    handleExercise,
+    sourceText,
+    chosenTargetLevel,
+    chosenTypeOfExercise,
+    chosenTypeOfAssignment,
+    // chosenCategory,
+    // handleTypeOfExercisePanel,
 
     // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
-    //handleTextToJSONFillGaps: handleTextToJSON,
+    // handleTextToJSONMultipleChoice: handleTextToJSON,
     handleGeneratedExerciseData,
   } = useCreateOERsContext();
 
-  const { apiKey } = useGeneralContext();
+  const { apiKey, setupModel } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
   const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
@@ -77,35 +82,42 @@ export default function FillGapsPanel({
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
-    // Costruisci l'oggetto di dati da inviare nella richiesta
+
+    // // Costruisci l'oggetto di dati da inviare nella richiesta
     // const requestData = {
     //   language: 'English',
+    //   type: chosenType,
     //   text: sourceText,
     //   level: chosenTargetLevel,
-    //   n_o_w: chosenLenght,
-    //   n_o_g: blanks,
-    //   n_o_d: distractorsFillGaps,
+    //   category: chosenCategory,
     //   temperature: temperature,
+    //   n_o_ca: correctAnswer,
+    //   nedd: easyDistractors,
+    //   n_o_d: distractorsMultipleChoice,
     // };
 
     // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
     const analyzedMaterial = await analyzeMaterial(sourceText);
+    handleTitle(analyzedMaterial.Title);
+    handleDescription(analyzedMaterial.MainTopics[0].Description);
+
+    // const exerciseTypeNumber =
+    //   correctAnswerQuiz === 1
+    //     ? mapOptionToNumber({ title: 'single_choice' }, TypeOfExerciseEnum)
+    //     : mapOptionToNumber({ title: 'multiple_choice' }, TypeOfExerciseEnum);
 
     const requestData = {
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      typeOfExercise: mapOptionToNumber(
-        { title: 'fill_in_the_blanks' },
-        TypeOfExerciseEnum
-      ), // fill_in_the_blanks exercise
+      typeOfExercise: chosenTypeOfExercise,//exerciseTypeNumber, // fill_in_the_blanks exercise
       learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
       bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
       // language: language, // English by default
       material: sourceText,
-      correctAnswersNumber: blanks,
-      distractorsNumber: distractorsFillGaps,
-      easilyDiscardableDistractorsNumber: easyDistractorsFillGaps,
+      correctAnswersNumber: correctAnswerQuiz,
+      distractorsNumber: distractorsMultipleChoice,
+      easilyDiscardableDistractorsNumber: easyDistractors,
       assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
       topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
       temperature: temperature,
@@ -114,16 +126,16 @@ export default function FillGapsPanel({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        //'/api/encore/genAI/fillGapsExercise',
+        // '/api/encore/genAI/multipleChoiceExercise',
         '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
-
       responseRef.current = apiResponse.data ?? null;
       // Gestisci la risposta
       setResponse(apiResponse.data ?? null);
@@ -135,7 +147,7 @@ export default function FillGapsPanel({
       setResponse(responseRef.current ?? null);
 
       if (responseRef.current) {
-        // setRispostaTipo(responseRef.current);
+        //setRispostaTipo(responseRef.current);
         //handleTextToJSON(responseRef.current);
         handleGeneratedExerciseData(
           responseRef.current.Assignment,
@@ -155,10 +167,11 @@ export default function FillGapsPanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelFillGaps !== null &&
-      bloomLevelExercise !== null &&
-      //length !== null &&
-      temperatureFillGaps !== null
+      targetLevelMultipleChoice !== null &&
+      assignmentType !== null &&
+      // questionCategoryMultipleChoice !== null &&
+      temperatureMultipleChoice !== null &&
+      bloomLevelExercise !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -167,10 +180,11 @@ export default function FillGapsPanel({
   useEffect(() => {
     handleOptionsComplete();
   }, [
-    targetLevelFillGaps,
-    temperature,
+    targetLevelMultipleChoice,
+    assignmentType,
+    questionCategoryMultipleChoice,
     bloomLevelExercise,
-    // length
+    temperatureMultipleChoice,
   ]);
 
   return (
@@ -182,12 +196,44 @@ export default function FillGapsPanel({
           </Flex>
           <SegmentedButton
             isHighlighted={
-              isGenerateButtonClicked && targetLevelFillGaps === null
+              isGenerateButtonClicked && targetLevelMultipleChoice === null
             }
             options={targetLevelOptions}
-            selected={targetLevelFillGaps}
-            preselectedTitle={targetLevelFillGaps?.title}
-            onChange={handleTargetLevelFillGaps}
+            selected={targetLevelMultipleChoice}
+            preselectedTitle={targetLevelMultipleChoice?.title}
+            onChange={handleTargetLevelMultipleChoice}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        <Box w={'40%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Exercise Type</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={isGenerateButtonClicked && assignmentType === null}
+            options={exerciseTypeOptions}
+            selected={assignmentType}
+            preselectedTitle={assignmentType?.title}
+            onChange={handleAssignmentType}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+        <Box w={'42%'} paddingLeft={'2%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={
+              isGenerateButtonClicked && temperatureMultipleChoice == null
+            }
+            options={temperatureOptions}
+            selected={temperatureMultipleChoice}
+            preselectedTitle={temperatureMultipleChoice?.title}
+            onChange={handleTemperatureMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -210,71 +256,55 @@ export default function FillGapsPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
-        {/* <Box w={'40%'}>
+        {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Lenght</Text>
+            <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && length == null}
-            options={lengthOptions}
-            selected={length}
-            preselectedTitle={length?.title}
-            onChange={handleLength}
+            isHighlighted={
+              isGenerateButtonClicked && questionCategoryMultipleChoice == null
+            }
+            options={questionCategoryOptions}
+            selected={questionCategoryMultipleChoice}
+            preselectedTitle={questionCategoryMultipleChoice?.title}
+            onChange={handleQuestionCategoryMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box> */}
-        <Box w={'80%'}>
-          <Flex paddingBottom="0.5rem">
-            <Text as="b">Creativity of AI</Text>
-          </Flex>
-          <SegmentedButton
-            isHighlighted={
-              isGenerateButtonClicked && temperatureFillGaps == null
-            }
-            options={temperatureOptions}
-            selected={temperatureFillGaps}
-            preselectedTitle={temperatureFillGaps?.title}
-            onChange={handleTemperatureFillGaps}
-            isSmallerScreen={isSmallerScreen || false}
-            fontSize={'md'}
-          />
-        </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
-          <Flex margin="0.4rem">
-            <Text as="b">Number Of Blanks</Text>
+        <Box w={'30%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Number Of Correct Answers</Text>
           </Flex>
           <SliderInput
-            value={blanks}
-            onChange={handleBlanks}
             min={1}
-            max={maxValue}
+            max={chosenTypeOfAssignment === 0 ? 3 : 1}  // 0 = theoretical assignment, 2 = practical assignment
+            value={correctAnswerQuiz}
+            onChange={handleCorrectAnswerQuiz}
           />
         </Box>
-        <Box w={'42%'} paddingLeft="2rem">
-          <Flex margin="0.4rem">
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Easy Distractors</Text>
           </Flex>
           <SliderInput
-            value={easyDistractorsFillGaps}
-            onChange={handleEasyDistractorsFillGaps}
             min={0}
-            max={blanks}
+            max={distractorsMultipleChoice}
+            value={easyDistractors}
+            onChange={handleEasyDistractors}
           />
         </Box>
-        <Box w={'42%'} paddingLeft="2rem">
-          <Flex margin="0.4rem">
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
           <SliderInput
-            value={distractorsFillGaps}
-            onChange={handleDistractorsFillGaps}
             min={0}
-            max={blanks}
+            max={8}
+            value={distractorsMultipleChoice}
+            onChange={handleDistractorsMultipleChoice}
           />
         </Box>
       </Flex>
@@ -287,10 +317,9 @@ export default function FillGapsPanel({
           //isDisabled={sourceText === ''}
           onClick={() => {
             handleOptionsComplete();
-
-            handleExercise(0);
+            //handleTypeOfExercisePanel(2);
             if (areOptionsComplete) {
-              if (sourceText !== '') {
+              if (sourceText != '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
               } else {
