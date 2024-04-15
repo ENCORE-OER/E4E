@@ -3,7 +3,12 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { AnalyzedMaterialProps, BloomLevelsEnum, GeneratedExerciseProps, TypeOfExerciseEnum } from '../../types/encoreElements';
+import {
+  AnalyzedMaterialProps,
+  BloomLevelsEnum,
+  GeneratedExerciseProps,
+  TypeOfExerciseEnum,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
@@ -15,7 +20,10 @@ type FillGapsPanelProps = {
   analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
-export default function FillGapsPanel({ isSmallerScreen, analyzeMaterial }: FillGapsPanelProps) {
+export default function FillGapsPanel({
+  isSmallerScreen,
+  analyzeMaterial,
+}: FillGapsPanelProps) {
   const {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
@@ -87,7 +95,10 @@ export default function FillGapsPanel({ isSmallerScreen, analyzeMaterial }: Fill
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      typeOfExercise: mapOptionToNumber({ title: 'fill_in_the_blanks' }, TypeOfExerciseEnum), // fill_in_the_blanks exercise
+      typeOfExercise: mapOptionToNumber(
+        { title: 'fill_in_the_blanks' },
+        TypeOfExerciseEnum
+      ), // fill_in_the_blanks exercise
       learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
       bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
       // language: language, // English by default
@@ -144,7 +155,6 @@ export default function FillGapsPanel({ isSmallerScreen, analyzeMaterial }: Fill
 
   const handleOptionsComplete = () => {
     if (
-
       targetLevelFillGaps !== null &&
       bloomLevelExercise !== null &&
       //length !== null &&
@@ -316,9 +326,7 @@ export default function FillGapsPanel({ isSmallerScreen, analyzeMaterial }: Fill
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && (
-            <GenerateExerciseResponseView response={response} />
-          )
+          response && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>

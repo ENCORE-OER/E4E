@@ -4,7 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 // import { useLocalStorage } from 'usehooks-ts';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { AnalyzedMaterialProps, BloomLevelsEnum, GeneratedExerciseProps } from '../../types/encoreElements';
+import {
+  AnalyzedMaterialProps,
+  BloomLevelsEnum,
+  GeneratedExerciseProps,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
@@ -100,7 +104,6 @@ export default function OpenQuestionPanel({
       temperature: temperature,
     };
 
-
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
@@ -156,7 +159,12 @@ export default function OpenQuestionPanel({
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelOpenQuestion, questionType, bloomLevelExercise, temperatureOpenQuestion]);
+  }, [
+    targetLevelOpenQuestion,
+    questionType,
+    bloomLevelExercise,
+    temperatureOpenQuestion,
+  ]);
 
   return (
     <>
@@ -243,7 +251,7 @@ export default function OpenQuestionPanel({
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'80%'} >
+        <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
           </Flex>
@@ -307,9 +315,7 @@ export default function OpenQuestionPanel({
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && (
-            <GenerateExerciseResponseView response={response} />
-          )
+          response && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>

@@ -71,7 +71,6 @@ const SegmentedButton = <T extends {}>({
             borderRadius="25"
             borderLeft={index !== 0 ? '1px solid darkgrey' : 'none'}
             overflow="hidden"
-            style={{ whiteSpace: 'normal' }}
           >
             {colored === option.title && (
               <Flex align="center" justify="center" marginRight="2">
@@ -79,7 +78,7 @@ const SegmentedButton = <T extends {}>({
               </Flex>
             )}
             <Box as="span" fontWeight="bold">
-              <Text as="span" fontSize={fontSize || 'lg'} overflow={''}>
+              <Text as="span" fontSize={fontSize || 'lg'} overflow={''} style={{ whiteSpace: 'normal' }}>
                 {option.title}
               </Text>
 

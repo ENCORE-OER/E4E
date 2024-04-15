@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
+import { PiSmileySadLight } from "react-icons/pi";
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
@@ -78,6 +79,7 @@ export default function PathDesignGenLO({
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
+  const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
 
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let newNumber = Number(e.target.value);
@@ -100,6 +102,8 @@ export default function PathDesignGenLO({
     //     type: 'warning',
     //   });
     // } else
+    setIsLessGeneratedLO(false);
+
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
@@ -124,12 +128,7 @@ export default function PathDesignGenLO({
           handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: any[] = [];
           console.log('Generate learning objectives');
-          // console.log('Educator experience: ', selectedEducatorExperience);
-          // console.log('Learner experience: ', selectedLearnerExperience);
-          // console.log('Group dimension: ', selectedGroupDimension);
           console.log('Education context: ', selectedContext);
-          // console.log('Bloom level: ', bloomLevelIndex);
-          // console.log('Verbs: ', selectedOptions);
           console.log('Bloom level: ', selectedBloomLevel);
           console.log(
             'Skills: ',
@@ -141,31 +140,21 @@ export default function PathDesignGenLO({
 
           // The API returns an array of 2 learning objectives for each bloom level,
           // so I have to call the API only half the number of learning objectives
-          for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
+          let i = 0;
+          const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
+          // Call the API until the number of learning objectives is reached.
+          while (learningObjectives.length < numberOfLO && i < MAX_API_CALL) {
+            //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
             const resp = await postGenerateLearningObjective(
               apiKey, // apiKey
-              // LANGUAGE_GEN_LO_API, // language
-              // mapOptionToNumber(
-              //   selectedEducatorExperience,
-              //   EducatorExperienceEnum
-              // ), // educatorExperience
-              // mapOptionToNumber(
-              //   selectedLearnerExperience,
-              //   LearnerExperienceEnum
-              // ), // learnerExperience
-              // mapOptionToNumber(selectedGroupDimension, GroupDimensionEnum), // dimension
               mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
               learningTextContext, // learningContext
               selectedSkillConceptsTags
                 .map((skill: SkillItemProps) => skill.label)
                 .join(', '), // skills
-              // bloomLevelIndex, // bloomLevel
-              // selectedBloomLevel, // bloomLevel
               mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
-              // selectedOptions, // verbs
-              // TEMPERATURE_GEN_LO_API // temperature
             );
 
             console.log('resp', resp);
@@ -181,7 +170,8 @@ export default function PathDesignGenLO({
 
               // The API returns an array of 2 learning objectives
               for (const textLO of resp) {
-                // Check if the learning objective is not already in the list and if the number of learning objectives is not reached
+                // Check if the learning objective is not already in the list
+                // and if the number of learning objectives is not reached
                 // Avoid duplicates
                 if (
                   !learningObjectives.includes(textLO) &&
@@ -195,6 +185,10 @@ export default function PathDesignGenLO({
             }
 
             console.log('learningObjectives', learningObjectives);
+            i++;
+          }
+          if (learningObjectives.length < numberOfLO) {
+            setIsLessGeneratedLO(true);
           }
           setGeneratedLOs(learningObjectives || []);
 
@@ -228,33 +222,15 @@ export default function PathDesignGenLO({
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
-    // language: string,
-    // educatorExperience: number,
-    // learnerExperience: number,
-    // dimension: number,
     educationContext: number,
     learningContext: string,
     skills: string,
     bloomLevel: string
-    // verbs: string[],
-    // temperature: number
   ): Promise<string[] | undefined> => {
     try {
       //console.log('apiKey', apiKey);
       const resp = await axios.post(
         '/api/encore/genAI/generateLearningObjective',
-        // {
-        //   language: language,
-        //   educatorExperience: educatorExperience,
-        //   learnerExperience: learnerExperience,
-        //   dimension: dimension,
-        //   educationContext: educationContext,
-        //   learningContext: learningContext,
-        //   skills: skills,
-        //   bloomLevel: bloomLevel,
-        //   verbs: verbs,
-        //   temperature: temperature,
-        // },
         {
           topic: skills,
           context: learningContext,
@@ -360,14 +336,14 @@ export default function PathDesignGenLO({
               //size="sm"
               w="70px"
               //h='50px'
-              border={isNumberOfLOZero ? '1.5px solid #bf5521ff' : '1px solid'}
+              border={isNumberOfLOZero ? '2.5px solid #bf5521ff' : '1px solid'}
               borderRadius="lg"
               rows={1}
               flexWrap="nowrap"
               overflowWrap={'break-word'}
               typeof="number"
               errorBorderColor={
-                numberOfLO === 0 ? '1.5px solid #bf5521ff' : 'none'
+                numberOfLO === 0 ? '2.5px solid #bf5521ff' : 'none'
               }
               value={numberOfLO}
               onChange={handleNumberChange}
@@ -393,20 +369,26 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
+        {isLessGeneratedLO &&
+          <Flex direction={'row'} align={'center'} pb={5} >
+            <PiSmileySadLight />
+            <Text pl={2} fontSize={'md'} fontWeight={'bold'} textColor={'orange.300'}> {`Sorry, but we were unable to generate N different required learning objectives.`} </Text>
+          </Flex>
+        }
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-            hydrated &&
-            generatedLOs.map((lo: string, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                textLearningObjective={lo}
-                index={index}
-                selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+          hydrated &&
+          generatedLOs.map((lo: string, index: number) => (
+            <BoxGeneratedLO
+              key={index}
+              textLearningObjective={lo}
+              index={index}
+              selectedLO={selectedLO}
+              handleCheckBoxClick={handleCheckBoxClick}
+              handleUpdateLO={handleUpdateLO}
+            />
+          ))
         }
       </Flex>
     </Flex>

@@ -59,13 +59,22 @@ export default function TabsCreateMenu({
       </TabList>
       <TabPanels>
         <TabPanel>
-          <FillGapsPanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
+          <FillGapsPanel
+            isSmallerScreen={isSmallerScreen}
+            analyzeMaterial={analyzeMaterial}
+          />
         </TabPanel>
         <TabPanel>
-          <OpenQuestionPanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
+          <OpenQuestionPanel
+            isSmallerScreen={isSmallerScreen}
+            analyzeMaterial={analyzeMaterial}
+          />
         </TabPanel>
         <TabPanel>
-          <MultipleChoicePanel isSmallerScreen={isSmallerScreen} analyzeMaterial={analyzeMaterial} />
+          <MultipleChoicePanel
+            isSmallerScreen={isSmallerScreen}
+            analyzeMaterial={analyzeMaterial}
+          />
         </TabPanel>
       </TabPanels>
     </Tabs>

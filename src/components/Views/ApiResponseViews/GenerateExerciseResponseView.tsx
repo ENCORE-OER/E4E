@@ -3,20 +3,20 @@ import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { GeneratedExerciseProps } from '../../../types/encoreElements';
 
 type GenerateExerciseResonseViewProps = {
-    response: GeneratedExerciseProps | null;
+  response: GeneratedExerciseProps | null;
 };
 
 export default function GenerateExerciseResponseView({
-    response
+  response,
 }: GenerateExerciseResonseViewProps) {
-    const { apiGeneratedExerciseData: apiData } = useCreateOERsContext();
+  const { apiGeneratedExerciseData: apiData } = useCreateOERsContext();
 
-    return (
-        <div>
-            <Text fontSize={'lg'} fontWeight={'bold'}>
-                Risposta API:
-            </Text>
-            {/* <Text>
+  return (
+    <div>
+      <Text fontSize={'lg'} fontWeight={'bold'}>
+        Risposta API:
+      </Text>
+      {/* <Text>
                 {apiData.language} <br />
                 {apiData.date} <br />
                 {apiData.temperature} <br />
@@ -28,21 +28,21 @@ export default function GenerateExerciseResponseView({
                 risposta: <br />
                 {response}
               </Text> */}
-            <Text>
-                Assignment: <br />
-                {apiData.Assignment} <br />
-                Plus: <br />
-                {apiData.Plus} <br />
-                Solutions: <br />
-                {apiData.Solutions} <br />
-                Distractors: <br />
-                {apiData.Distractors} <br />
-                Easily Discardable Distractors: <br />
-                {apiData.EasilyDiscardableDistractors} <br />
-                <br />
-                risposta: <br />
-                {JSON.stringify(response)}
-            </Text>
-        </div>
-    )
+      <Text>
+        Assignment: <br />
+        {apiData.Assignment} <br />
+        Plus: <br />
+        {apiData.Plus} <br />
+        Solutions: <br />
+        {apiData.Solutions} <br />
+        Distractors: <br />
+        {apiData.Distractors} <br />
+        Easily Discardable Distractors: <br />
+        {apiData.EasilyDiscardableDistractors} <br />
+        <br />
+        risposta: <br />
+        {JSON.stringify(response)}
+      </Text>
+    </div>
+  );
 }

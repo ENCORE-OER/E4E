@@ -260,7 +260,8 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [chosenLenght, setChosenLenght] = useState<number>(150);
   const [chosenCategory, setChosenCategory] = useState<number>(0);
   const [chosenTypeOfExercise, setChosenTypeOfExercise] = useState<number>(0);
-  const [chosenTypeOfAssignment, setChosenTypeOfAssignment] = useState<number>(0);
+  const [chosenTypeOfAssignment, setChosenTypeOfAssignment] =
+    useState<number>(0);
   const [question, setQuestion] = useState<string>('');
   const [solution, setSolution] = useState<string>('');
   const [options, setOptions] = useState<OptionsData>({});

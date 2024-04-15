@@ -3,7 +3,12 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { AnalyzedMaterialProps, BloomLevelsEnum, GeneratedExerciseProps, TypeOfExerciseEnum } from '../../types/encoreElements';
+import {
+  AnalyzedMaterialProps,
+  BloomLevelsEnum,
+  GeneratedExerciseProps,
+  TypeOfExerciseEnum,
+} from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../utils/utils';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
@@ -17,7 +22,7 @@ type MultipleChoicePanelProps = {
 
 export default function MultipleChoicePanel({
   isSmallerScreen,
-  analyzeMaterial
+  analyzeMaterial,
 }: MultipleChoicePanelProps) {
   const {
     isGenerateButtonClicked,
@@ -93,7 +98,7 @@ export default function MultipleChoicePanel({
     const exerciseTypeNumber =
       correctAnswer === 1
         ? mapOptionToNumber({ title: 'single_choice' }, TypeOfExerciseEnum)
-        : mapOptionToNumber({ title: 'multiple_choice' }, TypeOfExerciseEnum)
+        : mapOptionToNumber({ title: 'multiple_choice' }, TypeOfExerciseEnum);
 
     const requestData = {
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
@@ -167,7 +172,13 @@ export default function MultipleChoicePanel({
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [targetLevelMultipleChoice, exerciseType, questionCategoryMultipleChoice, bloomLevelExercise, temperatureMultipleChoice]);
+  }, [
+    targetLevelMultipleChoice,
+    exerciseType,
+    questionCategoryMultipleChoice,
+    bloomLevelExercise,
+    temperatureMultipleChoice,
+  ]);
 
   return (
     <>
@@ -337,9 +348,7 @@ export default function MultipleChoicePanel({
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && (
-            <GenerateExerciseResponseView response={response} />
-          )
+          response && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>
