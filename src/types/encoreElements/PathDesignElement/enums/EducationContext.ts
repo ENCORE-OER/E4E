@@ -4,6 +4,14 @@ export enum EducationContextEnum {
   VET = 4,
 }
 
+// export enum EducationContextEnum {
+//   primary_school = 0,
+//   middle_school = 1,
+//   high_school = 2,
+//   college = 3,
+//   academy = 4,
+// }
+
 // These are the options for the learning context
 // const Context: Option[] = [
 //   { title: 'School' },

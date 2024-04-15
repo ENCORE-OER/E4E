@@ -9,7 +9,7 @@ const axiosGenerativeAI = axiosCreate.create({
   },
 });
 
-export default async function serverSideCall(
+export default async function generateExercise(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -21,7 +21,7 @@ export default async function serverSideCall(
       macroSubject,
       title,
       level,
-      //typeOfExercise,
+      typeOfExercise,
       learningObjective,
       bloomLevel,
       language,
@@ -29,28 +29,26 @@ export default async function serverSideCall(
       correctAnswersNumber,
       distractorsNumber,
       easilyDiscardableDistractorsNumber,
-      //assignmentType,
+      assignmentType,
       topic,
       temperature,
     } = req.body;
 
-    const { apikey } = req.headers; // Express normalizes all request headers to lowercase
+    const { apikey, setupmodel } = req.headers; // Express normalizes all request headers to lowercase
 
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    //const analyzedMaterial = await post('/MaterialAnalyzer', {
-
     const url = '/Exercises/GenerateExercise';
 
     try {
-      const fillGapsExercise = await axiosGenerativeAI.post(
+      const exercise = await axiosGenerativeAI.post(
         url,
         {
           macroSubject: macroSubject,
           title: title,
           level: level,
-          typeOfExercise: 3, // 3 is for fill_in_the_gaps exercise
+          typeOfExercise: typeOfExercise,
           learningObjective: learningObjective,
           bloomLevel: bloomLevel,
           language: language,
@@ -59,14 +57,14 @@ export default async function serverSideCall(
           distractorsNumber: distractorsNumber,
           easilyDiscardableDistractorsNumber:
             easilyDiscardableDistractorsNumber,
-          assignmentType: 0, // 0 is for theoretical assignment. Usually the fill_in_the_gaps exercise is to check the understanding of the material
+          assignmentType: assignmentType,
           topic: topic,
           temperature: temperature,
         },
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
-            SetupModel: process.env.SETUP_MODEL,
+            SetupModel: setupmodel || process.env.SETUP_MODEL,
           },
         }
         // {
@@ -77,8 +75,8 @@ export default async function serverSideCall(
         //   },
         // }
       );
-      res.status(200).json(fillGapsExercise?.data);
-      console.log('fillGapsExercise', fillGapsExercise?.data);
+      res.status(200).json(exercise?.data);
+      console.log('exercise: ', exercise?.data);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal server error!' });

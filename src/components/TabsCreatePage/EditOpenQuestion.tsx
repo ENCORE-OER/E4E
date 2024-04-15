@@ -1,22 +1,23 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { GeneratedExerciseProps } from '../../types/encoreElements';
 import TextBox from '../TextBox/TextBox';
 
-type OpenQuestionData = {
-  language: string;
-  date: string;
-  level: string;
-  type_of_question: string;
-  category: string;
-  temperature: number;
-  question: string;
-  correctAnswer: string;
-};
+// type OpenQuestionData = {
+//   language: string;
+//   date: string;
+//   level: string;
+//   type_of_question: string;
+//   category: string;
+//   temperature: number;
+//   question: string;
+//   correctAnswer: string;
+// };
 
 type EditOpenQuestionProps = {
   isSmallerScreen?: boolean;
-  openQuestionData: OpenQuestionData;
+  openQuestionData: GeneratedExerciseProps;
 };
 
 export default function EditOpenQuestion({
@@ -34,8 +35,8 @@ export default function EditOpenQuestion({
   } = useCreateOERsContext();
 
   useEffect(() => {
-    handleQuestion(openQuestionData.question);
-    handleSolution(openQuestionData.correctAnswer);
+    handleQuestion(openQuestionData.Assignment);
+    handleSolution(openQuestionData.Solutions[0]);
   }, []);
 
   return (

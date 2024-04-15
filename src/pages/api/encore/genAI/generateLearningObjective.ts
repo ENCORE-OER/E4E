@@ -5,6 +5,7 @@ const axiosGenerativeAI = axiosCreate.create({
   baseURL: process.env.GENERATIVE_AI_URL, // TODO: change to the generative AI URL
   headers: {
     'Content-Type': 'application/json',
+    // SetupModel: process.env.SETUP_MODEL,
     // ApiKey: process.env.SK_API_KEY,
   },
 });
@@ -16,25 +17,29 @@ export default async function generateLearningObjective(
 ) {
   if (req.method === 'POST') {
     // get the data from the request body
-    const {
-      language,
-      educatorExperience,
-      learnerExperience,
-      dimension,
-      educationContext,
-      learningContext,
-      skills,
-      bloomLevel,
-      verbs,
-      temperature,
-    } = req.body;
+    // const {
+    //   language,
+    //   educatorExperience,
+    //   learnerExperience,
+    //   dimension,
+    //   educationContext,
+    //   learningContext,
+    //   skills,
+    //   bloomLevel,
+    //   verbs,
+    //   temperature,
+    // } = req.body;
+
+    const { topic, context, level } = req.body;
 
     //const { ApiKey } = req.headers;
-    const { apikey } = req.headers; // Express normalizes all request headers to lowercase
+    const { apikey, setupmodel } = req.headers; // Express normalizes all request headers to lowercase
 
     console.log('apiKey from context: ', apikey);
+    console.log('SETUP_MODEL: ', setupmodel);
 
     console.log('req.body', req.body);
+    // console.log(topic, context, level);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
     const url = '/LOGenerator/generatelearningobjective';
@@ -42,21 +47,27 @@ export default async function generateLearningObjective(
     try {
       const respLearningObjective = await axiosGenerativeAI.post(
         url,
+        // {
+        //   language: language,
+        //   educatorExperience: educatorExperience,
+        //   learnerExperience: learnerExperience,
+        //   dimension: dimension,
+        //   educationContext: educationContext,
+        //   learningContext: learningContext,
+        //   skills: skills,
+        //   bloomLevel: bloomLevel,
+        //   verbs: verbs,
+        //   temperature: temperature,
+        // },
         {
-          language: language,
-          educatorExperience: educatorExperience,
-          learnerExperience: learnerExperience,
-          dimension: dimension,
-          educationContext: educationContext,
-          learningContext: learningContext,
-          skills: skills,
-          bloomLevel: bloomLevel,
-          verbs: verbs,
-          temperature: temperature,
+          topic: topic,
+          context: context,
+          level: level,
         },
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
+            SetupModel: setupmodel || process.env.SETUP_MODEL,
           },
         }
         // {

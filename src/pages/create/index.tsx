@@ -11,12 +11,13 @@ import { useRouter } from 'next/router';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
 
-import InputAPIKey from '../../components/Inputs/InputAPIKey';
+import InputsGenerateAI from '../../components/Inputs/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import TabsCreateMenu from '../../components/TabsCreatePage/TabsCreateMenu';
 import TextBox from '../../components/TextBox/TextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { stringArrayToOptionsObject } from '../../utils/utils';
 
 const Create = () => {
   const { user } = useUser();
@@ -33,9 +34,10 @@ const Create = () => {
     isGenerateButtonClicked,
     handleOptionsChange,
     exercise,
-    apiFillGapsData,
+    apiGeneratedExerciseData: apiFillGapsData,
   } = useCreateOERsContext();
-  const { apiKey, handleApiKey } = useGeneralContext();
+  const { apiKey, handleApiKey, setupModel, handleSetupModel } =
+    useGeneralContext();
 
   const { addToast } = CustomToast();
 
@@ -74,7 +76,7 @@ const Create = () => {
                 </Text>
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-                <Flex
+                {/* <Flex
                   paddingBottom="0.5rem"
                   flexWrap="wrap"
                   direction={isSmallerScreen ? 'column' : 'row'}
@@ -87,7 +89,17 @@ const Create = () => {
                     w={isSmallerScreen ? '100%' : '40%'}
                     ml="auto"
                   />
-                </Flex>
+                </Flex> */}
+                <InputsGenerateAI
+                  apiKey={apiKey}
+                  handleApiKey={handleApiKey}
+                  setupModel={setupModel}
+                  handleSetupModel={handleSetupModel}
+                  isSmallerScreen={isSmallerScreen}
+                />
+                <Text as="b" pb="0.5rem">
+                  Educational resource input (text or URL)
+                </Text>
                 <TextBox
                   //backgroundColor="#EDF2F7"
                   placeholder="Add text or URL"
@@ -112,7 +124,9 @@ const Create = () => {
                 w="100%"
                 onClick={() => {
                   if (exercise == 'Fill the gaps') {
-                    handleOptionsChange(apiFillGapsData.words);
+                    handleOptionsChange(
+                      stringArrayToOptionsObject(apiFillGapsData)
+                    );
                   }
                   if (isGenerateButtonClicked) {
                     router.push({
