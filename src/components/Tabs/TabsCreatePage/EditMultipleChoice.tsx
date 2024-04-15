@@ -2,7 +2,10 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { GeneratedExerciseProps } from '../../../types/encoreElements';
-import { stringArrayToOptionsObject, useHasHydrated } from '../../../utils/utils';
+import {
+  stringArrayToOptionsObject,
+  useHasHydrated,
+} from '../../../utils/utils';
 import CheckboxEditableMenu from '../../CheckboxMenu/CheckboxEditableMenu';
 import RadioEditableMenu from '../../RadioMenu/RadioEditableMenu';
 import TextBox from '../../TextBox/TextBox';

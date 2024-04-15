@@ -109,9 +109,11 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
-              <Heading>Edit the {hydrated && typeOfExercisePanel} exercise</Heading>
+              <Heading>
+                Edit the {hydrated && typeOfExercisePanel} exercise
+              </Heading>
             </Flex>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>

@@ -91,7 +91,6 @@ export default function OpenQuestionPanel({
     handleTitle(analyzedMaterial.Title);
     handleDescription(analyzedMaterial.MainTopics[0].Description);
 
-
     const requestData = {
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API

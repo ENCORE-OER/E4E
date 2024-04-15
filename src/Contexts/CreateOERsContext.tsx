@@ -28,7 +28,6 @@ type CreateOERsContextProps = {
   bloomLevelExercise: Option | null;
   handleBloomLevelExercise: (selected: Option) => void;
 
-
   // * variabili Fill Gaps
   targetLevelFillGaps: Option | null;
   handleTargetLevelFillGaps: (selected: Option) => void;
@@ -251,10 +250,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   );
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [typeOfExercisePanel, setTypeOfExercisePanel] = useLocalStorage<string | null>(
-    'type of panel',
-    null
-  );
+  const [typeOfExercisePanel, setTypeOfExercisePanel] = useLocalStorage<
+    string | null
+  >('type of panel', null);
   const [temperature, setTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
@@ -367,7 +365,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   // Is used for segmented button in Question Panel
   const handleQuestionType = (selected: Option) => {
-    setQuestionType(selected);  // here we set the question type as a string
+    setQuestionType(selected); // here we set the question type as a string
     handleChosenTypeOfExercise(selected); // here we set the question type as a number
   };
   const handleQuestionCategoryOpenQuestion = (selected: Option) => {
@@ -386,7 +384,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   // Is used for theoretical or practical choose
   const handleAssignmentType = (selected: Option) => {
-    setAssignmentType(selected);  // here we set the exercise type as a string
+    setAssignmentType(selected); // here we set the exercise type as a string
     handleChosenTypeOfAssignment(selected); // here we set the exercise type as a number
   };
   const handleQuestionCategoryMultipleChoice = (selected: Option) => {
@@ -402,7 +400,8 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleCorrectAnswerQuiz = (number: number | string) => {
     setCorrectAnswerQuiz(number as number);
     // To avoid to set the type of exercise if the user has already chosen it
-    if (number === "1" && chosenTypeOfExercise !== 4) { // 4 = Single Choice
+    if (number === '1' && chosenTypeOfExercise !== 4) {
+      // 4 = Single Choice
       handleChosenTypeOfExercise({ title: 'Single Choice' });
     } else if (Number(number) > 1 && chosenTypeOfExercise !== 5) {
       handleChosenTypeOfExercise({ title: 'Multiple Choice' });
@@ -442,8 +441,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleTypeOfExercisePanel = (selected: number) => {
     switch (selected) {
       case 0:
-        setTypeOfExercisePanel('Open Question');  // TODO: creare una variabili costante per il nome del pannello (OPEN_QUESTION = 'Open Question')
-        if (questionType !== null) {  // Update the type of exercise if the user has already chosen it when the user changes the panel
+        setTypeOfExercisePanel('Open Question'); // TODO: creare una variabili costante per il nome del pannello (OPEN_QUESTION = 'Open Question')
+        if (questionType !== null) {
+          // Update the type of exercise if the user has already chosen it when the user changes the panel
           handleChosenTypeOfExercise(questionType);
         }
         break;
@@ -452,8 +452,9 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleChosenTypeOfExercise({ title: 'Fill the Gaps' }); // Update the type of exercise when the user changes the panel
         break;
       case 2:
-        setTypeOfExercisePanel('Multiple Choice');  // TODO: creare una variabili costante per il nome del pannello (MULTIPLE_CHOICE = 'Multiple Choice')
-        if (correctAnswerQuiz == 1 && chosenTypeOfExercise !== 4) { // Update the type of exercise if the user has already chosen it when the user changes the panel
+        setTypeOfExercisePanel('Multiple Choice'); // TODO: creare una variabili costante per il nome del pannello (MULTIPLE_CHOICE = 'Multiple Choice')
+        if (correctAnswerQuiz == 1 && chosenTypeOfExercise !== 4) {
+          // Update the type of exercise if the user has already chosen it when the user changes the panel
           handleChosenTypeOfExercise({ title: 'Single Choice' });
         } else if (correctAnswerQuiz > 1 && chosenTypeOfExercise !== 5) {
           handleChosenTypeOfExercise({ title: 'Multiple Choice' });
@@ -514,7 +515,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   // Si riferisce ai diversi tipi di esercizi di Open Question
   const handleChosenTypeOfExercise = (selected: Option) => {
     switch (selected.title) {
-      case 'Open':  // TODO: creare una variabili costante per il nome del pannello (OPEN = 'Open')
+      case 'Open': // TODO: creare una variabili costante per il nome del pannello (OPEN = 'Open')
         setChosenTypeOfExercise(0);
         break;
       case 'Short Answer': //TODO: creare una variabili costante per il nome del pannello (SHORT_ANSWER = 'Short Answer')

@@ -59,7 +59,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>

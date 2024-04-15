@@ -6,7 +6,7 @@ import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
-  GeneratedExerciseProps
+  GeneratedExerciseProps,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
@@ -110,7 +110,7 @@ export default function MultipleChoicePanel({
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      typeOfExercise: chosenTypeOfExercise,//exerciseTypeNumber, // fill_in_the_blanks exercise
+      typeOfExercise: chosenTypeOfExercise, //exerciseTypeNumber, // fill_in_the_blanks exercise
       learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
       bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
       // language: language, // English by default
@@ -280,7 +280,7 @@ export default function MultipleChoicePanel({
           </Flex>
           <SliderInput
             min={1}
-            max={chosenTypeOfAssignment === 0 ? 3 : 1}  // 0 = theoretical assignment, 2 = practical assignment
+            max={chosenTypeOfAssignment === 0 ? 3 : 1} // 0 = theoretical assignment, 2 = practical assignment
             value={correctAnswerQuiz}
             onChange={handleCorrectAnswerQuiz}
           />

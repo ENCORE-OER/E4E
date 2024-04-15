@@ -6,7 +6,7 @@ import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
-  GeneratedExerciseProps
+  GeneratedExerciseProps,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
