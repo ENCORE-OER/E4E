@@ -33,10 +33,10 @@ export default async function generateLearningObjective(
     const { topic, context, level } = req.body;
 
     //const { ApiKey } = req.headers;
-    const { apikey } = req.headers; // Express normalizes all request headers to lowercase
+    const { apikey, setupmodel } = req.headers; // Express normalizes all request headers to lowercase
 
     console.log('apiKey from context: ', apikey);
-    console.log('SETUP_MODEL: ', process.env.SETUP_MODEL);
+    console.log('SETUP_MODEL: ', setupmodel);
 
     console.log('req.body', req.body);
     // console.log(topic, context, level);
@@ -67,7 +67,7 @@ export default async function generateLearningObjective(
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
-            SetupModel: process.env.SETUP_MODEL,
+            SetupModel: setupmodel || process.env.SETUP_MODEL,
           },
         }
         // {

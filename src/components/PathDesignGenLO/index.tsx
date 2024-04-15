@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { PiSmileySadLight } from 'react-icons/pi';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
@@ -17,7 +18,7 @@ import {
   useHasHydrated,
 } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
-import InputAPIKey from '../Inputs/InputAPIKey';
+import InputsGenerateAI from '../Inputs/InputsGenerateAI';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
@@ -38,8 +39,6 @@ type PathDesignGenLOProps = {
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted: boolean;
-  apiKey: string | undefined;
-  handleApiKey: (apiKey: string) => void;
 };
 
 enum BloomLevelString {
@@ -69,11 +68,12 @@ export default function PathDesignGenLO({
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
-  apiKey,
-  handleApiKey,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
+
+  const { apiKey, setupModel, handleApiKey, handleSetupModel } = useGeneralContext();
+
   const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
@@ -149,6 +149,7 @@ export default function PathDesignGenLO({
 
             const resp = await postGenerateLearningObjective(
               apiKey, // apiKey
+              setupModel, // setupModel
               mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
               learningTextContext, // learningContext
               selectedSkillConceptsTags
@@ -222,6 +223,7 @@ export default function PathDesignGenLO({
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
+    setupModel: string | undefined,
     educationContext: number,
     learningContext: string,
     skills: string,
@@ -239,6 +241,7 @@ export default function PathDesignGenLO({
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
@@ -311,12 +314,12 @@ export default function PathDesignGenLO({
 
   return (
     <Flex pt="30px" direction="column">
-      <Flex direction="column">
-        <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
-          Insert the API Key
-        </Text>
-        <InputAPIKey w="400px" apiKey={apiKey} handleApiKey={handleApiKey} />
-      </Flex>
+      <InputsGenerateAI
+        apiKey={apiKey}
+        handleApiKey={handleApiKey}
+        setupModel={setupModel}
+        handleSetupModel={handleSetupModel}
+      />
       <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
@@ -386,17 +389,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-            hydrated &&
-            generatedLOs.map((lo: string, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                textLearningObjective={lo}
-                index={index}
-                selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+          hydrated &&
+          generatedLOs.map((lo: string, index: number) => (
+            <BoxGeneratedLO
+              key={index}
+              textLearningObjective={lo}
+              index={index}
+              selectedLO={selectedLO}
+              handleCheckBoxClick={handleCheckBoxClick}
+              handleUpdateLO={handleUpdateLO}
+            />
+          ))
         }
       </Flex>
     </Flex>

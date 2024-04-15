@@ -20,7 +20,7 @@ export default async function materialAnalyzer(
     // get the data from the request body
     const { material } = req.body;
 
-    const { apikey } = req.headers; // Express normalizes all request headers to lowercase
+    const { apikey, setupmodel } = req.headers; // Express normalizes all request headers to lowercase
 
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
@@ -36,7 +36,7 @@ export default async function materialAnalyzer(
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
-            SetupModel: process.env.SETUP_MODEL,
+            SetupModel: setupmodel || process.env.SETUP_MODEL,
           },
         }
         // {

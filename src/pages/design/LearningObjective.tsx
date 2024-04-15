@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
@@ -46,7 +45,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
-  const { apiKey, handleApiKey } = useGeneralContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
   const { addToast } = CustomToast();
@@ -197,7 +195,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -206,7 +204,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Box w={isSmallerScreen ? '95%' : '90%'}>
                 <LearningStepper
@@ -289,8 +287,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
-                  apiKey={apiKey}
-                  handleApiKey={handleApiKey}
+                // apiKey={apiKey}
+                // handleApiKey={handleApiKey}
                 />
               </Flex>
             )}
