@@ -36,7 +36,8 @@ const Create = () => {
     exercise,
     apiGeneratedExerciseData: apiFillGapsData,
   } = useCreateOERsContext();
-  const { apiKey, handleApiKey, setupModel, handleSetupModel } = useGeneralContext();
+  const { apiKey, handleApiKey, setupModel, handleSetupModel } =
+    useGeneralContext();
 
   const { addToast } = CustomToast();
 
@@ -58,7 +59,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -89,8 +90,16 @@ const Create = () => {
                     ml="auto"
                   />
                 </Flex> */}
-                <InputsGenerateAI apiKey={apiKey} handleApiKey={handleApiKey} setupModel={setupModel} handleSetupModel={handleSetupModel} isSmallerScreen={isSmallerScreen} />
-                <Text as="b" pb="0.5rem">Educational resource input (text or URL)</Text>
+                <InputsGenerateAI
+                  apiKey={apiKey}
+                  handleApiKey={handleApiKey}
+                  setupModel={setupModel}
+                  handleSetupModel={handleSetupModel}
+                  isSmallerScreen={isSmallerScreen}
+                />
+                <Text as="b" pb="0.5rem">
+                  Educational resource input (text or URL)
+                </Text>
                 <TextBox
                   //backgroundColor="#EDF2F7"
                   placeholder="Add text or URL"

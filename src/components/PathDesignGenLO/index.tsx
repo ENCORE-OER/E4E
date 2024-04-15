@@ -72,7 +72,8 @@ export default function PathDesignGenLO({
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
 
-  const { apiKey, setupModel, handleApiKey, handleSetupModel } = useGeneralContext();
+  const { apiKey, setupModel, handleApiKey, handleSetupModel } =
+    useGeneralContext();
 
   const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
@@ -389,17 +390,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))
+            hydrated &&
+            generatedLOs.map((lo: string, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                textLearningObjective={lo}
+                index={index}
+                selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
         }
       </Flex>
     </Flex>
