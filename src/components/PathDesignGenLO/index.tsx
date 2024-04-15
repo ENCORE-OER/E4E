@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { PiSmileySadLight } from "react-icons/pi";
+import { PiSmileySadLight } from 'react-icons/pi';
 import { Option, SkillItemProps } from '../../types/encoreElements';
 import { EducationContextEnum } from '../../types/encoreElements/PathDesignElement/enums';
 import { CustomToast } from '../../utils/Toast/CustomToast';
@@ -369,26 +369,34 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {isLessGeneratedLO &&
-          <Flex direction={'row'} align={'center'} pb={5} >
+        {isLessGeneratedLO && (
+          <Flex direction={'row'} align={'center'} pb={5}>
             <PiSmileySadLight />
-            <Text pl={2} fontSize={'md'} fontWeight={'bold'} textColor={'orange.300'}> {`Sorry, but we were unable to generate N different required learning objectives.`} </Text>
+            <Text
+              pl={2}
+              fontSize={'md'}
+              fontWeight={'bold'}
+              textColor={'orange.300'}
+            >
+              {' '}
+              {`Sorry, but we were unable to generate N different required learning objectives.`}{' '}
+            </Text>
           </Flex>
-        }
+        )}
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))
+            hydrated &&
+            generatedLOs.map((lo: string, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                textLearningObjective={lo}
+                index={index}
+                selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
         }
       </Flex>
     </Flex>
