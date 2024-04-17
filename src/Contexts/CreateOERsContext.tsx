@@ -55,23 +55,23 @@ type CreateOERsContextProps = {
   // * variabili Multiple Choice
   targetLevelMultipleChoice: Option | null;
   handleTargetLevelMultipleChoice: (selected: Option) => void;
-  exerciseType: Option | null;
-  handleExerciseType: (selected: Option) => void;
+  assignmentType: Option | null;
+  handleAssignmentType: (selected: Option) => void;
   questionCategoryMultipleChoice: Option | null;
   handleQuestionCategoryMultipleChoice: (selected: Option) => void;
   distractorsMultipleChoice: number;
   handleDistractorsMultipleChoice: (selected: number | string) => void;
   easyDistractors: number;
   handleEasyDistractors: (selected: number | string) => void;
-  correctAnswer: number;
-  handleCorrectAnswer: (selected: number | string) => void;
+  correctAnswerQuiz: number;
+  handleCorrectAnswerQuiz: (selected: number | string) => void;
   temperatureMultipleChoice: Option | null;
   handleTemperatureMultipleChoice: (selected: Option) => void;
 
   // * dati per il json
   // todo: metterle sul local storage e fare una funzione per resettarle
-  exercise: string | null;
-  handleExercise: (selected: number) => void;
+  typeOfExercisePanel: string | null;
+  handleTypeOfExercisePanel: (selected: number) => void;
   chosenTargetLevel: number | null;
   //handleChosenTargetLevel: (selected: Option) => void;
   temperature: number;
@@ -87,6 +87,7 @@ type CreateOERsContextProps = {
   chosenCategory: number;
   //handleChosenCategory: (selected: Option) => void;
   chosenTypeOfExercise: number;
+  handleChosenTypeOfExercise: (selected: Option) => void;
   chosenTypeOfAssignment: number;
   //handleChosenType: (selected: Option) => void;
   data: OerData;
@@ -235,11 +236,11 @@ export const CreateOERsProvider = ({ children }: any) => {
     useState<Option | null>(null);
   const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
     useState<Option | null>(null);
-  const [exerciseType, setExerciseType] = useState<Option | null>(null);
+  const [assignmentType, setAssignmentType] = useState<Option | null>(null);
   const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
     useState<number>(1);
   const [easyDistractors, setEasyDistractors] = useState<number>(0);
-  const [correctAnswer, setCorrectAnswer] = useState<number>(1);
+  const [correctAnswerQuiz, setCorrectAnswerQuiz] = useState<number>(1);
   const [temperatureMultipleChoice, setTemperatureMultipleChoice] =
     useState<Option | null>(null);
 
@@ -249,10 +250,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   );
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [exercise, setExercise] = useLocalStorage<string | null>(
-    'exercise',
-    null
-  );
+  const [typeOfExercisePanel, setTypeOfExercisePanel] = useLocalStorage<
+    string | null
+  >('type of panel', null);
   const [temperature, setTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
@@ -363,9 +363,10 @@ export const CreateOERsProvider = ({ children }: any) => {
     setTargetLevelOpenQuestion(selected);
     handleChosenTargetLevel(selected);
   };
+  // Is used for segmented button in Question Panel
   const handleQuestionType = (selected: Option) => {
-    setQuestionType(selected);
-    handleChosenTypeOfExercise(selected);
+    setQuestionType(selected); // here we set the question type as a string
+    handleChosenTypeOfExercise(selected); // here we set the question type as a number
   };
   const handleQuestionCategoryOpenQuestion = (selected: Option) => {
     setQuestionCategoryOpenQuestion(selected);
@@ -382,9 +383,9 @@ export const CreateOERsProvider = ({ children }: any) => {
     handleChosenTargetLevel(selected);
   };
   // Is used for theoretical or practical choose
-  const handleExerciseType = (selected: Option) => {
-    setExerciseType(selected);
-    handleChosenTypeOfAssignment(selected);
+  const handleAssignmentType = (selected: Option) => {
+    setAssignmentType(selected); // here we set the exercise type as a string
+    handleChosenTypeOfAssignment(selected); // here we set the exercise type as a number
   };
   const handleQuestionCategoryMultipleChoice = (selected: Option) => {
     setQuestionCategoryMultipleChoice(selected);
@@ -397,8 +398,15 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleEasyDistractors = (number: number | string) => {
     setEasyDistractors(number as number);
   };
-  const handleCorrectAnswer = (number: number | string) => {
-    setCorrectAnswer(number as number);
+  const handleCorrectAnswerQuiz = (number: number | string) => {
+    setCorrectAnswerQuiz(number as number);
+    // To avoid to set the type of exercise if the user has already chosen it
+    if (number === '1' && chosenTypeOfExercise !== 4) {
+      // 4 = Single Choice
+      handleChosenTypeOfExercise({ title: 'Single Choice' });
+    } else if (Number(number) > 1 && chosenTypeOfExercise !== 5) {
+      handleChosenTypeOfExercise({ title: 'Multiple Choice' });
+    }
   };
   const handleTemperatureMultipleChoice = (selected: Option) => {
     setTemperatureMultipleChoice(selected);
@@ -430,19 +438,31 @@ export const CreateOERsProvider = ({ children }: any) => {
         setChosenTargetLevel(null);
     }
   };
-  const handleExercise = (selected: number) => {
+  // Si riferisce ai pannelli
+  const handleTypeOfExercisePanel = (selected: number) => {
     switch (selected) {
       case 0:
-        setExercise('Fill the Gaps');
+        setTypeOfExercisePanel('Open Question'); // TODO: creare una variabili costante per il nome del pannello (OPEN_QUESTION = 'Open Question')
+        if (questionType !== null) {
+          // Update the type of exercise if the user has already chosen it when the user changes the panel
+          handleChosenTypeOfExercise(questionType);
+        }
         break;
       case 1:
-        setExercise('Open Question');
+        setTypeOfExercisePanel('Fill the Gaps'); // TODO: creare una variabili costante per il nome del pannello (FILL_THE_GAPS = 'Fill the Gaps')
+        handleChosenTypeOfExercise({ title: 'Fill the Gaps' }); // Update the type of exercise when the user changes the panel
         break;
       case 2:
-        setExercise('Multiple Choice');
+        setTypeOfExercisePanel('Multiple Choice'); // TODO: creare una variabili costante per il nome del pannello (MULTIPLE_CHOICE = 'Multiple Choice')
+        if (correctAnswerQuiz == 1 && chosenTypeOfExercise !== 4) {
+          // Update the type of exercise if the user has already chosen it when the user changes the panel
+          handleChosenTypeOfExercise({ title: 'Single Choice' });
+        } else if (correctAnswerQuiz > 1 && chosenTypeOfExercise !== 5) {
+          handleChosenTypeOfExercise({ title: 'Multiple Choice' });
+        }
         break;
       default:
-        console.log('error in chosen Exercise');
+        console.log('Error in chosen Exercise!');
     }
   };
   const handleTemperature = (selected: Option) => {
@@ -493,19 +513,26 @@ export const CreateOERsProvider = ({ children }: any) => {
         setChosenCategory(0);
     }
   };
+  // Si riferisce ai diversi tipi di esercizi di Open Question
   const handleChosenTypeOfExercise = (selected: Option) => {
     switch (selected.title) {
-      case 'Open':
+      case 'Open': // TODO: creare una variabili costante per il nome del pannello (OPEN = 'Open')
         setChosenTypeOfExercise(0);
         break;
-      case 'Short Answer':
+      case 'Short Answer': //TODO: creare una variabili costante per il nome del pannello (SHORT_ANSWER = 'Short Answer')
         setChosenTypeOfExercise(1);
         break;
-      case 'True False':
+      case 'True False': //TODO: creare una variabili costante per il nome del pannello (TRUE_FALSE = 'True False')
         setChosenTypeOfExercise(2);
         break;
-      case 'Fill the gaps':
+      case 'Fill the Gaps': //TODO: creare una variabili costante per il nome del pannello (FILL_THE_GAPS = 'Fill the Gaps')
         setChosenTypeOfExercise(3);
+        break;
+      case 'Single Choice': //TODO: creare una variabili costante per il nome del pannello (SINGLE_CHOICE = 'Single Choice')
+        setChosenTypeOfExercise(4);
+        break;
+      case 'Multiple Choice': //TODO: creare una variabili costante per il nome del pannello (MULTIPLE_CHOICE = 'Multiple Choice')
+        setChosenTypeOfExercise(5);
         break;
       default:
         setChosenTypeOfExercise(0);
@@ -519,7 +546,7 @@ export const CreateOERsProvider = ({ children }: any) => {
       case 'Code':
         setChosenTypeOfAssignment(1);
         break;
-      case 'Practical':
+      case 'Practical': // problem resolution
         setChosenTypeOfAssignment(2);
         break;
       default:
@@ -679,105 +706,39 @@ export const CreateOERsProvider = ({ children }: any) => {
   // };
 
   const handleData = () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const currentDateString = `${year}-${month}-${day}`;
-
-    switch (exercise) {
-      case 'Fill the gaps':
-        const temp: OerData = {
-          title: title,
-          description: description,
-          publication_date: currentDateString,
-          language: 'English',
-          generated_by_ai: true,
-          assessment_oer: true,
-          assessment_oer_type: exercise,
-          source: sourceText,
-          level: targetLevelFillGaps?.title || '',
-          temperature: temperature,
-          exercise_values: {
-            question: null,
-            fill_template: fillTemplate,
-            fill_template_with_gaps: fillTemplateWithGaps,
-            category: null,
-            type: null,
-            number_of_correct_answer: null,
-            number_of_easy_distractors: null,
-            number_of_distractors: distractors,
-            number_of_words: chosenLenght,
-            options: options || null,
-            solution: null,
-          },
-        };
-        console.log('fill gaps', temp);
-        setData(temp);
-        break;
-      case 'Open Question':
-        const temp0: OerData = {
-          title: title,
-          description: description,
-          publication_date: currentDateString,
-          language: 'English',
-          generated_by_ai: true,
-          assessment_oer: true,
-          assessment_oer_type: exercise,
-          source: sourceText,
-          level: targetLevelOpenQuestion?.title || '',
-          temperature: temperature,
-          exercise_values: {
-            question: question || null,
-            fill_template: null,
-            fill_template_with_gaps: null,
-            category: questionCategory || null,
-            type: questionType?.title || null,
-            number_of_correct_answer: null,
-            number_of_easy_distractors: null,
-            number_of_distractors: null,
-            number_of_words: null,
-            options: null,
-            solution: solution || null,
-          },
-        };
-        console.log('open question', temp0);
-        setData(temp0);
-
-        break;
-      case 'Multiple Choice':
-        const temp1: OerData = {
-          title: title,
-          description: description,
-          publication_date: currentDateString,
-          language: 'English',
-          generated_by_ai: true,
-          assessment_oer: true,
-          assessment_oer_type: exercise,
-          source: sourceText,
-          level: targetLevelMultipleChoice?.title || '',
-          temperature: temperature,
-          exercise_values: {
-            question: question || null,
-            fill_template: null,
-            fill_template_with_gaps: null,
-            category: questionCategory || null,
-            type: exerciseType?.title || null,
-            number_of_correct_answer: correctAnswer || null,
-            number_of_easy_distractors: easyDistractors || null,
-            number_of_distractors: distractors || null,
-            number_of_words: null,
-            options: options || null,
-            solution: solution || null,
-          },
-        };
-        console.log('multiple choice', temp1);
-        setData(temp1);
-
-        break;
-      default:
-        console.log('error in chosen Exercise');
-    }
+    const temp: OerData = {
+      title: title,
+      description: description,
+      publication_date: new Date().toISOString(),
+      language: 'English',
+      generated_by_ai: true,
+      assessment_oer: true,
+      assessment_oer_type: typeOfExercisePanel || '',
+      source: sourceText,
+      level:
+        targetLevelFillGaps?.title ||
+        targetLevelOpenQuestion?.title ||
+        targetLevelMultipleChoice?.title ||
+        '',
+      temperature: temperature,
+      exercise_values: {
+        question: question || null,
+        fill_template: fillTemplate || null,
+        fill_template_with_gaps: fillTemplateWithGaps || null,
+        category:
+          questionCategoryMultipleChoice?.title ||
+          questionCategoryOpenQuestion?.title ||
+          null,
+        type: assignmentType?.title || questionType?.title || null,
+        number_of_correct_answer: correctAnswerQuiz || null,
+        number_of_easy_distractors: easyDistractors || null,
+        number_of_distractors: distractors || null,
+        number_of_words: chosenLenght || null,
+        options: options || null, // see wordsOptions
+        solution: solution || null,
+      },
+    };
+    setData(temp);
   };
 
   const handleTitle = (selected: string) => {
@@ -842,7 +803,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         targetLevelOpenQuestion,
         handleTargetLevelOpenQuestion,
         questionType,
-        handleQuestionType,
+        handleQuestionType, // open question, short answer, true false
         questionCategoryOpenQuestion,
         handleQuestionCategoryOpenQuestion,
         temperatureOpenQuestion,
@@ -850,37 +811,38 @@ export const CreateOERsProvider = ({ children }: any) => {
         // * variabili e handle functions Multiple Choice
         targetLevelMultipleChoice,
         handleTargetLevelMultipleChoice,
-        exerciseType,
-        handleExerciseType,
+        assignmentType,
+        handleAssignmentType,
         questionCategoryMultipleChoice,
         handleQuestionCategoryMultipleChoice,
         distractorsMultipleChoice,
         handleDistractorsMultipleChoice,
         easyDistractors,
         handleEasyDistractors,
-        correctAnswer,
-        handleCorrectAnswer,
+        correctAnswerQuiz,
+        handleCorrectAnswerQuiz,
         temperatureMultipleChoice,
         handleTemperatureMultipleChoice,
         // * variabili e handle functions per il json
         chosenTargetLevel,
         //handleChosenTargetLevel,
-        exercise,
-        handleExercise,
+        typeOfExercisePanel,
+        handleTypeOfExercisePanel,
         temperature,
         //handleTemperature,
         distractors,
         handleDistractors,
         questionCategory,
         handleQuestionCategory,
-        sourceText,
+        sourceText, // material
         handleSourceText,
         chosenLenght,
         //handleChosenLenght,
         chosenCategory,
         //handleChosenCategory,
-        chosenTypeOfExercise,
-        chosenTypeOfAssignment,
+        chosenTypeOfExercise, // 0 = Open, 1 = Short Answer, 2 = True False, 3 = Fill the Gaps, 4 = Single Choice, 5 = Multiple Choice
+        handleChosenTypeOfExercise,
+        chosenTypeOfAssignment, // 0 = Theoretical, 1 = Code, 2 = Practical
         //handleChosenType,
         data,
         handleData,

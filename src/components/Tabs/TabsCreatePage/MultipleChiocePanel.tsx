@@ -1,29 +1,28 @@
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-// import { useLocalStorage } from 'usehooks-ts';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
   GeneratedExerciseProps,
-} from '../../types/encoreElements';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { mapOptionToNumber } from '../../utils/utils';
-import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
-import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
-//import TextBox from '../TextBox/TextBox';
+} from '../../../types/encoreElements';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../../utils/utils';
+import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
+import SliderInput from '../../NumberInput/SliderNumberInput';
+import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
-type OpenQuestionPanelProps = {
+type MultipleChoicePanelProps = {
   isSmallerScreen?: boolean;
   analyzeMaterial: (material: string) => Promise<AnalyzedMaterialProps>;
 };
 
-export default function OpenQuestionPanel({
+export default function MultipleChoicePanel({
   isSmallerScreen,
   analyzeMaterial,
-}: OpenQuestionPanelProps) {
+}: MultipleChoicePanelProps) {
   const {
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
@@ -34,38 +33,47 @@ export default function OpenQuestionPanel({
     exerciseTypeOptions,
     bloomLevelOptions,
 
-    temperatureOpenQuestion,
+    handleTitle,
+    handleDescription,
 
     bloomLevelExercise,
     handleBloomLevelExercise,
 
-    handleTemperatureOpenQuestion,
-    questionTypeOptions,
+    temperatureMultipleChoice,
+    handleTemperatureMultipleChoice,
 
-    targetLevelOpenQuestion,
-    handleTargetLevelOpenQuestion,
+    targetLevelMultipleChoice,
+    handleTargetLevelMultipleChoice,
 
-    questionType,
-    handleQuestionType,
+    assignmentType,
+    handleAssignmentType,
 
-    exerciseType,
-    handleExerciseType,
+    questionCategoryMultipleChoice,
+    // handleQuestionCategoryMultipleChoice,
 
-    // questionCategoryOpenQuestion,
-    // handleQuestionCategoryOpenQuestion,
+    correctAnswerQuiz,
+    handleCorrectAnswerQuiz,
+
+    easyDistractors,
+    handleEasyDistractors,
+
+    distractorsMultipleChoice,
+    handleDistractorsMultipleChoice,
 
     temperature,
     sourceText,
     chosenTargetLevel,
-    // chosenCategory,
     chosenTypeOfExercise,
     chosenTypeOfAssignment,
-    handleExercise,
+    // chosenCategory,
+    // handleTypeOfExercisePanel,
+
     // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
+    // handleTextToJSONMultipleChoice: handleTextToJSON,
     handleGeneratedExerciseData,
-    // handleTextToJSONOpenQuestion: handleTextToJSON,
   } = useCreateOERsContext();
-  const { apiKey } = useGeneralContext();
+
+  const { apiKey, setupModel } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
   const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
@@ -74,32 +82,43 @@ export default function OpenQuestionPanel({
 
   const handleGenerateButtonClick = async () => {
     setLoading(true);
+
     // // Costruisci l'oggetto di dati da inviare nella richiesta
     // const requestData = {
     //   language: 'English',
+    //   type: chosenType,
     //   text: sourceText,
     //   level: chosenTargetLevel,
-    //   type: chosenType,
     //   category: chosenCategory,
     //   temperature: temperature,
+    //   n_o_ca: correctAnswer,
+    //   nedd: easyDistractors,
+    //   n_o_d: distractorsMultipleChoice,
     // };
 
+    // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
     const analyzedMaterial = await analyzeMaterial(sourceText);
+    handleTitle(analyzedMaterial.Title);
+    handleDescription(analyzedMaterial.MainTopics[0].Description);
+
+    // const exerciseTypeNumber =
+    //   correctAnswerQuiz === 1
+    //     ? mapOptionToNumber({ title: 'single_choice' }, TypeOfExerciseEnum)
+    //     : mapOptionToNumber({ title: 'multiple_choice' }, TypeOfExerciseEnum);
 
     const requestData = {
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      typeOfExercise: chosenTypeOfExercise, // 0 = open question, 1 = short answer, 2 = true or false
+      typeOfExercise: chosenTypeOfExercise, //exerciseTypeNumber, // fill_in_the_blanks exercise
       learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
       bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
       // language: language, // English by default
       material: sourceText,
-      // correctAnswersNumber: 1,
-      // distractorsNumber: 0,
-      // easilyDiscardableDistractorsNumber: 0,
-      // assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
-      assignmentType: chosenTypeOfAssignment,
+      correctAnswersNumber: correctAnswerQuiz,
+      distractorsNumber: distractorsMultipleChoice,
+      easilyDiscardableDistractorsNumber: easyDistractors,
+      assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
       topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
       temperature: temperature,
     };
@@ -107,12 +126,13 @@ export default function OpenQuestionPanel({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        // '/api/encore/genAI/openQuestionExercise',
+        // '/api/encore/genAI/multipleChoiceExercise',
         '/api/encore/genAI/generateExercise',
         requestData,
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
@@ -124,11 +144,11 @@ export default function OpenQuestionPanel({
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
     } finally {
       setLoading(false);
-      setResponse(responseRef.current);
+      setResponse(responseRef.current ?? null);
 
       if (responseRef.current) {
-        // setRispostaTipo(responseRef.current);
-        // handleTextToJSON(responseRef.current);
+        //setRispostaTipo(responseRef.current);
+        //handleTextToJSON(responseRef.current);
         handleGeneratedExerciseData(
           responseRef.current.Assignment,
           responseRef.current.Plus,
@@ -147,11 +167,11 @@ export default function OpenQuestionPanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelOpenQuestion !== null &&
-      questionType !== null &&
-      // questionCategoryOpenQuestion !== null &&
-      bloomLevelExercise !== null &&
-      temperatureOpenQuestion !== null
+      targetLevelMultipleChoice !== null &&
+      assignmentType !== null &&
+      // questionCategoryMultipleChoice !== null &&
+      temperatureMultipleChoice !== null &&
+      bloomLevelExercise !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -160,10 +180,11 @@ export default function OpenQuestionPanel({
   useEffect(() => {
     handleOptionsComplete();
   }, [
-    targetLevelOpenQuestion,
-    questionType,
+    targetLevelMultipleChoice,
+    assignmentType,
+    questionCategoryMultipleChoice,
     bloomLevelExercise,
-    temperatureOpenQuestion,
+    temperatureMultipleChoice,
   ]);
 
   return (
@@ -175,12 +196,12 @@ export default function OpenQuestionPanel({
           </Flex>
           <SegmentedButton
             isHighlighted={
-              isGenerateButtonClicked && targetLevelOpenQuestion == null
+              isGenerateButtonClicked && targetLevelMultipleChoice === null
             }
             options={targetLevelOptions}
-            selected={targetLevelOpenQuestion}
-            preselectedTitle={targetLevelOpenQuestion?.title}
-            onChange={handleTargetLevelOpenQuestion}
+            selected={targetLevelMultipleChoice}
+            preselectedTitle={targetLevelMultipleChoice?.title}
+            onChange={handleTargetLevelMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
@@ -189,50 +210,36 @@ export default function OpenQuestionPanel({
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Question Type</Text>
+            <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && questionType == null}
-            options={questionTypeOptions}
-            selected={questionType}
-            preselectedTitle={questionType?.title}
-            onChange={handleQuestionType}
+            isHighlighted={isGenerateButtonClicked && assignmentType === null}
+            options={exerciseTypeOptions}
+            selected={assignmentType}
+            preselectedTitle={assignmentType?.title}
+            onChange={handleAssignmentType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
         <Box w={'42%'} paddingLeft={'2%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Exercise Type</Text>
+            <Text as="b">Creativity of AI</Text>
           </Flex>
           <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && exerciseType === null}
-            options={exerciseTypeOptions}
-            selected={exerciseType}
-            preselectedTitle={exerciseType?.title}
-            onChange={handleExerciseType}
+            isHighlighted={
+              isGenerateButtonClicked && temperatureMultipleChoice == null
+            }
+            options={temperatureOptions}
+            selected={temperatureMultipleChoice}
+            preselectedTitle={temperatureMultipleChoice?.title}
+            onChange={handleTemperatureMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
         </Box>
       </Flex>
       <Flex w={'100%'} paddingTop={'2rem'}>
-        {/* <Box w={'90%'}>
-          <Flex paddingBottom="0.5rem">
-            <Text as="b">Question Category</Text>
-          </Flex>
-          <SegmentedButton
-            isHighlighted={
-              isGenerateButtonClicked && questionCategoryOpenQuestion == null
-            }
-            options={questionCategoryOptions}
-            selected={questionCategoryOpenQuestion}
-            preselectedTitle={questionCategoryOpenQuestion?.title}
-            onChange={handleQuestionCategoryOpenQuestion}
-            isSmallerScreen={isSmallerScreen || false}
-            fontSize={'md'}
-          />
-        </Box> */}
         <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Bloom Level</Text>
@@ -249,22 +256,55 @@ export default function OpenQuestionPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'80%'}>
+        {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
-            <Text as="b">Creativity of AI</Text>
+            <Text as="b">Question Category</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={
-              isGenerateButtonClicked && temperatureOpenQuestion == null
+              isGenerateButtonClicked && questionCategoryMultipleChoice == null
             }
-            options={temperatureOptions}
-            selected={temperatureOpenQuestion}
-            preselectedTitle={temperatureOpenQuestion?.title}
-            onChange={handleTemperatureOpenQuestion}
+            options={questionCategoryOptions}
+            selected={questionCategoryMultipleChoice}
+            preselectedTitle={questionCategoryMultipleChoice?.title}
+            onChange={handleQuestionCategoryMultipleChoice}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
+          />
+        </Box> */}
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        <Box w={'30%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Number Of Correct Answers</Text>
+          </Flex>
+          <SliderInput
+            min={1}
+            max={chosenTypeOfAssignment === 0 ? 3 : 1} // 0 = theoretical assignment, 2 = practical assignment
+            value={correctAnswerQuiz}
+            onChange={handleCorrectAnswerQuiz}
+          />
+        </Box>
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Number Of Easy Distractors</Text>
+          </Flex>
+          <SliderInput
+            min={0}
+            max={distractorsMultipleChoice}
+            value={easyDistractors}
+            onChange={handleEasyDistractors}
+          />
+        </Box>
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Number Of Distractors</Text>
+          </Flex>
+          <SliderInput
+            min={0}
+            max={8}
+            value={distractorsMultipleChoice}
+            onChange={handleDistractorsMultipleChoice}
           />
         </Box>
       </Flex>
@@ -276,10 +316,10 @@ export default function OpenQuestionPanel({
           borderRadius="lg"
           //isDisabled={sourceText === ''}
           onClick={() => {
-            handleExercise(1);
             handleOptionsComplete();
+            //handleTypeOfExercisePanel(2);
             if (areOptionsComplete) {
-              if (sourceText !== '') {
+              if (sourceText != '') {
                 handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
               } else {

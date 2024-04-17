@@ -16,9 +16,9 @@ import { MdSave } from 'react-icons/md';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
-import EditFillGaps from '../../components/TabsCreatePage/EditFillGaps';
-import EditMultipleChoice from '../../components/TabsCreatePage/EditMultipleChoice';
-import EditOpenQuestion from '../../components/TabsCreatePage/EditOpenQuestion';
+import EditFillGaps from '../../components/Tabs/TabsCreatePage/EditFillGaps';
+import EditMultipleChoice from '../../components/Tabs/TabsCreatePage/EditMultipleChoice';
+import EditOpenQuestion from '../../components/Tabs/TabsCreatePage/EditOpenQuestion';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
@@ -34,7 +34,7 @@ const Edit = () => {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const {
-    exercise,
+    typeOfExercisePanel,
     title,
     description,
     data,
@@ -114,24 +114,26 @@ const Edit = () => {
               justifyContent="left"
               //justify="space-between"
             >
-              <Heading>Edit the {hydrated && exercise} exercise</Heading>
+              <Heading>
+                Edit the {hydrated && typeOfExercisePanel} exercise
+              </Heading>
             </Flex>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {hydrated && exercise === 'Fill the Gaps' && (
+            {hydrated && typeOfExercisePanel === 'Fill the Gaps' && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditFillGaps fillGapsData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && exercise === 'Open Question' && (
+            {hydrated && typeOfExercisePanel === 'Open Question' && (
               /* Genera il secondo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditOpenQuestion openQuestionData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && exercise === 'Multiple Choice' && (
+            {hydrated && typeOfExercisePanel === 'Multiple Choice' && (
               /* Genera il terzo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditMultipleChoice

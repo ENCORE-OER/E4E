@@ -1,19 +1,18 @@
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
   GeneratedExerciseProps,
-  TypeOfExerciseEnum,
-} from '../../types/encoreElements';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { mapOptionToNumber } from '../../utils/utils';
-import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
-import SliderInput from '../NumberInput/SliderNumberInput';
-import GenerateExerciseResponseView from '../Views/ApiResponseViews/GenerateExerciseResponseView';
+} from '../../../types/encoreElements';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../../utils/utils';
+import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
+import SliderInput from '../../NumberInput/SliderNumberInput';
+import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
 type FillGapsPanelProps = {
   isSmallerScreen?: boolean;
@@ -32,6 +31,9 @@ export default function FillGapsPanel({
     targetLevelOptions,
     temperatureOptions,
     // lengthOptions,
+
+    handleTitle,
+    handleDescription,
 
     bloomLevelExercise,
     handleBloomLevelExercise,
@@ -61,14 +63,15 @@ export default function FillGapsPanel({
     // chosenLenght,
     temperature,
 
-    handleExercise,
+    // handleTypeOfExercisePanel,
+    chosenTypeOfExercise,
 
     // apiGeneratedExerciseData: apiData, // is used in the GenerateExerciseResponseView component
     //handleTextToJSONFillGaps: handleTextToJSON,
     handleGeneratedExerciseData,
   } = useCreateOERsContext();
 
-  const { apiKey } = useGeneralContext();
+  const { apiKey, setupModel } = useGeneralContext();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const { addToast } = CustomToast();
   const [response, setResponse] = useState<GeneratedExerciseProps | null>(null);
@@ -90,15 +93,18 @@ export default function FillGapsPanel({
 
     // analyze the material (url or text) to take the macroSubject, title, topic, assignmentType
     const analyzedMaterial = await analyzeMaterial(sourceText);
+    handleTitle(analyzedMaterial.Title);
+    handleDescription(analyzedMaterial.MainTopics[0].Description);
 
     const requestData = {
       macroSubject: analyzedMaterial.MacroSubject, // from materialAnalyzer API
       title: analyzedMaterial.Title, // from materialAnalyzer API
       level: chosenTargetLevel,
-      typeOfExercise: mapOptionToNumber(
-        { title: 'fill_in_the_blanks' },
-        TypeOfExerciseEnum
-      ), // fill_in_the_blanks exercise
+      // typeOfExercise: mapOptionToNumber(
+      //   { title: 'fill_in_the_blanks' },
+      //   TypeOfExerciseEnum
+      // ), // fill_in_the_blanks exercise
+      typeOfExercise: chosenTypeOfExercise,
       learningObjective: `Teaching the students ${analyzedMaterial.MainTopics[0].Topic}. In particular ${analyzedMaterial.MainTopics[0].Description}`, // TODO: add a component in frontend to set the learning objective???
       bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
       // language: language, // English by default
@@ -120,6 +126,7 @@ export default function FillGapsPanel({
         {
           headers: {
             ApiKey: apiKey,
+            SetupModel: setupModel,
           },
         }
       );
@@ -288,7 +295,7 @@ export default function FillGapsPanel({
           onClick={() => {
             handleOptionsComplete();
 
-            handleExercise(0);
+            //handleTypeOfExercisePanel(1);
             if (areOptionsComplete) {
               if (sourceText !== '') {
                 handleIsGenerateButtonClicked(true);
