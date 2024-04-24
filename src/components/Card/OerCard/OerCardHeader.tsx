@@ -4,14 +4,13 @@ import {
   CardHeader,
   Flex,
   HStack,
-  Icon,
   Spacer,
-  Text,
+  Text
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
-import { FaCopy } from "react-icons/fa6";
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
+import IconCopy from '../../Icons/IconCopy';
 import TagsDomain from '../../Tags/TagsDomain';
 
 type OerCardHeaderProps = {
@@ -73,26 +72,13 @@ export default function OerCardHeader({
             />
           </Button>
         </HStack>
-        <Flex direction={'row'} align='center' gap='2'>
+        <Flex direction={'row'} align="center" gap="2">
           <Text noOfLines={1} variant="title_card">
             {title}
           </Text>
-          {!isGeneratedByAI &&
-            <Icon
-              as={FaCopy}
-              style={{
-                //background: 'none',
-                cursor: 'pointer',
-                position: 'sticky',
-                fontSize: '25px',
-                padding: '2',
-              }}
-              size='sm'
-              _hover={{
-                background: 'gray.200',
-                borderRadius: '7px'
-              }}
-            />}
+          {!isGeneratedByAI && (
+            <IconCopy size='25px' />
+          )}
           {/* <Button
             p='0'
             // style={{
