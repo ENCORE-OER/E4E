@@ -4,11 +4,13 @@ import {
   CardHeader,
   Flex,
   HStack,
+  Icon,
   Spacer,
   Text,
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
+import { FaCopy } from "react-icons/fa6";
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import TagsDomain from '../../Tags/TagsDomain';
 
@@ -48,34 +50,63 @@ export default function OerCardHeader({
             showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
-          {
-            <Button
+          <Button
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              position: 'sticky',
+            }}
+            variant="ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              //setIsSaved(!isSaved);
+              /*addCollection(idCollection, nameCollection);
+                  addResource(idCollection, idOer);*/
+            }}
+          >
+            {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
+            <IconBookmarkCheck
+              colorBookMark={collection_color}
+              size="25px"
+              isCheck={checkBookmark}
+            />
+          </Button>
+        </HStack>
+        <Flex direction={'row'} align='center' gap='2'>
+          <Text noOfLines={1} variant="title_card">
+            {title}
+          </Text>
+          {!isGeneratedByAI &&
+            <Icon
+              as={FaCopy}
               style={{
-                border: 'none',
-                background: 'none',
+                //background: 'none',
                 cursor: 'pointer',
                 position: 'sticky',
+                fontSize: '25px',
+                padding: '2',
               }}
-              variant="ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                //setIsSaved(!isSaved);
-                /*addCollection(idCollection, nameCollection);
-                    addResource(idCollection, idOer);*/
+              size='sm'
+              _hover={{
+                background: 'gray.200',
+                borderRadius: '7px'
               }}
+            />}
+          {/* <Button
+            p='0'
+            // style={{
+            //   border: 'none',
+            //   background: 'none',
+            //   cursor: 'pointer',
+            //   position: 'sticky',
+            // }}
+            variant="ghost"
             >
-              {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-              <IconBookmarkCheck
-                colorBookMark={collection_color}
-                size="25px"
-                isCheck={checkBookmark}
-              />
-            </Button>
-          }
-        </HStack>
-        <Text noOfLines={1} variant="title_card">
-          {title}
-        </Text>
+            
+            <FaCopy size='15px' />
+          </Button> */}
+        </Flex>
         <Flex>
           <Box mr={1}>
             <Text
