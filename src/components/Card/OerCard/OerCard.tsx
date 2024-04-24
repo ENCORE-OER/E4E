@@ -38,6 +38,7 @@ export default function OerCard({
   //wCard,
   //isSmallerScreen,
   maxWCard,
+  oer_url,
 }: OerCardProps) {
   return (
     <Card
@@ -67,6 +68,7 @@ export default function OerCard({
         isGeneratedByAI={isGeneratedByAI}
         collection_color={collection_color}
         checkBookmark={checkBookmark}
+        linkOer={oer_url}
       />
       <OerCardBody
         description={description}

@@ -28,6 +28,7 @@ export type ResourceCardProps = {
   total_likes: number;
   times_used: number;
   assessment_oer_type: string | null;
+  oer_url: string[];
 
   //isNormalSizeCard?: boolean;
 };

@@ -34,6 +34,7 @@ export default function SmallOerCard({
   times_used,
   total_likes,
   assessment_oer_type,
+  oer_url,
 }: //dataOer
 SmallOerCardProps) {
   return (
@@ -61,6 +62,7 @@ SmallOerCardProps) {
         ptCardHeader={ptCardHeader}
         collection_color={collection_color}
         checkBookmark={checkBookmark}
+        linkOer={oer_url}
       />
       <OerCardBody
         description={description}

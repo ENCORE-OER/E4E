@@ -37,6 +37,7 @@ import {
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 import GridMetadataOer from '../../Grids/GridMetadataOer';
+import IconCopy from '../../Icons/IconCopy';
 import TagConcept from '../../Tags/TagConcept';
 import TagResourceType from '../../Tags/TagReourceType';
 import TagsDomain from '../../Tags/TagsDomain';
@@ -385,9 +386,12 @@ export default function CardInfoModal({
                   )
                 )}
             </HStack>
-            <Heading size="md" mb="5">
-              {title}
-            </Heading>
+            <Flex direction="row" gap="2" align="center" pb="5">
+              <Heading size="md">{title}</Heading>
+              {!isGeneratedByAI && (
+                <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />
+              )}
+            </Flex>
             <HStack mb="5">
               <Button
                 leftIcon={<IconBookmarkCheck />}
