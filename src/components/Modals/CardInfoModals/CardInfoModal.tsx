@@ -254,7 +254,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-            []
+              []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -388,7 +388,9 @@ export default function CardInfoModal({
             </HStack>
             <Flex direction="row" gap="2" align="center" pb="5">
               <Heading size="md">{title}</Heading>
-              {!isGeneratedByAI && <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />}
+              {!isGeneratedByAI && (
+                <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />
+              )}
             </Flex>
             <HStack mb="5">
               <Button
@@ -562,9 +564,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //times_used={times_used}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //times_used={times_used}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
       <ExerciseInfoModal

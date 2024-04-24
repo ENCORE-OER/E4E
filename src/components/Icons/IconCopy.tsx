@@ -8,34 +8,42 @@ interface IconCopyProps extends IconProps {
 }
 
 export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
-
     const { addToast } = CustomToast();
     const handleIconClick = async (url: string) => {
-
         if (url.trim() != '') {
             try {
                 await navigator.clipboard.writeText(url);
-                console.log(url)
+                console.log(url);
                 addToast({
                     message: 'OER url saved!',
-                    type: 'success'
-                })
+                    type: 'success',
+                });
             } catch (error) {
                 console.error(error);
                 addToast({
                     message: 'Opss... There was a problem. OER url not saved!',
-                    type: 'error'
-                })
+                    type: 'error',
+                });
             }
         } else {
             addToast({
                 message: 'Opss... Url is empty. OER url not saved!',
-                type: 'error'
-            })
+                type: 'error',
+            });
         }
-    }
+    };
 
     return (
+        // <Tooltip
+        //     aria-label={'Copy OER url'}
+        //     label={'Copy OER url'}
+        //     hasArrow
+        //     placement="right"
+        //     bg="gray.100"
+        //     color="primary"
+        //     fontSize={'sm'}
+        //     p={1}
+        // >
         <Icon
             {...rest}
             as={FaCopy}
@@ -50,7 +58,11 @@ export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
                 background: 'gray.200',
                 borderRadius: '7px',
             }}
-            onClick={() => { handleIconClick(url) }}
+            onClick={(e) => {
+                e.stopPropagation();
+                handleIconClick(url);
+            }}
         />
+        // </Tooltip>
     );
 }

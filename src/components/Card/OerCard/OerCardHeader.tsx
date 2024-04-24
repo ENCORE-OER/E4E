@@ -38,9 +38,8 @@ export default function OerCardHeader({
   title,
   collection_color,
   checkBookmark,
-  linkOer
+  linkOer,
 }: OerCardHeaderProps) {
-
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
       <Flex justify="left" direction="column">
@@ -79,7 +78,9 @@ export default function OerCardHeader({
           <Text noOfLines={1} variant="title_card">
             {title}
           </Text>
-          {!isGeneratedByAI && <IconCopy fontSize="25px" url={linkOer ? linkOer[0] : ''} />}
+          {!isGeneratedByAI && (
+            <IconCopy fontSize="25px" url={linkOer ? linkOer[0] : ''} />
+          )}
           {/* <Button
             p='0'
             // style={{
