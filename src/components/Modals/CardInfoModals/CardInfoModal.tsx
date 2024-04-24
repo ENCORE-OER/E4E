@@ -13,7 +13,7 @@ import {
   ModalOverlay,
   Text,
   Tooltip,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Dispatch, useEffect, useState } from 'react';
 
@@ -386,13 +386,9 @@ export default function CardInfoModal({
                   )
                 )}
             </HStack>
-            <Flex direction='row' gap='2' align='center' pb="5">
-              <Heading size="md">
-                {title}
-              </Heading>
-              {!isGeneratedByAI && (
-                <IconCopy size='30px' />
-              )}
+            <Flex direction="row" gap="2" align="center" pb="5">
+              <Heading size="md">{title}</Heading>
+              {!isGeneratedByAI && <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />}
             </Flex>
             <HStack mb="5">
               <Button

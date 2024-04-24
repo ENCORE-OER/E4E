@@ -5,7 +5,7 @@ import {
   Flex,
   HStack,
   Spacer,
-  Text
+  Text,
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
@@ -23,6 +23,7 @@ type OerCardHeaderProps = {
   authors: (string | null)[];
   collection_color?: string;
   checkBookmark?: boolean;
+  linkOer: string[];
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -37,7 +38,9 @@ export default function OerCardHeader({
   title,
   collection_color,
   checkBookmark,
+  linkOer
 }: OerCardHeaderProps) {
+
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
       <Flex justify="left" direction="column">
@@ -76,9 +79,7 @@ export default function OerCardHeader({
           <Text noOfLines={1} variant="title_card">
             {title}
           </Text>
-          {!isGeneratedByAI && (
-            <IconCopy size='25px' />
-          )}
+          {!isGeneratedByAI && <IconCopy fontSize="25px" url={linkOer ? linkOer[0] : ''} />}
           {/* <Button
             p='0'
             // style={{

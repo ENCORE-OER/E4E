@@ -4,6 +4,7 @@ import {
   OerAuthorsInfo,
   OerMediaTypeInfo,
   OerProps,
+  OerUrlInfo,
 } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
@@ -36,6 +37,7 @@ export default function SingleResourceCard({
   ) ?? ['Unknwon'];
   const mediaTypes =
     oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) ?? [];
+  const linkOer = oer?.oer_url.map((item: OerUrlInfo) => item.url) || [];
 
   const [times_used, setTimes_used] = useState<number>(0);
   const [total_likes, setTotal_likes] = useState<number>(0);
@@ -116,6 +118,7 @@ export default function SingleResourceCard({
           //wCard={isSmallerScreen ? undefined : '550px'}
           //maxWCard='550px'
           isSmallerScreen={isSmallerScreen}
+          oer_url={linkOer}
         />
       )}
     </>
