@@ -15,7 +15,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 // import multiple_choice_data from '../../../data/json/examplesOutputGenOer/multiple_choice.json';
 import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
-import CardInfoModal from '../../Modals/CardInfoModals/CardInfoModal';
+import CardInfoModal from '../../Modals/CardInfoModals/CardInfoModal/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
 import SingleResourceCard from './SingleResourceCard';
 import SmallSingleResourceCard from './SmallSingleResourceCard';

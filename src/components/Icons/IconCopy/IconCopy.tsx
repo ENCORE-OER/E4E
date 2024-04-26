@@ -1,6 +1,6 @@
 import { Icon, IconProps } from '@chakra-ui/react';
 import { FaCopy } from 'react-icons/fa6';
-import { CustomToast } from '../../utils/Toast/CustomToast';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
 
 interface IconCopyProps extends IconProps {
   fontSize: string | number;
@@ -34,16 +34,6 @@ export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
   };
 
   return (
-    // <Tooltip
-    //     aria-label={'Copy OER url'}
-    //     label={'Copy OER url'}
-    //     hasArrow
-    //     placement="right"
-    //     bg="gray.100"
-    //     color="primary"
-    //     fontSize={'sm'}
-    //     p={1}
-    // >
     <Icon
       {...rest}
       as={FaCopy}
@@ -63,6 +53,5 @@ export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
         handleIconClick(url);
       }}
     />
-    // </Tooltip>
   );
 }

@@ -10,7 +10,7 @@ import {
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
-import IconCopy from '../../Icons/IconCopy';
+import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
 import TagsDomain from '../../Tags/TagsDomain';
 
 type OerCardHeaderProps = {
@@ -79,7 +79,7 @@ export default function OerCardHeader({
             {title}
           </Text>
           {!isGeneratedByAI && (
-            <IconCopy fontSize="25px" url={linkOer ? linkOer[0] : ''} />
+            <IconCopyUrl fontSize="25px" url={linkOer ? linkOer[0] : ''} />
           )}
           {/* <Button
             p='0'
