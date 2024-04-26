@@ -12,15 +12,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Tooltip,
-  useDisclosure,
+  useDisclosure
 } from '@chakra-ui/react';
 import { Dispatch, useEffect, useState } from 'react';
 
 import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { APIV2 } from '../../../data/api';
-import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
-import { IconLunchLinkOpen } from '../../../public/Icons/svgToIcons/iconLunchLinkOpen';
 import {
   CollectionProps,
   ColorCollectionProps,
@@ -36,6 +33,8 @@ import {
 } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
+import SaveResourceButton from '../../Buttons/ResourceButtons/SaveResourceButton';
+import ViewResourceButton from '../../Buttons/ResourceButtons/ViewResourceButton';
 import GridMetadataOer from '../../Grids/GridMetadataOer';
 import IconBookmarkCheckCollections from '../../Icons/IconCopy/IconBookmarkCheck/IconBookmarkCheckCollections';
 import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
@@ -365,7 +364,11 @@ export default function CardInfoModal({
                     collection_color: ColorCollectionProps | undefined,
                     index: number
                   ) => (
-                    <IconBookmarkCheckCollections key={index} collectionColor={collection_color?.color} collectionName={collection_color?.name} />
+                    <IconBookmarkCheckCollections
+                      key={index}
+                      collectionColor={collection_color?.color}
+                      collectionName={collection_color?.name}
+                    />
                   )
                 )}
             </HStack>
@@ -376,42 +379,8 @@ export default function CardInfoModal({
               )}
             </Flex>
             <HStack pb="5">
-              <Button
-                leftIcon={<IconBookmarkCheck />}
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleOpenAddCollectionModal();
-                }}
-              >
-                Save Resource
-              </Button>
-              <Tooltip
-                label={
-                  isGeneratedByAI
-                    ? 'View the exercise'
-                    : 'View the online resource'
-                }
-                aria-label={
-                  isGeneratedByAI
-                    ? 'View the exercise'
-                    : 'View the online resource'
-                }
-                hasArrow
-                placement="top"
-                bg="gray.300"
-                color="primary"
-                fontSize={'sm'}
-                p={1}
-              >
-                <Button
-                  leftIcon={<IconLunchLinkOpen />}
-                  variant="primary"
-                  onClick={handleViewResource}
-                >
-                  View Resource
-                </Button>
-              </Tooltip>
+              <SaveResourceButton handleOpenAddCollectionModal={handleOpenAddCollectionModal} />
+              <ViewResourceButton handleViewResource={handleViewResource} isGeneratedByAI={isGeneratedByAI} />
             </HStack>
 
             <Flex>
