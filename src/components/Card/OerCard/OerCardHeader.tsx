@@ -10,6 +10,7 @@ import {
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
+import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
 import TagsDomain from '../../Tags/TagsDomain';
 
 type OerCardHeaderProps = {
@@ -22,6 +23,7 @@ type OerCardHeaderProps = {
   authors: (string | null)[];
   collection_color?: string;
   checkBookmark?: boolean;
+  linkOer: string[];
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -36,6 +38,7 @@ export default function OerCardHeader({
   title,
   collection_color,
   checkBookmark,
+  linkOer,
 }: OerCardHeaderProps) {
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
@@ -48,34 +51,50 @@ export default function OerCardHeader({
             showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
-          {
-            <Button
-              style={{
-                border: 'none',
-                background: 'none',
-                cursor: 'pointer',
-                position: 'sticky',
-              }}
-              variant="ghost"
-              onClick={(e) => {
-                e.preventDefault();
-                //setIsSaved(!isSaved);
-                /*addCollection(idCollection, nameCollection);
-                    addResource(idCollection, idOer);*/
-              }}
-            >
-              {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-              <IconBookmarkCheck
-                colorBookMark={collection_color}
-                size="25px"
-                isCheck={checkBookmark}
-              />
-            </Button>
-          }
+          <Button
+            style={{
+              border: 'none',
+              background: 'none',
+              cursor: 'pointer',
+              position: 'sticky',
+            }}
+            variant="ghost"
+            onClick={(e) => {
+              e.preventDefault();
+              //setIsSaved(!isSaved);
+              /*addCollection(idCollection, nameCollection);
+                  addResource(idCollection, idOer);*/
+            }}
+          >
+            {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
+            <IconBookmarkCheck
+              colorBookMark={collection_color}
+              size="25px"
+              isCheck={checkBookmark}
+            />
+          </Button>
         </HStack>
-        <Text noOfLines={1} variant="title_card">
-          {title}
-        </Text>
+        <Flex direction={'row'} align="center" gap="2">
+          <Text noOfLines={1} variant="title_card">
+            {title}
+          </Text>
+          {!isGeneratedByAI && (
+            <IconCopyUrl fontSize="25px" url={linkOer ? linkOer[0] : ''} />
+          )}
+          {/* <Button
+            p='0'
+            // style={{
+            //   border: 'none',
+            //   background: 'none',
+            //   cursor: 'pointer',
+            //   position: 'sticky',
+            // }}
+            variant="ghost"
+            >
+            
+            <FaCopy size='15px' />
+          </Button> */}
+        </Flex>
         <Flex>
           <Box mr={1}>
             <Text

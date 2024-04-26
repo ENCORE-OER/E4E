@@ -4,6 +4,7 @@ import {
   OerAuthorsInfo,
   OerMediaTypeInfo,
   OerProps,
+  OerUrlInfo,
 } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
@@ -39,6 +40,7 @@ SmallSingleResourceCardProps) {
   ) ?? ['Unknwon'];
   const mediaTypes =
     oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) ?? [];
+  const linkOer = oer?.oer_url.map((item: OerUrlInfo) => item.url) || [];
 
   const getCount = async (id: number) => {
     const api = new APIV2(undefined);
@@ -114,6 +116,7 @@ SmallSingleResourceCardProps) {
           gapGridCardFooter={1}
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
+          oer_url={linkOer}
         />
       )}
     </>

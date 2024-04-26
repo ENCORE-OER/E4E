@@ -1,26 +1,17 @@
 import {
-  Box,
   Button,
   Flex,
-  HStack,
-  Heading,
   Modal,
-  ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
-  Text,
-  Tooltip,
   useDisclosure,
 } from '@chakra-ui/react';
 import { Dispatch, useEffect, useState } from 'react';
 
-import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
-import { APIV2 } from '../../../data/api';
-import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
-import { IconLunchLinkOpen } from '../../../public/Icons/svgToIcons/iconLunchLinkOpen';
+import { useCollectionsContext } from '../../../../Contexts/CollectionsContext/CollectionsContext';
+import { APIV2 } from '../../../../data/api';
 import {
   CollectionProps,
   ColorCollectionProps,
@@ -33,24 +24,21 @@ import {
   OerSourceRoerInfo,
   OerSubjectInfo,
   OerUrlInfo,
-} from '../../../types/encoreElements';
-import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
-import { useHasHydrated } from '../../../utils/utils';
-import GridMetadataOer from '../../Grids/GridMetadataOer';
-import TagConcept from '../../Tags/TagConcept';
-import TagResourceType from '../../Tags/TagReourceType';
-import TagsDomain from '../../Tags/TagsDomain';
-import CollectionModal from '../CollectionModals';
-import ExerciseInfoModal from './ExerciseInfoModal';
+} from '../../../../types/encoreElements';
+import { OerFreeSearchProps } from '../../../../types/encoreElements/oer/OerFreeSearch';
+import CollectionModal from '../../CollectionModals';
+import ExerciseInfoModal from '../ExerciseInfoModal/ExerciseInfoModal';
+import BodyCardInfoModal from './BodyCardInfoModal';
+import HeaderCardInfoModal from './HeaderCardInfoModal';
 
-type CardInfoModalProps = {
+export interface CardInfoModalProps {
   onCardInfoOpen: () => void; // used for the card info modal
   isCardInfoOpen: boolean; // used for the card info modal
   onCardInfoClose: () => void; // used for the card info modal
   oer: OerProps | OerFreeSearchProps | null | undefined;
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 export default function CardInfoModal({
   oer,
@@ -62,7 +50,6 @@ export default function CardInfoModal({
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
     useCollectionsContext();
-  const hydrated = useHasHydrated();
 
   const { isOpen, onOpen, onClose } = useDisclosure(); // used for the exercise modal
 
@@ -166,45 +153,9 @@ export default function CardInfoModal({
     return resp;
   };
 
-  // const setLikeOER = async (id: number | undefined) => {
-  //   if (id === undefined) return;
-  //   const api = new APIV2(undefined);
-  //   const resp = await api.setLikeOER(id);
-
-  //   setUpdateLikeOER(true);
-
-  //   return resp;
-  // };
-
-  // const reduceLikeOER = async (id: number | undefined) => {
-  //   if (id === undefined) return;
-  //   const api = new APIV2(undefined);
-  //   const resp = await api.reduceLikeOER(id);
-
-  //   setUpdateLikeOER(true);
-
-  //   return resp;
-  // }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        /*setShowTagDigital(false);
-              setShowTagEntrepreneurial(false);
-              setShowTagGreen(false);
-              const domain = oer?.skills?.flatMap((skill: any) =>
-                  skill?.domain?.map((item: any) => item.name)
-              );
-              
-              if (domain?.includes(digital)) {
-                  setShowTagDigital(true);
-              }
-              if (domain?.includes(entr)) {
-                  setShowTagEntrepreneurial(true);
-              }
-              if (domain?.includes(green)) {
-                  setShowTagGreen(true);
-              }*/
         if (oer) {
           setShowTagDigital(oer?.digital_domain || false);
           setShowTagEntrepreneurial(oer?.entrepreneurship_domain || false);
@@ -289,17 +240,6 @@ export default function CardInfoModal({
           setFill_template_with_gaps(oer.fill_template_with_gaps || null);
           setOptions(oer.options || []);
           setAssessment_oer_type(oer.assessment_oer_type || null);
-
-          /*Promise.all(
-            collections?.map(async (collection: CollectionProps) => {
-              if (collection.oers?.includes(oer)) {
-                return collection.color;
-              }
-            }) || []
-          ).then((colors) => {
-            if (!colors.includes(undefined))
-              setCollectionsColor(colors);
-          });*/
         }
       } catch (error) {
         console.error(error);
@@ -328,16 +268,6 @@ export default function CardInfoModal({
     }
   }, [updateLikeOER]);
 
-  /* useEffect(() => {
-     console.log('authors: ' + authors);
-     console.log('linkOer: ' + linkOer);
-     console.log('resourceType: ' + resourceType);
-     console.log('subjects: ' + subjects);
-     console.log('publishers: ' + publishers);
-     console.log('contributors: ' + contributors);
-     console.log('concepts: ' + concepts);
-   }, [concepts]);*/
-
   return (
     <Flex>
       <Modal
@@ -349,201 +279,39 @@ export default function CardInfoModal({
         <ModalOverlay />
         <ModalContent overflow="auto">
           <ModalCloseButton />
-          <ModalHeader>
-            <HStack pb="5" pr="10">
-              <TagsDomain
-                showTagDigital={showTagDigital}
-                showTagEntrepreneurial={showTagEntrepreneurial}
-                showTagGreen={showTagGreen}
-                showTagGenAI={isGeneratedByAI}
-              />
-              {collectionsColor?.length &&
-                collectionsColor?.map(
-                  (
-                    collection_color: ColorCollectionProps | undefined,
-                    index: number
-                  ) => (
-                    <Tooltip
-                      key={index}
-                      aria-label={collection_color?.name}
-                      label={collection_color?.name}
-                      hasArrow
-                      placement="bottom"
-                      bg="gray.200"
-                      color="primary"
-                      fontSize={'md'}
-                      p={2}
-                    >
-                      <span>
-                        <IconBookmarkCheck
-                          //key={index}
-                          colorBookMark={collection_color?.color}
-                          size="25px"
-                        />
-                      </span>
-                    </Tooltip>
-                  )
-                )}
-            </HStack>
-            <Heading size="md" mb="5">
-              {title}
-            </Heading>
-            <HStack mb="5">
-              <Button
-                leftIcon={<IconBookmarkCheck />}
-                variant="secondary"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleOpenAddCollectionModal();
-                }}
-              >
-                Save Resource
-              </Button>
-              <Tooltip
-                label={
-                  isGeneratedByAI
-                    ? 'View the exercise'
-                    : 'View the online resource'
-                }
-                aria-label={
-                  isGeneratedByAI
-                    ? 'View the exercise'
-                    : 'View the online resource'
-                }
-                hasArrow
-                placement="top"
-                bg="gray.300"
-                color="primary"
-                fontSize={'sm'}
-                p={1}
-              >
-                <Button
-                  leftIcon={<IconLunchLinkOpen />}
-                  variant="primary"
-                  onClick={handleViewResource}
-                >
-                  View Resource
-                </Button>
-              </Tooltip>
-            </HStack>
-
-            <Flex>
-              <Box mr={1}>
-                <Text variant="label_drawer">by</Text>
-              </Box>
-              <Box>
-                <Text color="grey" fontWeight="semibold" fontSize="sm">
-                  {authors.join(', ')} {/* Print the names with the commas*/}
-                </Text>
-              </Box>
-            </Flex>
-          </ModalHeader>
-          <ModalBody>
-            <Text mb="5">{description}</Text>
-            <Flex
-              gap={1}
-              w="100%"
-              pb="5"
-              justifyContent={'flex-start'}
-              flexWrap={'wrap'}
-              flex="1"
-            >
-              <TagResourceType
-                resourceType={
-                  assessment_oer_type
-                    ? [assessment_oer_type]
-                    : resourceType || []
-                }
-              />
-            </Flex>
-
-            <Flex justifyContent={'left'} pb="5" overflowWrap={'normal'}>
-              <Box>
-                <Text variant="label_drawer">Concepts covered</Text>
-                <Flex gap={1} w="100%" flexWrap={'wrap'}>
-                  <TagConcept concepts={concepts} />
-                </Flex>
-              </Box>
-            </Flex>
-            {collectionsColor?.length > 0 && (
-              <Text pb={1} variant="label">
-                {' '}
-                Click on the like button to let us know if you enjoyed the OER
-              </Text>
-            )}
-            {hydrated && (
-              <GridMetadataOer
-                gap={3}
-                lastUpdate={lastUpdate}
-                used={times_used}
-                likes={total_likes}
-                qualityScore={qualityScore}
-                isCardInfoModal={true}
-                // setLikeOER={() => setLikeOER(oer?.id)}
-                // reduceLikeOER={() => reduceLikeOER(oer?.id)}
-                // getLikes={() => getLikes(oer?.id)}
-                toggleLikeOER={() => toggleLikeOER(oer?.id)}
-                setUpdateLikeOER={setUpdateLikeOER}
-                isOERSaved={collectionsColor.length > 0}
-                isOERLiked={
-                  oer?.id === undefined ? false : likedOers?.includes(oer?.id)
-                }
-              />
-            )}
-            <Flex justifyContent={'left'} mb="5">
-              <Box>
-                <Text variant="label_drawer">Disciplinary field</Text>
-                <Text>
-                  {' '}
-                  {coverage && coverage.length > 0
-                    ? coverage.join(', ')
-                    : oer?.level}
-                </Text>
-              </Box>
-            </Flex>
-
-            <Flex justifyContent={'flex-start'} mb="5">
-              <Box>
-                <Text variant="label_drawer">Context</Text>
-                <Text>{subjects.join(', ')}</Text>
-              </Box>
-            </Flex>
-            <Flex justifyContent={'left'} mb="5">
-              <Box flex="1">
-                <Text variant="label_drawer">Publisher</Text>
-                <Text>{publishers}</Text>
-              </Box>
-              <Box flex="1">
-                <Text variant="label_drawer">Contributor</Text>
-                <Text>{contributors.join(', ')}</Text>
-              </Box>
-            </Flex>
-
-            {source_roer && source_roer.length > 0 && (
-              <Flex justifyContent={'left'} mb="5">
-                <Box>
-                  <Text variant="label_drawer">Retrieved from</Text>
-                  <Text>{source_roer.join(', ')}</Text>
-                </Box>
-              </Flex>
-            )}
-
-            {source && (
-              <Flex justifyContent={'left'} mb="5">
-                <Box>
-                  <Text variant="label_drawer">OER Source</Text>
-                  <Text>{source}</Text>
-                </Box>
-              </Flex>
-            )}
-
-            <Flex justifyContent={'left'} mb="5">
-              <Box>
-                <Text variant="label_drawer">License</Text>
-                <Text>{oer?.rights}</Text>
-              </Box>
-            </Flex>
-          </ModalBody>
+          <HeaderCardInfoModal
+            showTagDigital={showTagDigital}
+            showTagEntrepreneurial={showTagEntrepreneurial}
+            showTagGreen={showTagGreen}
+            isGeneratedByAI={isGeneratedByAI}
+            collectionsColor={collectionsColor}
+            title={title}
+            authors={authors.join(', ')}
+            linkOer={linkOer ? linkOer[0] : ''}
+            handleOpenAddCollectionModal={handleOpenAddCollectionModal}
+            handleViewResource={handleViewResource}
+          />
+          <BodyCardInfoModal
+            collectionsColor={collectionsColor}
+            description={description}
+            resourceType={resourceType}
+            concepts={concepts}
+            coverage={coverage}
+            subjects={subjects}
+            publishers={publishers.join(', ')}
+            contributors={contributors.join(', ')}
+            source_roer={source_roer}
+            source={source}
+            oer={oer}
+            lastUpdate={lastUpdate}
+            times_used={times_used}
+            total_likes={total_likes}
+            qualityScore={qualityScore}
+            assessment_oer_type={assessment_oer_type}
+            toggleLikeOER={toggleLikeOER}
+            setUpdateLikeOER={setUpdateLikeOER}
+            likedOers={likedOers}
+          />
           <ModalFooter>
             <Button onClick={onCardInfoClose}>Close</Button>
           </ModalFooter>
