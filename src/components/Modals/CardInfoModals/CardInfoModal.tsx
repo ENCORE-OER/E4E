@@ -37,7 +37,8 @@ import {
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
 import GridMetadataOer from '../../Grids/GridMetadataOer';
-import IconCopy from '../../Icons/IconCopy';
+import IconBookmarkCheckCollections from '../../Icons/IconCopy/IconBookmarkCheck/IconBookmarkCheckCollections';
+import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
 import TagConcept from '../../Tags/TagConcept';
 import TagResourceType from '../../Tags/TagReourceType';
 import TagsDomain from '../../Tags/TagsDomain';
@@ -364,32 +365,14 @@ export default function CardInfoModal({
                     collection_color: ColorCollectionProps | undefined,
                     index: number
                   ) => (
-                    <Tooltip
-                      key={index}
-                      aria-label={collection_color?.name}
-                      label={collection_color?.name}
-                      hasArrow
-                      placement="bottom"
-                      bg="gray.200"
-                      color="primary"
-                      fontSize={'md'}
-                      p={2}
-                    >
-                      <span>
-                        <IconBookmarkCheck
-                          //key={index}
-                          colorBookMark={collection_color?.color}
-                          size="25px"
-                        />
-                      </span>
-                    </Tooltip>
+                    <IconBookmarkCheckCollections key={index} collectionColor={collection_color?.color} collectionName={collection_color?.name} />
                   )
                 )}
             </HStack>
             <Flex direction="row" gap="2" align="center" pb="5">
               <Heading size="md">{title}</Heading>
               {!isGeneratedByAI && (
-                <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />
+                <IconCopyUrl fontSize="30px" url={linkOer ? linkOer[0] : ''} />
               )}
             </Flex>
             <HStack pb="5">
