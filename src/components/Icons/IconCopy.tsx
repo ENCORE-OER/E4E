@@ -1,4 +1,4 @@
-import { Icon, IconProps } from '@chakra-ui/react';
+import { Flex, Icon, IconProps, Tooltip } from '@chakra-ui/react';
 import { FaCopy } from 'react-icons/fa6';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
@@ -34,35 +34,37 @@ export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
   };
 
   return (
-    // <Tooltip
-    //     aria-label={'Copy OER url'}
-    //     label={'Copy OER url'}
-    //     hasArrow
-    //     placement="right"
-    //     bg="gray.100"
-    //     color="primary"
-    //     fontSize={'sm'}
-    //     p={1}
-    // >
-    <Icon
-      {...rest}
-      as={FaCopy}
-      style={{
-        //background: 'none',
-        cursor: 'pointer',
-        position: 'sticky',
-        fontSize: fontSize,
-        padding: '2',
-      }}
-      _hover={{
-        background: 'gray.200',
-        borderRadius: '7px',
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        handleIconClick(url);
-      }}
-    />
-    // </Tooltip>
+    <Tooltip
+      aria-label={'Copy OER url'}
+      label={'Copy OER url'}
+      hasArrow
+      placement="right"
+      bg="gray.100"
+      color="primary"
+      fontSize={'sm'}
+      p={1}
+    >
+      <Flex>
+        <Icon
+          {...rest}
+          as={FaCopy}
+          style={{
+            //background: 'none',
+            cursor: 'pointer',
+            position: 'sticky',
+            fontSize: fontSize,
+            padding: '2',
+          }}
+          _hover={{
+            background: 'gray.200',
+            borderRadius: '7px',
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleIconClick(url);
+          }}
+        />
+      </Flex>
+    </Tooltip>
   );
 }

@@ -254,7 +254,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-              []
+            []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -392,7 +392,7 @@ export default function CardInfoModal({
                 <IconCopy fontSize="30px" url={linkOer ? linkOer[0] : ''} />
               )}
             </Flex>
-            <HStack mb="5">
+            <HStack pb="5">
               <Button
                 leftIcon={<IconBookmarkCheck />}
                 variant="secondary"
@@ -432,7 +432,7 @@ export default function CardInfoModal({
             </HStack>
 
             <Flex>
-              <Box mr={1}>
+              <Box pr={1}>
                 <Text variant="label_drawer">by</Text>
               </Box>
               <Box>
@@ -443,7 +443,7 @@ export default function CardInfoModal({
             </Flex>
           </ModalHeader>
           <ModalBody>
-            <Text mb="5">{description}</Text>
+            <Text pb="5">{description}</Text>
             <Flex
               gap={1}
               w="100%"
@@ -494,7 +494,7 @@ export default function CardInfoModal({
                 }
               />
             )}
-            <Flex justifyContent={'left'} mb="5">
+            <Flex justifyContent={'left'} pb="5">
               <Box>
                 <Text variant="label_drawer">Disciplinary field</Text>
                 <Text>
@@ -506,13 +506,13 @@ export default function CardInfoModal({
               </Box>
             </Flex>
 
-            <Flex justifyContent={'flex-start'} mb="5">
+            <Flex justifyContent={'flex-start'} pb="5">
               <Box>
                 <Text variant="label_drawer">Context</Text>
                 <Text>{subjects.join(', ')}</Text>
               </Box>
             </Flex>
-            <Flex justifyContent={'left'} mb="5">
+            <Flex justifyContent={'left'} pb="5">
               <Box flex="1">
                 <Text variant="label_drawer">Publisher</Text>
                 <Text>{publishers}</Text>
@@ -524,7 +524,7 @@ export default function CardInfoModal({
             </Flex>
 
             {source_roer && source_roer.length > 0 && (
-              <Flex justifyContent={'left'} mb="5">
+              <Flex justifyContent={'left'} pb="5">
                 <Box>
                   <Text variant="label_drawer">Retrieved from</Text>
                   <Text>{source_roer.join(', ')}</Text>
@@ -533,7 +533,7 @@ export default function CardInfoModal({
             )}
 
             {source && (
-              <Flex justifyContent={'left'} mb="5">
+              <Flex justifyContent={'left'} pb="5">
                 <Box>
                   <Text variant="label_drawer">OER Source</Text>
                   <Text>{source}</Text>
@@ -541,7 +541,7 @@ export default function CardInfoModal({
               </Flex>
             )}
 
-            <Flex justifyContent={'left'} mb="5">
+            <Flex justifyContent={'left'} pb="5">
               <Box>
                 <Text variant="label_drawer">License</Text>
                 <Text>{oer?.rights}</Text>
@@ -564,9 +564,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-          //times_used={times_used}
-          //setTimes_used={setTimes_used}
-          //getCount={getCount}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
       <ExerciseInfoModal
