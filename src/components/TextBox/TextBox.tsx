@@ -7,6 +7,7 @@ interface TextBoxProps extends BoxProps {
   isHighlighted?: boolean;
   text?: string;
   rows?: number;
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both' | 'initial' | 'inherit';
   onTextChange: (newText: string) => void;
 }
 
@@ -17,6 +18,7 @@ const TextBox = ({
   text,
   onTextChange,
   rows,
+  resize,
   ...rest
 }: TextBoxProps) => {
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,6 +44,7 @@ const TextBox = ({
         onChange={handleTextChange}
         placeholder={placeholder}
         rows={rows || 1}
+        resize={resize || 'vertical'}
       />
     </Box>
   );

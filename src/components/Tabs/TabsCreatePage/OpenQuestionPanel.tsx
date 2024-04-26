@@ -8,6 +8,7 @@ import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
   GeneratedExerciseProps,
+  questionTypeOptions
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
@@ -28,36 +29,36 @@ export default function OpenQuestionPanel({
     isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
-    targetLevelOptions,
-    temperatureOptions,
+    //targetLevelOptions,
+    //temperatureOptions,
     // questionCategoryOptions,
-    exerciseTypeOptions,
-    bloomLevelOptions,
+    //assignmentTypeOptions,
+    //bloomLevelOptions,
 
     handleTitle,
     handleDescription,
 
-    temperatureOpenQuestion,
+    ChosenTemperature,
 
     bloomLevelExercise,
-    handleBloomLevelExercise,
+    //handleBloomLevelExercise,
 
-    handleTemperatureOpenQuestion,
-    questionTypeOptions,
+    //handleTemperatureOpenQuestion,
+    // questionTypeOptions,
 
-    targetLevelOpenQuestion,
-    handleTargetLevelOpenQuestion,
+    targetLevel,
+    //handleTargetLevelOpenQuestion,
 
     questionType,
     handleQuestionType,
 
-    assignmentType,
-    handleAssignmentType,
+    //assignmentType,
+    //handleAssignmentType,
 
     // questionCategoryOpenQuestion,
     // handleQuestionCategoryOpenQuestion,
 
-    temperature,
+    ChosenTemperature: temperature,
     sourceText,
     chosenTargetLevel,
     // chosenCategory,
@@ -153,11 +154,11 @@ export default function OpenQuestionPanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelOpenQuestion !== null &&
+      targetLevel !== null &&
       questionType !== null &&
       // questionCategoryOpenQuestion !== null &&
       bloomLevelExercise !== null &&
-      temperatureOpenQuestion !== null
+      ChosenTemperature !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -166,15 +167,15 @@ export default function OpenQuestionPanel({
   useEffect(() => {
     handleOptionsComplete();
   }, [
-    targetLevelOpenQuestion,
+    targetLevel,
     questionType,
     bloomLevelExercise,
-    temperatureOpenQuestion,
+    ChosenTemperature,
   ]);
 
   return (
     <>
-      <Flex w={'100%'}>
+      {/* <Flex w={'100%'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
@@ -191,9 +192,9 @@ export default function OpenQuestionPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
+      </Flex> */}
+      <Flex w={'100%'}>
+        <Box w={'60%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Question Type</Text>
           </Flex>
@@ -207,22 +208,22 @@ export default function OpenQuestionPanel({
             fontSize={'md'}
           />
         </Box>
-        <Box w={'42%'} paddingLeft={'2%'}>
+        {/* <Box w={'42%'} paddingLeft={'2%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={isGenerateButtonClicked && assignmentType === null}
-            options={exerciseTypeOptions}
+            options={assignmentTypeOptions}
             selected={assignmentType}
             preselectedTitle={assignmentType?.title}
             onChange={handleAssignmentType}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
       </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      {/* <Flex w={'100%'} paddingTop={'2rem'}>
         {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Question Category</Text>
@@ -238,7 +239,7 @@ export default function OpenQuestionPanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box> */}
+        </Box> 
         <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Bloom Level</Text>
@@ -255,8 +256,8 @@ export default function OpenQuestionPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      </Flex> */}
+      {/* <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
@@ -273,7 +274,7 @@ export default function OpenQuestionPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
+      </Flex> */}
       <Flex paddingTop="3rem" w="40%">
         <Button
           size="lg"

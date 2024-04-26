@@ -10,7 +10,7 @@ import {
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
-import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
+// import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../../NumberInput/SliderNumberInput';
 import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
@@ -24,25 +24,25 @@ export default function FillGapsPanel({
   analyzeMaterial,
 }: FillGapsPanelProps) {
   const {
-    isGenerateButtonClicked,
+    //isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
-    bloomLevelOptions,
-    targetLevelOptions,
-    temperatureOptions,
+    // bloomLevelOptions,
+    // targetLevelOptions,
+    // temperatureOptions,
     // lengthOptions,
 
     handleTitle,
     handleDescription,
 
     bloomLevelExercise,
-    handleBloomLevelExercise,
+    // handleBloomLevelExercise,
 
-    temperatureFillGaps,
-    handleTemperatureFillGaps,
+    temperature,
+    // handleTemperatureFillGaps,
 
-    targetLevelFillGaps,
-    handleTargetLevelFillGaps,
+    targetLevel,
+    // handleTargetLevelFillGaps,
 
     // length,
     // handleLength,
@@ -61,7 +61,7 @@ export default function FillGapsPanel({
 
     chosenTargetLevel,
     // chosenLenght,
-    temperature,
+    ChosenTemperature,
 
     // handleTypeOfExercisePanel,
     chosenTypeOfExercise,
@@ -114,7 +114,7 @@ export default function FillGapsPanel({
       easilyDiscardableDistractorsNumber: easyDistractorsFillGaps,
       assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
       topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
-      temperature: temperature,
+      temperature: ChosenTemperature,
     };
 
     try {
@@ -162,10 +162,10 @@ export default function FillGapsPanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelFillGaps !== null &&
+      targetLevel !== null &&
       bloomLevelExercise !== null &&
       //length !== null &&
-      temperatureFillGaps !== null
+      temperature !== null
     ) {
       setAreOptionsComplete(true);
     }
@@ -174,15 +174,15 @@ export default function FillGapsPanel({
   useEffect(() => {
     handleOptionsComplete();
   }, [
-    targetLevelFillGaps,
-    temperature,
+    targetLevel,
+    ChosenTemperature,
     bloomLevelExercise,
     // length
   ]);
 
   return (
     <>
-      <Flex w={'100%'}>
+      {/* <Flex w={'100%'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
@@ -199,8 +199,8 @@ export default function FillGapsPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      </Flex> */}
+      {/* <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Bloom Level</Text>
@@ -217,8 +217,8 @@ export default function FillGapsPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      </Flex> */}
+      {/*<Flex w={'100%'} paddingTop={'2rem'}>
         {/* <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Lenght</Text>
@@ -232,7 +232,7 @@ export default function FillGapsPanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box> */}
+        </Box> 
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Creativity of AI</Text>
@@ -249,10 +249,10 @@ export default function FillGapsPanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
-          <Flex margin="0.4rem">
+      </Flex>*/}
+      <Flex w={'100%'} >
+        <Box w={'30%'}>
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Blanks</Text>
           </Flex>
           <SliderInput
@@ -262,8 +262,8 @@ export default function FillGapsPanel({
             max={maxValue}
           />
         </Box>
-        <Box w={'42%'} paddingLeft="2rem">
-          <Flex margin="0.4rem">
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Easy Distractors</Text>
           </Flex>
           <SliderInput
@@ -273,8 +273,8 @@ export default function FillGapsPanel({
             max={blanks}
           />
         </Box>
-        <Box w={'42%'} paddingLeft="2rem">
-          <Flex margin="0.4rem">
+        <Box w={'30%'} marginLeft="2rem">
+          <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Distractors</Text>
           </Flex>
           <SliderInput

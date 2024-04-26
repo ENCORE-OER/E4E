@@ -10,7 +10,7 @@ import {
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
-import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
+// import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
 import SliderInput from '../../NumberInput/SliderNumberInput';
 import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
@@ -24,31 +24,31 @@ export default function MultipleChoicePanel({
   analyzeMaterial,
 }: MultipleChoicePanelProps) {
   const {
-    isGenerateButtonClicked,
+    // isGenerateButtonClicked,
     handleIsGenerateButtonClicked,
 
-    targetLevelOptions,
-    temperatureOptions,
+    // targetLevelOptions,
+    // temperatureOptions,
     // questionCategoryOptions,
-    exerciseTypeOptions,
-    bloomLevelOptions,
+    // assignmentTypeOptions,
+    // bloomLevelOptions,
 
     handleTitle,
     handleDescription,
 
     bloomLevelExercise,
-    handleBloomLevelExercise,
+    // handleBloomLevelExercise,
 
-    temperatureMultipleChoice,
-    handleTemperatureMultipleChoice,
+    temperature,
+    // handleTemperatureMultipleChoice,
 
-    targetLevelMultipleChoice,
-    handleTargetLevelMultipleChoice,
+    targetLevel,
+    // handleTargetLevelMultipleChoice,
 
     assignmentType,
-    handleAssignmentType,
+    // handleAssignmentType,
 
-    questionCategoryMultipleChoice,
+    //questionCategoryMultipleChoice,
     // handleQuestionCategoryMultipleChoice,
 
     correctAnswerQuiz,
@@ -60,7 +60,7 @@ export default function MultipleChoicePanel({
     distractorsMultipleChoice,
     handleDistractorsMultipleChoice,
 
-    temperature,
+    ChosenTemperature,
     sourceText,
     chosenTargetLevel,
     chosenTypeOfExercise,
@@ -120,7 +120,7 @@ export default function MultipleChoicePanel({
       easilyDiscardableDistractorsNumber: easyDistractors,
       assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
       topic: analyzedMaterial.MainTopics[0].Topic, // from materialAnalyzer API
-      temperature: temperature,
+      temperature: ChosenTemperature,
     };
 
     try {
@@ -167,10 +167,10 @@ export default function MultipleChoicePanel({
 
   const handleOptionsComplete = () => {
     if (
-      targetLevelMultipleChoice !== null &&
+      targetLevel !== null &&
       assignmentType !== null &&
       // questionCategoryMultipleChoice !== null &&
-      temperatureMultipleChoice !== null &&
+      temperature !== null &&
       bloomLevelExercise !== null
     ) {
       setAreOptionsComplete(true);
@@ -180,16 +180,16 @@ export default function MultipleChoicePanel({
   useEffect(() => {
     handleOptionsComplete();
   }, [
-    targetLevelMultipleChoice,
+    targetLevel,
     assignmentType,
-    questionCategoryMultipleChoice,
+    //questionCategoryMultipleChoice,
     bloomLevelExercise,
-    temperatureMultipleChoice,
+    temperature,
   ]);
 
   return (
     <>
-      <Flex w={'100%'}>
+      {/* <Flex w={'100%'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Target level</Text>
@@ -206,15 +206,15 @@ export default function MultipleChoicePanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      </Flex> */}
+      {/* <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'40%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Exercise Type</Text>
           </Flex>
           <SegmentedButton
             isHighlighted={isGenerateButtonClicked && assignmentType === null}
-            options={exerciseTypeOptions}
+            options={assignmentTypeOptions}
             selected={assignmentType}
             preselectedTitle={assignmentType?.title}
             onChange={handleAssignmentType}
@@ -238,8 +238,8 @@ export default function MultipleChoicePanel({
             fontSize={'md'}
           />
         </Box>
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+      </Flex> */}
+      {/* <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Bloom Level</Text>
@@ -255,7 +255,7 @@ export default function MultipleChoicePanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box>
+        </Box> */}
         {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Question Category</Text>
@@ -271,9 +271,9 @@ export default function MultipleChoicePanel({
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
-        </Box> */}
-      </Flex>
-      <Flex w={'100%'} paddingTop={'2rem'}>
+        </Box>
+      </Flex> */}
+      <Flex w={'100%'} >
         <Box w={'30%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Correct Answers</Text>
