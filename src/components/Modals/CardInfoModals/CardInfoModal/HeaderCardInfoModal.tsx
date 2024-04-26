@@ -1,85 +1,90 @@
-import { Box, Flex, Heading, HStack, ModalHeader, Text } from "@chakra-ui/react";
-import { ColorCollectionProps } from "../../../../types/encoreElements";
-import SaveResourceButton from "../../../Buttons/ResourceButtons/SaveResourceButton";
-import ViewResourceButton from "../../../Buttons/ResourceButtons/ViewResourceButton";
-import IconBookmarkCheckCollections from "../../../Icons/IconCopy/IconBookmarkCheck/IconBookmarkCheckCollections";
-import IconCopyUrl from "../../../Icons/IconCopy/IconCopyUrl";
-import TagsDomain from "../../../Tags/TagsDomain";
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  ModalHeader,
+  Text,
+} from '@chakra-ui/react';
+import { ColorCollectionProps } from '../../../../types/encoreElements';
+import SaveResourceButton from '../../../Buttons/ResourceButtons/SaveResourceButton';
+import ViewResourceButton from '../../../Buttons/ResourceButtons/ViewResourceButton';
+import IconBookmarkCheckCollections from '../../../Icons/IconCopy/IconBookmarkCheck/IconBookmarkCheckCollections';
+import IconCopyUrl from '../../../Icons/IconCopy/IconCopyUrl';
+import TagsDomain from '../../../Tags/TagsDomain';
 
-interface HeaderCardInfoModalProps {
-    showTagDigital: boolean;
-    showTagEntrepreneurial: boolean;
-    showTagGreen: boolean;
-    isGeneratedByAI: boolean;
-    collectionsColor: (ColorCollectionProps | undefined)[];
-    title: string;
-    linkOer: string;
-    authors: string;
-    handleOpenAddCollectionModal: () => void;
-    handleViewResource: () => void;
+export interface HeaderCardInfoModalProps {
+  showTagDigital: boolean;
+  showTagEntrepreneurial: boolean;
+  showTagGreen: boolean;
+  isGeneratedByAI: boolean;
+  collectionsColor: (ColorCollectionProps | undefined)[] | undefined;
+  title: string;
+  linkOer?: string;
+  authors: string;
+  handleOpenAddCollectionModal?: () => void;
+  handleViewResource?: () => void;
 }
 
 export default function HeaderCardInfoModal({
-    showTagDigital,
-    showTagEntrepreneurial,
-    showTagGreen,
-    isGeneratedByAI,
-    collectionsColor,
-    title,
-    authors,
-    linkOer,
-    handleOpenAddCollectionModal,
-    handleViewResource,
+  showTagDigital,
+  showTagEntrepreneurial,
+  showTagGreen,
+  isGeneratedByAI,
+  collectionsColor,
+  title,
+  authors,
+  linkOer,
+  handleOpenAddCollectionModal,
+  handleViewResource,
 }: HeaderCardInfoModalProps) {
-    return (
-        <ModalHeader>
-            <HStack pb="5" pr="10">
-                <TagsDomain
-                    showTagDigital={showTagDigital}
-                    showTagEntrepreneurial={showTagEntrepreneurial}
-                    showTagGreen={showTagGreen}
-                    showTagGenAI={isGeneratedByAI}
-                />
-                {collectionsColor?.length &&
-                    collectionsColor?.map(
-                        (
-                            collection_color: ColorCollectionProps | undefined,
-                            index: number
-                        ) => (
-                            <IconBookmarkCheckCollections
-                                key={index}
-                                collectionColor={collection_color?.color}
-                                collectionName={collection_color?.name}
-                            />
-                        )
-                    )}
-            </HStack>
-            <Flex direction="row" gap="2" align="center" pb="5">
-                <Heading size="md">{title}</Heading>
-                {!isGeneratedByAI && (
-                    <IconCopyUrl fontSize="30px" url={linkOer} />
-                )}
-            </Flex>
-            <HStack pb="5">
-                <SaveResourceButton
-                    handleOpenAddCollectionModal={handleOpenAddCollectionModal}
-                />
-                <ViewResourceButton
-                    handleViewResource={handleViewResource}
-                    isGeneratedByAI={isGeneratedByAI}
-                />
-            </HStack>
+  return (
+    <ModalHeader>
+      <HStack pb="5" pr="10">
+        <TagsDomain
+          showTagDigital={showTagDigital}
+          showTagEntrepreneurial={showTagEntrepreneurial}
+          showTagGreen={showTagGreen}
+          showTagGenAI={isGeneratedByAI}
+        />
+        {collectionsColor?.length &&
+          collectionsColor?.map(
+            (
+              collection_color: ColorCollectionProps | undefined,
+              index: number
+            ) => (
+              <IconBookmarkCheckCollections
+                key={index}
+                collectionColor={collection_color?.color}
+                collectionName={collection_color?.name}
+              />
+            )
+          )}
+      </HStack>
+      <Flex direction="row" gap="2" align="center" pb="5">
+        <Heading size="md">{title}</Heading>
+        {!isGeneratedByAI && <IconCopyUrl fontSize="30px" url={linkOer ? linkOer : ''} />}
+      </Flex>
+      <HStack pb="5">
+        <SaveResourceButton
+          handleOpenAddCollectionModal={handleOpenAddCollectionModal}
+        />
+        <ViewResourceButton
+          handleViewResource={handleViewResource}
+          isGeneratedByAI={isGeneratedByAI}
+        />
+      </HStack>
 
-            <Flex>
-                <Box pr={1}>
-                    <Text variant="label_drawer">by</Text>
-                </Box>
-                <Box>
-                    <Text color="grey" fontWeight="semibold" fontSize="sm">
-                        {authors} {/* Print the names with the commas*/}
-                    </Text>
-                </Box>
-            </Flex>
-        </ModalHeader >
-    );
+      <Flex>
+        <Box pr={1}>
+          <Text variant="label_drawer">by</Text>
+        </Box>
+        <Box>
+          <Text color="grey" fontWeight="semibold" fontSize="sm">
+            {authors} {/* Print the names with the commas*/}
+          </Text>
+        </Box>
+      </Flex>
+    </ModalHeader>
+  );
 }

@@ -2,7 +2,7 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { IconLunchLinkOpen } from '../../../public/Icons/svgToIcons/iconLunchLinkOpen';
 
 type ViewResourceButtonProps = {
-  handleViewResource: () => void;
+  handleViewResource?: () => void;
   isGeneratedByAI: boolean;
 };
 
@@ -26,7 +26,12 @@ export default function ViewResourceButton({
       <Button
         leftIcon={<IconLunchLinkOpen />}
         variant="primary"
-        onClick={handleViewResource}
+        onClick={(e) => {
+          e.preventDefault();
+          if (handleViewResource) {
+            handleViewResource();
+          }
+        }}
       >
         View Resource
       </Button>

@@ -2,7 +2,7 @@ import { Button, Tooltip } from '@chakra-ui/react';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 
 type SaveResourceButtonProps = {
-  handleOpenAddCollectionModal: () => void;
+  handleOpenAddCollectionModal?: () => void;
 };
 
 export default function SaveResourceButton({
@@ -24,7 +24,9 @@ export default function SaveResourceButton({
         variant="secondary"
         onClick={(e) => {
           e.preventDefault();
-          handleOpenAddCollectionModal();
+          if (handleOpenAddCollectionModal) {
+            handleOpenAddCollectionModal();
+          }
         }}
       >
         Save Resource

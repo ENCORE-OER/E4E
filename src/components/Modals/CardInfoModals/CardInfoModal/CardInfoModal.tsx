@@ -6,7 +6,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalOverlay,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { Dispatch, useEffect, useState } from 'react';
 
@@ -27,7 +27,7 @@ import {
 } from '../../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../../types/encoreElements/oer/OerFreeSearch';
 import CollectionModal from '../../CollectionModals';
-import ExerciseInfoModal from '../ExerciseInfoModal';
+import ExerciseInfoModal from '../ExerciseInfoModal/ExerciseInfoModal';
 import BodyCardInfoModal from './BodyCardInfoModal';
 import HeaderCardInfoModal from './HeaderCardInfoModal';
 
