@@ -99,7 +99,6 @@ type CreateOERsContextProps = {
     Distractors: string[],
     EasilyDiscardableDistractors: string[]
   ) => void;
-
 };
 
 export const CreateOERsContext = createContext<CreateOERsContextProps>(
@@ -113,15 +112,13 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [bloomLevelExercise, setBloomLevelExercise] = useState<Option | null>(
     null
   );
-  const [targetLevel, setTargetLevel] =
-    useState<Option | null>(null);
+  const [targetLevel, setTargetLevel] = useState<Option | null>(null);
   const [assignmentType, setAssignmentType] = useState<Option | null>(null);
-  const [temperature, setTemperature] =
-    useState<Option | null>(null);
+  const [temperature, setTemperature] = useState<Option | null>(null);
   const [chosenTopic, setChosenTopic] = useState<string>('');
 
   // * variabili per il Fill Gaps
-   const [length, setLength] = useState<Option | null>(null);
+  const [length, setLength] = useState<Option | null>(null);
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
   const [easyDistractorsFillGaps, setEasyDistractorsFillGaps] =
     useState<number>(0);
@@ -129,7 +126,6 @@ export const CreateOERsProvider = ({ children }: any) => {
 
   // * variabili per l'Open Question
   const [questionType, setQuestionType] = useState<Option | null>(null);
-  
 
   // * variabili per il Multiple Choice
   const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
@@ -202,9 +198,15 @@ export const CreateOERsProvider = ({ children }: any) => {
     setBloomLevelExercise(selected);
   };
   const handleTargetLevel = (selected: Option | number) => {
-    if(selected === 0 || selected === 1 || selected === 2 || selected === 3 || selected === 4){
+    if (
+      selected === 0 ||
+      selected === 1 ||
+      selected === 2 ||
+      selected === 3 ||
+      selected === 4
+    ) {
       setTargetLevel(targetLevelOptions[selected as number]);
-    }else{
+    } else {
       setTargetLevel(selected as Option);
     }
     handleChosenTargetLevel(selected);
@@ -214,9 +216,9 @@ export const CreateOERsProvider = ({ children }: any) => {
     handleChoosenTemperature(selected);
   };
   const handleAssignmentType = (selected: Option | number) => {
-    if(selected === 0 || selected === 1 || selected === 2){
+    if (selected === 0 || selected === 1 || selected === 2) {
       setAssignmentType(assignmentTypeOptions[selected as number]);
-    }else{
+    } else {
       setAssignmentType(selected as Option);
     }
     handleChosenTypeOfAssignment(selected); // here we set the exercise type as a number
@@ -244,14 +246,14 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
 
   // * Open Question
-  
+
   // Is used for segmented button in Question Panel
   const handleQuestionType = (selected: Option) => {
     setQuestionType(selected); // here we set the question type as a string
     handleChosenTypeOfExercise(selected); // here we set the question type as a number
   };
 
-  // * Multiple Choice  
+  // * Multiple Choice
   const handleDistractorsMultipleChoice = (number: number | string) => {
     setDistractorsMultipleChoice(number as number);
     handleDistractors(number as number);
@@ -446,9 +448,7 @@ export const CreateOERsProvider = ({ children }: any) => {
       assessment_oer: true,
       assessment_oer_type: typeOfExercisePanel || '',
       source: sourceText,
-      level:
-        targetLevel?.title ||
-        '',
+      level: targetLevel?.title || '',
       temperature: ChosenTemperature,
       exercise_values: {
         question: question || null,
@@ -462,9 +462,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         number_of_correct_answer: correctAnswerQuiz || null,
         number_of_easy_distractors: easyDistractors || null,
         number_of_distractors: distractors || null,
-        number_of_words: 
-         chosenLenght || 
-        null,
+        number_of_words: chosenLenght || null,
         options: options || null, // see wordsOptions
         solution: solution || null,
       },

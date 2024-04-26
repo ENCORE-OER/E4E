@@ -79,7 +79,6 @@ const Create = () => {
     } catch (error) {
       console.error('Error during the API call:', error);
     }
-
   };
 
   const handleAnalize = async () => {
@@ -90,7 +89,7 @@ const Create = () => {
     handleTitle(analyzedMaterial.Title);
     console.log('topic data:', topicData);
     if (analyzedMaterial) setStep(1);
-  }
+  };
 
   const handleTopicSelect = (index: number) => {
     setSelectedTopicIndex(index);
@@ -101,7 +100,7 @@ const Create = () => {
       handleChosenTopic(topicData.MainTopics[index].Topic);
     }
     setStep(2);
-  }
+  };
 
   useEffect(() => {
     //console.log('Selected topic index:', selectedTopicIndex);
@@ -126,7 +125,7 @@ const Create = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
@@ -161,15 +160,17 @@ const Create = () => {
                 />
               </Box>
               <Box w={isSmallerScreen ? '95%' : '90%'}>
-                <Flex 
-                  w="auto" 
-                  justifyContent={step > 0 ? "space-between" : "flex-end"} 
+                <Flex
+                  w="auto"
+                  justifyContent={step > 0 ? 'space-between' : 'flex-end'}
                   alignItems="center"
                 >
                   {step > 0 && (
                     <Box>
                       <Flex paddingBottom="0.25rem" paddingTop="0.5rem">
-                        <Text as="b">Choose a starting topic from the generated ones</Text>
+                        <Text as="b">
+                          Choose a starting topic from the generated ones
+                        </Text>
                       </Flex>
                       <CreateOerTopicMenu
                         data={topicData}
@@ -214,9 +215,7 @@ const Create = () => {
                   {/*  <Flex paddingTop={'1rem'}>
                     <Text fontSize='2xl'> Parameter shared between exercises </Text>
                   </Flex> */}
-                  <SharedParameterTab
-                    isSmallerScreen={isSmallerScreen}
-                  />
+                  <SharedParameterTab isSmallerScreen={isSmallerScreen} />
                 </Box>
               )}
               {/* {step > 1 && (
@@ -226,7 +225,7 @@ const Create = () => {
               )} */}
               {step > 1 && (
                 <Box w={isSmallerScreen ? '95%' : '90%'}>
-                  <Flex w="auto" justifyContent="right" >
+                  <Flex w="auto" justifyContent="right">
                     <Button
                       border="1px solid"
                       borderRadius="lg"
@@ -247,7 +246,8 @@ const Create = () => {
                           });
                         } else {
                           addToast({
-                            message: 'Please generate an exercise before proceeding',
+                            message:
+                              'Please generate an exercise before proceeding',
                             type: 'warning',
                           });
                         }

@@ -250,7 +250,7 @@ export default function FillGapsPanel({
           />
         </Box>
       </Flex>*/}
-      <Flex w={'100%'} >
+      <Flex w={'100%'}>
         <Box w={'30%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Blanks</Text>

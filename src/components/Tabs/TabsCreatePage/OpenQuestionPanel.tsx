@@ -8,7 +8,7 @@ import {
   AnalyzedMaterialProps,
   BloomLevelsEnum,
   GeneratedExerciseProps,
-  questionTypeOptions
+  questionTypeOptions,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
@@ -166,12 +166,7 @@ export default function OpenQuestionPanel({
 
   useEffect(() => {
     handleOptionsComplete();
-  }, [
-    targetLevel,
-    questionType,
-    bloomLevelExercise,
-    ChosenTemperature,
-  ]);
+  }, [targetLevel, questionType, bloomLevelExercise, ChosenTemperature]);
 
   return (
     <>

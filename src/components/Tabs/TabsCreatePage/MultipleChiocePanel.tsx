@@ -256,7 +256,7 @@ export default function MultipleChoicePanel({
             fontSize={'md'}
           />
         </Box> */}
-        {/* <Box w={'90%'}>
+      {/* <Box w={'90%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Question Category</Text>
           </Flex>
@@ -273,7 +273,7 @@ export default function MultipleChoicePanel({
           />
         </Box>
       </Flex> */}
-      <Flex w={'100%'} >
+      <Flex w={'100%'}>
         <Box w={'30%'}>
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Correct Answers</Text>
