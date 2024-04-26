@@ -5,11 +5,9 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalOverlay
+  ModalOverlay,
 } from '@chakra-ui/react';
-import {
-  ExerciseInfoModalProps
-} from '../../../../types/encoreElements';
+import { ExerciseInfoModalProps } from '../../../../types/encoreElements';
 import BodyExerciseInfoModal from './BodyExerciseInfoModal/BodyExerciseInfoModal';
 import HeaderExerciseInfoModal from './HeaderExerciseInfoModal';
 
@@ -44,7 +42,12 @@ export default function ExerciseInfoModal({
     <Flex>
       <Modal
         isOpen={isOpen ? isOpen : false}
-        onClose={onClose || (() => { return; })}
+        onClose={
+          onClose ||
+          (() => {
+            return;
+          })
+        }
         closeOnOverlayClick={true}
         size={'xl'}
       >

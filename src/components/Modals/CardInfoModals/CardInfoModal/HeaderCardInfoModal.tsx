@@ -63,7 +63,9 @@ export default function HeaderCardInfoModal({
       </HStack>
       <Flex direction="row" gap="2" align="center" pb="5">
         <Heading size="md">{title}</Heading>
-        {!isGeneratedByAI && <IconCopyUrl fontSize="30px" url={linkOer ? linkOer : ''} />}
+        {!isGeneratedByAI && (
+          <IconCopyUrl fontSize="30px" url={linkOer ? linkOer : ''} />
+        )}
       </Flex>
       <HStack pb="5">
         <SaveResourceButton
