@@ -1,4 +1,4 @@
-import { Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Text } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { GeneratedExerciseProps } from '../../../types/encoreElements';
 
@@ -9,40 +9,67 @@ type GenerateExerciseResonseViewProps = {
 export default function GenerateExerciseResponseView({
   response,
 }: GenerateExerciseResonseViewProps) {
-  const { apiGeneratedExerciseData: apiData } = useCreateOERsContext();
+  const { apiGeneratedExerciseData: apiData, title } = useCreateOERsContext();
 
   return (
-    <div>
-      <Text fontSize={'lg'} fontWeight={'bold'}>
-        Risposta API:
-      </Text>
-      {/* <Text>
-                {apiData.language} <br />
-                {apiData.date} <br />
-                {apiData.temperature} <br />
-                {apiData.level} <br />
-                {apiData.text} <br />
-                {apiData.textWithGaps} <br />
-                {apiData.wordsAndAnswers} <br />
-                <br />
-                risposta: <br />
-                {response}
-              </Text> */}
-      <Text>
-        Assignment: <br />
-        {apiData.Assignment} <br />
-        Plus: <br />
-        {apiData.Plus} <br />
-        Solutions: <br />
-        {apiData.Solutions} <br />
-        Distractors: <br />
-        {apiData.Distractors} <br />
-        Easily Discardable Distractors: <br />
-        {apiData.EasilyDiscardableDistractors} <br />
-        <br />
-        risposta: <br />
-        {JSON.stringify(response)}
-      </Text>
-    </div>
+    <>
+      <Card>
+        <CardHeader>
+          <Heading size='md'>{title}</Heading>
+        </CardHeader>
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing='4'>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Assignment
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {apiData.Assignment} 
+              </Text>
+            </Box>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Plus
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {apiData.Plus}
+              </Text>
+            </Box>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Solutions
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {apiData.Solutions}
+              </Text>
+            </Box>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Distractors
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {apiData.Distractors}
+              </Text>
+            </Box>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Easily Discardable Distractors
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {apiData.EasilyDiscardableDistractors} 
+              </Text>
+            </Box>
+            <Box>
+              <Heading size='xs' textTransform='uppercase'>
+                Risposta
+              </Heading>
+              <Text pt='2' fontSize='sm'>
+                {JSON.stringify(response)}
+              </Text>
+            </Box>
+          </Stack>
+        </CardBody>
+      </Card>
+    </>
   );
 }

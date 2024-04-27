@@ -85,10 +85,6 @@ export default function CreateExerciseButton({
         bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
         // language: language, // English by default
         material: sourceText,
-        // correctAnswersNumber: 1,
-        // distractorsNumber: 0,
-        // easilyDiscardableDistractorsNumber: 0,
-        // assignmentType: analyzedMaterial.MainTopics[0].Type, // 0 is for theoretical assignment
         assignmentType: chosenTypeOfAssignment,
         topic: chosenTopic, // from materialAnalyzer API
         temperature: ChosenTemperature,
@@ -139,7 +135,7 @@ export default function CreateExerciseButton({
 
       if (responseRef.current) {
         // setRispostaTipo(responseRef.current);
-        //handleTextToJSON(responseRef.current);
+        // handleTextToJSON(responseRef.current);
         handleGeneratedExerciseData(
           responseRef.current.Assignment,
           responseRef.current.Plus,
