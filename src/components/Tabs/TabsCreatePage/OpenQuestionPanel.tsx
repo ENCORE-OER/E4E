@@ -9,8 +9,7 @@ type OpenQuestionPanelProps = {
 
 export default function OpenQuestionPanel({
   isSmallerScreen,
-} //analyzeMaterial,
-: OpenQuestionPanelProps) {
+}: OpenQuestionPanelProps) {
   const {
     isGenerateButtonClicked,
 
