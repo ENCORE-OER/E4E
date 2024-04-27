@@ -1,4 +1,13 @@
-import { Box, Card, CardBody, CardHeader, Heading, Stack, StackDivider, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Heading,
+  Stack,
+  StackDivider,
+  Text,
+} from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { GeneratedExerciseProps } from '../../../types/encoreElements';
 
@@ -15,55 +24,55 @@ export default function GenerateExerciseResponseView({
     <>
       <Card>
         <CardHeader>
-          <Heading size='md'>{title}</Heading>
+          <Heading size="md">{title}</Heading>
         </CardHeader>
         <CardBody>
-          <Stack divider={<StackDivider />} spacing='4'>
+          <Stack divider={<StackDivider />} spacing="4">
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Assignment
               </Heading>
-              <Text pt='2' fontSize='sm'>
-                {apiData.Assignment} 
+              <Text pt="2" fontSize="sm">
+                {apiData.Assignment}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Plus
               </Heading>
-              <Text pt='2' fontSize='sm'>
+              <Text pt="2" fontSize="sm">
                 {apiData.Plus}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Solutions
               </Heading>
-              <Text pt='2' fontSize='sm'>
+              <Text pt="2" fontSize="sm">
                 {apiData.Solutions}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Distractors
               </Heading>
-              <Text pt='2' fontSize='sm'>
+              <Text pt="2" fontSize="sm">
                 {apiData.Distractors}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Easily Discardable Distractors
               </Heading>
-              <Text pt='2' fontSize='sm'>
-                {apiData.EasilyDiscardableDistractors} 
+              <Text pt="2" fontSize="sm">
+                {apiData.EasilyDiscardableDistractors}
               </Text>
             </Box>
             <Box>
-              <Heading size='xs' textTransform='uppercase'>
+              <Heading size="xs" textTransform="uppercase">
                 Risposta
               </Heading>
-              <Text pt='2' fontSize='sm'>
+              <Text pt="2" fontSize="sm">
                 {JSON.stringify(response)}
               </Text>
             </Box>
