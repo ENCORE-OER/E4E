@@ -1,8 +1,6 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
-import {
-  questionTypeOptions,
-} from '../../../types/encoreElements';
+import { questionTypeOptions } from '../../../types/encoreElements';
 import SegmentedButton from '../../Buttons/ButtonsDesignPage/SegmentedButton';
 
 type OpenQuestionPanelProps = {
@@ -11,8 +9,8 @@ type OpenQuestionPanelProps = {
 
 export default function OpenQuestionPanel({
   isSmallerScreen,
-  //analyzeMaterial,
-}: OpenQuestionPanelProps) {
+} //analyzeMaterial,
+: OpenQuestionPanelProps) {
   const {
     isGenerateButtonClicked,
 

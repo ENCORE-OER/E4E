@@ -34,9 +34,9 @@ const Create = () => {
   } = useCreateOERsContext();
   const { addToast } = CustomToast();
   const [step, setStep] = useState<number>(0);
-  const handleStep = (step:number) => {
+  const handleStep = (step: number) => {
     setStep(step);
-  }
+  };
 
   return (
     <>
@@ -52,16 +52,12 @@ const Create = () => {
           bg="background"
         >
           <Box w="100%" h="100%">
-            <Flex
-              w="100%"
-              justifyContent="left"
-              >
+            <Flex w="100%" justifyContent="left">
               <Heading>Create a new OER with Generative AI</Heading>
             </Flex>
 
-             <Box w="100%" justifyContent="left">
-              
-             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
+            <Box w="100%" justifyContent="left">
+              <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
                 <Text>
                   This section provides guidance on creating Open Educational
                   Resources (OER) supported by generative AI. <br />
@@ -78,7 +74,8 @@ const Create = () => {
               />
               {step > 1 && (
                 <Box paddingTop={'2rem'}>
-                  <SharedParameterTab isSmallerScreen={isSmallerScreen} /> {/* in this there are also the different tabs for the exercises and the api call for the generation of the exercises*/}
+                  <SharedParameterTab isSmallerScreen={isSmallerScreen} />{' '}
+                  {/* in this there are also the different tabs for the exercises and the api call for the generation of the exercises*/}
                 </Box>
               )}
               {step > 1 && (

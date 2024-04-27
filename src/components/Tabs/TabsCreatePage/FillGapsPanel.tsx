@@ -21,12 +21,7 @@ export default function FillGapsPanel() {
           <Flex paddingBottom="0.5rem">
             <Text as="b">Number Of Blanks</Text>
           </Flex>
-          <SliderInput
-            value={blanks}
-            onChange={handleBlanks}
-            min={1}
-            max={8}
-          />
+          <SliderInput value={blanks} onChange={handleBlanks} min={1} max={8} />
         </Box>
         <Box w={'30%'} marginLeft="2rem">
           <Flex paddingBottom="0.5rem">

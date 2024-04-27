@@ -34,9 +34,7 @@ export default function TabsCreateMenu({
         </TabList>
         <TabPanels>
           <TabPanel>
-            <OpenQuestionPanel 
-              isSmallerScreen={isSmallerScreen}
-            />
+            <OpenQuestionPanel isSmallerScreen={isSmallerScreen} />
           </TabPanel>
           <TabPanel>
             <FillGapsPanel />

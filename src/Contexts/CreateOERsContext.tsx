@@ -242,7 +242,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleSourceText = (selected: string) => {
     setSourceText(selected);
   };
-  const handleChosenTargetLevel = (selected: Option ) => {
+  const handleChosenTargetLevel = (selected: Option) => {
     switch (selected) {
       case targetLevelOptions[0]:
         setChosenTargetLevel(0);

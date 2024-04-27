@@ -145,7 +145,8 @@ export default function SharedParameterTab({
         </Box>
       </Flex>
       <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-        <TabsCreateMenu isSmallerScreen={isSmallerScreen} />{/* this bring to the tabs and the api call */}
+        <TabsCreateMenu isSmallerScreen={isSmallerScreen} />
+        {/* this bring to the tabs and the api call */}
       </Box>
     </>
   );
