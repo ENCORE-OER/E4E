@@ -49,6 +49,10 @@ const Edit = () => {
   const [loading, setLoading] = useState(false);
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
 
+  useEffect(() => {
+    console.log('qualcosa');
+  }, [response]);
+
   const handleOptionsComplete = () => {
     if (
       title != null &&
@@ -66,6 +70,7 @@ const Edit = () => {
     const requestData = {
       data: data,
     };
+    console.log('requestData', requestData);
 
     try {
       // Esegui la chiamata API
@@ -85,11 +90,9 @@ const Edit = () => {
   };
 
   useEffect(() => {
-    if (areOptionsComplete) handleSaveButtonClick();
-  }, [data]);
-
-  useEffect(() => {
     if (title && description) handleOptionsComplete();
+    handleData();
+    console.log('data', data);
   }, [title, description]);
 
   return (
@@ -172,7 +175,8 @@ const Edit = () => {
                   handleOptionsComplete();
                   if (areOptionsComplete) {
                     handleData();
-                    console.log('Save');
+                    handleSaveButtonClick();
+                    //console.log('Save');
                   } else {
                     addToast({
                       message:
@@ -186,12 +190,12 @@ const Edit = () => {
                 <Icon as={MdSave} w="40%" h="40%" />
               </Button>
             </Flex>
-            {!loading &&
+            {/* {!loading &&
               response &&
               addToast({
                 message: 'Exercise saved successfully.',
                 type: 'success',
-              })}
+              })} */}
           </Box>
         </Box>
       </Flex>
