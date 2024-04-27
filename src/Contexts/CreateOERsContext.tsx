@@ -5,7 +5,6 @@ import {
   OerData,
   Option,
   OptionsData,
-  lengthOptions,
   assignmentTypeOptions,
   targetLevelOptions,
 } from '../types/encoreElements/index';
@@ -20,17 +19,17 @@ type CreateOERsContextProps = {
   bloomLevelExercise: Option | null;
   handleBloomLevelExercise: (selected: Option) => void;
   targetLevel: Option | null;
-  handleTargetLevel: (selected: Option | number) => void;
+  handleTargetLevel: (selected: Option) => void;
   assignmentType: Option | null;
   handleAssignmentType: (selected: Option | number) => void;
   temperature: Option | null;
   handleTemperature: (selected: Option) => void;
   chosenTopic: string;
   handleChosenTopic: (selected: string) => void;
+  macroSubject: string;
+  handleMacroSubject: (selected: string) => void;
 
   // * variabili Fill Gaps
-  length: Option | null;
-  handleLength: (selected: Option) => void;
   distractorsFillGaps: number;
   handleDistractorsFillGaps: (selected: number | string) => void;
   easyDistractorsFillGaps: number;
@@ -64,8 +63,6 @@ type CreateOERsContextProps = {
   handleQuestionCategory: (selected: Option) => void;
   sourceText: string; // material
   handleSourceText: (selected: string) => void;
-  chosenLenght: number;
-  handleChosenLenght: (selected: Option) => void;
   chosenTypeOfExercise: number;
   handleChosenTypeOfExercise: (selected: Option) => void;
   chosenTypeOfAssignment: number;
@@ -89,8 +86,6 @@ type CreateOERsContextProps = {
   handleFillTemplateWithGaps: (selected: string) => void;
 
   // * altro
-  maxValue: number; //numero per definire il numero massimo di gaps
-
   apiGeneratedExerciseData: GeneratedExerciseProps;
   handleGeneratedExerciseData: (
     Assignment: string,
@@ -116,9 +111,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [assignmentType, setAssignmentType] = useState<Option | null>(null);
   const [temperature, setTemperature] = useState<Option | null>(null);
   const [chosenTopic, setChosenTopic] = useState<string>('');
+  const [macroSubject, setMacroSubject] = useState<string>('');
 
   // * variabili per il Fill Gaps
-  const [length, setLength] = useState<Option | null>(null);
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
   const [easyDistractorsFillGaps, setEasyDistractorsFillGaps] =
     useState<number>(0);
@@ -146,7 +141,6 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
   const [sourceText, setSourceText] = useState<string>(''); // url or text. Used to generate the exercise (material)
-  const [chosenLenght, setChosenLenght] = useState<number>(150);
   const [chosenTypeOfExercise, setChosenTypeOfExercise] = useState<number>(0);
   const [chosenTypeOfAssignment, setChosenTypeOfAssignment] =
     useState<number>(0);
@@ -177,38 +171,14 @@ export const CreateOERsProvider = ({ children }: any) => {
   // * altro
   const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
 
-  const calculateMaxValue = (selected: Option) => {
-    switch (selected) {
-      case lengthOptions[0]:
-        return 8;
-      case lengthOptions[1]:
-        return 10;
-      case lengthOptions[2]:
-        return 12;
-      default:
-        return 8;
-    }
-  };
-  const [maxValue, setMaxValue] = useState(8);
-
   // * handle functions
 
   // * General
   const handleBloomLevelExercise = (selected: Option) => {
     setBloomLevelExercise(selected);
   };
-  const handleTargetLevel = (selected: Option | number) => {
-    if (
-      selected === 0 ||
-      selected === 1 ||
-      selected === 2 ||
-      selected === 3 ||
-      selected === 4
-    ) {
-      setTargetLevel(targetLevelOptions[selected as number]);
-    } else {
-      setTargetLevel(selected as Option);
-    }
+  const handleTargetLevel = (selected: Option) => {
+    setTargetLevel(selected);
     handleChosenTargetLevel(selected);
   };
   const handleTemperature = (selected: Option) => {
@@ -226,15 +196,11 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleChosenTopic = (selected: string) => {
     setChosenTopic(selected);
   };
+  const handleMacroSubject = (selected: string) => {
+    setMacroSubject(selected);
+  };
 
   // * Fill Gaps
-  const handleLength = (selected: Option) => {
-    setLength(selected);
-
-    handleMaxValue(selected);
-
-    handleChosenLenght(selected);
-  };
   const handleDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
   };
@@ -276,24 +242,26 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleSourceText = (selected: string) => {
     setSourceText(selected);
   };
-  const handleChosenTargetLevel = (selected: Option | number) => {
+  const handleChosenTargetLevel = (selected: Option ) => {
     switch (selected) {
-      case { title: 'Primary' } || 0:
+      case targetLevelOptions[0]:
         setChosenTargetLevel(0);
         break;
-      case { title: 'Middle School' } || 1:
+      case targetLevelOptions[1]:
         setChosenTargetLevel(1);
         break;
-      case { title: 'High School' } || 2:
+      case targetLevelOptions[2]:
+        console.log('ci arrivo');
         setChosenTargetLevel(2);
         break;
-      case { title: 'College' } || 3:
+      case targetLevelOptions[3]:
         setChosenTargetLevel(3);
         break;
-      case { title: 'Accademy' } || 4:
+      case targetLevelOptions[4]:
         setChosenTargetLevel(4);
         break;
       default:
+        console.log('Error in chosen Target Level!');
         setChosenTargetLevel(null);
     }
   };
@@ -339,21 +307,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         setChosenTemperature(0.2);
     }
   };
-  const handleChosenLenght = (selected: Option) => {
-    switch (selected.title) {
-      case 'Short':
-        setChosenLenght(150);
-        break;
-      case 'Medium':
-        setChosenLenght(250);
-        break;
-      case 'Long':
-        setChosenLenght(350);
-        break;
-      default:
-        setChosenLenght(150);
-    }
-  };
+
   // Si riferisce ai diversi tipi di esercizi di Open Question
   const handleChosenTypeOfExercise = (selected: Option) => {
     switch (selected.title) {
@@ -462,7 +416,7 @@ export const CreateOERsProvider = ({ children }: any) => {
         number_of_correct_answer: correctAnswerQuiz || null,
         number_of_easy_distractors: easyDistractors || null,
         number_of_distractors: distractors || null,
-        number_of_words: chosenLenght || null,
+        number_of_words: null,
         options: options || null, // see wordsOptions
         solution: solution || null,
       },
@@ -479,13 +433,6 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
 
   // * altro
-  const handleMaxValue = (selected: Option) => {
-    // Calcola il nuovo valore massimo in base all'altro valore
-    const nuovoMaxValue = calculateMaxValue(selected);
-    // Aggiorna il valore massimo
-    setMaxValue(nuovoMaxValue);
-  };
-
   const handleIsGenerateButtonClicked = (bool: boolean) => {
     setIsGenerateButtonClicked(bool);
   };
@@ -496,7 +443,6 @@ export const CreateOERsProvider = ({ children }: any) => {
         // * altre variabili
         isGenerateButtonClicked,
         handleIsGenerateButtonClicked,
-        maxValue,
         apiGeneratedExerciseData,
         handleGeneratedExerciseData,
         // * General variables and handle functions
@@ -510,9 +456,9 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleAssignmentType,
         chosenTopic,
         handleChosenTopic,
+        macroSubject,
+        handleMacroSubject,
         // * variabili e handle functions Fill Gaps
-        length,
-        handleLength,
         distractorsFillGaps,
         handleDistractorsFillGaps,
         easyDistractorsFillGaps,
@@ -542,8 +488,6 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleQuestionCategory,
         sourceText, // material
         handleSourceText,
-        chosenLenght,
-        handleChosenLenght,
         chosenTypeOfExercise, // 0 = Open, 1 = Short Answer, 2 = True False, 3 = Fill the Gaps, 4 = Single Choice, 5 = Multiple Choice
         handleChosenTypeOfExercise,
         chosenTypeOfAssignment, // 0 = Theoretical, 1 = Code, 2 = Practical

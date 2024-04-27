@@ -17,11 +17,11 @@ export const bloomLevelOptions: Option[] = [
   { title: 'Create' },
 ];
 
-export const lengthOptions: Option[] = [
-  { title: 'Short', description: '(~150 words)' },
-  { title: 'Medium', description: '(~250 words)' },
-  { title: 'Long', description: '(~350 words)' },
-];
+// export const lengthOptions: Option[] = [
+//   { title: 'Short', description: '(~150 words)' },
+//   { title: 'Medium', description: '(~250 words)' },
+//   { title: 'Long', description: '(~350 words)' },
+// ];
 
 export const questionTypeOptions: Option[] = [
   { title: 'Open' },
