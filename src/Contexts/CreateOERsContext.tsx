@@ -5,9 +5,9 @@ import {
   OerData,
   Option,
   OptionsData,
+  assignmentTypeOptions,
+  targetLevelOptions,
 } from '../types/encoreElements/index';
-// import { OerData } from '../types/encoreElements/oer/CreateOERsElement/OerData';
-// import { useHasHydrated } from '../utils/utils';
 
 //context props
 type CreateOERsContextProps = {
@@ -15,58 +15,39 @@ type CreateOERsContextProps = {
   isGenerateButtonClicked: boolean;
   handleIsGenerateButtonClicked: (bool: boolean) => void;
 
-  // * dati dentro i segmented buttons
-  targetLevelOptions: Option[];
-  bloomLevelOptions: Option[];
-  lengthOptions: Option[];
-  questionTypeOptions: Option[];
-  questionCategoryOptions: Option[];
-  exerciseTypeOptions: Option[];
-  temperatureOptions: Option[];
-
   // * General variables
   bloomLevelExercise: Option | null;
   handleBloomLevelExercise: (selected: Option) => void;
+  targetLevel: Option | null;
+  handleTargetLevel: (selected: Option) => void;
+  assignmentType: Option | null;
+  handleAssignmentType: (selected: Option | number) => void;
+  temperature: Option | null;
+  handleTemperature: (selected: Option) => void;
+  chosenTopic: string;
+  handleChosenTopic: (selected: string) => void;
+  macroSubject: string;
+  handleMacroSubject: (selected: string) => void;
 
   // * variabili Fill Gaps
-  targetLevelFillGaps: Option | null;
-  handleTargetLevelFillGaps: (selected: Option) => void;
-  length: Option | null;
-  handleLength: (selected: Option) => void;
   distractorsFillGaps: number;
   handleDistractorsFillGaps: (selected: number | string) => void;
   easyDistractorsFillGaps: number;
   handleEasyDistractorsFillGaps: (selected: number | string) => void;
   blanks: number;
   handleBlanks: (selected: number | string) => void;
-  temperatureFillGaps: Option | null;
-  handleTemperatureFillGaps: (selected: Option) => void;
 
   // * variabili Open Question
-  targetLevelOpenQuestion: Option | null;
-  handleTargetLevelOpenQuestion: (selected: Option) => void;
   questionType: Option | null;
   handleQuestionType: (selected: Option) => void;
-  questionCategoryOpenQuestion: Option | null;
-  handleQuestionCategoryOpenQuestion: (selected: Option) => void;
-  temperatureOpenQuestion: Option | null;
-  handleTemperatureOpenQuestion: (selected: Option) => void;
 
   // * variabili Multiple Choice
-  targetLevelMultipleChoice: Option | null;
-  handleTargetLevelMultipleChoice: (selected: Option) => void;
-  assignmentType: Option | null;
-  handleAssignmentType: (selected: Option) => void;
-  questionCategoryMultipleChoice: Option | null;
-  handleQuestionCategoryMultipleChoice: (selected: Option) => void;
   distractorsMultipleChoice: number;
   handleDistractorsMultipleChoice: (selected: number | string) => void;
   easyDistractors: number;
   handleEasyDistractors: (selected: number | string) => void;
   correctAnswerQuiz: number;
   handleCorrectAnswerQuiz: (selected: number | string) => void;
-  temperatureMultipleChoice: Option | null;
-  handleTemperatureMultipleChoice: (selected: Option) => void;
 
   // * dati per il json
   // todo: metterle sul local storage e fare una funzione per resettarle
@@ -74,7 +55,7 @@ type CreateOERsContextProps = {
   handleTypeOfExercisePanel: (selected: number) => void;
   chosenTargetLevel: number | null;
   //handleChosenTargetLevel: (selected: Option) => void;
-  temperature: number;
+  ChosenTemperature: number;
   //handleTemperature: (selected: Option) => void;
   distractors: number;
   handleDistractors: (selected: number) => void;
@@ -82,10 +63,6 @@ type CreateOERsContextProps = {
   handleQuestionCategory: (selected: Option) => void;
   sourceText: string; // material
   handleSourceText: (selected: string) => void;
-  chosenLenght: number;
-  //handleChosenLenght: (selected: Option) => void;
-  chosenCategory: number;
-  //handleChosenCategory: (selected: Option) => void;
   chosenTypeOfExercise: number;
   handleChosenTypeOfExercise: (selected: Option) => void;
   chosenTypeOfAssignment: number;
@@ -109,8 +86,6 @@ type CreateOERsContextProps = {
   handleFillTemplateWithGaps: (selected: string) => void;
 
   // * altro
-  maxValue: number; //numero per definire il numero massimo di gaps
-
   apiGeneratedExerciseData: GeneratedExerciseProps;
   handleGeneratedExerciseData: (
     Assignment: string,
@@ -119,130 +94,39 @@ type CreateOERsContextProps = {
     Distractors: string[],
     EasilyDiscardableDistractors: string[]
   ) => void;
-
-  // apiOpenQuestionData: {
-  //   language: string;
-  //   date: string;
-  //   level: string;
-  //   type_of_question: string;
-  //   category: string;
-  //   temperature: number;
-  //   question: string;
-  //   correctAnswer: string;
-  // };
-  // // handleTextToJSONOpenQuestion: (text: string) => void;
-  // //handleTextToJSONFillGaps: (text: string) => void;
-  // apiMultipleChiocesData: {
-  //   language: string;
-  //   date: string;
-  //   level: string;
-  //   temperature: number;
-  //   nedd: number;
-  //   n_o_d: number;
-  //   category: string;
-  //   question: string;
-  //   correctAnswer: string;
-  //   answers: { [key: string]: boolean };
-  //   solution: string;
-  // };
-  // handleTextToJSONMultipleChoice: (text: string) => void;
 };
 
 export const CreateOERsContext = createContext<CreateOERsContextProps>(
   {} as CreateOERsContextProps
 );
-
 // Create a custom hook to use the context
 export const useCreateOERsContext = () => useContext(CreateOERsContext);
-
 // Create a provider to wrap the app and provide the context to all its children
 export const CreateOERsProvider = ({ children }: any) => {
-  //const hydrated = useHasHydrated();
-  // * difficoltà, da aggiungere forse in futuro
-
-  // * dati per i segmented buttons
-  // TODO: aggiungere commento descrittivo per ogni gruppo di opzioni per sapere a cosa serve e dove viene usata
-  const targetLevelOptions: Option[] = [
-    { title: 'Primary' },
-    { title: 'Middle School' },
-    { title: 'High School' },
-    { title: 'College' },
-    { title: 'Academy' },
-  ];
-  // This is used to give a set of options to the user to choose the bloom level before generate the exercise
-  const bloomLevelOptions: Option[] = [
-    { title: 'Remember' },
-    { title: 'Understand' },
-    { title: 'Apply' },
-    { title: 'Analyze' },
-    { title: 'Evaluate' },
-    { title: 'Create' },
-  ];
-  const lengthOptions: Option[] = [
-    { title: 'Short', description: '(~150 words)' },
-    { title: 'Medium', description: '(~250 words)' },
-    { title: 'Long', description: '(~350 words)' },
-  ];
-  const questionTypeOptions: Option[] = [
-    { title: 'Open' },
-    { title: 'Short Answer' },
-    { title: 'True False' },
-  ];
-  const questionCategoryOptions: Option[] = [
-    { title: 'Factual Knowledge' },
-    { title: 'Understanding of Concepts' },
-    { title: 'Application of Skills' },
-    { title: 'Analysys And Evaluation' },
-  ];
-  const exerciseTypeOptions: Option[] = [
-    { title: 'Theoretical' },
-    { title: 'Practical' }, // problem resolution
-  ];
-  const temperatureOptions: Option[] = [
-    { title: 'Low' },
-    { title: 'Medium' },
-    { title: 'High' },
-  ];
-
-  // General variables
+  // * General variables
   const [bloomLevelExercise, setBloomLevelExercise] = useState<Option | null>(
     null
   );
+  const [targetLevel, setTargetLevel] = useState<Option | null>(null);
+  const [assignmentType, setAssignmentType] = useState<Option | null>(null);
+  const [temperature, setTemperature] = useState<Option | null>(null);
+  const [chosenTopic, setChosenTopic] = useState<string>('');
+  const [macroSubject, setMacroSubject] = useState<string>('');
 
   // * variabili per il Fill Gaps
-  const [targetLevelFillGaps, setTargetLevelFillGaps] = useState<Option | null>(
-    null
-  );
-  const [length, setLength] = useState<Option | null>(null);
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
   const [easyDistractorsFillGaps, setEasyDistractorsFillGaps] =
     useState<number>(0);
   const [blanks, setBlanks] = useState<number>(1);
-  const [temperatureFillGaps, setTemperatureFillGaps] = useState<Option | null>(
-    null
-  );
 
   // * variabili per l'Open Question
-  const [targetLevelOpenQuestion, setTargetLevelOpenQuestion] =
-    useState<Option | null>(null);
   const [questionType, setQuestionType] = useState<Option | null>(null);
-  const [questionCategoryOpenQuestion, setQuestionCategoryOpenQuestion] =
-    useState<Option | null>(null);
-  const [temperatureOpenQuestion, setTemperatureOpenQuestion] =
-    useState<Option | null>(null);
 
   // * variabili per il Multiple Choice
-  const [targetLevelMultipleChoice, setTargetLevelMultipleChoice] =
-    useState<Option | null>(null);
-  const [questionCategoryMultipleChoice, setQuestionCategoryMultipleChoice] =
-    useState<Option | null>(null);
-  const [assignmentType, setAssignmentType] = useState<Option | null>(null);
   const [distractorsMultipleChoice, setDistractorsMultipleChoice] =
     useState<number>(1);
   const [easyDistractors, setEasyDistractors] = useState<number>(0);
   const [correctAnswerQuiz, setCorrectAnswerQuiz] = useState<number>(1);
-  const [temperatureMultipleChoice, setTemperatureMultipleChoice] =
-    useState<Option | null>(null);
 
   // * dati per il json
   const [chosenTargetLevel, setChosenTargetLevel] = useState<number | null>(
@@ -253,12 +137,10 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [typeOfExercisePanel, setTypeOfExercisePanel] = useLocalStorage<
     string | null
   >('type of panel', null);
-  const [temperature, setTemperature] = useState<number>(0.2);
+  const [ChosenTemperature, setChosenTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
   const [sourceText, setSourceText] = useState<string>(''); // url or text. Used to generate the exercise (material)
-  const [chosenLenght, setChosenLenght] = useState<number>(150);
-  const [chosenCategory, setChosenCategory] = useState<number>(0);
   const [chosenTypeOfExercise, setChosenTypeOfExercise] = useState<number>(0);
   const [chosenTypeOfAssignment, setChosenTypeOfAssignment] =
     useState<number>(0);
@@ -268,16 +150,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [fillTemplate, setFillTemplate] = useState<string>('');
   const [fillTemplateWithGaps, setFillTemplateWithGaps] = useState<string>('');
   const [data, setData] = useState({} as OerData);
-  // const [apiOpenQuestionData, setApiOpenQuestionData] = useState({
-  //   language: '',
-  //   date: '',
-  //   level: '',
-  //   type_of_question: '',
-  //   category: '',
-  //   temperature: 0,
-  //   question: '',
-  //   correctAnswer: '',
-  // });
+
   const [apiGeneratedExerciseData, setApiGeneratedExerciseData] =
     useState<GeneratedExerciseProps>({
       // language: '',
@@ -294,36 +167,9 @@ export const CreateOERsProvider = ({ children }: any) => {
       Distractors: [],
       EasilyDiscardableDistractors: [],
     });
-  // const [apiMultipleChiocesData, setApiMultipleChiocesData] = useState({
-  //   language: '',
-  //   date: '',
-  //   level: '',
-  //   temperature: 0,
-  //   nedd: 0,
-  //   n_o_d: 0,
-  //   category: '',
-  //   question: '',
-  //   correctAnswer: '',
-  //   answers: {},
-  //   solution: '',
-  // });
 
   // * altro
   const [isGenerateButtonClicked, setIsGenerateButtonClicked] = useState(false);
-
-  const calculateMaxValue = (selected: Option) => {
-    switch (selected) {
-      case lengthOptions[0]:
-        return 8;
-      case lengthOptions[1]:
-        return 10;
-      case lengthOptions[2]:
-        return 12;
-      default:
-        return 8;
-    }
-  };
-  const [maxValue, setMaxValue] = useState(8);
 
   // * handle functions
 
@@ -331,19 +177,30 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleBloomLevelExercise = (selected: Option) => {
     setBloomLevelExercise(selected);
   };
-
-  // * Fill Gaps
-  const handleTargetLevelFillGaps = (selected: Option) => {
-    setTargetLevelFillGaps(selected);
+  const handleTargetLevel = (selected: Option) => {
+    setTargetLevel(selected);
     handleChosenTargetLevel(selected);
   };
-  const handleLength = (selected: Option) => {
-    setLength(selected);
-
-    handleMaxValue(selected);
-
-    handleChosenLenght(selected);
+  const handleTemperature = (selected: Option) => {
+    setTemperature(selected);
+    handleChoosenTemperature(selected);
   };
+  const handleAssignmentType = (selected: Option | number) => {
+    if (selected === 0 || selected === 1 || selected === 2) {
+      setAssignmentType(assignmentTypeOptions[selected as number]);
+    } else {
+      setAssignmentType(selected as Option);
+    }
+    handleChosenTypeOfAssignment(selected); // here we set the exercise type as a number
+  };
+  const handleChosenTopic = (selected: string) => {
+    setChosenTopic(selected);
+  };
+  const handleMacroSubject = (selected: string) => {
+    setMacroSubject(selected);
+  };
+
+  // * Fill Gaps
   const handleDistractorsFillGaps = (number: number | string) => {
     setDistractorsFillGaps(number as number);
   };
@@ -353,46 +210,19 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleBlanks = (number: number | string) => {
     setBlanks(number as number);
   };
-  const handleTemperatureFillGaps = (selected: Option) => {
-    setTemperatureFillGaps(selected);
-    handleTemperature(selected);
-  };
 
   // * Open Question
-  const handleTargetLevelOpenQuestion = (selected: Option) => {
-    setTargetLevelOpenQuestion(selected);
-    handleChosenTargetLevel(selected);
-  };
+
   // Is used for segmented button in Question Panel
   const handleQuestionType = (selected: Option) => {
     setQuestionType(selected); // here we set the question type as a string
     handleChosenTypeOfExercise(selected); // here we set the question type as a number
   };
-  const handleQuestionCategoryOpenQuestion = (selected: Option) => {
-    setQuestionCategoryOpenQuestion(selected);
-    handleChosenCategory(selected);
-  };
-  const handleTemperatureOpenQuestion = (selected: Option) => {
-    setTemperatureOpenQuestion(selected);
-    handleTemperature(selected);
-  };
 
   // * Multiple Choice
-  const handleTargetLevelMultipleChoice = (selected: Option) => {
-    setTargetLevelMultipleChoice(selected);
-    handleChosenTargetLevel(selected);
-  };
-  // Is used for theoretical or practical choose
-  const handleAssignmentType = (selected: Option) => {
-    setAssignmentType(selected); // here we set the exercise type as a string
-    handleChosenTypeOfAssignment(selected); // here we set the exercise type as a number
-  };
-  const handleQuestionCategoryMultipleChoice = (selected: Option) => {
-    setQuestionCategoryMultipleChoice(selected);
-    handleChosenCategory(selected);
-  };
   const handleDistractorsMultipleChoice = (number: number | string) => {
     setDistractorsMultipleChoice(number as number);
+    handleDistractors(number as number);
   };
   const handleEasyDistractors = (number: number | string) => {
     setEasyDistractors(number as number);
@@ -407,33 +237,31 @@ export const CreateOERsProvider = ({ children }: any) => {
       handleChosenTypeOfExercise({ title: 'Multiple Choice' });
     }
   };
-  const handleTemperatureMultipleChoice = (selected: Option) => {
-    setTemperatureMultipleChoice(selected);
-    handleTemperature(selected);
-  };
 
   // * dati per il json
   const handleSourceText = (selected: string) => {
     setSourceText(selected);
   };
   const handleChosenTargetLevel = (selected: Option) => {
-    switch (selected.title) {
-      case 'Primary':
+    switch (selected) {
+      case targetLevelOptions[0]:
         setChosenTargetLevel(0);
         break;
-      case 'Middle School':
+      case targetLevelOptions[1]:
         setChosenTargetLevel(1);
         break;
-      case 'High School':
+      case targetLevelOptions[2]:
+        console.log('ci arrivo');
         setChosenTargetLevel(2);
         break;
-      case 'College':
+      case targetLevelOptions[3]:
         setChosenTargetLevel(3);
         break;
-      case 'Academy':
+      case targetLevelOptions[4]:
         setChosenTargetLevel(4);
         break;
       default:
+        console.log('Error in chosen Target Level!');
         setChosenTargetLevel(null);
     }
   };
@@ -464,54 +292,22 @@ export const CreateOERsProvider = ({ children }: any) => {
         console.log('Error in chosen Exercise!');
     }
   };
-  const handleTemperature = (selected: Option) => {
+  const handleChoosenTemperature = (selected: Option) => {
     switch (selected.title) {
       case 'Low':
-        setTemperature(0.2);
+        setChosenTemperature(0.2);
         break;
       case 'Medium':
-        setTemperature(0.6);
+        setChosenTemperature(0.6);
         break;
       case 'High':
-        setTemperature(0.9);
+        setChosenTemperature(0.9);
         break;
       default:
-        setTemperature(0.2);
+        setChosenTemperature(0.2);
     }
   };
-  const handleChosenLenght = (selected: Option) => {
-    switch (selected.title) {
-      case 'Short':
-        setChosenLenght(150);
-        break;
-      case 'Medium':
-        setChosenLenght(250);
-        break;
-      case 'Long':
-        setChosenLenght(350);
-        break;
-      default:
-        setChosenLenght(150);
-    }
-  };
-  const handleChosenCategory = (selected: Option) => {
-    switch (selected.title) {
-      case 'Factual Knowledge':
-        setChosenCategory(0);
-        break;
-      case 'Understanding of Concepts':
-        setChosenCategory(1);
-        break;
-      case 'Application of Skills':
-        setChosenCategory(2);
-        break;
-      case 'Analysys And Evaluation':
-        setChosenCategory(3);
-        break;
-      default:
-        setChosenCategory(0);
-    }
-  };
+
   // Si riferisce ai diversi tipi di esercizi di Open Question
   const handleChosenTypeOfExercise = (selected: Option) => {
     switch (selected.title) {
@@ -537,15 +333,15 @@ export const CreateOERsProvider = ({ children }: any) => {
         setChosenTypeOfExercise(0);
     }
   };
-  const handleChosenTypeOfAssignment = (selected: Option) => {
-    switch (selected.title) {
-      case 'Theoretical':
+  const handleChosenTypeOfAssignment = (selected: Option | number) => {
+    switch (selected) {
+      case { title: 'Theoretical' } || 0:
         setChosenTypeOfAssignment(0);
         break;
-      case 'Code':
+      case { title: 'Code' } || 1:
         setChosenTypeOfAssignment(1);
         break;
-      case 'Practical': // problem resolution
+      case { title: 'Practical' } || 2: // problem resolution
         setChosenTypeOfAssignment(2);
         break;
       default:
@@ -580,65 +376,6 @@ export const CreateOERsProvider = ({ children }: any) => {
     setFillTemplateWithGaps(selected);
   };
 
-  // const handleTextToJSONOpenQuestion = (text: string) => {
-  //   const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
-  //   const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
-  //   const levelMatch = text.match(/Level: (.+?)(?=\s\d|\b|$)/);
-  //   const typeOfQuestionMatch = text.match(
-  //     /Type of question: (.+?)(?=\s\d|\b|$)/
-  //   );
-  //   const categoryMatch = text.match(/Category: (.+?)(?=\s\d|\b|$)/);
-  //   const temperatureMatch = text.match(/Temperature: (.+?)(?=\s|$)/);
-  //   const questionMatch = text.match(/Question: (.+?)(?=\n8\.\))/);
-  //   const correctAnswerMatch = text.match(/CorrectAnswer: (.+?)(?:\n|$)/);
-
-  //   const newApiData = {
-  //     language: languageMatch ? languageMatch[1] : '',
-  //     date: dateMatch ? dateMatch[1] : '',
-  //     level: levelMatch ? levelMatch[1] : '',
-  //     type_of_question: typeOfQuestionMatch ? typeOfQuestionMatch[1] : '',
-  //     category: categoryMatch ? categoryMatch[1] : '',
-  //     temperature: temperatureMatch ? parseFloat(temperatureMatch[1]) : 0,
-  //     question: questionMatch ? questionMatch[1] : '',
-  //     correctAnswer: correctAnswerMatch ? correctAnswerMatch[1] : '',
-  //   };
-
-  //   setApiOpenQuestionData(newApiData);
-  // };
-  // const handleTextToJSONFillGaps = (text: string) => {
-  //   const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
-  //   const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
-  //   const temperatureMatch = text.match(/Temperature: ([^\n]*)(?=\n)/);
-  //   const wordsMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
-  //   const levelMatch = text.match(/Level: ([^\n]*)(?=\n)/);
-  //   const textMatch = text.match(/Text: ([^\n]*)(?=\n)/);
-  //   const textWithGapsMatch = text.match(/TextWithGaps: ([^\n]*)(?=\n)/);
-  //   const wordsAndAnswersMatch = text.match(/Words:\n([\s\S]*?)(?=\n[A-Z]|$)/);
-
-  //   const wordsArray = wordsMatch ? wordsMatch[1].split('\n') : [];
-  //   const wordsObject = {} as { [key: string]: boolean };
-  //   wordsArray.forEach((line) => {
-  //     const wordsInLine = line.trim().split(/\s+/);
-  //     wordsInLine.forEach((word) => {
-  //       const cleanedWord = word.replace(/^\(A\)/, '').trim(); // Rimuove (A) dalla parola
-  //       if (cleanedWord !== '') {
-  //         wordsObject[cleanedWord] = false;
-  //       }
-  //     });
-  //   });
-
-  //   setApiFillGapsData({
-  //     language: languageMatch ? languageMatch[1] : '',
-  //     date: dateMatch ? dateMatch[1] : '',
-  //     temperature: temperatureMatch ? parseFloat(temperatureMatch[1]) : 0,
-  //     words: wordsObject,
-  //     level: levelMatch ? levelMatch[1] : '',
-  //     text: textMatch ? textMatch[1] : '',
-  //     textWithGaps: textWithGapsMatch ? textWithGapsMatch[1] : '',
-  //     wordsAndAnswers: wordsAndAnswersMatch ? wordsAndAnswersMatch[1] : '',
-  //   });
-  // };
-
   const handleGeneratedExerciseData = (
     Assignment: string,
     Plus: string,
@@ -655,55 +392,6 @@ export const CreateOERsProvider = ({ children }: any) => {
     });
   };
 
-  // //todo togliere le (A)
-  // const handleTextToJSONMultipleChoice = (text: string) => {
-  //   const languageMatch = text.match(/Language: ([^\n]*)(?=\n)/);
-  //   const dateMatch = text.match(/Date: ([^\n]*)(?=\n)/);
-  //   const levelMatch = text.match(/Level: ([^\n]*)(?=\n)/);
-  //   const temperatureMatch = text.match(/Temperature: ([^\n]*)(?=\n)/);
-  //   const neddMatch = text.match(/Nedd: ([^\n]*)(?=\n)/);
-  //   const n_o_dMatch = text.match(/N_o_d: ([^\n]*)(?=\n)/);
-  //   const categoryMatch = text.match(/Category:(.+?)(?=\s\d|\b|$)/);
-  //   const questionMatch = text.match(
-  //     /Question: ((?:[^\n]|\n(?!CorrectAnswerIndex|\d{1,2}\.\)))+)/
-  //   );
-  //   const correctAnswerMatch = text.match(/CorrectAnswerIndex: ([^\n]*)(?=\n)/);
-  //   const answersMatch = text.match(/Answers:\n([\s\S]*?)(?=\n[A-Z]|$)/);
-  //   const solutionMatch = text.match(
-  //     /Solution: ((?:[^\n]|\n(?!.*\d{1,2}\.\)))+)/
-  //   );
-
-  //   if (correctAnswerMatch !== null) {
-  //     const correctAnswerIndex = correctAnswerMatch
-  //       ? parseInt(correctAnswerMatch[1])
-  //       : -1;
-  //     const answersArray = answersMatch ? answersMatch[1].split('\n') : [];
-  //     const answersObject = {} as { [key: string]: boolean };
-  //     answersArray.forEach((line, index) => {
-  //       const answer = line.trim();
-  //       if (answer !== '') {
-  //         answersObject[answer] = index === correctAnswerIndex;
-  //       }
-  //     });
-
-  //     setApiMultipleChiocesData({
-  //       language: languageMatch ? languageMatch[1] : '',
-  //       date: dateMatch ? dateMatch[1] : '',
-  //       level: levelMatch ? levelMatch[1] : '',
-  //       temperature: temperatureMatch ? parseFloat(temperatureMatch[1]) : 0,
-  //       nedd: neddMatch ? parseInt(neddMatch[1]) : 0,
-  //       n_o_d: n_o_dMatch ? parseInt(n_o_dMatch[1]) : 0,
-  //       category: categoryMatch ? categoryMatch[1].trim() : '',
-  //       question: questionMatch ? questionMatch[1].trim() : '',
-  //       correctAnswer: correctAnswerMatch ? correctAnswerMatch[1] : '',
-  //       answers: answersObject,
-  //       solution: solutionMatch ? solutionMatch[1].trim() : '',
-  //     });
-  //   } else {
-  //     console.log('error in correctAnswerIndexMatch');
-  //   }
-  // };
-
   const handleData = () => {
     const temp: OerData = {
       title: title,
@@ -714,25 +402,21 @@ export const CreateOERsProvider = ({ children }: any) => {
       assessment_oer: true,
       assessment_oer_type: typeOfExercisePanel || '',
       source: sourceText,
-      level:
-        targetLevelFillGaps?.title ||
-        targetLevelOpenQuestion?.title ||
-        targetLevelMultipleChoice?.title ||
-        '',
-      temperature: temperature,
-      exercise_value: {
+      level: targetLevel?.title || '',
+      temperature: ChosenTemperature,
+      exercise_values: {
         question: question || null,
         fill_template: fillTemplate || null,
         fill_template_with_gaps: fillTemplateWithGaps || null,
         category:
-          questionCategoryMultipleChoice?.title ||
-          questionCategoryOpenQuestion?.title ||
+          // questionCategoryMultipleChoice?.title ||
+          // questionCategoryOpenQuestion?.title ||
           null,
         type: assignmentType?.title || questionType?.title || null,
         number_of_correct_answer: correctAnswerQuiz || null,
         number_of_easy_distractors: easyDistractors || null,
         number_of_distractors: distractors || null,
-        number_of_words: chosenLenght || null,
+        number_of_words: null,
         options: options || null, // see wordsOptions
         solution: solution || null,
       },
@@ -749,13 +433,6 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
 
   // * altro
-  const handleMaxValue = (selected: Option) => {
-    // Calcola il nuovo valore massimo in base all'altro valore
-    const nuovoMaxValue = calculateMaxValue(selected);
-    // Aggiorna il valore massimo
-    setMaxValue(nuovoMaxValue);
-  };
-
   const handleIsGenerateButtonClicked = (bool: boolean) => {
     setIsGenerateButtonClicked(bool);
   };
@@ -766,68 +443,44 @@ export const CreateOERsProvider = ({ children }: any) => {
         // * altre variabili
         isGenerateButtonClicked,
         handleIsGenerateButtonClicked,
-        maxValue,
-        // apiOpenQuestionData,
-        // handleTextToJSONOpenQuestion,
         apiGeneratedExerciseData,
-        //handleTextToJSONFillGaps,
         handleGeneratedExerciseData,
-        // apiMultipleChiocesData,
-        // handleTextToJSONMultipleChoice,
-        // * dati per i segmented buttons
-        targetLevelOptions,
-        bloomLevelOptions,
-        lengthOptions,
-        questionTypeOptions,
-        questionCategoryOptions,
-        exerciseTypeOptions,
-        temperatureOptions,
         // * General variables and handle functions
         bloomLevelExercise,
         handleBloomLevelExercise,
+        targetLevel,
+        handleTargetLevel,
+        temperature,
+        handleTemperature,
+        assignmentType,
+        handleAssignmentType,
+        chosenTopic,
+        handleChosenTopic,
+        macroSubject,
+        handleMacroSubject,
         // * variabili e handle functions Fill Gaps
-        targetLevelFillGaps,
-        handleTargetLevelFillGaps,
-        length,
-        handleLength,
         distractorsFillGaps,
         handleDistractorsFillGaps,
         easyDistractorsFillGaps,
         handleEasyDistractorsFillGaps,
         blanks,
         handleBlanks,
-        temperatureFillGaps,
-        handleTemperatureFillGaps,
         // * variabili e handle functions Open Question
-        targetLevelOpenQuestion,
-        handleTargetLevelOpenQuestion,
         questionType,
         handleQuestionType, // open question, short answer, true false
-        questionCategoryOpenQuestion,
-        handleQuestionCategoryOpenQuestion,
-        temperatureOpenQuestion,
-        handleTemperatureOpenQuestion,
         // * variabili e handle functions Multiple Choice
-        targetLevelMultipleChoice,
-        handleTargetLevelMultipleChoice,
-        assignmentType,
-        handleAssignmentType,
-        questionCategoryMultipleChoice,
-        handleQuestionCategoryMultipleChoice,
         distractorsMultipleChoice,
         handleDistractorsMultipleChoice,
         easyDistractors,
         handleEasyDistractors,
         correctAnswerQuiz,
         handleCorrectAnswerQuiz,
-        temperatureMultipleChoice,
-        handleTemperatureMultipleChoice,
         // * variabili e handle functions per il json
         chosenTargetLevel,
         //handleChosenTargetLevel,
         typeOfExercisePanel,
         handleTypeOfExercisePanel,
-        temperature,
+        ChosenTemperature,
         //handleTemperature,
         distractors,
         handleDistractors,
@@ -835,10 +488,6 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleQuestionCategory,
         sourceText, // material
         handleSourceText,
-        chosenLenght,
-        //handleChosenLenght,
-        chosenCategory,
-        //handleChosenCategory,
         chosenTypeOfExercise, // 0 = Open, 1 = Short Answer, 2 = True False, 3 = Fill the Gaps, 4 = Single Choice, 5 = Multiple Choice
         handleChosenTypeOfExercise,
         chosenTypeOfAssignment, // 0 = Theoretical, 1 = Code, 2 = Practical
