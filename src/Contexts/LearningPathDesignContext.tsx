@@ -27,6 +27,7 @@ type LearnignPathDesignContextProps = {
   bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
+  resourceIndex: number;  // Index of the selected resource in the collection
   selectedLearningObjectiveIndex: number;
   resetCheckBoxOptions: boolean;
   learningObjectives: string[];
@@ -52,6 +53,7 @@ type LearnignPathDesignContextProps = {
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
+  handleResourceIndexChange: (resourceIndex: number) => void;
   handleLearningObjectives: () => void;
   handleSelectedCustomLearningObjectiveChange: (newValue: string) => void;
   handleCustomLearningObjective0Change: (newValue: string) => void;
@@ -119,11 +121,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     ''
   );
 
-  // Use for storage of the collection and bloom level indexes
+  // Use for storage of the collection, resource and bloom level indexes
   const [collectionIndex, setcollectionIndex] = useLocalStorage<number>(
     'collectionIndex',
     -1
   );
+  // Index og the selected resource in the collection
+  const [resourceIndex, setResourceIndex] = useLocalStorage<number>(
+    'resourceIndex',
+    -1
+  );
+
   const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>(
     'bloomLevelIndex',
     -1
@@ -194,6 +202,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // };
 
   const resetState = () => {
+    handleResourceIndexChange(-1);
     setBloomLevelIndex(-1);
     // setStep(1);
     setSelectedSkillConceptsTags([]);
@@ -341,6 +350,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     resetState();
   };
 
+  const handleResourceIndexChange = (resourceIndex: number) => {
+    setResourceIndex(resourceIndex);
+  };
+
   //handlers for bloom level selection
   const handleBloomLevelChange = (bloomLevelIndex: number) => {
     setBloomLevelIndex(bloomLevelIndex);
@@ -378,6 +391,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // Usa setLocalStorage per salvare i valori
   }, [
     collectionIndex,
+    resourceIndex,
     bloomLevelIndex,
     selectedSkillConceptsTags,
     learningTextContext,
@@ -470,6 +484,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedOptions,
         resetCheckBoxOptions,
         collectionIndex,
+        resourceIndex,
         learningObjectives,
         selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
         storedLearningObjective, // Learning Objective stored with save button
@@ -493,6 +508,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         //handleResetStep0,
         //handleResetStep1,
         handleCollectionIndexChange,
+        handleResourceIndexChange,
         handleSelectedLearningObjectiveIndexChange,
         handleLearningObjectives,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2

@@ -15,6 +15,7 @@ export default function CentralBarsSmallerScreen({
   handleText,
   isNextButtonClicked,
   collectionIndex,
+  bloomLevelIndex,
   currentBloomOptions,
   step,
   isSmallerScreen,
@@ -41,6 +42,7 @@ export default function CentralBarsSmallerScreen({
         gap={`${SPACING}%`}
       >
         <Box w="100%" flexDirection={'column'} flex="1">
+          {/* Bloom Level */}
           <Text fontSize="sm" fontWeight="bold">
             {bloomLevelTitleTextBox}
           </Text>
@@ -50,6 +52,8 @@ export default function CentralBarsSmallerScreen({
               onSelectionChange={handleBloomLevelChange}
               isHighlighted={isNextButtonClicked}
               isBloomLevel={true}
+              itemIndex={bloomLevelIndex}
+              defaultMenuTitle="Select Bloom Level"
             />
           </Box>
 
@@ -62,6 +66,7 @@ export default function CentralBarsSmallerScreen({
           collectionIndex > -1 && (
             <Box flex="1" w="100%" flexDirection="column">
               <Box>
+                {/* Verbs Bloom Level */}
                 <Text fontSize="sm" fontWeight="bold" pb={`${SPACING}%`}>
                   {verbsTitleTextBox}
                 </Text>
@@ -82,6 +87,7 @@ export default function CentralBarsSmallerScreen({
         pr={`${SPACING}%`}
         pt={`${SPACING}%`}
       >
+        {/* Skill and concepts */}
         <Text fontSize="sm" fontWeight="bold">
           {skillConceptTitleTextBox}
         </Text>
@@ -102,18 +108,19 @@ export default function CentralBarsSmallerScreen({
         pr={`${SPACING}%`}
         pt={`${SPACING}%`}
       >
+        {/* Context */}
         <Text
           fontSize="sm"
           fontWeight="bold"
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
           {contextTitleTextBox}
         </Text>
         <Box
           pt={1}
-          // paddingRight={`${SPACING}%`}
-          // w={`${DIMENSION}%`}
+        // paddingRight={`${SPACING}%`}
+        // w={`${DIMENSION}%`}
         >
           <TextBox
             backgroundColor="#EDF2F7"
@@ -126,8 +133,8 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           pt={1}
-          //paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION}%`}
+        //paddingRight={`${SPACING}%`}
+        //w={`${DIMENSION}%`}
         >
           {contextDescriptionTextBox}
         </Text>

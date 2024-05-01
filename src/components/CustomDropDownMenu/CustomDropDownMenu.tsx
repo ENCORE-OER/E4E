@@ -23,6 +23,8 @@ type CollectionMenuProps = {
   onSelectionChange?: (selectedItem: number) => void;
   isHighlighted: boolean;
   isBloomLevel?: boolean;
+  itemIndex: number;
+  defaultMenuTitle: string;
 };
 
 export default function CustomDropDownMenu({
@@ -32,26 +34,33 @@ export default function CustomDropDownMenu({
   onSelectionChange,
   isHighlighted,
   isBloomLevel,
+  itemIndex,
+  defaultMenuTitle,
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
-  const [menuTitle, setMenuTitle] = useState<string | null>(null);
-  const { collectionIndex, bloomLevelIndex, selectedSkillConceptsTags } =
+  const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
+  // const { collectionIndex, resourceIndex, bloomLevelIndex, selectedSkillConceptsTags } =
+  const { selectedSkillConceptsTags } =
     useLearningPathDesignContext();
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
 
+  // useEffect(() => {
+  //   // Aggiorna il titolo in base agli indici
+  //   if (isBloomLevel) {
+  //     // Se è un Bloom Level e l'indice è valido
+  //     setMenuTitle(data[bloomLevelIndex]?.name || 'Select Bloom Level');
+  //   } else {
+  //     // Se è una Collection e l'indice è valido
+  //     setMenuTitle(data[collectionIndex]?.name || 'Select Collection');
+  //   }
+  //   // ... altri effetti necessari
+  // }, [isBloomLevel, collectionIndex, resourceIndex, bloomLevelIndex, data]);
+
   useEffect(() => {
-    // Aggiorna il titolo in base agli indici
-    if (isBloomLevel) {
-      // Se è un Bloom Level e l'indice è valido
-      setMenuTitle(data[bloomLevelIndex]?.name || 'Select Bloom Level');
-    } else {
-      // Se è una Collection e l'indice è valido
-      setMenuTitle(data[collectionIndex]?.name || 'Select Collection');
-    }
-    // ... altri effetti necessari
-  }, [isBloomLevel, collectionIndex, bloomLevelIndex, data]);
+    setMenuTitle(data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle);
+  }, [itemIndex, data, defaultMenuTitle]);
 
   const handleData = () => {
     if (onData) {
@@ -61,7 +70,7 @@ export default function CustomDropDownMenu({
   const handleMenuItemClick = (item: ArrayProps, index: number) => {
     //setSelectedItem(item.name);
     if (onSelectionChange) onSelectionChange(index);
-    setMenuTitle(item.name);
+    setMenuTitle(item.name || item.title || '');
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
 
     //todo fix this, the problem is that idk how to delete the tags without refreshing the page
@@ -76,11 +85,8 @@ export default function CustomDropDownMenu({
   };
 
   const handleHighlight = () => {
-    if (isBloomLevel) {
-      return bloomLevelIndex === -1 ? true : false;
-    } else {
-      return collectionIndex === -1 ? true : false;
-    }
+    // If the index is -1, it means that the item is not selected
+    return itemIndex === -1 ? true : false;
   };
 
   useEffect(() => {
@@ -104,12 +110,12 @@ export default function CustomDropDownMenu({
           onOpen={handleToggleMenu}
           onClose={handleToggleMenu}
         >
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%">
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%" title={menuTitle}>
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
             <Text align="left" noOfLines={1}>
               {
                 selectedOptions.includes('All') &&
-                options?.length === selectedOptions.length
+                  options?.length === selectedOptions.length
                   ? 'All'
                   : selectedOptions.length > 0
                     ? selectedOptions.join(', ')
@@ -125,7 +131,7 @@ export default function CustomDropDownMenu({
                   key={index}
                   onClick={() => handleMenuItemClick(item, index)}
                 >
-                  <Text>{item.name}</Text>
+                  <Text>{item.name || item.title}</Text>
                 </MenuItem>
               ))}
           </MenuList>

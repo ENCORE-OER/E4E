@@ -6,10 +6,10 @@ import { useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
-import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
 import PathDesignGenLO from '../../components/PathDesignGenLO';
+import PathDesignHeaderBars from '../../components/PathDesignHeaderBars';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import { SkillItemProps } from '../../types/encoreElements';
@@ -25,11 +25,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
     //learningTextContext: text,
     step,
     collectionIndex,
+    // resourceIndex,
     selectedSkillConceptsTags,
     handleStepChange,
     selectedOptions,
     //handleResetStep0,
     handleCollectionIndexChange,
+    handleResourceIndexChange,
     // takes the value of the selected option in "Educational Scenario"
     selectedContext, // used for the api call
     selectedLearnerExperience, // used for the api call
@@ -64,6 +66,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
     null
   );
+  const [selectedResource, setSelectedResource] = useState<boolean | null>(
+    null
+  );
+  // const [resourceIndex, setResourceIndex] = useState<number>(-1); // Used to keep track of the selected resource in the collection
   const [isNextButtonClicked, setIsNextButtonClicked] =
     useState<boolean>(false); // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
 
@@ -76,6 +82,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleCollectionChange = (collectionIndex: number) => {
     handleCollectionIndexChange(collectionIndex);
+    handleStepChange(1); // Update the state to show the text when a collection is selected
+  };
+
+  const handleResourceSelection = () => {
+    // Update the state to show the text when a collection is selected
+    setSelectedResource(true);
+  };
+
+  const handleResourceChange = (resourceIndex: number) => {
+    handleResourceIndexChange(resourceIndex);   // Create this function in the LearningPathDesignContext???
     handleStepChange(1); // Update the state to show the text when a collection is selected
   };
 
@@ -149,6 +165,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handleNextClick = () => {
     if (
       selectedCollection !== null &&
+      selectedResource !== null &&
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
       selectedSkillConceptsTags.length > 0 &&
@@ -195,7 +212,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -204,7 +221,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Box w={isSmallerScreen ? '95%' : '90%'}>
                 <LearningStepper
@@ -224,21 +241,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Box>
             </Box>
 
-            <Flex w="100%" paddingTop="1.5rem">
-              <Text fontSize="sm">
-                Select here the collection that contain potential relevant
-                resources
-              </Text>
-            </Flex>
-            <Box w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}>
-              <CustomDropDownMenu
-                data={collections}
-                onData={handleCollectionSelection}
-                onSelectionChange={handleCollectionChange}
-                isHighlighted={isNextButtonClicked}
-                isBloomLevel={false}
-              />
-            </Box>
+            <PathDesignHeaderBars
+              SPACING={SPACING}
+              DIMENSION={DIMENSION}
+              isSmallerScreen={isSmallerScreen}
+              collections={collections}
+              handleCollectionSelection={handleCollectionSelection}
+              handleCollectionChange={handleCollectionChange}
+              resources={collections[collectionIndex]?.oers}  // Create an array of resources names???
+              handleResourceSelection={handleResourceSelection}
+              handleResourceChange={handleResourceChange}
+              isNextButtonClicked={isNextButtonClicked}
+            />
 
             {step >= 1 && (
               <Flex direction="column" w={isSmallerScreen ? '95%' : '90%'}>
@@ -253,6 +267,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 <Box>
                   <PathDesignCentralBars
                     collectionIndex={collectionIndex}
+                    bloomLevelIndex={bloomLevelIndex}
                     isNextButtonClicked={isNextButtonClicked}
                     isSmallerScreen={isSmallerScreen}
                     bloomLevelTitleTextBox="Select the Bloom level for the learning objective"
@@ -272,7 +287,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
                   // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
                   bloomLevelIndex={bloomLevelIndex}
-                  selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name}
+                  selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
                   selectedContext={selectedContext}
                   selectedSkillConceptsTags={selectedSkillConceptsTags}
                   selectedOptions={selectedOptions}
@@ -287,8 +302,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
-                  // apiKey={apiKey}
-                  // handleApiKey={handleApiKey}
+                // apiKey={apiKey}
+                // handleApiKey={handleApiKey}
                 />
               </Flex>
             )}

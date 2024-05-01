@@ -30,6 +30,7 @@ export default function CentralBars({
   handleText,
   isNextButtonClicked,
   collectionIndex,
+  bloomLevelIndex,
   currentBloomOptions,
   step,
   bloomLevelTitleTextBox: bloomLevelTextBox,
@@ -43,50 +44,56 @@ export default function CentralBars({
 }: CentralBarsProps) {
   return (
     <>
-      <Flex paddingTop="1.5rem" w="100%">
+      {/* Text boxes */}
+      <Flex paddingTop="1.5rem" w="100%" gap={`${SPACING}%`}>
+        {/* Bloom Level */}
         <Text
           fontSize="sm"
           fontWeight="bold"
-          paddingRight={`${SPACING}%`}
-          w={`${DIMENSION}%`}
+          // paddingRight={`${SPACING}%`}
+          w={`${DIMENSION - SPACING}%`}
         >
           {bloomLevelTextBox}
         </Text>
+        {/* Skill and concepts */}
         <Text
           fontSize="sm"
           fontWeight="bold"
-          paddingRight={`${SPACING}%`}
-          w={`${DIMENSION}%`}
+          // paddingRight={`${SPACING}%`}
+          w={`${DIMENSION - SPACING}%`}
         >
           {skillConceptTextBox}
         </Text>
+        {/* Learning Context */}
         <Text
           fontSize="sm"
           fontWeight="bold"
-          paddingRight={`${SPACING}%`}
-          w={`${DIMENSION}%`}
+          // paddingRight={`${SPACING}%`}
+          w={`${DIMENSION - SPACING}%`}
         >
           {contextTextBox}
         </Text>
       </Flex>
 
-      <Flex w="100%" pt={1}>
-        <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+      <Flex w="100%" pt={1} gap={`${SPACING}%`}>
+        <Box w={`${DIMENSION - SPACING}%`}>
           <CustomDropDownMenu
             data={bloomLevels}
             onSelectionChange={handleBloomLevelChange}
             isHighlighted={isNextButtonClicked}
             isBloomLevel={true}
+            itemIndex={bloomLevelIndex}
+            defaultMenuTitle="Select Bloom Level"
           />
         </Box>
 
-        <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+        <Box w={`${DIMENSION - SPACING}%`}>
           <SearchBarPathDesign
             collectionIndex={collectionIndex}
             isHighlighted={isNextButtonClicked}
           />
         </Box>
-        <Box paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+        <Box w={`${DIMENSION - SPACING}%`}>
           <TextBox
             backgroundColor="#EDF2F7"
             placeholder={placeholderContextBox}
@@ -97,14 +104,14 @@ export default function CentralBars({
         </Box>
       </Flex>
 
-      <Flex w="100%" pt={1}>
-        <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+      <Flex w="100%" pt={1} gap={`${SPACING}%`}>
+        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
           {bloomLevelDescriptionTextBox}
         </Text>
-        <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
           {skillConceptDescriptionTextBox}
         </Text>
-        <Text fontSize="sm" paddingRight={`${SPACING}%`} w={`${DIMENSION}%`}>
+        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
           {contextDescriptionTextBox}
         </Text>
       </Flex>

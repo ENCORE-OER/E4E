@@ -4,6 +4,7 @@ import CentralBarsSmallerScreen from './CentralBarsSmallerScreen';
 
 export interface PathDesignCentralBarsProps {
   collectionIndex: number;
+  bloomLevelIndex: number;
   isNextButtonClicked: boolean;
   isSmallerScreen?: boolean;
   bloomLevelTitleTextBox: string;
@@ -18,6 +19,7 @@ export interface PathDesignCentralBarsProps {
 
 export default function PathDesignCentralBars({
   collectionIndex,
+  bloomLevelIndex,
   isNextButtonClicked,
   isSmallerScreen,
   bloomLevelTitleTextBox,
@@ -57,6 +59,7 @@ export default function PathDesignCentralBars({
           handleText={handleSetText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
+          bloomLevelIndex={bloomLevelIndex}
           step={step}
           bloomLevelTitleTextBox={bloomLevelTitleTextBox}
           verbsTitleTextBox={verbsTitleTextBox}
@@ -82,6 +85,7 @@ export default function PathDesignCentralBars({
           handleText={handleSetText}
           isNextButtonClicked={isNextButtonClicked}
           collectionIndex={collectionIndex}
+          bloomLevelIndex={bloomLevelIndex}
           step={step}
           isSmallerScreen={isSmallerScreen}
           bloomLevelTitleTextBox={bloomLevelTitleTextBox}

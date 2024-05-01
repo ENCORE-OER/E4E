@@ -127,7 +127,7 @@ export default function PathDesignGenLO({
           setGeneratedLOs([]);
           setSelectedLO([]);
           handleSelectedLearningObjectiveIndexChange(-1);
-          const learningObjectives: any[] = [];
+          const learningObjectives: string[] = [];
           console.log('Generate learning objectives');
           console.log('Education context: ', selectedContext);
           console.log('Bloom level: ', selectedBloomLevel);
@@ -257,33 +257,6 @@ export default function PathDesignGenLO({
     }
   };
 
-  // --------- This function was used to cut the response of the API to get only the significant learning objective text ---------
-
-  // // function to cut the response of the API to get only the significant learning objective text
-  // const cutResponse = (resp: string) => {
-  //   // TODO: modify the API response to get receive only the text of the learning objective
-  //   // AT THE MOMENT: the response is a string with the config and the learning objective,
-  //   // so i have to cut the string to get only the learning objective
-
-  //   // Find the index of the start of the learning objective in the string
-  //   const startIndex =
-  //     resp.indexOf(`Temperature: ${TEMPERATURE_GEN_LO_API}`) +
-  //     `Temperature: ${TEMPERATURE_GEN_LO_API}`.length +
-  //     1;
-
-  //   // Extract only the learning objective
-  //   const textLO = resp?.substring(startIndex);
-
-  //   // const endIndex = textLO.indexOf('\n\n');
-
-  //   // // Extract main text until the first double newline
-  //   // textLO = textLO.substring(0, endIndex).trim();
-
-  //   // console.log(textLO);
-
-  //   return textLO;
-  // };
-
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
@@ -310,7 +283,7 @@ export default function PathDesignGenLO({
 
   // Update the loading state to false when the learning objectives are generated
   useEffect(() => {
-    if (isLoading && generatedLOs.length > 0) setIsLoading(false);
+    if (isLoading && generatedLOs.length > 0) { setIsLoading(false); }
   }, [generatedLOs]);
 
   return (
@@ -390,17 +363,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-            hydrated &&
-            generatedLOs.map((lo: string, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                textLearningObjective={lo}
-                index={index}
-                selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+          hydrated &&
+          generatedLOs.map((lo: string, index: number) => (
+            <BoxGeneratedLO
+              key={index}
+              textLearningObjective={lo}
+              index={index}
+              selectedLO={selectedLO}
+              handleCheckBoxClick={handleCheckBoxClick}
+              handleUpdateLO={handleUpdateLO}
+            />
+          ))
         }
       </Flex>
     </Flex>
