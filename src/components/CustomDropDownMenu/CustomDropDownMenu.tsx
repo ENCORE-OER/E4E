@@ -40,8 +40,7 @@ export default function CustomDropDownMenu({
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
   // const { collectionIndex, resourceIndex, bloomLevelIndex, selectedSkillConceptsTags } =
-  const { selectedSkillConceptsTags } =
-    useLearningPathDesignContext();
+  const { selectedSkillConceptsTags } = useLearningPathDesignContext();
   const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
@@ -59,7 +58,9 @@ export default function CustomDropDownMenu({
   // }, [isBloomLevel, collectionIndex, resourceIndex, bloomLevelIndex, data]);
 
   useEffect(() => {
-    setMenuTitle(data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle);
+    setMenuTitle(
+      data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle
+    );
   }, [itemIndex, data, defaultMenuTitle]);
 
   const handleData = () => {
@@ -110,18 +111,30 @@ export default function CustomDropDownMenu({
           onOpen={handleToggleMenu}
           onClose={handleToggleMenu}
         >
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%" title={menuTitle}>
-            {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
-            <Text align="left" noOfLines={1}>
-              {
-                selectedOptions.includes('All') &&
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            w="100%"
+            title={menuTitle}
+            bg={'white'}
+          >
+            {menuTitle === defaultMenuTitle ? (
+              <Text align="left" fontWeight={'normal'} color={'gray.400'}>
+                {menuTitle}
+              </Text>
+            ) : (
+              /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
+              <Text align="left" noOfLines={1}>
+                {
+                  selectedOptions.includes('All') &&
                   options?.length === selectedOptions.length
-                  ? 'All'
-                  : selectedOptions.length > 0
-                    ? selectedOptions.join(', ')
-                    : menuTitle // Utilizza il valore memorizzato in menuTitle
-              }
-            </Text>
+                    ? 'All'
+                    : selectedOptions.length > 0
+                      ? selectedOptions.join(', ')
+                      : menuTitle // Utilizza il valore memorizzato in menuTitle
+                }
+              </Text>
+            )}
           </MenuButton>
 
           <MenuList>

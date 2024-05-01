@@ -91,7 +91,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const handleResourceChange = (resourceIndex: number) => {
-    handleResourceIndexChange(resourceIndex);   // Create this function in the LearningPathDesignContext???
+    handleResourceIndexChange(resourceIndex); // Create this function in the LearningPathDesignContext???
     handleStepChange(1); // Update the state to show the text when a collection is selected
   };
 
@@ -212,7 +212,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -221,7 +221,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Box w={isSmallerScreen ? '95%' : '90%'}>
                 <LearningStepper
@@ -248,7 +248,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               collections={collections}
               handleCollectionSelection={handleCollectionSelection}
               handleCollectionChange={handleCollectionChange}
-              resources={collections[collectionIndex]?.oers}  // Create an array of resources names???
+              resources={collections[collectionIndex]?.oers} // Create an array of resources names???
               handleResourceSelection={handleResourceSelection}
               handleResourceChange={handleResourceChange}
               isNextButtonClicked={isNextButtonClicked}
@@ -302,8 +302,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
+                  // apiKey={apiKey}
+                  // handleApiKey={handleApiKey}
                 />
               </Flex>
             )}

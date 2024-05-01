@@ -283,7 +283,9 @@ export default function PathDesignGenLO({
 
   // Update the loading state to false when the learning objectives are generated
   useEffect(() => {
-    if (isLoading && generatedLOs.length > 0) { setIsLoading(false); }
+    if (isLoading && generatedLOs.length > 0) {
+      setIsLoading(false);
+    }
   }, [generatedLOs]);
 
   return (
@@ -363,17 +365,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))
+            hydrated &&
+            generatedLOs.map((lo: string, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                textLearningObjective={lo}
+                index={index}
+                selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
         }
       </Flex>
     </Flex>

@@ -27,7 +27,7 @@ type LearnignPathDesignContextProps = {
   bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
-  resourceIndex: number;  // Index of the selected resource in the collection
+  resourceIndex: number; // Index of the selected resource in the collection
   selectedLearningObjectiveIndex: number;
   resetCheckBoxOptions: boolean;
   learningObjectives: string[];
