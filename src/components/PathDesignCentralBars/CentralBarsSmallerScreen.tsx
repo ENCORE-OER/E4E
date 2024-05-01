@@ -112,15 +112,15 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           fontWeight="bold"
-        //paddingRight={`${SPACING}%`}
-        //w={`${DIMENSION}%`}
+          //paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION}%`}
         >
           {contextTitleTextBox}
         </Text>
         <Box
           pt={1}
-        // paddingRight={`${SPACING}%`}
-        // w={`${DIMENSION}%`}
+          // paddingRight={`${SPACING}%`}
+          // w={`${DIMENSION}%`}
         >
           <TextBox
             // backgroundColor="#EDF2F7"
@@ -135,8 +135,8 @@ export default function CentralBarsSmallerScreen({
         <Text
           fontSize="sm"
           pt={1}
-        //paddingRight={`${SPACING}%`}
-        //w={`${DIMENSION}%`}
+          //paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION}%`}
         >
           {contextDescriptionTextBox}
         </Text>
