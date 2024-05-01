@@ -149,7 +149,9 @@ export default function SearchBarPathDesign({
       >
         <AutoCompleteInput
           variant="filled"
-          placeholder="Search..."
+          placeholder="Search for keywords..."
+          bg="white"
+          _placeholder={{ color: 'gray.400' }}
           value={inputValue}
           onChange={(e) => {
             e.preventDefault();

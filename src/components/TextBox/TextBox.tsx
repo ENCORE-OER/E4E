@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react';
 interface TextBoxProps extends BoxProps {
   backgroundColor?: string;
   placeholder?: string;
+  placeholderColor?: string;
   isHighlighted?: boolean;
   text?: string;
   rows?: number;
@@ -14,6 +15,7 @@ interface TextBoxProps extends BoxProps {
 const TextBox = ({
   backgroundColor,
   placeholder,
+  placeholderColor,
   isHighlighted,
   text,
   onTextChange,
@@ -43,6 +45,7 @@ const TextBox = ({
         value={text}
         onChange={handleTextChange}
         placeholder={placeholder}
+        _placeholder={{ color: placeholderColor }}
         rows={rows || 1}
         resize={resize || 'vertical'}
       />

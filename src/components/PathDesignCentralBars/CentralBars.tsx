@@ -95,8 +95,10 @@ export default function CentralBars({
         </Box>
         <Box w={`${DIMENSION - SPACING}%`}>
           <TextBox
-            backgroundColor="#EDF2F7"
+            // backgroundColor="#EDF2F7"
+            backgroundColor="white"
             placeholder={placeholderContextBox}
+            placeholderColor={'gray.400'}
             isHighlighted={isNextButtonClicked}
             text={text}
             onTextChange={handleText}
