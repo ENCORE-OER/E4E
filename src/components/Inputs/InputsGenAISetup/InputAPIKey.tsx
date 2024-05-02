@@ -1,9 +1,4 @@
-import {
-  Button,
-  Input,
-  InputGroup,
-  InputRightElement
-} from '@chakra-ui/react';
+import { Button, Input, InputGroup, InputRightElement } from '@chakra-ui/react';
 import { useState } from 'react';
 import { InputGenAISetupProps } from '.';
 
@@ -25,7 +20,7 @@ export default function InputAPIKey({
         value={apiKey}
         onChange={(e) => {
           if (handleApiKey !== undefined) {
-            handleApiKey(e.target.value)
+            handleApiKey(e.target.value);
           }
         }}
       />

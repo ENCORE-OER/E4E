@@ -40,19 +40,18 @@ export default function CentralBars({
   verbsTitleTextBox,
 }: CentralBarsProps) {
   return (
-    <Flex paddingTop="1.5rem" w="100%" direction='column'>
-      <Flex w="100%" direction='column'>
-
+    <Flex paddingTop="1.5rem" w="100%" direction="column">
+      <Flex w="100%" direction="column">
         {/* Skill and concepts */}
         <Text
           fontSize="sm"
           fontWeight="bold"
           // paddingRight={`${SPACING}%`}
-          w='100%'
+          w="100%"
         >
           {skillConceptTextBox}
         </Text>
-        <Box w='100%' pt={1}>
+        <Box w="100%" pt={1}>
           <SearchBarPathDesign
             collectionIndex={collectionIndex}
             isHighlighted={isNextButtonClicked}
@@ -60,11 +59,10 @@ export default function CentralBars({
         </Box>
       </Flex>
 
-      <Text paddingTop="1.5rem" display='flex' w='100%'>
-        To define a learning path effectively, it is crucial to
-        choose the desired level within the Bloom taxonomy and
-        provide indications of the skills, concepts, and contextual
-        information that need to be achieved.
+      <Text paddingTop="1.5rem" display="flex" w="100%">
+        To define a learning path effectively, it is crucial to choose the
+        desired level within the Bloom taxonomy and provide indications of the
+        skills, concepts, and contextual information that need to be achieved.
       </Text>
 
       {/* Text boxes */}
@@ -76,30 +74,34 @@ export default function CentralBars({
           // paddingRight={`${SPACING}%`}
           //w={`${DIMENSION - SPACING}%`}
           // flex='1'
-          w='50%'
+          w="50%"
           pt={1}
         >
           {bloomLevelTextBox}
         </Text>
         {/* Verbs Bloom Level Text Box */}
-        {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (<Text
-          fontSize="sm"
-          fontWeight="bold"
-          //paddingRight={`${SPACING}%`}
-          //pb={1}
-          // flex='1'
-          w='50%'
-          pt={1}
-        >
-          {verbsTitleTextBox}
-        </Text>)}
+        {step >= 2 &&
+          currentBloomOptions.length > 0 &&
+          collectionIndex > -1 && (
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              //paddingRight={`${SPACING}%`}
+              //pb={1}
+              // flex='1'
+              w="50%"
+              pt={1}
+            >
+              {verbsTitleTextBox}
+            </Text>
+          )}
       </Flex>
 
       <Flex w="100%" pt={1} gap={`${SPACING}%`}>
         <Box
           // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
           // flex='1'
-          w='50%'
+          w="50%"
         >
           <CustomDropDownMenu
             data={bloomLevels}
@@ -111,34 +113,38 @@ export default function CentralBars({
           />
         </Box>
 
-        {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (<Box
-          // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
-          // flex='1'
-          w='50%'
-        >
-          <CheckboxMenu
-            onOptionsChange={handleOptionsChange}
-            options={currentBloomOptions}
-            reset={resetCheckBoxOptions}
-            isHighlighted={isNextButtonClicked}
-          />
-        </Box>)}
+        {step >= 2 &&
+          currentBloomOptions.length > 0 &&
+          collectionIndex > -1 && (
+            <Box
+              // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
+              // flex='1'
+              w="50%"
+            >
+              <CheckboxMenu
+                onOptionsChange={handleOptionsChange}
+                options={currentBloomOptions}
+                reset={resetCheckBoxOptions}
+                isHighlighted={isNextButtonClicked}
+              />
+            </Box>
+          )}
       </Flex>
 
-      <Flex paddingTop="1.5rem" w="100%" direction='column'>
+      <Flex paddingTop="1.5rem" w="100%" direction="column">
         {/* Learning Context */}
         <Text
           fontSize="sm"
           fontWeight="bold"
           // paddingRight={`${SPACING}%`}
           //w={`${DIMENSION - SPACING}%`}
-          w='100%'
+          w="100%"
         >
           {contextTextBox}
         </Text>
         <Box
           //w={`${DIMENSION - SPACING}%`}
-          w='100%'
+          w="100%"
           pt={1}
         >
           <TextBox

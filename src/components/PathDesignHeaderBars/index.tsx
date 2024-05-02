@@ -31,10 +31,11 @@ export default function PathDesignHeaderBars({
   handleResourceChange,
   isNextButtonClicked,
 }: PathDesignHeaderBarsProps) {
-  const { collectionIndex, resourceIndex, step } = useLearningPathDesignContext();
+  const { collectionIndex, resourceIndex, step } =
+    useLearningPathDesignContext();
 
   return (
-    <Flex direction='column' w='100%'>
+    <Flex direction="column" w="100%">
       {/* Text boxes */}
       <Flex paddingTop="1.5rem" gap={`${SPACING}%`}>
         <Text
@@ -43,20 +44,22 @@ export default function PathDesignHeaderBars({
           // paddingRight={`${SPACING}%`}
           //w={`${DIMENSION - SPACING}%`}
           // flex='1'
-          w='50%'
+          w="50%"
         >
           Select the collection with relevant resources*
         </Text>
-        {step >= 1 && (<Text
-          fontSize="sm"
-          fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          // w={`${DIMENSION - SPACING}%`}
-          // flex='1'
-          w='50%'
-        >
-          Select the resources within the collection
-        </Text>)}
+        {step >= 1 && (
+          <Text
+            fontSize="sm"
+            fontWeight="bold"
+            // paddingRight={`${SPACING}%`}
+            // w={`${DIMENSION - SPACING}%`}
+            // flex='1'
+            w="50%"
+          >
+            Select the resources within the collection
+          </Text>
+        )}
       </Flex>
 
       {/* Dropdown menu  */}
@@ -65,7 +68,7 @@ export default function PathDesignHeaderBars({
         <Box
           // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
           // flex='1'
-          w='50%'
+          w="50%"
         >
           {/* <Text
             fontSize="sm"
@@ -87,12 +90,13 @@ export default function PathDesignHeaderBars({
         </Box>
 
         {/* Resources */}
-        {step >= 1 && (<Box
-          // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
-          // flex='1'
-          w='50%'
-        >
-          {/* <Text
+        {step >= 1 && (
+          <Box
+            // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
+            // flex='1'
+            w="50%"
+          >
+            {/* <Text
             fontSize="sm"
             fontWeight="bold"
             // paddingRight={`${SPACING}%`}
@@ -100,16 +104,17 @@ export default function PathDesignHeaderBars({
           >
             Select the resources within the collection*
           </Text> */}
-          <CustomDropDownMenu
-            data={resources} // When a collection is selected, the resources array is updated with the resources of the selected collection???
-            onData={handleResourceSelection}
-            onSelectionChange={handleResourceChange}
-            isHighlighted={isNextButtonClicked}
-            isBloomLevel={false}
-            itemIndex={resourceIndex}
-            defaultMenuTitle="Select the resources"
-          />
-        </Box>)}
+            <CustomDropDownMenu
+              data={resources} // When a collection is selected, the resources array is updated with the resources of the selected collection???
+              onData={handleResourceSelection}
+              onSelectionChange={handleResourceChange}
+              isHighlighted={isNextButtonClicked}
+              isBloomLevel={false}
+              itemIndex={resourceIndex}
+              defaultMenuTitle="Select the resources"
+            />
+          </Box>
+        )}
       </Flex>
     </Flex>
   );

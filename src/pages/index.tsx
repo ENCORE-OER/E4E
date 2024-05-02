@@ -4,7 +4,7 @@ import {
   Heading,
   Text,
   useBreakpointValue,
-  VStack
+  VStack,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -415,11 +415,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: '12px',
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: '15px',
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (

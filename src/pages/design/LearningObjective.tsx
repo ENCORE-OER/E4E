@@ -195,126 +195,122 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   return (
-    <>
-      <Flex w="100%" h="100%">
-        <SideBar pagePath={'/design'} />
-        <Navbar user={user} pageName="Design" />
+    <Flex w="100%" h="100%">
+      <SideBar pagePath={'/design'} />
+      <Navbar user={user} pageName="Design" />
 
+      <Box
+        py="115px"
+        pl={isSmallerScreen ? '90px' : '240px'}
+        w="100%"
+        minH={step >= 2 ? 'full' : '100vh'}
+        bg="background"
+      >
         <Box
-          //ml="200px"
-          py="115px"
-          pl={isSmallerScreen ? '90px' : '240px'}
-          w="full"
-          h={step >= 2 ? 'full' : '100vh'}
-          bg="background"
+          // w="100%"
+          w={isSmallerScreen ? '95%' : '80%'}
+          h="100%"
         >
-          <Box
-            // w="100%"
-            w={isSmallerScreen ? '95%' : '80%'}
-            h="100%"
+          <Flex
+            w="100%"
+            justifyContent="left"
+          //justify="space-between"
           >
-            <Flex
-              w="100%"
-              justifyContent="left"
-            //justify="space-between"
-            >
-              <Heading>Learning path design</Heading>
-            </Flex>
+            <Heading>Learning path design</Heading>
+          </Flex>
 
+          <Box
+            paddingTop="1.5rem"
+            w="100%"
+            justifyContent="left"
+          //justify="space-between"
+          >
             <Box
-              paddingTop="1.5rem"
+              //  w={isSmallerScreen ? '95%' : '90%'}
               w="100%"
-              justifyContent="left"
-            //justify="space-between"
             >
-              <Box
-                //  w={isSmallerScreen ? '95%' : '90%'} 
-                w="100%"
-              >
-                <LearningStepper
-                  activeStep={1}
-                  isSmallerScreen={isSmallerScreen}
-                />
-              </Box>
-              <Box
-                //  w={isSmallerScreen ? '95%' : '90%'} 
-                w="100%"
-                paddingTop="1.5rem"
-              >
-                <Text>
-                  This section is designed to assist you in crafting a
-                  personalized learning journey to achieve specific learning
-                  objectives.
-                  <br />
-                  It does so by seamlessly integrating various activities and
-                  learning resources focused on your chosen topics.
-                </Text>
-              </Box>
+              <LearningStepper
+                activeStep={1}
+                isSmallerScreen={isSmallerScreen}
+              />
             </Box>
-
-            {/* This component contains the collections and resources DropDownMenus */}
-            <PathDesignHeaderBars
-              SPACING={SPACING}
-              DIMENSION={DIMENSION}
-              isSmallerScreen={isSmallerScreen}
-              collections={collections}
-              handleCollectionSelection={handleCollectionSelection}
-              handleCollectionChange={handleCollectionChange}
-              resources={collections[collectionIndex]?.oers} // Create an array of resources names???
-              handleResourceSelection={handleResourceSelection}
-              handleResourceChange={handleResourceChange}
-              isNextButtonClicked={isNextButtonClicked}
-            />
-
-            {step >= 1 && (
-              <Flex direction="column" >
-
-                {/*  This component contains the SkillsSearchBar, the BloomLevel DropDownMenu, The VerbsBloomLevel Checkbox and the LearningContext TextBox */}
-                <PathDesignCentralBars
-                  collectionIndex={collectionIndex}
-                  bloomLevelIndex={bloomLevelIndex}
-                  isNextButtonClicked={isNextButtonClicked}
-                  isSmallerScreen={isSmallerScreen}
-                  bloomLevelTitleTextBox="Select the Bloom level for the learning objective*"
-                  skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
-                  contextTitleTextBox="Specify the context"
-                  placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
-                  verbsTitleTextBox="Select the verbs related to your learning objective*"
-                />
-                <PathDesignGenLO
-                  // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
-                  // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
-                  bloomLevelIndex={bloomLevelIndex}
-                  selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
-                  selectedContext={selectedContext}
-                  selectedSkillConceptsTags={selectedSkillConceptsTags}
-                  selectedOptions={selectedOptions}
-                  // selectedGroupDimension={selectedGroupDimension}
-                  // selectedLearnerExperience={selectedLearnerExperience}
-                  // selectedEducatorExperience={selectedEducatorExperience}
-                  learningTextContext={learningTextContext}
-                  generatedLOs={generatedLOs}
-                  setGeneratedLOs={setGeneratedLOs}
-                  handleSelectedLearningObjectiveIndexChange={
-                    handleSelectedLearningObjectiveIndexChange
-                  }
-                  setIsNextButtonClicked={setIsNextButtonClicked}
-                  isHighligted={isNextButtonClicked}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
-                />
-              </Flex>
-            )}
-            <FooterButtonsGroup
-              SPACING={SPACING}
-              handleResetAll={handleResetAll}
-              handleNextClick={handleNextClick}
-              handlePrevButtonClick={handlePrevButtonClick}
-            />
+            <Box
+              //  w={isSmallerScreen ? '95%' : '90%'}
+              w="100%"
+              paddingTop="2rem"
+            >
+              <Text>
+                This section is designed to assist you in crafting a
+                personalized learning journey to achieve specific learning
+                objectives.
+                <br />
+                It does so by seamlessly integrating various activities and
+                learning resources focused on your chosen topics.
+              </Text>
+            </Box>
           </Box>
+
+          {/* This component contains the collections and resources DropDownMenus */}
+          <PathDesignHeaderBars
+            SPACING={SPACING}
+            DIMENSION={DIMENSION}
+            isSmallerScreen={isSmallerScreen}
+            collections={collections}
+            handleCollectionSelection={handleCollectionSelection}
+            handleCollectionChange={handleCollectionChange}
+            resources={collections[collectionIndex]?.oers} // Create an array of resources names???
+            handleResourceSelection={handleResourceSelection}
+            handleResourceChange={handleResourceChange}
+            isNextButtonClicked={isNextButtonClicked}
+          />
+
+          {step >= 1 && (
+            <Flex direction="column">
+              {/*  This component contains the SkillsSearchBar, the BloomLevel DropDownMenu, The VerbsBloomLevel Checkbox and the LearningContext TextBox */}
+              <PathDesignCentralBars
+                collectionIndex={collectionIndex}
+                bloomLevelIndex={bloomLevelIndex}
+                isNextButtonClicked={isNextButtonClicked}
+                isSmallerScreen={isSmallerScreen}
+                bloomLevelTitleTextBox="Select the Bloom level for the learning objective*"
+                skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
+                contextTitleTextBox="Specify the context"
+                placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
+                verbsTitleTextBox="Select the verbs related to your learning objective*"
+              />
+              <PathDesignGenLO
+                // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
+                // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
+                bloomLevelIndex={bloomLevelIndex}
+                selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
+                selectedContext={selectedContext}
+                selectedSkillConceptsTags={selectedSkillConceptsTags}
+                selectedOptions={selectedOptions}
+                // selectedGroupDimension={selectedGroupDimension}
+                // selectedLearnerExperience={selectedLearnerExperience}
+                // selectedEducatorExperience={selectedEducatorExperience}
+                learningTextContext={learningTextContext}
+                generatedLOs={generatedLOs}
+                setGeneratedLOs={setGeneratedLOs}
+                handleSelectedLearningObjectiveIndexChange={
+                  handleSelectedLearningObjectiveIndexChange
+                }
+                setIsNextButtonClicked={setIsNextButtonClicked}
+                isHighligted={isNextButtonClicked}
+              // apiKey={apiKey}
+              // handleApiKey={handleApiKey}
+              />
+            </Flex>
+          )}
+          <FooterButtonsGroup
+            SPACING={SPACING}
+            handleResetAll={handleResetAll}
+            handleNextClick={handleNextClick}
+            handlePrevButtonClick={handlePrevButtonClick}
+          />
         </Box>
-      </Flex >
-    </>
+      </Box>
+    </Flex>
   );
 };
 

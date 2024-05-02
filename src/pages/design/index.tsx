@@ -85,15 +85,19 @@ const Home = () => {
       <Box
         py="115px"
         pl={isSmallerScreen ? '90px' : '240px'}
-        w="full"
+        w="100%"
         minH="100vh"
         bg="background"
       >
-        <Box w="100%" h="100%">
+        <Box
+          // w="100%" 
+          w={isSmallerScreen ? '95%' : '80%'}
+          h="100%"
+        >
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -102,16 +106,23 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
-            <Box w={isSmallerScreen ? '95%' : '90%'}>
+            <Box
+              // w={isSmallerScreen ? '95%' : '90%'}
+              w='100%'
+            >
               <LearningStepper
                 activeStep={0}
                 isSmallerScreen={isSmallerScreen}
               />
             </Box>
 
-            <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
+            <Box
+              //  w={isSmallerScreen ? '95%' : '90%'} 
+              w='100%'
+              paddingTop="2rem"
+            >
               <Text>
                 This part will guide you in creating a tailored learning path to
                 meet your specific educational goals. Start by detailing the
@@ -119,7 +130,11 @@ const Home = () => {
                 your activities.
               </Text>
             </Box>
-            <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
+            <Box
+              w='100%'
+              // w={isSmallerScreen ? '95%' : '90%'}
+              paddingTop="1.5rem"
+            >
               {hydrated && (
                 <SegmentedButtonGroup
                   onOptionsChange={handleOptionsComplete}
