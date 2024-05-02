@@ -7,14 +7,14 @@
  */
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CreateOerTopicMenu from '../../../components/DropDownMenuItem/CreateOerTopicMenu';
+import TextBox from '../../../components/TextBox/TextBox';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { TopicData, targetLevelOptions } from '../../../types/encoreElements';
-import CreateOerTopicMenu from '../../../components/DropDownMenuItem/CreateOerTopicMenu';
-import TextBox from '../../../components/TextBox/TextBox';
-import InputsGenerateAI from '../../../components/Inputs/InputsGenerateAI';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import InputsGenerateAI from '../../Inputs/InputsGenAISetup/InputsGenerateAI';
 
 type AnalizerTabCreateOerProps = {
   isSmallerScreen?: boolean;

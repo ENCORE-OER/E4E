@@ -21,7 +21,7 @@ export interface CentralBarsProps extends PathDesignCentralBarsProps {
 
 export default function CentralBars({
   SPACING,
-  DIMENSION,
+  // DIMENSION,
   bloomLevels,
   handleBloomLevelChange,
   handleOptionsChange,
@@ -37,13 +37,36 @@ export default function CentralBars({
   skillConceptTitleTextBox: skillConceptTextBox,
   contextTitleTextBox: contextTextBox,
   placeholderContextBox,
-  bloomLevelDescriptionTextBox,
-  skillConceptDescriptionTextBox,
-  contextDescriptionTextBox,
   verbsTitleTextBox,
 }: CentralBarsProps) {
   return (
-    <>
+    <Flex paddingTop="1.5rem" w="100%" direction='column'>
+      <Flex w="100%" direction='column'>
+
+        {/* Skill and concepts */}
+        <Text
+          fontSize="sm"
+          fontWeight="bold"
+          // paddingRight={`${SPACING}%`}
+          w='100%'
+        >
+          {skillConceptTextBox}
+        </Text>
+        <Box w='100%' pt={1}>
+          <SearchBarPathDesign
+            collectionIndex={collectionIndex}
+            isHighlighted={isNextButtonClicked}
+          />
+        </Box>
+      </Flex>
+
+      <Text paddingTop="1.5rem" display='flex' w='100%'>
+        To define a learning path effectively, it is crucial to
+        choose the desired level within the Bloom taxonomy and
+        provide indications of the skills, concepts, and contextual
+        information that need to be achieved.
+      </Text>
+
       {/* Text boxes */}
       <Flex paddingTop="1.5rem" w="100%" gap={`${SPACING}%`}>
         {/* Bloom Level */}
@@ -51,32 +74,33 @@ export default function CentralBars({
           fontSize="sm"
           fontWeight="bold"
           // paddingRight={`${SPACING}%`}
-          w={`${DIMENSION - SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
+          // flex='1'
+          w='50%'
+          pt={1}
         >
           {bloomLevelTextBox}
         </Text>
-        {/* Skill and concepts */}
-        <Text
+        {/* Verbs Bloom Level Text Box */}
+        {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (<Text
           fontSize="sm"
           fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          w={`${DIMENSION - SPACING}%`}
+          //paddingRight={`${SPACING}%`}
+          //pb={1}
+          // flex='1'
+          w='50%'
+          pt={1}
         >
-          {skillConceptTextBox}
-        </Text>
-        {/* Learning Context */}
-        <Text
-          fontSize="sm"
-          fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          w={`${DIMENSION - SPACING}%`}
-        >
-          {contextTextBox}
-        </Text>
+          {verbsTitleTextBox}
+        </Text>)}
       </Flex>
 
       <Flex w="100%" pt={1} gap={`${SPACING}%`}>
-        <Box w={`${DIMENSION - SPACING}%`}>
+        <Box
+          // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
+          // flex='1'
+          w='50%'
+        >
           <CustomDropDownMenu
             data={bloomLevels}
             onSelectionChange={handleBloomLevelChange}
@@ -87,13 +111,36 @@ export default function CentralBars({
           />
         </Box>
 
-        <Box w={`${DIMENSION - SPACING}%`}>
-          <SearchBarPathDesign
-            collectionIndex={collectionIndex}
+        {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (<Box
+          // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
+          // flex='1'
+          w='50%'
+        >
+          <CheckboxMenu
+            onOptionsChange={handleOptionsChange}
+            options={currentBloomOptions}
+            reset={resetCheckBoxOptions}
             isHighlighted={isNextButtonClicked}
           />
-        </Box>
-        <Box w={`${DIMENSION - SPACING}%`}>
+        </Box>)}
+      </Flex>
+
+      <Flex paddingTop="1.5rem" w="100%" direction='column'>
+        {/* Learning Context */}
+        <Text
+          fontSize="sm"
+          fontWeight="bold"
+          // paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
+          w='100%'
+        >
+          {contextTextBox}
+        </Text>
+        <Box
+          //w={`${DIMENSION - SPACING}%`}
+          w='100%'
+          pt={1}
+        >
           <TextBox
             // backgroundColor="#EDF2F7"
             backgroundColor="white"
@@ -105,39 +152,6 @@ export default function CentralBars({
           />
         </Box>
       </Flex>
-
-      <Flex w="100%" pt={1} gap={`${SPACING}%`}>
-        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
-          {bloomLevelDescriptionTextBox}
-        </Text>
-        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
-          {skillConceptDescriptionTextBox}
-        </Text>
-        <Text fontSize="sm" w={`${DIMENSION - SPACING}%`}>
-          {contextDescriptionTextBox}
-        </Text>
-      </Flex>
-
-      {step >= 2 && currentBloomOptions.length > 0 && collectionIndex > -1 && (
-        <Flex paddingTop="1.5rem" w="100%">
-          <Box w={`${DIMENSION}%`} flexDirection="column">
-            <Text
-              fontSize="sm"
-              fontWeight="bold"
-              paddingRight={`${SPACING}%`}
-              pb={1}
-            >
-              {verbsTitleTextBox}
-            </Text>
-            <CheckboxMenu
-              onOptionsChange={handleOptionsChange}
-              options={currentBloomOptions}
-              reset={resetCheckBoxOptions}
-              isHighlighted={isNextButtonClicked}
-            />
-          </Box>
-        </Flex>
-      )}
-    </>
+    </Flex>
   );
 }

@@ -2,21 +2,16 @@ import {
   Button,
   Input,
   InputGroup,
-  InputGroupProps,
-  InputRightElement,
+  InputRightElement
 } from '@chakra-ui/react';
 import { useState } from 'react';
-
-interface InputAPIKeyProps extends InputGroupProps {
-  apiKey: string | undefined;
-  handleApiKey: (apiKey: string) => void;
-}
+import { InputGenAISetupProps } from '.';
 
 export default function InputAPIKey({
   apiKey,
   handleApiKey,
   ...rest
-}: InputAPIKeyProps) {
+}: InputGenAISetupProps) {
   const [show, setShow] = useState<boolean>(false);
   const handleClick = () => setShow(!show);
 
@@ -28,7 +23,11 @@ export default function InputAPIKey({
         placeholder="Enter your OpenAI API Key"
         focusBorderColor="yellow.500"
         value={apiKey}
-        onChange={(e) => handleApiKey(e.target.value)}
+        onChange={(e) => {
+          if (handleApiKey !== undefined) {
+            handleApiKey(e.target.value)
+          }
+        }}
       />
       <InputRightElement width="4.5rem">
         <Button h="1.75rem" size="sm" onClick={handleClick}>

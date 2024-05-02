@@ -208,11 +208,15 @@ const Home = (/*props: DiscoverPageProps*/) => {
           h={step >= 2 ? 'full' : '100vh'}
           bg="background"
         >
-          <Box w="100%" h="100%">
+          <Box
+            // w="100%"
+            w={isSmallerScreen ? '95%' : '80%'}
+            h="100%"
+          >
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -221,15 +225,22 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
-              <Box w={isSmallerScreen ? '95%' : '90%'}>
+              <Box
+                //  w={isSmallerScreen ? '95%' : '90%'} 
+                w="100%"
+              >
                 <LearningStepper
                   activeStep={1}
                   isSmallerScreen={isSmallerScreen}
                 />
               </Box>
-              <Box w="100% " paddingTop="1.5rem">
+              <Box
+                //  w={isSmallerScreen ? '95%' : '90%'} 
+                w="100%"
+                paddingTop="1.5rem"
+              >
                 <Text>
                   This section is designed to assist you in crafting a
                   personalized learning journey to achieve specific learning
@@ -241,6 +252,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Box>
             </Box>
 
+            {/* This component contains the collections and resources DropDownMenus */}
             <PathDesignHeaderBars
               SPACING={SPACING}
               DIMENSION={DIMENSION}
@@ -255,34 +267,20 @@ const Home = (/*props: DiscoverPageProps*/) => {
             />
 
             {step >= 1 && (
-              <Flex direction="column" w={isSmallerScreen ? '95%' : '90%'}>
-                <Flex paddingTop="1.5rem" w="90%">
-                  <Text>
-                    To define a learning path effectively, it is crucial to
-                    choose the desired level within the Bloom taxonomy and
-                    provide indications of the skills, concepts, and contextual
-                    information that need to be achieved.
-                  </Text>
-                </Flex>
-                <Box>
-                  <PathDesignCentralBars
-                    collectionIndex={collectionIndex}
-                    bloomLevelIndex={bloomLevelIndex}
-                    isNextButtonClicked={isNextButtonClicked}
-                    isSmallerScreen={isSmallerScreen}
-                    bloomLevelTitleTextBox="Select the Bloom level for the learning objective"
-                    skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
-                    skillConceptDescriptionTextBox="The selection of skills and concepts here is informed by the
-                    collection of Open Educational Resources (OERs)"
-                    contextTitleTextBox="Add here the context"
-                    contextDescriptionTextBox="Here the contextual information that will assist in delineating the
-                    specific context of the educational activity"
-                    placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
-                    verbsTitleTextBox="Select the verbs related to your learning objective"
-                    bloomLevelDescriptionTextBox="This level indicates the cognitive complexity or depth of
-                    understanding associated with a particular learning objective"
-                  />
-                </Box>
+              <Flex direction="column" >
+
+                {/*  This component contains the SkillsSearchBar, the BloomLevel DropDownMenu, The VerbsBloomLevel Checkbox and the LearningContext TextBox */}
+                <PathDesignCentralBars
+                  collectionIndex={collectionIndex}
+                  bloomLevelIndex={bloomLevelIndex}
+                  isNextButtonClicked={isNextButtonClicked}
+                  isSmallerScreen={isSmallerScreen}
+                  bloomLevelTitleTextBox="Select the Bloom level for the learning objective*"
+                  skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
+                  contextTitleTextBox="Specify the context"
+                  placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
+                  verbsTitleTextBox="Select the verbs related to your learning objective*"
+                />
                 <PathDesignGenLO
                   // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
                   // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
@@ -302,8 +300,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   }
                   setIsNextButtonClicked={setIsNextButtonClicked}
                   isHighligted={isNextButtonClicked}
-                  // apiKey={apiKey}
-                  // handleApiKey={handleApiKey}
+                // apiKey={apiKey}
+                // handleApiKey={handleApiKey}
                 />
               </Flex>
             )}
@@ -315,7 +313,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             />
           </Box>
         </Box>
-      </Flex>
+      </Flex >
     </>
   );
 };

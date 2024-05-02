@@ -47,6 +47,7 @@ function LearningStepper({
       index={activeStep}
       orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
       gap="2"
+      w='100%'
     >
       {steps.map((step, index) => (
         <Step key={index} style={{ overflow: 'hidden' }}>

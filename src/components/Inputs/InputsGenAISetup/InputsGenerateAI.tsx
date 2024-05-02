@@ -1,14 +1,11 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { InputGenAISetupProps } from '.';
 import InputAPIKey from './InputAPIKey';
 import InputSetupModel from './InputSetupModel';
 
-type InputsGenerateAIProps = {
-  apiKey: string | undefined;
-  handleApiKey: (value: string) => void;
-  setupModel: string | undefined;
-  handleSetupModel: (value: string) => void;
+interface InputsGenerateAIProps extends InputGenAISetupProps {
   isSmallerScreen?: boolean;
-};
+}
 
 export default function InputsGenerateAI({
   apiKey,

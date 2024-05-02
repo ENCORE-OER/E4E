@@ -18,7 +18,7 @@ import {
   useHasHydrated,
 } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
-import InputsGenerateAI from '../Inputs/InputsGenerateAI';
+import InputsGenAISetup from '../Inputs/InputsGenAISetup';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
 type PathDesignGenLOProps = {
@@ -251,7 +251,9 @@ export default function PathDesignGenLO({
       console.log('Success - resp.data:', resp?.data);
       // console.log('Success - resp:', resp);
 
-      return resp?.data[bloomLevel]; // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
+      // The API returns an array of 2 learning objectives for each bloom level, 
+      // so I have to select the one corresponding to the selected bloom level
+      return resp?.data[bloomLevel];
     } catch (error) {
       console.error('Error:', error);
     }
@@ -289,13 +291,8 @@ export default function PathDesignGenLO({
   }, [generatedLOs]);
 
   return (
-    <Flex pt="30px" direction="column">
-      <InputsGenerateAI
-        apiKey={apiKey}
-        handleApiKey={handleApiKey}
-        setupModel={setupModel}
-        handleSetupModel={handleSetupModel}
-      />
+    <Flex pt="3rem" direction="column" w='100%'>
+      <InputsGenAISetup apiKey={apiKey} handleApiKey={handleApiKey} setupModel={setupModel} handleSetupModel={handleSetupModel} />
       <Flex flexDirection="row" align="center" py="5">
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
@@ -365,17 +362,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-            hydrated &&
-            generatedLOs.map((lo: string, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                textLearningObjective={lo}
-                index={index}
-                selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+          hydrated &&
+          generatedLOs.map((lo: string, index: number) => (
+            <BoxGeneratedLO
+              key={index}
+              textLearningObjective={lo}
+              index={index}
+              selectedLO={selectedLO}
+              handleCheckBoxClick={handleCheckBoxClick}
+              handleUpdateLO={handleUpdateLO}
+            />
+          ))
         }
       </Flex>
     </Flex>
