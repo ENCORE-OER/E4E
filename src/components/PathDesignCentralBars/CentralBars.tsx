@@ -98,26 +98,31 @@ export default function CentralBars({
           )}
       </Flex>
 
-      <Flex w="100%" pt={1} gap={`${SPACING}%`}>
+      <Flex w="100%" pt={1} gap={`${SPACING}%`} direction='row'>
         {/* Bloom Level Selection */}
         <Box
           // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
           // flex='1'
           w="50%"
-          display='flex'
-          flexDirection={'row'}
-          alignItems={'center'}
-          gap={1}
         >
-          <CustomDropDownMenu
-            data={bloomLevels}
-            onSelectionChange={handleBloomLevelChange}
-            isHighlighted={isNextButtonClicked}
-            isBloomLevel={true}
-            itemIndex={bloomLevelIndex}
-            defaultMenuTitle="Select Bloom Level"
-          />
-          <IconInfoCircleTooltip label_tooltip={`Bloom's Taxonomy is a framework that categorizes educational objectives into six levels of cognitive complexity, ranging from simple recall to higher-order thinking skills like evaluation and creation.`} />
+          <Flex
+            direction={'row'}
+            align={'center'}
+            gap={1}
+
+          >
+            <CustomDropDownMenu
+              data={bloomLevels}
+              onSelectionChange={handleBloomLevelChange}
+              isHighlighted={isNextButtonClicked}
+              isBloomLevel={true}
+              itemIndex={bloomLevelIndex}
+              defaultMenuTitle="Select Bloom Level"
+            />
+            <IconInfoCircleTooltip
+              label_tooltip={`Bloom's Taxonomy is a framework that categorizes educational objectives into six levels of cognitive complexity, ranging from simple recall to higher-order thinking skills like evaluation and creation.`}
+            />
+          </Flex>
         </Box>
 
         {step >= 2 &&

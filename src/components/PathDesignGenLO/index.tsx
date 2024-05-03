@@ -298,7 +298,7 @@ export default function PathDesignGenLO({
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
       />
-      <Flex flexDirection="row" align="center" py="5">
+      <Flex direction="row" align="center" py="5" flexWrap={'wrap'}>
         <Text pr="5">Desired number of learning objective(s)</Text>
         <Flex pr="10%" align="center">
           <Tooltip
@@ -331,7 +331,10 @@ export default function PathDesignGenLO({
             />
           </Tooltip>
         </Flex>
-        <GenerateLOButton handleGenerateLO={handleGenerateLO} numberOfLO={numberOfLO} />
+        <GenerateLOButton
+          handleGenerateLO={handleGenerateLO}
+          numberOfLO={numberOfLO}
+        />
       </Flex>
 
       {isLoading && (

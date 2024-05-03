@@ -35,11 +35,20 @@ export default function FooterButtonsGroup({
         )}
 
         {handlePrevButtonClick && (
-          <StandardButton buttonText='Previous' handleClick={handlePrevButtonClick} w='100%' />
+          <StandardButton
+            buttonText="Previous"
+            handleClick={handlePrevButtonClick}
+            w="100%"
+          />
         )}
 
         {handleNextClick && (
-          <StandardButton buttonText='Next' handleClick={handleNextClick} leftIcon={<IconPathEdit />} w='100%' />
+          <StandardButton
+            buttonText="Next"
+            handleClick={handleNextClick}
+            leftIcon={<IconPathEdit />}
+            w="100%"
+          />
         )}
       </Flex>
     </Flex>
