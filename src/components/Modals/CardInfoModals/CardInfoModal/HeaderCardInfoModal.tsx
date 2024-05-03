@@ -9,7 +9,7 @@ import {
 import { ColorCollectionProps } from '../../../../types/encoreElements';
 import SaveResourceButton from '../../../Buttons/ResourceButtons/SaveResourceButton';
 import ViewResourceButton from '../../../Buttons/ResourceButtons/ViewResourceButton';
-import IconBookmarkCheckCollections from '../../../Icons/IconCopy/IconBookmarkCheck/IconBookmarkCheckCollections';
+import IconBookmarkCheckCollections from '../../../Icons/IconBookmarkCheck/IconBookmarkCheckCollections';
 import IconCopyUrl from '../../../Icons/IconCopy/IconCopyUrl';
 import TagsDomain from '../../../Tags/TagsDomain';
 

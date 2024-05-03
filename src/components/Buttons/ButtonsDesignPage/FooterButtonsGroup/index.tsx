@@ -1,6 +1,7 @@
-import { Button, Flex, Text } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { IconPathEdit } from '../../../../public/Icons/svgToIcons/iconPatheEdit';
 import ResetButton from '../ResetButton';
+import StandardButton from '../StandardButton';
 
 interface FooterButtonsGroupProps {
   SPACING: number;
@@ -34,32 +35,11 @@ export default function FooterButtonsGroup({
         )}
 
         {handlePrevButtonClick && (
-          <Button
-            //marginRight={'1px'}
-            border={'1px solid'}
-            w="100%"
-            colorScheme="yellow"
-            onClick={handlePrevButtonClick}
-          >
-            <Text fontWeight="bold" fontSize="lg">
-              Previous
-            </Text>
-          </Button>
+          <StandardButton buttonText='Previous' handleClick={handlePrevButtonClick} w='100%' />
         )}
 
         {handleNextClick && (
-          <Button
-            //marginLeft={'1px'}
-            border={'1px solid'}
-            w="100%"
-            leftIcon={<IconPathEdit />}
-            colorScheme="yellow"
-            onClick={handleNextClick}
-          >
-            <Text fontWeight="bold" fontSize="lg">
-              Next
-            </Text>
-          </Button>
+          <StandardButton buttonText='Next' handleClick={handleNextClick} leftIcon={<IconPathEdit />} w='100%' />
         )}
       </Flex>
     </Flex>

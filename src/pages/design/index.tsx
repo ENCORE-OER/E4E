@@ -90,14 +90,14 @@ const Home = () => {
         bg="background"
       >
         <Box
-          // w="100%" 
+          // w="100%"
           w={isSmallerScreen ? '95%' : '80%'}
           h="100%"
         >
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -106,11 +106,11 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box
               // w={isSmallerScreen ? '95%' : '90%'}
-              w='100%'
+              w="100%"
             >
               <LearningStepper
                 activeStep={0}
@@ -119,8 +119,8 @@ const Home = () => {
             </Box>
 
             <Box
-              //  w={isSmallerScreen ? '95%' : '90%'} 
-              w='100%'
+              //  w={isSmallerScreen ? '95%' : '90%'}
+              w="100%"
               paddingTop="2rem"
             >
               <Text>
@@ -131,7 +131,7 @@ const Home = () => {
               </Text>
             </Box>
             <Box
-              w='100%'
+              w="100%"
               // w={isSmallerScreen ? '95%' : '90%'}
               paddingTop="1.5rem"
             >

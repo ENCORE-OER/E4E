@@ -4,6 +4,7 @@ import { ArrayProps } from '../../types/encoreElements';
 import CheckboxMenu from '../CheckboxMenu/CheckboxMenu';
 import CustomDropDownMenu from '../CustomDropDownMenu/CustomDropDownMenu';
 import SearchBarPathDesign from '../CustomSearchBar/SearchBarSkillsConcepts';
+import IconInfoCircleTooltip from '../Icons/IconInfoCircle/IconInfoCircle';
 import TextBox from '../TextBox/TextBox';
 
 export interface CentralBarsProps extends PathDesignCentralBarsProps {
@@ -98,10 +99,15 @@ export default function CentralBars({
       </Flex>
 
       <Flex w="100%" pt={1} gap={`${SPACING}%`}>
+        {/* Bloom Level Selection */}
         <Box
           // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
           // flex='1'
           w="50%"
+          display='flex'
+          flexDirection={'row'}
+          alignItems={'center'}
+          gap={1}
         >
           <CustomDropDownMenu
             data={bloomLevels}
@@ -111,6 +117,7 @@ export default function CentralBars({
             itemIndex={bloomLevelIndex}
             defaultMenuTitle="Select Bloom Level"
           />
+          <IconInfoCircleTooltip label_tooltip={`Bloom's Taxonomy is a framework that categorizes educational objectives into six levels of cognitive complexity, ranging from simple recall to higher-order thinking skills like evaluation and creation.`} />
         </Box>
 
         {step >= 2 &&

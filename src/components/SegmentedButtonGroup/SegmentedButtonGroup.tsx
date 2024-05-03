@@ -187,7 +187,7 @@ export default function SegmentedButtonGroup({
                 />
               </Box>
             </Box>
-            <Box w="50%" >
+            <Box w="50%">
               <Text as="b">Leaner{"'"}s experience</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton

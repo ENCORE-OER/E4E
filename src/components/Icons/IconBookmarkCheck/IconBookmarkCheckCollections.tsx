@@ -1,5 +1,5 @@
 import { Flex, Tooltip } from '@chakra-ui/react';
-import { IconBookmarkCheck } from '../../../../public/Icons/svgToIcons/iconBookmarkCheck';
+import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 
 type IconBookmarkCheckProps = {
   collectionName: string | undefined;

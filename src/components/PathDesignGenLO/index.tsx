@@ -1,4 +1,4 @@
-import { Button, Flex, Text, Textarea, Tooltip } from '@chakra-ui/react';
+import { Flex, Text, Textarea, Tooltip } from '@chakra-ui/react';
 import axios from 'axios';
 import {
   ChangeEvent,
@@ -18,6 +18,7 @@ import {
   useHasHydrated,
 } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
+import GenerateLOButton from '../Buttons/ButtonsDesignPage/GenerateLOButton';
 import InputsGenAISetup from '../Inputs/InputsGenAISetup';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 
@@ -95,8 +96,7 @@ export default function PathDesignGenLO({
     }
   };
 
-  const handleGenerateLO = async (e: any) => {
-    e.preventDefault();
+  const handleGenerateLO = async () => {
     // if (apiKey === undefined || apiKey === '') {
     //   addToast({
     //     message: 'Please enter your OpenAI API Key.',
@@ -331,9 +331,7 @@ export default function PathDesignGenLO({
             />
           </Tooltip>
         </Flex>
-        <Button variant="primary" onClick={handleGenerateLO}>
-          Generate
-        </Button>
+        <GenerateLOButton handleGenerateLO={handleGenerateLO} numberOfLO={numberOfLO} />
       </Flex>
 
       {isLoading && (
@@ -367,17 +365,17 @@ export default function PathDesignGenLO({
         {
           //numberOfLO > 0 &&
           generatedLOs.length > 0 &&
-            hydrated &&
-            generatedLOs.map((lo: string, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                textLearningObjective={lo}
-                index={index}
-                selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+          hydrated &&
+          generatedLOs.map((lo: string, index: number) => (
+            <BoxGeneratedLO
+              key={index}
+              textLearningObjective={lo}
+              index={index}
+              selectedLO={selectedLO}
+              handleCheckBoxClick={handleCheckBoxClick}
+              handleUpdateLO={handleUpdateLO}
+            />
+          ))
         }
       </Flex>
     </Flex>
