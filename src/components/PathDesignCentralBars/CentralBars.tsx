@@ -98,19 +98,14 @@ export default function CentralBars({
           )}
       </Flex>
 
-      <Flex w="100%" pt={1} gap={`${SPACING}%`} direction='row'>
+      <Flex w="100%" pt={1} gap={`${SPACING}%`} direction="row">
         {/* Bloom Level Selection */}
         <Box
           // w={isSmallerScreen ? '50%' : `${DIMENSION - SPACING}%`}
           // flex='1'
           w="50%"
         >
-          <Flex
-            direction={'row'}
-            align={'center'}
-            gap={1}
-
-          >
+          <Flex direction={'row'} align={'center'} gap={1}>
             <CustomDropDownMenu
               data={bloomLevels}
               onSelectionChange={handleBloomLevelChange}

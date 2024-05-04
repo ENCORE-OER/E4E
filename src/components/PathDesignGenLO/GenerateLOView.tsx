@@ -1,0 +1,291 @@
+
+import { Flex, Text, Textarea, Tooltip } from '@chakra-ui/react';
+import axios from 'axios';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { PathDesignGenLOProps } from '.';
+import { BloomLevelString, EducationContextEnum, SkillItemProps } from '../../types/encoreElements';
+import { CustomToast } from '../../utils/Toast/CustomToast';
+import { mapOptionToNumber, mapStringToString } from '../../utils/utils';
+import GenerateLOButton from '../Buttons/ButtonsDesignPage/GenerateLOButton';
+import InputsGenerateAI from '../Inputs/InputsGenAISetup/InputsGenerateAI';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+
+interface GenerateLOViewProps extends PathDesignGenLOProps {
+    apiKey: string | undefined;
+    handleApiKey: (value: string) => void;
+    setupModel: string | undefined;
+    handleSetupModel: (value: string) => void;
+    setSelectedLO: Dispatch<SetStateAction<boolean[]>>;
+    // isLessGeneratedLO: boolean;
+    setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function GenerateLOView({
+    apiKey,
+    handleApiKey,
+    setupModel,
+    handleSetupModel,
+    setSelectedLO,
+    setIsLessGeneratedLO,
+    bloomLevelIndex,
+    selectedBloomLevel,
+    selectedContext,
+    selectedSkillConceptsTags,
+    selectedOptions,
+    learningTextContext,
+    generatedLOs,
+    setGeneratedLOs,
+    handleSelectedLearningObjectiveIndexChange,
+    setIsNextButtonClicked,
+}: GenerateLOViewProps) {
+
+    const { addToast } = CustomToast();
+
+    const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
+    const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+    const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
+    const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
+
+
+    const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let newNumber = Number(e.target.value);
+        console.log('newNumber', newNumber);
+
+        // Limit the number of learning objectives to 5
+        newNumber = Math.min(newNumber, 5);
+        console.log('number modified', newNumber);
+        setNumberOfLO(newNumber);
+        if (newNumber > 0) {
+            setIsNumberOfLOZero(false);
+        }
+    };
+
+    const postGenerateLearningObjective = async (
+        apiKey: string | undefined,
+        setupModel: string | undefined,
+        educationContext: number,
+        learningContext: string,
+        skills: string,
+        bloomLevel: string
+    ): Promise<string[] | undefined> => {
+        try {
+            //console.log('apiKey', apiKey);
+            const resp = await axios.post(
+                '/api/encore/genAI/generateLearningObjective',
+                {
+                    topic: skills,
+                    context: learningContext,
+                    level: educationContext,
+                },
+                {
+                    headers: {
+                        ApiKey: apiKey,
+                        SetupModel: setupModel,
+                    },
+                }
+            );
+
+            // console.log('Success - resp.data.error:', resp?.data?.error);
+            console.log('Success - resp.data:', resp?.data);
+            // console.log('Success - resp:', resp);
+
+            // The API returns an array of 2 learning objectives for each bloom level,
+            // so I have to select the one corresponding to the selected bloom level
+            return resp?.data[bloomLevel];
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    const handleGenerateLO = async () => {
+        // if (apiKey === undefined || apiKey === '') {
+        //   addToast({
+        //     message: 'Please enter your OpenAI API Key.',
+        //     type: 'warning',
+        //   });
+        // } else
+        setIsLessGeneratedLO(false);
+
+        if (
+            bloomLevelIndex === -1 ||
+            selectedSkillConceptsTags.length === 0 ||
+            selectedOptions.length === 0 ||
+            learningTextContext === ''
+        ) {
+            addToast({
+                message:
+                    'Please fill out all the required fields before generating learning objectives.',
+                type: 'warning',
+            });
+            setIsNextButtonClicked(true);
+            // return;
+        } else {
+            try {
+                console.log('Previous learning objectives: ', generatedLOs);
+                // Reset the selected learning objective index (to -1)
+                if (numberOfLO > 0) {
+                    setIsLoading(true);
+                    setGeneratedLOs([]);
+                    setSelectedLO([]);
+                    handleSelectedLearningObjectiveIndexChange(-1);
+                    const learningObjectives: string[] = [];
+                    console.log('Generate learning objectives');
+                    console.log('Education context: ', selectedContext);
+                    console.log('Bloom level: ', selectedBloomLevel);
+                    console.log(
+                        'Skills: ',
+                        selectedSkillConceptsTags
+                            ?.map((skill: SkillItemProps) => skill.label)
+                            .join(', ')
+                    );
+                    console.log('Text: ', learningTextContext);
+
+                    // The API returns an array of 2 learning objectives for each bloom level,
+                    // so I have to call the API only half the number of learning objectives
+                    let i = 0;
+                    const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
+                    // Call the API until the number of learning objectives is reached.
+                    while (learningObjectives.length < numberOfLO && i < MAX_API_CALL) {
+                        //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
+                        console.log('LO number ' + i);
+
+                        const resp = await postGenerateLearningObjective(
+                            apiKey, // apiKey
+                            setupModel, // setupModel
+                            mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
+                            learningTextContext, // learningContext
+                            selectedSkillConceptsTags
+                                .map((skill: SkillItemProps) => skill.label)
+                                .join(', '), // skills
+                            mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
+                        );
+
+                        console.log('resp', resp);
+
+                        if (!resp) {
+                            console.log('No response');
+                            //learningObjectives.push('');
+                            setIsApiKeyInvalid(true);
+                            setIsLoading(false);
+                        } else {
+                            // const textLO = cutResponse(resp);
+                            // learningObjectives.push(textLO);
+
+                            // The API returns an array of 2 learning objectives
+                            for (const textLO of resp) {
+                                // Check if the learning objective is not already in the list
+                                // and if the number of learning objectives is not reached
+                                // Avoid duplicates
+                                if (
+                                    !learningObjectives.includes(textLO) &&
+                                    learningObjectives.length < numberOfLO
+                                ) {
+                                    learningObjectives.push(textLO);
+                                    //console.log('textLO', textLO);
+                                }
+                            }
+                            setIsApiKeyInvalid(false);
+                        }
+
+                        console.log('learningObjectives', learningObjectives);
+                        i++;
+                    }
+                    if (learningObjectives.length < numberOfLO) {
+                        setIsLessGeneratedLO(true);
+                    }
+                    setGeneratedLOs(learningObjectives || []);
+
+                    if (isApiKeyInvalid) {
+                        addToast({
+                            message: 'Invalid API Key. Please enter a valid OpenAI API Key.',
+                            type: 'error',
+                        });
+                    } else {
+                        addToast({
+                            message: 'Learning objectives generated!',
+                            type: 'info',
+                        });
+                    }
+                } else {
+                    setIsNumberOfLOZero(true);
+                    console.log('Number of learning objectives is 0');
+                    addToast({
+                        message:
+                            'Please enter the number of learning objectives to generate.',
+                        type: 'warning',
+                    });
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setIsNextButtonClicked(false);
+            }
+        }
+    };
+
+    // Update the loading state to false when the learning objectives are generated
+    useEffect(() => {
+        if (isLoading && generatedLOs.length > 0) {
+            setIsLoading(false);
+        }
+    }, [generatedLOs]);
+
+    return (
+        <Flex direction="column" w="100%">
+            {/* <InputsGenAISetup
+            apiKey={apiKey}
+            handleApiKey={handleApiKey}
+            setupModel={setupModel}
+            handleSetupModel={handleSetupModel}
+          /> */}
+            <InputsGenerateAI
+                apiKey={apiKey}
+                handleApiKey={handleApiKey}
+                setupModel={setupModel}
+                handleSetupModel={handleSetupModel}
+            />
+            <Flex direction="row" align="center" py="5" flexWrap={'wrap'}>
+                <Text pr="5">Desired number of learning objective(s)</Text>
+                <Flex pr="10%" align="center">
+                    <Tooltip
+                        label="You can generate maximum 5 learning objectives at a time."
+                        bg={'accent.900'}
+                        color="black"
+                        placement={'top'}
+                        borderRadius={'md'}
+                    >
+                        <Textarea
+                            display="flex"
+                            textAlign={'center'}
+                            justifyContent={'center'}
+                            variant="solid"
+                            resize="none"
+                            //size="sm"
+                            w="70px"
+                            //h='50px'
+                            border={isNumberOfLOZero ? '2.5px solid #bf5521ff' : '1px solid'}
+                            borderRadius="lg"
+                            rows={1}
+                            flexWrap="nowrap"
+                            overflowWrap={'break-word'}
+                            typeof="number"
+                            errorBorderColor={
+                                numberOfLO === 0 ? '2.5px solid #bf5521ff' : 'none'
+                            }
+                            value={numberOfLO}
+                            onChange={handleNumberChange}
+                        />
+                    </Tooltip>
+                </Flex>
+                <GenerateLOButton
+                    handleGenerateLO={handleGenerateLO}
+                    numberOfLO={numberOfLO}
+                />
+            </Flex>
+
+            {isLoading && (
+                <LoadingSpinner textLoading="Generating Learning Objectives..." />
+            )}
+        </Flex>
+    );
+}
