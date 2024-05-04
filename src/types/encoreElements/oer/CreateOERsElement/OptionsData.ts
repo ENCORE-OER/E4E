@@ -1,3 +1,1 @@
-export type OptionsData = {
-  [key: string]: boolean;
-};
+export type OptionsData = [string, boolean];

@@ -15,7 +15,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import SharedParameterTab from '../../components/Tabs/TabsCreatePage/SharedParameterTab';
 import AnalizerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalizerTabCreateOer';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { stringArrayToOptionsObject } from '../../utils/utils';
+// import { stringArrayToOptionsObject } from '../../utils/utils';
 
 const Create = () => {
   const { user } = useUser();
@@ -27,10 +27,11 @@ const Create = () => {
     lg: false,
   });
   const {
-    isGenerateButtonClicked,
-    handleOptionsChange,
-    typeOfExercisePanel,
-    apiGeneratedExerciseData: apiFillGapsData,
+    //isGenerateButtonClicked,
+    apiGeneratedExerciseData,
+    // handleOptionsChange,
+    // typeOfExercisePanel,
+    // apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { addToast } = CustomToast();
   const [step, setStep] = useState<number>(0);
@@ -90,12 +91,17 @@ const Create = () => {
                       mt={4}
                       w="10%"
                       onClick={() => {
-                        if (typeOfExercisePanel === 'Fill the Gaps') {
-                          handleOptionsChange(
-                            stringArrayToOptionsObject(apiFillGapsData)
-                          );
-                        }
-                        if (isGenerateButtonClicked) {
+                        // if (typeOfExercisePanel === 'Fill the Gaps') {
+                        //   handleOptionsChange(
+                        //     stringArrayToOptionsObject(apiGeneratedExerciseData)
+                        //   );
+                        // }else if(typeOfExercisePanel === 'multipleChoice'){
+                        //   // handleOptionsChange(
+                        //   //   stringArrayToOptionsObject(apiGeneratedExerciseData)
+                        //   // );
+                        // }
+                        if (apiGeneratedExerciseData.Assignment !== '') {
+                          // todo: implement a better check
                           router.push({
                             pathname: '/create/edit',
                           });

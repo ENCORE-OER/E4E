@@ -72,10 +72,18 @@ export default function AnalizerTabCreateOer({
     const analyzedMaterial = await analyzeMaterial(sourceText);
     setLoading(false);
     setTopicData(analyzedMaterial);
-    handleTitle(analyzedMaterial.Title);
-    handleMacroSubject(analyzedMaterial.MacroSubject);
     console.log('topic data:', topicData);
+    if (analyzedMaterial) {
+      handleTitle(analyzedMaterial?.Title);
+      handleMacroSubject(analyzedMaterial?.MacroSubject);
+    }
     if (analyzedMaterial) onChange(1);
+    // if(topicData){
+    //   console.log('topic data:', topicData);
+    //   if(topicData?.Title) handleTitle(topicData?.Title);
+
+    //   if(topicData?.MacroSubject) handleMacroSubject(topicData?.MacroSubject);
+    // }
   };
 
   const handleTopicSelect = (index: number) => {

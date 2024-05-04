@@ -28,6 +28,7 @@ const TextBox = ({
 
   return (
     <Box
+      w="100%"
       {...rest}
       border={
         isHighlighted && text === ''
@@ -45,6 +46,7 @@ const TextBox = ({
         placeholder={placeholder}
         rows={rows || 1}
         resize={resize || 'vertical'}
+        w="100%"
       />
     </Box>
   );
