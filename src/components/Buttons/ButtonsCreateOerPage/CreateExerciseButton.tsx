@@ -45,6 +45,7 @@ export default function CreateExerciseButton({
     macroSubject,
     chosenTopic,
     learningObjective,
+    apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { apiKey, setupModel } = useGeneralContext();
   const responseRef = useRef<GeneratedExerciseProps | null>(null);
@@ -254,7 +255,7 @@ export default function CreateExerciseButton({
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && <GenerateExerciseResponseView response={response} />
+          (response || apiGeneratedExerciseData.Assignment !== "") && <GenerateExerciseResponseView response={response} />
         )}
       </Box>
     </>

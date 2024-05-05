@@ -36,6 +36,7 @@ export default function AnalizerTabCreateOer({
     handleMacroSubject,
     sourceText,
     handleSourceText,
+    apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { apiKey, handleApiKey, setupModel, handleSetupModel } =
     useGeneralContext();
@@ -125,10 +126,10 @@ export default function AnalizerTabCreateOer({
       <Box w={isSmallerScreen ? '95%' : '90%'}>
         <Flex
           w="auto"
-          justifyContent={step > 0 ? 'space-between' : 'flex-end'}
+          justifyContent={( apiGeneratedExerciseData.Assignment !== "" || step > 0 ) ? 'space-between' : 'flex-end'}
           alignItems="center"
         >
-          {step > 0 && (
+          {( apiGeneratedExerciseData.Assignment !== "" || step > 0 ) && (
             <Box>
               <Flex paddingBottom="0.25rem" paddingTop="0.5rem">
                 <Text as="b">
