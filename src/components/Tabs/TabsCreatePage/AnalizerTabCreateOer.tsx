@@ -126,10 +126,14 @@ export default function AnalizerTabCreateOer({
       <Box w={isSmallerScreen ? '95%' : '90%'}>
         <Flex
           w="auto"
-          justifyContent={( apiGeneratedExerciseData.Assignment !== "" || step > 0 ) ? 'space-between' : 'flex-end'}
+          justifyContent={
+            apiGeneratedExerciseData.Assignment !== '' || step > 0
+              ? 'space-between'
+              : 'flex-end'
+          }
           alignItems="center"
         >
-          {( apiGeneratedExerciseData.Assignment !== "" || step > 0 ) && (
+          {(apiGeneratedExerciseData.Assignment !== '' || step > 0) && (
             <Box>
               <Flex paddingBottom="0.25rem" paddingTop="0.5rem">
                 <Text as="b">

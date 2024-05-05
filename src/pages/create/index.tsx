@@ -73,13 +73,13 @@ const Create = () => {
                 onChange={handleStep}
                 step={step}
               />
-              {( apiGeneratedExerciseData.Assignment !== ""  || step > 1 ) && ( //todo finde a better way to check if the exercise is generated
+              {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo finde a better way to check if the exercise is generated
                 <Box paddingTop={'2rem'}>
                   <SharedParameterTab isSmallerScreen={isSmallerScreen} />{' '}
                   {/* in this there are also the different tabs for the exercises and the api call for the generation of the exercises*/}
                 </Box>
               )}
-              {( apiGeneratedExerciseData.Assignment !== "" || step > 1 ) && (
+              {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && (
                 <Box w={isSmallerScreen ? '95%' : '90%'}>
                   <Flex w="auto" justifyContent="right">
                     <Button

@@ -255,7 +255,9 @@ export default function CreateExerciseButton({
             <Text>Loading...</Text>
           </Box>
         ) : (
-          (response || apiGeneratedExerciseData.Assignment !== "") && <GenerateExerciseResponseView response={response} />
+          (response || apiGeneratedExerciseData.Assignment !== '') && (
+            <GenerateExerciseResponseView response={response} />
+          )
         )}
       </Box>
     </>
