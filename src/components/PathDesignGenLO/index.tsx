@@ -2,7 +2,11 @@ import { Flex, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { PiSmileySadLight } from 'react-icons/pi';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { ObjectLearningObjectiveProps, Option, SkillItemProps } from '../../types/encoreElements';
+import {
+  ObjectLearningObjectiveProps,
+  Option,
+  SkillItemProps,
+} from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
 import AddLearningObjectiveButton from '../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
@@ -76,7 +80,7 @@ export default function PathDesignGenLO({
     // setTotalLearningObjectives(updatedGeneratedLOs);
 
     // ... Update using the <ObjectLearningObjectiveProps> array ...
-    const updatedObjectLOs = [...updatedSelectedLOs]
+    const updatedObjectLOs = [...updatedSelectedLOs];
     updatedObjectLOs[index].learningObjective = updatedText;
     // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
     // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
@@ -87,17 +91,27 @@ export default function PathDesignGenLO({
   const handleCheckBoxClick = (index: number) => {
     console.log('Checkbox clicked');
     try {
-      console.log('selected LOs', updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected));
+      console.log(
+        'selected LOs',
+        updatedSelectedLOs.map(
+          (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
+        )
+      );
 
       // Updating object LO selection
       const updatedSelectedLOsObj = [...updatedSelectedLOs];
-      updatedSelectedLOsObj[index].isSelected = !updatedSelectedLOsObj[index].isSelected;
-      console.log('updated Selected LOs', updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected));
+      updatedSelectedLOsObj[index].isSelected =
+        !updatedSelectedLOsObj[index].isSelected;
+      console.log(
+        'updated Selected LOs',
+        updatedSelectedLOs.map(
+          (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
+        )
+      );
 
       setObjectLOs(updatedSelectedLOsObj);
 
       handleSelectedLearningObjectiveIndexChange(index);
-
     } catch (error) {
       console.log(error);
     }
@@ -111,8 +125,10 @@ export default function PathDesignGenLO({
       // updatedGeneratedLOs.push('');
       // setGeneratedLOs(updatedGeneratedLOs);
 
-      setObjectLOs((prevObjectLOs: ObjectLearningObjectiveProps[]) => [...prevObjectLOs, { learningObjective: '', isSelected: false, isGenerated: false }]);
-
+      setObjectLOs((prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+        ...prevObjectLOs,
+        { learningObjective: '', isSelected: false, isGenerated: false },
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -159,7 +175,11 @@ export default function PathDesignGenLO({
         p="15px"
         direction="column"
         border={
-          isHighligted && updatedSelectedLOs.length > 0 && updatedSelectedLOs.filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected).length === 0
+          isHighligted &&
+          updatedSelectedLOs.length > 0 &&
+          updatedSelectedLOs.filter(
+            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+          ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -180,29 +200,35 @@ export default function PathDesignGenLO({
           </Flex>
         )}
 
-        <Flex direction='column'>
+        <Flex direction="column">
           {
             //numberOfLO > 0 &&
             updatedSelectedLOs.length > 0 &&
-            hydrated &&
-            updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps, index: number) => (
-              <BoxGeneratedLO
-                key={index}
-                // textLearningObjective={objectLO.learningObjective}
-                objectLOs={updatedSelectedLOs}
-                index={index}
-                //selectedLO={selectedLO}
-                handleCheckBoxClick={handleCheckBoxClick}
-                handleUpdateLO={handleUpdateLO}
-              />
-            ))
+              hydrated &&
+              updatedSelectedLOs.map(
+                (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                  <BoxGeneratedLO
+                    key={index}
+                    // textLearningObjective={objectLO.learningObjective}
+                    objectLOs={updatedSelectedLOs}
+                    index={index}
+                    //selectedLO={selectedLO}
+                    handleCheckBoxClick={handleCheckBoxClick}
+                    handleUpdateLO={handleUpdateLO}
+                  />
+                )
+              )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
           )}
           {!isLoading && (
-            <Flex justifyContent='center' pt='3rem'>
-              <AddLearningObjectiveButton textButton="Add empty learning objective" w='fit-content' handleClick={handleAddEmptyLearningObjective} />
+            <Flex justifyContent="center" pt="3rem">
+              <AddLearningObjectiveButton
+                textButton="Add empty learning objective"
+                w="fit-content"
+                handleClick={handleAddEmptyLearningObjective}
+              />
             </Flex>
           )}
         </Flex>

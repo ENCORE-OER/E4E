@@ -22,12 +22,14 @@ interface Tag {
 
 type SearchBarV2Props = {
   collectionIndex: number;
+  resourcesIndex?: number[];
   selectedTags?: string[];
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
   isHighlighted: boolean;
 };
 export default function SearchBarPathDesign({
   collectionIndex,
+  resourcesIndex,
   isHighlighted,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
@@ -53,7 +55,22 @@ export default function SearchBarPathDesign({
   };
 
   const renderSkillAndConceptItems = () => {
-    hydrated &&
+    if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
+      uniqueItems.clear();
+      resourcesIndex.forEach((index: number) => {
+        oers[index]?.skills?.forEach((skill) => {
+          const skillId = skill.id;
+          const skillLabel = skill.label;
+          uniqueItems.add({ id: skillId, label: skillLabel });
+        });
+
+        oers[index]?.concepts?.forEach((concept) => {
+          const conceptId = concept.id;
+          const conceptLabel = concept.label;
+          uniqueItems.add({ id: conceptId, label: conceptLabel });
+        });
+      });
+    } else {
       oers?.forEach((oer: OerInCollectionProps) => {
         oer?.skills?.forEach((skill) => {
           const skillId = skill.id;
@@ -67,24 +84,31 @@ export default function SearchBarPathDesign({
           uniqueItems.add({ id: conceptId, label: conceptLabel });
         });
       });
+    }
 
+    // while (!hydrated) {
+    // }
     return (
-      <AutoCompleteList>
-        {[...uniqueItems].map(
-          (uniqueItem: SkillItemProps) =>
-            !selectedSkillConceptsTags?.some(
-              (item: SkillItemProps) => item.id === uniqueItem.id
-            ) && (
-              <AutoCompleteItem
-                key={`item-${uniqueItem.id}`}
-                value={uniqueItem.label}
-                textTransform="capitalize"
-              >
-                {uniqueItem.label}
-              </AutoCompleteItem>
-            )
+      <>
+        {hydrated && (
+          <AutoCompleteList>
+            {[...uniqueItems].map(
+              (uniqueItem: SkillItemProps) =>
+                !selectedSkillConceptsTags?.some(
+                  (item: SkillItemProps) => item.id === uniqueItem.id
+                ) && (
+                  <AutoCompleteItem
+                    key={`item-${uniqueItem.id}`}
+                    value={uniqueItem.label}
+                    textTransform="capitalize"
+                  >
+                    {uniqueItem.label}
+                  </AutoCompleteItem>
+                )
+            )}
+          </AutoCompleteList>
         )}
-      </AutoCompleteList>
+      </>
     );
   };
 

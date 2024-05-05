@@ -31,6 +31,7 @@ export default function CentralBars({
   handleText,
   isNextButtonClicked,
   collectionIndex,
+  resourcesIndex,
   bloomLevelIndex,
   currentBloomOptions,
   step,
@@ -55,6 +56,7 @@ export default function CentralBars({
         <Box w="100%" pt={1}>
           <SearchBarPathDesign
             collectionIndex={collectionIndex}
+            resourcesIndex={resourcesIndex}
             isHighlighted={isNextButtonClicked}
           />
         </Box>

@@ -3,6 +3,7 @@ import CentralBars from './CentralBars';
 
 export interface PathDesignCentralBarsProps {
   collectionIndex: number;
+  resourcesIndex: number[];
   bloomLevelIndex: number;
   isNextButtonClicked: boolean;
   isSmallerScreen?: boolean;
@@ -15,6 +16,7 @@ export interface PathDesignCentralBarsProps {
 
 export default function PathDesignCentralBars({
   collectionIndex,
+  resourcesIndex,
   bloomLevelIndex,
   isNextButtonClicked,
   // isSmallerScreen,
@@ -24,6 +26,7 @@ export default function PathDesignCentralBars({
   placeholderContextBox,
   verbsTitleTextBox,
 }: PathDesignCentralBarsProps) {
+  // TODO: make a choice. Or all with the context or all in PathDesignCentralBarsProps
   const {
     DIMENSION,
     SPACING,
@@ -50,6 +53,7 @@ export default function PathDesignCentralBars({
       handleText={handleSetText}
       isNextButtonClicked={isNextButtonClicked}
       collectionIndex={collectionIndex}
+      resourcesIndex={resourcesIndex}
       bloomLevelIndex={bloomLevelIndex}
       step={step}
       bloomLevelTitleTextBox={bloomLevelTitleTextBox}

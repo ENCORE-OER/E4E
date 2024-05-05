@@ -4,7 +4,7 @@ import {
   ArrayProps,
   ObjectLearningObjectiveProps,
   Option,
-  SkillItemProps
+  SkillItemProps,
 } from '../types/encoreElements/index';
 
 // Context props
@@ -27,7 +27,7 @@ type LearnignPathDesignContextProps = {
   bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
-  resourceIndex: number; // Index of the selected resource in the collection
+  resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
   selectedLearningObjectiveIndex: number; // Indexes of the selected learning
   resetCheckBoxOptions: boolean;
@@ -47,10 +47,13 @@ type LearnignPathDesignContextProps = {
   handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
-  setLearningObjectiveObjects: React.Dispatch<React.SetStateAction<ObjectLearningObjectiveProps[]>>;
+  setLearningObjectiveObjects: React.Dispatch<
+    React.SetStateAction<ObjectLearningObjectiveProps[]>
+  >;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
-  handleResourceIndexChange: (resourceIndex: number) => void;
+  setResourcesIndex: React.Dispatch<React.SetStateAction<number[]>>;
+  //handleResourceIndexChange: (resourceIndex: number) => void;
   handleSelectedCustomLearningObjectiveChange: (newValue: string) => void;
   handleStoredLearningObjective: () => void;
   handleLearningObjective: () => void;
@@ -115,10 +118,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     'collectionIndex',
     -1
   );
-  // Index og the selected resource in the collection
-  const [resourceIndex, setResourceIndex] = useLocalStorage<number>(
+
+  // Indexes of the selected resources in the collection
+  // An Educator can selected zero, one or more resources
+  // This is used in LearningObective page to filter the skills and concepts
+  const [resourcesIndex, setResourcesIndex] = useLocalStorage<number[]>(
     'resourceIndex',
-    -1
+    []
   );
 
   const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>(
@@ -142,9 +148,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
-  // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty) 
+  // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty)
   const [learningObjectiveObjects, setLearningObjectiveObjects] =
-    useLocalStorage<ObjectLearningObjectiveProps[]>('learningObjectiveObjects', []);
+    useLocalStorage<ObjectLearningObjectiveProps[]>(
+      'learningObjectiveObjects',
+      []
+    );
 
   const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
     useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
@@ -184,14 +193,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // };
 
   const resetState = () => {
-    handleResourceIndexChange(-1);
+    handleStepChange(0);
+    // handleResourceIndexChange(-1);
+    setResourcesIndex([]);
     setBloomLevelIndex(-1);
-    // setStep(1);
     setSelectedSkillConceptsTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
-    setLearningObjectiveObjects([])
-    handleStepChange(0);
+    setLearningObjectiveObjects([]);
   };
 
   // Reset all the parameters. Use this with resetAll button
@@ -250,7 +259,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // }
     // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
 
-    setSelectedLearningObjectiveIndex(index)
+    setSelectedLearningObjectiveIndex(index);
   };
 
   // Used to recover the learning objective to show from the stored learning objective
@@ -277,9 +286,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     resetState();
   };
 
-  const handleResourceIndexChange = (resourceIndex: number) => {
-    setResourceIndex(resourceIndex);
-  };
+  // const handleResourceIndexChange = (resourceIndex: number) => {
+  //   setResourceIndex(resourceIndex);
+  // };
 
   //handlers for bloom level selection
   const handleBloomLevelChange = (bloomLevelIndex: number) => {
@@ -318,7 +327,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // Usa setLocalStorage per salvare i valori
   }, [
     collectionIndex,
-    resourceIndex,
+    resourcesIndex,
     bloomLevelIndex,
     selectedSkillConceptsTags,
     learningTextContext,
@@ -395,7 +404,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedOptions,
         resetCheckBoxOptions,
         collectionIndex,
-        resourceIndex,
+        resourcesIndex,
         learningObjectiveObjects,
         selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
         selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
@@ -414,7 +423,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleStepChange,
         handleOptionsChange,
         handleCollectionIndexChange,
-        handleResourceIndexChange,
+        setResourcesIndex,
+        // handleResourceIndexChange,
         setLearningObjectiveObjects,
         handleSelectedLearningObjectiveIndexChange,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2

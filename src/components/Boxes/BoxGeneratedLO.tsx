@@ -20,11 +20,12 @@ export default function BoxGeneratedLO({
   index,
   // selectedLO,
   handleCheckBoxClick,
-  handleUpdateLO,
-  // handleConfirmLO,
+  handleUpdateLO, // handleConfirmLO,
 }: BoxGeneratedLOProps) {
   const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
-  const [editedText, setEditedText] = useState<string>(objectLOs[index].learningObjective);
+  const [editedText, setEditedText] = useState<string>(
+    objectLOs[index].learningObjective
+  );
 
   //const [isLOSaved, setIsLOSaved] = useState<boolean>(false); // This state is used to check if the learning objective has been saved on DB with the 'Save' button
 
@@ -75,7 +76,7 @@ export default function BoxGeneratedLO({
         px={2}
         pr={8}
       >
-        <Flex w="100%" direction='column' p={1}>
+        <Flex w="100%" direction="column" p={1}>
           <Text
             //position="absolute
             //top="-10px"
@@ -90,7 +91,9 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             border="none"
           >
-            {`Learning Objective ${index + 1} ${objectLOs[index].isGenerated ? '[ Generated ]' : ''}`}
+            {`Learning Objective ${index + 1} ${
+              objectLOs[index].isGenerated ? '[ Generated ]' : ''
+            }`}
           </Text>
           {isEditClicked ? (
             <Textarea
@@ -132,9 +135,7 @@ export default function BoxGeneratedLO({
             color={'black'}
             borderRadius="md"
             isDisabled={editedText === '' ? true : false}
-            isChecked={
-              objectLOs[index].isSelected
-            } //TODO: reset the checkbox after clicking the generate buttons
+            isChecked={objectLOs[index].isSelected} //TODO: reset the checkbox after clicking the generate buttons
             onChange={
               // handleCheckBoxClick && index !== undefined
               //   ? () => handleCheckBoxClick(index)

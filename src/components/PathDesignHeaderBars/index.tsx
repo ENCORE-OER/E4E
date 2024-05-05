@@ -31,7 +31,7 @@ export default function PathDesignHeaderBars({
   handleResourceChange,
   isNextButtonClicked,
 }: PathDesignHeaderBarsProps) {
-  const { collectionIndex, resourceIndex, step } =
+  const { collectionIndex, resourcesIndex, step } =
     useLearningPathDesignContext();
 
   return (
@@ -110,7 +110,7 @@ export default function PathDesignHeaderBars({
               onSelectionChange={handleResourceChange}
               isHighlighted={isNextButtonClicked}
               isBloomLevel={false}
-              itemIndex={resourceIndex}
+              itemIndex={resourcesIndex}
               defaultMenuTitle="Select the resources"
             />
           </Box>

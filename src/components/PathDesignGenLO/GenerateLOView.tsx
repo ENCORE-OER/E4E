@@ -116,7 +116,7 @@ export default function GenerateLOView({
     //   });
     // } else
     setIsLessGeneratedLO(false);
-    console.log('objectLOs: ', objectLOs?.map(obj => obj));
+    console.log('objectLOs: ', objectLOs?.map((obj) => obj));
 
     if (
       bloomLevelIndex === -1 ||
@@ -143,9 +143,13 @@ export default function GenerateLOView({
           //     filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).
           //     map((objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective) || []);
           setObjectLOs(
-            objectLOs?.
-              filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).
-              map((objectLO: ObjectLearningObjectiveProps) => objectLO) || []);
+            objectLOs
+              ?.filter(
+                (objectLO: ObjectLearningObjectiveProps) =>
+                  !objectLO.isGenerated
+              )
+              .map((objectLO: ObjectLearningObjectiveProps) => objectLO) || []
+          );
           handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: string[] = [];
           console.log('Generate learning objectives');
@@ -214,11 +218,15 @@ export default function GenerateLOView({
           }
           // setTotalLearningObjectives(prevLearningObjectives => [...prevLearningObjectives, ...learningObjectives]);
           setObjectLOs(
-            (prevLearningObjectives: ObjectLearningObjectiveProps[]) =>
-              [...prevLearningObjectives, ...learningObjectives.map((lo) =>
-                ({ learningObjective: lo, isSelected: false, isGenerated: true })
-              )]
-          )
+            (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
+              ...prevLearningObjectives,
+              ...learningObjectives.map((lo) => ({
+                learningObjective: lo,
+                isSelected: false,
+                isGenerated: true,
+              })),
+            ]
+          );
 
           if (isApiKeyInvalid) {
             addToast({
@@ -250,7 +258,14 @@ export default function GenerateLOView({
 
   // Update the loading state to false when the learning objectives are generated
   useEffect(() => {
-    if (isLoading && (objectLOs.length - objectLOs.filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).length > 0)) {
+    if (
+      isLoading &&
+      objectLOs.length -
+        objectLOs.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
+    ) {
       setIsLoading(false);
     }
   }, [objectLOs]);
