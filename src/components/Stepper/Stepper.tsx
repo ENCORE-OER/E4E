@@ -61,7 +61,11 @@ function LearningStepper({
 
           <Box flexShrink="0">
             <StepTitle style={{ fontWeight: 'bold' }}>{step.title}</StepTitle>
-            <StepDescription style={{ color: '#9C9C9C', fontWeight: 'lighter' }}>{step.description}</StepDescription>
+            <StepDescription
+              style={{ color: '#9C9C9C', fontWeight: 'lighter' }}
+            >
+              {step.description}
+            </StepDescription>
           </Box>
 
           {/* <Box flexShrink="0">

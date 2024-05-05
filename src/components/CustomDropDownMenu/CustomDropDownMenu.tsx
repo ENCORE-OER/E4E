@@ -59,7 +59,7 @@ export default function CustomDropDownMenu({
 
   useEffect(() => {
     setMenuTitle(
-      data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle
+      itemIndex > -1 ? (data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle) : defaultMenuTitle
     );
   }, [itemIndex, data, defaultMenuTitle]);
 
@@ -70,7 +70,9 @@ export default function CustomDropDownMenu({
   };
   const handleMenuItemClick = (item: ArrayProps, index: number) => {
     //setSelectedItem(item.name);
-    if (onSelectionChange) onSelectionChange(index);
+    if (onSelectionChange) {
+      onSelectionChange(index);
+    }
     setMenuTitle(item.name || item.title || '');
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
 
@@ -97,7 +99,7 @@ export default function CustomDropDownMenu({
   }, [selectedOptions]);
   return (
     <>
-      <Box
+      {hydrated && (<Box
         flex="1"
         border={
           isHighlighted && handleHighlight()
@@ -127,7 +129,7 @@ export default function CustomDropDownMenu({
               <Text align="left" noOfLines={1}>
                 {
                   selectedOptions.includes('All') &&
-                  options?.length === selectedOptions.length
+                    options?.length === selectedOptions.length
                     ? 'All'
                     : selectedOptions.length > 0
                       ? selectedOptions.join(', ')
@@ -149,7 +151,7 @@ export default function CustomDropDownMenu({
               ))}
           </MenuList>
         </Menu>
-      </Box>
+      </Box>)}
     </>
   );
 }

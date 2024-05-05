@@ -1,17 +1,13 @@
 import { Flex, Text } from '@chakra-ui/react';
-import {
-  Dispatch,
-  SetStateAction,
-  useState
-} from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { PiSmileySadLight } from 'react-icons/pi';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { Option, SkillItemProps } from '../../types/encoreElements';
-import {
-  useHasHydrated
-} from '../../utils/utils';
+import { ObjectLearningObjectiveProps, Option, SkillItemProps } from '../../types/encoreElements';
+import { useHasHydrated } from '../../utils/utils';
 import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
+import AddLearningObjectiveButton from '../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
 import ShowHideButton from '../Buttons/ShowHideButton';
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
@@ -27,8 +23,10 @@ export interface PathDesignGenLOProps {
   // selectedLearnerExperience: Option | null;
   // selectedEducatorExperience: Option | null;
   learningTextContext: string;
-  generatedLOs: string[];
-  setGeneratedLOs: Dispatch<SetStateAction<string[]>>;
+  // totalLearningObjectives: string[];
+  // setTotalLearningObjectives: Dispatch<SetStateAction<string[]>>;
+  objectLOs: ObjectLearningObjectiveProps[];
+  setObjectLOs: Dispatch<SetStateAction<ObjectLearningObjectiveProps[]>>;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted?: boolean;
@@ -47,8 +45,10 @@ export default function PathDesignGenLO({
   // selectedLearnerExperience,
   // selectedEducatorExperience,
   learningTextContext,
-  generatedLOs,
-  setGeneratedLOs,
+  // totalLearningObjectives,
+  // setTotalLearningObjectives,
+  objectLOs: updatedSelectedLOs,
+  setObjectLOs,
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
@@ -59,8 +59,8 @@ export default function PathDesignGenLO({
     useGeneralContext();
 
   // Used to handle generated learning objectives
-  const [selectedLO, setSelectedLO] = useState<boolean[]>([]); // Array to keep track of the selected learning objective
   const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
 
   // Show Generate Learning Objectives area
   const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
@@ -69,22 +69,50 @@ export default function PathDesignGenLO({
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (index: number, updatedText: string) => {
     console.log('Update learning objective');
-    const updatedGeneratedLOs = [...generatedLOs];
-    // console.log('GeneratedLOs', updatedGeneratedLOs);
-    updatedGeneratedLOs[index] = updatedText; // Update the learning objective
+
+    // const updatedGeneratedLOs = [...totalLearningObjectives];
+    // // console.log('GeneratedLOs', updatedGeneratedLOs);
+    // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
+    // setTotalLearningObjectives(updatedGeneratedLOs);
+
+    // ... Update using the <ObjectLearningObjectiveProps> array ...
+    const updatedObjectLOs = [...updatedSelectedLOs]
+    updatedObjectLOs[index].learningObjective = updatedText;
+    // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
     // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
-    setGeneratedLOs(updatedGeneratedLOs);
+    setObjectLOs(updatedObjectLOs);
   };
 
-  // Function to handle the click on the checkbox to select the learning objective
+  // Function to handle the click on the checkbox to select the learning objectives
   const handleCheckBoxClick = (index: number) => {
     console.log('Checkbox clicked');
     try {
-      const updatedSelectedLOs = new Array(generatedLOs.length).fill(false);
-      updatedSelectedLOs[index] = true;
-      console.log('updatedSelectedLOs', updatedSelectedLOs);
-      setSelectedLO(updatedSelectedLOs);
+      console.log('selected LOs', updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected));
+
+      // Updating object LO selection
+      const updatedSelectedLOsObj = [...updatedSelectedLOs];
+      updatedSelectedLOsObj[index].isSelected = !updatedSelectedLOsObj[index].isSelected;
+      console.log('updated Selected LOs', updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected));
+
+      setObjectLOs(updatedSelectedLOsObj);
+
       handleSelectedLearningObjectiveIndexChange(index);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to create/add an empty learning objective
+  const handleAddEmptyLearningObjective = () => {
+    console.log('Add empty learning objective');
+    try {
+      // const updatedGeneratedLOs = [...generatedLOs];
+      // updatedGeneratedLOs.push('');
+      // setGeneratedLOs(updatedGeneratedLOs);
+
+      setObjectLOs((prevObjectLOs: ObjectLearningObjectiveProps[]) => [...prevObjectLOs, { learningObjective: '', isSelected: false, isGenerated: false }]);
+
     } catch (error) {
       console.log(error);
     }
@@ -98,19 +126,23 @@ export default function PathDesignGenLO({
           handleApiKey={handleApiKey}
           setupModel={setupModel}
           handleSetupModel={handleSetupModel}
-          setSelectedLO={setSelectedLO}
           selectedContext={selectedContext}
           selectedSkillConceptsTags={selectedSkillConceptsTags}
           selectedOptions={selectedOptions}
           learningTextContext={learningTextContext}
-          generatedLOs={generatedLOs}
-          setGeneratedLOs={setGeneratedLOs}
+          // totalLearningObjectives={totalLearningObjectives}
+          // setTotalLearningObjectives={setTotalLearningObjectives}
           setIsLessGeneratedLO={setIsLessGeneratedLO}
           setIsNextButtonClicked={setIsNextButtonClicked}
           bloomLevelIndex={bloomLevelIndex}
           selectedBloomLevel={selectedBloomLevel}
-          handleSelectedLearningObjectiveIndexChange={handleSelectedLearningObjectiveIndexChange}
-
+          handleSelectedLearningObjectiveIndexChange={
+            handleSelectedLearningObjectiveIndexChange
+          }
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          objectLOs={updatedSelectedLOs}
+          setObjectLOs={setObjectLOs}
         />
       )}
       <Flex justifyContent="center" py="10px">
@@ -127,7 +159,7 @@ export default function PathDesignGenLO({
         p="15px"
         direction="column"
         border={
-          isHighligted && generatedLOs.length > 0 && selectedLO.length === 0
+          isHighligted && updatedSelectedLOs.length > 0 && updatedSelectedLOs.filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -147,21 +179,33 @@ export default function PathDesignGenLO({
             </Text>
           </Flex>
         )}
-        {
-          //numberOfLO > 0 &&
-          generatedLOs.length > 0 &&
-          hydrated &&
-          generatedLOs.map((lo: string, index: number) => (
-            <BoxGeneratedLO
-              key={index}
-              textLearningObjective={lo}
-              index={index}
-              selectedLO={selectedLO}
-              handleCheckBoxClick={handleCheckBoxClick}
-              handleUpdateLO={handleUpdateLO}
-            />
-          ))
-        }
+
+        <Flex direction='column'>
+          {
+            //numberOfLO > 0 &&
+            updatedSelectedLOs.length > 0 &&
+            hydrated &&
+            updatedSelectedLOs.map((objectLO: ObjectLearningObjectiveProps, index: number) => (
+              <BoxGeneratedLO
+                key={index}
+                // textLearningObjective={objectLO.learningObjective}
+                objectLOs={updatedSelectedLOs}
+                index={index}
+                //selectedLO={selectedLO}
+                handleCheckBoxClick={handleCheckBoxClick}
+                handleUpdateLO={handleUpdateLO}
+              />
+            ))
+          }
+          {isLoading && (
+            <LoadingSpinner textLoading="Generating Learning Objectives..." />
+          )}
+          {!isLoading && (
+            <Flex justifyContent='center' pt='3rem'>
+              <AddLearningObjectiveButton textButton="Add empty learning objective" w='fit-content' handleClick={handleAddEmptyLearningObjective} />
+            </Flex>
+          )}
+        </Flex>
       </Flex>
     </Flex>
   );

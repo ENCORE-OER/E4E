@@ -45,6 +45,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
     handleIdLearningScenario,
+    // ----- Learning Objective Objects -----
+    learningObjectiveObjects,
+    setLearningObjectiveObjects
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -73,7 +76,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [isNextButtonClicked, setIsNextButtonClicked] =
     useState<boolean>(false); // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
 
-  const [generatedLOs, setGeneratedLOs] = useState<string[]>([]); // Array to keep track of the generated learning objectives
+  // const [totalLearningObjectives, setTotalLearningObjectives] = useState<string[]>([]); // Array to keep track of the all learning objectives (generated + empty)
+  // const [learningObjectiveObjects, setLearningObjectiveObjects] = useState<ObjectLearningObjectiveProps[]>([]);   // Array of {learningObject, isSelected, isGenerated}, to keep track if an added empty LO was selected before click on "Generate LO" button
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
@@ -82,7 +86,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleCollectionChange = (collectionIndex: number) => {
     handleCollectionIndexChange(collectionIndex);
-    handleStepChange(1); // Update the state to show the text when a collection is selected
+    // Change to step 1 only if a collection is selected
+    if (collectionIndex > -1) {
+      handleStepChange(1); // Update the state to show the text when a collection is selected
+    }
   };
 
   const handleResourceSelection = () => {
@@ -92,7 +99,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleResourceChange = (resourceIndex: number) => {
     handleResourceIndexChange(resourceIndex); // Create this function in the LearningPathDesignContext???
-    handleStepChange(1); // Update the state to show the text when a collection is selected
+    //handleStepChange(1); // Update the state to show the text when a collection is selected
   };
 
   const handlePrevButtonClick = () => {
@@ -112,7 +119,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       selectedOptions !== undefined &&
       selectedSkillConceptsTags !== undefined &&
       learningTextContext !== undefined &&
-      generatedLOs[selectedLearningObjectiveIndex] !== undefined
+      learningObjectiveObjects[selectedLearningObjectiveIndex] !== undefined
     ) {
       try {
         // const api = new APIV2(undefined);
@@ -146,7 +153,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               (item: SkillItemProps) => item.id
             ),
             LearningContext: learningTextContext,
-            textLearningObjective: generatedLOs[selectedLearningObjectiveIndex],
+            textLearningObjective: learningObjectiveObjects[selectedLearningObjectiveIndex].learningObjective,
           },
           Path: {
             Nodes: [],
@@ -172,10 +179,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
       learningTextContext?.trim() !== '' &&
       selectedOptions.length > 0 && // verbsBloomLevel
       selectedLearningObjectiveIndex > -1 &&
-      generatedLOs.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
+      learningObjectiveObjects.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
     ) {
       handleSelectedCustomLearningObjectiveChange(
-        generatedLOs[selectedLearningObjectiveIndex]
+        learningObjectiveObjects[selectedLearningObjectiveIndex].learningObjective
       );
       console.log(
         'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
@@ -214,7 +221,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -223,7 +230,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -290,15 +297,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 // selectedLearnerExperience={selectedLearnerExperience}
                 // selectedEducatorExperience={selectedEducatorExperience}
                 learningTextContext={learningTextContext}
-                generatedLOs={generatedLOs}
-                setGeneratedLOs={setGeneratedLOs}
+                // totalLearningObjectives={totalLearningObjectives}
+                // setTotalLearningObjectives={setTotalLearningObjectives}
+                objectLOs={learningObjectiveObjects}
+                setObjectLOs={setLearningObjectiveObjects}
                 handleSelectedLearningObjectiveIndexChange={
                   handleSelectedLearningObjectiveIndexChange
                 }
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
+              // apiKey={apiKey}
+              // handleApiKey={handleApiKey}
               />
             </Flex>
           )}

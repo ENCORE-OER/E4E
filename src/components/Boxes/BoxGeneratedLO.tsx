@@ -1,27 +1,30 @@
 import { Box, Checkbox, Flex, Text, Textarea } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import EditButtonLearningObjectiveBox from '../Buttons/ButtonsDesignPage/EditButtonLearningObjectiveBox';
 
 interface BoxGeneratedLOProps {
-  textLearningObjective: string; // Learning Objective text
-  index?: number;
-  selectedLO?: boolean[];
-  handleCheckBoxClick?: (index: number) => void;
-  handleUpdateLO?: (index: number, newText: string) => void;
+  // textLearningObjective: string; // Learning Objective text
+  objectLOs: ObjectLearningObjectiveProps[];
+  index: number;
+  // selectedLO?: boolean[];
+  handleCheckBoxClick: (index: number) => void;
+  handleUpdateLO: (index: number, newText: string) => void;
   // This function is used to update the learning objective in the Learning Path Design page
-  handleConfirmLO?: (newText: string) => void;
+  // handleConfirmLO?: (newText: string) => void;
 }
 
 export default function BoxGeneratedLO({
-  textLearningObjective,
+  // textLearningObjective,
+  objectLOs,
   index,
-  selectedLO,
+  // selectedLO,
   handleCheckBoxClick,
   handleUpdateLO,
-  handleConfirmLO,
+  // handleConfirmLO,
 }: BoxGeneratedLOProps) {
   const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
-  const [editedText, setEditedText] = useState<string>(textLearningObjective);
+  const [editedText, setEditedText] = useState<string>(objectLOs[index].learningObjective);
 
   //const [isLOSaved, setIsLOSaved] = useState<boolean>(false); // This state is used to check if the learning objective has been saved on DB with the 'Save' button
 
@@ -32,11 +35,12 @@ export default function BoxGeneratedLO({
       if (isEditClicked) {
         // Confirm the edit
         setIsEditClicked(false);
-        if (index !== undefined && handleUpdateLO !== undefined) {
-          handleUpdateLO(index, editedText); // Pass the edited text to the function to update the learning objective
-        } else if (handleConfirmLO !== undefined) {
-          handleConfirmLO(editedText);
-        }
+        // if (index !== undefined && handleUpdateLO !== undefined) {
+        //   handleUpdateLO(index, editedText); // Pass the edited text to the function to update the learning objective
+        // } else if (handleConfirmLO !== undefined) {
+        //   handleConfirmLO(editedText);
+        // }
+        handleUpdateLO(index, editedText);
       } else {
         setIsEditClicked(true);
       }
@@ -51,10 +55,10 @@ export default function BoxGeneratedLO({
 
   // Update the edited text when we restore the old learning objective with the 'Undo' button
   useEffect(() => {
-    if (textLearningObjective !== editedText) {
-      setEditedText(textLearningObjective);
+    if (objectLOs[index].learningObjective !== editedText) {
+      setEditedText(objectLOs[index].learningObjective);
     }
-  }, [textLearningObjective]);
+  }, [objectLOs[index].learningObjective]);
 
   return (
     <Flex py="10px" align="center" gap="5" key={index}>
@@ -62,47 +66,54 @@ export default function BoxGeneratedLO({
         display="flex"
         position="relative"
         minW="500px"
-        minH="80px"
+        minH="60px"
         w="90%"
-        border="2px solid black"
-        borderRadius={'md'}
+        //border="2px solid black"
+        backgroundColor="accent.200"
+        borderRadius="md"
         alignItems="center"
-        p={2}
+        px={2}
+        pr={8}
       >
-        <Flex w="100%">
+        <Flex w="100%" direction='column' p={1}>
           <Text
-            position="absolute"
-            top="-10px"
-            left="5%"
+            //position="absolute
+            //top="-10px"
+            //left="5%"
             //transform="translateX(-90%)"
-            backgroundColor="background"
-            px="4px"
+            // backgroundColor="background"
+            //backgroundColor="accent.200"
+            // px="4px"
+            pb={1}
             fontSize="sm"
-            borderRadius={'md'}
+            fontWeight="bold"
+            borderRadius="md"
             border="none"
           >
-            Learning Objective
+            {`Learning Objective ${index + 1} ${objectLOs[index].isGenerated ? '[ Generated ]' : ''}`}
           </Text>
           {isEditClicked ? (
             <Textarea
               display={'flex'}
               //w="100%"
               //h={'100%'}
-              pr="10"
-              py="3"
-              pl="3"
+              // pr="10"
+              // py="3"
+              // pl="3"
               resize="none"
               border="none"
               value={editedText}
               onChange={handleTextChange}
+              fontSize="sm"
             />
           ) : (
             <Text
-              pr="10"
-              py="3"
-              pl="3"
+              // pr="10"
+              // py="3"
+              // pl="3"
               whiteSpace="pre-wrap" //TODO: check if this is necessary
               border="none"
+              fontSize="sm"
             >
               {editedText}
             </Text>
@@ -122,12 +133,13 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             isDisabled={editedText === '' ? true : false}
             isChecked={
-              selectedLO && index !== undefined ? selectedLO[index] : false
+              objectLOs[index].isSelected
             } //TODO: reset the checkbox after clicking the generate buttons
             onChange={
-              handleCheckBoxClick && index !== undefined
-                ? () => handleCheckBoxClick(index)
-                : undefined
+              // handleCheckBoxClick && index !== undefined
+              //   ? () => handleCheckBoxClick(index)
+              //   : undefined
+              () => handleCheckBoxClick(index)
             }
           />
         )}

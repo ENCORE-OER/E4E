@@ -2,10 +2,10 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import {
   ArrayProps,
+  ObjectLearningObjectiveProps,
   Option,
-  SkillItemProps,
+  SkillItemProps
 } from '../types/encoreElements/index';
-import { useHasHydrated } from '../utils/utils';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -28,15 +28,11 @@ type LearnignPathDesignContextProps = {
   step: number;
   collectionIndex: number;
   resourceIndex: number; // Index of the selected resource in the collection
-  selectedLearningObjectiveIndex: number;
+  learningObjectiveObjects: ObjectLearningObjectiveProps[];
+  selectedLearningObjectiveIndex: number; // Indexes of the selected learning
   resetCheckBoxOptions: boolean;
-  learningObjectives: string[];
   selectedCustomLearningObjective: string; // selected and edited learning objective in step 2 and 3
   storedLearningObjective: string; // Learning Objective stored with save button
-  customLearningObjectivePart0: string;
-  customLearningObjectivePart1: string;
-  customLearningObjectivePart2: string;
-  storedLearningObjectives: string[];
   resetAll: boolean;
   handleResetAll: (value: boolean) => void;
   // handleApiKey: (value: string) => void;
@@ -51,18 +47,11 @@ type LearnignPathDesignContextProps = {
   handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
+  setLearningObjectiveObjects: React.Dispatch<React.SetStateAction<ObjectLearningObjectiveProps[]>>;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
   handleResourceIndexChange: (resourceIndex: number) => void;
-  handleLearningObjectives: () => void;
   handleSelectedCustomLearningObjectiveChange: (newValue: string) => void;
-  handleCustomLearningObjective0Change: (newValue: string) => void;
-  handleCustomLearningObjective1Change: (newValue: string) => void;
-  handleCustomLearningObjective2Change: (newValue: string) => void;
-  handleUseStoredLearningObjectives: () => void;
-  handleUseLearningObjectives: () => void;
-  handleCustomLearningObjectives: () => void;
-  handleNewStoredLearningObjectives: () => void;
   handleStoredLearningObjective: () => void;
   handleLearningObjective: () => void;
 };
@@ -79,7 +68,7 @@ export const useLearningPathDesignContext = () =>
 
 // Create a provider to wrap the app and provide the context to all its children
 export const LearningPathDesignProvider = ({ children }: any) => {
-  const hydrated = useHasHydrated();
+  // const hydrated = useHasHydrated();
   const DIMENSION = 30;
   const SPACING = 3;
   const LANGUAGE_GEN_LO_API = 'english';
@@ -153,27 +142,20 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
+  // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty) 
+  const [learningObjectiveObjects, setLearningObjectiveObjects] =
+    useLocalStorage<ObjectLearningObjectiveProps[]>('learningObjectiveObjects', []);
+
   const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
     useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
-
-  const [learningObjectives, setLearningObjectives] = useState<string[]>([]);
 
   // Used to store the learning objetive chosen by the Educator from the list of generated learning objectives
   const [selectedCustomLearningObjective, setCustomLearningObjective] =
     useLocalStorage<string>('customLearningObjective', '');
 
-  // Learning Objective stored with save button
+  // Learning Objective stored with save button in step 3 (learning path)
   const [storedLearningObjective, setStoredLearningObjective] =
     useLocalStorage<string>('storedLearningObjective', '');
-
-  const [customLearningObjectivePart1, setCustomLearningObjectivePart1] =
-    useLocalStorage<string>('customLearningObjective1', '');
-  const [customLearningObjectivePart2, setCustomLearningObjectivePart2] =
-    useLocalStorage<string>('customLearningObjective2', '');
-  const [customLearningObjectivePart0, setCustomLearningObjectivePart0] =
-    useLocalStorage<string>('customLearningObjective0', '');
-  const [storedLearningObjectives, setStoredLearningObjectives] =
-    useLocalStorage<string[]>('storedLearningObjectives', []);
 
   // Use for storage of the options in the segmented control
   const [selectedEducatorExperience, setSelectedEducatorExperience] =
@@ -208,6 +190,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setSelectedSkillConceptsTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
+    setLearningObjectiveObjects([])
+    handleStepChange(0);
   };
 
   // Reset all the parameters. Use this with resetAll button
@@ -254,8 +238,19 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setSelectedOptions(newSelectedOptions);
   };
 
+  // // To handle the learningObjectiveObjects
+  // const handleLearningObjectiveObjects = (newLearningObjectiveObjects: ObjectLearningObjectiveProps[]) => {
+  //   setLearningObjectiveObjects((prev: ObjectLearningObjectiveProps[]) => [...prev, ...newLearningObjectiveObjects])
+  // }
+
   const handleSelectedLearningObjectiveIndexChange = (index: number) => {
-    setSelectedLearningObjectiveIndex(index);
+    // This is for the case to collect more indexes
+    // if (index === -1) {
+    //   setSelectedLearningObjectiveIndex([]);
+    // }
+    // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
+
+    setSelectedLearningObjectiveIndex(index)
   };
 
   // Used to recover the learning objective to show from the stored learning objective
@@ -263,81 +258,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setCustomLearningObjective(storedLearningObjective);
   };
 
-  const handleLearningObjectives = () => {
-    const selectedSkillsLabels = selectedSkillConceptsTags.map(
-      (item: SkillItemProps) => item.label
-    );
-    const principleOfSkills =
-      hydrated && selectedSkillsLabels ? selectedSkillsLabels.join(' ') : '';
-    console.log('principle of skills: ', principleOfSkills);
-    const selectedOptionsText =
-      hydrated && selectedOptions ? selectedOptions.join(' ') : '';
-
-    console.log('selected options: ', selectedOptionsText);
-    const learningObjectiveText = hydrated ? learningTextContext : '';
-
-    const learningObjectives = [
-      `${principleOfSkills}`,
-      `${selectedOptionsText}`,
-      `${learningObjectiveText}`,
-    ];
-    setLearningObjectives(learningObjectives);
-  };
-
   const handleSelectedCustomLearningObjectiveChange = (newValue: string) => {
     setCustomLearningObjective(newValue);
-  };
-
-  const handleCustomLearningObjective0Change = (newValue: string) => {
-    setCustomLearningObjectivePart0(newValue);
-  };
-
-  const handleCustomLearningObjective1Change = (newValue: string) => {
-    setCustomLearningObjectivePart1(newValue);
-  };
-
-  const handleCustomLearningObjective2Change = (newValue: string) => {
-    setCustomLearningObjectivePart2(newValue);
-  };
-
-  const handleNewStoredLearningObjectives = () => {
-    // --------------------------------------------------
-    // This with the <ThreeTextBoxes /> component
-    const newStoredLearningObjectives = [
-      customLearningObjectivePart0,
-      customLearningObjectivePart1,
-      customLearningObjectivePart2,
-    ];
-    setStoredLearningObjectives(newStoredLearningObjectives);
-    // --------------------------------------------------
   };
 
   // Used to store the learning objetive after that the Educator has clicked the save button in 'Learning Path Deisgn' page
   const handleStoredLearningObjective = () => {
     setStoredLearningObjective(selectedCustomLearningObjective);
-  };
-
-  const handleUseStoredLearningObjectives = () => {
-    setCustomLearningObjectivePart0(storedLearningObjectives[0]);
-    setCustomLearningObjectivePart1(storedLearningObjectives[1]);
-    setCustomLearningObjectivePart2(storedLearningObjectives[2]);
-  };
-  const handleUseLearningObjectives = () => {
-    // --------------------------------------------------
-    // This with the <ThreeTextBoxes /> component
-    setCustomLearningObjectivePart0(learningObjectives[0]);
-    setCustomLearningObjectivePart1(learningObjectives[1]);
-    setCustomLearningObjectivePart2(learningObjectives[2]);
-    // --------------------------------------------------
-  };
-
-  const handleCustomLearningObjectives = () => {
-    //handleLearningObjectives();
-    if (storedLearningObjectives.length > 0) {
-      handleUseStoredLearningObjectives();
-    } else {
-      handleUseLearningObjectives();
-    }
   };
 
   //handlers for text input
@@ -405,21 +332,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     currentBloomOptions,
   ]);
 
-  // useEffect(() => {
-  //   if (
-  //     customLearningObjectivePart0 === '' &&
-  //     customLearningObjectivePart1 === '' &&
-  //     customLearningObjectivePart2 === ''
-  //   ) {
-  //     handleLearningObjectives();
-  //     if (storedLearningObjectives.length > 0) {
-  //       handleUseStoredLearningObjectives();
-  //     } else if (learningObjectives.length > 0) {
-  //       handleUseLearningObjectives();
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     if (collectionIndex !== -1) {
       setStep(2);
@@ -478,20 +390,16 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedSkillConceptsTags,
         setSelectedSkillConceptsTags,
         bloomLevelIndex,
-        selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
         currentBloomOptions,
         step,
         selectedOptions,
         resetCheckBoxOptions,
         collectionIndex,
         resourceIndex,
-        learningObjectives,
+        learningObjectiveObjects,
+        selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
         selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
         storedLearningObjective, // Learning Objective stored with save button
-        customLearningObjectivePart0,
-        customLearningObjectivePart1,
-        customLearningObjectivePart2,
-        storedLearningObjectives,
         resetAll,
         handleResetAll,
         // handleApiKey,
@@ -505,20 +413,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleSkillsChange,
         handleStepChange,
         handleOptionsChange,
-        //handleResetStep0,
-        //handleResetStep1,
         handleCollectionIndexChange,
         handleResourceIndexChange,
+        setLearningObjectiveObjects,
         handleSelectedLearningObjectiveIndexChange,
-        handleLearningObjectives,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
-        handleCustomLearningObjective0Change,
-        handleCustomLearningObjective1Change,
-        handleCustomLearningObjective2Change,
-        handleUseStoredLearningObjectives,
-        handleUseLearningObjectives,
-        handleCustomLearningObjectives,
-        handleNewStoredLearningObjectives,
         handleStoredLearningObjective,
         handleLearningObjective,
       }}
