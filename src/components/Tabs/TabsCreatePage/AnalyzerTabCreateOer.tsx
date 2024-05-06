@@ -3,30 +3,30 @@
  *  the source,
  *  the apy key
  *  the setup model
- *  the analizer button and api call
+ *  the analyzer button and api call
  */
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { TopicData, targetLevelOptions } from '../../../types/encoreElements';
-import CreateOerTopicMenu from '../../../components/DropDownMenuItem/CreateOerTopicMenu';
-import TextBox from '../../../components/TextBox/TextBox';
-import InputsGenerateAI from '../../../components/Inputs/InputsGenerateAI';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import CreateOerTopicMenu from '../../DropDownMenuItem/CreateOerTopicMenu';
+import InputsGenerateAI from '../../Inputs/InputsGenerateAI';
+import TextBox from '../../TextBox/TextBox';
 
-type AnalizerTabCreateOerProps = {
+type AnalyzerTabCreateOerProps = {
   isSmallerScreen?: boolean;
   step: number;
   onChange: (step: number) => void;
 };
 
-export default function AnalizerTabCreateOer({
+export default function AnalyzerTabCreateOer({
   isSmallerScreen,
   step,
   onChange,
-}: AnalizerTabCreateOerProps) {
+}: AnalyzerTabCreateOerProps) {
   const {
     handleDescription,
     handleTitle,
@@ -68,7 +68,7 @@ export default function AnalizerTabCreateOer({
     }
   };
 
-  const handleAnalize = async () => {
+  const handleAnalyze = async () => {
     setLoading(true);
     const analyzedMaterial = await analyzeMaterial(sourceText);
     setLoading(false);
@@ -168,11 +168,11 @@ export default function AnalizerTabCreateOer({
                     type: 'warning',
                   });
                 } else {
-                  handleAnalize();
+                  handleAnalyze();
                 }
               }}
             >
-              Analize Material
+              Analyze Material
             </Button>
           </Flex>
         </Flex>

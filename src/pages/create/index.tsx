@@ -8,13 +8,13 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useState } from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import SharedParameterTab from '../../components/Tabs/TabsCreatePage/SharedParameterTab';
-import AnalizerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalizerTabCreateOer';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import AnalyzerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalyzerTabCreateOer';
 // import { stringArrayToOptionsObject } from '../../utils/utils';
 
 const Create = () => {
@@ -68,7 +68,7 @@ const Create = () => {
                   assessment content from starting resources.
                 </Text>
               </Box>
-              <AnalizerTabCreateOer
+              <AnalyzerTabCreateOer
                 isSmallerScreen={isSmallerScreen}
                 onChange={handleStep}
                 step={step}
