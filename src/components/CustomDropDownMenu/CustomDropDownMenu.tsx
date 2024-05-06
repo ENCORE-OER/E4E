@@ -21,8 +21,9 @@ type CollectionMenuProps = {
   options?: string[] | undefined;
   onData?: (data: string[] | number[]) => void;
   onSelectionChange?: (selectedItem: number) => void;
-  isHighlighted: boolean;
+  isHighlighted?: boolean;
   isBloomLevel?: boolean;
+  isYellowOnFocus?: boolean;
 };
 
 export default function CustomDropDownMenu({
@@ -32,6 +33,7 @@ export default function CustomDropDownMenu({
   onSelectionChange,
   isHighlighted,
   isBloomLevel,
+  isYellowOnFocus,
 }: CollectionMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | null>(null);
@@ -104,7 +106,7 @@ export default function CustomDropDownMenu({
           onOpen={handleToggleMenu}
           onClose={handleToggleMenu}
         >
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%">
+          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%" _expanded={isYellowOnFocus ? { bg: 'yellow.400' } : undefined}>
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
             <Text align="left" noOfLines={1}>
               {

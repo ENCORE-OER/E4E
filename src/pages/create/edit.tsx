@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spacer,
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
@@ -22,8 +23,9 @@ import EditOpenQuestion from '../../components/Tabs/TabsCreatePage/EditOpenQuest
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
-import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
+import CollectionDropDownMenu from '../../components/DropDownMenu/CollectionDropDownMenui';
+import CheckboxDropdown from '../../components/DropDownMenu/CheckboxDropdown';
+import {domainOptions, tyopeOfResourcesOption, licenseOption} from '../../types/encoreElements/index';
 
 const Edit = () => {
   const { user } = useUser();
@@ -36,8 +38,7 @@ const Edit = () => {
   });
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
-  const { collections } = useCollectionsContext();
-  const { handleCollectionIndexChange } = useLearningPathDesignContext();
+  const { collections, addResource } = useCollectionsContext();
   const {
     title,
     description,
@@ -50,25 +51,31 @@ const Edit = () => {
     // apiMultipleChiocesData,
   } = useCreateOERsContext();
 
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [areOptionsComplete, setAreOptionsComplete] = useState(true);
+  const [collectionIndex, setCollectionIndex] = useState<number>(0);
+  const [selectedLicence, setSelectedLicence] = useState<string[]>([]);
+  const [selectedDomain, setSelectedDomain] = useState<string[]>([]);
+  const [selectedTypeOfResource, setSelectedTypeOfResource] = useState<string[]>([]);
+  const [selectedAudience, setSelectedAudience] = useState<string[]>([]);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
-  const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
-    null
-  );
-
-  useEffect(() => {
-    //console.log('qualcosa');
-  }, [response]);
-
-  const handleCollectionSelection = () => {
-    // Update the state to show the text when a collection is selected
-    setSelectedCollection(true);
-  };
+  const handleSelectedLicence = (selectedLicence: string[]) => {
+    setSelectedLicence(selectedLicence);
+  }
+  const handleSelectedDomain = (selectedDomain: string[]) => {
+    setSelectedDomain(selectedDomain);
+  }
+  const handleSelectedTypeOfResource = (selectedTypeOfResource: string[]) => {
+    setSelectedTypeOfResource(selectedTypeOfResource);
+  }
+  const handleSelectedAudience = (selectedAudience: string[]) => {
+    setSelectedAudience(selectedAudience);
+  }
 
   const handleCollectionChange = (collectionIndex: number) => {
-    handleCollectionIndexChange(collectionIndex);
+    setCollectionIndex(collectionIndex);
   };
 
   const handleOptionsComplete = () => {
@@ -102,18 +109,55 @@ const Edit = () => {
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
     } finally {
       setLoading(false);
+      
     }
   };
+
+  const handleAddExerciseToCollection = async () => {
+    if (!loading && response) {
+      const temp = {
+        id: response.data.id,
+        title: response.data.title,
+        description: response.data.description,
+        concepts: [],
+      };
+      console.log('temp', temp);
+      await addResource(collections[collectionIndex].id, temp); 
+    } else {
+      console.log('Unable to add exercise to collection:', { loading, response });
+    }
+  };
+  
+  useEffect(() => {
+    if (!loading && response && !toastDisplayed) {
+      addToast({
+        message: 'Exercise saved successfully.',
+        type: 'success',
+      });
+      setToastDisplayed(true);
+    }
+  }, [loading, response, toastDisplayed]);
 
   useEffect(() => {
     handleOptionsComplete();
     handleData();
     //console.log('data', data);
-  }, [title, description, selectedCollection]);
+  }, [title, description]);
 
   useEffect(() => {
-    console.log('response', response);
+    //console.log('response', response);
+    if(response){
+      handleAddExerciseToCollection();
+    }  
   }, [response]);
+
+  useEffect(() => {
+    // console.log('selectedLicence', selectedLicence);
+    // console.log('selectedDomain', selectedDomain);
+    // console.log('selectedTypeOfResource', selectedTypeOfResource);
+    // console.log('selectedAudience', selectedAudience);
+    // console.log('collectionIndex', collectionIndex);
+  }, [selectedLicence, selectedDomain, selectedTypeOfResource, selectedAudience]);
 
   return (
     <>
@@ -139,7 +183,66 @@ const Edit = () => {
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {console.log('chosenTypeOfExercise', chosenTypeOfExercise)}
+            <Box w="80%">
+              <Flex>
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">License</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={licenseOption}
+                    onChange={handleSelectedLicence}
+                    title='License'
+                  />
+                </Box>
+                <Spacer />
+                <Box w="65%">
+                    <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                      <Text as="b">Select a collection to save the exercise to</Text>
+                    </Flex>
+                    <CollectionDropDownMenu
+                      options={collections}
+                      title="Select a collection"
+                      onChange={handleCollectionChange}
+                    />
+                 </Box>
+              </Flex>
+              <Flex>
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Domain</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={domainOptions}
+                    onChange={handleSelectedDomain}
+                    title='Select'
+                  />
+                </Box>
+                <Spacer />
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Type of resources</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={tyopeOfResourcesOption}
+                    onChange={handleSelectedTypeOfResource}
+                    title='Select'
+                  />
+                </Box>
+                <Spacer />
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Audience</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={licenseOption}
+                    onChange={handleSelectedAudience}
+                    title='Select'
+                  />
+                </Box>
+              </Flex>
+            </Box>
+            {/* {console.log('chosenTypeOfExercise', chosenTypeOfExercise)} */}
             {hydrated && chosenTypeOfExercise === 3 && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
@@ -160,18 +263,6 @@ const Edit = () => {
                 />
               </Box>
             )}
-            <Box w="60%" paddingTop="1rem">
-              <Flex paddingBottom="0.5rem" paddingTop="1rem">
-                <Text as="b">Select a collection to save the exercise to</Text>
-              </Flex>
-              <CustomDropDownMenu
-                data={collections}
-                onData={handleCollectionSelection}
-                onSelectionChange={handleCollectionChange}
-                isHighlighted={areOptionsComplete}
-                isBloomLevel={false}
-              />
-            </Box>
             <Flex w="auto" position="absolute" bottom="5%" right="8%">
               <Button
                 border="1px solid"
@@ -207,6 +298,7 @@ const Edit = () => {
                   if (areOptionsComplete) {
                     handleData();
                     handleSaveButtonClick();
+                    
                     //console.log('Save');
                   } else {
                     addToast({
@@ -221,13 +313,14 @@ const Edit = () => {
                 <Icon as={MdSave} w="40%" h="40%" />
               </Button>
             </Flex>
-            {console.log('response', response)}
+            {/* {console.log('response', response)}
             {!loading &&
               response &&
               addToast({
                 message: 'Exercise saved successfully.',
                 type: 'success',
-              })}
+              })
+            } */}
           </Box>
         </Box>
       </Flex>

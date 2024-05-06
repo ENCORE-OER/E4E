@@ -35,14 +35,16 @@ export default function GenerateExerciseResponseView({} //response,
                 {apiData.Assignment}
               </Text>
             </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                Plus
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                {apiData.Plus}
-              </Text>
-            </Box>
+            { apiData.Plus !== "" &&
+              <Box>            
+                <Heading size="xs" textTransform="uppercase">
+                  Plus
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  {apiData.Plus}
+                </Text>
+              </Box>
+            }
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 Solutions
@@ -51,22 +53,26 @@ export default function GenerateExerciseResponseView({} //response,
                 {apiData.Solutions.join(' -|- ')}
               </Text>
             </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                Distractors
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                {apiData.Distractors.join(' -|- ')}
-              </Text>
-            </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                Easily Discardable Distractors
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                {apiData.EasilyDiscardableDistractors.join(' -|- ')}
-              </Text>
-            </Box>
+             { apiData.Distractors.join(' -|- ') !== "" &&
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  Distractors
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  {apiData.Distractors.join(' -|- ')}
+                </Text>
+              </Box>
+            }
+            { apiData.EasilyDiscardableDistractors.join(' -|- ') !== "" &&
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  Easily Discardable Distractors
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  {apiData.EasilyDiscardableDistractors.join(' -|- ')}
+                </Text>
+              </Box>
+            }
             {/* <Box>
               <Heading size="xs" textTransform="uppercase">
                 Risposta
