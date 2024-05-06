@@ -47,17 +47,37 @@ export const mapStringToString = (string: string, enumObject: any): string => {
 export const stringArrayToOptionsObject = (
   apiFillGapsData: GeneratedExerciseProps
 ) => {
-  const optionsObject = {} as OptionsData;
-  apiFillGapsData.Solutions.forEach((solution) => {
-    optionsObject[solution] = true;
-  });
-  apiFillGapsData.Distractors.forEach((distractor) => {
-    optionsObject[distractor] = false;
-  });
-  apiFillGapsData.EasilyDiscardableDistractors.forEach((distractor) => {
-    optionsObject[distractor] = false;
-  });
-  console.log('optionsObject', optionsObject);
+  const optionsObject: OptionsData[] = [];
 
+  // Aggiungi tutte le stringhe da A all'array di risultato con il bool impostato su true
+  apiFillGapsData.Solutions.forEach((string) =>
+    optionsObject.push([string, true])
+  );
+
+  // Aggiungi tutte le stringhe da B e C all'array di risultato con il bool impostato su false
+  [
+    ...apiFillGapsData.Distractors,
+    ...apiFillGapsData.EasilyDiscardableDistractors,
+  ].forEach((string) => optionsObject.push([string, false]));
+
+  console.log('optionsObject', optionsObject);
   return optionsObject;
 };
+
+// export const stringArrayToOptionsObject = (
+//   apiFillGapsData: GeneratedExerciseProps
+// ) => {
+//   const optionsObject = {} as OptionsData;
+//   apiFillGapsData.Solutions.forEach((solution) => {
+//     optionsObject[solution] = true;
+//   });
+//   apiFillGapsData.Distractors.forEach((distractor) => {
+//     optionsObject[distractor] = false;
+//   });
+//   apiFillGapsData.EasilyDiscardableDistractors.forEach((distractor) => {
+//     optionsObject[distractor] = false;
+//   });
+//   console.log('optionsObject', optionsObject);
+
+//   return optionsObject;
+// };

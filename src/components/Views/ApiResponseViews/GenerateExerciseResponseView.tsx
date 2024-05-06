@@ -15,9 +15,8 @@ type GenerateExerciseResonseViewProps = {
   response: GeneratedExerciseProps | null;
 };
 
-export default function GenerateExerciseResponseView({
-  response,
-}: GenerateExerciseResonseViewProps) {
+export default function GenerateExerciseResponseView({} //response,
+: GenerateExerciseResonseViewProps) {
   const { apiGeneratedExerciseData: apiData, title } = useCreateOERsContext();
 
   return (
@@ -49,7 +48,7 @@ export default function GenerateExerciseResponseView({
                 Solutions
               </Heading>
               <Text pt="2" fontSize="sm">
-                {apiData.Solutions}
+                {apiData.Solutions.join(' -|- ')}
               </Text>
             </Box>
             <Box>
@@ -57,7 +56,7 @@ export default function GenerateExerciseResponseView({
                 Distractors
               </Heading>
               <Text pt="2" fontSize="sm">
-                {apiData.Distractors}
+                {apiData.Distractors.join(' -|- ')}
               </Text>
             </Box>
             <Box>
@@ -65,17 +64,17 @@ export default function GenerateExerciseResponseView({
                 Easily Discardable Distractors
               </Heading>
               <Text pt="2" fontSize="sm">
-                {apiData.EasilyDiscardableDistractors}
+                {apiData.EasilyDiscardableDistractors.join(' -|- ')}
               </Text>
             </Box>
-            <Box>
+            {/* <Box>
               <Heading size="xs" textTransform="uppercase">
                 Risposta
               </Heading>
               <Text pt="2" fontSize="sm">
                 {JSON.stringify(response)}
               </Text>
-            </Box>
+            </Box> */}
           </Stack>
         </CardBody>
       </Card>

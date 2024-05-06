@@ -8,14 +8,14 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { useState } from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import SharedParameterTab from '../../components/Tabs/TabsCreatePage/SharedParameterTab';
-import AnalizerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalizerTabCreateOer';
+import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { stringArrayToOptionsObject } from '../../utils/utils';
+import AnalyzerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalyzerTabCreateOer';
+// import { stringArrayToOptionsObject } from '../../utils/utils';
 
 const Create = () => {
   const { user } = useUser();
@@ -27,10 +27,11 @@ const Create = () => {
     lg: false,
   });
   const {
-    isGenerateButtonClicked,
-    handleOptionsChange,
-    typeOfExercisePanel,
-    apiGeneratedExerciseData: apiFillGapsData,
+    //isGenerateButtonClicked,
+    apiGeneratedExerciseData,
+    // handleOptionsChange,
+    // typeOfExercisePanel,
+    // apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { addToast } = CustomToast();
   const [step, setStep] = useState<number>(0);
@@ -67,18 +68,18 @@ const Create = () => {
                   assessment content from starting resources.
                 </Text>
               </Box>
-              <AnalizerTabCreateOer
+              <AnalyzerTabCreateOer
                 isSmallerScreen={isSmallerScreen}
                 onChange={handleStep}
                 step={step}
               />
-              {step > 1 && (
+              {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo finde a better way to check if the exercise is generated
                 <Box paddingTop={'2rem'}>
                   <SharedParameterTab isSmallerScreen={isSmallerScreen} />{' '}
                   {/* in this there are also the different tabs for the exercises and the api call for the generation of the exercises*/}
                 </Box>
               )}
-              {step > 1 && (
+              {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && (
                 <Box w={isSmallerScreen ? '95%' : '90%'}>
                   <Flex w="auto" justifyContent="right">
                     <Button
@@ -90,12 +91,17 @@ const Create = () => {
                       mt={4}
                       w="10%"
                       onClick={() => {
-                        if (typeOfExercisePanel === 'Fill the Gaps') {
-                          handleOptionsChange(
-                            stringArrayToOptionsObject(apiFillGapsData)
-                          );
-                        }
-                        if (isGenerateButtonClicked) {
+                        // if (typeOfExercisePanel === 'Fill the Gaps') {
+                        //   handleOptionsChange(
+                        //     stringArrayToOptionsObject(apiGeneratedExerciseData)
+                        //   );
+                        // }else if(typeOfExercisePanel === 'multipleChoice'){
+                        //   // handleOptionsChange(
+                        //   //   stringArrayToOptionsObject(apiGeneratedExerciseData)
+                        //   // );
+                        // }
+                        if (apiGeneratedExerciseData.Assignment !== '') {
+                          // todo: implement a better check
                           router.push({
                             pathname: '/create/edit',
                           });

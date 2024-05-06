@@ -4,10 +4,9 @@ import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { GeneratedExerciseProps } from '../../../types/encoreElements';
 import {
   stringArrayToOptionsObject,
-  useHasHydrated,
+  // useHasHydrated,
 } from '../../../utils/utils';
 import CheckboxEditableMenu from '../../CheckboxMenu/CheckboxEditableMenu';
-import RadioEditableMenu from '../../RadioMenu/RadioEditableMenu';
 import TextBox from '../../TextBox/TextBox';
 
 // type MultipleChoiceData = {
@@ -32,7 +31,7 @@ type EditMultipleChoiceProps = {
 export default function EditMultipleChoice({
   multipleChoiceData,
 }: EditMultipleChoiceProps) {
-  const hydrated = useHasHydrated();
+  // const hydrated = useHasHydrated();
   const {
     title,
     handleTitle,
@@ -45,21 +44,17 @@ export default function EditMultipleChoice({
     options,
     handleOptions,
     handleOptionsChange,
-    chosenTypeOfExercise: chosenType,
+    apiGeneratedExerciseData,
+    // chosenTypeOfExercise: chosenType,
   } = useCreateOERsContext();
 
   const optionsObject = stringArrayToOptionsObject(multipleChoiceData);
 
   useEffect(() => {
-    handleSolution(multipleChoiceData.Solutions[0]); // TODO: check if this is correct
+    handleSolution(multipleChoiceData.Plus); // TODO: check if this is correct
     handleQuestion(multipleChoiceData.Assignment);
     handleOptionsChange(optionsObject);
   }, []);
-
-  useEffect(() => {
-    console.log(options);
-  }, [options]);
-
   return (
     <>
       <Flex w={'100%'}>
@@ -94,20 +89,16 @@ export default function EditMultipleChoice({
           <Flex paddingBottom="0.5rem" paddingTop="1rem">
             <Text as="b">Options</Text>
           </Flex>
-          {hydrated &&
-            (chosenType ? (
-              <RadioEditableMenu
-                initialOptions={options}
-                onChange={handleOptions}
-                onOptionsChange={handleOptionsChange}
-              />
-            ) : (
-              <CheckboxEditableMenu
-                initialOptions={options}
-                onChange={handleOptions}
-                onOptionsChange={handleOptionsChange}
-              />
-            ))}
+          {console.log('options', options)}
+          <CheckboxEditableMenu
+            initialOptions={
+              options.length === 0
+                ? stringArrayToOptionsObject(apiGeneratedExerciseData)
+                : options
+            }
+            onChange={handleOptions}
+            onOptionsChange={handleOptionsChange}
+          />
           <Flex paddingBottom="0.5rem" paddingTop="1rem">
             <Text as="b">Answer</Text>
           </Flex>
