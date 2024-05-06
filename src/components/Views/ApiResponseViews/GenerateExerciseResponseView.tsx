@@ -35,8 +35,8 @@ export default function GenerateExerciseResponseView({} //response,
                 {apiData.Assignment}
               </Text>
             </Box>
-            { apiData.Plus !== "" &&
-              <Box>            
+            {apiData.Plus !== '' && (
+              <Box>
                 <Heading size="xs" textTransform="uppercase">
                   Plus
                 </Heading>
@@ -44,7 +44,7 @@ export default function GenerateExerciseResponseView({} //response,
                   {apiData.Plus}
                 </Text>
               </Box>
-            }
+            )}
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 Solutions
@@ -53,7 +53,7 @@ export default function GenerateExerciseResponseView({} //response,
                 {apiData.Solutions.join(' -|- ')}
               </Text>
             </Box>
-             { apiData.Distractors.join(' -|- ') !== "" &&
+            {apiData.Distractors.join(' -|- ') !== '' && (
               <Box>
                 <Heading size="xs" textTransform="uppercase">
                   Distractors
@@ -62,8 +62,8 @@ export default function GenerateExerciseResponseView({} //response,
                   {apiData.Distractors.join(' -|- ')}
                 </Text>
               </Box>
-            }
-            { apiData.EasilyDiscardableDistractors.join(' -|- ') !== "" &&
+            )}
+            {apiData.EasilyDiscardableDistractors.join(' -|- ') !== '' && (
               <Box>
                 <Heading size="xs" textTransform="uppercase">
                   Easily Discardable Distractors
@@ -72,7 +72,7 @@ export default function GenerateExerciseResponseView({} //response,
                   {apiData.EasilyDiscardableDistractors.join(' -|- ')}
                 </Text>
               </Box>
-            }
+            )}
             {/* <Box>
               <Heading size="xs" textTransform="uppercase">
                 Risposta

@@ -106,7 +106,12 @@ export default function CustomDropDownMenu({
           onOpen={handleToggleMenu}
           onClose={handleToggleMenu}
         >
-          <MenuButton as={Button} rightIcon={<ChevronDownIcon />} w="100%" _expanded={isYellowOnFocus ? { bg: 'yellow.400' } : undefined}>
+          <MenuButton
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            w="100%"
+            _expanded={isYellowOnFocus ? { bg: 'yellow.400' } : undefined}
+          >
             {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
             <Text align="left" noOfLines={1}>
               {
