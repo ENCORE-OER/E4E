@@ -1,6 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -12,7 +11,6 @@ import PathDesignGenLO from '../../components/PathDesignGenLO';
 import PathDesignHeaderBars from '../../components/PathDesignHeaderBars';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import { SkillItemProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
 const Home = (/*props: DiscoverPageProps*/) => {
@@ -35,9 +33,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // handleResourceIndexChange,
     // takes the value of the selected option in "Educational Scenario"
     selectedContext, // used for the api call
-    selectedLearnerExperience, // used for the api call
-    selectedEducatorExperience, // used for the api call
-    selectedGroupDimension, // used for the api call
+    // selectedLearnerExperience, // used for the api call
+    // selectedEducatorExperience, // used for the api call
+    // selectedGroupDimension, // used for the api call
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
     selectedCustomLearningObjective,
@@ -45,7 +43,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     selectedLearningObjectiveIndex,
     handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
-    handleIdLearningScenario,
+    // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     setLearningObjectiveObjects,
@@ -124,67 +122,67 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  const saveLearningScenario = async () => {
-    if (
-      selectedEducatorExperience?.title !== undefined &&
-      selectedContext?.title !== undefined &&
-      selectedGroupDimension?.title !== undefined &&
-      selectedLearnerExperience?.title !== undefined &&
-      bloomLevels[bloomLevelIndex]?.name !== undefined &&
-      selectedOptions !== undefined &&
-      selectedSkillConceptsTags !== undefined &&
-      learningTextContext !== undefined &&
-      learningObjectiveObjects[selectedLearningObjectiveIndex] !== undefined
-    ) {
-      try {
-        // const api = new APIV2(undefined);
-        // const resp = await api.saveLearningScenario(
-        //   // objectiveId
-        //   selectedEducatorExperience?.title,
-        //   selectedContext?.title,
-        //   selectedGroupDimension?.title,
-        //   selectedLearnerExperience?.title,
-        //   bloomLevels[bloomLevelIndex]?.name,
-        //   selectedOptions, // verbsBloomLevel
-        //   selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
-        //   learningTextContext,
-        //   //selectedCustomLearningObjective
-        //   generatedLOs[selectedLearningObjectiveIndex]
-        // );
-        const resp = await axios.post('/api/encore/saveLearningScenario', {
-          Context: {
-            EducatorExperience: selectedEducatorExperience?.title,
-            EducationContext: selectedContext?.title,
-            Dimension: selectedGroupDimension?.title,
-            LearnerExperience: selectedLearnerExperience?.title,
-          },
-          Objective: {
-            //id: objectiveId,
-            BloomLevel: {
-              name: bloomLevels[bloomLevelIndex]?.name,
-              verbs: selectedOptions,
-            },
-            Skills: selectedSkillConceptsTags.map(
-              (item: SkillItemProps) => item.id
-            ),
-            LearningContext: learningTextContext,
-            textLearningObjective:
-              learningObjectiveObjects[selectedLearningObjectiveIndex]
-                .learningObjective,
-          },
-          Path: {
-            Nodes: [],
-            Edges: [],
-          },
-        });
-        console.log(resp?.data);
-        console.log('Learning scenario id: ' + resp?.data?._id);
-        handleIdLearningScenario(resp?.data?._id ?? '');
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // const saveLearningScenario = async () => {
+  //   if (
+  //     selectedEducatorExperience?.title !== undefined &&
+  //     selectedContext?.title !== undefined &&
+  //     selectedGroupDimension?.title !== undefined &&
+  //     selectedLearnerExperience?.title !== undefined &&
+  //     bloomLevels[bloomLevelIndex]?.name !== undefined &&
+  //     selectedOptions !== undefined &&
+  //     selectedSkillConceptsTags !== undefined &&
+  //     learningTextContext !== undefined &&
+  //     learningObjectiveObjects[selectedLearningObjectiveIndex] !== undefined
+  //   ) {
+  //     try {
+  //       // const api = new APIV2(undefined);
+  //       // const resp = await api.saveLearningScenario(
+  //       //   // objectiveId
+  //       //   selectedEducatorExperience?.title,
+  //       //   selectedContext?.title,
+  //       //   selectedGroupDimension?.title,
+  //       //   selectedLearnerExperience?.title,
+  //       //   bloomLevels[bloomLevelIndex]?.name,
+  //       //   selectedOptions, // verbsBloomLevel
+  //       //   selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
+  //       //   learningTextContext,
+  //       //   //selectedCustomLearningObjective
+  //       //   generatedLOs[selectedLearningObjectiveIndex]
+  //       // );
+  //       const resp = await axios.post('/api/encore/saveLearningScenario', {
+  //         Context: {
+  //           EducatorExperience: selectedEducatorExperience?.title,
+  //           EducationContext: selectedContext?.title,
+  //           Dimension: selectedGroupDimension?.title,
+  //           LearnerExperience: selectedLearnerExperience?.title,
+  //         },
+  //         Objective: {
+  //           //id: objectiveId,
+  //           BloomLevel: {
+  //             name: bloomLevels[bloomLevelIndex]?.name,
+  //             verbs: selectedOptions,
+  //           },
+  //           Skills: selectedSkillConceptsTags.map(
+  //             (item: SkillItemProps) => item.id
+  //           ),
+  //           LearningContext: learningTextContext,
+  //           textLearningObjective:
+  //             learningObjectiveObjects[selectedLearningObjectiveIndex]
+  //               .learningObjective,
+  //         },
+  //         Path: {
+  //           Nodes: [],
+  //           Edges: [],
+  //         },
+  //       });
+  //       console.log(resp?.data);
+  //       console.log('Learning scenario id: ' + resp?.data?._id);
+  //       handleIdLearningScenario(resp?.data?._id ?? '');
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   const handleNextClick = () => {
     if (
@@ -205,7 +203,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       console.log(
         'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
       );
-      saveLearningScenario();
+      //saveLearningScenario();
       router.push({
         pathname: '/design/learningPathDesign',
       });
@@ -252,7 +250,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -261,7 +259,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -339,8 +337,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
+              // apiKey={apiKey}
+              // handleApiKey={handleApiKey}
               />
             </Flex>
           )}

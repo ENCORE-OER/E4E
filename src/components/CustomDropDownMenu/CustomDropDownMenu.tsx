@@ -22,10 +22,11 @@ type CollectionMenuProps = {
   // options?: string[] | undefined;
   onData?: (data?: string[] | number[]) => void;
   onSelectionChange?: (selectedItem: number) => void;
-  isHighlighted: boolean;
+  isHighlighted?: boolean;
   isBloomLevel?: boolean;
   itemIndex?: number | number[];
   defaultMenuTitle: string;
+  isYellowOnFocus?: boolean;
 };
 
 export default function CustomDropDownMenu({
@@ -35,6 +36,7 @@ export default function CustomDropDownMenu({
   onSelectionChange,
   isHighlighted,
   isBloomLevel,
+  isYellowOnFocus,
   itemIndex,
   defaultMenuTitle,
 }: CollectionMenuProps) {
@@ -78,8 +80,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-                data[itemIndex]?.title ||
-                defaultMenuTitle
+            data[itemIndex]?.title ||
+            defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -144,6 +146,7 @@ export default function CustomDropDownMenu({
           w="100%"
           title={menuTitle}
           bg={'white'}
+          _expanded={isYellowOnFocus ? { bg: 'yellow.400' } : undefined}
         >
           {menuTitle === defaultMenuTitle ? (
             <Text align="left" fontWeight={'normal'} color={'gray.400'}>
@@ -151,6 +154,7 @@ export default function CustomDropDownMenu({
             </Text>
           ) : (
             /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
+
             <Text align="left" noOfLines={1}>
               {/* {
                     selectedOptions.includes('All') &&
