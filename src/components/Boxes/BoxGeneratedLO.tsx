@@ -31,13 +31,10 @@ export default function BoxGeneratedLO({
   handleDeleteLO,
   isSmallerScreen,
 }: BoxGeneratedLOProps) {
-
   const hydrated = useHasHydrated();
 
   const [isEditClicked, setIsEditClicked] = useState<boolean>(false);
-  const [editedText, setEditedText] = useState<string>(
-    textLearningObjective
-  );
+  const [editedText, setEditedText] = useState<string>(textLearningObjective);
 
   //const [isLOSaved, setIsLOSaved] = useState<boolean>(false); // This state is used to check if the learning objective has been saved on DB with the 'Save' button
 
@@ -103,8 +100,9 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             border="none"
           >
-            {`Learning Objective ${index + 1} ${isGenerated ? '[ Generated ]' : ''
-              }`}
+            {`Learning Objective ${index + 1} ${
+              isGenerated ? '[ Generated ]' : ''
+            }`}
           </Text>
           {isEditClicked ? (
             <Textarea
@@ -134,18 +132,18 @@ export default function BoxGeneratedLO({
           )}
         </Flex>
         {hydrated && (
-          <Flex gap={isSmallerScreen ? 2 : 5} >
+          <Flex gap={isSmallerScreen ? 2 : 5}>
             <EditButtonLearningObjectiveBox
               isEditClicked={isEditClicked}
               handleEditClick={handleEditClick}
               isSmallerScreen={isSmallerScreen}
-              label_tooltip='Edit'
+              label_tooltip="Edit"
             />
 
             <DeleteButtonLOBox
               handleDeleteClick={() => handleDeleteLO(index)}
               isSmallerScreen={isSmallerScreen}
-              label_tooltip='Delete'
+              label_tooltip="Delete"
             />
           </Flex>
         )}
@@ -172,8 +170,6 @@ export default function BoxGeneratedLO({
           />
         )}
       </Box>
-
-
     </Flex>
   );
 }

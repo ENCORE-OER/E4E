@@ -30,16 +30,16 @@ export default function EditButtonLearningObjectiveBox({
     >
       <Button
         bg={'secondary'}
-        color='primary'
+        color="primary"
         //px="30px"
         display="flex"
         borderRadius={'xl'}
         onClick={handleEditClick}
         px={isSmallerScreen ? 0 : undefined}
         rightIcon={isEditClicked ? <CheckIcon /> : <IconEdit />}
-        w='fit-content'
+        w="fit-content"
       >
-        {isSmallerScreen ? '' : (isEditClicked ? 'Confirm' : 'Edit')}
+        {isSmallerScreen ? '' : isEditClicked ? 'Confirm' : 'Edit'}
       </Button>
     </Tooltip>
   );

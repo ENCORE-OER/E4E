@@ -312,7 +312,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 isNextButtonClicked={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
                 bloomLevelTitleTextBox="Select the Bloom level for the learning objective*"
-                skillConceptTitleTextBox="Add here the skill or the concepts to be covered"
+                skillConceptTitleTextBox="Add here the skills or the concepts to be covered*"
                 contextTitleTextBox="Specify the context"
                 placeholderContextBox="Add any relevant information you want to specify in the learning objective(s)..."
                 verbsTitleTextBox="Select the verbs related to your learning objective*"
