@@ -4,7 +4,7 @@ import { ArrayProps } from '../../types/encoreElements';
 import CheckboxMenu from '../CheckboxMenu/CheckboxMenu';
 import CustomDropDownMenu from '../CustomDropDownMenu/CustomDropDownMenu';
 import SearchBarPathDesign from '../CustomSearchBar/SearchBarSkillsConcepts';
-import IconInfoCircleTooltip from '../Icons/IconInfoCircle/IconInfoCircle';
+import IconInfoCircleTooltip from '../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import TextBox from '../TextBox/TextBox';
 
 export interface CentralBarsProps extends PathDesignCentralBarsProps {

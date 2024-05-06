@@ -48,8 +48,8 @@ export default function GenerateLOView({
   setIsNextButtonClicked,
   isLoading,
   setIsLoading,
-  objectLOs,
-  setObjectLOs,
+  learningObjectiveObjects,
+  setLearningObjectiveObjects,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -116,7 +116,7 @@ export default function GenerateLOView({
     //   });
     // } else
     setIsLessGeneratedLO(false);
-    console.log('objectLOs: ', objectLOs?.map((obj) => obj));
+    console.log('objectLOs: ', learningObjectiveObjects?.map((obj) => obj));
 
     if (
       bloomLevelIndex === -1 ||
@@ -134,7 +134,7 @@ export default function GenerateLOView({
     } else {
       try {
         // console.log('Previous learning objectives: ', totalLearningObjectives);
-        console.log('Previous OBJECT learning objectives: ', objectLOs);
+        console.log('Previous OBJECT learning objectives: ', learningObjectiveObjects);
         // Reset the selected learning objective index (to -1)
         if (numberOfLO > 0) {
           setIsLoading(true);
@@ -142,8 +142,8 @@ export default function GenerateLOView({
           //   objectLOs?.
           //     filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).
           //     map((objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective) || []);
-          setObjectLOs(
-            objectLOs
+          setLearningObjectiveObjects(
+            learningObjectiveObjects
               ?.filter(
                 (objectLO: ObjectLearningObjectiveProps) =>
                   !objectLO.isGenerated
@@ -217,7 +217,7 @@ export default function GenerateLOView({
             setIsLessGeneratedLO(true);
           }
           // setTotalLearningObjectives(prevLearningObjectives => [...prevLearningObjectives, ...learningObjectives]);
-          setObjectLOs(
+          setLearningObjectiveObjects(
             (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
               ...prevLearningObjectives,
               ...learningObjectives.map((lo) => ({
@@ -260,15 +260,15 @@ export default function GenerateLOView({
   useEffect(() => {
     if (
       isLoading &&
-      objectLOs.length -
-        objectLOs.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.length -
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
-  }, [objectLOs]);
+  }, [learningObjectiveObjects]);
 
   return (
     <Flex direction="column" w="100%">

@@ -13,6 +13,7 @@ import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
 import AddLearningObjectiveButton from '../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
 import ShowHideButton from '../Buttons/ShowHideButton';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
+import InfoGenAITextBox from '../TextBox/InfoGenAITextBox';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
@@ -30,8 +31,8 @@ export interface PathDesignGenLOProps {
   learningTextContext: string;
   // totalLearningObjectives: string[];
   // setTotalLearningObjectives: Dispatch<SetStateAction<string[]>>;
-  objectLOs: ObjectLearningObjectiveProps[];
-  setObjectLOs: Dispatch<SetStateAction<ObjectLearningObjectiveProps[]>>;
+  learningObjectiveObjects: ObjectLearningObjectiveProps[];
+  setLearningObjectiveObjects: Dispatch<SetStateAction<ObjectLearningObjectiveProps[]>>;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted?: boolean;
@@ -53,8 +54,8 @@ export default function PathDesignGenLO({
   learningTextContext,
   // totalLearningObjectives,
   // setTotalLearningObjectives,
-  objectLOs,
-  setObjectLOs,
+  learningObjectiveObjects,
+  setLearningObjectiveObjects,
   handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isHighligted,
@@ -84,11 +85,11 @@ export default function PathDesignGenLO({
     // setTotalLearningObjectives(updatedGeneratedLOs);
 
     // ... Update using the <ObjectLearningObjectiveProps> array ...
-    const updatedObjectLOs = [...objectLOs];
+    const updatedObjectLOs = [...learningObjectiveObjects];
     updatedObjectLOs[index].learningObjective = updatedText;
     // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
     // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
-    setObjectLOs(updatedObjectLOs);
+    setLearningObjectiveObjects(updatedObjectLOs);
   };
 
   // Function to handle the click on the checkbox to select the learning objectives
@@ -97,23 +98,23 @@ export default function PathDesignGenLO({
     try {
       console.log(
         'selected LOs',
-        objectLOs.map(
+        learningObjectiveObjects.map(
           (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
         )
       );
 
       // Updating object LO selection
-      const updatedSelectedLOsObj = [...objectLOs];
+      const updatedSelectedLOsObj = [...learningObjectiveObjects];
       updatedSelectedLOsObj[index].isSelected =
         !updatedSelectedLOsObj[index].isSelected;
       console.log(
         'updated Selected LOs',
-        objectLOs.map(
+        learningObjectiveObjects.map(
           (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
         )
       );
 
-      setObjectLOs(updatedSelectedLOsObj);
+      setLearningObjectiveObjects(updatedSelectedLOsObj);
 
       handleSelectedLearningObjectiveIndexChange(index);
     } catch (error) {
@@ -121,17 +122,23 @@ export default function PathDesignGenLO({
     }
   };
 
-  // Function to create/add an empty learning objective
-  const handleAddEmptyLearningObjective = () => {
-    console.log('Add empty learning objective');
+  // Function to create/add a custom learning objective
+  const handleAddLearningObjective = () => {
+    console.log('Add new learning objective');
     try {
       // const updatedGeneratedLOs = [...generatedLOs];
       // updatedGeneratedLOs.push('');
       // setGeneratedLOs(updatedGeneratedLOs);
 
-      setObjectLOs((prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+      setLearningObjectiveObjects((prevObjectLOs: ObjectLearningObjectiveProps[]) => [
         ...prevObjectLOs,
-        { learningObjective: '', isSelected: false, isGenerated: false },
+        {
+          learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
+            .map((selectedSkillConceptsTag: SkillItemProps) =>
+              selectedSkillConceptsTag.label).join(', ')} - ${learningTextContext}`,
+          isSelected: false,
+          isGenerated: false
+        },
       ]);
     } catch (error) {
       console.log(error);
@@ -139,11 +146,11 @@ export default function PathDesignGenLO({
   };
 
   const handleDeleteLO = (indexLO: number) => {
-    const updatedObjectLOs = [...objectLOs].filter(
+    const updatedObjectLOs = [...learningObjectiveObjects].filter(
       (objectLO: ObjectLearningObjectiveProps, index: number) =>
         indexLO !== index
     );
-    setObjectLOs(updatedObjectLOs);
+    setLearningObjectiveObjects(updatedObjectLOs);
 
     addToast({
       message: `Learning objective successfully deleted!`,
@@ -174,8 +181,8 @@ export default function PathDesignGenLO({
           }
           isLoading={isLoading}
           setIsLoading={setIsLoading}
-          objectLOs={objectLOs}
-          setObjectLOs={setObjectLOs}
+          learningObjectiveObjects={learningObjectiveObjects}
+          setLearningObjectiveObjects={setLearningObjectiveObjects}
         />
       )}
       <Flex justifyContent="center" py="10px">
@@ -193,10 +200,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          objectLOs.length > 0 &&
-          objectLOs.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -220,25 +227,25 @@ export default function PathDesignGenLO({
         <Flex direction="column">
           {
             //numberOfLO > 0 &&
-            objectLOs.length > 0 &&
-              hydrated &&
-              objectLOs.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxGeneratedLO
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    isSelected={objectLO.isSelected}
-                    // objectLOs={updatedSelectedLOs}
-                    index={index}
-                    //selectedLO={selectedLO}
-                    handleCheckBoxClick={handleCheckBoxClick}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                  />
-                )
+            learningObjectiveObjects.length > 0 &&
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxGeneratedLO
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  isSelected={objectLO.isSelected}
+                  // objectLOs={updatedSelectedLOs}
+                  index={index}
+                  //selectedLO={selectedLO}
+                  handleCheckBoxClick={handleCheckBoxClick}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
@@ -246,13 +253,16 @@ export default function PathDesignGenLO({
           {!isLoading && (
             <Flex justifyContent="center" pt="3rem">
               <AddLearningObjectiveButton
-                textButton="Add empty learning objective"
+                textButton="Add new learning objective"
                 w="fit-content"
-                handleClick={handleAddEmptyLearningObjective}
+                handleClick={handleAddLearningObjective}
               />
             </Flex>
           )}
         </Flex>
+      </Flex>
+      <Flex paddingTop={'1.5rem'}>
+        <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
       </Flex>
     </Flex>
   );

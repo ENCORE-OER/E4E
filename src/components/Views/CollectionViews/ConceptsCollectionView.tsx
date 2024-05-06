@@ -2,7 +2,7 @@ import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { MultiValue } from 'react-select';
 import { OerConceptInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
-import IconInfoCircleTooltip from '../../Icons/IconInfoCircle/IconInfoCircle';
+import IconInfoCircleTooltip from '../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import SelectConcepts from '../../Selects/SelectConcepts';
 
 type ConceptsCollectionViewProps = {
@@ -37,7 +37,7 @@ export default function ConceptsCollectionView({
       //w="full"
       //minW="150px"
       bg="background"
-      //justifyContent="center"
+    //justifyContent="center"
     >
       <Flex gap={1} bg="background">
         <IconInfoCircleTooltip label_tooltip={label_tooltip} />

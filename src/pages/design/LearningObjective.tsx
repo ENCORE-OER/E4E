@@ -329,8 +329,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 learningTextContext={learningTextContext}
                 // totalLearningObjectives={totalLearningObjectives}
                 // setTotalLearningObjectives={setTotalLearningObjectives}
-                objectLOs={learningObjectiveObjects}
-                setObjectLOs={setLearningObjectiveObjects}
+                learningObjectiveObjects={learningObjectiveObjects}
+                setLearningObjectiveObjects={setLearningObjectiveObjects}
                 handleSelectedLearningObjectiveIndexChange={
                   handleSelectedLearningObjectiveIndexChange
                 }
