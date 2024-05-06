@@ -1,10 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Flex,
-  Heading,
-  useBreakpointValue
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/learningPathContext';
@@ -16,12 +11,10 @@ import ShowHideButton from '../../components/Buttons/ShowHideButton';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import {
-  ObjectLearningObjectiveProps
-} from '../../types/encoreElements';
+import TableLearningPath from '../../components/Tables';
+import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
-
 
 // type DiscoverPageProps = {
 //   accessToken: string | undefined;
@@ -283,7 +276,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           py="115px"
           pl={isSmallerScreen ? '90px' : '240px'}
           w="full"
-          minH='100vh'
+          minH="100vh"
           bg="background"
         >
           <Box
@@ -311,7 +304,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               />
             </Box>
 
-            <Flex paddingTop="1.5rem" direction='column'>
+            <Flex paddingTop="1.5rem" direction="column">
               <Flex>
                 <ShowHideButton
                   isClicked={isClicked}
@@ -321,24 +314,36 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   isUpDown={true}
                   showButtonName="Learning objective(s)"
                   hideButtonName="Learning objective(s)"
-                  fontWeight='bold'
-                  color='primary'
-                  border='none'
+                  fontWeight="bold"
+                  color="primary"
+                  border="none"
                 />
               </Flex>
               {showBox && hydrated && (
-                <Flex direction='column' gap={2} pt={3}>
-                  {learningObjectiveObjects.filter((objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected).map(
-                    (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                      <BoxSelectedLO
-                        key={index}
-                        index={index}
-                        learningObjective={objectLO.learningObjective}
-                      />
+                <Flex direction="column" gap={2} pt={3}>
+                  {learningObjectiveObjects
+                    .filter(
+                      (objectLO: ObjectLearningObjectiveProps) =>
+                        objectLO.isSelected
                     )
-                  )}
+                    .map(
+                      (
+                        objectLO: ObjectLearningObjectiveProps,
+                        index: number
+                      ) => (
+                        <BoxSelectedLO
+                          key={index}
+                          index={index}
+                          learningObjective={objectLO.learningObjective}
+                        />
+                      )
+                    )}
                 </Flex>
               )}
+            </Flex>
+
+            <Flex paddingTop='1.5rem'>
+              <TableLearningPath />
             </Flex>
 
             {/* <Box

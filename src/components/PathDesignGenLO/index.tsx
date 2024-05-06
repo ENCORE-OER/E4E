@@ -193,10 +193,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-            objectLOs.length > 0 &&
-            objectLOs.filter(
-              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-            ).length === 0
+          objectLOs.length > 0 &&
+          objectLOs.filter(
+            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+          ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -221,24 +221,24 @@ export default function PathDesignGenLO({
           {
             //numberOfLO > 0 &&
             objectLOs.length > 0 &&
-            hydrated &&
-            objectLOs.map(
-              (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                <BoxGeneratedLO
-                  key={index}
-                  textLearningObjective={objectLO.learningObjective}
-                  isGenerated={objectLO.isGenerated}
-                  isSelected={objectLO.isSelected}
-                  // objectLOs={updatedSelectedLOs}
-                  index={index}
-                  //selectedLO={selectedLO}
-                  handleCheckBoxClick={handleCheckBoxClick}
-                  handleUpdateLO={handleUpdateLO}
-                  handleDeleteLO={handleDeleteLO}
-                  isSmallerScreen={isSmallerScreen}
-                />
+              hydrated &&
+              objectLOs.map(
+                (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                  <BoxGeneratedLO
+                    key={index}
+                    textLearningObjective={objectLO.learningObjective}
+                    isGenerated={objectLO.isGenerated}
+                    isSelected={objectLO.isSelected}
+                    // objectLOs={updatedSelectedLOs}
+                    index={index}
+                    //selectedLO={selectedLO}
+                    handleCheckBoxClick={handleCheckBoxClick}
+                    handleUpdateLO={handleUpdateLO}
+                    handleDeleteLO={handleDeleteLO}
+                    isSmallerScreen={isSmallerScreen}
+                  />
+                )
               )
-            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />

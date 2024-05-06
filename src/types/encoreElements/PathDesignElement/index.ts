@@ -5,4 +5,5 @@ export * from './LearningScenario';
 export * from './ObjectLearningObjective';
 export * from './PathDesign';
 export * from './SkillItemProps';
+export * from './TableLearningPathProps';
 export * from './Tag';

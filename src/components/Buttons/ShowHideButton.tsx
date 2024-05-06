@@ -38,15 +38,23 @@ export default function ShowHideButton({
     // setButtonName(showButtonName);
     // setShowBox(!showBox);
     // setIsClicked(!isClicked);
-
   };
 
   return (
     <Button
       variant="link"
-      rightIcon={!isUpDown
-        ? (!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />)
-        : (isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />)
+      rightIcon={
+        !isUpDown ? (
+          !isClicked ? (
+            <ChevronDownIcon />
+          ) : (
+            <ChevronUpIcon />
+          )
+        ) : isClicked ? (
+          <ChevronDownIcon />
+        ) : (
+          <ChevronUpIcon />
+        )
       }
       onClick={handleButtonClick}
       {...rest}

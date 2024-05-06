@@ -5,6 +5,6 @@ export * from './ExerciseInfoModalProps';
 export * from './GeneratedExercises';
 export * from './MetricsOers';
 export * from './oer/index';
-export * from './PathDesignElement/index';
+export * from './PathDesignElement';
 export * from './ResourceCardProps';
 export * from './SortingDropDownMenu';
