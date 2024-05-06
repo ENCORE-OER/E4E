@@ -4,6 +4,7 @@ export interface TableLearningPathProps {
     number: number;
     type: JSX.Element;
     activity: string;
+    time: string;
     description: string;
     content: JSX.Element;
     action: JSX.Element;

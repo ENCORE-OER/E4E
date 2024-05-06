@@ -11,7 +11,7 @@ import ShowHideButton from '../../components/Buttons/ShowHideButton';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import TableLearningPath from '../../components/Tables';
+import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
@@ -342,8 +342,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
               )}
             </Flex>
 
-            <Flex paddingTop='1.5rem'>
-              <TableLearningPath />
+            <Flex pt='2rem'>
+              <Heading fontSize={'x-large'}>Introduction to usability - lesson plan</Heading>
+            </Flex>
+            <Flex paddingTop="1rem">
+              <LearningPathTabs />
             </Flex>
 
             {/* <Box

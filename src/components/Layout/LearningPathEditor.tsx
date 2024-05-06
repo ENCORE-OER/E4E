@@ -1,4 +1,4 @@
-import { Box, Center, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
@@ -9,11 +9,11 @@ import ResourceCardList from '../Card/OerCard/ResourceCardsList';
 //import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type LearningPathEditorProps = {
-  conceptSelectedIndex: number;
+  conceptSelectedIndex?: number;
   //setConceptSelectedIndex: Dispatch<SetStateAction<number>>;
-  oers: (OerProps | undefined | OerFreeSearchProps)[];
+  oers?: (OerProps | undefined | OerFreeSearchProps)[];
   collectionColor?: string | string[];
-  isLoading: boolean;
+  isLoading?: boolean; // for the cards
   wPathEditor?: string;
 };
 
@@ -51,7 +51,7 @@ export default function LearningPathEditor({
 
   useEffect(() => {
     (async () => {
-      const fragment = await getFragment(conceptSelectedIndex);
+      const fragment = await getFragment(conceptSelectedIndex || 0);  // if conceptSelectedIndex is undefined then use 0
       setLearningPath(fragment);
     })();
   }, [conceptSelectedIndex, getFragment]);
@@ -65,7 +65,7 @@ export default function LearningPathEditor({
   }, []);
 
   return (
-    <>
+    <Flex w='100%'>
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
@@ -109,33 +109,35 @@ export default function LearningPathEditor({
               />
             </Box>
 
-            <Box flex="1" p={5} w="90%">
-              <Text pb={5} fontSize="20" fontWeight="semibold">
-                Relevant OERs
-              </Text>
+            {oers !== undefined &&
+              (<Box flex="1" p={5} w="90%">
+                <Text pb={5} fontSize="20" fontWeight="semibold">
+                  Relevant OERs
+                </Text>
 
-              {isLoading && (
-                <div className="loading-spinner">
-                  <div className="spinner"></div>
-                  <p>Loading...</p>
-                </div>
-              )}
+                {isLoading !== undefined && isLoading && (
+                  <div className="loading-spinner">
+                    <div className="spinner"></div>
+                    <p>Loading...</p>
+                  </div>
+                )}
 
-              {oers && !isLoading && (
-                <ResourceCardList
-                  oers={oers}
-                  isNormalSizeCard={false}
-                  itemsPerPage={3}
-                  collectionsColor={collectionColor ? collectionColor : ''}
-                  isResourcePage={false}
-                  oersLength={oers.length}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-              )}
-            </Box>
+                {oers && !isLoading && (
+                  <ResourceCardList
+                    oers={oers}
+                    isNormalSizeCard={false}
+                    itemsPerPage={3}
+                    collectionsColor={collectionColor ? collectionColor : ''}
+                    isResourcePage={false}
+                    oersLength={oers.length}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                )}
+              </Box>)
+            }
           </Box>
         )}
-    </>
+    </ Flex>
   );
 }
