@@ -77,7 +77,9 @@ export default function CustomDropDownMenu({
       } else if (!Array.isArray(itemIndex)) {
         setMenuTitle(
           itemIndex > -1
-            ? data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle
+            ? data[itemIndex]?.name ||
+                data[itemIndex]?.title ||
+                defaultMenuTitle
             : defaultMenuTitle
         );
       }

@@ -132,7 +132,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>
@@ -170,7 +170,7 @@ const Edit = () => {
                 onSelectionChange={handleCollectionChange}
                 isHighlighted={areOptionsComplete}
                 isBloomLevel={false}
-                defaultMenuTitle='Choose a collection'
+                defaultMenuTitle="Choose a collection"
               />
             </Box>
             <Flex w="auto" position="absolute" bottom="5%" right="8%">
