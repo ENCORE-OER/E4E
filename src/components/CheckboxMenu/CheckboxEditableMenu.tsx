@@ -2,63 +2,65 @@ import { Button, Flex, Input, Checkbox, Stack, Icon } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import { OptionsData } from '../../types/encoreElements';
 
 type EditableCheckboxMenuProps = {
-  initialOptions: { [key: string]: boolean };
-  onChange: (answer: string, isChecked: boolean) => void;
-  onOptionsChange?: (newOptions: { [key: string]: boolean }) => void;
+  initialOptions: OptionsData[];
+  onChange: (option: OptionsData) => void;
+  onOptionsChange?: (newOptions: OptionsData[]) => void;
 };
 
 function EditableCheckboxMenu({
   initialOptions,
-  onChange,
-  onOptionsChange,
+  onChange, //gestisce il cambiamento di stato di una voce
+  onOptionsChange, //gestisce il cambiamento di stato di tutte le voci
 }: EditableCheckboxMenuProps) {
-  const [options, setOptions] = useState(initialOptions || {});
+  const [options, setOptions] = useState(initialOptions || []);
   const [inputText, setInputText] = useState('');
   const hydrated = useHasHydrated();
 
-  const handleCheckboxChange = (key: string) => {
-    setOptions((prevOptions) => {
-      const updatedOptions = { ...prevOptions, [key]: !prevOptions[key] };
-      onChange(key, updatedOptions[key]);
-      return updatedOptions;
-    });
+  const handleCheckboxChange = (index: number) => {
+    const updatedOptions = [...options];
+    updatedOptions[index][1] = !updatedOptions[index][1];
+    setOptions(updatedOptions);
+    onChange(updatedOptions[index]);
   };
 
   const handleAddOption = () => {
     if (inputText.trim() !== '') {
-      setOptions({ ...options, [inputText]: false });
+      const newOption: OptionsData = [inputText, false];
+      setOptions([...options, newOption]);
       setInputText('');
-      onChange(inputText, false);
+      onChange(newOption);
     }
   };
 
-  const handleRemoveOption = (key: string) => {
-    const { [key]: _, ...newOptions } = options;
-    console.log(_);
-    setOptions(newOptions);
-    if (onOptionsChange) onOptionsChange(newOptions);
+  const handleRemoveOption = (index: number) => {
+    const updatedOptions = [...options];
+    updatedOptions.splice(index, 1);
+    setOptions(updatedOptions);
+    if (onOptionsChange) onOptionsChange(updatedOptions);
   };
 
   return (
     <>
       <Stack direction="column">
         {hydrated &&
-          Object.entries(options).map(([key, value]) => (
-            <Flex key={key}>
+          options.map(([text, isChecked], index) => (
+            <Flex key={index}>
               <Checkbox
-                isChecked={value}
-                onChange={() => handleCheckboxChange(key)}
+                isChecked={isChecked}
+                onChange={() => handleCheckboxChange(index)}
                 w="40%"
                 colorScheme="yellow"
               >
-                {key}
+                {text}
               </Checkbox>
               <Button
                 colorScheme="yellow"
                 size="md"
-                onClick={() => handleRemoveOption(key)}
+                ml={2}
+                onClick={() => handleRemoveOption(index)}
               >
                 <Icon as={DeleteIcon} w={4} h={4} />
               </Button>
@@ -72,7 +74,7 @@ function EditableCheckboxMenu({
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
-        <Button colorScheme="yellow" size="md" onClick={handleAddOption}>
+        <Button colorScheme="yellow" size="md" onClick={handleAddOption} ml={2}>
           <Flex align="center">
             <Icon as={AddIcon} w={4} h={4} />
           </Flex>

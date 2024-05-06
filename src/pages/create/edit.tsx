@@ -13,7 +13,10 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdSave } from 'react-icons/md';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import EditFillGaps from '../../components/Tabs/TabsCreatePage/EditFillGaps';
@@ -33,13 +36,15 @@ const Edit = () => {
   });
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
+  const { collections } = useCollectionsContext();
+  const { handleCollectionIndexChange } = useLearningPathDesignContext();
   const {
-    typeOfExercisePanel,
     title,
     description,
     data,
     handleData,
     apiGeneratedExerciseData,
+    chosenTypeOfExercise,
     // apiFillGapsData
     // apiOpenQuestionData,
     // apiMultipleChiocesData,
@@ -47,20 +52,30 @@ const Edit = () => {
 
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const [areOptionsComplete, setAreOptionsComplete] = useState(true);
+
+  const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
+    null
+  );
 
   useEffect(() => {
-    console.log('qualcosa');
+    //console.log('qualcosa');
   }, [response]);
 
+  const handleCollectionSelection = () => {
+    // Update the state to show the text when a collection is selected
+    setSelectedCollection(true);
+  };
+
+  const handleCollectionChange = (collectionIndex: number) => {
+    handleCollectionIndexChange(collectionIndex);
+  };
+
   const handleOptionsComplete = () => {
-    if (
-      title != null &&
-      title != '' &&
-      description != null &&
-      description != ''
-    ) {
+    if (title != '' && description != '') {
       setAreOptionsComplete(true);
+    } else {
+      setAreOptionsComplete(false);
     }
   };
 
@@ -81,6 +96,7 @@ const Edit = () => {
 
       // Gestisci la risposta
       setResponse(apiResponse.data);
+      console.log('response', response);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
@@ -90,10 +106,14 @@ const Edit = () => {
   };
 
   useEffect(() => {
-    if (title && description) handleOptionsComplete();
+    handleOptionsComplete();
     handleData();
-    console.log('data', data);
-  }, [title, description]);
+    //console.log('data', data);
+  }, [title, description, selectedCollection]);
+
+  useEffect(() => {
+    console.log('response', response);
+  }, [response]);
 
   return (
     <>
@@ -112,28 +132,27 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
-              <Heading>
-                Edit the {hydrated && typeOfExercisePanel} exercise
-              </Heading>
+              <Heading>Edit the exercise</Heading>
             </Flex>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {hydrated && typeOfExercisePanel === 'Fill the Gaps' && (
+            {console.log('chosenTypeOfExercise', chosenTypeOfExercise)}
+            {hydrated && chosenTypeOfExercise === 3 && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditFillGaps fillGapsData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && typeOfExercisePanel === 'Open Question' && (
+            {hydrated && chosenTypeOfExercise < 3 && (
               /* Genera il secondo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditOpenQuestion openQuestionData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && typeOfExercisePanel === 'Multiple Choice' && (
+            {hydrated && chosenTypeOfExercise > 3 && (
               /* Genera il terzo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditMultipleChoice
@@ -141,9 +160,22 @@ const Edit = () => {
                 />
               </Box>
             )}
+            <Box w="60%" paddingTop="1rem">
+              <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                <Text as="b">Select a collection to save the exercise to</Text>
+              </Flex>
+              <CustomDropDownMenu
+                data={collections}
+                onData={handleCollectionSelection}
+                onSelectionChange={handleCollectionChange}
+                isHighlighted={areOptionsComplete}
+                isBloomLevel={false}
+                defaultMenuTitle='Choose a collection'
+              />
+            </Box>
             <Flex w="auto" position="absolute" bottom="5%" right="8%">
               <Button
-                border={'1px solid'}
+                border="1px solid"
                 borderRadius="lg"
                 size="lg"
                 type="submit"
@@ -190,12 +222,13 @@ const Edit = () => {
                 <Icon as={MdSave} w="40%" h="40%" />
               </Button>
             </Flex>
-            {/* {!loading &&
+            {console.log('response', response)}
+            {!loading &&
               response &&
               addToast({
                 message: 'Exercise saved successfully.',
                 type: 'success',
-              })} */}
+              })}
           </Box>
         </Box>
       </Flex>

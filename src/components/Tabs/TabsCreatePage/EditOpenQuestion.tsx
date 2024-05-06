@@ -70,6 +70,7 @@ export default function EditOpenQuestion({
             placeholder="Insert the question"
             rows={5}
           />
+          {console.log('question', question)}
           <Flex paddingBottom="0.5rem" paddingTop="1rem">
             <Text as="b">Answer</Text>
           </Flex>
@@ -79,6 +80,7 @@ export default function EditOpenQuestion({
             placeholder="Insert the answer of the question"
             rows={5}
           />
+          {console.log('solution', solution)}
         </Box>
       </Flex>
     </>

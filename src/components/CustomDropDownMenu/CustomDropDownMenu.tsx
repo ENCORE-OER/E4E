@@ -24,7 +24,7 @@ type CollectionMenuProps = {
   onSelectionChange?: (selectedItem: number) => void;
   isHighlighted: boolean;
   isBloomLevel?: boolean;
-  itemIndex: number | number[];
+  itemIndex?: number | number[];
   defaultMenuTitle: string;
 };
 
@@ -59,26 +59,28 @@ export default function CustomDropDownMenu({
   // }, [isBloomLevel, collectionIndex, resourceIndex, bloomLevelIndex, data]);
 
   useEffect(() => {
-    if (Array.isArray(itemIndex)) {
-      if (itemIndex.length === 0) {
-        // Reset menu title if there aren't resources selected
-        setMenuTitle(defaultMenuTitle);
-      } else {
-        // Sum all the name of the selected resources
-        const longTitle = itemIndex
-          .map(
-            (index: number) =>
-              data[index]?.name || data[index]?.title || defaultMenuTitle
-          )
-          .join(', ');
-        setMenuTitle(longTitle);
+    if (itemIndex !== undefined) {
+      if (Array.isArray(itemIndex)) {
+        if (itemIndex.length === 0) {
+          // Reset menu title if there aren't resources selected
+          setMenuTitle(defaultMenuTitle);
+        } else {
+          // Sum all the name of the selected resources
+          const longTitle = itemIndex
+            .map(
+              (index: number) =>
+                data[index]?.name || data[index]?.title || defaultMenuTitle
+            )
+            .join(', ');
+          setMenuTitle(longTitle);
+        }
+      } else if (!Array.isArray(itemIndex)) {
+        setMenuTitle(
+          itemIndex > -1
+            ? data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle
+            : defaultMenuTitle
+        );
       }
-    } else if (!Array.isArray(itemIndex)) {
-      setMenuTitle(
-        itemIndex > -1
-          ? data[itemIndex]?.name || data[itemIndex]?.title || defaultMenuTitle
-          : defaultMenuTitle
-      );
     }
   }, [itemIndex, data, defaultMenuTitle]);
 

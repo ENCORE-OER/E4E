@@ -44,6 +44,8 @@ export default function CreateExerciseButton({
     description,
     macroSubject,
     chosenTopic,
+    learningObjective,
+    apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { apiKey, setupModel } = useGeneralContext();
   const responseRef = useRef<GeneratedExerciseProps | null>(null);
@@ -64,7 +66,7 @@ export default function CreateExerciseButton({
         title: title, // from materialAnalyzer API
         level: chosenTargetLevel,
         typeOfExercise: chosenTypeOfExercise,
-        learningObjective: `Teaching the students ${title}. In particular ${description}`, // TODO: add a component in frontend to set the learning objective???
+        learningObjective: learningObjective,
         bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
         // language: language, // English by default
         material: sourceText,
@@ -160,6 +162,9 @@ export default function CreateExerciseButton({
     bloomLevelExercise,
     questionType,
     assignmentType,
+    temperature,
+    learningObjective,
+    chosenTopic,
   ]);
 
   const handleOptionsComplete = () => {
@@ -168,7 +173,9 @@ export default function CreateExerciseButton({
         targetLevel !== null &&
         bloomLevelExercise !== null &&
         //length !== null &&
-        temperature !== null
+        temperature !== null &&
+        learningObjective !== '' &&
+        chosenTopic !== ''
       ) {
         setAreOptionsComplete(true);
       }
@@ -177,7 +184,9 @@ export default function CreateExerciseButton({
         targetLevel !== null &&
         bloomLevelExercise !== null &&
         temperature !== null &&
-        questionType !== null
+        questionType !== null &&
+        learningObjective !== '' &&
+        chosenTopic !== ''
       ) {
         setAreOptionsComplete(true);
       }
@@ -186,7 +195,9 @@ export default function CreateExerciseButton({
         targetLevel !== null &&
         bloomLevelExercise !== null &&
         assignmentType !== null &&
-        temperature !== null
+        temperature !== null &&
+        learningObjective !== '' &&
+        chosenTopic !== ''
       ) {
         setAreOptionsComplete(true);
       }
@@ -208,9 +219,9 @@ export default function CreateExerciseButton({
             //handleTypeOfExercisePanel(1);
             if (areOptionsComplete) {
               if (sourceText !== '') {
-                handleIsGenerateButtonClicked(true);
                 handleGenerateButtonClick();
               } else {
+                handleIsGenerateButtonClicked(true);
                 addToast({
                   message: 'Please add a resource for the exercise.',
                   type: 'warning',
@@ -237,14 +248,16 @@ export default function CreateExerciseButton({
 
       <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
         <Flex paddingBottom="0.5rem">
-          <Text as="b">Output</Text>
+          <Text as="b">Exercise preview</Text>
         </Flex>
         {loading ? (
           <Box>
             <Text>Loading...</Text>
           </Box>
         ) : (
-          response && <GenerateExerciseResponseView response={response} />
+          (response || apiGeneratedExerciseData.Assignment !== '') && (
+            <GenerateExerciseResponseView response={response} />
+          )
         )}
       </Box>
     </>
