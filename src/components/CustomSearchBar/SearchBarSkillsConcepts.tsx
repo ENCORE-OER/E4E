@@ -4,7 +4,7 @@ import {
   AutoCompleteInput,
   AutoCompleteItem,
   AutoCompleteList,
-  AutoCompleteTag,
+  AutoCompleteTag
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -27,7 +27,7 @@ type SearchBarV2Props = {
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
   isHighlighted: boolean;
 };
-export default function SearchBarPathDesign({
+export default function SearchBarSkillsConcepts({
   collectionIndex,
   resourcesIndex,
   isHighlighted,
@@ -55,8 +55,10 @@ export default function SearchBarPathDesign({
   };
 
   const renderSkillAndConceptItems = () => {
+    console.log('renderSkillAndConceptItems...');
+    uniqueItems.clear();  // Clear the set to avoid duplicates
     if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
-      uniqueItems.clear();
+      console.log('first if...');
       resourcesIndex.forEach((index: number) => {
         oers[index]?.skills?.forEach((skill) => {
           const skillId = skill.id;
@@ -71,6 +73,7 @@ export default function SearchBarPathDesign({
         });
       });
     } else {
+      console.log('second if...');
       oers?.forEach((oer: OerInCollectionProps) => {
         oer?.skills?.forEach((skill) => {
           const skillId = skill.id;

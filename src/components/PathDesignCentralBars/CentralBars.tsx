@@ -3,7 +3,7 @@ import { PathDesignCentralBarsProps } from '.';
 import { ArrayProps } from '../../types/encoreElements';
 import CheckboxMenu from '../CheckboxMenu/CheckboxMenu';
 import CustomDropDownMenu from '../CustomDropDownMenu/CustomDropDownMenu';
-import SearchBarPathDesign from '../CustomSearchBar/SearchBarSkillsConcepts';
+import SearchBarSkillsConcepts from '../CustomSearchBar/SearchBarSkillsConcepts';
 import IconInfoCircleTooltip from '../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import TextBox from '../TextBox/TextBox';
 
@@ -54,7 +54,7 @@ export default function CentralBars({
           {skillConceptTextBox}
         </Text>
         <Box w="100%" pt={1}>
-          <SearchBarPathDesign
+          <SearchBarSkillsConcepts
             collectionIndex={collectionIndex}
             resourcesIndex={resourcesIndex}
             isHighlighted={isNextButtonClicked}

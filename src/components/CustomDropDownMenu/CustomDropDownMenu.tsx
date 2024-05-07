@@ -11,7 +11,6 @@ import {
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import { ArrayProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 
@@ -21,7 +20,7 @@ type CollectionMenuProps = {
   data: ArrayProps[]; // data array to scroll through the menu
   // options?: string[] | undefined;
   onData?: (data?: string[] | number[]) => void;
-  onSelectionChange?: (selectedItem: number) => void;
+  onSelectionChange?: (selectedItem: number, event?: any) => void;
   isHighlighted?: boolean;
   isBloomLevel?: boolean;
   itemIndex?: number | number[];
@@ -35,7 +34,7 @@ export default function CustomDropDownMenu({
   // onData,
   onSelectionChange,
   isHighlighted,
-  isBloomLevel,
+  // isBloomLevel,
   isYellowOnFocus,
   itemIndex,
   defaultMenuTitle,
@@ -43,7 +42,7 @@ export default function CustomDropDownMenu({
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
   // const { collectionIndex, resourceIndex, bloomLevelIndex, selectedSkillConceptsTags } =
-  const { selectedSkillConceptsTags } = useLearningPathDesignContext();
+  // const { selectedSkillConceptsTags } = useLearningPathDesignContext();
   // const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
@@ -80,8 +79,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-                data[itemIndex]?.title ||
-                defaultMenuTitle
+            data[itemIndex]?.title ||
+            defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -103,11 +102,11 @@ export default function CustomDropDownMenu({
     setMenuTitle(item.name || item.title || '');
     handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
 
-    //todo fix this, the problem is that idk how to delete the tags without refreshing the page
-    if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
-      // Refresha la pagina
-      window.location.reload();
-    }
+    //TODO: fix this, the problem is that idk how to delete the tags without refreshing the page => FIXED: use .clear() method
+    // if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
+    //   // Refresha la pagina
+    //   window.location.reload();
+    // }
   };
 
   const handleToggleMenu = () => {

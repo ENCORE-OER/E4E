@@ -32,7 +32,9 @@ export interface PathDesignGenLOProps {
   // totalLearningObjectives: string[];
   // setTotalLearningObjectives: Dispatch<SetStateAction<string[]>>;
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
-  setLearningObjectiveObjects: Dispatch<SetStateAction<ObjectLearningObjectiveProps[]>>;
+  setLearningObjectiveObjects: Dispatch<
+    SetStateAction<ObjectLearningObjectiveProps[]>
+  >;
   handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isHighligted?: boolean;
@@ -130,16 +132,21 @@ export default function PathDesignGenLO({
       // updatedGeneratedLOs.push('');
       // setGeneratedLOs(updatedGeneratedLOs);
 
-      setLearningObjectiveObjects((prevObjectLOs: ObjectLearningObjectiveProps[]) => [
-        ...prevObjectLOs,
-        {
-          learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
-            .map((selectedSkillConceptsTag: SkillItemProps) =>
-              selectedSkillConceptsTag.label).join(', ')} - ${learningTextContext}`,
-          isSelected: false,
-          isGenerated: false
-        },
-      ]);
+      setLearningObjectiveObjects(
+        (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+          ...prevObjectLOs,
+          {
+            learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
+              .map(
+                (selectedSkillConceptsTag: SkillItemProps) =>
+                  selectedSkillConceptsTag.label
+              )
+              .join(', ')} - ${learningTextContext}`,
+            isSelected: false,
+            isGenerated: false,
+          },
+        ]
+      );
     } catch (error) {
       console.log(error);
     }
@@ -219,7 +226,8 @@ export default function PathDesignGenLO({
               textColor={'orange.300'}
             >
               {' '}
-              {`Sorry, but we were unable to generate N different required learning objectives.`}{' '}
+              {`Sorry, but we were unable to generate N different required learning objectives.`}
+              {' '}
             </Text>
           </Flex>
         )}

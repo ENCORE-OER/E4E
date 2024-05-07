@@ -134,7 +134,10 @@ export default function GenerateLOView({
     } else {
       try {
         // console.log('Previous learning objectives: ', totalLearningObjectives);
-        console.log('Previous OBJECT learning objectives: ', learningObjectiveObjects);
+        console.log(
+          'Previous OBJECT learning objectives: ',
+          learningObjectiveObjects
+        );
         // Reset the selected learning objective index (to -1)
         if (numberOfLO > 0) {
           setIsLoading(true);
@@ -261,10 +264,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }
