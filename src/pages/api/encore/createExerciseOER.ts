@@ -21,7 +21,7 @@ export default async function serverSideCall(
     console.log('req.body', req.body);
     console.log('data', data);
     console.log('description', data?.description);
-    console.log(data?.level);
+    console.log(data?.exercise_values);
 
     //const url = 'https://encore-db.grial.eu/api/oer/create/';
 
@@ -35,22 +35,12 @@ export default async function serverSideCall(
           publication_date: data?.publication_date,
           source: data?.source,
           language: data?.language,
+          learning_objective: data?.learning_objective,
+          topic: data?.topic,
           assessment_oer: data?.assessment_oer,
           added_externally: data?.added_externally,
-          assessment_oer_type: data?.assessment_oer_type,
           generated_by_ai: data?.generated_by_ai,
-          level: data?.level,
-          number_of_distractors: data?.number_of_distractors,
-          //number_of_words: data?.number_of_words,
-          temperature: data?.temperature,
-          type_of_exercise: data?.type_of_exercise,
-          number_of_correct_answer: data?.number_of_correct_answer,
-          number_of_easy_distractors: data?.number_of_easy_distractors,
-          quiz_questions: data?.quiz_questions[0],
-          // question: data?.question,
-          // question_response: data?.question_response,
-          fill_template: data?.fill_template,
-          fill_template_with_gaps: data?.fill_template_with_gaps,
+          exercise_values: data?.exercise_values,
         }
         // {
         //   headers: {
