@@ -4,7 +4,7 @@ import {
   AutoCompleteInput,
   AutoCompleteItem,
   AutoCompleteList,
-  AutoCompleteTag
+  AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -56,7 +56,7 @@ export default function SearchBarSkillsConcepts({
 
   const renderSkillAndConceptItems = () => {
     console.log('renderSkillAndConceptItems...');
-    uniqueItems.clear();  // Clear the set to avoid duplicates
+    uniqueItems.clear(); // Clear the set to avoid duplicates
     if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
       console.log('first if...');
       resourcesIndex.forEach((index: number) => {

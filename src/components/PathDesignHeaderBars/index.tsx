@@ -57,7 +57,7 @@ export default function PathDesignHeaderBars({
             // flex='1'
             w="50%"
           >
-            Select the resources within the collection
+            Select the resources within the collection*
           </Text>
         )}
       </Flex>
@@ -112,6 +112,7 @@ export default function PathDesignHeaderBars({
               isBloomLevel={false}
               itemIndex={resourcesIndex}
               defaultMenuTitle="Select the resources"
+              isCheckBoxNeeded={true}
             />
           </Box>
         )}

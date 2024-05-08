@@ -250,7 +250,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -259,7 +259,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -337,8 +337,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-              // apiKey={apiKey}
-              // handleApiKey={handleApiKey}
+                // apiKey={apiKey}
+                // handleApiKey={handleApiKey}
               />
             </Flex>
           )}

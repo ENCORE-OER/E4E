@@ -1,12 +1,13 @@
 import {
   Box,
   Button,
+  Checkbox,
   Flex,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
+  Text
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -16,7 +17,7 @@ import { useHasHydrated } from '../../utils/utils';
 
 export type onDataType = number | string;
 
-type CollectionMenuProps = {
+type CustomDropDownMenuProps = {
   data: ArrayProps[]; // data array to scroll through the menu
   // options?: string[] | undefined;
   onData?: (data?: string[] | number[]) => void;
@@ -26,6 +27,7 @@ type CollectionMenuProps = {
   itemIndex?: number | number[];
   defaultMenuTitle: string;
   isYellowOnFocus?: boolean;
+  isCheckBoxNeeded?: boolean;
 };
 
 export default function CustomDropDownMenu({
@@ -38,7 +40,8 @@ export default function CustomDropDownMenu({
   isYellowOnFocus,
   itemIndex,
   defaultMenuTitle,
-}: CollectionMenuProps) {
+  isCheckBoxNeeded,
+}: CustomDropDownMenuProps) {
   //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
   // const { collectionIndex, resourceIndex, bloomLevelIndex, selectedSkillConceptsTags } =
@@ -173,7 +176,8 @@ export default function CustomDropDownMenu({
             data?.map((item: ArrayProps, index: number) => (
               <Flex p={0.5} key={index}>
                 <MenuItem
-                  onClick={() => handleMenuItemClick(item, index)}
+                  onClick={!isCheckBoxNeeded ? () => handleMenuItemClick(item, index) : undefined}
+                  closeOnSelect={isCheckBoxNeeded ? false : true}
                   bg={
                     Array.isArray(itemIndex)
                       ? itemIndex.includes(index)
@@ -185,7 +189,20 @@ export default function CustomDropDownMenu({
                   }
                   borderRadius={5}
                 >
-                  <Text>{item.name || item.title}</Text>
+                  <Flex direction={'row'} w='100%'>
+                    <Text flex='1'>{item.name || item.title}</Text>
+                    {isCheckBoxNeeded &&
+                      <Flex flex='1' justify={'flex-end'}>
+                        <Checkbox
+                          key={index}
+                          value={item.name || item.title}
+                          colorScheme="yellow"
+                          onChange={() => handleMenuItemClick(item, index)}
+                          isChecked={Array.isArray(itemIndex) ? itemIndex.includes(index) : itemIndex === index}
+                        />
+                      </Flex>
+                    }
+                  </Flex>
                 </MenuItem>
               </Flex>
             ))}
