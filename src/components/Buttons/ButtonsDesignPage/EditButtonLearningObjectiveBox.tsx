@@ -29,7 +29,7 @@ export default function EditButtonLearningObjectiveBox({
       borderRadius={5}
     >
       <Button
-        variant='link'
+        variant="link"
         // bg={'secondary'}
         color="primary"
         //px="30px"
