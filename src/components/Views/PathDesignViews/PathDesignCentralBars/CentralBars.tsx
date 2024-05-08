@@ -1,11 +1,11 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { PathDesignCentralBarsProps } from '.';
-import { ArrayProps } from '../../types/encoreElements';
-import CheckboxMenu from '../CheckboxMenu/CheckboxMenu';
-import CustomDropDownMenu from '../CustomDropDownMenu/CustomDropDownMenu';
-import SearchBarSkillsConcepts from '../CustomSearchBar/SearchBarSkillsConcepts';
-import IconInfoCircleTooltip from '../Icons/IconInfoCircle/IconInfoCircleTooltip';
-import TextBox from '../TextBox/TextBox';
+import { ArrayProps } from '../../../../types/encoreElements';
+import CheckboxMenu from '../../../CheckboxMenu/CheckboxMenu';
+import CustomDropDownMenu from '../../../CustomDropDownMenu/CustomDropDownMenu';
+import SearchBarSkillsConcepts from '../../../CustomSearchBar/SearchBarSkillsConcepts';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
+import TextBox from '../../../TextBox/TextBox';
 
 export interface CentralBarsProps extends PathDesignCentralBarsProps {
   SPACING: number;

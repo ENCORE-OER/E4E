@@ -62,8 +62,11 @@ export default function SearchBarSkillsConcepts({
         oers[index]?.skills?.forEach((skill) => {
           const skillId = skill.id;
           const skillLabel = skill.label;
-          const isLabelAlreadySelected = [...uniqueItems].some((item: SkillItemProps) => item.label === skillLabel);
-          if (!isLabelAlreadySelected) { // Avoid duplicates: Check if the item is already in the set
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === skillLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
             uniqueItems.add({ id: skillId, label: skillLabel });
           }
         });
@@ -71,8 +74,11 @@ export default function SearchBarSkillsConcepts({
         oers[index]?.concepts?.forEach((concept) => {
           const conceptId = concept.id;
           const conceptLabel = concept.label;
-          const isLabelAlreadySelected = [...uniqueItems].some((item: SkillItemProps) => item.label === conceptLabel);
-          if (!isLabelAlreadySelected) { // Avoid duplicates: Check if the item is already in the set
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === conceptLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
             uniqueItems.add({ id: conceptId, label: conceptLabel });
           }
         });

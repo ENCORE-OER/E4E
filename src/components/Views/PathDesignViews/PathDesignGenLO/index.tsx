@@ -1,19 +1,18 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { PiSmileySadLight } from 'react-icons/pi';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useGeneralContext } from '../../../../Contexts/GeneralContext';
 import {
   ObjectLearningObjectiveProps,
   Option,
   SkillItemProps,
-} from '../../types/encoreElements';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
-import BoxGeneratedLO from '../Boxes/BoxGeneratedLO';
-import AddLearningObjectiveButton from '../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
-import ShowHideButton from '../Buttons/ShowHideButton';
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import InfoGenAITextBox from '../TextBox/InfoGenAITextBox';
+} from '../../../../types/encoreElements';
+import { CustomToast } from '../../../../utils/Toast/CustomToast';
+import { useHasHydrated } from '../../../../utils/utils';
+import BoxGeneratedLO from '../../../Boxes/BoxGeneratedLO';
+import AddLearningObjectiveButton from '../../../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
+import ShowHideButton from '../../../Buttons/ShowHideButton';
+import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
@@ -207,10 +206,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -234,24 +233,24 @@ export default function PathDesignGenLO({
           {
             //numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxGeneratedLO
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    isSelected={objectLO.isSelected}
-                    // objectLOs={updatedSelectedLOs}
-                    index={index}
-                    //selectedLO={selectedLO}
-                    handleCheckBoxClick={handleCheckBoxClick}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxGeneratedLO
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  isSelected={objectLO.isSelected}
+                  // objectLOs={updatedSelectedLOs}
+                  index={index}
+                  //selectedLO={selectedLO}
+                  handleCheckBoxClick={handleCheckBoxClick}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
@@ -266,9 +265,6 @@ export default function PathDesignGenLO({
             </Flex>
           )}
         </Flex>
-      </Flex>
-      <Flex paddingTop={'1.5rem'}>
-        <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
       </Flex>
     </Flex>
   );

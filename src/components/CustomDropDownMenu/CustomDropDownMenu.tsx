@@ -7,13 +7,14 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
+  Text
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { ArrayProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
+import DeselectAllButton from '../Buttons/ButtonsDesignPage/DeselectAllButton';
 
 export type onDataType = number | string;
 
@@ -42,25 +43,10 @@ export default function CustomDropDownMenu({
   defaultMenuTitle,
   isCheckBoxNeeded,
 }: CustomDropDownMenuProps) {
-  //const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
-  // const { collectionIndex, resourceIndex, bloomLevelIndex, selectedSkillConceptsTags } =
-  // const { selectedSkillConceptsTags } = useLearningPathDesignContext();
-  // const [selectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
 
-  // useEffect(() => {
-  //   // Aggiorna il titolo in base agli indici
-  //   if (isBloomLevel) {
-  //     // Se è un Bloom Level e l'indice è valido
-  //     setMenuTitle(data[bloomLevelIndex]?.name || 'Select Bloom Level');
-  //   } else {
-  //     // Se è una Collection e l'indice è valido
-  //     setMenuTitle(data[collectionIndex]?.name || 'Select Collection');
-  //   }
-  //   // ... altri effetti necessari
-  // }, [isBloomLevel, collectionIndex, resourceIndex, bloomLevelIndex, data]);
 
   useEffect(() => {
     if (itemIndex !== undefined) {
@@ -82,8 +68,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-                data[itemIndex]?.title ||
-                defaultMenuTitle
+            data[itemIndex]?.title ||
+            defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -112,6 +98,14 @@ export default function CustomDropDownMenu({
     // }
   };
 
+  const handleDeleteAllClick = () => {
+    if (onSelectionChange) {
+      onSelectionChange(-1);
+    }
+
+    //setMenuTitle(defaultMenuTitle);
+  }
+
   const handleToggleMenu = () => {
     setIsOpen(!isOpen); // invert open menu state
   };
@@ -139,26 +133,31 @@ export default function CustomDropDownMenu({
     >
       <Menu
         isOpen={isOpen}
-        onOpen={handleToggleMenu}
+        // onOpen={handleToggleMenu}
         onClose={handleToggleMenu}
+        closeOnSelect={isCheckBoxNeeded ? false : true}
       >
         <MenuButton
           as={Button}
-          rightIcon={<ChevronDownIcon />}
+          rightIcon={isOpen ? <ChevronUpIcon fontSize='x-large' /> : <ChevronDownIcon fontSize='x-large' />}
           w="100%"
           title={menuTitle}
           bg={'white'}
-          _expanded={isYellowOnFocus ? { bg: 'yellow.400' } : undefined}
+          _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
+          aria-expanded={isOpen ? 'true' : 'false'}
+          onClick={handleToggleMenu}
         >
-          {menuTitle === defaultMenuTitle ? (
-            <Text align="left" fontWeight={'normal'} color={'gray.400'}>
-              {menuTitle}
-            </Text>
-          ) : (
-            /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
+          <Flex direction='row' w='100%' align='center' gap={3}>
+            <Flex flex="1" justifyItems={'flex-start'} overflow="hidden" whiteSpace="nowrap" >
+              {menuTitle === defaultMenuTitle ? (
+                <Text align="left" fontWeight={'normal'} color={'gray.400'} noOfLines={1}>
+                  {menuTitle}
+                </Text>
+              ) : (
+                /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
 
-            <Text align="left" noOfLines={1}>
-              {/* {
+                <Text align="left" noOfLines={1}>
+                  {/* {
                     selectedOptions.includes('All') &&
                       options?.length === selectedOptions.length
                       ? 'All'
@@ -166,12 +165,64 @@ export default function CustomDropDownMenu({
                         ? selectedOptions.join(', ')
                         : menuTitle // Utilizza il valore memorizzato in menuTitle
                   } */}
-              {menuTitle}
-            </Text>
-          )}
+                  {menuTitle}
+                </Text>
+              )}
+            </Flex>
+
+            {/* TODO: Implementation of X button inside the MENU to deselect all the options selected before. */}
+            {/* PROBLEM: It's not possible to e.stopPropagation() to menu button */}
+            {/* {!isOpen &&
+              isCheckBoxNeeded &&
+              Array.isArray(itemIndex) &&
+              itemIndex.length > 0 &&
+              (
+                <Flex justify={'flex-end'}>
+                  <Button
+                    // position='absolute'
+                    // right={0}
+
+                    bg='none'
+                    _hover={{ backgroundColor: 'blue.300' }}
+                    w='fit-content'
+                    p={0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteAllClick();
+                    }}
+                  >
+                    <CloseIcon
+                      fontSize='small'
+                    // as="button"
+                    // bg='none'
+                    // _hover={{ backgroundColor: 'gray.300' }}
+                    // w='fit-content'
+                    // p={0}
+                    // onClick={(e) => {
+                    //   e.stopPropagation();
+                    //   handleDeleteAllClick();
+                    // }}
+                    />
+                  </Button>
+                </Flex>
+              )
+            } */}
+          </Flex>
         </MenuButton>
 
-        <MenuList>
+        <MenuList
+          maxH="25rem"
+          overflowY="auto"
+          whiteSpace="pre-wrap"
+          overflowWrap={'normal'}
+        >
+          {isCheckBoxNeeded &&
+            Array.isArray(itemIndex) &&
+            itemIndex.length > 0 && (
+              <Flex w='100%' justifyContent={'flex-end'} px={2} py={1} align='center'>
+                <DeselectAllButton handleClick={handleDeleteAllClick} />
+              </Flex>
+            )}
           {hydrated &&
             data?.map((item: ArrayProps, index: number) => (
               <Flex p={0.5} key={index}>
@@ -181,7 +232,6 @@ export default function CustomDropDownMenu({
                       ? () => handleMenuItemClick(item, index)
                       : undefined
                   }
-                  closeOnSelect={isCheckBoxNeeded ? false : true}
                   bg={
                     Array.isArray(itemIndex)
                       ? itemIndex.includes(index)

@@ -1,14 +1,13 @@
 import {
-  Box,
   Button,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
+  Text
 } from '@chakra-ui/react';
 
-import { ChevronDownIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import {
   OerAudienceInfo,
@@ -73,39 +72,37 @@ export default function DropDownMenu({
     console.log('OPTIONS in DropDownMenu: ' + options);
   }, [optionsObj, options]);
   return (
-    <>
-      <Box flex="1">
-        <Menu
-          isOpen={isOpen}
-          onOpen={handleToggleMenu}
-          onClose={handleToggleMenu}
-        >
-          <MenuButton
-            as={Button}
-            variant="dropdown"
-            rightIcon={<ChevronDownIcon />}
-            //w={buttonWidth}
-            w="100%"
-          >
-            {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
-            <Text align="left" noOfLines={1}>
-              {selectedOptions.includes('All') &&
-              (options?.length === selectedOptions.length ||
-                optionsObj?.length === selectedOptions.length)
-                ? 'All'
-                : selectedOptions.length > 0
-                  ? selectedOptions.join(', ')
-                  : 'Select Options'}
-            </Text>
-          </MenuButton>
-          <MenuList
-            maxH="15rem"
-            maxW="100px"
-            overflowY="auto"
-            whiteSpace="pre-wrap"
-            overflowWrap={'normal'}
-          >
-            {/*options?.map((option) => (
+    <Menu
+      isOpen={isOpen}
+      onOpen={handleToggleMenu}
+      onClose={handleToggleMenu}
+    >
+      <MenuButton
+        as={Button}
+        variant="dropdown"
+        rightIcon={isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+        //w={buttonWidth}
+        w="100%"
+      >
+        {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
+        <Text align="left" noOfLines={1}>
+          {selectedOptions.includes('All') &&
+            (options?.length === selectedOptions.length ||
+              optionsObj?.length === selectedOptions.length)
+            ? 'All'
+            : selectedOptions.length > 0
+              ? selectedOptions.join(', ')
+              : 'Select Options'}
+        </Text>
+      </MenuButton>
+      <MenuList
+        maxH="15rem"
+        maxW="100px"
+        overflowY="auto"
+        whiteSpace="pre-wrap"
+        overflowWrap={'normal'}
+      >
+        {/*options?.map((option) => (
               <MenuItem key={option}>
                 <DropDownMenuItem
                   item={option}
@@ -116,22 +113,20 @@ export default function DropDownMenu({
                 />
               </MenuItem>
             ))*/}
-            {optionsObj?.map((option) => (
-              <MenuItem key={option.id}>
-                <DropDownMenuItem
-                  idItem={option.id}
-                  item={option.name}
-                  optionsObj={optionsObj}
-                  selectedOptions={selectedOptions}
-                  setSelectedOptions={setSelectedOptions}
-                  selectedOptionIds={selectedOptionIds}
-                  setSelectedOptionIds={setSelectedOptionIds}
-                />
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
-      </Box>
-    </>
+        {optionsObj?.map((option) => (
+          <MenuItem key={option.id}>
+            <DropDownMenuItem
+              idItem={option.id}
+              item={option.name}
+              optionsObj={optionsObj}
+              selectedOptions={selectedOptions}
+              setSelectedOptions={setSelectedOptions}
+              selectedOptionIds={selectedOptionIds}
+              setSelectedOptionIds={setSelectedOptionIds}
+            />
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
   );
 }

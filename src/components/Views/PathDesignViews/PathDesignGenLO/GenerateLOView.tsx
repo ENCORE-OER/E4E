@@ -1,11 +1,10 @@
-import { Flex, Text, Textarea, Tooltip } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import {
-  ChangeEvent,
   Dispatch,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from 'react';
 import { PathDesignGenLOProps } from '.';
 import {
@@ -13,11 +12,12 @@ import {
   EducationContextEnum,
   ObjectLearningObjectiveProps,
   SkillItemProps,
-} from '../../types/encoreElements';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { mapOptionToNumber, mapStringToString } from '../../utils/utils';
-import GenerateLOButton from '../Buttons/ButtonsDesignPage/GenerateLOButton';
-import InputsGenerateAI from '../Inputs/InputsGenAISetup/InputsGenerateAI';
+} from '../../../../types/encoreElements';
+import { CustomToast } from '../../../../utils/Toast/CustomToast';
+import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
+import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
+import InputsGenerateAI from '../../../Inputs/InputsGenAISetup/InputsGenerateAI';
+import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
   apiKey: string | undefined;
@@ -58,18 +58,18 @@ export default function GenerateLOView({
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
-  const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    let newNumber = Number(e.target.value);
-    console.log('newNumber', newNumber);
+  // const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  //   let newNumber = Number(e.target.value);
+  //   console.log('newNumber', newNumber);
 
-    // Limit the number of learning objectives to 5
-    newNumber = Math.min(newNumber, 5);
-    console.log('number modified', newNumber);
-    setNumberOfLO(newNumber);
-    if (newNumber > 0) {
-      setIsNumberOfLOZero(false);
-    }
-  };
+  //   // Limit the number of learning objectives to 5
+  //   newNumber = Math.min(newNumber, 5);
+  //   console.log('number modified', newNumber);
+  //   setNumberOfLO(newNumber);
+  //   if (newNumber > 0) {
+  //     setIsNumberOfLOZero(false);
+  //   }
+  // };
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
@@ -264,10 +264,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
@@ -291,37 +291,14 @@ export default function GenerateLOView({
         <Text pr="5" fontWeight={'bold'}>
           Desired number of learning objective(s)*
         </Text>
-        <Flex pr="10%" align="center">
-          <Tooltip
-            label="You can generate maximum 5 learning objectives at a time."
-            bg={'accent.900'}
-            color="black"
-            placement={'top'}
-            borderRadius={'md'}
-          >
-            <Textarea
-              display="flex"
-              textAlign={'center'}
-              justifyContent={'center'}
-              variant="solid"
-              resize="none"
-              //size="sm"
-              w="70px"
-              //h='50px'
-              border={isNumberOfLOZero ? '2.5px solid #bf5521ff' : '1px solid'}
-              borderRadius="lg"
-              rows={1}
-              flexWrap="nowrap"
-              overflowWrap={'break-word'}
-              typeof="number"
-              errorBorderColor={
-                numberOfLO === 0 ? '2.5px solid #bf5521ff' : 'none'
-              }
-              value={numberOfLO}
-              onChange={handleNumberChange}
-            />
-          </Tooltip>
-        </Flex>
+        <NumberInputTextBox
+          numberInput={numberOfLO}
+          setNumberInput={setNumberOfLO}
+          isNumberZero={isNumberOfLOZero}
+          setIsNumberZero={setIsNumberOfLOZero}
+          label_tooltip="You can generate maximum 5 learning objectives at a time."
+          pr='10%'
+        />
         <GenerateLOButton
           handleGenerateLO={handleGenerateLO}
           numberOfLO={numberOfLO}

@@ -6,11 +6,13 @@ import { useCollectionsContext } from '../../Contexts/CollectionsContext/Collect
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import Navbar from '../../components/NavBars/NavBarEncore';
-import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
-import PathDesignGenLO from '../../components/PathDesignGenLO';
-import PathDesignHeaderBars from '../../components/PathDesignHeaderBars';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
+import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import PathDesignCentralBars from '../../components/Views/PathDesignViews/PathDesignCentralBars';
+import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGenLO';
+import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
+import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
 const Home = (/*props: DiscoverPageProps*/) => {
@@ -105,13 +107,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
   const handleResourceChange = (resourceIndex: number) => {
-    if (resourcesIndex.includes(resourceIndex)) {
-      const updatedResourcesIndex = resourcesIndex.filter(
-        (index: number) => index !== resourceIndex
-      );
-      setResourcesIndex(updatedResourcesIndex);
+    if (resourceIndex > -1) {
+      if (resourcesIndex.includes(resourceIndex)) {
+        const updatedResourcesIndex = resourcesIndex.filter(
+          (index: number) => index !== resourceIndex
+        );
+        setResourcesIndex(updatedResourcesIndex);
+      } else {
+        setResourcesIndex((prevIndex: number[]) => [...prevIndex, resourceIndex]);
+      }
     } else {
-      setResourcesIndex((prevIndex: number[]) => [...prevIndex, resourceIndex]);
+      setResourcesIndex([]);
     }
   };
 
@@ -250,7 +256,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -259,7 +265,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -337,10 +343,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
+              // apiKey={apiKey}
+              // handleApiKey={handleApiKey}
               />
+
+              <PathDesignGenLessonPlan />
+
+              <Flex paddingTop={'1.5rem'}>
+                <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
+              </Flex>
             </Flex>
+
           )}
           <FooterButtonsGroup
             SPACING={SPACING}
