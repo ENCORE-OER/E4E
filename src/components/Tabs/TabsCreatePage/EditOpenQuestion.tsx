@@ -37,6 +37,10 @@ export default function EditOpenQuestion({
   useEffect(() => {
     handleQuestion(openQuestionData.Assignment);
     handleSolution(openQuestionData.Solutions[0]);
+    // console.log ('openQuestionData', openQuestionData);
+    // console.log ('question', question);
+    // console.log ('solution', solution);
+    
   }, []);
 
   return (
@@ -64,6 +68,7 @@ export default function EditOpenQuestion({
           <Flex paddingBottom="0.5rem" paddingTop="1rem">
             <Text as="b">Question</Text>
           </Flex>
+          
           <TextBox
             text={question}
             onTextChange={handleQuestion}

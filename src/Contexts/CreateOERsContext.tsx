@@ -412,11 +412,11 @@ export const CreateOERsProvider = ({ children }: any) => {
     });
   };
 
-  const handleStringBoolToString = (array: OptionsData[]) => {
-    // Utilizziamo il metodo map per trasformare ogni elemento dell'array in una stringa
-    const stringsArray = array.map((item) => item[0]);
-    return stringsArray;
-  };
+  // const handleStringBoolToString = (array: OptionsData[]) => {
+  //   // Utilizziamo il metodo map per trasformare ogni elemento dell'array in una stringa
+  //   const stringsArray = array.map((item) => item[0]);
+  //   return stringsArray;
+  // };
 
   const handleData = () => {
     //todo modificare quando ci sarà il nuovo json
@@ -426,28 +426,29 @@ export const CreateOERsProvider = ({ children }: any) => {
       publication_date: new Date().toISOString().substring(0, 10),
       source: sourceText,
       language: 'English',
+      learning_objective: learningObjective,
+      topic: chosenTopic,
       assessment_oer: true,
       added_externally: true,
-      assessment_oer_type: typeOfExercisePanel || '',
       generated_by_ai: true,
-      level: targetLevel?.title || '',
-      number_of_distractors: distractors,
-      number_of_words: 0,
-      temperature: ChosenTemperature,
-      type_of_exercise: assignmentTypeOptions[chosenTypeOfAssignment].title,
-      number_of_correct_answer: apiGeneratedExerciseData.Solutions.length,
-      number_of_easy_distractors:
-        apiGeneratedExerciseData.EasilyDiscardableDistractors.length,
-      quiz_questions: [
-        {
-          options: handleStringBoolToString(options),
-          question: question,
-          solution: solution,
-          correct_answer: apiGeneratedExerciseData.Solutions[0],
-        },
-      ],
-      fill_template: fillTemplate || 'no template',
-      fill_template_with_gaps: fillTemplateWithGaps || 'no template',
+      exercise_values: {
+        assessment_oer_type: 'Exercise',
+        temperature: ChosenTemperature,
+        type_of_assignment: assignmentType?.title || '',
+        target_level: chosenTargetLevel || 0,
+        question: question,
+        solution: solution,
+        number_of_correct_answer: correctAnswerQuiz,
+        number_of_distractors: distractors,
+        number_of_easy_distractors: easyDistractors,
+        coding_starter_code: '',
+        coding_test_cases: [],
+        fill_template: fillTemplate,
+        fill_template_with_gaps: fillTemplateWithGaps,
+        options: options,
+      },
+
+      
     };
     setData(temp);
   };
