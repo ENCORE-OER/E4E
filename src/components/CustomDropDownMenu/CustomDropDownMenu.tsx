@@ -7,7 +7,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  Text,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -82,8 +82,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-            data[itemIndex]?.title ||
-            defaultMenuTitle
+                data[itemIndex]?.title ||
+                defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -176,7 +176,11 @@ export default function CustomDropDownMenu({
             data?.map((item: ArrayProps, index: number) => (
               <Flex p={0.5} key={index}>
                 <MenuItem
-                  onClick={!isCheckBoxNeeded ? () => handleMenuItemClick(item, index) : undefined}
+                  onClick={
+                    !isCheckBoxNeeded
+                      ? () => handleMenuItemClick(item, index)
+                      : undefined
+                  }
                   closeOnSelect={isCheckBoxNeeded ? false : true}
                   bg={
                     Array.isArray(itemIndex)
@@ -189,19 +193,23 @@ export default function CustomDropDownMenu({
                   }
                   borderRadius={5}
                 >
-                  <Flex direction={'row'} w='100%'>
-                    <Text flex='1'>{item.name || item.title}</Text>
-                    {isCheckBoxNeeded &&
-                      <Flex flex='1' justify={'flex-end'}>
+                  <Flex direction={'row'} w="100%">
+                    <Text flex="1">{item.name || item.title}</Text>
+                    {isCheckBoxNeeded && (
+                      <Flex flex="1" justify={'flex-end'}>
                         <Checkbox
                           key={index}
                           value={item.name || item.title}
                           colorScheme="yellow"
                           onChange={() => handleMenuItemClick(item, index)}
-                          isChecked={Array.isArray(itemIndex) ? itemIndex.includes(index) : itemIndex === index}
+                          isChecked={
+                            Array.isArray(itemIndex)
+                              ? itemIndex.includes(index)
+                              : itemIndex === index
+                          }
                         />
                       </Flex>
-                    }
+                    )}
                   </Flex>
                 </MenuItem>
               </Flex>

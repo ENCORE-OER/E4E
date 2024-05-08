@@ -1,5 +1,5 @@
 import { CheckIcon } from '@chakra-ui/icons';
-import { Button, Tooltip } from '@chakra-ui/react';
+import { Button, Text, Tooltip } from '@chakra-ui/react';
 import IconEdit from '../../Icons/IconEdit/IconEdit';
 
 type EditButtonLearningObjectiveBoxProps = {
@@ -29,17 +29,21 @@ export default function EditButtonLearningObjectiveBox({
       borderRadius={5}
     >
       <Button
-        bg={'secondary'}
+        variant='link'
+        // bg={'secondary'}
         color="primary"
         //px="30px"
         display="flex"
-        borderRadius={'xl'}
+        border={'none'}
+        // borderRadius={'xl'}
         onClick={handleEditClick}
         px={isSmallerScreen ? 0 : undefined}
         rightIcon={isEditClicked ? <CheckIcon /> : <IconEdit />}
         w="fit-content"
       >
-        {isSmallerScreen ? '' : isEditClicked ? 'Confirm' : 'Edit'}
+        <Text textDecoration="underline">
+          {isSmallerScreen ? '' : isEditClicked ? 'Confirm' : 'Edit'}
+        </Text>
       </Button>
     </Tooltip>
   );
