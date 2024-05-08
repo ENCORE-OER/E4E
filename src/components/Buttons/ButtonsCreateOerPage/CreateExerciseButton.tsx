@@ -145,7 +145,6 @@ export default function CreateExerciseButton({
           responseRef.current.Distractors,
           responseRef.current.EasilyDiscardableDistractors
         );
-        
       } else {
         addToast({
           message: 'Error during the API call.',

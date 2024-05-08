@@ -447,8 +447,6 @@ export const CreateOERsProvider = ({ children }: any) => {
         fill_template_with_gaps: fillTemplateWithGaps,
         options: options,
       },
-
-      
     };
     setData(temp);
   };
