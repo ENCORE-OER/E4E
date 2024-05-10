@@ -7,7 +7,8 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  MenuOptionGroup,
+  Text,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -46,7 +47,6 @@ export default function CustomDropDownMenu({
   const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
-
 
   useEffect(() => {
     if (itemIndex !== undefined) {
@@ -104,7 +104,7 @@ export default function CustomDropDownMenu({
     }
 
     //setMenuTitle(defaultMenuTitle);
-  }
+  };
 
   const handleToggleMenu = () => {
     setIsOpen(!isOpen); // invert open menu state
@@ -139,7 +139,13 @@ export default function CustomDropDownMenu({
       >
         <MenuButton
           as={Button}
-          rightIcon={isOpen ? <ChevronUpIcon fontSize='x-large' /> : <ChevronDownIcon fontSize='x-large' />}
+          rightIcon={
+            isOpen ? (
+              <ChevronUpIcon fontSize="x-large" />
+            ) : (
+              <ChevronDownIcon fontSize="x-large" />
+            )
+          }
           w="100%"
           title={menuTitle}
           bg={'white'}
@@ -147,10 +153,20 @@ export default function CustomDropDownMenu({
           aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
         >
-          <Flex direction='row' w='100%' align='center' gap={3}>
-            <Flex flex="1" justifyItems={'flex-start'} overflow="hidden" whiteSpace="nowrap" >
+          <Flex direction="row" w="100%" align="center" gap={3}>
+            <Flex
+              flex="1"
+              justifyItems={'flex-start'}
+              overflow="hidden"
+              whiteSpace="nowrap"
+            >
               {menuTitle === defaultMenuTitle ? (
-                <Text align="left" fontWeight={'normal'} color={'gray.400'} noOfLines={1}>
+                <Text
+                  align="left"
+                  fontWeight={'normal'}
+                  color={'gray.400'}
+                  noOfLines={1}
+                >
                   {menuTitle}
                 </Text>
               ) : (
@@ -217,53 +233,65 @@ export default function CustomDropDownMenu({
           overflowWrap={'normal'}
         >
           {isCheckBoxNeeded &&
-            Array.isArray(itemIndex) &&
-            itemIndex.length > 0 && (
-              <Flex w='100%' justifyContent={'flex-end'} px={2} py={1} align='center'>
-                <DeselectAllButton handleClick={handleDeleteAllClick} />
+            // Array.isArray(itemIndex) &&
+            // itemIndex.length > 0 && 
+            (
+              <Flex
+                w="100%"
+                justifyContent={'flex-end'}
+                px={2}
+                py={1}
+                align="center"
+              >
+                <DeselectAllButton
+                  handleClick={handleDeleteAllClick}
+                  isDisabled={!(Array.isArray(itemIndex) && itemIndex.length > 0)}
+                />
               </Flex>
             )}
-          {hydrated &&
-            data?.map((item: ArrayProps, index: number) => (
-              <Flex p={0.5} key={index}>
-                <MenuItem
-                  onClick={
-                    !isCheckBoxNeeded
-                      ? () => handleMenuItemClick(item, index)
-                      : undefined
-                  }
-                  bg={
-                    Array.isArray(itemIndex)
-                      ? itemIndex.includes(index)
-                        ? 'accent.200'
+          <MenuOptionGroup>
+            {hydrated &&
+              data?.map((item: ArrayProps, index: number) => (
+                <Flex p={0.5} key={index}>
+                  <MenuItem
+                    onClick={
+                      !isCheckBoxNeeded
+                        ? () => handleMenuItemClick(item, index)
                         : undefined
-                      : itemIndex === index
-                        ? 'accent.200'
-                        : undefined
-                  }
-                  borderRadius={5}
-                >
-                  <Flex direction={'row'} w="100%">
-                    <Text flex="1">{item.name || item.title}</Text>
-                    {isCheckBoxNeeded && (
-                      <Flex flex="1" justify={'flex-end'}>
-                        <Checkbox
-                          key={index}
-                          value={item.name || item.title}
-                          colorScheme="yellow"
-                          onChange={() => handleMenuItemClick(item, index)}
-                          isChecked={
-                            Array.isArray(itemIndex)
-                              ? itemIndex.includes(index)
-                              : itemIndex === index
-                          }
-                        />
-                      </Flex>
-                    )}
-                  </Flex>
-                </MenuItem>
-              </Flex>
-            ))}
+                    }
+                    bg={
+                      Array.isArray(itemIndex)
+                        ? itemIndex.includes(index)
+                          ? 'accent.200'
+                          : undefined
+                        : itemIndex === index
+                          ? 'accent.200'
+                          : undefined
+                    }
+                    borderRadius={5}
+                  >
+                    <Flex direction={'row'} w="100%">
+                      <Text flex="1">{item.name || item.title}</Text>
+                      {isCheckBoxNeeded && (
+                        <Flex flex="1" justify={'flex-end'}>
+                          <Checkbox
+                            key={index}
+                            value={item.name || item.title}
+                            colorScheme="yellow"
+                            onChange={() => handleMenuItemClick(item, index)}
+                            isChecked={
+                              Array.isArray(itemIndex)
+                                ? itemIndex.includes(index)
+                                : itemIndex === index
+                            }
+                          />
+                        </Flex>
+                      )}
+                    </Flex>
+                  </MenuItem>
+                </Flex>
+              ))}
+          </MenuOptionGroup>
         </MenuList>
       </Menu>
     </Box>

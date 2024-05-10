@@ -1,11 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState
-} from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PathDesignGenLOProps } from '.';
 import {
   BloomLevelString,
@@ -264,10 +259,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }
@@ -297,7 +292,7 @@ export default function GenerateLOView({
           isNumberZero={isNumberOfLOZero}
           setIsNumberZero={setIsNumberOfLOZero}
           label_tooltip="You can generate maximum 5 learning objectives at a time."
-          pr='10%'
+          pr="10%"
         />
         <GenerateLOButton
           handleGenerateLO={handleGenerateLO}

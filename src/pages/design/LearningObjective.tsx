@@ -106,15 +106,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
-  const handleResourceChange = (resourceIndex: number) => {
-    if (resourceIndex > -1) {
-      if (resourcesIndex.includes(resourceIndex)) {
+  const handleResourceChange = (newResourceIndex: number) => {
+    if (newResourceIndex > -1) {
+      if (resourcesIndex.includes(newResourceIndex)) {
         const updatedResourcesIndex = resourcesIndex.filter(
-          (index: number) => index !== resourceIndex
+          (index: number) => index !== newResourceIndex
         );
         setResourcesIndex(updatedResourcesIndex);
       } else {
-        setResourcesIndex((prevIndex: number[]) => [...prevIndex, resourceIndex]);
+        setResourcesIndex((prevIndex: number[]) => [
+          ...prevIndex,
+          newResourceIndex,
+        ]);
       }
     } else {
       setResourcesIndex([]);
@@ -353,7 +356,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
               </Flex>
             </Flex>
-
           )}
           <FooterButtonsGroup
             SPACING={SPACING}

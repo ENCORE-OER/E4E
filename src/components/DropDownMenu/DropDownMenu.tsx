@@ -4,7 +4,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  Text,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -72,11 +72,7 @@ export default function DropDownMenu({
     console.log('OPTIONS in DropDownMenu: ' + options);
   }, [optionsObj, options]);
   return (
-    <Menu
-      isOpen={isOpen}
-      onOpen={handleToggleMenu}
-      onClose={handleToggleMenu}
-    >
+    <Menu isOpen={isOpen} onOpen={handleToggleMenu} onClose={handleToggleMenu}>
       <MenuButton
         as={Button}
         variant="dropdown"
@@ -87,8 +83,8 @@ export default function DropDownMenu({
         {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
         <Text align="left" noOfLines={1}>
           {selectedOptions.includes('All') &&
-            (options?.length === selectedOptions.length ||
-              optionsObj?.length === selectedOptions.length)
+          (options?.length === selectedOptions.length ||
+            optionsObj?.length === selectedOptions.length)
             ? 'All'
             : selectedOptions.length > 0
               ? selectedOptions.join(', ')
