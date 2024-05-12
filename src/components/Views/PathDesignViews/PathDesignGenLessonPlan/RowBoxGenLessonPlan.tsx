@@ -5,15 +5,19 @@ import MultipleDataDropDownMenu from '../../../CustomDropDownMenu/MultipleDataDr
 import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
 
 type RowBoxGenLessonPlan = {
-  numberInput: number;  // Used to specify the number of activities to generate
+  numberInput: number; // Used to specify the number of activities to generate
   setNumberInput: Dispatch<SetStateAction<number>>;
-  isNumberZero: boolean;    // Used to check if the number input is zero
+  isNumberZero: boolean; // Used to check if the number input is zero
   setIsNumberZero: Dispatch<SetStateAction<boolean>>;
   defaultMenuTitle: string; // Used to display the default title of the menu
-  description: string;  // Used to describe the number input
+  description: string; // Used to describe the number input
   dataMenu: MultipleArrayProps[]; // Used to populate the menu
   onDataMenu: () => void; // Used to handle the data of the menu
-  onSelectionChangeMenu?: (selectedBloomActiviesIndex: number, selectedActivityIndex: number, event?: any) => void; // Used to handle the selection change of the menu
+  onSelectionChangeMenu?: (
+    selectedBloomActiviesIndex: number,
+    selectedActivityIndex: number,
+    event?: any
+  ) => void; // Used to handle the selection change of the menu
   itemIndexMenu: number[][]; // Used to store the index of the selected item in the menu
 };
 
@@ -28,13 +32,10 @@ export default function RowBoxGenLessonPlan({
   onDataMenu,
   onSelectionChangeMenu,
   itemIndexMenu,
-
 }: RowBoxGenLessonPlan) {
-
-
   return (
     <Flex direction="row" align="center" flexWrap={'wrap'} gap={2}>
-      <Flex w="40%" flex='1' align="center" gap={3} pr={5}>
+      <Flex w="40%" flex="1" align="center" gap={3} pr={5}>
         <NumberInputTextBox
           numberInput={numberInput}
           setNumberInput={setNumberInput}

@@ -68,8 +68,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-            data[itemIndex]?.title ||
-            defaultMenuTitle
+                data[itemIndex]?.title ||
+                defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -232,23 +232,22 @@ export default function CustomDropDownMenu({
           whiteSpace="pre-wrap"
           overflowWrap={'normal'}
         >
-          {isCheckBoxNeeded &&
+          {isCheckBoxNeeded && (
             // Array.isArray(itemIndex) &&
-            // itemIndex.length > 0 && 
-            (
-              <Flex
-                w="100%"
-                justifyContent={'flex-end'}
-                px={2}
-                py={1}
-                align="center"
-              >
-                <DeselectAllButton
-                  handleClick={handleDeleteAllClick}
-                  isDisabled={!(Array.isArray(itemIndex) && itemIndex.length > 0)}
-                />
-              </Flex>
-            )}
+            // itemIndex.length > 0 &&
+            <Flex
+              w="100%"
+              justifyContent={'flex-end'}
+              px={2}
+              py={1}
+              align="center"
+            >
+              <DeselectAllButton
+                handleClick={handleDeleteAllClick}
+                isDisabled={!(Array.isArray(itemIndex) && itemIndex.length > 0)}
+              />
+            </Flex>
+          )}
           <MenuOptionGroup>
             {hydrated &&
               data?.map((item: ArrayProps, index: number) => (

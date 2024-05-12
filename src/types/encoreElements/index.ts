@@ -2,7 +2,7 @@ export * from './collectionModal';
 export * from './CollectionProps';
 export * from './CollectionsContext';
 export * from './ExerciseInfoModalProps';
-export * from './GeneratedExercises';
+export * from './GenerativeAI';
 export * from './MetricsOers';
 export * from './oer/index';
 export * from './PathDesignElement/index';

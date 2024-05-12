@@ -1,6 +1,12 @@
 import { Flex } from '@chakra-ui/react';
+import axios from 'axios';
 import { useState } from 'react';
-import { ArrayProps, MultipleArrayProps } from '../../../../types/encoreElements';
+import {
+  ArrayProps,
+  MainTopicProps,
+  MultipleArrayProps,
+  OutputLessonPlanProps,
+} from '../../../../types/encoreElements';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
@@ -13,11 +19,15 @@ export default function PathDesignGenLessonPlan() {
   const [isNumberOfLAZero, setIsNumberOfLAZero] = useState<boolean>(false); // State to check if the number of learning activities is invalid (zero)
   const [isNumberOfAAZero, setIsNumberOfAAZero] = useState<boolean>(false); // State to check if the number of assessment activities is invalid (zero)
 
-  const [selectedLearningActivities, setSelectedLearningActivities] = useState<boolean>(false);
-  const [learningActivitiesIndex, setLearningActivitiesIndex] = useState<number[][]>([]);
+  const [selectedLearningActivities, setSelectedLearningActivities] =
+    useState<boolean>(false);
+  const [learningActivitiesIndex, setLearningActivitiesIndex] = useState<
+    number[][]
+  >([]);
   // const [selectedAssessmentActivities, setSelectedAssessmentActivities] = useState<boolean>(false);
-  const [assessmentActivitiesIndex, setAssessmentActivitiesIndex] = useState<number[][]>([]);
-
+  const [assessmentActivitiesIndex, setAssessmentActivitiesIndex] = useState<
+    number[][]
+  >([]);
 
   const RememberActivities: ArrayProps[] = [
     { name: 'Create a list of keywords' },
@@ -28,17 +38,17 @@ export default function PathDesignGenLessonPlan() {
 
   const UnderstandActivities: ArrayProps[] = [
     { name: 'Mind map' },
-    { name: 'Summary' }
+    { name: 'Summary' },
   ];
 
   const dataLearningActivities: MultipleArrayProps[] = [
     {
       activities: RememberActivities,
-      title: 'Remember'
+      title: 'Remember',
     },
     {
       activities: UnderstandActivities,
-      title: 'Understand'
+      title: 'Understand',
     },
   ];
 
@@ -48,39 +58,44 @@ export default function PathDesignGenLessonPlan() {
     { name: 'True or false questions' },
     { name: 'Matching questions' },
     { name: 'Fill in the blanks' },
-    { name: 'Essay questions' }
+    { name: 'Essay questions' },
   ];
 
   const dataAssessmentActivities: MultipleArrayProps[] = [
     {
       activities: EvaluateActivities,
-      title: 'Evaluate'
+      title: 'Evaluate',
     },
   ];
 
   const handleActivitySelection = () => {
     setSelectedLearningActivities(true);
-  }
+  };
 
-  const handleActivityChange = (newIndexBloomActivity: number, newIndexActivity: number) => {
+  const handleActivityChange = (
+    newIndexBloomActivity: number,
+    newIndexActivity: number
+  ) => {
     if (newIndexBloomActivity <= -1 && newIndexActivity <= -1) {
       setLearningActivitiesIndex([]);
       setAssessmentActivitiesIndex([]);
     } else {
-
       // Populate the learning activities index array until the new index bloom activity with empty arrays
       while (learningActivitiesIndex.length <= newIndexBloomActivity) {
-        setLearningActivitiesIndex(prevIndex => [...prevIndex, []]);
-
+        setLearningActivitiesIndex((prevIndex) => [...prevIndex, []]);
       }
 
       // Check if the learning activities index array already contains the new index bloom activity
-      const updatedActivitiesIndex = learningActivitiesIndex[newIndexBloomActivity]?.includes(newIndexActivity)
-        ? learningActivitiesIndex[newIndexBloomActivity].filter(index => index !== newIndexActivity)    // If YES, remove the new index activity from the array
-        : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity];    // If NO, add the new index activity to the array
+      const updatedActivitiesIndex = learningActivitiesIndex[
+        newIndexBloomActivity
+      ]?.includes(newIndexActivity)
+        ? learningActivitiesIndex[newIndexBloomActivity].filter(
+          (index) => index !== newIndexActivity
+        ) // If YES, remove the new index activity from the array
+        : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
 
       // Update the learning activities index array with the new index activity
-      setLearningActivitiesIndex(prevIndex => {
+      setLearningActivitiesIndex((prevIndex) => {
         const updatedIndex = [...prevIndex];
         updatedIndex[newIndexBloomActivity] = updatedActivitiesIndex;
         return updatedIndex;
@@ -98,21 +113,72 @@ export default function PathDesignGenLessonPlan() {
       //     ]);
       // }
     }
-  }
+  };
 
-  const postGenerateLessonPlan = async () => {
+  const postGenerateLessonPlan = async (
+    apiKey: string,
+    setupModel: string,
+    maintopics: MainTopicProps[],
+    language: string,
+    macroSubjects: string,
+    title: string,
+    level: number,
+    learningobjective: string,
+    bloomLevel: number,
+    context: string,
+    temperature: number
+  ): Promise<OutputLessonPlanProps[]> => {
     try {
 
+      const resp = await axios.post(
+        '/api/encore/genAI/generateLessonPlan',
+        {
+          mainTopics: maintopics,
+          language: language,
+          macroSubjects: macroSubjects,
+          title: title,
+          level: level,
+          learningObjective: learningobjective,
+          bloomLevel: bloomLevel,
+          context: context,
+          temperature: temperature,
+        },
+        {
+          headers: {
+            ApiKey: apiKey,
+            SetupModel: setupModel,
+          },
+        }
+      );
+
+      return resp?.data;
     } catch (error) {
       console.error(error);
+      return [];
     }
-  }
+
+
+
+  };
 
   const handleGenerateLessonPlan = async () => {
-    const resp = await postGenerateLessonPlan();
+    const resp = await postGenerateLessonPlan(
+      'apiKey',
+      'setupModel',
+      [{ Topic: 'maintopics', Type: 2, Description: '' }],
+      'language',
+      'macroSubjects',
+      'title',
+      0,
+      'learningobjective',
+      0,
+      'context',
+      0.3
+    );
 
     console.log('Generate lesson plan', resp);
-  }
+  };
+
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="80%">
       {/* <Flex>
@@ -157,8 +223,10 @@ export default function PathDesignGenLessonPlan() {
           itemIndexMenu={assessmentActivitiesIndex}
         />
       </Flex>
-      <Flex w='100%' justifyContent='flex-end'>
-        <GenerateLessonPlanButton handleGenerateLessonPlan={handleGenerateLessonPlan} />
+      <Flex w="100%" justifyContent="flex-end">
+        <GenerateLessonPlanButton
+          handleGenerateLessonPlan={handleGenerateLessonPlan}
+        />
       </Flex>
     </Flex>
   );
