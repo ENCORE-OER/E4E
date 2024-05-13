@@ -1,7 +1,5 @@
-import TableLearningPath from "../../Tables";
+import TableLearningPath from '../../Tables';
 
 export default function TabTable() {
-    return (
-        <TableLearningPath />
-    );
+  return <TableLearningPath />;
 }

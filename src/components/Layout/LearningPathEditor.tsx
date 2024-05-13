@@ -51,7 +51,7 @@ export default function LearningPathEditor({
 
   useEffect(() => {
     (async () => {
-      const fragment = await getFragment(conceptSelectedIndex || 0);  // if conceptSelectedIndex is undefined then use 0
+      const fragment = await getFragment(conceptSelectedIndex || 0); // if conceptSelectedIndex is undefined then use 0
       setLearningPath(fragment);
     })();
   }, [conceptSelectedIndex, getFragment]);
@@ -65,7 +65,7 @@ export default function LearningPathEditor({
   }, []);
 
   return (
-    <Flex w='100%'>
+    <Flex w="100%">
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
@@ -109,8 +109,8 @@ export default function LearningPathEditor({
               />
             </Box>
 
-            {oers !== undefined &&
-              (<Box flex="1" p={5} w="90%">
+            {oers !== undefined && (
+              <Box flex="1" p={5} w="90%">
                 <Text pb={5} fontSize="20" fontWeight="semibold">
                   Relevant OERs
                 </Text>
@@ -134,10 +134,10 @@ export default function LearningPathEditor({
                     setCurrentPage={setCurrentPage}
                   />
                 )}
-              </Box>)
-            }
+              </Box>
+            )}
           </Box>
         )}
-    </ Flex>
+    </Flex>
   );
 }

@@ -20,7 +20,11 @@ const data = [
     time: '30 min',
     description: 'Description A',
     content: <Button variant="solid">Add Content</Button>,
-    action: <Button shadow={'none'} bg='none' w='fit-content'><IconVerticalPoints /></Button>,
+    action: (
+      <Button shadow={'none'} bg="none" w="fit-content">
+        <IconVerticalPoints />
+      </Button>
+    ),
   },
   {
     number: 2,
@@ -54,7 +58,7 @@ const data = [
 
 export default function TableLearningPath() {
   return (
-    <Flex direction="column" >
+    <Flex direction="column">
       <CustomTable data={data} titles={titleColumns} />
     </Flex>
   );
