@@ -36,7 +36,7 @@ export default function MultipleChoicePanel() {
           </Flex>
           <SliderInput
             min={0}
-            max={distractorsMultipleChoice}
+            max={8}
             value={easyDistractors}
             onChange={handleEasyDistractors}
           />

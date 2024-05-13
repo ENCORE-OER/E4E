@@ -22,10 +22,11 @@ type CollectionMenuProps = {
   // options?: string[] | undefined;
   onData?: (data?: string[] | number[]) => void;
   onSelectionChange?: (selectedItem: number) => void;
-  isHighlighted: boolean;
+  isHighlighted?: boolean;
   isBloomLevel?: boolean;
   itemIndex: number | number[];
   defaultMenuTitle: string;
+  isYellowOnFocus?: boolean;
 };
 
 export default function CustomDropDownMenu({
@@ -146,7 +147,6 @@ export default function CustomDropDownMenu({
               {menuTitle}
             </Text>
           ) : (
-            /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
             <Text align="left" noOfLines={1}>
               {/* {
                     selectedOptions.includes('All') &&

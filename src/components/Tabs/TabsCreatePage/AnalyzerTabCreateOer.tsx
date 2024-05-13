@@ -3,30 +3,30 @@
  *  the source,
  *  the apy key
  *  the setup model
- *  the analizer button and api call
+ *  the analyzer button and api call
  */
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import CreateOerTopicMenu from '../../../components/DropDownMenuItem/CreateOerTopicMenu';
-import TextBox from '../../../components/TextBox/TextBox';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { TopicData, targetLevelOptions } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import CreateOerTopicMenu from '../../DropDownMenuItem/CreateOerTopicMenu';
 import InputsGenerateAI from '../../Inputs/InputsGenAISetup/InputsGenerateAI';
+import TextBox from '../../TextBox/TextBox';
 
-type AnalizerTabCreateOerProps = {
+type AnalyzerTabCreateOerProps = {
   isSmallerScreen?: boolean;
   step: number;
   onChange: (step: number) => void;
 };
 
-export default function AnalizerTabCreateOer({
+export default function AnalyzerTabCreateOer({
   isSmallerScreen,
   step,
   onChange,
-}: AnalizerTabCreateOerProps) {
+}: AnalyzerTabCreateOerProps) {
   const {
     handleDescription,
     handleTitle,
@@ -36,6 +36,7 @@ export default function AnalizerTabCreateOer({
     handleMacroSubject,
     sourceText,
     handleSourceText,
+    apiGeneratedExerciseData,
   } = useCreateOERsContext();
   const { apiKey, handleApiKey, setupModel, handleSetupModel } =
     useGeneralContext();
@@ -67,15 +68,23 @@ export default function AnalizerTabCreateOer({
     }
   };
 
-  const handleAnalize = async () => {
+  const handleAnalyze = async () => {
     setLoading(true);
     const analyzedMaterial = await analyzeMaterial(sourceText);
     setLoading(false);
     setTopicData(analyzedMaterial);
-    handleTitle(analyzedMaterial.Title);
-    handleMacroSubject(analyzedMaterial.MacroSubject);
     console.log('topic data:', topicData);
+    if (analyzedMaterial) {
+      handleTitle(analyzedMaterial?.Title);
+      handleMacroSubject(analyzedMaterial?.MacroSubject);
+    }
     if (analyzedMaterial) onChange(1);
+    // if(topicData){
+    //   console.log('topic data:', topicData);
+    //   if(topicData?.Title) handleTitle(topicData?.Title);
+
+    //   if(topicData?.MacroSubject) handleMacroSubject(topicData?.MacroSubject);
+    // }
   };
 
   const handleTopicSelect = (index: number) => {
@@ -117,10 +126,14 @@ export default function AnalizerTabCreateOer({
       <Box w={isSmallerScreen ? '95%' : '90%'}>
         <Flex
           w="auto"
-          justifyContent={step > 0 ? 'space-between' : 'flex-end'}
+          justifyContent={
+            apiGeneratedExerciseData.Assignment !== '' || step > 0
+              ? 'space-between'
+              : 'flex-end'
+          }
           alignItems="center"
         >
-          {step > 0 && (
+          {(apiGeneratedExerciseData.Assignment !== '' || step > 0) && (
             <Box>
               <Flex paddingBottom="0.25rem" paddingTop="0.5rem">
                 <Text as="b">
@@ -155,11 +168,11 @@ export default function AnalizerTabCreateOer({
                     type: 'warning',
                   });
                 } else {
-                  handleAnalize();
+                  handleAnalyze();
                 }
               }}
             >
-              Analize Material
+              Analyze Material
             </Button>
           </Flex>
         </Flex>

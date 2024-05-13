@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Spacer,
   Text,
   useBreakpointValue,
 } from '@chakra-ui/react';
@@ -21,6 +22,14 @@ import EditMultipleChoice from '../../components/Tabs/TabsCreatePage/EditMultipl
 import EditOpenQuestion from '../../components/Tabs/TabsCreatePage/EditOpenQuestion';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
+import CollectionDropDownMenu from '../../components/DropDownMenu/CollectionDropDownMenui';
+import CheckboxDropdown from '../../components/DropDownMenu/CheckboxDropdown';
+import {
+  domainOptions,
+  tyopeOfResourcesOption,
+  licenseOption,
+} from '../../types/encoreElements/index';
 
 const Edit = () => {
   const { user } = useUser();
@@ -33,34 +42,53 @@ const Edit = () => {
   });
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
+  const { collections, addResource } = useCollectionsContext();
   const {
-    typeOfExercisePanel,
     title,
     description,
     data,
     handleData,
     apiGeneratedExerciseData,
+    chosenTypeOfExercise,
     // apiFillGapsData
     // apiOpenQuestionData,
     // apiMultipleChiocesData,
   } = useCreateOERsContext();
 
-  const [response, setResponse] = useState(null);
+  const [response, setResponse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
+  const [areOptionsComplete, setAreOptionsComplete] = useState(true);
+  const [collectionIndex, setCollectionIndex] = useState<number>(0);
+  const [selectedLicence, setSelectedLicence] = useState<string[]>([]);
+  const [selectedDomain, setSelectedDomain] = useState<string[]>([]);
+  const [selectedTypeOfResource, setSelectedTypeOfResource] = useState<
+    string[]
+  >([]);
+  const [selectedAudience, setSelectedAudience] = useState<string[]>([]);
+  const [toastDisplayed, setToastDisplayed] = useState(false);
 
-  useEffect(() => {
-    console.log('qualcosa');
-  }, [response]);
+  const handleSelectedLicence = (selectedLicence: string[]) => {
+    setSelectedLicence(selectedLicence);
+  };
+  const handleSelectedDomain = (selectedDomain: string[]) => {
+    setSelectedDomain(selectedDomain);
+  };
+  const handleSelectedTypeOfResource = (selectedTypeOfResource: string[]) => {
+    setSelectedTypeOfResource(selectedTypeOfResource);
+  };
+  const handleSelectedAudience = (selectedAudience: string[]) => {
+    setSelectedAudience(selectedAudience);
+  };
+
+  const handleCollectionChange = (collectionIndex: number) => {
+    setCollectionIndex(collectionIndex);
+  };
 
   const handleOptionsComplete = () => {
-    if (
-      title != null &&
-      title != '' &&
-      description != null &&
-      description != ''
-    ) {
+    if (title != '' && description != '') {
       setAreOptionsComplete(true);
+    } else {
+      setAreOptionsComplete(false);
     }
   };
 
@@ -81,6 +109,7 @@ const Edit = () => {
 
       // Gestisci la risposta
       setResponse(apiResponse.data);
+      console.log('response', response);
     } catch (error) {
       console.error('Errore durante la chiamata API:', error);
       // Gestisci l'errore, mostra un messaggio o fai qualcos'altro
@@ -89,11 +118,59 @@ const Edit = () => {
     }
   };
 
+  const handleAddExerciseToCollection = async () => {
+    if (!loading && response) {
+      const temp = {
+        id: response.data.id,
+        title: response.data.title,
+        description: response.data.description,
+        concepts: [],
+      };
+      console.log('temp', temp);
+      await addResource(collections[collectionIndex].id, temp);
+    } else {
+      console.log('Unable to add exercise to collection:', {
+        loading,
+        response,
+      });
+    }
+  };
+
   useEffect(() => {
-    if (title && description) handleOptionsComplete();
+    if (!loading && response && !toastDisplayed) {
+      addToast({
+        message: 'Exercise saved successfully.',
+        type: 'success',
+      });
+      setToastDisplayed(true);
+    }
+  }, [loading, response, toastDisplayed]);
+
+  useEffect(() => {
+    handleOptionsComplete();
     handleData();
-    console.log('data', data);
+    //console.log('data', data);
   }, [title, description]);
+
+  useEffect(() => {
+    //console.log('response', response);
+    if (response) {
+      handleAddExerciseToCollection();
+    }
+  }, [response]);
+
+  useEffect(() => {
+    // console.log('selectedLicence', selectedLicence);
+    // console.log('selectedDomain', selectedDomain);
+    // console.log('selectedTypeOfResource', selectedTypeOfResource);
+    // console.log('selectedAudience', selectedAudience);
+    // console.log('collectionIndex', collectionIndex);
+  }, [
+    selectedLicence,
+    selectedDomain,
+    selectedTypeOfResource,
+    selectedAudience,
+  ]);
 
   return (
     <>
@@ -114,26 +191,86 @@ const Edit = () => {
               justifyContent="left"
               //justify="space-between"
             >
-              <Heading>
-                Edit the {hydrated && typeOfExercisePanel} exercise
-              </Heading>
+              <Heading>Edit the exercise</Heading>
             </Flex>
             <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
               <Text>This section provides guidance...</Text>
             </Box>
-            {hydrated && typeOfExercisePanel === 'Fill the Gaps' && (
+            <Box w="80%">
+              <Flex>
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">License</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={licenseOption}
+                    onChange={handleSelectedLicence}
+                    title="License"
+                  />
+                </Box>
+                <Spacer />
+                <Box w="65%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">
+                      Select a collection to save the exercise to
+                    </Text>
+                  </Flex>
+                  <CollectionDropDownMenu
+                    options={collections}
+                    title="Select a collection"
+                    onChange={handleCollectionChange}
+                  />
+                </Box>
+              </Flex>
+              <Flex>
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Domain</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={domainOptions}
+                    onChange={handleSelectedDomain}
+                    title="Select"
+                  />
+                </Box>
+                <Spacer />
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Type of resources</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={tyopeOfResourcesOption}
+                    onChange={handleSelectedTypeOfResource}
+                    title="Select"
+                  />
+                </Box>
+                <Spacer />
+                <Box w="30%">
+                  <Flex paddingBottom="0.5rem" paddingTop="1rem">
+                    <Text as="b">Audience</Text>
+                  </Flex>
+                  <CheckboxDropdown
+                    options={licenseOption}
+                    onChange={handleSelectedAudience}
+                    title="Select"
+                  />
+                </Box>
+              </Flex>
+            </Box>
+            {/* {console.log('chosenTypeOfExercise', chosenTypeOfExercise)} */}
+            {hydrated && chosenTypeOfExercise === 3 && (
               /* Genera il primo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditFillGaps fillGapsData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && typeOfExercisePanel === 'Open Question' && (
+            {hydrated && chosenTypeOfExercise < 3 && (
               /* Genera il secondo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditOpenQuestion openQuestionData={apiGeneratedExerciseData} />
               </Box>
             )}
-            {hydrated && typeOfExercisePanel === 'Multiple Choice' && (
+            {hydrated && chosenTypeOfExercise > 3 && (
               /* Genera il terzo elemento in base alla tua variabile */
               <Box w="80%">
                 <EditMultipleChoice
@@ -143,7 +280,7 @@ const Edit = () => {
             )}
             <Flex w="auto" position="absolute" bottom="5%" right="8%">
               <Button
-                border={'1px solid'}
+                border="1px solid"
                 borderRadius="lg"
                 size="lg"
                 type="submit"
@@ -176,6 +313,7 @@ const Edit = () => {
                   if (areOptionsComplete) {
                     handleData();
                     handleSaveButtonClick();
+
                     //console.log('Save');
                   } else {
                     addToast({
@@ -190,12 +328,14 @@ const Edit = () => {
                 <Icon as={MdSave} w="40%" h="40%" />
               </Button>
             </Flex>
-            {/* {!loading &&
+            {/* {console.log('response', response)}
+            {!loading &&
               response &&
               addToast({
                 message: 'Exercise saved successfully.',
                 type: 'success',
-              })} */}
+              })
+            } */}
           </Box>
         </Box>
       </Flex>

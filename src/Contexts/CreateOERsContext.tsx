@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from 'react';
-import { useLocalStorage } from 'usehooks-ts';
 import {
   GeneratedExerciseProps,
   OerData,
@@ -28,6 +27,8 @@ type CreateOERsContextProps = {
   handleChosenTopic: (selected: string) => void;
   macroSubject: string;
   handleMacroSubject: (selected: string) => void;
+  learningObjective: string;
+  handleLearningObjective: (selected: string) => void;
 
   // * variabili Fill Gaps
   distractorsFillGaps: number;
@@ -75,9 +76,9 @@ type CreateOERsContextProps = {
   handleDescription: (selected: string) => void;
   question: string;
   handleQuestion: (selected: string) => void;
-  options: OptionsData;
-  handleOptions: (selected: string, isChecked: boolean) => void;
-  handleOptionsChange: (selected: { [key: string]: boolean }) => void;
+  options: OptionsData[];
+  handleOptions: (option: OptionsData) => void;
+  handleOptionsChange: (selected: OptionsData[]) => void;
   solution: string;
   handleSolution: (selected: string) => void;
   fillTemplate: string;
@@ -112,6 +113,7 @@ export const CreateOERsProvider = ({ children }: any) => {
   const [temperature, setTemperature] = useState<Option | null>(null);
   const [chosenTopic, setChosenTopic] = useState<string>('');
   const [macroSubject, setMacroSubject] = useState<string>('');
+  const [learningObjective, setLearningObjective] = useState<string>('');
 
   // * variabili per il Fill Gaps
   const [distractorsFillGaps, setDistractorsFillGaps] = useState<number>(0);
@@ -134,9 +136,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   );
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [typeOfExercisePanel, setTypeOfExercisePanel] = useLocalStorage<
-    string | null
-  >('type of panel', null);
+  const [typeOfExercisePanel, setTypeOfExercisePanel] = useState<string | null>(
+    'Open Question'
+  );
   const [ChosenTemperature, setChosenTemperature] = useState<number>(0.2);
   const [distractors, setDistractors] = useState<number>(0);
   const [questionCategory, setQuestionCategory] = useState<string>('');
@@ -146,7 +148,7 @@ export const CreateOERsProvider = ({ children }: any) => {
     useState<number>(0);
   const [question, setQuestion] = useState<string>('');
   const [solution, setSolution] = useState<string>('');
-  const [options, setOptions] = useState<OptionsData>({});
+  const [options, setOptions] = useState<OptionsData[]>([]);
   const [fillTemplate, setFillTemplate] = useState<string>('');
   const [fillTemplateWithGaps, setFillTemplateWithGaps] = useState<string>('');
   const [data, setData] = useState({} as OerData);
@@ -198,6 +200,9 @@ export const CreateOERsProvider = ({ children }: any) => {
   };
   const handleMacroSubject = (selected: string) => {
     setMacroSubject(selected);
+  };
+  const handleLearningObjective = (selected: string) => {
+    setLearningObjective(selected);
   };
 
   // * Fill Gaps
@@ -251,7 +256,6 @@ export const CreateOERsProvider = ({ children }: any) => {
         setChosenTargetLevel(1);
         break;
       case targetLevelOptions[2]:
-        console.log('ci arrivo');
         setChosenTargetLevel(2);
         break;
       case targetLevelOptions[3]:
@@ -313,21 +317,27 @@ export const CreateOERsProvider = ({ children }: any) => {
     switch (selected.title) {
       case 'Open': // TODO: creare una variabili costante per il nome del pannello (OPEN = 'Open')
         setChosenTypeOfExercise(0);
+        //handleTypeOfExercisePanel(0);
         break;
       case 'Short Answer': //TODO: creare una variabili costante per il nome del pannello (SHORT_ANSWER = 'Short Answer')
         setChosenTypeOfExercise(1);
+        //handleTypeOfExercisePanel(0);
         break;
       case 'True False': //TODO: creare una variabili costante per il nome del pannello (TRUE_FALSE = 'True False')
         setChosenTypeOfExercise(2);
+        //handleTypeOfExercisePanel(0);
         break;
       case 'Fill the Gaps': //TODO: creare una variabili costante per il nome del pannello (FILL_THE_GAPS = 'Fill the Gaps')
         setChosenTypeOfExercise(3);
+        //handleTypeOfExercisePanel(1);
         break;
       case 'Single Choice': //TODO: creare una variabili costante per il nome del pannello (SINGLE_CHOICE = 'Single Choice')
         setChosenTypeOfExercise(4);
+        //handleTypeOfExercisePanel(2);
         break;
       case 'Multiple Choice': //TODO: creare una variabili costante per il nome del pannello (MULTIPLE_CHOICE = 'Multiple Choice')
         setChosenTypeOfExercise(5);
+        //handleTypeOfExercisePanel(2);
         break;
       default:
         setChosenTypeOfExercise(0);
@@ -357,13 +367,23 @@ export const CreateOERsProvider = ({ children }: any) => {
   const handleQuestion = (selected: string) => {
     setQuestion(selected);
   };
-  const handleOptions = (answer: string, isChecked: boolean) => {
-    setOptions((prevOptions) => {
-      const updatedOptions = { ...prevOptions, [answer]: isChecked };
-      return updatedOptions;
-    });
+  const handleOptions = (option: OptionsData) => {
+    console.log('options', options);
+    const updatedOptions = [...options];
+    const index = options.findIndex(([text]) => text === option[0]);
+
+    // Se l'opzione esiste, la sostituiamo con quella nuova
+    if (index !== -1) {
+      updatedOptions[index] = option;
+    } else {
+      // Altrimenti, aggiungiamo l'opzione all'array
+      updatedOptions.push(option);
+    }
+
+    // Chiamiamo handleOptionsChange con l'array aggiornato
+    handleOptionsChange(updatedOptions);
   };
-  const handleOptionsChange = (newOptions: { [key: string]: boolean }) => {
+  const handleOptionsChange = (newOptions: OptionsData[]) => {
     setOptions(newOptions);
   };
   const handleSolution = (newSolution: string) => {
@@ -392,33 +412,40 @@ export const CreateOERsProvider = ({ children }: any) => {
     });
   };
 
+  // const handleStringBoolToString = (array: OptionsData[]) => {
+  //   // Utilizziamo il metodo map per trasformare ogni elemento dell'array in una stringa
+  //   const stringsArray = array.map((item) => item[0]);
+  //   return stringsArray;
+  // };
+
   const handleData = () => {
+    //todo modificare quando ci sarà il nuovo json
     const temp: OerData = {
       title: title,
       description: description,
-      publication_date: new Date().toISOString(),
-      language: 'English',
-      generated_by_ai: true,
-      assessment_oer: true,
-      assessment_oer_type: typeOfExercisePanel || '',
+      publication_date: new Date().toISOString().substring(0, 10),
       source: sourceText,
-      level: targetLevel?.title || '',
-      temperature: ChosenTemperature,
+      language: 'English',
+      learning_objective: learningObjective,
+      topic: chosenTopic,
+      assessment_oer: true,
+      added_externally: true,
+      generated_by_ai: true,
       exercise_values: {
-        question: question || null,
-        fill_template: fillTemplate || null,
-        fill_template_with_gaps: fillTemplateWithGaps || null,
-        category:
-          // questionCategoryMultipleChoice?.title ||
-          // questionCategoryOpenQuestion?.title ||
-          null,
-        type: assignmentType?.title || questionType?.title || null,
-        number_of_correct_answer: correctAnswerQuiz || null,
-        number_of_easy_distractors: easyDistractors || null,
-        number_of_distractors: distractors || null,
-        number_of_words: null,
-        options: options || null, // see wordsOptions
-        solution: solution || null,
+        assessment_oer_type: 'Exercise',
+        temperature: ChosenTemperature,
+        type_of_assignment: assignmentType?.title || '',
+        target_level: chosenTargetLevel || 0,
+        question: question,
+        solution: solution,
+        number_of_correct_answer: correctAnswerQuiz,
+        number_of_distractors: distractors,
+        number_of_easy_distractors: easyDistractors,
+        coding_starter_code: '',
+        coding_test_cases: [],
+        fill_template: fillTemplate,
+        fill_template_with_gaps: fillTemplateWithGaps,
+        options: options,
       },
     };
     setData(temp);
@@ -458,6 +485,8 @@ export const CreateOERsProvider = ({ children }: any) => {
         handleChosenTopic,
         macroSubject,
         handleMacroSubject,
+        learningObjective,
+        handleLearningObjective,
         // * variabili e handle functions Fill Gaps
         distractorsFillGaps,
         handleDistractorsFillGaps,
