@@ -1,10 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
-import CustomDropDownMenu from '../../components/CustomDropDownMenu/CustomDropDownMenu';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext';
 import {
   CollectionProps,
   OerInCollectionProps,
-} from '../../types/encoreElements';
+} from '../../../../types/encoreElements';
+import CustomDropDownMenu from '../../../CustomDropDownMenu/CustomDropDownMenu';
 
 type PathDesignHeaderBarsProps = {
   SPACING: number;
@@ -57,7 +57,7 @@ export default function PathDesignHeaderBars({
             // flex='1'
             w="50%"
           >
-            Select the resources within the collection
+            Select the resources within the collection*
           </Text>
         )}
       </Flex>
@@ -83,7 +83,7 @@ export default function PathDesignHeaderBars({
             onData={handleCollectionSelection}
             onSelectionChange={handleCollectionChange}
             isHighlighted={isNextButtonClicked}
-            isBloomLevel={false}
+            // isBloomLevel={false}
             itemIndex={collectionIndex}
             defaultMenuTitle="Choose a collection"
           />
@@ -104,14 +104,16 @@ export default function PathDesignHeaderBars({
           >
             Select the resources within the collection*
           </Text> */}
+
             <CustomDropDownMenu
               data={resources} // When a collection is selected, the resources array is updated with the resources of the selected collection???
               onData={handleResourceSelection}
               onSelectionChange={handleResourceChange}
               isHighlighted={isNextButtonClicked}
-              isBloomLevel={false}
+              // isBloomLevel={false}
               itemIndex={resourcesIndex}
               defaultMenuTitle="Select the resources"
+              isCheckBoxNeeded={true}
             />
           </Box>
         )}

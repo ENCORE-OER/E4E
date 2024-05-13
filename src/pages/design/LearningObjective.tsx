@@ -1,18 +1,18 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import Navbar from '../../components/NavBars/NavBarEncore';
-import PathDesignCentralBars from '../../components/PathDesignCentralBars/';
-import PathDesignGenLO from '../../components/PathDesignGenLO';
-import PathDesignHeaderBars from '../../components/PathDesignHeaderBars';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import { SkillItemProps } from '../../types/encoreElements';
+import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import PathDesignCentralBars from '../../components/Views/PathDesignViews/PathDesignCentralBars';
+import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGenLO';
+import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
+import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
 const Home = (/*props: DiscoverPageProps*/) => {
@@ -35,9 +35,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // handleResourceIndexChange,
     // takes the value of the selected option in "Educational Scenario"
     selectedContext, // used for the api call
-    selectedLearnerExperience, // used for the api call
-    selectedEducatorExperience, // used for the api call
-    selectedGroupDimension, // used for the api call
+    // selectedLearnerExperience, // used for the api call
+    // selectedEducatorExperience, // used for the api call
+    // selectedGroupDimension, // used for the api call
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
     selectedCustomLearningObjective,
@@ -45,7 +45,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     selectedLearningObjectiveIndex,
     handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
-    handleIdLearningScenario,
+    // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     setLearningObjectiveObjects,
@@ -106,14 +106,21 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
-  const handleResourceChange = (resourceIndex: number) => {
-    if (resourcesIndex.includes(resourceIndex)) {
-      const updatedResourcesIndex = resourcesIndex.filter(
-        (index: number) => index !== resourceIndex
-      );
-      setResourcesIndex(updatedResourcesIndex);
+  const handleResourceChange = (newResourceIndex: number) => {
+    if (newResourceIndex > -1) {
+      if (resourcesIndex.includes(newResourceIndex)) {
+        const updatedResourcesIndex = resourcesIndex.filter(
+          (index: number) => index !== newResourceIndex
+        );
+        setResourcesIndex(updatedResourcesIndex);
+      } else {
+        setResourcesIndex((prevIndex: number[]) => [
+          ...prevIndex,
+          newResourceIndex,
+        ]);
+      }
     } else {
-      setResourcesIndex((prevIndex: number[]) => [...prevIndex, resourceIndex]);
+      setResourcesIndex([]);
     }
   };
 
@@ -124,67 +131,67 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  const saveLearningScenario = async () => {
-    if (
-      selectedEducatorExperience?.title !== undefined &&
-      selectedContext?.title !== undefined &&
-      selectedGroupDimension?.title !== undefined &&
-      selectedLearnerExperience?.title !== undefined &&
-      bloomLevels[bloomLevelIndex]?.name !== undefined &&
-      selectedOptions !== undefined &&
-      selectedSkillConceptsTags !== undefined &&
-      learningTextContext !== undefined &&
-      learningObjectiveObjects[selectedLearningObjectiveIndex] !== undefined
-    ) {
-      try {
-        // const api = new APIV2(undefined);
-        // const resp = await api.saveLearningScenario(
-        //   // objectiveId
-        //   selectedEducatorExperience?.title,
-        //   selectedContext?.title,
-        //   selectedGroupDimension?.title,
-        //   selectedLearnerExperience?.title,
-        //   bloomLevels[bloomLevelIndex]?.name,
-        //   selectedOptions, // verbsBloomLevel
-        //   selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
-        //   learningTextContext,
-        //   //selectedCustomLearningObjective
-        //   generatedLOs[selectedLearningObjectiveIndex]
-        // );
-        const resp = await axios.post('/api/encore/saveLearningScenario', {
-          Context: {
-            EducatorExperience: selectedEducatorExperience?.title,
-            EducationContext: selectedContext?.title,
-            Dimension: selectedGroupDimension?.title,
-            LearnerExperience: selectedLearnerExperience?.title,
-          },
-          Objective: {
-            //id: objectiveId,
-            BloomLevel: {
-              name: bloomLevels[bloomLevelIndex]?.name,
-              verbs: selectedOptions,
-            },
-            Skills: selectedSkillConceptsTags.map(
-              (item: SkillItemProps) => item.id
-            ),
-            LearningContext: learningTextContext,
-            textLearningObjective:
-              learningObjectiveObjects[selectedLearningObjectiveIndex]
-                .learningObjective,
-          },
-          Path: {
-            Nodes: [],
-            Edges: [],
-          },
-        });
-        console.log(resp?.data);
-        console.log('Learning scenario id: ' + resp?.data?._id);
-        handleIdLearningScenario(resp?.data?._id ?? '');
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+  // const saveLearningScenario = async () => {
+  //   if (
+  //     selectedEducatorExperience?.title !== undefined &&
+  //     selectedContext?.title !== undefined &&
+  //     selectedGroupDimension?.title !== undefined &&
+  //     selectedLearnerExperience?.title !== undefined &&
+  //     bloomLevels[bloomLevelIndex]?.name !== undefined &&
+  //     selectedOptions !== undefined &&
+  //     selectedSkillConceptsTags !== undefined &&
+  //     learningTextContext !== undefined &&
+  //     learningObjectiveObjects[selectedLearningObjectiveIndex] !== undefined
+  //   ) {
+  //     try {
+  //       // const api = new APIV2(undefined);
+  //       // const resp = await api.saveLearningScenario(
+  //       //   // objectiveId
+  //       //   selectedEducatorExperience?.title,
+  //       //   selectedContext?.title,
+  //       //   selectedGroupDimension?.title,
+  //       //   selectedLearnerExperience?.title,
+  //       //   bloomLevels[bloomLevelIndex]?.name,
+  //       //   selectedOptions, // verbsBloomLevel
+  //       //   selectedSkillConceptsTags.map((item: SkillItemProps) => item.id),
+  //       //   learningTextContext,
+  //       //   //selectedCustomLearningObjective
+  //       //   generatedLOs[selectedLearningObjectiveIndex]
+  //       // );
+  //       const resp = await axios.post('/api/encore/saveLearningScenario', {
+  //         Context: {
+  //           EducatorExperience: selectedEducatorExperience?.title,
+  //           EducationContext: selectedContext?.title,
+  //           Dimension: selectedGroupDimension?.title,
+  //           LearnerExperience: selectedLearnerExperience?.title,
+  //         },
+  //         Objective: {
+  //           //id: objectiveId,
+  //           BloomLevel: {
+  //             name: bloomLevels[bloomLevelIndex]?.name,
+  //             verbs: selectedOptions,
+  //           },
+  //           Skills: selectedSkillConceptsTags.map(
+  //             (item: SkillItemProps) => item.id
+  //           ),
+  //           LearningContext: learningTextContext,
+  //           textLearningObjective:
+  //             learningObjectiveObjects[selectedLearningObjectiveIndex]
+  //               .learningObjective,
+  //         },
+  //         Path: {
+  //           Nodes: [],
+  //           Edges: [],
+  //         },
+  //       });
+  //       console.log(resp?.data);
+  //       console.log('Learning scenario id: ' + resp?.data?._id);
+  //       handleIdLearningScenario(resp?.data?._id ?? '');
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
 
   const handleNextClick = () => {
     if (
@@ -205,7 +212,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       console.log(
         'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
       );
-      saveLearningScenario();
+      //saveLearningScenario();
       router.push({
         pathname: '/design/learningPathDesign',
       });
@@ -331,8 +338,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 learningTextContext={learningTextContext}
                 // totalLearningObjectives={totalLearningObjectives}
                 // setTotalLearningObjectives={setTotalLearningObjectives}
-                objectLOs={learningObjectiveObjects}
-                setObjectLOs={setLearningObjectiveObjects}
+                learningObjectiveObjects={learningObjectiveObjects}
+                setLearningObjectiveObjects={setLearningObjectiveObjects}
                 handleSelectedLearningObjectiveIndexChange={
                   handleSelectedLearningObjectiveIndexChange
                 }
@@ -342,6 +349,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 // apiKey={apiKey}
                 // handleApiKey={handleApiKey}
               />
+
+              <PathDesignGenLessonPlan />
+
+              <Flex paddingTop={'1.5rem'}>
+                <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
+              </Flex>
             </Flex>
           )}
           <FooterButtonsGroup

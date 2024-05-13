@@ -1,4 +1,4 @@
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext';
 import CentralBars from './CentralBars';
 
 export interface PathDesignCentralBarsProps {

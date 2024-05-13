@@ -27,7 +27,7 @@ type SearchBarV2Props = {
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
   isHighlighted: boolean;
 };
-export default function SearchBarPathDesign({
+export default function SearchBarSkillsConcepts({
   collectionIndex,
   resourcesIndex,
   isHighlighted,
@@ -55,19 +55,32 @@ export default function SearchBarPathDesign({
   };
 
   const renderSkillAndConceptItems = () => {
+    console.log('renderSkillAndConceptItems...');
+    uniqueItems.clear(); // Clear the set to avoid duplicates
     if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
-      uniqueItems.clear();
       resourcesIndex.forEach((index: number) => {
         oers[index]?.skills?.forEach((skill) => {
           const skillId = skill.id;
           const skillLabel = skill.label;
-          uniqueItems.add({ id: skillId, label: skillLabel });
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === skillLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
+            uniqueItems.add({ id: skillId, label: skillLabel });
+          }
         });
 
         oers[index]?.concepts?.forEach((concept) => {
           const conceptId = concept.id;
           const conceptLabel = concept.label;
-          uniqueItems.add({ id: conceptId, label: conceptLabel });
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === conceptLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
+            uniqueItems.add({ id: conceptId, label: conceptLabel });
+          }
         });
       });
     } else {

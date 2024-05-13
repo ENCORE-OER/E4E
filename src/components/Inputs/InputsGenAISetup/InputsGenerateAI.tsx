@@ -24,7 +24,7 @@ export default function InputsGenerateAI({
     >
       <Box>
         <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
-          Insert the API Key
+          API Key
         </Text>
         <InputAPIKey
           w={
@@ -40,7 +40,7 @@ export default function InputsGenerateAI({
       </Box>
       <Box>
         <Text pl="1" fontSize="sm" fontWeight="bold" color="gray">
-          Insert the Setup Model
+          Setup Model
         </Text>
         <InputSetupModel
           w={
