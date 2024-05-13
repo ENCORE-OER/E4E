@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
+import { useCreateOERsContext } from '../../../../Contexts/CreateOERsContext';
 import {
   ArrayProps,
   MainTopicProps,
@@ -11,6 +12,9 @@ import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/Generat
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 export default function PathDesignGenLessonPlan() {
+
+  const { chosenTargetLevel } = useCreateOERsContext();
+
   const [numberOfLearningActivities, setNumberOfLearningActivities] =
     useState<number>(0); // Number of learning activities to generate for the lesson plan
   const [numberOfAssessmentActivities, setNumberOfAssessmentActivities] =
@@ -129,7 +133,6 @@ export default function PathDesignGenLessonPlan() {
     temperature: number
   ): Promise<OutputLessonPlanProps[]> => {
     try {
-
       const resp = await axios.post(
         '/api/encore/genAI/generateLessonPlan',
         {
@@ -156,9 +159,6 @@ export default function PathDesignGenLessonPlan() {
       console.error(error);
       return [];
     }
-
-
-
   };
 
   const handleGenerateLessonPlan = async () => {
@@ -169,7 +169,7 @@ export default function PathDesignGenLessonPlan() {
       'language',
       'macroSubjects',
       'title',
-      0,
+      chosenTargetLevel || 0,
       'learningobjective',
       0,
       'context',
