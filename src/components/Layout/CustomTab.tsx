@@ -1,4 +1,5 @@
 import {
+  Flex,
   HTMLChakraProps,
   Tab,
   TabList,
@@ -7,7 +8,7 @@ import {
   TabPanelsProps,
   Tabs,
   ThemingProps,
-  UseTabsProps,
+  UseTabsProps
 } from '@chakra-ui/react';
 
 export type CustomTabStyleProps = ThemingProps<'Tabs'> &
@@ -16,7 +17,8 @@ export type CustomTabStyleProps = ThemingProps<'Tabs'> &
 
 export type CustomTabConfigProps = ({
   label: string | React.ReactElement;
-  child: React.ReactElement;
+  child?: React.ReactElement;
+  isButton?: boolean;
 } & TabPanelsProps)[];
 
 export type CustomTabProps = {
@@ -33,14 +35,37 @@ export type CustomTabProps = {
  */
 export const CustomTab = (props: CustomTabProps) => {
   const { config, _selected, ...style } = props;
+
   return (
+
     <Tabs {...style}>
       <TabList>
-        {config.map((tab, id) => (
-          <Tab key={id} _selected={_selected}>
-            {tab.label}
-          </Tab>
-        ))}
+        {/* {config.map((tab, id) => (
+            <Tab key={id} _selected={_selected}>
+              {tab.label}
+            </Tab>
+          ))} */}
+
+        <Flex w='100%'>
+          {config.filter((elem) =>
+            !elem.isButton).map((tab, id) => (
+              <Tab key={id} _selected={_selected}>
+                {tab.label}
+              </Tab>
+            )
+            )}
+        </Flex>
+
+        <Flex justify='flex-end' gap={5}>
+          {config.filter((elem) =>
+            elem.isButton).map((button, id) => (
+              <Flex key={id} >
+                {button.label}
+              </Flex>
+            )
+            )}
+        </Flex>
+
       </TabList>
       <TabPanels>
         {config.map((tab, id) => (
@@ -50,5 +75,6 @@ export const CustomTab = (props: CustomTabProps) => {
         ))}
       </TabPanels>
     </Tabs>
+
   );
 };

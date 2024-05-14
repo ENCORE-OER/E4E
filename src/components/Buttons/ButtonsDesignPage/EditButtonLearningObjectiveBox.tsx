@@ -1,6 +1,7 @@
 import { CheckIcon } from '@chakra-ui/icons';
-import { Button, Text, Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@chakra-ui/react';
 import IconEdit from '../../Icons/IconEdit/IconEdit';
+import UnderlinedButton from './UnderlinedButton';
 
 type EditButtonLearningObjectiveBoxProps = {
   isEditClicked: boolean;
@@ -28,23 +29,12 @@ export default function EditButtonLearningObjectiveBox({
       fontSize={'sm'}
       borderRadius={5}
     >
-      <Button
-        variant="link"
-        // bg={'secondary'}
-        color="primary"
-        //px="30px"
-        display="flex"
-        border={'none'}
-        // borderRadius={'xl'}
-        onClick={handleEditClick}
-        px={isSmallerScreen ? 0 : undefined}
+      <UnderlinedButton
+        handleClick={handleEditClick}
+        isSmallerScreen={isSmallerScreen}
+        nameButton={isSmallerScreen ? '' : isEditClicked ? 'Confirm' : 'Edit'}
         rightIcon={isEditClicked ? <CheckIcon /> : <IconEdit />}
-        w="fit-content"
-      >
-        <Text textDecoration="underline">
-          {isSmallerScreen ? '' : isEditClicked ? 'Confirm' : 'Edit'}
-        </Text>
-      </Button>
+      />
     </Tooltip>
   );
 }

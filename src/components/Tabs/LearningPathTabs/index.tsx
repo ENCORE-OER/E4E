@@ -1,5 +1,11 @@
+import { FaSave } from 'react-icons/fa';
+import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButton';
+import IconEdit from '../../Icons/IconEdit/IconEdit';
+import IconExport from '../../Icons/IconExport/IconExport';
 import IconGraph from '../../Icons/IconGraph/IconGraph';
+import IconPlus from '../../Icons/IconPlus/IconPlus';
 import IconTable from '../../Icons/IconTable/IconTable';
+import IconTiles from '../../Icons/IconTiles/IconTiles';
 import {
   CustomTab,
   CustomTabConfigProps,
@@ -46,7 +52,7 @@ const getConfig = () => {
     {
       label: (
         <LearningPathTabLabel
-          // iconTab={}
+          iconTab={IconTiles}
           spacing={2}
           name="Tiles"
         />
@@ -59,6 +65,39 @@ const getConfig = () => {
         <LearningPathTabLabel iconTab={IconGraph} spacing={2} name="Graph" />
       ),
       child: <TabGraph />,
+      pt: '3%',
+    },
+
+    // Fixed Buttons on top-right of the Tabs
+    {
+      label: (
+        // <Button onClick={() => { }} variant="link" border='none' color='primary' fontWeight='normal' rightIcon={<IconEdit />} textDecoration='underline'>
+        //   Edit
+        // </Button>
+        <UnderlinedButton handleClick={() => console.log('Edit')} nameButton='Edit' rightIcon={<IconEdit />} color='primary' fontWeight='normal' />
+      ),
+      isButton: true,
+      pt: '3%',
+    },
+    {
+      label: (
+        <UnderlinedButton handleClick={() => console.log('Add activity')} nameButton='Add activity' rightIcon={<IconPlus />} color='primary' fontWeight='normal' />
+      ),
+      isButton: true,
+      pt: '3%',
+    },
+    {
+      label: (
+        <UnderlinedButton handleClick={() => console.log('Export')} nameButton='Export' rightIcon={<IconExport />} color='primary' fontWeight='normal' />
+      ),
+      isButton: true,
+      pt: '3%',
+    },
+    {
+      label: (
+        <UnderlinedButton handleClick={() => console.log('Save')} nameButton='Save' rightIcon={<FaSave />} color='primary' fontWeight='normal' />
+      ),
+      isButton: true,
       pt: '3%',
     },
   ];
