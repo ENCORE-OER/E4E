@@ -1,33 +1,45 @@
-import { Card, CardBody, CardFooter, CardHeader, Flex, Text } from '@chakra-ui/react';
+import {
+    Card,
+    CardBody,
+    CardFooter,
+    CardHeader,
+    Flex,
+    Icon,
+    Text
+} from '@chakra-ui/react';
 import { useState } from 'react';
+import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
 import EditButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/EditButtonLessonCard';
 import RegenerateButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/RegenerateButtonLessonCard';
+import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButton';
 import ShowHideButton from '../../Buttons/ShowHideButton';
+import IconBookOpen from '../../Icons/IconBookOpen/IconBookOpen';
+import IconPlus from '../../Icons/IconPlus/IconPlus';
 import TagLessonCompulsory from '../../Tags/TagsLesson/TagLessonCompulsory';
 import TagLessonDuration from '../../Tags/TagsLesson/TagLessonDuration';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 
 type LessonCardProps = {
-    lessonType: string;
-    activityName: string;
-    indexCard: number;  // Specifies the order of the lessons
-    descriptionActivity: string;
+    lessonTitle: string;
+    lessonType: string; // Specifies if learning, assessment or other
+    activityType: string; // Specifies if Frontal Lecture, Group Discussion, Single-choice quix, etc...
+    indexCard: number; // Specifies the order of the lessons
+    activityDescription: string;
 };
 
 export default function LessonCard({
-    activityName,
+    lessonTitle,
+    activityType,
     lessonType,
     indexCard,
-    descriptionActivity
+    activityDescription,
 }: LessonCardProps) {
-
     // Show Generate Learning Objectives area
     const [showBox, setShowBox] = useState(false); // used to show the Activity
 
-
     return (
         <Card display="flex" borderRadius={'10px'} border={'1px'}>
-            <CardHeader>
+            <CardHeader pb={0}>
                 <Flex w="100%" direction="row">
                     <Flex flex="1" justify="flex-start" direction="row" align="center">
                         <TagLessonType labelTag={lessonType} />
@@ -53,13 +65,13 @@ export default function LessonCard({
                 </Flex>
             </CardHeader>
 
-            <CardBody justifyContent='flex-start' display='flex' w='100%'>
-                <Flex w='100%' direction='column'>
+            <CardBody justifyContent="flex-start" display="flex" w="100%" py={0}>
+                <Flex w="100%" direction="column">
                     <Flex p={3}>
                         <ShowHideButton
                             showBox={showBox}
                             setShowBox={setShowBox}
-                            showButtonName={`${indexCard}. ${activityName}`}
+                            showButtonName={`${indexCard}. ${lessonTitle}`}
                             isUpDown={false}
                             fontWeight="bold"
                             color="primary"
@@ -68,12 +80,31 @@ export default function LessonCard({
                         />
                     </Flex>
                     <Text noOfLines={showBox ? undefined : 1} variant="description_card">
-                        {descriptionActivity}
+                        {activityDescription}
                     </Text>
                 </Flex>
             </CardBody>
 
-            <CardFooter></CardFooter>
+            <CardFooter>
+                <Flex direction={'row'} w='100%' align='center'>
+                    <Flex direction="row" gap={1} flex='1' justify='flex-start'>
+                        <Text fontWeight="bold">Activity type: </Text>
+                        <Text>{activityType}</Text>
+                        <Icon as={IconBookOpen} />
+                    </Flex>
+
+                    <Flex direction="row" gap={3} flex='1' justify='flex-end'>
+                        <UnderlinedButton
+                            handleClick={() => console.log('Add condition')}
+                            nameButton='Add pass and fail conditions'
+                            rightIcon={<IconPlus />}
+                            color="grey"
+                            fontWeight="normal"
+                        />
+                        <AddContentButton />
+                    </Flex>
+                </Flex>
+            </CardFooter>
         </Card>
     );
 }
