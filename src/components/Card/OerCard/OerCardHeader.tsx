@@ -11,7 +11,7 @@ import {
 //import { BsBookmark } from 'react-icons/bs';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
-import TagsDomain from '../../Tags/TagsDomain';
+import TagsDomain from '../../Tags/TagsOer/TagsDomain';
 
 type OerCardHeaderProps = {
   ptCardHeader?: string;

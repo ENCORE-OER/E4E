@@ -1,6 +1,6 @@
 import { Box, CardFooter, Flex } from '@chakra-ui/react';
 import GridMetadataCard from '../../Grids/GridMetadataOer/GridMetadataCard';
-import TagResourceType from '../../Tags/TagReourceType';
+import TagResourceType from '../../Tags/TagsOer/TagReourceType';
 
 type OerCardFooterProps = {
   resourceType: (string | null)[];

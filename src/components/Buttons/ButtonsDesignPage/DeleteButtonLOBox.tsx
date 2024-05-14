@@ -1,5 +1,6 @@
-import { Button, Text, Tooltip } from '@chakra-ui/react';
+import { Tooltip } from '@chakra-ui/react';
 import IconDelete from '../../Icons/IconDelete/IconDelete';
+import UnderlinedButton from './UnderlinedButton';
 
 type DeleteButtonLOBoxProps = {
   handleDeleteClick: () => void;
@@ -25,25 +26,13 @@ export default function DeleteButtonLOBox({
       fontSize={'sm'}
       borderRadius={5}
     >
-      <Button
-        //bg={isEditClicked ? 'accent.200' : 'secondary'}
-        variant="link"
-        color="red.700"
-        //px="30px"
-        display="flex"
-        // borderRadius={isSmallerScreen ? 'xl' : undefined}
-        border={'none'}
-        onClick={handleDeleteClick}
+      <UnderlinedButton
+        handleClick={handleDeleteClick}
+        nameButton={isSmallerScreen ? '' : 'Delete'}
         rightIcon={<IconDelete />}
-        // _hover={{ bg: undefined }}
-        px={isSmallerScreen ? 0 : undefined}
-        // _hover={isSmallerScreen ? { bg: 'accent.900' } : undefined}
-        w="fit-content"
-      >
-        <Text textDecoration="underline">
-          {isSmallerScreen ? '' : 'Delete'}
-        </Text>
-      </Button>
+        isSmallerScreen={isSmallerScreen}
+        color="red.700"
+      />
     </Tooltip>
   );
 }

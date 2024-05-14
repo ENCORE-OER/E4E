@@ -6,8 +6,8 @@ import {
 } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import GridMetadataOer from '../../../Grids/GridMetadataOer';
-import TagConcept from '../../../Tags/TagConcept';
-import TagResourceType from '../../../Tags/TagReourceType';
+import TagConcept from '../../../Tags/TagsOer/TagConcept';
+import TagResourceType from '../../../Tags/TagsOer/TagReourceType';
 
 interface BodyCardInfoModalProps {
   description: string;

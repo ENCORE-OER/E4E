@@ -11,7 +11,7 @@ import SaveResourceButton from '../../../Buttons/ResourceButtons/SaveResourceBut
 import ViewResourceButton from '../../../Buttons/ResourceButtons/ViewResourceButton';
 import IconBookmarkCheckCollections from '../../../Icons/IconBookmarkCheck/IconBookmarkCheckCollections';
 import IconCopyUrl from '../../../Icons/IconCopy/IconCopyUrl';
-import TagsDomain from '../../../Tags/TagsDomain';
+import TagsDomain from '../../../Tags/TagsOer/TagsDomain';
 
 export interface HeaderCardInfoModalProps {
   showTagDigital: boolean;

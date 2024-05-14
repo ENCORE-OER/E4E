@@ -8,7 +8,7 @@ import {
   TabPanelsProps,
   Tabs,
   ThemingProps,
-  UseTabsProps
+  UseTabsProps,
 } from '@chakra-ui/react';
 
 export type CustomTabStyleProps = ThemingProps<'Tabs'> &
@@ -37,7 +37,6 @@ export const CustomTab = (props: CustomTabProps) => {
   const { config, _selected, ...style } = props;
 
   return (
-
     <Tabs {...style}>
       <TabList>
         {/* {config.map((tab, id) => (
@@ -46,26 +45,23 @@ export const CustomTab = (props: CustomTabProps) => {
             </Tab>
           ))} */}
 
-        <Flex w='100%'>
-          {config.filter((elem) =>
-            !elem.isButton).map((tab, id) => (
+        <Flex w="100%">
+          {config
+            .filter((elem) => !elem.isButton)
+            .map((tab, id) => (
               <Tab key={id} _selected={_selected}>
                 {tab.label}
               </Tab>
-            )
-            )}
+            ))}
         </Flex>
 
-        <Flex justify='flex-end' gap={5}>
-          {config.filter((elem) =>
-            elem.isButton).map((button, id) => (
-              <Flex key={id} >
-                {button.label}
-              </Flex>
-            )
-            )}
+        <Flex justify="flex-end" gap={5}>
+          {config
+            .filter((elem) => elem.isButton)
+            .map((button, id) => (
+              <Flex key={id}>{button.label}</Flex>
+            ))}
         </Flex>
-
       </TabList>
       <TabPanels>
         {config.map((tab, id) => (
@@ -75,6 +71,5 @@ export const CustomTab = (props: CustomTabProps) => {
         ))}
       </TabPanels>
     </Tabs>
-
   );
 };

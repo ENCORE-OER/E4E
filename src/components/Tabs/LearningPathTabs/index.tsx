@@ -51,11 +51,7 @@ const getConfig = () => {
     },
     {
       label: (
-        <LearningPathTabLabel
-          iconTab={IconTiles}
-          spacing={2}
-          name="Tiles"
-        />
+        <LearningPathTabLabel iconTab={IconTiles} spacing={2} name="Tiles" />
       ),
       child: <TabTiles />,
       pt: '3%',
@@ -71,31 +67,52 @@ const getConfig = () => {
     // Fixed Buttons on top-right of the Tabs
     {
       label: (
-        // <Button onClick={() => { }} variant="link" border='none' color='primary' fontWeight='normal' rightIcon={<IconEdit />} textDecoration='underline'>
-        //   Edit
-        // </Button>
-        <UnderlinedButton handleClick={() => console.log('Edit')} nameButton='Edit' rightIcon={<IconEdit />} color='primary' fontWeight='normal' />
+        <UnderlinedButton
+          handleClick={() => console.log('Edit')}
+          nameButton="Edit"
+          rightIcon={<IconEdit />}
+          color="primary"
+          fontWeight="normal"
+        />
       ),
       isButton: true,
       pt: '3%',
     },
     {
       label: (
-        <UnderlinedButton handleClick={() => console.log('Add activity')} nameButton='Add activity' rightIcon={<IconPlus />} color='primary' fontWeight='normal' />
+        <UnderlinedButton
+          handleClick={() => console.log('Add activity')}
+          nameButton="Add activity"
+          rightIcon={<IconPlus />}
+          color="primary"
+          fontWeight="normal"
+        />
       ),
       isButton: true,
       pt: '3%',
     },
     {
       label: (
-        <UnderlinedButton handleClick={() => console.log('Export')} nameButton='Export' rightIcon={<IconExport />} color='primary' fontWeight='normal' />
+        <UnderlinedButton
+          handleClick={() => console.log('Export')}
+          nameButton="Export"
+          rightIcon={<IconExport />}
+          color="primary"
+          fontWeight="normal"
+        />
       ),
       isButton: true,
       pt: '3%',
     },
     {
       label: (
-        <UnderlinedButton handleClick={() => console.log('Save')} nameButton='Save' rightIcon={<FaSave />} color='primary' fontWeight='normal' />
+        <UnderlinedButton
+          handleClick={() => console.log('Save')}
+          nameButton="Save"
+          rightIcon={<FaSave />}
+          color="primary"
+          fontWeight="normal"
+        />
       ),
       isButton: true,
       pt: '3%',
