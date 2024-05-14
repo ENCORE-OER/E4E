@@ -18,7 +18,7 @@ export default function InputGenAISetup({
 }: InputGenAISetupProps) {
   // API Setup
   const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
-  const [isClicked, setIsClicked] = useState(false); // used for the API setup button
+  // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
 
   return (
     <Box>
@@ -32,8 +32,8 @@ export default function InputGenAISetup({
       )}
       <Flex justifyContent="center" py="10px">
         <ShowHideButton
-          isClicked={isClicked}
-          setIsClicked={setIsClicked}
+          // isClicked={isClicked}
+          // setIsClicked={setIsClicked}
           showBox={showBox}
           setShowBox={setShowBox}
           showButtonName="Show API Setup"

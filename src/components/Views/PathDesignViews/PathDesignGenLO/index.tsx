@@ -74,7 +74,7 @@ export default function PathDesignGenLO({
 
   // Show Generate Learning Objectives area
   const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
-  const [isClicked, setIsClicked] = useState(false); // used for the API setup button
+  // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
 
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (index: number, updatedText: string) => {
@@ -193,8 +193,8 @@ export default function PathDesignGenLO({
       )}
       <Flex justifyContent="center" py="10px">
         <ShowHideButton
-          isClicked={isClicked}
-          setIsClicked={setIsClicked}
+          // isClicked={isClicked}
+          // setIsClicked={setIsClicked}
           showBox={showBox}
           setShowBox={setShowBox}
           showButtonName="Generate Learning Objectives"
@@ -206,10 +206,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -233,24 +233,24 @@ export default function PathDesignGenLO({
           {
             //numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxGeneratedLO
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    isSelected={objectLO.isSelected}
-                    // objectLOs={updatedSelectedLOs}
-                    index={index}
-                    //selectedLO={selectedLO}
-                    handleCheckBoxClick={handleCheckBoxClick}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxGeneratedLO
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  isSelected={objectLO.isSelected}
+                  // objectLOs={updatedSelectedLOs}
+                  index={index}
+                  //selectedLO={selectedLO}
+                  handleCheckBoxClick={handleCheckBoxClick}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />

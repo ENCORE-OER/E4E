@@ -78,7 +78,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // Show Generate Learning Objectives area
   const [showBox, setShowBox] = useState(true); // used to show the API setup boxes
-  const [isClicked, setIsClicked] = useState(false); // used for the API setup button
+  // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
 
   // const getDataOerById = async (id_oer?: number) => {
   //   const api = new APIV2(props.accessToken);
@@ -287,7 +287,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -296,7 +296,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -307,13 +307,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex paddingTop="1.5rem" direction="column">
               <Flex>
                 <ShowHideButton
-                  isClicked={isClicked}
-                  setIsClicked={setIsClicked}
+                  // isClicked={isClicked}
+                  // setIsClicked={setIsClicked}
                   showBox={showBox}
                   setShowBox={setShowBox}
                   isUpDown={true}
                   showButtonName="Learning objective(s)"
-                  hideButtonName="Learning objective(s)"
                   fontWeight="bold"
                   color="primary"
                   border="none"

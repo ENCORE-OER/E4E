@@ -57,7 +57,7 @@ const Home = (props: DiscoverPageProps) => {
   //const [audienceCard, setAudienceCard] = useState<string[]>([]);
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
   //const [buttonName, setButtonName] = useState('Advanced Search');
-  const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
+  // const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
@@ -384,12 +384,12 @@ const Home = (props: DiscoverPageProps) => {
 
             <Flex
               justifyContent="center"
-              pt={isClicked ? '60px' : '5px'}
+              pt={showBox ? '60px' : '5px'}
               pb="10px"
             >
               <ShowHideButton
-                isClicked={isClicked}
-                setIsClicked={setIsClicked}
+                // isClicked={isClicked}
+                // setIsClicked={setIsClicked}
                 showBox={showBox}
                 setShowBox={setShowBox}
                 showButtonName="Advanced Search"
@@ -415,11 +415,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (
