@@ -51,6 +51,7 @@ interface CollectionViewProps extends BoxProps {
   isDeletingResource: boolean;
   setIsDeletingResource: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean; // Used for the view of the REsources Page in Add Content Modal
 }
 
 export default function CollectionView({
@@ -76,6 +77,7 @@ export default function CollectionView({
   isDeletingResource,
   setIsDeletingResource,
   isSmallerScreen,
+  isAddContentModal,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -262,7 +264,7 @@ export default function CollectionView({
                 isAscending={isAscending}
                 setAscending={setAscending}
                 handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+              //setIsLoading={setIsLoading}
               />
             </Flex>
           </HStack>
@@ -299,7 +301,7 @@ export default function CollectionView({
           )}
         </Box>
 
-        {hydrated && (
+        {hydrated && !isAddContentModal && (
           <ConceptsCollectionView
             handleConceptsChange={handleConceptsChange}
             uniqueConcepts={uniqueConcepts}

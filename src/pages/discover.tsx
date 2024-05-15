@@ -31,11 +31,11 @@ import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
 
-type DiscoverPageProps = {
-  accessToken: string | undefined;
-};
+// type DiscoverPageProps = {
+//   accessToken: string | undefined;
+// };
 
-const Discover = (props: DiscoverPageProps) => {
+const Discover = (/*props: DiscoverPageProps*/) => {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
@@ -227,7 +227,7 @@ const Discover = (props: DiscoverPageProps) => {
 
     //here we search the OERS using the query parameters
 
-    const api = new APIV2(props.accessToken);
+    const api = new APIV2(undefined);
 
     try {
       //let resp: RespDataProps | null = null;
@@ -254,7 +254,7 @@ const Discover = (props: DiscoverPageProps) => {
         // saving the keywords used fot the search in the database if there are results
 
         if (resp?.recordsFiltered > 0) {
-          const api = new APIV2(props.accessToken);
+          const api = new APIV2(undefined);
           keywords.forEach(async (keyword: string) => {
             await api.saveKeyword(keyword);
           });
@@ -614,7 +614,7 @@ const Discover = (props: DiscoverPageProps) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -655,7 +655,7 @@ const Discover = (props: DiscoverPageProps) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
