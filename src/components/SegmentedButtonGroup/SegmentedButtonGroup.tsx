@@ -25,6 +25,7 @@ export default function SegmentedButtonGroup({
   handleResetAll,
 }: SegmentedButtonProps) {
   const {
+    SPACING,
     handleContextChange,
     handleEducatorExperienceChange,
     handleGroupDimensionChange,
@@ -39,26 +40,26 @@ export default function SegmentedButtonGroup({
 
   const YourExperience: Option[] = [
     { title: 'Junior' },
-    { title: 'Advanced' },
+    { title: 'Intermediate' },
     { title: 'Senior' },
   ];
 
   const Context: Option[] = [
     { title: 'School' },
-    { title: 'VET' },
+    { title: 'Vocational' },
     { title: 'University' },
   ];
 
   const GroupDimension: Option[] = [
-    { title: 'Small', description: '(~150 People)' },
-    { title: 'Medium', description: '(~250 People)' },
-    { title: 'Large', description: '(~350 People)' },
+    { title: 'Small', description: '(<10 People)' },
+    { title: 'Medium', description: '(11-50 People)' },
+    { title: 'Large', description: '(>50 People)' },
   ];
 
   const LeanerExperience: Option[] = [
-    { title: 'Initial' },
+    { title: 'Beginner' },
+    { title: 'Intermediate' },
     { title: 'Advanced' },
-    { title: 'Experienced' },
   ];
 
   const [highlightedOptions, setHighlightedOptions] = useState<string[]>([]);
@@ -143,8 +144,8 @@ export default function SegmentedButtonGroup({
     <>
       {hydrated && (
         <>
-          <Flex w="100%">
-            <Box w="50%" px="1.5rem">
+          <Flex w="100%" gap={`${SPACING}%`}>
+            <Box w="50%">
               <Text as="b">Your experience</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
@@ -157,7 +158,7 @@ export default function SegmentedButtonGroup({
                 />
               </Box>
             </Box>
-            <Box w="50%" px="1.5rem">
+            <Box w="50%">
               <Text as="b">Educational context</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
@@ -172,8 +173,8 @@ export default function SegmentedButtonGroup({
             </Box>
           </Flex>
 
-          <Flex w="100%" paddingTop="1.5rem">
-            <Box w="50%" px="1.5rem">
+          <Flex w="100%" paddingTop="1.5rem" gap={`${SPACING}%`}>
+            <Box w="50%">
               <Text as="b">Leaner{"'"}s group dimension</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
@@ -186,7 +187,7 @@ export default function SegmentedButtonGroup({
                 />
               </Box>
             </Box>
-            <Box w="50%" px="1.5rem">
+            <Box w="50%">
               <Text as="b">Leaner{"'"}s experience</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton

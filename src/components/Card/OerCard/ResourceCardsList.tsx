@@ -36,6 +36,7 @@ type ResourceCardsListProps = {
   setCurrentPage?: Dispatch<SetStateAction<number>>;
   handlePageChange?: (newPage: number) => void;
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 };
 
 export default function ResourceCardsList({
@@ -51,6 +52,7 @@ export default function ResourceCardsList({
   setCurrentPage,
   handlePageChange,
   isSmallerScreen,
+  isAddContentModal,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -127,6 +129,7 @@ export default function ResourceCardsList({
                           collectionsColor={collectionsColor}
                           updateLikeOER={updateLikeOER}
                           isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
+                          isAddContentModal={isAddContentModal}
                         />
                       </Box>
                       {isResourcePage && (

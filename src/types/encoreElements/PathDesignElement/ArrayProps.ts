@@ -1,3 +1,4 @@
 export type ArrayProps = {
-  name: string;
+  name?: string;
+  title?: string;
 };

@@ -12,7 +12,7 @@ import {
   ColorCollectionProps,
   ExerciseInfoModalProps,
 } from '../../../../types/encoreElements';
-import TagsDomain from '../../../Tags/TagsDomain';
+import TagsDomain from '../../../Tags/TagsOer/TagsDomain';
 // import { HeaderCardInfoModalProps } from '../CardInfoModal/HeaderCardInfoModal';
 
 // interface HeaderExerciseInfoModalProps extends ExerciseInfoModalProps {}

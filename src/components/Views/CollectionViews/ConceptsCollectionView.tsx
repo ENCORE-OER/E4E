@@ -1,9 +1,8 @@
-import { Box, Flex, Heading, Text, Tooltip } from '@chakra-ui/react';
-import Image from 'next/image';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { MultiValue } from 'react-select';
-import icon_infocircle from '../../../public/Icons/icon_infocircle.svg';
 import { OerConceptInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
+import IconInfoCircleTooltip from '../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import SelectConcepts from '../../Selects/SelectConcepts';
 
 type ConceptsCollectionViewProps = {
@@ -41,20 +40,7 @@ export default function ConceptsCollectionView({
       //justifyContent="center"
     >
       <Flex gap={1} bg="background">
-        <Tooltip
-          hasArrow
-          placement="top"
-          label={label_tooltip}
-          aria-label={label_tooltip}
-          //ml="1px"
-          bg="white"
-          color="primary"
-          p={2}
-        >
-          <span>
-            <Image src={icon_infocircle} alt="infocircle" />
-          </span>
-        </Tooltip>
+        <IconInfoCircleTooltip label_tooltip={label_tooltip} />
         <Box>
           <Heading fontSize="18px" fontWeight="semibold" pb="2">
             Choose the key concepts you wish to incorporate into the learning

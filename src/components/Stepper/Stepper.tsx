@@ -15,7 +15,7 @@ import {
 const steps = [
   {
     title: 'Educational Scenario',
-    description: 'Descrive your educational scenario',
+    description: 'Describe your educational scenario',
     path: '/plan/index',
   },
   {
@@ -47,6 +47,7 @@ function LearningStepper({
       index={activeStep}
       orientation={isSmallerScreen ? 'vertical' : 'horizontal'}
       gap="2"
+      w="100%"
     >
       {steps.map((step, index) => (
         <Step key={index} style={{ overflow: 'hidden' }}>
@@ -59,8 +60,12 @@ function LearningStepper({
           </StepIndicator>
 
           <Box flexShrink="0">
-            <StepTitle>{step.title}</StepTitle>
-            <StepDescription>{step.description}</StepDescription>
+            <StepTitle style={{ fontWeight: 'bold' }}>{step.title}</StepTitle>
+            <StepDescription
+              style={{ color: '#9C9C9C', fontWeight: 'lighter' }}
+            >
+              {step.description}
+            </StepDescription>
           </Box>
 
           {/* <Box flexShrink="0">

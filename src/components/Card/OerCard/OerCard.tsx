@@ -6,6 +6,7 @@ import OerCardHeader from './OerCardHeader';
 
 interface OerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
+  isAddContentModal?: boolean;
   isSmallerScreen?: boolean; // used for the responsive design of the page (reduce number of resource type tags)
 }
 
@@ -39,6 +40,7 @@ export default function OerCard({
   //isSmallerScreen,
   maxWCard,
   oer_url,
+  isAddContentModal,
 }: OerCardProps) {
   return (
     <Card
@@ -69,6 +71,7 @@ export default function OerCard({
         collection_color={collection_color}
         checkBookmark={checkBookmark}
         linkOer={oer_url}
+        isAddContentModal={isAddContentModal}
       />
       <OerCardBody
         description={description}

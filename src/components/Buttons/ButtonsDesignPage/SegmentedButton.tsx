@@ -66,7 +66,8 @@ const SegmentedButton = <T extends {}>({
           <Button
             key={option.title}
             onClick={() => handleOnChange(option)}
-            colorScheme={colored === option.title ? 'yellow' : 'gray'}
+            // colorScheme={colored === option.title ? 'yellow' : 'gray'}
+            bg={colored === option.title ? 'accent.900' : 'white'}
             w="100%"
             borderRadius="25"
             borderLeft={index !== 0 ? '1px solid darkgrey' : 'none'}

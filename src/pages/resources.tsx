@@ -33,9 +33,10 @@ import {
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated } from '../utils/utils';
 
-type DiscoverPageProps = {
-  accessToken: string | undefined;
-};
+interface DiscoverPageProps {
+  // accessToken: string | undefined;
+  isAddContentModal?: boolean; // Used for the AddContentModal
+}
 
 export interface OerItemToDeleteProps {
   collectionIndex: number;
@@ -43,7 +44,7 @@ export interface OerItemToDeleteProps {
   oer_title: string;
 }
 
-const Home = (props: DiscoverPageProps) => {
+const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   const router = useRouter();
   const { user } = useUser();
   const {
@@ -107,7 +108,7 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   const getDataOerById = async (id_oer?: number, signal?: AbortSignal) => {
-    const api = new APIV2(props.accessToken);
+    const api = new APIV2(undefined);
 
     if (id_oer) {
       try {
@@ -274,12 +275,12 @@ const Home = (props: DiscoverPageProps) => {
 
   return (
     <Flex w="100%" h="100%" bg="background">
-      <SideBar pagePath={router.pathname} />
-      <Navbar user={user} pageName="Your resources" />
+      {!isAddContentModal && <SideBar pagePath={router.pathname} />}
+      {!isAddContentModal && <Navbar user={user} pageName="Your resources" />}
       <Box
         //ml="200px"
         py="115px"
-        pl={isSmallerScreen ? '70px' : '240px'}
+        pl={isSmallerScreen || isAddContentModal ? '70px' : '240px'}
         //w="full"
         flex="1"
         minH="100vh"
@@ -382,6 +383,7 @@ const Home = (props: DiscoverPageProps) => {
               isDeletingResource={isDeletingResource}
               setIsDeletingResource={setIsDeletingResource}
               isSmallerScreen={isSmallerScreen}
+              isAddContentModal={isAddContentModal}
             />
           )}
         </Flex>
@@ -402,4 +404,4 @@ const Home = (props: DiscoverPageProps) => {
   );
 };
 
-export default Home;
+export default ResourcesPage;

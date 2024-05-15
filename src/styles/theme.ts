@@ -16,6 +16,7 @@ const config = {
     secondary: '#CED4DA',
     background: '#F8F9FA',
     grey: '#8F959E',
+    light_grey: '#9C9C9C',
     dark_grey: '#495057',
     green_light: {
       200: transparentize(0.8, '#BADC58'),

@@ -14,22 +14,22 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdSave } from 'react-icons/md';
+import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
+import CheckboxDropdown from '../../components/DropDownMenu/CheckboxDropdown';
+import CollectionDropDownMenu from '../../components/DropDownMenu/CollectionDropDownMenui';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import EditFillGaps from '../../components/Tabs/TabsCreatePage/EditFillGaps';
 import EditMultipleChoice from '../../components/Tabs/TabsCreatePage/EditMultipleChoice';
 import EditOpenQuestion from '../../components/Tabs/TabsCreatePage/EditOpenQuestion';
-import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
-import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import CollectionDropDownMenu from '../../components/DropDownMenu/CollectionDropDownMenui';
-import CheckboxDropdown from '../../components/DropDownMenu/CheckboxDropdown';
 import {
   domainOptions,
-  tyopeOfResourcesOption,
   licenseOption,
+  tyopeOfResourcesOption,
 } from '../../types/encoreElements/index';
+import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useHasHydrated } from '../../utils/utils';
 
 const Edit = () => {
   const { user } = useUser();

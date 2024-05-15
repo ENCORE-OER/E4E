@@ -22,12 +22,14 @@ interface Tag {
 
 type SearchBarV2Props = {
   collectionIndex: number;
+  resourcesIndex?: number[];
   selectedTags?: string[];
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
   isHighlighted: boolean;
 };
-export default function SearchBarPathDesign({
+export default function SearchBarSkillsConcepts({
   collectionIndex,
+  resourcesIndex,
   isHighlighted,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
@@ -53,7 +55,35 @@ export default function SearchBarPathDesign({
   };
 
   const renderSkillAndConceptItems = () => {
-    hydrated &&
+    console.log('renderSkillAndConceptItems...');
+    uniqueItems.clear(); // Clear the set to avoid duplicates
+    if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
+      resourcesIndex.forEach((index: number) => {
+        oers[index]?.skills?.forEach((skill) => {
+          const skillId = skill.id;
+          const skillLabel = skill.label;
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === skillLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
+            uniqueItems.add({ id: skillId, label: skillLabel });
+          }
+        });
+
+        oers[index]?.concepts?.forEach((concept) => {
+          const conceptId = concept.id;
+          const conceptLabel = concept.label;
+          const isLabelAlreadySelected = [...uniqueItems].some(
+            (item: SkillItemProps) => item.label === conceptLabel
+          );
+          if (!isLabelAlreadySelected) {
+            // Avoid duplicates: Check if the item is already in the set
+            uniqueItems.add({ id: conceptId, label: conceptLabel });
+          }
+        });
+      });
+    } else {
       oers?.forEach((oer: OerInCollectionProps) => {
         oer?.skills?.forEach((skill) => {
           const skillId = skill.id;
@@ -67,24 +97,31 @@ export default function SearchBarPathDesign({
           uniqueItems.add({ id: conceptId, label: conceptLabel });
         });
       });
+    }
 
+    // while (!hydrated) {
+    // }
     return (
-      <AutoCompleteList>
-        {[...uniqueItems].map(
-          (uniqueItem: SkillItemProps) =>
-            !selectedSkillConceptsTags?.some(
-              (item: SkillItemProps) => item.id === uniqueItem.id
-            ) && (
-              <AutoCompleteItem
-                key={`item-${uniqueItem.id}`}
-                value={uniqueItem.label}
-                textTransform="capitalize"
-              >
-                {uniqueItem.label}
-              </AutoCompleteItem>
-            )
+      <>
+        {hydrated && (
+          <AutoCompleteList>
+            {[...uniqueItems].map(
+              (uniqueItem: SkillItemProps) =>
+                !selectedSkillConceptsTags?.some(
+                  (item: SkillItemProps) => item.id === uniqueItem.id
+                ) && (
+                  <AutoCompleteItem
+                    key={`item-${uniqueItem.id}`}
+                    value={uniqueItem.label}
+                    textTransform="capitalize"
+                  >
+                    {uniqueItem.label}
+                  </AutoCompleteItem>
+                )
+            )}
+          </AutoCompleteList>
         )}
-      </AutoCompleteList>
+      </>
     );
   };
 
@@ -149,7 +186,9 @@ export default function SearchBarPathDesign({
       >
         <AutoCompleteInput
           variant="filled"
-          placeholder="Search..."
+          placeholder="Search for keywords..."
+          bg="white"
+          _placeholder={{ color: 'gray.400' }}
           value={inputValue}
           onChange={(e) => {
             e.preventDefault();

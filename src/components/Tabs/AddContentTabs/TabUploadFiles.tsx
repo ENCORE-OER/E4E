@@ -1,0 +1,53 @@
+import { Flex, Text } from '@chakra-ui/react';
+import { useState } from 'react';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import UploadButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
+
+export default function TabUploadFiles() {
+  const [uploading, setUploading] = useState(false);
+  const { addToast } = CustomToast();
+
+  const handleUploadFile = async (file: File) => {
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('SERVER_URL', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        addToast({
+          message: 'File uploaded successfully!',
+          type: 'success',
+        });
+      } else {
+        addToast({
+          message: `Error during the file uploading: ${response.statusText}`,
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      addToast({
+        message: `Error during the file uploading: ${error}`,
+        type: 'error',
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <Flex w="100%">
+      <Flex justify="center" direction="column" w="100%">
+        <UploadButton
+          handleUploadFile={handleUploadFile}
+          disabled={uploading}
+        />
+        {uploading && <Text>File Uploading...</Text>}
+      </Flex>
+    </Flex>
+  );
+}

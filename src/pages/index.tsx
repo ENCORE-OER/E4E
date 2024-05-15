@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Text,
@@ -9,11 +8,11 @@ import {
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
+import ShowHideButton from '../components/Buttons/ShowHideButton';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import SearchView from '../components/Views/SearchView';
@@ -57,8 +56,8 @@ const Home = (props: DiscoverPageProps) => {
   );
   //const [audienceCard, setAudienceCard] = useState<string[]>([]);
   const [showBox, setShowBox] = useState(false); // used to show the options for the advanced search
-  const [buttonName, setButtonName] = useState('Advanced Search');
-  const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
+  //const [buttonName, setButtonName] = useState('Advanced Search');
+  // const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
@@ -177,19 +176,6 @@ const Home = (props: DiscoverPageProps) => {
         message: `${error}`,
         type: 'error',
       });
-    }
-  };
-
-  const handleAdvanceSearchClick = (e: any) => {
-    e.preventDefault();
-    if (showBox === false) {
-      setButtonName('Close');
-      setShowBox(true);
-      setIsClicked(!isClicked);
-    } else {
-      setButtonName('Advanced Search');
-      setShowBox(false);
-      setIsClicked(!isClicked);
     }
   };
 
@@ -398,16 +384,17 @@ const Home = (props: DiscoverPageProps) => {
 
             <Flex
               justifyContent="center"
-              pt={isClicked ? '60px' : '5px'}
+              pt={showBox ? '60px' : '5px'}
               pb="10px"
             >
-              <Button
-                variant="link"
-                rightIcon={!isClicked ? <ChevronDownIcon /> : <ChevronUpIcon />}
-                onClick={handleAdvanceSearchClick}
-              >
-                {buttonName}
-              </Button>
+              <ShowHideButton
+                // isClicked={isClicked}
+                // setIsClicked={setIsClicked}
+                showBox={showBox}
+                setShowBox={setShowBox}
+                showButtonName="Advanced Search"
+                hideButtonName="Close"
+              />
             </Flex>
           </div>
           <Text variant="text_before_venn" textAlign="center">

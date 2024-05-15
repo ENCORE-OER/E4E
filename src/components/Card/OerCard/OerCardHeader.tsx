@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   CardHeader,
+  Checkbox,
   Flex,
   HStack,
   Spacer,
@@ -11,7 +12,7 @@ import {
 //import { BsBookmark } from 'react-icons/bs';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
-import TagsDomain from '../../Tags/TagsDomain';
+import TagsDomain from '../../Tags/TagsOer/TagsDomain';
 
 type OerCardHeaderProps = {
   ptCardHeader?: string;
@@ -24,6 +25,7 @@ type OerCardHeaderProps = {
   collection_color?: string;
   checkBookmark?: boolean;
   linkOer: string[];
+  isAddContentModal?: boolean; // Used for the AddContent Modal to show the resources page
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -39,6 +41,7 @@ export default function OerCardHeader({
   collection_color,
   checkBookmark,
   linkOer,
+  isAddContentModal,
 }: OerCardHeaderProps) {
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
@@ -67,11 +70,20 @@ export default function OerCardHeader({
             }}
           >
             {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-            <IconBookmarkCheck
-              colorBookMark={collection_color}
-              size="25px"
-              isCheck={checkBookmark}
-            />
+            {!isAddContentModal ? (
+              <IconBookmarkCheck
+                colorBookMark={collection_color}
+                size="25px"
+                isCheck={checkBookmark}
+              />
+            ) : (
+              <Checkbox
+                colorScheme="yellow"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              />
+            )}
           </Button>
         </HStack>
         <Flex direction={'row'} align="center" gap="2">
