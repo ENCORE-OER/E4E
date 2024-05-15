@@ -1,3 +1,2 @@
-export * from './LessonCard'
-export * from './TableLearningPathProps'
-
+export * from './LessonCard';
+export * from './TableLearningPathProps';

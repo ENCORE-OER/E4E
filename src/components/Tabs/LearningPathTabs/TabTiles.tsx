@@ -2,10 +2,9 @@ import LessonCardsList from '../../Card/LessonCard/LessonCardsList';
 
 type TabTilesProps = {
   isSmallerScreen?: boolean;
-}
+};
 
 export default function TabTiles({ isSmallerScreen }: TabTilesProps) {
-
   return (
     // <LessonCard
     //   lessonTitle="Activity Title"

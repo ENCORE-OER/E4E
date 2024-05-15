@@ -9,7 +9,7 @@ export type AddPassFailConditionModalProps = {
   setIsPass: Dispatch<SetStateAction<boolean>>;
   condition: string;
   setCondition: Dispatch<SetStateAction<string>>;
-  handleAddCondition: (
+  handleAddCondition?: (
     index: number,
     newCondition: PassFailConditionsProps
   ) => void;

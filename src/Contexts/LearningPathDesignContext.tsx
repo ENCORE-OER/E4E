@@ -67,7 +67,6 @@ type LearnignPathDesignContextProps = {
   handleLessonCards: (lessonCard: LessonCardProps | LessonCardProps[]) => void;
 
   // ====================
-
 };
 
 // Create the context and export it so that it can be used in other components
@@ -203,26 +202,34 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //   setApiKey(value);
   // };
 
-
   // ========================================================
   // ----- Lesson card -----
 
   // Pass Fail Conditions for each Lesson Card
   // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
 
-  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>('lessonCards', []);
+  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
+    'lessonCards',
+    []
+  );
 
-  const handleLessonCards = (lessonCard: LessonCardProps | LessonCardProps[]) => {
+  const handleLessonCards = (
+    lessonCard: LessonCardProps | LessonCardProps[]
+  ) => {
     if (Array.isArray(lessonCard)) {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [...prevLessonCards, ...lessonCard])
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        ...lessonCard,
+      ]);
     } else {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [...prevLessonCards, lessonCard])
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        lessonCard,
+      ]);
     }
-
-  }
+  };
 
   // ========================================================
-
 
   const resetState = () => {
     handleStepChange(0);
@@ -468,7 +475,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
         lessonCards,
         setLessonCards,
-        handleLessonCards
+        handleLessonCards,
 
         // ===================
       }}

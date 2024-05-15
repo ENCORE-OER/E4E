@@ -9,5 +9,5 @@ export type LessonCardProps = {
     index: number,
     newCondition: PassFailConditionsProps
   ) => {};
-  handleOpenModal?: () => void;
+  handleOpenModal?: (index: number, conditionIndex: number | null) => void;
 };

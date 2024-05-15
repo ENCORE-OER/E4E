@@ -1,6 +1,18 @@
-import { Button, Flex, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select } from "@chakra-ui/react";
-import { ChangeEvent } from "react";
-import { AddPassFailConditionModalProps } from "../../../types/encoreElements";
+import {
+    Button,
+    Flex,
+    Input,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Select,
+} from '@chakra-ui/react';
+import { ChangeEvent } from 'react';
+import { AddPassFailConditionModalProps } from '../../../types/encoreElements';
 
 export default function AddPassFailConditionModal({
     isOpen,
@@ -10,7 +22,7 @@ export default function AddPassFailConditionModal({
     setIsPass,
     condition,
     setCondition,
-    handleAddCondition
+    handleAddCondition,
 }: AddPassFailConditionModalProps) {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -23,7 +35,6 @@ export default function AddPassFailConditionModal({
                         <Select
                             value={isPass ? 'pass' : 'fail'}
                             onChange={(e) => setIsPass(e.target.value === 'pass')}
-
                         >
                             <option value="pass">If pass: </option>
                             <option value="fail">If fail: </option>
@@ -32,20 +43,26 @@ export default function AddPassFailConditionModal({
                     <Input
                         placeholder="Condition"
                         value={condition}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setCondition(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                            setCondition(e.target.value)
+                        }
                     />
                 </ModalBody>
                 <ModalFooter gap={3}>
-                    <Button colorScheme="gray" onClick={(e) => {
-                        e.preventDefault();
+                    <Button
+                        colorScheme="gray"
+                        onClick={(e) => {
+                            e.preventDefault();
 
-                        if (indexCard !== null)
-                            handleAddCondition(indexCard, { condition, isPass })
-
-                    }}>
-                        Add
+                            if (indexCard !== null && handleAddCondition)
+                                handleAddCondition(indexCard, { condition, isPass });
+                        }}
+                    >
+                        {condition === '' ? 'Add' : 'Save'}
                     </Button>
-                    <Button variant="ghost" onClick={onClose}>Cancel</Button>
+                    <Button variant="ghost" onClick={onClose}>
+                        Cancel
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
