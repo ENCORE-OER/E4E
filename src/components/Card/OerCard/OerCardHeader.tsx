@@ -25,7 +25,7 @@ type OerCardHeaderProps = {
   collection_color?: string;
   checkBookmark?: boolean;
   linkOer: string[];
-  isAddContentModal?: boolean;  // Used for the AddContent Modal to show the resources page
+  isAddContentModal?: boolean; // Used for the AddContent Modal to show the resources page
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -41,7 +41,7 @@ export default function OerCardHeader({
   collection_color,
   checkBookmark,
   linkOer,
-  isAddContentModal
+  isAddContentModal,
 }: OerCardHeaderProps) {
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
@@ -70,14 +70,20 @@ export default function OerCardHeader({
             }}
           >
             {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-            {!isAddContentModal ?
+            {!isAddContentModal ? (
               <IconBookmarkCheck
                 colorBookMark={collection_color}
                 size="25px"
                 isCheck={checkBookmark}
-              /> :
-              <Checkbox colorScheme='yellow' onClick={(e) => { e.stopPropagation() }} />
-            }
+              />
+            ) : (
+              <Checkbox
+                colorScheme="yellow"
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              />
+            )}
           </Button>
         </HStack>
         <Flex direction={'row'} align="center" gap="2">

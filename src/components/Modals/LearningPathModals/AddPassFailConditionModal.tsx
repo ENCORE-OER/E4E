@@ -28,7 +28,7 @@ export default function AddPassFailConditionModal({
 
   useEffect(() => {
     setInitialCondition(condition);
-  }, [])
+  }, []);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>

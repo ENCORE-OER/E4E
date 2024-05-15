@@ -70,7 +70,6 @@ const data = [
 ];
 
 export default function TableLearningPath() {
-
   return (
     <Flex direction="column">
       <CustomTable data={data} titles={titleColumns} />
