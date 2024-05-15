@@ -5,44 +5,47 @@ import {
     CardHeader,
     Flex,
     Icon,
-    Text
+    Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { LessonCardProps, PassFailConditionsProps } from '../../../types/encoreElements';
+import { useHasHydrated } from '../../../utils/utils';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
+import AddPassFailConditionsButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddPassFailConditionsButton';
 import EditButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/EditButtonLessonCard';
 import RegenerateButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/RegenerateButtonLessonCard';
 import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButton';
 import ShowHideButton from '../../Buttons/ShowHideButton';
 import IconBookOpen from '../../Icons/IconBookOpen/IconBookOpen';
-import IconPlus from '../../Icons/IconPlus/IconPlus';
 import TagLessonCompulsory from '../../Tags/TagsLesson/TagLessonCompulsory';
 import TagLessonDuration from '../../Tags/TagsLesson/TagLessonDuration';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 
-type LessonCardProps = {
-    lessonTitle: string;
-    lessonType: string; // Specifies if learning, assessment or other
-    activityType: string; // Specifies if Frontal Lecture, Group Discussion, Single-choice quix, etc...
-    indexCard: number; // Specifies the order of the lessons
-    activityDescription: string;
-};
 
 export default function LessonCard({
-    lessonTitle,
-    activityType,
-    lessonType,
+    lesson,
     indexCard,
-    activityDescription,
+    isSmallerScreen,
+    handleOpenModal,
 }: LessonCardProps) {
+
+    const hydrated = useHasHydrated();
+
     // Show Generate Learning Objectives area
-    const [showBox, setShowBox] = useState(false); // used to show the Activity
+    const [showBox, setShowBox] = useState<boolean>(false); // used to show the Activity
+
+    // const [passFailConditions, setPassFailConditions] = useState<PassFailConditionsProps[]>([]);
+
+    const handleChangeClick = () => {
+        handleOpenModal && handleOpenModal();
+    }
 
     return (
-        <Card display="flex" borderRadius={'10px'} border={'1px'}>
+        <Card display="flex" borderRadius={'10px'} border={'1px'} w='100%'>
             <CardHeader pb={0}>
                 <Flex w="100%" direction="row">
                     <Flex flex="1" justify="flex-start" direction="row" align="center">
-                        <TagLessonType labelTag={lessonType} />
+                        <TagLessonType labelTag={lesson.lessonType} />
                         <TagLessonDuration time={30} />
                         <TagLessonCompulsory isChecked={true} />
                     </Flex>
@@ -71,7 +74,7 @@ export default function LessonCard({
                         <ShowHideButton
                             showBox={showBox}
                             setShowBox={setShowBox}
-                            showButtonName={`${indexCard}. ${lessonTitle}`}
+                            showButtonName={`${indexCard}. ${lesson.lessonTitle}`}
                             isUpDown={false}
                             fontWeight="bold"
                             color="primary"
@@ -80,27 +83,43 @@ export default function LessonCard({
                         />
                     </Flex>
                     <Text noOfLines={showBox ? undefined : 1} variant="description_card">
-                        {activityDescription}
+                        {lesson.activityDescription}
                     </Text>
+                    <Flex direction='column' gap={0.5} pt={1}>
+                        {showBox && hydrated && lesson.passFailConditions?.length > 0 && (
+                            lesson.passFailConditions?.map((condition: PassFailConditionsProps, index: number) => (
+                                <Flex direction='row' gap={3} align='center' key={index}>
+                                    <Flex
+                                        // key={index}
+                                        direction='row'
+                                        gap={1}
+                                        py={1}
+                                        px={3}
+                                        bg={condition.isPass ? 'green.100' : 'red.100'}
+                                        borderRadius={10}
+                                        w='50%'
+                                    >
+                                        <Text fontWeight={'bold'}>{condition.isPass ? 'If pass: ' : 'If fail: '}</Text>
+                                        <Text>{condition.condition}</Text>
+                                    </Flex>
+                                    <UnderlinedButton handleClick={handleChangeClick} nameButton='Change' fontWeight='normal' />
+                                </Flex>
+                            ))
+                        )}
+                    </Flex>
                 </Flex>
             </CardBody>
 
             <CardFooter>
-                <Flex direction={'row'} w='100%' align='center'>
-                    <Flex direction="row" gap={1} flex='1' justify='flex-start'>
+                <Flex direction={'row'} w="100%" align="center">
+                    <Flex direction="row" gap={1} flex="1" justify="flex-start">
                         <Text fontWeight="bold">Activity type: </Text>
-                        <Text>{activityType}</Text>
+                        <Text>{lesson.activityType}</Text>
                         <Icon as={IconBookOpen} />
                     </Flex>
 
-                    <Flex direction="row" gap={3} flex='1' justify='flex-end'>
-                        <UnderlinedButton
-                            handleClick={() => console.log('Add condition')}
-                            nameButton='Add pass and fail conditions'
-                            rightIcon={<IconPlus />}
-                            color="grey"
-                            fontWeight="normal"
-                        />
+                    <Flex direction="row" gap={3} flex="1" justify="flex-end">
+                        <AddPassFailConditionsButton handleOpenModal={handleChangeClick} isSmallerScreen={isSmallerScreen} />
                         <AddContentButton />
                     </Flex>
                 </Flex>

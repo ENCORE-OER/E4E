@@ -12,6 +12,7 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
+import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
@@ -287,7 +288,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -296,7 +297,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -347,7 +348,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Heading>
             </Flex>
             <Flex paddingTop="1rem">
-              <LearningPathTabs />
+              <LearningPathTabs isSmallerScreen={isSmallerScreen} />
+            </Flex>
+            <Flex paddingTop={'1.5rem'}>
+              <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
             </Flex>
 
             {/* <Box

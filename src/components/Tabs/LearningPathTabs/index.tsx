@@ -16,7 +16,9 @@ import TabGraph from './TabGraph';
 import { default as TabTable } from './TabTable';
 import TabTiles from './TabTiles';
 
-export type LearningPathTabsProps = {} & CustomTabStyleProps;
+export type LearningPathTabsProps = {
+  isSmallerScreen?: boolean;
+} & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
   const { ...rest } = props;

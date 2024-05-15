@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import {
   ArrayProps,
+  LessonCardProps,
   ObjectLearningObjectiveProps,
   Option,
   SkillItemProps,
@@ -57,6 +58,16 @@ type LearnignPathDesignContextProps = {
   handleSelectedCustomLearningObjectiveChange: (newValue: string) => void;
   handleStoredLearningObjective: () => void;
   handleLearningObjective: () => void;
+
+  // ====================
+  // Lesson Card
+
+  lessonCards: LessonCardProps[];
+  setLessonCards: React.Dispatch<React.SetStateAction<LessonCardProps[]>>;
+  handleLessonCards: (lessonCard: LessonCardProps | LessonCardProps[]) => void;
+
+  // ====================
+
 };
 
 // Create the context and export it so that it can be used in other components
@@ -178,19 +189,40 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [selectedLearnerExperience, setSelectedLearnerExperience] =
     useLocalStorage<Option | null>('selectedLeanerExperience', null);
 
-  //bloom options selection for checkboxes
+  // Bloom options selection for checkboxes
   const [currentBloomOptions, setCurrentBloomOptions] = useState<string[]>([]);
 
-  //step selection for part of the learning objective page
+  // Step selection for part of the learning objective page
   const [step, setStep] = useState<number>(0);
 
-  //reset checkbox options when bloom level is changed
+  // Reset checkbox options when bloom level is changed
   const [resetCheckBoxOptions, setResetCheckBoxOptions] =
     useState<boolean>(false);
 
   // const handleApiKey = (value: string) => {
   //   setApiKey(value);
   // };
+
+
+  // ========================================================
+  // ----- Lesson card -----
+
+  // Pass Fail Conditions for each Lesson Card
+  // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
+
+  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>('lessonCards', []);
+
+  const handleLessonCards = (lessonCard: LessonCardProps | LessonCardProps[]) => {
+    if (Array.isArray(lessonCard)) {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [...prevLessonCards, ...lessonCard])
+    } else {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [...prevLessonCards, lessonCard])
+    }
+
+  }
+
+  // ========================================================
+
 
   const resetState = () => {
     handleStepChange(0);
@@ -430,6 +462,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
         handleStoredLearningObjective,
         handleLearningObjective,
+
+        // ===================
+        // LESSON CARD
+
+        lessonCards,
+        setLessonCards,
+        handleLessonCards
+
+        // ===================
       }}
     >
       {children}

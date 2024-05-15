@@ -1,3 +1,5 @@
+// This Should be the context only for the Learning Path Fragment from Polyglot
+
 import React, { useContext, useMemo, useState } from 'react';
 import { v4 } from 'uuid';
 import { APIV2 } from '../data/api';

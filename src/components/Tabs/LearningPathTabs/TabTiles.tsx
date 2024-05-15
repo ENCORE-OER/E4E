@@ -1,15 +1,21 @@
-import LessonCard from '../../Card/LessonCard';
+import LessonCardsList from '../../Card/LessonCard/LessonCardsList';
 
-export default function TabTiles() {
-  const description =
-    'Ciao nhsfdsbdlsj aslkjkjcdshbvskdjlvnljv jnvdljnvlknvdjbvjsv ls vjòsnvl sbhbasjklblahhbfhadsb afbdakjfhbaoi abad iuafhiadhf c dfscccccccccc sjdcdjcnsjdcnscndsjc dsc dscdsjcdshcbdshcbdkjcsd csdhcbsdbc dsbc usc bscbshcshkb .........';
+type TabTilesProps = {
+  isSmallerScreen?: boolean;
+}
+
+export default function TabTiles({ isSmallerScreen }: TabTilesProps) {
+
   return (
-    <LessonCard
-      lessonTitle="Activity Title"
-      lessonType="Learning"
-      activityType="Activity Type"
-      indexCard={1}
-      activityDescription={description}
-    />
+    // <LessonCard
+    //   lessonTitle="Activity Title"
+    //   lessonType="Learning"
+    //   activityType="Activity Type"
+    //   indexCard={1}
+    //   activityDescription={description}
+    //   isSmallerScreen={isSmallerScreen}
+    // />
+
+    <LessonCardsList isSmallerScreen={isSmallerScreen} />
   );
 }
