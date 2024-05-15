@@ -92,7 +92,10 @@ export default function LessonCard({
                 fontSize="x-large"
               />
             </Flex>
-            <Text noOfLines={showBox ? undefined : 1} variant="description_card">
+            <Text
+              noOfLines={showBox ? undefined : 1}
+              variant="description_card"
+            >
               {lesson.activityDescription}
             </Text>
             <Flex direction="column" gap={0.5} pt={1}>
@@ -162,7 +165,10 @@ export default function LessonCard({
           </Flex>
         </CardFooter>
       </Card>
-      <AddContentModal isOpen={isAddContentModalOpen} onClose={handleCloseAddContentModal} />
+      <AddContentModal
+        isOpen={isAddContentModalOpen}
+        onClose={handleCloseAddContentModal}
+      />
     </>
   );
 }

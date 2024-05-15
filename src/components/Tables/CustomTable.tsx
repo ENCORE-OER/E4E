@@ -36,7 +36,7 @@ export default function CustomTable({ titles, data }: TableLearningPathProps) {
         <Tbody bg="white">
           {data.map((row, index: number) => (
             <Tr key={index} borderWidth="1px" borderColor="primary">
-              <Td borderWidth="2px" borderColor="primary">
+              <Td borderWidth="2px" borderColor="primary" justifyContent={'center'}>
                 {row.number}
               </Td>
               <Td borderWidth="2px" borderColor="primary">

@@ -18,7 +18,7 @@ import { CustomToast } from '../../utils/Toast/CustomToast';
 // import { stringArrayToOptionsObject } from '../../utils/utils';
 
 interface CreateProps {
-  isAddContentModal?: boolean;  // Used for the AddContentModal
+  isAddContentModal?: boolean; // Used for the AddContentModal
 }
 
 const Create = ({ isAddContentModal }: CreateProps) => {
@@ -50,7 +50,7 @@ const Create = ({ isAddContentModal }: CreateProps) => {
 
       <Box
         py="115px"
-        pl={(isSmallerScreen || isAddContentModal) ? '90px' : '240px'}
+        pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
         w="full"
         minH="100vh"
         bg="background"

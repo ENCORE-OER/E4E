@@ -6,6 +6,7 @@ import OerCardHeader from './OerCardHeader';
 
 interface OerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
+  isAddContentModal?: boolean;
   isSmallerScreen?: boolean; // used for the responsive design of the page (reduce number of resource type tags)
 }
 
@@ -39,6 +40,7 @@ export default function OerCard({
   //isSmallerScreen,
   maxWCard,
   oer_url,
+  isAddContentModal,
 }: OerCardProps) {
   return (
     <Card
@@ -54,7 +56,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-      //mb={mbCard || '5'}
+    //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}
@@ -69,6 +71,7 @@ export default function OerCard({
         collection_color={collection_color}
         checkBookmark={checkBookmark}
         linkOer={oer_url}
+        isAddContentModal={isAddContentModal}
       />
       <OerCardBody
         description={description}
@@ -85,7 +88,7 @@ export default function OerCard({
           assessment_oer_type ? [assessment_oer_type] : resourceType || []
         }
         gapGrid={gapGridCardFooter}
-        //maxResTypeTags={isSmallerScreen ? 2 : 3}
+      //maxResTypeTags={isSmallerScreen ? 2 : 3}
       />
     </Card>
   );

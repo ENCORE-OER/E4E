@@ -35,7 +35,7 @@ import { useHasHydrated } from '../utils/utils';
 
 interface DiscoverPageProps {
   // accessToken: string | undefined;
-  isAddContentModal?: boolean;  // Used for the AddContentModal
+  isAddContentModal?: boolean; // Used for the AddContentModal
 }
 
 export interface OerItemToDeleteProps {
@@ -280,7 +280,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
       <Box
         //ml="200px"
         py="115px"
-        pl={(isSmallerScreen || isAddContentModal) ? '70px' : '240px'}
+        pl={isSmallerScreen || isAddContentModal ? '70px' : '240px'}
         //w="full"
         flex="1"
         minH="100vh"
@@ -289,8 +289,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

@@ -36,6 +36,7 @@ type ResourceCardsListProps = {
   setCurrentPage?: Dispatch<SetStateAction<number>>;
   handlePageChange?: (newPage: number) => void;
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 };
 
 export default function ResourceCardsList({
@@ -51,6 +52,7 @@ export default function ResourceCardsList({
   setCurrentPage,
   handlePageChange,
   isSmallerScreen,
+  isAddContentModal
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -115,18 +117,19 @@ export default function ResourceCardsList({
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
                                 : // : collectionsColor[   // to handle when we use the API with pagination
-                                  // (currentPage) > 1
-                                  //   ? index + itemsPerPage * (currentPage - 1)
-                                  //   : index]
-                                  collectionsColor[index]
+                                // (currentPage) > 1
+                                //   ? index + itemsPerPage * (currentPage - 1)
+                                //   : index]
+                                collectionsColor[index]
                               : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                                ''
+                              ''
                           }
                           // oer={fill_the_gaps_data}
                           oer={oer}
                           collectionsColor={collectionsColor}
                           updateLikeOER={updateLikeOER}
                           isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
+                          isAddContentModal={isAddContentModal}
                         />
                       </Box>
                       {isResourcePage && (
@@ -147,8 +150,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -233,8 +236,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>

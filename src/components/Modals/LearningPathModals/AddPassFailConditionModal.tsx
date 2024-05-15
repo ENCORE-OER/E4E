@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   Select,
 } from '@chakra-ui/react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { AddPassFailConditionModalProps } from '../../../types/encoreElements';
 
 export default function AddPassFailConditionModal({
@@ -24,6 +24,12 @@ export default function AddPassFailConditionModal({
   setCondition,
   handleAddCondition,
 }: AddPassFailConditionModalProps) {
+  const [initialCondition, setInitialCondition] = useState<string>('');
+
+  useEffect(() => {
+    setInitialCondition(condition);
+  }, [])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -58,7 +64,7 @@ export default function AddPassFailConditionModal({
                 handleAddCondition(indexCard, { condition, isPass });
             }}
           >
-            {condition === '' ? 'Add' : 'Save'}
+            {initialCondition !== '' ? 'Save' : 'Add'}
           </Button>
           <Button variant="ghost" onClick={onClose}>
             Cancel

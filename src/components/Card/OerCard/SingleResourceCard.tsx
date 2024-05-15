@@ -17,6 +17,7 @@ interface SingleResourceCardProps {
   collectionsColor: string[] | string;
   updateLikeOER: boolean;
   isSmallerScreen?: boolean; // used for the responsive design of the page
+  isAddContentModal?: boolean;
 }
 
 export default function SingleResourceCard({
@@ -26,6 +27,7 @@ export default function SingleResourceCard({
   collectionsColor,
   updateLikeOER,
   isSmallerScreen,
+  isAddContentModal,
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -119,6 +121,7 @@ export default function SingleResourceCard({
           //maxWCard='550px'
           isSmallerScreen={isSmallerScreen}
           oer_url={linkOer}
+          isAddContentModal={isAddContentModal}
         />
       )}
     </>

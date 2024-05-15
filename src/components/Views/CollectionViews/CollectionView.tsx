@@ -289,6 +289,7 @@ export default function CollectionView({
                 currentPage={currentPage}
                 handlePageChange={handlePageChange}
                 isSmallerScreen={isSmallerScreen}
+                isAddContentModal={isAddContentModal}
               />
               <Flex justifyContent="center" padding="5">
                 <AddResourcesButton

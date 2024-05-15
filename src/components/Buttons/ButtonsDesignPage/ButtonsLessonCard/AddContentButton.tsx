@@ -1,8 +1,6 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
 
-
 export default function AddContentButton({ ...rest }: ButtonProps) {
-
   return (
     <Button
       {...rest}
