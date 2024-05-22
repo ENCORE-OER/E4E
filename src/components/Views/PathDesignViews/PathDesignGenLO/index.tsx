@@ -206,10 +206,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -224,7 +224,7 @@ export default function PathDesignGenLO({
               fontWeight={'bold'}
               textColor={'orange.300'}
             >
-              {`Sorry, but we were unable to generate N different required learning objectives.`}{' '}
+              {`Sorry, but we were unable to generate the requested number of learning objectives.`}{' '}
             </Text>
           </Flex>
         )}
@@ -233,24 +233,24 @@ export default function PathDesignGenLO({
           {
             //numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxGeneratedLO
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    isSelected={objectLO.isSelected}
-                    // objectLOs={updatedSelectedLOs}
-                    index={index}
-                    //selectedLO={selectedLO}
-                    handleCheckBoxClick={handleCheckBoxClick}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxGeneratedLO
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  isSelected={objectLO.isSelected}
+                  // objectLOs={updatedSelectedLOs}
+                  index={index}
+                  //selectedLO={selectedLO}
+                  handleCheckBoxClick={handleCheckBoxClick}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
