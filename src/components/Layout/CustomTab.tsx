@@ -47,7 +47,11 @@ export const CustomTab = (props: CustomTabProps) => {
   const [selectedIndex, setSelectedIndex] = useState(firstEnabledTabIndex);
 
   return (
-    <Tabs {...style} index={selectedIndex} onChange={index => setSelectedIndex(index)}>
+    <Tabs
+      {...style}
+      index={selectedIndex}
+      onChange={(index) => setSelectedIndex(index)}
+    >
       <TabList>
         {/* {config.map((tab, id) => (
             <Tab key={id} _selected={_selected}>
