@@ -9,15 +9,19 @@ import {
   OutputLessonPlanProps,
 } from '../../../../types/encoreElements';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
+import ShowHideButton from '../../../Buttons/ShowHideButton';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 export default function PathDesignGenLessonPlan() {
   const { chosenTargetLevel } = useCreateOERsContext();
 
+  // Show Generate Lesson Plan area
+  const [showBox, setShowBox] = useState(false); // used to show the generate lesson plan
+
   const [numberOfLearningActivities, setNumberOfLearningActivities] =
-    useState<number>(0); // Number of learning activities to generate for the lesson plan
+    useState<number>(2); // Number of learning activities to generate for the lesson plan
   const [numberOfAssessmentActivities, setNumberOfAssessmentActivities] =
-    useState<number>(0); // Number of assessment activities to generate for the lesson plan
+    useState<number>(2); // Number of assessment activities to generate for the lesson plan
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLAZero, setIsNumberOfLAZero] = useState<boolean>(false); // State to check if the number of learning activities is invalid (zero)
   const [isNumberOfAAZero, setIsNumberOfAAZero] = useState<boolean>(false); // State to check if the number of assessment activities is invalid (zero)
@@ -93,8 +97,8 @@ export default function PathDesignGenLessonPlan() {
         newIndexBloomActivity
       ]?.includes(newIndexActivity)
         ? learningActivitiesIndex[newIndexBloomActivity].filter(
-            (index) => index !== newIndexActivity
-          ) // If YES, remove the new index activity from the array
+          (index) => index !== newIndexActivity
+        ) // If YES, remove the new index activity from the array
         : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
 
       // Update the learning activities index array with the new index activity
@@ -180,48 +184,49 @@ export default function PathDesignGenLessonPlan() {
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="80%">
-      {/* <Flex>
-                <ShowHideButton
-                    isClicked={isClicked}
-                    setIsClicked={setIsClicked}
-                    showBox={showBox}
-                    setShowBox={setShowBox}
-                    //isUpDown={false}
-                    showButtonName="Specify the number of activities in the lesson plan"
-                    hideButtonName="Specify the number of activities in the lesson plan"
-                    fontWeight="bold"
-                    color="primary"
-                    border="none"
-                />
-            </Flex> */}
-      <Flex border={selectedLearningActivities ? '1px' : 'none'}>
-        <RowBoxGenLessonPlan
-          numberInput={numberOfLearningActivities}
-          setNumberInput={setNumberOfLearningActivities}
-          isNumberZero={isNumberOfLAZero}
-          setIsNumberZero={setIsNumberOfLAZero}
-          defaultMenuTitle="Choose types of learning activities..."
-          description="in class activities"
-          dataMenu={dataLearningActivities}
-          onDataMenu={handleActivitySelection}
-          onSelectionChangeMenu={handleActivityChange}
-          itemIndexMenu={learningActivitiesIndex}
-        />
-      </Flex>
       <Flex>
-        <RowBoxGenLessonPlan
-          numberInput={numberOfAssessmentActivities}
-          setNumberInput={setNumberOfAssessmentActivities}
-          isNumberZero={isNumberOfAAZero}
-          setIsNumberZero={setIsNumberOfAAZero}
-          defaultMenuTitle="Choose types of assessment activities..."
-          description="assessment activities"
-          dataMenu={dataAssessmentActivities}
-          onDataMenu={handleActivitySelection}
-          onSelectionChangeMenu={handleActivityChange}
-          itemIndexMenu={assessmentActivitiesIndex}
+        <ShowHideButton
+          showBox={showBox}
+          setShowBox={setShowBox}
+          // isUpDown={false}
+          showButtonName="Specify the number of activities in the lesson plan"
+          fontWeight="bold"
+          color="primary"
+          border="none"
         />
       </Flex>
+      {showBox &&
+        <Flex direction="column" rowGap={3} w="100%">
+          <Flex border={selectedLearningActivities ? '1px' : 'none'}>
+            <RowBoxGenLessonPlan
+              numberInput={numberOfLearningActivities}
+              setNumberInput={setNumberOfLearningActivities}
+              isNumberZero={isNumberOfLAZero}
+              setIsNumberZero={setIsNumberOfLAZero}
+              defaultMenuTitle="Choose types of learning activities..."
+              description="in class activities"
+              dataMenu={dataLearningActivities}
+              onDataMenu={handleActivitySelection}
+              onSelectionChangeMenu={handleActivityChange}
+              itemIndexMenu={learningActivitiesIndex}
+            />
+          </Flex>
+          <Flex>
+            <RowBoxGenLessonPlan
+              numberInput={numberOfAssessmentActivities}
+              setNumberInput={setNumberOfAssessmentActivities}
+              isNumberZero={isNumberOfAAZero}
+              setIsNumberZero={setIsNumberOfAAZero}
+              defaultMenuTitle="Choose types of assessment activities..."
+              description="assessment activities"
+              dataMenu={dataAssessmentActivities}
+              onDataMenu={handleActivitySelection}
+              onSelectionChangeMenu={handleActivityChange}
+              itemIndexMenu={assessmentActivitiesIndex}
+            />
+          </Flex>
+        </Flex>
+      }
       <Flex w="100%" justifyContent="flex-end">
         <GenerateLessonPlanButton
           handleGenerateLessonPlan={handleGenerateLessonPlan}
