@@ -19,6 +19,7 @@ export type CustomTabConfigProps = ({
   label: string | React.ReactElement;
   child?: React.ReactElement;
   isButton?: boolean;
+  isDisabled?: boolean;
 } & TabPanelsProps)[];
 
 export type CustomTabProps = {
@@ -33,11 +34,18 @@ export type CustomTabProps = {
  *
  * @see Docs https://chakra-ui.com/docs/components/tabs
  */
+
 export const CustomTab = (props: CustomTabProps) => {
   const { config, _selected, ...style } = props;
 
+  const getFirstEnabledTabIndex = (config: CustomTabConfigProps) => {
+    return config.findIndex(tab => !tab.isDisabled && !tab.isButton);
+  };
+
+  const firstEnabledTabIndex = getFirstEnabledTabIndex(config);
+
   return (
-    <Tabs {...style}>
+    <Tabs {...style} index={firstEnabledTabIndex}>
       <TabList>
         {/* {config.map((tab, id) => (
             <Tab key={id} _selected={_selected}>
@@ -49,7 +57,7 @@ export const CustomTab = (props: CustomTabProps) => {
           {config
             .filter((elem) => !elem.isButton)
             .map((tab, id) => (
-              <Tab key={id} _selected={_selected}>
+              <Tab key={id} _selected={_selected} isDisabled={tab.isDisabled}>
                 {tab.label}
               </Tab>
             ))}

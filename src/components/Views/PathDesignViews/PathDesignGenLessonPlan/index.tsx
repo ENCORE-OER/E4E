@@ -97,8 +97,8 @@ export default function PathDesignGenLessonPlan() {
         newIndexBloomActivity
       ]?.includes(newIndexActivity)
         ? learningActivitiesIndex[newIndexBloomActivity].filter(
-            (index) => index !== newIndexActivity
-          ) // If YES, remove the new index activity from the array
+          (index) => index !== newIndexActivity
+        ) // If YES, remove the new index activity from the array
         : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
 
       // Update the learning activities index array with the new index activity

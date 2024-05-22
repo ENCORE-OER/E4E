@@ -156,6 +156,7 @@ export default function MultipleDataDropDownMenu({
           _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
           aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
+          isDisabled={true}
         >
           <Flex direction="row" w="100%" align="center" gap={3}>
             <Flex
@@ -263,7 +264,7 @@ export default function MultipleDataDropDownMenu({
                           onClick={
                             !isCheckBoxNeeded
                               ? () =>
-                                  handleMenuItemClick(data, indexData, index)
+                                handleMenuItemClick(data, indexData, index)
                               : undefined
                           }
                           bg={
