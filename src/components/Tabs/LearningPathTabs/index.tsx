@@ -50,6 +50,7 @@ const getConfig = () => {
       ),
       child: <TabTable />,
       pt: '3%',
+      isDisabled: true,
     },
     {
       label: (
@@ -57,6 +58,7 @@ const getConfig = () => {
       ),
       child: <TabTiles />,
       pt: '3%',
+      isDisabled: true,
     },
     {
       label: (
@@ -75,6 +77,7 @@ const getConfig = () => {
           rightIcon={<IconEdit />}
           color="primary"
           fontWeight="normal"
+          isDisabled={true}
         />
       ),
       isButton: true,
@@ -88,6 +91,7 @@ const getConfig = () => {
           rightIcon={<IconPlus />}
           color="primary"
           fontWeight="normal"
+          isDisabled={true}
         />
       ),
       isButton: true,
@@ -101,6 +105,7 @@ const getConfig = () => {
           rightIcon={<IconExport />}
           color="primary"
           fontWeight="normal"
+          isDisabled={true}
         />
       ),
       isButton: true,
@@ -114,6 +119,7 @@ const getConfig = () => {
           rightIcon={<FaSave />}
           color="primary"
           fontWeight="normal"
+          isDisabled={true}
         />
       ),
       isButton: true,

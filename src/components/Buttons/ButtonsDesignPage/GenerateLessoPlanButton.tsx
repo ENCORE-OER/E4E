@@ -15,6 +15,7 @@ export default function GenerateLessonPlanButton({
       //   isDisabled={isDisabled}
       w="fit-content"
       // display={'flex'}
+      isDisabled={true}
     />
   );
 }

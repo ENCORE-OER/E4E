@@ -60,21 +60,21 @@ export default function LearningPathEditor({
     console.log(learningPath);
   }, [learningPath]);
 
-  useEffect(() => {
-    console.log(collectionColor);
-  }, []);
+  // useEffect(() => {
+  //   console.log(collectionColor);
+  // }, []);
 
   return (
     <Flex w="100%">
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Box p="10px">
+          <Flex p="10px" w="100%" flexDirection="row">
             {/**/}
-            <Box
+            <Flex
               p={0}
               m={0}
-              w={wPathEditor || '80%'}
+              minW={wPathEditor || '80%'}
               h="full"
               mt={5}
               border={'1px solid #CED4DA'}
@@ -107,10 +107,10 @@ export default function LearningPathEditor({
                   console.log('close spinner');
                 }}
               />
-            </Box>
+            </Flex>
 
             {oers !== undefined && (
-              <Box flex="1" p={5} w="90%">
+              <Box flex="1" p={5} w="90%" display="flex">
                 <Text pb={5} fontSize="20" fontWeight="semibold">
                   Relevant OERs
                 </Text>
@@ -136,7 +136,7 @@ export default function LearningPathEditor({
                 )}
               </Box>
             )}
-          </Box>
+          </Flex>
         )}
     </Flex>
   );
