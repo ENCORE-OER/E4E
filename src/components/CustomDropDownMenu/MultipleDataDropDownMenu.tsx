@@ -264,7 +264,7 @@ export default function MultipleDataDropDownMenu({
                           onClick={
                             !isCheckBoxNeeded
                               ? () =>
-                                handleMenuItemClick(data, indexData, index)
+                                  handleMenuItemClick(data, indexData, index)
                               : undefined
                           }
                           bg={

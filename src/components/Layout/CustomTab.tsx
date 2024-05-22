@@ -10,6 +10,7 @@ import {
   ThemingProps,
   UseTabsProps,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 
 export type CustomTabStyleProps = ThemingProps<'Tabs'> &
   UseTabsProps &
@@ -39,13 +40,14 @@ export const CustomTab = (props: CustomTabProps) => {
   const { config, _selected, ...style } = props;
 
   const getFirstEnabledTabIndex = (config: CustomTabConfigProps) => {
-    return config.findIndex(tab => !tab.isDisabled && !tab.isButton);
+    return config.findIndex((tab) => !tab.isDisabled && !tab.isButton);
   };
 
   const firstEnabledTabIndex = getFirstEnabledTabIndex(config);
+  const [selectedIndex, setSelectedIndex] = useState(firstEnabledTabIndex);
 
   return (
-    <Tabs {...style} index={firstEnabledTabIndex}>
+    <Tabs {...style} index={selectedIndex} onChange={index => setSelectedIndex(index)}>
       <TabList>
         {/* {config.map((tab, id) => (
             <Tab key={id} _selected={_selected}>

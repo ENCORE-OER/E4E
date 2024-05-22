@@ -69,7 +69,7 @@ export default function LearningPathEditor({
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Flex p="10px" w='100%' flexDirection="row">
+          <Flex p="10px" w="100%" flexDirection="row">
             {/**/}
             <Flex
               p={0}
@@ -110,7 +110,7 @@ export default function LearningPathEditor({
             </Flex>
 
             {oers !== undefined && (
-              <Box flex="1" p={5} w="90%" display='flex'>
+              <Box flex="1" p={5} w="90%" display="flex">
                 <Text pb={5} fontSize="20" fontWeight="semibold">
                   Relevant OERs
                 </Text>

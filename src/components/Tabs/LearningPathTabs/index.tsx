@@ -66,7 +66,6 @@ const getConfig = () => {
       ),
       child: <TabGraph />,
       pt: '3%',
-
     },
 
     // Fixed Buttons on top-right of the Tabs
