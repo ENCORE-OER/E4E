@@ -21,7 +21,7 @@ export default async function generateExercise(
       macroSubject,
       title,
       level,
-      typeOfExercise,
+      typeOfActivity,
       learningObjective,
       bloomLevel,
       language,
@@ -39,7 +39,7 @@ export default async function generateExercise(
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/Exercises/GenerateExercise';
+    const url = '/ActivityGenerator/generateActivity';
 
     try {
       const exercise = await axiosGenerativeAI.post(
@@ -48,7 +48,7 @@ export default async function generateExercise(
           macroSubject: macroSubject,
           title: title,
           level: level,
-          typeOfExercise: typeOfExercise,
+          typeOfActivity: typeOfActivity,
           learningObjective: learningObjective,
           bloomLevel: bloomLevel,
           language: language,

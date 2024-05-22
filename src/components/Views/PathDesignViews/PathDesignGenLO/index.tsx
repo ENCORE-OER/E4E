@@ -224,7 +224,7 @@ export default function PathDesignGenLO({
               fontWeight={'bold'}
               textColor={'orange.300'}
             >
-              {`Sorry, but we were unable to generate N different required learning objectives.`}{' '}
+              {`Sorry, but we were unable to generate the requested number of learning objectives.`}{' '}
             </Text>
           </Flex>
         )}

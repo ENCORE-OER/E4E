@@ -48,10 +48,14 @@ export default function GenerateLOView({
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
-  const [numberOfLO, setNumberOfLO] = useState<number>(0); // Number of learning objectives to generate
+  const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
+
+  // Max and Min number of learning objectives
+  const MAX_LO = 5;
+  const MIN_LO = 1;
 
   // const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
   //   let newNumber = Number(e.target.value);
@@ -282,22 +286,35 @@ export default function GenerateLOView({
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
       />
-      <Flex direction="row" align="center" py="5" flexWrap={'wrap'}>
-        <Text pr="5" fontWeight={'bold'}>
-          Desired number of learning objective(s)*
+      <Flex
+        w="100%"
+        direction="row"
+        align="center"
+        py="5"
+        flexWrap={'wrap'}
+        gap="5"
+      >
+        <Text fontWeight={'bold'}>
+          Desired number of learning objective(s):
         </Text>
         <NumberInputTextBox
           numberInput={numberOfLO}
           setNumberInput={setNumberOfLO}
+          minNumber={MIN_LO}
+          maxNumber={MAX_LO}
           isNumberZero={isNumberOfLOZero}
           setIsNumberZero={setIsNumberOfLOZero}
-          label_tooltip="You can generate maximum 5 learning objectives at a time."
+          label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
+          min_label_tooltip={`You must have at least ${MIN_LO} learning objective.`}
+          max_label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
           pr="10%"
         />
-        <GenerateLOButton
-          handleGenerateLO={handleGenerateLO}
-          numberOfLO={numberOfLO}
-        />
+        <Flex flex="1" justify="flex-end">
+          <GenerateLOButton
+            handleGenerateLO={handleGenerateLO}
+            numberOfLO={numberOfLO}
+          />
+        </Flex>
       </Flex>
 
       {/* {isLoading && (

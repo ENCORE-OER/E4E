@@ -39,9 +39,13 @@ export default function RowBoxGenLessonPlan({
         <NumberInputTextBox
           numberInput={numberInput}
           setNumberInput={setNumberInput}
+          minNumber={0}
+          maxNumber={5}
           isNumberZero={isNumberZero}
           setIsNumberZero={setIsNumberZero}
           label_tooltip="Specify the number of activities you want to generate. Maximum number of activities is 5."
+          min_label_tooltip="The minimum number of activities is 0."
+          max_label_tooltip="The maximum number of activities is 5."
         />
         <Text fontSize="md">{description}</Text>
       </Flex>
