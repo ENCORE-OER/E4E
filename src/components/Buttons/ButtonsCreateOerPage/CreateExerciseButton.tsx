@@ -1,15 +1,15 @@
 import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import axios from 'axios';
-import GenerateExerciseResponseView from '../../../components/Views/ApiResponseViews/GenerateExerciseResponseView';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
+import GenerateExerciseResponseView from '../../../components/Views/ApiResponseViews/GenerateExerciseResponseView';
 import {
-  GeneratedExerciseProps,
   BloomLevelsEnum,
+  GeneratedExerciseProps,
 } from '../../../types/encoreElements';
-import { mapOptionToNumber } from '../../../utils/utils';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { mapOptionToNumber } from '../../../utils/utils';
 
 type CreateExerciseButtonProps = {
   isSmallerScreen?: boolean;
@@ -65,7 +65,7 @@ export default function CreateExerciseButton({
         macroSubject: macroSubject, // from materialAnalyzer API
         title: title, // from materialAnalyzer API
         level: chosenTargetLevel,
-        typeOfExercise: chosenTypeOfExercise,
+        typeOfActivity: chosenTypeOfExercise,
         learningObjective: learningObjective,
         bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
         // language: language, // English by default
@@ -82,7 +82,7 @@ export default function CreateExerciseButton({
         macroSubject: macroSubject, // from materialAnalyzer API
         title: title, // from materialAnalyzer API
         level: chosenTargetLevel,
-        typeOfExercise: chosenTypeOfExercise, // 0 = open question, 1 = short answer, 2 = true or false
+        typeOfActivity: chosenTypeOfExercise, // 0 = open question, 1 = short answer, 2 = true or false
         learningObjective: `Teaching the students ${title}. In particular ${description}`, // TODO: add a component in frontend to set the learning objective???
         bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
         // language: language, // English by default
@@ -96,7 +96,7 @@ export default function CreateExerciseButton({
         macroSubject: macroSubject, // from materialAnalyzer API
         title: title, // from materialAnalyzer API
         level: chosenTargetLevel,
-        typeOfExercise: chosenTypeOfExercise, //exerciseTypeNumber, // fill_in_the_blanks exercise
+        typeOfActivity: chosenTypeOfExercise, //exerciseTypeNumber, // fill_in_the_blanks exercise
         learningObjective: `Teaching the students ${chosenTopic}. In particular ${description}`, // TODO: add a component in frontend to set the learning objective???
         bloomLevel: mapOptionToNumber(bloomLevelExercise, BloomLevelsEnum),
         // language: language, // English by default
@@ -114,8 +114,7 @@ export default function CreateExerciseButton({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        //'/api/encore/genAI/fillGapsExercise',
-        '/api/encore/genAI/generateExercise',
+        '/api/encore/genAI/generateActivity',
         requestData,
         {
           headers: {

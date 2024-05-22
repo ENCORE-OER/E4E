@@ -189,7 +189,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

@@ -36,6 +36,7 @@ import { Box, Button, CircularProgress, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import {
+  BloomLevelString,
   assignmentTypeOptions,
   bloomLevelOptions,
   targetLevelOptions,
@@ -48,6 +49,7 @@ import TabsCreateMenu from './TabsCreateMenu';
 import axios from 'axios';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { mapStringToString } from '../../../utils/utils';
 
 type SharedParameterProps = {
   isSmallerScreen?: boolean;
@@ -117,29 +119,34 @@ export default function SharedParameterTab({
 
       // console.log('Success - resp.data.error:', resp?.data?.error);
       console.log('Success - resp.data:', resp?.data);
+
       // console.log('Success - resp:', resp);
-      switch (bloomLevel) {
-        case 'Remember':
-          return resp?.data['Remembering'];
-          break;
-        case 'Understand':
-          return resp?.data['Understanding'];
-          break;
-        case 'Apply':
-          return resp?.data['Applying'];
-          break;
-        case 'Analyze':
-          return resp?.data['Analyzing'];
-          break;
-        case 'Evaluate':
-          return resp?.data['Evaluating'];
-          break;
-        case 'Create':
-          return resp?.data['Creating'];
-          break;
-        default:
-          return resp?.data['Remembering'];
-      }
+      // switch (bloomLevel) {
+      //   case 'Remember':
+      //     return resp?.data['Remembering'];
+      //     break;
+      //   case 'Understand':
+      //     return resp?.data['Understanding'];
+      //     break;
+      //   case 'Apply':
+      //     return resp?.data['Applying'];
+      //     break;
+      //   case 'Analyze':
+      //     return resp?.data['Analyzing'];
+      //     break;
+      //   case 'Evaluate':
+      //     return resp?.data['Evaluating'];
+      //     break;
+      //   case 'Create':
+      //     return resp?.data['Creating'];
+      //     break;
+      //   default:
+      //     return resp?.data['Remembering'];
+      // }
+
+      const bloomLevelString = mapStringToString(bloomLevel, BloomLevelString);
+      return resp?.data[bloomLevelString];
+
       // The API returns an array of 2 learning objectives for each bloom level, so I have to select the one corresponding to the selected bloom level
     } catch (error) {
       console.error('Error:', error);

@@ -42,7 +42,7 @@ export default async function generateLearningObjective(
     // console.log(topic, context, level);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/LOGenerator/generatelearningobjective';
+    const url = '/LearningObjectiveGenerator/generateLearningObjective';
 
     try {
       const respLearningObjective = await axiosGenerativeAI.post(

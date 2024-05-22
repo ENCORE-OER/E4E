@@ -14,7 +14,7 @@ export default async function materialAnalyzer(
   res: NextApiResponse
 ) {
   if (req.method === 'POST') {
-    console.log(process.env.SK_API_KEY);
+    console.log('API_KEY: ', process.env.SK_API_KEY);
     console.log('SETUP_MODEL: ', process.env.SETUP_MODEL);
 
     // get the data from the request body
@@ -25,7 +25,8 @@ export default async function materialAnalyzer(
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/Analyser/analyseMaterial';
+    // const url = '/Analyser/analyseMaterial';
+    const url = '/MaterialAnalyser/analyseMaterial';
 
     try {
       const analyzeMaterial = await axiosGenerativeAI.post(
