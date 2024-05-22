@@ -97,8 +97,8 @@ export default function PathDesignGenLessonPlan() {
         newIndexBloomActivity
       ]?.includes(newIndexActivity)
         ? learningActivitiesIndex[newIndexBloomActivity].filter(
-          (index) => index !== newIndexActivity
-        ) // If YES, remove the new index activity from the array
+            (index) => index !== newIndexActivity
+          ) // If YES, remove the new index activity from the array
         : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
 
       // Update the learning activities index array with the new index activity
@@ -195,7 +195,7 @@ export default function PathDesignGenLessonPlan() {
           border="none"
         />
       </Flex>
-      {showBox &&
+      {showBox && (
         <Flex direction="column" rowGap={3} w="100%">
           <Flex border={selectedLearningActivities ? '1px' : 'none'}>
             <RowBoxGenLessonPlan
@@ -226,7 +226,7 @@ export default function PathDesignGenLessonPlan() {
             />
           </Flex>
         </Flex>
-      }
+      )}
       <Flex w="100%" justifyContent="flex-end">
         <GenerateLessonPlanButton
           handleGenerateLessonPlan={handleGenerateLessonPlan}

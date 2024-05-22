@@ -263,10 +263,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }
@@ -286,7 +286,14 @@ export default function GenerateLOView({
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
       />
-      <Flex w="100%" direction="row" align="center" py="5" flexWrap={'wrap'} gap="5">
+      <Flex
+        w="100%"
+        direction="row"
+        align="center"
+        py="5"
+        flexWrap={'wrap'}
+        gap="5"
+      >
         <Text fontWeight={'bold'}>
           Desired number of learning objective(s):
         </Text>
@@ -302,7 +309,7 @@ export default function GenerateLOView({
           max_label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
           pr="10%"
         />
-        <Flex flex="1" justify="flex-end" >
+        <Flex flex="1" justify="flex-end">
           <GenerateLOButton
             handleGenerateLO={handleGenerateLO}
             numberOfLO={numberOfLO}
@@ -313,6 +320,6 @@ export default function GenerateLOView({
       {/* {isLoading && (
         <LoadingSpinner textLoading="Generating Learning Objectives..." />
       )} */}
-    </Flex >
+    </Flex>
   );
 }

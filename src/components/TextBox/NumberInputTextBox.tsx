@@ -27,9 +27,6 @@ export default function NumberInputTextBox({
   // setIsNumberZero,
   ...rest
 }: NumberInputTextBoxProps) {
-
-
-
   const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     let newNumber = Number(e.target.value);
     console.log('newNumber', newNumber);
@@ -44,20 +41,18 @@ export default function NumberInputTextBox({
   };
 
   const handleClickPlusButton = () => {
-    if (numberInput < maxNumber)
-      setNumberInput(numberInput + 1);
+    if (numberInput < maxNumber) setNumberInput(numberInput + 1);
   };
 
   const handleClickMinusButton = () => {
-    if (numberInput > minNumber)
-      setNumberInput(numberInput - 1);
+    if (numberInput > minNumber) setNumberInput(numberInput - 1);
   };
 
   return (
     <Flex
       {...rest}
       align="center"
-      direction='row'
+      direction="row"
       gap={0}
       borderRadius="lg"
       border={isNumberZero ? '2.5px solid #bf5521ff' : '1px solid'}
@@ -70,13 +65,11 @@ export default function NumberInputTextBox({
         color="black"
         placement={'top'}
         borderRadius={'md'}
-        visibility={(numberInput === minNumber && min_label_tooltip) ? 'visible' : 'hidden'}
+        visibility={
+          numberInput === minNumber && min_label_tooltip ? 'visible' : 'hidden'
+        }
       >
-        <Button
-          bg='none'
-          p={0}
-          onClick={handleClickMinusButton}
-        >
+        <Button bg="none" p={0} onClick={handleClickMinusButton}>
           <IconMinus />
         </Button>
       </Tooltip>
@@ -116,13 +109,11 @@ export default function NumberInputTextBox({
         color="black"
         placement={'top'}
         borderRadius={'md'}
-        visibility={(numberInput === maxNumber && max_label_tooltip) ? 'visible' : 'hidden'}
+        visibility={
+          numberInput === maxNumber && max_label_tooltip ? 'visible' : 'hidden'
+        }
       >
-        <Button
-          bg='none'
-          p={0}
-          onClick={handleClickPlusButton}
-        >
+        <Button bg="none" p={0} onClick={handleClickPlusButton}>
           <IconPlus />
         </Button>
       </Tooltip>
