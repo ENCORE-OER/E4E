@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PiSmileySadLight } from 'react-icons/pi';
 import { useGeneralContext } from '../../../../Contexts/GeneralContext';
 import {
@@ -69,6 +69,7 @@ export default function PathDesignGenLO({
   // Used to handle generated learning objectives
   const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
 
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
@@ -123,33 +124,34 @@ export default function PathDesignGenLO({
   //   }
   // };
 
-  // // Function to create/add a custom learning objective
-  // const handleAddLearningObjective = () => {
-  //   console.log('Add new learning objective');
-  //   try {
-  //     // const updatedGeneratedLOs = [...generatedLOs];
-  //     // updatedGeneratedLOs.push('');
-  //     // setGeneratedLOs(updatedGeneratedLOs);
+  // Function to create/add a custom learning objective
+  const handleAddLearningObjective = () => {
+    console.log('Add new learning objective');
+    try {
+      // const updatedGeneratedLOs = [...generatedLOs];
+      // updatedGeneratedLOs.push('');
+      // setGeneratedLOs(updatedGeneratedLOs);
 
-  //     setLearningObjectiveObjects(
-  //       (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
-  //         ...prevObjectLOs,
-  //         {
-  //           learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
-  //             .map(
-  //               (selectedSkillConceptsTag: SkillItemProps) =>
-  //                 selectedSkillConceptsTag.label
-  //             )
-  //             .join(', ')} - ${learningTextContext}`,
-  //           isSelected: false,
-  //           isGenerated: false,
-  //         },
-  //       ]
-  //     );
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+      setLearningObjectiveObjects(
+        (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+          ...prevObjectLOs,
+          {
+            learningObjective: '',
+            // `${selectedBloomLevel} - ${selectedSkillConceptsTags
+            //   .map(
+            //     (selectedSkillConceptsTag: SkillItemProps) =>
+            //       selectedSkillConceptsTag.label
+            //   )
+            //   .join(', ')} - ${learningTextContext}`,
+            isSelected: false,
+            isGenerated: false,
+          },
+        ]
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleDeleteLO = (indexLO: number) => {
     const updatedObjectLOs = [...learningObjectiveObjects].filter(
@@ -163,6 +165,14 @@ export default function PathDesignGenLO({
       type: 'success',
     });
   };
+
+  useEffect(() => {
+    if (learningObjectiveObjects.length < numberOfLO) {
+      for (let index = 0; index < numberOfLO - learningObjectiveObjects.length; index++) {
+        handleAddLearningObjective();
+      }
+    }
+  }, [])
 
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
@@ -189,6 +199,8 @@ export default function PathDesignGenLO({
         setIsLoading={setIsLoading}
         learningObjectiveObjects={learningObjectiveObjects}
         setLearningObjectiveObjects={setLearningObjectiveObjects}
+        numberOfLO={numberOfLO}
+        setNumberOfLO={setNumberOfLO}
       />
       {/* )}
       <Flex justifyContent="center" py="10px">
@@ -231,7 +243,7 @@ export default function PathDesignGenLO({
 
         <Flex direction="column" rowGap={3}>
           {
-            //numberOfLO > 0 &&
+            // numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
             hydrated &&
             learningObjectiveObjects.map(

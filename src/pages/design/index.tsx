@@ -103,7 +103,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -112,7 +112,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}
@@ -125,7 +125,9 @@ const Home = () => {
             </Flex>
 
             <Flex w="100%" paddingTop="1.5rem" direction={'column'}>
-              <Text fontWeight='bold' fontSize='lg' pb={1}>API Setup</Text>
+              <Text fontWeight="bold" fontSize="lg" pb={1}>
+                API Setup
+              </Text>
               <InputsGenerateAI
                 apiKey={apiKey}
                 handleApiKey={handleApiKey}

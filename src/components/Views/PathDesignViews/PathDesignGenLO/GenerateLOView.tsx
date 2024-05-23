@@ -22,6 +22,8 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  numberOfLO: number;
+  setNumberOfLO: Dispatch<SetStateAction<number>>;
 }
 
 export default function GenerateLOView({
@@ -38,16 +40,18 @@ export default function GenerateLOView({
   learningTextContext,
   // totalLearningObjectives,
   // setTotalLearningObjectives,
-  handleSelectedLearningObjectiveIndexChange,
+  // handleSelectedLearningObjectiveIndexChange,
   setIsNextButtonClicked,
   isLoading,
   setIsLoading,
   learningObjectiveObjects,
   setLearningObjectiveObjects,
+  numberOfLO,
+  setNumberOfLO
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
-  const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
+
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
@@ -136,13 +140,22 @@ export default function GenerateLOView({
           'Previous OBJECT learning objectives: ',
           learningObjectiveObjects
         );
-        // Reset the selected learning objective index (to -1)
+
         if (numberOfLO > 0) {
           setIsLoading(true);
-          // setTotalLearningObjectives(
-          //   objectLOs?.
-          //     filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).
-          //     map((objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective) || []);
+
+          // Number of the learning objectives not generated
+          const numberLONotGenerated = learningObjectiveObjects
+            ?.filter(
+              (objectLO: ObjectLearningObjectiveProps) =>
+                !objectLO.isGenerated
+            )
+            .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length
+
+          // Number of the learning objectives to generate
+          const numberLOToGenerate = numberOfLO - numberLONotGenerated;
+
+          // We filter the learning objectives deleting the previous generated learning objectives
           setLearningObjectiveObjects(
             learningObjectiveObjects
               ?.filter(
@@ -151,7 +164,8 @@ export default function GenerateLOView({
               )
               .map((objectLO: ObjectLearningObjectiveProps) => objectLO) || []
           );
-          handleSelectedLearningObjectiveIndexChange(-1);
+
+          // handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: string[] = [];
           console.log('Generate learning objectives');
           console.log('Education context: ', selectedContext);
@@ -169,7 +183,7 @@ export default function GenerateLOView({
           let i = 0;
           const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
           // Call the API until the number of learning objectives is reached.
-          while (learningObjectives.length < numberOfLO && i < MAX_API_CALL) {
+          while (learningObjectives.length < numberLOToGenerate && i < MAX_API_CALL) {
             //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
@@ -202,7 +216,7 @@ export default function GenerateLOView({
                 // Avoid duplicates
                 if (
                   !learningObjectives.includes(textLO) &&
-                  learningObjectives.length < numberOfLO
+                  learningObjectives.length < numberLOToGenerate
                 ) {
                   learningObjectives.push(textLO);
                   //console.log('textLO', textLO);
@@ -214,10 +228,10 @@ export default function GenerateLOView({
             console.log('learningObjectives', learningObjectives);
             i++;
           }
-          if (learningObjectives.length < numberOfLO) {
+          if (learningObjectives.length < numberLOToGenerate) {
             setIsLessGeneratedLO(true);
           }
-          // setTotalLearningObjectives(prevLearningObjectives => [...prevLearningObjectives, ...learningObjectives]);
+          // Repopulate the learning objectives array
           setLearningObjectiveObjects(
             (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
               ...prevLearningObjectives,
