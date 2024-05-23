@@ -9,7 +9,7 @@ import {
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../../../utils/utils';
-import BoxGeneratedLO from '../../../Boxes/BoxGeneratedLO';
+import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import AddLearningObjectiveButton from '../../../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
@@ -77,51 +77,53 @@ export default function PathDesignGenLO({
   // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
 
   // Function to update the learning objective when the user edits it
-  const handleUpdateLO = (index: number, updatedText: string) => {
-    console.log('Update learning objective');
+  const handleUpdateLO = (updatedText: string, index?: number) => {
+    if (index != undefined) {
+      console.log('Update learning objective');
 
-    // const updatedGeneratedLOs = [...totalLearningObjectives];
-    // // console.log('GeneratedLOs', updatedGeneratedLOs);
-    // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
-    // setTotalLearningObjectives(updatedGeneratedLOs);
+      // const updatedGeneratedLOs = [...totalLearningObjectives];
+      // // console.log('GeneratedLOs', updatedGeneratedLOs);
+      // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
+      // setTotalLearningObjectives(updatedGeneratedLOs);
 
-    // ... Update using the <ObjectLearningObjectiveProps> array ...
-    const updatedObjectLOs = [...learningObjectiveObjects];
-    updatedObjectLOs[index].learningObjective = updatedText;
-    // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
-    // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
-    setLearningObjectiveObjects(updatedObjectLOs);
-  };
-
-  // Function to handle the click on the checkbox to select the learning objectives
-  const handleCheckBoxClick = (index: number) => {
-    console.log('Checkbox clicked');
-    try {
-      console.log(
-        'selected LOs',
-        learningObjectiveObjects.map(
-          (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
-        )
-      );
-
-      // Updating object LO selection
-      const updatedSelectedLOsObj = [...learningObjectiveObjects];
-      updatedSelectedLOsObj[index].isSelected =
-        !updatedSelectedLOsObj[index].isSelected;
-      console.log(
-        'updated Selected LOs',
-        learningObjectiveObjects.map(
-          (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
-        )
-      );
-
-      setLearningObjectiveObjects(updatedSelectedLOsObj);
-
-      handleSelectedLearningObjectiveIndexChange(index);
-    } catch (error) {
-      console.log(error);
+      // ... Update using the <ObjectLearningObjectiveProps> array ...
+      const updatedObjectLOs = [...learningObjectiveObjects];
+      updatedObjectLOs[index].learningObjective = updatedText;
+      // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
+      // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
+      setLearningObjectiveObjects(updatedObjectLOs);
     }
   };
+
+  // // Function to handle the click on the checkbox to select the learning objectives
+  // const handleCheckBoxClick = (index: number) => {
+  //   console.log('Checkbox clicked');
+  //   try {
+  //     console.log(
+  //       'selected LOs',
+  //       learningObjectiveObjects.map(
+  //         (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
+  //       )
+  //     );
+
+  //     // Updating object LO selection
+  //     const updatedSelectedLOsObj = [...learningObjectiveObjects];
+  //     updatedSelectedLOsObj[index].isSelected =
+  //       !updatedSelectedLOsObj[index].isSelected;
+  //     console.log(
+  //       'updated Selected LOs',
+  //       learningObjectiveObjects.map(
+  //         (objectLO: ObjectLearningObjectiveProps) => objectLO.isSelected
+  //       )
+  //     );
+
+  //     setLearningObjectiveObjects(updatedSelectedLOsObj);
+
+  //     handleSelectedLearningObjectiveIndexChange(index);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // Function to create/add a custom learning objective
   const handleAddLearningObjective = () => {
@@ -206,10 +208,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -229,28 +231,38 @@ export default function PathDesignGenLO({
           </Flex>
         )}
 
-        <Flex direction="column">
+        <Flex direction="column" rowGap={3}>
           {
             //numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxGeneratedLO
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    isSelected={objectLO.isSelected}
-                    // objectLOs={updatedSelectedLOs}
-                    index={index}
-                    //selectedLO={selectedLO}
-                    handleCheckBoxClick={handleCheckBoxClick}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                // <BoxGeneratedLO
+                //   key={index}
+                //   textLearningObjective={objectLO.learningObjective}
+                //   isGenerated={objectLO.isGenerated}
+                //   isSelected={objectLO.isSelected}
+                //   // objectLOs={updatedSelectedLOs}
+                //   index={index}
+                //   //selectedLO={selectedLO}
+                //   handleCheckBoxClick={handleCheckBoxClick}
+                //   handleUpdateLO={handleUpdateLO}
+                //   handleDeleteLO={handleDeleteLO}
+                //   isSmallerScreen={isSmallerScreen}
+                // />
+                <BoxLearningObjective
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  // isGenerated={objectLO.isGenerated}
+                  index={index}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                  label_tooltip_delete='Delete'
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />

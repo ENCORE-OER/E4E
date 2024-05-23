@@ -9,7 +9,8 @@ interface TextBoxProps extends BoxProps {
   text?: string;
   rows?: number;
   resize?: 'none' | 'vertical' | 'horizontal' | 'both' | 'initial' | 'inherit';
-  onTextChange: (newText: string) => void;
+  index?: number;
+  onTextChange: (newText: string, index?: number) => void;
 }
 
 const TextBox = ({
@@ -18,6 +19,7 @@ const TextBox = ({
   placeholderColor,
   isHighlighted,
   text,
+  index,
   onTextChange,
   rows,
   resize,
@@ -25,7 +27,11 @@ const TextBox = ({
 }: TextBoxProps) => {
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    onTextChange(newText);
+    if (index != undefined) {
+      onTextChange(newText, index);
+    } else {
+      onTextChange(newText);
+    }
   };
 
   return (
