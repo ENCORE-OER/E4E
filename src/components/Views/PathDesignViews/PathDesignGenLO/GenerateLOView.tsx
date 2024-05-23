@@ -11,7 +11,6 @@ import {
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
-import InputsGenerateAI from '../../../Inputs/InputsGenAISetup/InputsGenerateAI';
 import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
@@ -27,9 +26,9 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
 
 export default function GenerateLOView({
   apiKey,
-  handleApiKey,
+  // handleApiKey,
   setupModel,
-  handleSetupModel,
+  // handleSetupModel,
   setIsLessGeneratedLO,
   bloomLevelIndex,
   selectedBloomLevel,
@@ -263,10 +262,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
@@ -280,12 +279,12 @@ export default function GenerateLOView({
             setupModel={setupModel}
             handleSetupModel={handleSetupModel}
           /> */}
-      <InputsGenerateAI
+      {/* <InputsGenerateAI
         apiKey={apiKey}
         handleApiKey={handleApiKey}
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
-      />
+      /> */}
       <Flex
         w="100%"
         direction="row"

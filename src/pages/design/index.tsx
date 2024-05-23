@@ -2,12 +2,15 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
+import InputsGenerateAI from '../../components/Inputs/InputsGenAISetup/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
+import InfoAPISetupTextBox from '../../components/TextBox/InfoAPISetupTextBox';
+import { useGeneralContext } from '../../Contexts/GeneralContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
 
@@ -28,6 +31,9 @@ const Home = () => {
     resetAll,
     handleResetAll,
   } = useLearningPathDesignContext();
+
+  const { apiKey, setupModel, handleApiKey, handleSetupModel } =
+    useGeneralContext();
 
   // ==================================================================
 
@@ -97,7 +103,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -106,9 +112,9 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
-            <Box
+            <Flex
               // w={isSmallerScreen ? '95%' : '90%'}
               w="100%"
             >
@@ -116,12 +122,23 @@ const Home = () => {
                 activeStep={0}
                 isSmallerScreen={isSmallerScreen}
               />
-            </Box>
+            </Flex>
+
+            <Flex w="100%" paddingTop="1.5rem" direction={'column'}>
+              <Text fontWeight='bold' fontSize='lg' pb={1}>API Setup</Text>
+              <InputsGenerateAI
+                apiKey={apiKey}
+                handleApiKey={handleApiKey}
+                setupModel={setupModel}
+                handleSetupModel={handleSetupModel}
+              />
+              <InfoAPISetupTextBox />
+            </Flex>
 
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
               w="100%"
-              paddingTop="2rem"
+              paddingTop="1rem"
             >
               <Text>
                 This part will guide you in creating a tailored learning path to

@@ -10,8 +10,6 @@ import {
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
-import AddLearningObjectiveButton from '../../../Buttons/ButtonsDesignPage/AddLearningObjectiveButton';
-import ShowHideButton from '../../../Buttons/ShowHideButton';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
 import GenerateLOView from './GenerateLOView';
 
@@ -73,7 +71,7 @@ export default function PathDesignGenLO({
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
 
   // Show Generate Learning Objectives area
-  const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
+  // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
   // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
 
   // Function to update the learning objective when the user edits it
@@ -125,33 +123,33 @@ export default function PathDesignGenLO({
   //   }
   // };
 
-  // Function to create/add a custom learning objective
-  const handleAddLearningObjective = () => {
-    console.log('Add new learning objective');
-    try {
-      // const updatedGeneratedLOs = [...generatedLOs];
-      // updatedGeneratedLOs.push('');
-      // setGeneratedLOs(updatedGeneratedLOs);
+  // // Function to create/add a custom learning objective
+  // const handleAddLearningObjective = () => {
+  //   console.log('Add new learning objective');
+  //   try {
+  //     // const updatedGeneratedLOs = [...generatedLOs];
+  //     // updatedGeneratedLOs.push('');
+  //     // setGeneratedLOs(updatedGeneratedLOs);
 
-      setLearningObjectiveObjects(
-        (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
-          ...prevObjectLOs,
-          {
-            learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
-              .map(
-                (selectedSkillConceptsTag: SkillItemProps) =>
-                  selectedSkillConceptsTag.label
-              )
-              .join(', ')} - ${learningTextContext}`,
-            isSelected: false,
-            isGenerated: false,
-          },
-        ]
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     setLearningObjectiveObjects(
+  //       (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+  //         ...prevObjectLOs,
+  //         {
+  //           learningObjective: `${selectedBloomLevel} - ${selectedSkillConceptsTags
+  //             .map(
+  //               (selectedSkillConceptsTag: SkillItemProps) =>
+  //                 selectedSkillConceptsTag.label
+  //             )
+  //             .join(', ')} - ${learningTextContext}`,
+  //           isSelected: false,
+  //           isGenerated: false,
+  //         },
+  //       ]
+  //     );
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleDeleteLO = (indexLO: number) => {
     const updatedObjectLOs = [...learningObjectiveObjects].filter(
@@ -167,32 +165,32 @@ export default function PathDesignGenLO({
   };
 
   return (
-    <Flex pt="3rem" direction="column" w="100%">
-      {showBox && (
-        <GenerateLOView
-          apiKey={apiKey}
-          handleApiKey={handleApiKey}
-          setupModel={setupModel}
-          handleSetupModel={handleSetupModel}
-          selectedContext={selectedContext}
-          selectedSkillConceptsTags={selectedSkillConceptsTags}
-          selectedOptions={selectedOptions}
-          learningTextContext={learningTextContext}
-          // totalLearningObjectives={totalLearningObjectives}
-          // setTotalLearningObjectives={setTotalLearningObjectives}
-          setIsLessGeneratedLO={setIsLessGeneratedLO}
-          setIsNextButtonClicked={setIsNextButtonClicked}
-          bloomLevelIndex={bloomLevelIndex}
-          selectedBloomLevel={selectedBloomLevel}
-          handleSelectedLearningObjectiveIndexChange={
-            handleSelectedLearningObjectiveIndexChange
-          }
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          learningObjectiveObjects={learningObjectiveObjects}
-          setLearningObjectiveObjects={setLearningObjectiveObjects}
-        />
-      )}
+    <Flex pt="1.5rem" direction="column" w="100%">
+      {/* {showBox && ( */}
+      <GenerateLOView
+        apiKey={apiKey}
+        handleApiKey={handleApiKey}
+        setupModel={setupModel}
+        handleSetupModel={handleSetupModel}
+        selectedContext={selectedContext}
+        selectedSkillConceptsTags={selectedSkillConceptsTags}
+        selectedOptions={selectedOptions}
+        learningTextContext={learningTextContext}
+        // totalLearningObjectives={totalLearningObjectives}
+        // setTotalLearningObjectives={setTotalLearningObjectives}
+        setIsLessGeneratedLO={setIsLessGeneratedLO}
+        setIsNextButtonClicked={setIsNextButtonClicked}
+        bloomLevelIndex={bloomLevelIndex}
+        selectedBloomLevel={selectedBloomLevel}
+        handleSelectedLearningObjectiveIndexChange={
+          handleSelectedLearningObjectiveIndexChange
+        }
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        learningObjectiveObjects={learningObjectiveObjects}
+        setLearningObjectiveObjects={setLearningObjectiveObjects}
+      />
+      {/* )}
       <Flex justifyContent="center" py="10px">
         <ShowHideButton
           // isClicked={isClicked}
@@ -202,16 +200,16 @@ export default function PathDesignGenLO({
           showButtonName="Generate Learning Objectives"
           hideButtonName="Hide"
         />
-      </Flex>
+      </Flex> */}
       <Flex
         p="15px"
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -235,39 +233,39 @@ export default function PathDesignGenLO({
           {
             //numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  // <BoxGeneratedLO
-                  //   key={index}
-                  //   textLearningObjective={objectLO.learningObjective}
-                  //   isGenerated={objectLO.isGenerated}
-                  //   isSelected={objectLO.isSelected}
-                  //   // objectLOs={updatedSelectedLOs}
-                  //   index={index}
-                  //   //selectedLO={selectedLO}
-                  //   handleCheckBoxClick={handleCheckBoxClick}
-                  //   handleUpdateLO={handleUpdateLO}
-                  //   handleDeleteLO={handleDeleteLO}
-                  //   isSmallerScreen={isSmallerScreen}
-                  // />
-                  <BoxLearningObjective
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    // isGenerated={objectLO.isGenerated}
-                    index={index}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                    label_tooltip_delete="Delete"
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                // <BoxGeneratedLO
+                //   key={index}
+                //   textLearningObjective={objectLO.learningObjective}
+                //   isGenerated={objectLO.isGenerated}
+                //   isSelected={objectLO.isSelected}
+                //   // objectLOs={updatedSelectedLOs}
+                //   index={index}
+                //   //selectedLO={selectedLO}
+                //   handleCheckBoxClick={handleCheckBoxClick}
+                //   handleUpdateLO={handleUpdateLO}
+                //   handleDeleteLO={handleDeleteLO}
+                //   isSmallerScreen={isSmallerScreen}
+                // />
+                <BoxLearningObjective
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  // isGenerated={objectLO.isGenerated}
+                  index={index}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={handleDeleteLO}
+                  isSmallerScreen={isSmallerScreen}
+                  label_tooltip_delete="Delete"
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
           )}
-          {!isLoading && (
+          {/* {!isLoading && (
             <Flex justifyContent="center" pt="3rem">
               <AddLearningObjectiveButton
                 textButton="Add new learning objective"
@@ -275,7 +273,7 @@ export default function PathDesignGenLO({
                 handleClick={handleAddLearningObjective}
               />
             </Flex>
-          )}
+          )} */}
         </Flex>
       </Flex>
     </Flex>
