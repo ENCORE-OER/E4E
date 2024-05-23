@@ -2,7 +2,7 @@ import { Box, Checkbox, Flex, Text, Textarea } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useHasHydrated } from '../../utils/utils';
 import DeleteButtonLOBox from '../Buttons/ButtonsDesignPage/DeleteButtonLOBox';
-import EditButtonLearningObjectiveBox from '../Buttons/ButtonsDesignPage/EditButtonLearningObjectiveBox';
+import EditButtonLearningObjectiveBox from '../Buttons/ButtonsDesignPage/UnderlinedButtons/EditButtonLearningObjectiveBox';
 
 interface BoxGeneratedLOProps {
   textLearningObjective: string; // Learning Objective text
@@ -100,9 +100,8 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             border="none"
           >
-            {`Learning Objective ${index + 1} ${
-              isGenerated ? '[ Generated ]' : ''
-            }`}
+            {`Learning Objective ${index + 1} ${isGenerated ? '[ Generated ]' : ''
+              }`}
           </Text>
           {isEditClicked ? (
             <Textarea

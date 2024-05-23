@@ -47,10 +47,9 @@ export default function GenerateLOView({
   learningObjectiveObjects,
   setLearningObjectiveObjects,
   numberOfLO,
-  setNumberOfLO
+  setNumberOfLO,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
-
 
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
@@ -147,10 +146,9 @@ export default function GenerateLOView({
           // Number of the learning objectives not generated
           const numberLONotGenerated = learningObjectiveObjects
             ?.filter(
-              (objectLO: ObjectLearningObjectiveProps) =>
-                !objectLO.isGenerated
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
             )
-            .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length
+            .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length;
 
           // Number of the learning objectives to generate
           const numberLOToGenerate = numberOfLO - numberLONotGenerated;
@@ -183,7 +181,10 @@ export default function GenerateLOView({
           let i = 0;
           const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
           // Call the API until the number of learning objectives is reached.
-          while (learningObjectives.length < numberLOToGenerate && i < MAX_API_CALL) {
+          while (
+            learningObjectives.length < numberLOToGenerate &&
+            i < MAX_API_CALL
+          ) {
             //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
@@ -276,10 +277,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }

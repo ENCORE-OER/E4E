@@ -17,7 +17,7 @@ import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/
 import AddPassFailConditionsButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddPassFailConditionsButton';
 import EditButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/EditButtonLessonCard';
 import RegenerateButtonLessonCard from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/RegenerateButtonLessonCard';
-import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButton';
+import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import ShowHideButton from '../../Buttons/ShowHideButton';
 import IconBookOpen from '../../Icons/IconBookOpen/IconBookOpen';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';

@@ -1,6 +1,8 @@
+import { InfoIcon } from '@chakra-ui/icons';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { PathDesignCentralBarsProps } from '.';
-import { ArrayProps } from '../../../../types/encoreElements';
+import { ArrayProps, Option } from '../../../../types/encoreElements';
+import UnderlinedButton from '../../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import CheckboxMenu from '../../../CheckboxMenu/CheckboxMenu';
 import CustomDropDownMenu from '../../../CustomDropDownMenu/CustomDropDownMenu';
 import SearchBarSkillsConcepts from '../../../CustomSearchBar/SearchBarSkillsConcepts';
@@ -16,8 +18,12 @@ export interface CentralBarsProps extends PathDesignCentralBarsProps {
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   step: number;
   resetCheckBoxOptions: boolean;
-  text: string;
-  handleText: (newText: string) => void;
+  learningTextContext: string;
+  handleSetLearningTextContext: (newText: string) => void;
+  selectedEducatorExperience: Option | null;
+  selectedContext: Option | null;
+  selectedGroupDimension: Option | null;
+  selectedLearnerExperience: Option | null;
 }
 
 export default function CentralBars({
@@ -27,8 +33,8 @@ export default function CentralBars({
   handleBloomLevelChange,
   handleOptionsChange,
   resetCheckBoxOptions,
-  text,
-  handleText,
+  learningTextContext,
+  handleSetLearningTextContext,
   isNextButtonClicked,
   collectionIndex,
   resourcesIndex,
@@ -40,7 +46,14 @@ export default function CentralBars({
   contextTitleTextBox: contextTextBox,
   placeholderContextBox,
   verbsTitleTextBox,
+  selectedEducatorExperience,
+  selectedContext,
+  selectedGroupDimension,
+  selectedLearnerExperience
 }: CentralBarsProps) {
+
+  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`
+
   return (
     <Flex paddingTop="1.5rem" w="100%" direction="column">
       <Flex w="100%" direction="column">
@@ -142,15 +155,26 @@ export default function CentralBars({
 
       <Flex paddingTop="1.5rem" w="100%" direction="column">
         {/* Learning Context */}
-        <Text
-          fontSize="sm"
-          fontWeight="bold"
+        <Flex direction='row' align='center' w='100%'>
+          <Text
+            fontSize="sm"
+            fontWeight="bold"
           // paddingRight={`${SPACING}%`}
           //w={`${DIMENSION - SPACING}%`}
-          w="100%"
-        >
-          {contextTextBox}
-        </Text>
+          >
+            {contextTextBox}
+          </Text>
+          <Flex align='center' gap={2} justify='flex-end' flex='1'>
+            <UnderlinedButton
+              handleClick={() => handleSetLearningTextContext(defaultContext)}
+              nameButton='Show the default'
+              fontSize='sm'
+              color='primary'
+              fontWeight='normal'
+            />
+            <InfoIcon />
+          </Flex>
+        </Flex>
         <Box
           //w={`${DIMENSION - SPACING}%`}
           w="100%"
@@ -162,8 +186,8 @@ export default function CentralBars({
             placeholder={placeholderContextBox}
             placeholderColor={'gray.400'}
             isHighlighted={isNextButtonClicked}
-            text={text}
-            onTextChange={handleText}
+            text={learningTextContext}
+            onTextChange={handleSetLearningTextContext}
           />
         </Box>
       </Flex>

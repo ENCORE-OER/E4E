@@ -1,6 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import IconEdit from '../../../Icons/IconEdit/IconEdit';
-import UnderlinedButton from '../UnderlinedButton';
+import UnderlinedButton from '../UnderlinedButtons/UnderlinedButton';
 
 type EditButtonLessonCardProps = {
   isEditClicked: boolean;

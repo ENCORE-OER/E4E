@@ -168,11 +168,15 @@ export default function PathDesignGenLO({
 
   useEffect(() => {
     if (learningObjectiveObjects.length < numberOfLO) {
-      for (let index = 0; index < numberOfLO - learningObjectiveObjects.length; index++) {
+      for (
+        let index = 0;
+        index < numberOfLO - learningObjectiveObjects.length;
+        index++
+      ) {
         handleAddLearningObjective();
       }
     }
-  }, [])
+  }, []);
 
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
@@ -218,10 +222,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-            learningObjectiveObjects.length > 0 &&
-            learningObjectiveObjects.filter(
-              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-            ).length === 0
+          learningObjectiveObjects.length > 0 &&
+          learningObjectiveObjects.filter(
+            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+          ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -245,34 +249,34 @@ export default function PathDesignGenLO({
           {
             // numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-            hydrated &&
-            learningObjectiveObjects.map(
-              (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                // <BoxGeneratedLO
-                //   key={index}
-                //   textLearningObjective={objectLO.learningObjective}
-                //   isGenerated={objectLO.isGenerated}
-                //   isSelected={objectLO.isSelected}
-                //   // objectLOs={updatedSelectedLOs}
-                //   index={index}
-                //   //selectedLO={selectedLO}
-                //   handleCheckBoxClick={handleCheckBoxClick}
-                //   handleUpdateLO={handleUpdateLO}
-                //   handleDeleteLO={handleDeleteLO}
-                //   isSmallerScreen={isSmallerScreen}
-                // />
-                <BoxLearningObjective
-                  key={index}
-                  textLearningObjective={objectLO.learningObjective}
-                  // isGenerated={objectLO.isGenerated}
-                  index={index}
-                  handleUpdateLO={handleUpdateLO}
-                  handleDeleteLO={handleDeleteLO}
-                  isSmallerScreen={isSmallerScreen}
-                  label_tooltip_delete="Delete"
-                />
+              hydrated &&
+              learningObjectiveObjects.map(
+                (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                  // <BoxGeneratedLO
+                  //   key={index}
+                  //   textLearningObjective={objectLO.learningObjective}
+                  //   isGenerated={objectLO.isGenerated}
+                  //   isSelected={objectLO.isSelected}
+                  //   // objectLOs={updatedSelectedLOs}
+                  //   index={index}
+                  //   //selectedLO={selectedLO}
+                  //   handleCheckBoxClick={handleCheckBoxClick}
+                  //   handleUpdateLO={handleUpdateLO}
+                  //   handleDeleteLO={handleDeleteLO}
+                  //   isSmallerScreen={isSmallerScreen}
+                  // />
+                  <BoxLearningObjective
+                    key={index}
+                    textLearningObjective={objectLO.learningObjective}
+                    // isGenerated={objectLO.isGenerated}
+                    index={index}
+                    handleUpdateLO={handleUpdateLO}
+                    handleDeleteLO={handleDeleteLO}
+                    isSmallerScreen={isSmallerScreen}
+                    label_tooltip_delete="Delete"
+                  />
+                )
               )
-            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />

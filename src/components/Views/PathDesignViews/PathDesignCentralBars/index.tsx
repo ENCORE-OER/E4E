@@ -36,8 +36,12 @@ export default function PathDesignCentralBars({
     handleOptionsChange,
     step,
     resetCheckBoxOptions,
-    learningTextContext: text,
-    handleSetLearningTextContext: handleSetText,
+    learningTextContext,
+    handleSetLearningTextContext,
+    selectedEducatorExperience,
+    selectedContext,
+    selectedGroupDimension,
+    selectedLearnerExperience
   } = useLearningPathDesignContext();
 
   return (
@@ -49,8 +53,8 @@ export default function PathDesignCentralBars({
       currentBloomOptions={currentBloomOptions}
       handleOptionsChange={handleOptionsChange}
       resetCheckBoxOptions={resetCheckBoxOptions}
-      text={text}
-      handleText={handleSetText}
+      learningTextContext={learningTextContext}
+      handleSetLearningTextContext={handleSetLearningTextContext}
       isNextButtonClicked={isNextButtonClicked}
       collectionIndex={collectionIndex}
       resourcesIndex={resourcesIndex}
@@ -61,6 +65,10 @@ export default function PathDesignCentralBars({
       skillConceptTitleTextBox={skillConceptTitleTextBox}
       contextTitleTextBox={contextTitleTextBox}
       placeholderContextBox={placeholderContextBox}
+      selectedEducatorExperience={selectedEducatorExperience}
+      selectedContext={selectedContext}
+      selectedGroupDimension={selectedGroupDimension}
+      selectedLearnerExperience={selectedLearnerExperience}
     />
   );
 }
