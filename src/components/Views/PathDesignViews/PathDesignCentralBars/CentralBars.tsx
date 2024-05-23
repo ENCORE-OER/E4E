@@ -49,10 +49,9 @@ export default function CentralBars({
   selectedEducatorExperience,
   selectedContext,
   selectedGroupDimension,
-  selectedLearnerExperience
+  selectedLearnerExperience,
 }: CentralBarsProps) {
-
-  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`
+  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
 
   return (
     <Flex paddingTop="1.5rem" w="100%" direction="column">
@@ -155,22 +154,22 @@ export default function CentralBars({
 
       <Flex paddingTop="1.5rem" w="100%" direction="column">
         {/* Learning Context */}
-        <Flex direction='row' align='center' w='100%'>
+        <Flex direction="row" align="center" w="100%">
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
-          <Flex align='center' gap={2} justify='flex-end' flex='1'>
+          <Flex align="center" gap={2} justify="flex-end" flex="1">
             <UnderlinedButton
               handleClick={() => handleSetLearningTextContext(defaultContext)}
-              nameButton='Show the default'
-              fontSize='sm'
-              color='primary'
-              fontWeight='normal'
+              nameButton="Show the default"
+              fontSize="sm"
+              color="primary"
+              fontWeight="normal"
             />
             <InfoIcon />
           </Flex>

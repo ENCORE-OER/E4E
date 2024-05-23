@@ -34,10 +34,9 @@ export default function DeleteOerAlertDialog({
         }
         onCloseDeleteAlertDialog();
       }}
-      item_name={OerItemToDelete ? OerItemToDelete.oer_title : ''}
-      modalText={`You have selected one or more concepts referred to this Oer.
+      modalText={`You have selected one or more concepts referred to this OER.
       If you delete it, the concepts could be removed.\n
-      Are you sure you want to delete`}
+      Are you sure you want to delete ${OerItemToDelete?.oer_title || 'this OER'} ?`}
     />
   );
 }

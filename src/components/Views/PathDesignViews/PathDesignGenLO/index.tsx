@@ -11,6 +11,7 @@ import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
+import DeleteLOAlertDialog from '../../../Modals/AlertDialogs/DeleteAlertDialog/DeleteLOAlertDialog';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
@@ -70,6 +71,21 @@ export default function PathDesignGenLO({
   const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
+
+
+  // handle deleting last learning objective
+  const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
+    useState<boolean>(false);
+
+  const onCloseDeleteAlertDialog = () => {
+    setIsDeleteAlertDialogOpen(false);
+  };
+
+  const onOpenDeleteAlertDialog = (
+  ) => {
+    setIsDeleteAlertDialogOpen(true);
+  };
+
 
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
@@ -222,10 +238,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '1.5px solid #bf5521ff'
             : 'null'
         }
@@ -249,34 +265,40 @@ export default function PathDesignGenLO({
           {
             // numberOfLO > 0 &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  // <BoxGeneratedLO
-                  //   key={index}
-                  //   textLearningObjective={objectLO.learningObjective}
-                  //   isGenerated={objectLO.isGenerated}
-                  //   isSelected={objectLO.isSelected}
-                  //   // objectLOs={updatedSelectedLOs}
-                  //   index={index}
-                  //   //selectedLO={selectedLO}
-                  //   handleCheckBoxClick={handleCheckBoxClick}
-                  //   handleUpdateLO={handleUpdateLO}
-                  //   handleDeleteLO={handleDeleteLO}
-                  //   isSmallerScreen={isSmallerScreen}
-                  // />
-                  <BoxLearningObjective
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    // isGenerated={objectLO.isGenerated}
-                    index={index}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={handleDeleteLO}
-                    isSmallerScreen={isSmallerScreen}
-                    label_tooltip_delete="Delete"
-                  />
-                )
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                // <BoxGeneratedLO
+                //   key={index}
+                //   textLearningObjective={objectLO.learningObjective}
+                //   isGenerated={objectLO.isGenerated}
+                //   isSelected={objectLO.isSelected}
+                //   // objectLOs={updatedSelectedLOs}
+                //   index={index}
+                //   //selectedLO={selectedLO}
+                //   handleCheckBoxClick={handleCheckBoxClick}
+                //   handleUpdateLO={handleUpdateLO}
+                //   handleDeleteLO={handleDeleteLO}
+                //   isSmallerScreen={isSmallerScreen}
+                // />
+                <BoxLearningObjective
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  // isGenerated={objectLO.isGenerated}
+                  index={index}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={() => {
+                    if (learningObjectiveObjects.length > 1) {
+                      handleDeleteLO
+                    } else {
+                      onOpenDeleteAlertDialog();
+                    }
+                  }}
+                  isSmallerScreen={isSmallerScreen}
+                  label_tooltip_delete="Delete"
+                />
               )
+            )
           }
           {isLoading && (
             <LoadingSpinner textLoading="Generating Learning Objectives..." />
@@ -292,6 +314,12 @@ export default function PathDesignGenLO({
           )} */}
         </Flex>
       </Flex>
+      <DeleteLOAlertDialog
+        isDeleteAlertDialogOpen={isDeleteAlertDialogOpen}
+        onCloseDeleteAlertDialog={onCloseDeleteAlertDialog}
+        handleDeleteLO={handleDeleteLO}
+        index={0} // Will be always the first and last of the array because we want to open this dialog when there is only one learning objective
+      />
     </Flex>
   );
 }

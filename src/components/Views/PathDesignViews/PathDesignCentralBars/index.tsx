@@ -41,7 +41,7 @@ export default function PathDesignCentralBars({
     selectedEducatorExperience,
     selectedContext,
     selectedGroupDimension,
-    selectedLearnerExperience
+    selectedLearnerExperience,
   } = useLearningPathDesignContext();
 
   return (
