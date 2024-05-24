@@ -34,9 +34,7 @@ export default function CustomAlertDialog({
       <ModalContent>
         <ModalHeader>{modalHeader}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {modalText}
-        </ModalBody>
+        <ModalBody>{modalText}</ModalBody>
 
         <ModalFooter gap="3">
           <Button onClick={onClose}>Cancel</Button>
@@ -46,7 +44,7 @@ export default function CustomAlertDialog({
               e.preventDefault();
               onConfirm();
             }}
-          //ml={3}
+            //ml={3}
           >
             {confirmButtonText}
           </Button>

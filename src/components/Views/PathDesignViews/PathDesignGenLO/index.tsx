@@ -72,7 +72,6 @@ export default function PathDesignGenLO({
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
 
-
   // handle deleting last learning objective
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
     useState<boolean>(false);
@@ -81,11 +80,9 @@ export default function PathDesignGenLO({
     setIsDeleteAlertDialogOpen(false);
   };
 
-  const onOpenDeleteAlertDialog = (
-  ) => {
+  const onOpenDeleteAlertDialog = () => {
     setIsDeleteAlertDialogOpen(true);
   };
-
 
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
@@ -194,6 +191,12 @@ export default function PathDesignGenLO({
     }
   }, []);
 
+  useEffect(() => {
+    if (learningObjectiveObjects.length === 0) {
+      handleAddLearningObjective();
+    }
+  }, [learningObjectiveObjects])
+
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
       {/* {showBox && ( */}
@@ -289,7 +292,7 @@ export default function PathDesignGenLO({
                   handleUpdateLO={handleUpdateLO}
                   handleDeleteLO={() => {
                     if (learningObjectiveObjects.length > 1) {
-                      handleDeleteLO
+                      handleDeleteLO(index);
                     } else {
                       onOpenDeleteAlertDialog();
                     }
