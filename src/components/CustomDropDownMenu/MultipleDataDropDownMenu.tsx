@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Checkbox,
   Flex,
@@ -8,7 +7,7 @@ import {
   MenuItem,
   MenuList,
   MenuOptionGroup,
-  Text,
+  Text
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -48,7 +47,7 @@ export default function MultipleDataDropDownMenu({
   defaultMenuTitle,
   isCheckBoxNeeded,
 }: MultipleDataDropDownMenuProps) {
-  const [menuTitle, setMenuTitle] = useState<string | undefined>(undefined);
+  const [menuTitle, setMenuTitle] = useState<string | undefined>(defaultMenuTitle);
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
 
@@ -59,10 +58,10 @@ export default function MultipleDataDropDownMenu({
     } else {
       // Sum all the name of the selected resources
       const longTitle = itemIndex
-        .map((indexArray: number[], i: number) =>
+        .flatMap((indexArray: number[], i: number) =>
           indexArray.map(
             (index: number) =>
-              multipleData[i]?.activities[index]?.title || defaultMenuTitle
+              multipleData[i]?.activities[index]?.name || defaultMenuTitle
           )
         )
         .join(', ');
@@ -86,8 +85,12 @@ export default function MultipleDataDropDownMenu({
       onSelectionChange(indexData, selectedItemIndex);
       // handleData();
     }
-    setMenuTitle(data.activities[selectedItemIndex].title || '');
-    handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
+    setMenuTitle(data.activities[selectedItemIndex].name || defaultMenuTitle);
+    // handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
+    if (!isCheckBoxNeeded) {
+      setIsOpen(false);
+    }
+
 
     //TODO: fix this, the problem is that idk how to delete the tags without refreshing the page => FIXED: use .clear() method
     // if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
@@ -101,7 +104,7 @@ export default function MultipleDataDropDownMenu({
       onSelectionChange(-1, -1);
     }
 
-    //setMenuTitle(defaultMenuTitle);
+    setMenuTitle(defaultMenuTitle);
   };
 
   const handleToggleMenu = () => {
@@ -125,21 +128,27 @@ export default function MultipleDataDropDownMenu({
   //   // console.log(collectionIndex);1
   // }, [selectedOptions]);
 
+  useEffect(() => {
+    multipleData.flatMap((data) => data.activities.map(item => {
+      console.log('multipleData:', item.name);
+    }))
+  }, [multipleData])
+
   return (
-    <Box
+    <Flex
       flex="1"
       border={
         isHighlighted && handleHighlight()
           ? '1.5px solid #bf5521ff'
           : '1px solid #CED4DA'
       }
-      borderRadius="7px"
+      borderRadius="lg"
     >
       <Menu
         isOpen={isOpen}
         // onOpen={handleToggleMenu}
         onClose={handleToggleMenu}
-        closeOnSelect={isCheckBoxNeeded ? false : true}
+        closeOnSelect={!isCheckBoxNeeded}
       >
         <MenuButton
           as={Button}
@@ -151,16 +160,18 @@ export default function MultipleDataDropDownMenu({
             )
           }
           w="100%"
-          title={menuTitle}
+          // title={menuTitle}
           bg={'white'}
           _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
-          aria-expanded={isOpen ? 'true' : 'false'}
+          //aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
-          isDisabled={true}
+        // isDisabled={true}
+
         >
           <Flex direction="row" w="100%" align="center" gap={3}>
             <Flex
-              flex="1"
+              // flex="1"
+              w="100%"
               justifyItems={'flex-start'}
               overflow="hidden"
               whiteSpace="nowrap"
@@ -234,8 +245,8 @@ export default function MultipleDataDropDownMenu({
         <MenuList
           maxH="25rem"
           overflowY="auto"
-          whiteSpace="pre-wrap"
-          overflowWrap={'normal'}
+        // whiteSpace="pre-wrap"
+        // overflowWrap={'normal'}
         >
           {isCheckBoxNeeded && (
             // Array.isArray(itemIndex) &&
@@ -249,13 +260,16 @@ export default function MultipleDataDropDownMenu({
             >
               <DeselectAllButton
                 handleClick={handleDeleteAllClick}
-                isDisabled={!(Array.isArray(itemIndex) && itemIndex.length > 0)}
+                isDisabled={itemIndex.length === 0}
               />
             </Flex>
           )}
           {hydrated &&
             multipleData?.map((data: MultipleArrayProps, indexData: number) => (
               <MenuOptionGroup key={indexData} w="fit-content">
+                <Text fontWeight="bold" py={2} px={5} bg="accent.900">
+                  {data.title}
+                </Text>
                 {hydrated &&
                   data?.activities?.map(
                     (activity: ArrayProps, index: number) => (
@@ -264,7 +278,7 @@ export default function MultipleDataDropDownMenu({
                           onClick={
                             !isCheckBoxNeeded
                               ? () =>
-                                  handleMenuItemClick(data, indexData, index)
+                                handleMenuItemClick(data, indexData, index)
                               : undefined
                           }
                           bg={
@@ -275,7 +289,7 @@ export default function MultipleDataDropDownMenu({
                           borderRadius={5}
                         >
                           <Flex direction={'row'} w="100%">
-                            <Text flex="1">{activity.title}</Text>
+                            <Text flex="1">{activity.name}</Text>
                             {isCheckBoxNeeded && (
                               <Flex flex="1" justify={'flex-end'}>
                                 <Checkbox
@@ -302,6 +316,6 @@ export default function MultipleDataDropDownMenu({
           ;
         </MenuList>
       </Menu>
-    </Box>
+    </Flex>
   );
 }

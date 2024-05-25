@@ -22,6 +22,7 @@ export default function StandardButton({
         e.preventDefault();
         handleClick();
       }}
+      borderRadius={10}
     >
       <Text fontWeight="bold" fontSize="lg">
         {buttonText}

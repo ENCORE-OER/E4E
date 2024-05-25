@@ -68,8 +68,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-                data[itemIndex]?.title ||
-                defaultMenuTitle
+            data[itemIndex]?.title ||
+            defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -129,7 +129,7 @@ export default function CustomDropDownMenu({
           ? '1.5px solid #bf5521ff'
           : '1px solid #CED4DA'
       }
-      borderRadius="7px"
+      borderRadius="lg"
     >
       <Menu
         isOpen={isOpen}

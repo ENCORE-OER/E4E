@@ -12,6 +12,7 @@ import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
 import DeleteLOAlertDialog from '../../../Modals/AlertDialogs/DeleteAlertDialog/DeleteLOAlertDialog';
+import InfoGenAITextBox from '../../../TextBox/InfoGenAITextBox';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
@@ -195,7 +196,7 @@ export default function PathDesignGenLO({
     if (learningObjectiveObjects.length === 0) {
       handleAddLearningObjective();
     }
-  }, [learningObjectiveObjects])
+  }, [learningObjectiveObjects]);
 
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
@@ -225,6 +226,11 @@ export default function PathDesignGenLO({
         numberOfLO={numberOfLO}
         setNumberOfLO={setNumberOfLO}
       />
+
+      <Flex paddingTop={'1.5rem'}>
+        <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
+      </Flex>
+
       {/* )}
       <Flex justifyContent="center" py="10px">
         <ShowHideButton

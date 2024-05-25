@@ -11,7 +11,7 @@ import {
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
-import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
+import NumberInputWithButtons from '../../../TextBox/NumberInputWithButtons';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
   apiKey: string | undefined;
@@ -277,10 +277,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
@@ -311,7 +311,7 @@ export default function GenerateLOView({
         <Text fontWeight={'bold'}>
           Desired number of learning objective(s):
         </Text>
-        <NumberInputTextBox
+        <NumberInputWithButtons
           numberInput={numberOfLO}
           setNumberInput={setNumberOfLO}
           minNumber={MIN_LO}

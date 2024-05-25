@@ -1,4 +1,3 @@
-import { InfoIcon } from '@chakra-ui/icons';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { PathDesignCentralBarsProps } from '.';
 import { ArrayProps, Option } from '../../../../types/encoreElements';
@@ -158,8 +157,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
+          // paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
@@ -170,8 +169,9 @@ export default function CentralBars({
               fontSize="sm"
               color="primary"
               fontWeight="normal"
+              isDisabled={learningTextContext !== ''}
             />
-            <InfoIcon />
+            <IconInfoCircleTooltip label_tooltip='The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps.' />
           </Flex>
         </Flex>
         <Box

@@ -8,7 +8,6 @@ import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/Foote
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
 import PathDesignCentralBars from '../../components/Views/PathDesignViews/PathDesignCentralBars';
 import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGenLO';
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
@@ -259,7 +258,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -268,7 +267,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -346,15 +345,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
+              // apiKey={apiKey}
+              // handleApiKey={handleApiKey}
               />
 
               <PathDesignGenLessonPlan />
 
-              <Flex paddingTop={'1.5rem'}>
-                <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
-              </Flex>
             </Flex>
           )}
           <FooterButtonsGroup
