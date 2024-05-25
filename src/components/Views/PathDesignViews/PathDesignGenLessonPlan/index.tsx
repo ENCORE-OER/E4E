@@ -31,7 +31,8 @@ export default function PathDesignGenLessonPlan() {
   const [learningActivitiesIndex, setLearningActivitiesIndex] = useState<
     number[][]
   >([]);
-  const [selectedAssessmentActivities, setSelectedAssessmentActivities] = useState<boolean>(false);
+  const [selectedAssessmentActivities, setSelectedAssessmentActivities] =
+    useState<boolean>(false);
   const [assessmentActivitiesIndex, setAssessmentActivitiesIndex] = useState<
     number[][]
   >([]);
@@ -52,11 +53,9 @@ export default function PathDesignGenLessonPlan() {
   const ApplyLearningActivities: ArrayProps[] = [
     { name: 'Problem Solving' },
     { name: 'Prompt Engineering' },
-  ]
+  ];
 
-  const CreateLearningActivities: ArrayProps[] = [
-    { name: 'Find Solution' },
-  ]
+  const CreateLearningActivities: ArrayProps[] = [{ name: 'Find Solution' }];
 
   const dataLearningActivities: MultipleArrayProps[] = [
     {
@@ -103,14 +102,14 @@ export default function PathDesignGenLessonPlan() {
     { name: 'Analyzing-Plotting Data' },
     { name: 'Calculation' },
     { name: 'Image Evaluation' },
-  ]
+  ];
 
   const CreateAssessmentActivities: ArrayProps[] = [
     { name: 'Brainstorming' },
     { name: 'Coding Question' },
     { name: 'Innovation Pitch' },
     { name: 'Simulation' },
-  ]
+  ];
 
   const dataAssessmentActivities: MultipleArrayProps[] = [
     // {

@@ -7,7 +7,7 @@ import {
   MenuItem,
   MenuList,
   MenuOptionGroup,
-  Text
+  Text,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -47,7 +47,9 @@ export default function MultipleDataDropDownMenu({
   defaultMenuTitle,
   isCheckBoxNeeded,
 }: MultipleDataDropDownMenuProps) {
-  const [menuTitle, setMenuTitle] = useState<string | undefined>(defaultMenuTitle);
+  const [menuTitle, setMenuTitle] = useState<string | undefined>(
+    defaultMenuTitle
+  );
   const [isOpen, setIsOpen] = useState(false); // for the open Menu
   const hydrated = useHasHydrated();
 
@@ -91,7 +93,6 @@ export default function MultipleDataDropDownMenu({
       setIsOpen(false);
     }
 
-
     //TODO: fix this, the problem is that idk how to delete the tags without refreshing the page => FIXED: use .clear() method
     // if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
     //   // Refresha la pagina
@@ -129,10 +130,12 @@ export default function MultipleDataDropDownMenu({
   // }, [selectedOptions]);
 
   useEffect(() => {
-    multipleData.flatMap((data) => data.activities.map(item => {
-      console.log('multipleData:', item.name);
-    }))
-  }, [multipleData])
+    multipleData.flatMap((data) =>
+      data.activities.map((item) => {
+        console.log('multipleData:', item.name);
+      })
+    );
+  }, [multipleData]);
 
   return (
     <Flex
@@ -165,8 +168,7 @@ export default function MultipleDataDropDownMenu({
           _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
           //aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
-        // isDisabled={true}
-
+          // isDisabled={true}
         >
           <Flex direction="row" w="100%" align="center" gap={3}>
             <Flex
@@ -245,8 +247,8 @@ export default function MultipleDataDropDownMenu({
         <MenuList
           maxH="25rem"
           overflowY="auto"
-        // whiteSpace="pre-wrap"
-        // overflowWrap={'normal'}
+          // whiteSpace="pre-wrap"
+          // overflowWrap={'normal'}
         >
           {isCheckBoxNeeded && (
             // Array.isArray(itemIndex) &&
@@ -278,7 +280,7 @@ export default function MultipleDataDropDownMenu({
                           onClick={
                             !isCheckBoxNeeded
                               ? () =>
-                                handleMenuItemClick(data, indexData, index)
+                                  handleMenuItemClick(data, indexData, index)
                               : undefined
                           }
                           bg={

@@ -157,8 +157,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
@@ -171,7 +171,7 @@ export default function CentralBars({
               fontWeight="normal"
               isDisabled={learningTextContext !== ''}
             />
-            <IconInfoCircleTooltip label_tooltip='The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps.' />
+            <IconInfoCircleTooltip label_tooltip="The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps." />
           </Flex>
         </Flex>
         <Box

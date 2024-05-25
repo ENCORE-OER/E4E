@@ -37,17 +37,17 @@ export default function RowBoxGenLessonPlan({
   itemIndexMenu,
   setItemIndexMenu,
   isAtleastItemSelected,
-  SetIsAtleastItemSelected
+  SetIsAtleastItemSelected,
 }: RowBoxGenLessonPlan) {
-
   const handleItemSelection = () => {
-    if (!isAtleastItemSelected)
-      SetIsAtleastItemSelected(true);
+    if (!isAtleastItemSelected) SetIsAtleastItemSelected(true);
   };
 
-  const handleItemChange = (newIndexBloomActivity: number, newIndexActivity: number) => {
+  const handleItemChange = (
+    newIndexBloomActivity: number,
+    newIndexActivity: number
+  ) => {
     setItemIndexMenu((prevIndex) => {
-
       if (newIndexBloomActivity === -1 && newIndexActivity === -1) {
         return [];
       }
@@ -62,16 +62,18 @@ export default function RowBoxGenLessonPlan({
       // Toggle the activity selection
       if (updatedIndex[newIndexBloomActivity].includes(newIndexActivity)) {
         // If already selected, remove it
-        updatedIndex[newIndexBloomActivity] = updatedIndex[newIndexBloomActivity].filter(
-          (index) => index !== newIndexActivity
-        );
+        updatedIndex[newIndexBloomActivity] = updatedIndex[
+          newIndexBloomActivity
+        ].filter((index) => index !== newIndexActivity);
       } else {
         // If not selected, add it
         updatedIndex[newIndexBloomActivity].push(newIndexActivity);
       }
 
       // Check if there are any selected activities left
-      const hasSelectedActivities = updatedIndex.some((subArray) => subArray.length > 0);
+      const hasSelectedActivities = updatedIndex.some(
+        (subArray) => subArray.length > 0
+      );
 
       // If no activities are selected, reset the array
       if (!hasSelectedActivities) {
@@ -82,9 +84,15 @@ export default function RowBoxGenLessonPlan({
     });
   };
 
-
   return (
-    <Flex direction="row" align="center" flexWrap={'wrap'} gap={2} w="100%" border={isAtleastItemSelected ? '1px' : 'none'}>
+    <Flex
+      direction="row"
+      align="center"
+      flexWrap={'wrap'}
+      gap={2}
+      w="100%"
+      border={isAtleastItemSelected ? '1px' : 'none'}
+    >
       <Flex minW="50%" align="center" gap={3} pr={5}>
         <NumberInputTextBox
           numberInput={numberInput}
@@ -105,7 +113,7 @@ export default function RowBoxGenLessonPlan({
         defaultMenuTitle={defaultMenuTitle}
         isCheckBoxNeeded={true}
       /> */}
-      <Box w='400px'>
+      <Box w="400px">
         <MultipleDataDropDownMenu
           multipleData={dataMenu}
           onData={handleItemSelection}
