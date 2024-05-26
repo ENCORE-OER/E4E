@@ -18,7 +18,7 @@ export default function BoxSelectedLO({
       w="80%"
       border="none"
       // fontSize="sm"
-      backgroundColor="accent.200"
+      backgroundColorTextArea="accent.200"
       borderRadius="lg"
       alignItems="center"
       gap={2}

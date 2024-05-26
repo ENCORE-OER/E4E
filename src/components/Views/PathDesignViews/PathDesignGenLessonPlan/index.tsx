@@ -10,6 +10,7 @@ import {
 } from '../../../../types/encoreElements';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 export default function PathDesignGenLessonPlan() {
@@ -239,7 +240,8 @@ export default function PathDesignGenLessonPlan() {
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="80%">
-      <Flex>
+      <Flex direction="row" align="center" gap={1}>
+
         <ShowHideButton
           showBox={showBox}
           setShowBox={setShowBox}
@@ -248,6 +250,9 @@ export default function PathDesignGenLessonPlan() {
           fontWeight="bold"
           color="primary"
           border="none"
+        />
+        <IconInfoCircleTooltip
+          label_tooltip={`If no activities are selected, all activities will be considered as possible choices.`}
         />
       </Flex>
       {showBox && (

@@ -47,7 +47,7 @@ export default function RowBoxGenLessonPlan({
     newIndexBloomActivity: number,
     newIndexActivity: number
   ) => {
-    setItemIndexMenu((prevIndex) => {
+    setItemIndexMenu((prevIndex: number[][]) => {
       if (newIndexBloomActivity === -1 && newIndexActivity === -1) {
         return [];
       }
@@ -64,7 +64,7 @@ export default function RowBoxGenLessonPlan({
         // If already selected, remove it
         updatedIndex[newIndexBloomActivity] = updatedIndex[
           newIndexBloomActivity
-        ].filter((index) => index !== newIndexActivity);
+        ].filter((index: number) => index !== newIndexActivity);
       } else {
         // If not selected, add it
         updatedIndex[newIndexBloomActivity].push(newIndexActivity);
@@ -72,7 +72,7 @@ export default function RowBoxGenLessonPlan({
 
       // Check if there are any selected activities left
       const hasSelectedActivities = updatedIndex.some(
-        (subArray) => subArray.length > 0
+        (subArray: number[]) => subArray.length > 0
       );
 
       // If no activities are selected, reset the array

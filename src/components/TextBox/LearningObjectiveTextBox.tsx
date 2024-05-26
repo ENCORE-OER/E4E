@@ -6,6 +6,7 @@ type LearningObjectiveTextBoxProps = {
   handleLearningObjective: (text: string, index?: number) => void;
   isGenerateButtonClicked?: boolean; // Used to highlight the box when the user try to go ahead with an empty text
   placeholder?: string;
+  bg?: string;
 };
 
 export default function LearningObjectiveTextBox({
@@ -14,6 +15,7 @@ export default function LearningObjectiveTextBox({
   isGenerateButtonClicked,
   placeholder,
   index,
+  bg,
 }: LearningObjectiveTextBoxProps) {
   return (
     <TextBox
@@ -23,6 +25,7 @@ export default function LearningObjectiveTextBox({
       onTextChange={handleLearningObjective}
       resize="vertical"
       placeholder={placeholder}
+      backgroundColorTextArea={bg}
     />
   );
 }

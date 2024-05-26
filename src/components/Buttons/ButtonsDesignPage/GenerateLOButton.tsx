@@ -15,8 +15,9 @@ export default function GenerateLOButton({
       buttonText={'Generate learning objectives'}
       handleClick={handleGenerateLO}
       isDisabled={isDisabled}
-      // w='auto'
-      // display={'flex'}
+      w='fit-content'
+    // w='auto'
+    // display={'flex'}
     />
   );
 }

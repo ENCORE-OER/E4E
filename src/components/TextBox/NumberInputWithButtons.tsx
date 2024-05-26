@@ -1,5 +1,5 @@
 import { Button, Flex, FlexProps, Textarea, Tooltip } from '@chakra-ui/react';
-import { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect } from 'react';
 import IconMinus from '../Icons/IconMinus/IconMinus';
 import IconPlus from '../Icons/IconPlus/IconPlus';
 
@@ -10,6 +10,8 @@ type NumberInputWithButtonsProps = {
   maxNumber: number;
   isNumberZero: boolean;
   setIsNumberZero: Dispatch<SetStateAction<boolean>>;
+  isEmptyLearningObjectivesPresent: boolean;
+  isLoading?: boolean;
   label_tooltip?: string;
   min_label_tooltip?: string;
   max_label_tooltip?: string;
@@ -24,6 +26,8 @@ export default function NumberInputWithButtons({
   min_label_tooltip,
   max_label_tooltip,
   setNumberInput,
+  isEmptyLearningObjectivesPresent,
+  isLoading,
   // setIsNumberZero,
   ...rest
 }: NumberInputWithButtonsProps) {
@@ -32,7 +36,7 @@ export default function NumberInputWithButtons({
     console.log('newNumber', newNumber);
 
     // Limit the number to 5
-    newNumber = Math.min(newNumber, maxNumber);
+    newNumber = Math.max(Math.min(newNumber, maxNumber), minNumber);
     console.log('number modified', newNumber);
     setNumberInput(newNumber);
     // if (newNumber > 0) {
@@ -45,8 +49,20 @@ export default function NumberInputWithButtons({
   };
 
   const handleClickMinusButton = () => {
-    if (numberInput > minNumber) setNumberInput(numberInput - 1);
+
+    // If there are empty objectives, decrease numberOfLO
+    // otherwise, do nothing
+    if (isEmptyLearningObjectivesPresent) {
+      // Decrease numberOfLO only if it's greater than the minimum allowed
+      if (numberInput > minNumber) setNumberInput(numberInput - 1);
+    }
   };
+
+  useEffect(() => {
+    if (numberInput < minNumber) {
+      setNumberInput(minNumber);
+    }
+  }, [numberInput]);
 
   return (
     <Flex
@@ -66,10 +82,10 @@ export default function NumberInputWithButtons({
         placement={'top'}
         borderRadius={'md'}
         visibility={
-          numberInput === minNumber && min_label_tooltip ? 'visible' : 'hidden'
+          ((numberInput === minNumber) || !isEmptyLearningObjectivesPresent) && min_label_tooltip ? 'visible' : 'hidden'
         }
       >
-        <Button bg="none" p={0} onClick={handleClickMinusButton}>
+        <Button bg="none" p={0} onClick={handleClickMinusButton} isDisabled={isLoading || !isEmptyLearningObjectivesPresent || (numberInput === minNumber)}>
           <IconMinus />
         </Button>
       </Tooltip>
@@ -101,6 +117,7 @@ export default function NumberInputWithButtons({
           }
           value={numberInput}
           onChange={handleNumberChange}
+          isDisabled={isLoading}
         />
       </Tooltip>
       <Tooltip
@@ -113,7 +130,7 @@ export default function NumberInputWithButtons({
           numberInput === maxNumber && max_label_tooltip ? 'visible' : 'hidden'
         }
       >
-        <Button bg="none" p={0} onClick={handleClickPlusButton}>
+        <Button bg="none" p={0} onClick={handleClickPlusButton} isDisabled={isLoading || numberInput === maxNumber}>
           <IconPlus />
         </Button>
       </Tooltip>

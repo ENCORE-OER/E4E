@@ -30,8 +30,9 @@ type LearnignPathDesignContextProps = {
   collectionIndex: number;
   resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
-  selectedLearningObjectiveIndex: number; // Indexes of the selected learning
+  // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
   resetCheckBoxOptions: boolean;
+  numberOfLO: number; // Number of LO specified by the user
   selectedCustomLearningObjective: string; // selected and edited learning objective in step 2 and 3
   storedLearningObjective: string; // Learning Objective stored with save button
   resetAll: boolean;
@@ -48,10 +49,13 @@ type LearnignPathDesignContextProps = {
   handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
+  setNumberOfLO: React.Dispatch<
+    React.SetStateAction<number>
+  >;
   setLearningObjectiveObjects: React.Dispatch<
     React.SetStateAction<ObjectLearningObjectiveProps[]>
   >;
-  handleSelectedLearningObjectiveIndexChange: (index: number) => void;
+  // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
   setResourcesIndex: React.Dispatch<React.SetStateAction<number[]>>;
   //handleResourceIndexChange: (resourceIndex: number) => void;
@@ -158,6 +162,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
+  // Number of learning objectives specified by the user with the numberInputTextBox
+  const [numberOfLO, setNumberOfLO] = useLocalStorage<number>(
+    'numberOfLO',
+    1
+  );
+
   // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty)
   const [learningObjectiveObjects, setLearningObjectiveObjects] =
     useLocalStorage<ObjectLearningObjectiveProps[]>(
@@ -165,8 +175,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       []
     );
 
-  const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
-    useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
+  // const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
+  //   useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
 
   // Used to store the learning objetive chosen by the Educator from the list of generated learning objectives
   const [selectedCustomLearningObjective, setCustomLearningObjective] =
@@ -291,15 +301,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //   setLearningObjectiveObjects((prev: ObjectLearningObjectiveProps[]) => [...prev, ...newLearningObjectiveObjects])
   // }
 
-  const handleSelectedLearningObjectiveIndexChange = (index: number) => {
-    // This is for the case to collect more indexes
-    // if (index === -1) {
-    //   setSelectedLearningObjectiveIndex([]);
-    // }
-    // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
+  // const handleSelectedLearningObjectiveIndexChange = (index: number) => {
+  //   // This is for the case to collect more indexes
+  //   // if (index === -1) {
+  //   //   setSelectedLearningObjectiveIndex([]);
+  //   // }
+  //   // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
 
-    setSelectedLearningObjectiveIndex(index);
-  };
+  //   setSelectedLearningObjectiveIndex(index);
+  // };
 
   // Used to recover the learning objective to show from the stored learning objective
   const handleLearningObjective = () => {
@@ -444,8 +454,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         resetCheckBoxOptions,
         collectionIndex,
         resourcesIndex,
+        numberOfLO,
         learningObjectiveObjects,
-        selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
+        // selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
         selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
         storedLearningObjective, // Learning Objective stored with save button
         resetAll,
@@ -464,8 +475,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleCollectionIndexChange,
         setResourcesIndex,
         // handleResourceIndexChange,
+        setNumberOfLO,
         setLearningObjectiveObjects,
-        handleSelectedLearningObjectiveIndexChange,
+        // handleSelectedLearningObjectiveIndexChange,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
         handleStoredLearningObjective,
         handleLearningObjective,

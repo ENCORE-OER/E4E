@@ -11,6 +11,7 @@ import {
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import NumberInputWithButtons from '../../../TextBox/NumberInputWithButtons';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
@@ -24,6 +25,7 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   numberOfLO: number;
   setNumberOfLO: Dispatch<SetStateAction<number>>;
+  isEmptyLearningObjectivesPresent: boolean;
 }
 
 export default function GenerateLOView({
@@ -48,6 +50,7 @@ export default function GenerateLOView({
   setLearningObjectiveObjects,
   numberOfLO,
   setNumberOfLO,
+  isEmptyLearningObjectivesPresent,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -119,7 +122,21 @@ export default function GenerateLOView({
     setIsLessGeneratedLO(false);
     console.log('objectLOs: ', learningObjectiveObjects?.map((obj) => obj));
 
-    if (
+    //  // Number of the learning objectives to generate
+    const numberLOToGenerate = learningObjectiveObjects
+      ?.filter( // We filter counting the previously or empty learning objectives
+        (objectLO: ObjectLearningObjectiveProps) => (objectLO.learningObjective === '' || objectLO.isGenerated)
+      )
+      .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length;
+
+    if (!isEmptyLearningObjectivesPresent && numberLOToGenerate === 0) {
+      addToast({
+        message:
+          'In order to generate new learning objectives, there must be empty learning objectives or at least one previously generate learning objective!',
+        type: 'error',
+      });
+    }
+    else if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
       selectedOptions.length === 0 ||
@@ -143,22 +160,12 @@ export default function GenerateLOView({
         if (numberOfLO > 0) {
           setIsLoading(true);
 
-          // Number of the learning objectives not generated
-          const numberLONotGenerated = learningObjectiveObjects
-            ?.filter(
-              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-            )
-            .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length;
-
-          // Number of the learning objectives to generate
-          const numberLOToGenerate = numberOfLO - numberLONotGenerated;
-
-          // We filter the learning objectives deleting the previous generated learning objectives
+          // We filter the learning objectives deleting the previous generated learning objectives or empty learning objectives
           setLearningObjectiveObjects(
             learningObjectiveObjects
               ?.filter(
                 (objectLO: ObjectLearningObjectiveProps) =>
-                  !objectLO.isGenerated
+                  (!objectLO.isGenerated || objectLO.learningObjective === '')
               )
               .map((objectLO: ObjectLearningObjectiveProps) => objectLO) || []
           );
@@ -251,8 +258,8 @@ export default function GenerateLOView({
             });
           } else {
             addToast({
-              message: 'Learning objectives generated!',
-              type: 'info',
+              message: 'Learning objectives succesfully generated!',
+              type: 'success',
             });
           }
         } else {
@@ -277,14 +284,17 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
-  }, [learningObjectiveObjects]);
+    // else if (numberOfLO > learningObjectiveObjects.length && numberOfLO > MIN_LO) {
+    //   setNumberOfLO(numberOfLO - 1);
+    // }
+  }, [learningObjectiveObjects.length]);
 
   return (
     <Flex direction="column" w="100%">
@@ -319,11 +329,14 @@ export default function GenerateLOView({
           isNumberZero={isNumberOfLOZero}
           setIsNumberZero={setIsNumberOfLOZero}
           label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
-          min_label_tooltip={`You must have at least ${MIN_LO} learning objective.`}
+          min_label_tooltip={!isEmptyLearningObjectivesPresent ? `No empty learning objectives available.` : `You must have at least ${MIN_LO} learning objective.`}
           max_label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
+          isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
+          isLoading={isLoading}
           pr="10%"
         />
-        <Flex flex="1" justify="flex-end">
+        <Flex flex="1" justify="flex-end" direction="row" align="center" gap={1}>
+          <IconInfoCircleTooltip label_tooltip='This button allows you to automatically generate learning objectvies using AI. Generation will only occur if you have empty or previously generated learning objectives. The colored texts are those generated by AI.' />
           <GenerateLOButton
             handleGenerateLO={handleGenerateLO}
             numberOfLO={numberOfLO}

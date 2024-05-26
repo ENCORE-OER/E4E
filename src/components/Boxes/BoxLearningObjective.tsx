@@ -19,15 +19,17 @@ export default function BoxLearningObjective({
   handleUpdateLO,
   handleDeleteLO,
   isSmallerScreen,
+  isGenerated
 }: BoxLearningObjectiveProps) {
   return (
-    <Flex direction="row" gap={1}>
+    <Flex direction="row" gap={1} w="90%">
       <LearningObjectiveTextBox
         // isGenerateButtonClicked={isGenerateButtonClicked}
         learningObjective={textLearningObjective}
         index={index}
         handleLearningObjective={handleUpdateLO}
         placeholder="Type your learning objective here..."
+        bg={isGenerated ? 'accent.200' : undefined}
       />
       <Tooltip
         hasArrow

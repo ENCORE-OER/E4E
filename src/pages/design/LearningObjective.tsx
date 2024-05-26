@@ -40,14 +40,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
     selectedCustomLearningObjective,
-    handleSelectedCustomLearningObjectiveChange,
-    selectedLearningObjectiveIndex,
-    handleSelectedLearningObjectiveIndexChange,
+    // handleSelectedCustomLearningObjectiveChange,
+    // selectedLearningObjectiveIndex,
+    // handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
     // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     setLearningObjectiveObjects,
+    numberOfLO,
+    setNumberOfLO
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -195,19 +197,19 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handleNextClick = () => {
     if (
       selectedCollection !== null &&
-      selectedResource !== null &&
+      // selectedResource !== null &&
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
       selectedSkillConceptsTags.length > 0 &&
       learningTextContext?.trim() !== '' &&
       selectedOptions.length > 0 && // verbsBloomLevel
-      selectedLearningObjectiveIndex > -1 &&
+      // selectedLearningObjectiveIndex > -1 &&
       learningObjectiveObjects.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
     ) {
-      handleSelectedCustomLearningObjectiveChange(
-        learningObjectiveObjects[selectedLearningObjectiveIndex]
-          .learningObjective
-      );
+      // handleSelectedCustomLearningObjectiveChange(
+      //   learningObjectiveObjects[selectedLearningObjectiveIndex]
+      //     .learningObjective
+      // );
       console.log(
         'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
       );
@@ -258,7 +260,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -267,7 +269,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -339,14 +341,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 // setTotalLearningObjectives={setTotalLearningObjectives}
                 learningObjectiveObjects={learningObjectiveObjects}
                 setLearningObjectiveObjects={setLearningObjectiveObjects}
-                handleSelectedLearningObjectiveIndexChange={
-                  handleSelectedLearningObjectiveIndexChange
-                }
+                // handleSelectedLearningObjectiveIndexChange={
+                //   handleSelectedLearningObjectiveIndexChange
+                // }
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
                 // apiKey={apiKey}
                 // handleApiKey={handleApiKey}
+                numberOfLO={numberOfLO}
+                setNumberOfLO={setNumberOfLO}
               />
 
               <PathDesignGenLessonPlan />

@@ -79,7 +79,7 @@ export default function BoxGeneratedLO({
         minH="65px"
         w="100%"
         //border="2px solid black"
-        backgroundColor="accent.200"
+        backgroundColorTextArea="accent.200"
         borderRadius="md"
         alignItems="center"
         px={2}
@@ -100,9 +100,8 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             border="none"
           >
-            {`Learning Objective ${index + 1} ${
-              isGenerated ? '[ Generated ]' : ''
-            }`}
+            {`Learning Objective ${index + 1} ${isGenerated ? '[ Generated ]' : ''
+              }`}
           </Text>
           {isEditClicked ? (
             <Textarea
