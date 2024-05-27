@@ -19,7 +19,7 @@ export default function BoxLearningObjective({
   handleUpdateLO,
   handleDeleteLO,
   isSmallerScreen,
-  isGenerated
+  isGenerated,
 }: BoxLearningObjectiveProps) {
   return (
     <Flex direction="row" gap={1} w="90%">

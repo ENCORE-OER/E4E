@@ -32,6 +32,8 @@ type LearnignPathDesignContextProps = {
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
   // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
   resetCheckBoxOptions: boolean;
+  MAX_LO: number; // Max number of learning objectives that an Educator can set
+  MIN_LO: number; // Min number of learning objectives that an Educator can set
   numberOfLO: number; // Number of LO specified by the user
   selectedCustomLearningObjective: string; // selected and edited learning objective in step 2 and 3
   storedLearningObjective: string; // Learning Objective stored with save button
@@ -49,9 +51,7 @@ type LearnignPathDesignContextProps = {
   handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
-  setNumberOfLO: React.Dispatch<
-    React.SetStateAction<number>
-  >;
+  setNumberOfLO: React.Dispatch<React.SetStateAction<number>>;
   setLearningObjectiveObjects: React.Dispatch<
     React.SetStateAction<ObjectLearningObjectiveProps[]>
   >;
@@ -162,11 +162,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
+  // Max and Min number of learning objectives that an Educator can hold
+  const MAX_LO = 5;
+  const MIN_LO = 1;
+
   // Number of learning objectives specified by the user with the numberInputTextBox
-  const [numberOfLO, setNumberOfLO] = useLocalStorage<number>(
-    'numberOfLO',
-    1
-  );
+  const [numberOfLO, setNumberOfLO] = useLocalStorage<number>('numberOfLO', 1);
 
   // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty)
   const [learningObjectiveObjects, setLearningObjectiveObjects] =
@@ -250,6 +251,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setSelectedOptions([]);
     setLearningTextContext('');
     setLearningObjectiveObjects([]);
+    setNumberOfLO(MIN_LO);
   };
 
   // Reset all the parameters. Use this with resetAll button
@@ -454,6 +456,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         resetCheckBoxOptions,
         collectionIndex,
         resourcesIndex,
+        MAX_LO,
+        MIN_LO,
         numberOfLO,
         learningObjectiveObjects,
         // selectedLearningObjectiveIndex, // index of the selected learning objective in step 2

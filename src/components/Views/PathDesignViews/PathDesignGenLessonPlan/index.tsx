@@ -241,7 +241,6 @@ export default function PathDesignGenLessonPlan() {
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="80%">
       <Flex direction="row" align="center" gap={1}>
-
         <ShowHideButton
           showBox={showBox}
           setShowBox={setShowBox}

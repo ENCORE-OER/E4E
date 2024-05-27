@@ -25,6 +25,8 @@ export interface PathDesignGenLOProps {
   // selectedLearnerExperience: Option | null;
   // selectedEducatorExperience: Option | null;
   learningTextContext: string;
+  MAX_LO: number;
+  MIN_LO: number;
   numberOfLO: number;
   setNumberOfLO: Dispatch<SetStateAction<number>>;
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
@@ -47,6 +49,8 @@ export default function PathDesignGenLO({
   // selectedLearnerExperience,
   // selectedEducatorExperience,
   learningTextContext,
+  MAX_LO,
+  MIN_LO,
   numberOfLO,
   setNumberOfLO,
   learningObjectiveObjects,
@@ -170,7 +174,6 @@ export default function PathDesignGenLO({
     });
   };
 
-
   useEffect(() => {
     // Starting with at least one learning objective
     if (learningObjectiveObjects.length < numberOfLO) {
@@ -184,7 +187,7 @@ export default function PathDesignGenLO({
       // Remove empty objectives
       const difference = learningObjectiveObjects.length - numberOfLO;
       let count = 0;
-      const updatedObjectives = learningObjectiveObjects.filter(obj => {
+      const updatedObjectives = learningObjectiveObjects.filter((obj) => {
         if (count < difference && obj.learningObjective === '') {
           count++;
           return false;
@@ -224,6 +227,8 @@ export default function PathDesignGenLO({
         setIsLoading={setIsLoading}
         learningObjectiveObjects={learningObjectiveObjects}
         setLearningObjectiveObjects={setLearningObjectiveObjects}
+        MAX_LO={MAX_LO}
+        MIN_LO={MIN_LO}
         numberOfLO={numberOfLO}
         setNumberOfLO={setNumberOfLO}
         isEmptyLearningObjectivesPresent={learningObjectiveObjects.some(
@@ -300,6 +305,6 @@ export default function PathDesignGenLO({
         handleDeleteLO={handleDeleteLO}
         index={0} // Will be always the first and last of the array because we want to open this dialog when there is only one learning objective
       />
-    </Flex >
+    </Flex>
   );
 }

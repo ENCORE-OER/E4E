@@ -48,8 +48,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     setLearningObjectiveObjects,
+    MAX_LO,
+    MIN_LO,
     numberOfLO,
-    setNumberOfLO
+    setNumberOfLO,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -349,6 +351,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 isSmallerScreen={isSmallerScreen}
                 // apiKey={apiKey}
                 // handleApiKey={handleApiKey}
+                MAX_LO={MAX_LO}
+                MIN_LO={MIN_LO}
                 numberOfLO={numberOfLO}
                 setNumberOfLO={setNumberOfLO}
               />

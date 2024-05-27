@@ -50,14 +50,14 @@ export default function PathDesignHeaderBars({
           Select the collection with relevant resources*
         </Text>
         {step >= 1 && (
-          <Flex direction='row' gap={1} w="50%" align="center">
+          <Flex direction="row" gap={1} w="50%" align="center">
             <Text
               fontSize="sm"
               fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            // w={`${DIMENSION - SPACING}%`}
-            // flex='1'
-            // w="50%"
+              // paddingRight={`${SPACING}%`}
+              // w={`${DIMENSION - SPACING}%`}
+              // flex='1'
+              // w="50%"
             >
               Select the resources within the collection
             </Text>

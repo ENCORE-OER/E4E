@@ -49,7 +49,6 @@ export default function NumberInputWithButtons({
   };
 
   const handleClickMinusButton = () => {
-
     // If there are empty objectives, decrease numberOfLO
     // otherwise, do nothing
     if (isEmptyLearningObjectivesPresent) {
@@ -82,10 +81,22 @@ export default function NumberInputWithButtons({
         placement={'top'}
         borderRadius={'md'}
         visibility={
-          ((numberInput === minNumber) || !isEmptyLearningObjectivesPresent) && min_label_tooltip ? 'visible' : 'hidden'
+          (numberInput === minNumber || !isEmptyLearningObjectivesPresent) &&
+          min_label_tooltip
+            ? 'visible'
+            : 'hidden'
         }
       >
-        <Button bg="none" p={0} onClick={handleClickMinusButton} isDisabled={isLoading || !isEmptyLearningObjectivesPresent || (numberInput === minNumber)}>
+        <Button
+          bg="none"
+          p={0}
+          onClick={handleClickMinusButton}
+          isDisabled={
+            isLoading ||
+            !isEmptyLearningObjectivesPresent ||
+            numberInput === minNumber
+          }
+        >
           <IconMinus />
         </Button>
       </Tooltip>
@@ -130,7 +141,12 @@ export default function NumberInputWithButtons({
           numberInput === maxNumber && max_label_tooltip ? 'visible' : 'hidden'
         }
       >
-        <Button bg="none" p={0} onClick={handleClickPlusButton} isDisabled={isLoading || numberInput === maxNumber}>
+        <Button
+          bg="none"
+          p={0}
+          onClick={handleClickPlusButton}
+          isDisabled={isLoading || numberInput === maxNumber}
+        >
           <IconPlus />
         </Button>
       </Tooltip>

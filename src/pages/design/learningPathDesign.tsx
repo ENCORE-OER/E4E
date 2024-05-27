@@ -288,7 +288,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -297,7 +297,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -321,19 +321,15 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Flex>
               {showBox && hydrated && (
                 <Flex direction="column" gap={2} pt={3}>
-                  {learningObjectiveObjects
-                    .map(
-                      (
-                        objectLO: ObjectLearningObjectiveProps,
-                        index: number
-                      ) => (
-                        <BoxSelectedLO
-                          key={index}
-                          index={index}
-                          learningObjective={objectLO.learningObjective}
-                        />
-                      )
-                    )}
+                  {learningObjectiveObjects.map(
+                    (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                      <BoxSelectedLO
+                        key={index}
+                        index={index}
+                        learningObjective={objectLO.learningObjective}
+                      />
+                    )
+                  )}
                 </Flex>
               )}
             </Flex>

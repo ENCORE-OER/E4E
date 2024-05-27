@@ -157,8 +157,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
