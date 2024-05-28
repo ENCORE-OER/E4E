@@ -96,7 +96,6 @@ export default function PathDesignGenLO({
   };
   // =========================================
 
-
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
   // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
@@ -220,15 +219,14 @@ export default function PathDesignGenLO({
   }, [numberOfLO, learningObjectiveObjects.length]);
 
   useEffect(() => {
-
     const update = learningObjectiveObjects.some(
       (learningObjectiveObject: ObjectLearningObjectiveProps) =>
         learningObjectiveObject.isGenerated
-    )
+    );
     if (update !== isAtLeastOneLOGenerated) {
       setIsAtLeastOneLOGenerated(update);
     }
-  }, [learningObjectiveObjects])
+  }, [learningObjectiveObjects]);
 
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
@@ -321,6 +319,7 @@ export default function PathDesignGenLO({
                   isSmallerScreen={isSmallerScreen}
                   label_tooltip_delete="Delete"
                   isNextButtonClicked={isNextButtonClicked}
+                  isDisabled={isLoading && (objectLO.isGenerated || objectLO.learningObjective.trim().length === 0)}
                 />
               )
             )

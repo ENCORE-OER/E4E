@@ -11,6 +11,7 @@ type BoxLearningObjectiveProps = {
   label_tooltip_delete?: string;
   isSmallerScreen?: boolean;
   isNextButtonClicked: boolean;
+  isDisabled?: boolean;
 };
 
 export default function BoxLearningObjective({
@@ -22,6 +23,7 @@ export default function BoxLearningObjective({
   // isSmallerScreen,
   isGenerated,
   isNextButtonClicked,
+  isDisabled,
 }: BoxLearningObjectiveProps) {
   return (
     <Flex direction="row" gap={1}>
@@ -32,6 +34,7 @@ export default function BoxLearningObjective({
         placeholder="Type your learning objective here..."
         bg={isGenerated ? 'accent.200' : undefined}
         isHighlighted={isNextButtonClicked}
+        isDisabled={isDisabled}
       />
       {/* <Tooltip
         hasArrow
@@ -49,7 +52,7 @@ export default function BoxLearningObjective({
         fontSize={'sm'}
         borderRadius={5}
       > */}
-      <Button variant="ghost" onClick={() => handleDeleteLO(index)} p={0}>
+      <Button variant="ghost" onClick={() => handleDeleteLO(index)} p={0} isDisabled={isDisabled}>
         <IconDelete />
       </Button>
       {/* </Tooltip> */}

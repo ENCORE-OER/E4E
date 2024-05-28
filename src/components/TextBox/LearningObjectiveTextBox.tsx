@@ -8,6 +8,7 @@ type LearningObjectiveTextBoxProps = {
   placeholder?: string;
   bg?: string;
   isHighlighted?: boolean;
+  isDisabled?: boolean;
 };
 
 export default function LearningObjectiveTextBox({
@@ -17,6 +18,7 @@ export default function LearningObjectiveTextBox({
   index,
   bg,
   isHighlighted,
+  isDisabled,
 }: LearningObjectiveTextBoxProps) {
   return (
     <TextBox
@@ -27,6 +29,7 @@ export default function LearningObjectiveTextBox({
       resize="vertical"
       placeholder={placeholder}
       backgroundColorTextArea={bg}
+      isDisabled={isDisabled}
     />
   );
 }

@@ -60,7 +60,7 @@ export default function GenerateLOView({
   setNumberOfLO,
   isEmptyLearningObjectivesPresent,
   setIsGenerateLOClicked,
-  isAtLeastOneLOGenerated
+  isAtLeastOneLOGenerated,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -305,17 +305,17 @@ export default function GenerateLOView({
     } else {
       handleGenerateLO();
     }
-  }
+  };
 
   // Update the loading state to false when the learning objectives are generated
   useEffect(() => {
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }
@@ -386,7 +386,7 @@ export default function GenerateLOView({
         isOpen={isOverwriteAlertDialogOpen}
         onClose={onCloseOverwriteAlertDialog}
         onConfirm={handleGenerateLO}
-        modalText='The previous generated learning objectives will be overwritten, are you sure to continue?'
+        modalText="The previous generated learning objectives will be overwritten, are you sure to continue?"
       />
 
       {/* {isLoading && (
