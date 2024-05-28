@@ -14,13 +14,13 @@ export default function BoxSelectedLO({
       py={1}
       px={3}
       // whiteSpace="pre-wrap" //TODO: check if this is necessary
-      minH="45px"
+      // minH="45px"
       w="80%"
       border="none"
       // fontSize="sm"
-      backgroundColorTextArea="accent.200"
+      bg="accent.200"
       borderRadius="lg"
-      alignItems="center"
+      alignItems="baseline"
       gap={2}
     >
       <Text fontSize="sm">{`${index + 1}.`}</Text>

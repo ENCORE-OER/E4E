@@ -1,6 +1,10 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { PathDesignCentralBarsProps } from '.';
-import { ArrayProps, Option, SkillItemProps } from '../../../../types/encoreElements';
+import {
+  ArrayProps,
+  Option,
+  SkillItemProps,
+} from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import UnderlinedButton from '../../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import CheckboxMenu from '../../../CheckboxMenu/CheckboxMenu';
@@ -53,7 +57,7 @@ export default function CentralBars({
   selectedGroupDimension,
   selectedLearnerExperience,
   selectedSkillConceptTags,
-  selectedOptions
+  selectedOptions,
 }: CentralBarsProps) {
   const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
   const hydrated = useHasHydrated();
@@ -71,16 +75,18 @@ export default function CentralBars({
           {skillConceptTextBox}
         </Text>
         <Box w="100%" pt={1}>
-          {hydrated &&
+          {hydrated && (
             <SearchBarSkillsConcepts
               collectionIndex={collectionIndex}
               resourcesIndex={resourcesIndex}
               isHighlighted={isNextButtonClicked}
             />
-          }
-          {isNextButtonClicked &&
-            selectedSkillConceptTags.length === 0 &&
-            <Text color="error_label" fontSize="sm">Choose at least a skill or a concept!</Text>}
+          )}
+          {isNextButtonClicked && selectedSkillConceptTags.length === 0 && (
+            <Text color="error_label" fontSize="sm">
+              Choose at least a skill or a concept!
+            </Text>
+          )}
         </Box>
       </Flex>
 
@@ -144,9 +150,11 @@ export default function CentralBars({
             />
           </Flex>
           {isNextButtonClicked &&
-            (bloomLevelIndex === null ||
-              bloomLevelIndex < 0) &&
-            <Text color="error_label" fontSize="sm">Choose a Bloom level!</Text>}
+            (bloomLevelIndex === null || bloomLevelIndex < 0) && (
+              <Text color="error_label" fontSize="sm">
+                Choose a Bloom level!
+              </Text>
+            )}
         </Box>
 
         {step >= 2 &&
@@ -163,9 +171,11 @@ export default function CentralBars({
                 reset={resetCheckBoxOptions}
                 isHighlighted={isNextButtonClicked}
               />
-              {isNextButtonClicked &&
-                selectedOptions.length === 0 &&
-                <Text color="error_label" fontSize="sm">Choose at least one verb!</Text>}
+              {isNextButtonClicked && selectedOptions.length === 0 && (
+                <Text color="error_label" fontSize="sm">
+                  Choose at least one verb!
+                </Text>
+              )}
             </Box>
           )}
       </Flex>
@@ -176,12 +186,18 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
-          <Flex align="center" gap={2} justify="flex-end" flex="1" direction="row">
+          <Flex
+            align="center"
+            gap={2}
+            justify="flex-end"
+            flex="1"
+            direction="row"
+          >
             <UnderlinedButton
               handleClick={() => handleSetLearningTextContext(defaultContext)}
               nameButton="Show the default"
@@ -207,9 +223,11 @@ export default function CentralBars({
             text={learningTextContext}
             onTextChange={handleSetLearningTextContext}
           />
-          {isNextButtonClicked &&
-            learningTextContext.length === 0 &&
-            <Text color="error_label" fontSize="sm">Specify the context or set the default one!</Text>}
+          {isNextButtonClicked && learningTextContext.length === 0 && (
+            <Text color="error_label" fontSize="sm">
+              Specify the context or set the default one!
+            </Text>
+          )}
         </Box>
       </Flex>
     </Flex>

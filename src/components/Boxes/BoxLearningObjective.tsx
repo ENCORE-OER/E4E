@@ -21,7 +21,7 @@ export default function BoxLearningObjective({
   handleDeleteLO,
   // isSmallerScreen,
   isGenerated,
-  isNextButtonClicked
+  isNextButtonClicked,
 }: BoxLearningObjectiveProps) {
   return (
     <Flex direction="row" gap={1}>

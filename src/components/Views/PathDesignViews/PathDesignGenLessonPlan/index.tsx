@@ -239,8 +239,9 @@ export default function PathDesignGenLessonPlan() {
   };
 
   return (
-    <Flex direction="column" rowGap={3} pt="3rem" w="80%">
-      <Flex direction="row" align="center" gap={1}>
+    <Flex direction="column" rowGap={3} pt="3rem" w="100%">
+      <Flex direction="row" align="center" gap={1} wrap="wrap" w="100%"
+      >
         <ShowHideButton
           showBox={showBox}
           setShowBox={setShowBox}
@@ -249,6 +250,7 @@ export default function PathDesignGenLessonPlan() {
           fontWeight="bold"
           color="primary"
           border="none"
+          letterSpacing={0}
         />
         <IconInfoCircleTooltip
           label_tooltip={`If no activities are selected, all activities will be considered as possible choices.`}

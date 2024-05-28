@@ -47,7 +47,9 @@ type LearnignPathDesignContextProps = {
   handleLearnerExperienceChange: (selected: Option | null) => void;
   handleSetLearningTextContext: (newText: string) => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
-  setSelectedSkillConceptTags: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
+  setSelectedSkillConceptTags: React.Dispatch<
+    React.SetStateAction<SkillItemProps[]>
+  >;
   handleSkillsChange: (newSkills: SkillItemProps[]) => void;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
@@ -423,7 +425,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       }
     }
   }, [bloomLevelIndex]);
-
 
   return (
     <LearningPathDesignContext.Provider

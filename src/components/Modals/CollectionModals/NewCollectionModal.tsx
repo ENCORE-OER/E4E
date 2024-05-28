@@ -127,7 +127,9 @@ export default function NewCollectionModal({
                 }
               }}
               errorBorderColor={
-                nameCollection.length === maxLength ? 'warning_label' : 'error_label'
+                nameCollection.length === maxLength
+                  ? 'warning_label'
+                  : 'error_label'
               }
             />
             {nameCollection.length === maxLength && (

@@ -74,11 +74,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [isNextButtonClicked, setIsNextButtonClicked] =
     useState<boolean>(false); // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
 
-  const [isGenerateLOClicked, setIsGenerateLOClicked] = useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
+  const [isGenerateLOClicked, setIsGenerateLOClicked] =
+    useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
 
-
-  const [isEmptyLearningObjectivesPresent, setIsEmptyLearningObjectivesPresent] =
-    useState<boolean>(false); // Used to know if there are empty learning objectives
+  const [
+    isEmptyLearningObjectivesPresent,
+    setIsEmptyLearningObjectivesPresent,
+  ] = useState<boolean>(false); // Used to know if there are empty learning objectives
 
   // const [totalLearningObjectives, setTotalLearningObjectives] = useState<string[]>([]); // Array to keep track of the all learning objectives (generated + empty)
   // const [learningObjectiveObjects, setLearningObjectiveObjects] = useState<ObjectLearningObjectiveProps[]>([]);   // Array of {learningObject, isSelected, isGenerated}, to keep track if an added empty LO was selected before click on "Generate LO" button
@@ -97,7 +99,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     if (newCollectionIndex > -1) {
       handleStepChange(1); // Update the state to show the text when a collection is selected
       if (isNextButtonClicked) {
-        setIsNextButtonClicked(!isNextButtonClicked)
+        setIsNextButtonClicked(!isNextButtonClicked);
       }
     }
   };
@@ -113,7 +115,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
   const handleResourceChange = (newResourceIndex: number) => {
-    console.log("Entro in handleResourceChange")
+    console.log('Entro in handleResourceChange');
     if (newResourceIndex > -1) {
       if (resourcesIndex.includes(newResourceIndex)) {
         const updatedResourcesIndex = resourcesIndex.filter(
@@ -223,8 +225,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       setIsNextButtonClicked(true);
       if (collectionIndex < 0) {
         addToast({
-          message:
-            'Choose a collection and then fill in the required fields.',
+          message: 'Choose a collection and then fill in the required fields.',
           type: 'warning',
         });
       } else if (isEmptyLearningObjectivesPresent) {
@@ -257,18 +258,22 @@ const Home = (/*props: DiscoverPageProps*/) => {
   }, [selectedCollection, selectedResource]);
 
   useEffect(() => {
-    setIsEmptyLearningObjectivesPresent(learningObjectiveObjects.some(
-      (objectLO) => objectLO.learningObjective === ''
-    ))
-  }, [learningObjectiveObjects])
+    setIsEmptyLearningObjectivesPresent(
+      learningObjectiveObjects.some(
+        (objectLO) => objectLO.learningObjective === ''
+      )
+    );
+  }, [learningObjectiveObjects]);
 
   useEffect(() => {
-    if ((!isNextButtonClicked && isGenerateLOClicked) ||
-      (isNextButtonClicked && !isGenerateLOClicked)) {
-      setIsGenerateLOClicked(!isGenerateLOClicked)
+    if (
+      (!isNextButtonClicked && isGenerateLOClicked) ||
+      (isNextButtonClicked && !isGenerateLOClicked)
+    ) {
+      setIsGenerateLOClicked(!isGenerateLOClicked);
     }
-    console.log("next button: ", isNextButtonClicked);
-  }, [isNextButtonClicked])
+    console.log('next button: ', isNextButtonClicked);
+  }, [isNextButtonClicked]);
 
   return (
     <Flex w="100%" h="100%">
@@ -290,7 +295,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -299,7 +304,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -374,7 +379,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 // handleSelectedLearningObjectiveIndexChange={
                 //   handleSelectedLearningObjectiveIndexChange
                 // }
-                isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
+                isEmptyLearningObjectivesPresent={
+                  isEmptyLearningObjectivesPresent
+                }
                 isGenerateLOClicked={isGenerateLOClicked}
                 setIsGenerateLOClicked={setIsGenerateLOClicked}
                 isNextButtonClicked={isNextButtonClicked}

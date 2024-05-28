@@ -288,7 +288,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -297,7 +297,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -313,10 +313,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   showBox={showBox}
                   setShowBox={setShowBox}
                   isUpDown={true}
-                  showButtonName="Learning objective(s)"
+                  showButtonName={learningObjectiveObjects.length > 1 ? "Learning objectives" : "Learning objective"}
                   fontWeight="bold"
                   color="primary"
                   border="none"
+                  letterSpacing={0}
                 />
               </Flex>
               {showBox && hydrated && (

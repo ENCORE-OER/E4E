@@ -66,7 +66,7 @@ export default function PathDesignGenLO({
   setIsGenerateLOClicked,
   isHighligted,
   isSmallerScreen,
-  isEmptyLearningObjectivesPresent
+  isEmptyLearningObjectivesPresent,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
@@ -79,9 +79,10 @@ export default function PathDesignGenLO({
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   // const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
   // const [isGenerateLOClicked, setIsGenerateLOClicked] = useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
-  const [isAtLeastOneLOGenerated, setIsAtLeastOneLOGenerated] = useState<boolean>(false); // State to check in real time if there is at least one generated learning objective
+  const [isAtLeastOneLOGenerated, setIsAtLeastOneLOGenerated] =
+    useState<boolean>(false); // State to check in real time if there is at least one generated learning objective
 
-
+  // =========================================
   // handle deleting last learning objective
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
     useState<boolean>(false);
@@ -93,6 +94,8 @@ export default function PathDesignGenLO({
   const onOpenDeleteAlertDialog = () => {
     setIsDeleteAlertDialogOpen(true);
   };
+  // =========================================
+
 
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
@@ -186,11 +189,6 @@ export default function PathDesignGenLO({
   };
 
   useEffect(() => {
-    setIsAtLeastOneLOGenerated(learningObjectiveObjects.some(
-      (learningObjectiveObject: ObjectLearningObjectiveProps) =>
-        learningObjectiveObject.isGenerated
-    ));
-
     // Starting with at least one learning objective
     if (learningObjectiveObjects.length < numberOfLO) {
       // Add objectives until the desired number is reached
@@ -220,6 +218,17 @@ export default function PathDesignGenLO({
       handleAddLearningObjective();
     }
   }, [numberOfLO, learningObjectiveObjects.length]);
+
+  useEffect(() => {
+
+    const update = learningObjectiveObjects.some(
+      (learningObjectiveObject: ObjectLearningObjectiveProps) =>
+        learningObjectiveObject.isGenerated
+    )
+    if (update !== isAtLeastOneLOGenerated) {
+      setIsAtLeastOneLOGenerated(update);
+    }
+  }, [learningObjectiveObjects])
 
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
@@ -251,13 +260,14 @@ export default function PathDesignGenLO({
         setNumberOfLO={setNumberOfLO}
         isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
         setIsGenerateLOClicked={setIsGenerateLOClicked}
+        isAtLeastOneLOGenerated={isAtLeastOneLOGenerated}
       />
 
-      {isGenerateLOClicked && isAtLeastOneLOGenerated &&
+      {isGenerateLOClicked && isAtLeastOneLOGenerated && (
         <Flex>
           <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
         </Flex>
-      }
+      )}
 
       <Flex
         py="1rem"
