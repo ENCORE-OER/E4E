@@ -25,7 +25,7 @@ export default function LearningPathTitleTextBox({
       onTextChange={handleTitleLearningPath}
       resize="vertical"
       placeholder={placeholder}
-      backgroundColorTextArea={bg}
+      bgTextArea={bg}
       isDisabled={isDisabled}
       isBoldText={true}
       isLargeFontSize={true}

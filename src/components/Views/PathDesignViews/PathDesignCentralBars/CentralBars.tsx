@@ -186,8 +186,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
+          // paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
@@ -216,7 +216,7 @@ export default function CentralBars({
         >
           <TextBox
             // backgroundColor="#EDF2F7"
-            backgroundColorTextArea="white"
+            bgTextArea="white"
             placeholder={placeholderContextBox}
             placeholderColor={'gray.400'}
             isHighlighted={isNextButtonClicked}

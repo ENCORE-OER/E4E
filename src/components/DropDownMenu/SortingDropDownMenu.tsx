@@ -85,7 +85,7 @@ export default function SortingDropDownMenu({
                 setItemSorting(item);
                 handleItemSortingClick(item.name);
               }}
-              backgroundColorTextArea={
+              bg={
                 item.name === itemSorting.name ? 'gray.200' : ''
               }
             >

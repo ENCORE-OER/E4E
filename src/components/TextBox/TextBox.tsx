@@ -2,7 +2,7 @@ import { Box, BoxProps, Textarea } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 
 export interface TextBoxProps extends BoxProps {
-  backgroundColorTextArea?: string;
+  bgTextArea?: string;
   placeholder?: string;
   placeholderColor?: string;
   isHighlighted?: boolean;
@@ -19,7 +19,7 @@ export interface TextBoxProps extends BoxProps {
 }
 
 const TextBox = ({
-  backgroundColorTextArea,
+  bgTextArea,
   placeholder,
   placeholderColor,
   isHighlighted,
@@ -57,7 +57,7 @@ const TextBox = ({
     >
       <Textarea
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
-        bg={backgroundColorTextArea}
+        bg={bgTextArea}
         variant="solid"
         value={text}
         onChange={handleTextChange}
@@ -69,8 +69,8 @@ const TextBox = ({
         isDisabled={isDisabled}
         fontSize={isLargeFontSize ? 'x-large' : undefined}
         fontWeight={isBoldText ? 'bold' : undefined}
-        // fontSize={fontSizeTextArea}
-        // fontWeight={fontWeightTextArea}
+      // fontSize={fontSizeTextArea}
+      // fontWeight={fontWeightTextArea}
       />
     </Box>
   );

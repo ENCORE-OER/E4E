@@ -28,10 +28,10 @@ export default function LearningObjectiveTextBox({
       onTextChange={handleLearningObjective}
       resize="vertical"
       placeholder={placeholder}
-      backgroundColorTextArea={bg}
+      bgTextArea={bg}
       isDisabled={isDisabled}
-      // fontSize="sm"
-      // fontWeight={"normal"}
+    // fontSize="sm"
+    // fontWeight={"normal"}
     />
   );
 }

@@ -614,7 +614,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -655,7 +655,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -681,7 +681,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
             px={isSmallerScreen ? '15px' : '30px'}
             w="full"
             h="full"
-            backgroundColorTextArea="background"
+            bg="background"
             borderLeft="0.5px"
             borderLeftColor={'secondary'}
             borderLeftStyle={'solid'}
