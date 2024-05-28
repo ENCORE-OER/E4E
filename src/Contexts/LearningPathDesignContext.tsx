@@ -336,7 +336,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setStep(newStep);
   };
 
-
   // ========================================================
   // ----- Learning Path Design (Page 3) -----
 
@@ -377,10 +376,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const handleTitleLearningPath = (newTitle: string) => {
     setTitleLearningPath(newTitle);
-  }
+  };
 
   // ========================================================
-
 
   useEffect(() => {
     if (resetCheckBoxOptions) {

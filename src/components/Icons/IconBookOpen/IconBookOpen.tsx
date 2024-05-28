@@ -7,7 +7,7 @@ export default function IconBookOpen({ ...rest }: IconProps) {
       {...rest}
       as={PiBookOpenTextBold}
       fontSize={'x-large'}
-    //   fontWeight={'bold'}
+      //   fontWeight={'bold'}
     />
   );
 }

@@ -68,8 +68,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-            data[itemIndex]?.title ||
-            defaultMenuTitle
+                data[itemIndex]?.title ||
+                defaultMenuTitle
             : defaultMenuTitle
         );
       }

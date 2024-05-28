@@ -7,7 +7,7 @@ export default function IconTime({ ...rest }: IconProps) {
       {...rest}
       as={MdAccessTimeFilled}
       fontSize={'x-large'}
-    //   fontWeight={'bold'}
+      //   fontWeight={'bold'}
     />
   );
 }

@@ -7,7 +7,7 @@ export default function IconGroup({ ...rest }: IconProps) {
       {...rest}
       as={MdGroups}
       fontSize={'x-large'}
-    //   fontWeight={'bold'}
+      //   fontWeight={'bold'}
     />
   );
 }

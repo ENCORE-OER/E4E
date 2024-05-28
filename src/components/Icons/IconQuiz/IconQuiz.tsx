@@ -7,7 +7,7 @@ export default function IconQuiz({ ...rest }: IconProps) {
       {...rest}
       as={MdQuiz}
       fontSize={'x-large'}
-    //   fontWeight={'bold'}
+      //   fontWeight={'bold'}
     />
   );
 }
