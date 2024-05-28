@@ -100,9 +100,8 @@ export default function BoxGeneratedLO({
             borderRadius="md"
             border="none"
           >
-            {`Learning Objective ${index + 1} ${
-              isGenerated ? '[ Generated ]' : ''
-            }`}
+            {`Learning Objective ${index + 1} ${isGenerated ? '[ Generated ]' : ''
+              }`}
           </Text>
           {isEditClicked ? (
             <Textarea

@@ -66,8 +66,12 @@ type LearnignPathDesignContextProps = {
   handleLearningObjective: () => void;
 
   // ====================
-  // Lesson Card
+  // Learning path
+  titleLearningPath: string;
+  setTitleLearningPath: React.Dispatch<React.SetStateAction<string>>;
+  handleTitleLearningPath: (newTitle: string) => void;
 
+  // Lesson Card
   lessonCards: LessonCardProps[];
   setLessonCards: React.Dispatch<React.SetStateAction<LessonCardProps[]>>;
   handleLessonCards: (lessonCard: LessonCardProps | LessonCardProps[]) => void;
@@ -215,35 +219,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //   setApiKey(value);
   // };
 
-  // ========================================================
-  // ----- Lesson card -----
-
-  // Pass Fail Conditions for each Lesson Card
-  // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
-
-  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
-    'lessonCards',
-    []
-  );
-
-  const handleLessonCards = (
-    lessonCard: LessonCardProps | LessonCardProps[]
-  ) => {
-    if (Array.isArray(lessonCard)) {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [
-        ...prevLessonCards,
-        ...lessonCard,
-      ]);
-    } else {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [
-        ...prevLessonCards,
-        lessonCard,
-      ]);
-    }
-  };
-
-  // ========================================================
-
   const resetState = () => {
     handleStepChange(0);
     // handleResourceIndexChange(-1);
@@ -360,6 +335,52 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const handleStepChange = (newStep: number) => {
     setStep(newStep);
   };
+
+
+  // ========================================================
+  // ----- Learning Path Design (Page 3) -----
+
+  // ========================================================
+  // ----- Lesson card -----
+
+  // Pass Fail Conditions for each Lesson Card
+  // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
+
+  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
+    'lessonCards',
+    []
+  );
+
+  const handleLessonCards = (
+    lessonCard: LessonCardProps | LessonCardProps[]
+  ) => {
+    if (Array.isArray(lessonCard)) {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        ...lessonCard,
+      ]);
+    } else {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        lessonCard,
+      ]);
+    }
+  };
+
+  // ========================================================
+
+  // Title learning path
+  const [titleLearningPath, setTitleLearningPath] = useLocalStorage<string>(
+    'titleLearningPath',
+    ''
+  );
+
+  const handleTitleLearningPath = (newTitle: string) => {
+    setTitleLearningPath(newTitle);
+  }
+
+  // ========================================================
+
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -481,6 +502,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleLearningObjective,
 
         // ===================
+
+        // Learning path
+        titleLearningPath,
+        setTitleLearningPath,
+        handleTitleLearningPath,
+
         // LESSON CARD
 
         lessonCards,

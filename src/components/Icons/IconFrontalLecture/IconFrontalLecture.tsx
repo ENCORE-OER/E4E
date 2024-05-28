@@ -7,7 +7,7 @@ export default function IconFrontalLecture({ ...rest }: IconProps) {
       {...rest}
       as={FaPersonChalkboard}
       fontSize={'x-large'}
-      //   fontWeight={'bold'}
+    //   fontWeight={'bold'}
     />
   );
 }

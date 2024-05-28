@@ -319,7 +319,11 @@ export default function PathDesignGenLO({
                   isSmallerScreen={isSmallerScreen}
                   label_tooltip_delete="Delete"
                   isNextButtonClicked={isNextButtonClicked}
-                  isDisabled={isLoading && (objectLO.isGenerated || objectLO.learningObjective.trim().length === 0)}
+                  isDisabled={
+                    isLoading &&
+                    (objectLO.isGenerated ||
+                      objectLO.learningObjective.trim().length === 0)
+                  }
                 />
               )
             )

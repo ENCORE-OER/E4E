@@ -52,7 +52,12 @@ export default function BoxLearningObjective({
         fontSize={'sm'}
         borderRadius={5}
       > */}
-      <Button variant="ghost" onClick={() => handleDeleteLO(index)} p={0} isDisabled={isDisabled}>
+      <Button
+        variant="ghost"
+        onClick={() => handleDeleteLO(index)}
+        p={0}
+        isDisabled={isDisabled}
+      >
         <IconDelete />
       </Button>
       {/* </Tooltip> */}

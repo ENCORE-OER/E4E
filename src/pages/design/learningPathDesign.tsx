@@ -13,6 +13,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
@@ -49,6 +50,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // handleLearningObjective,
     //learningObjectives,
     learningObjectiveObjects,
+    titleLearningPath,
+    handleTitleLearningPath
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -288,7 +291,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -297,7 +300,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -341,8 +344,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
             <Flex pt="2rem">
               {/* TODO: Add a Textarea. The title of the lesson plan must be editable. */}
-              <Heading fontSize={'x-large'}>
+              {/* <Heading fontSize={'x-large'}>
                 Introduction to usability - lesson plan
+              </Heading> */}
+
+              <Heading fontWeight={'bold'} w="100%">
+                <LearningPathTitleTextBox
+                  titleLearningPath={titleLearningPath}
+                  handleTitleLearningPath={handleTitleLearningPath}
+                  placeholder='Enter a title...'
+                />
               </Heading>
             </Flex>
             <Flex paddingTop="1rem">

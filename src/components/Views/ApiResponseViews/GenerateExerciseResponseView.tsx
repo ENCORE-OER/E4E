@@ -15,8 +15,8 @@ type GenerateExerciseResonseViewProps = {
   response: GeneratedExerciseProps | null;
 };
 
-export default function GenerateExerciseResponseView({} //response,
-: GenerateExerciseResonseViewProps) {
+export default function GenerateExerciseResponseView({ } //response,
+  : GenerateExerciseResonseViewProps) {
   const { apiGeneratedExerciseData: apiData, title } = useCreateOERsContext();
 
   return (

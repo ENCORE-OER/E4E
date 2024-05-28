@@ -7,7 +7,7 @@ export default function IconAttach({ ...rest }: IconProps) {
       {...rest}
       as={MdNoteAdd}
       fontSize={'x-large'}
-      //   fontWeight={'bold'}
+    //   fontWeight={'bold'}
     />
   );
 }

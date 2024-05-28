@@ -37,7 +37,7 @@ export default function ConceptsCollectionView({
       //w="full"
       //minW="150px"
       bg="background"
-      //justifyContent="center"
+    //justifyContent="center"
     >
       <Flex gap={1} bg="background">
         <IconInfoCircleTooltip label_tooltip={label_tooltip} />
