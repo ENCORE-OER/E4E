@@ -85,9 +85,7 @@ export default function SortingDropDownMenu({
                 setItemSorting(item);
                 handleItemSortingClick(item.name);
               }}
-              bg={
-                item.name === itemSorting.name ? 'gray.200' : ''
-              }
+              bg={item.name === itemSorting.name ? 'gray.200' : ''}
             >
               <SortingDropDownMenuItem icon={item.icon} name={item.name} />
             </MenuItem>

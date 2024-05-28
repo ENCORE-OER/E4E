@@ -30,8 +30,8 @@ export default function LearningObjectiveTextBox({
       placeholder={placeholder}
       bgTextArea={bg}
       isDisabled={isDisabled}
-    // fontSize="sm"
-    // fontWeight={"normal"}
+      // fontSize="sm"
+      // fontWeight={"normal"}
     />
   );
 }
