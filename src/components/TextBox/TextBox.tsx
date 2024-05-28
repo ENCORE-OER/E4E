@@ -69,8 +69,8 @@ const TextBox = ({
         isDisabled={isDisabled}
         fontSize={isLargeFontSize ? 'x-large' : undefined}
         fontWeight={isBoldText ? 'bold' : undefined}
-      // fontSize={fontSizeTextArea}
-      // fontWeight={fontWeightTextArea}
+        // fontSize={fontSizeTextArea}
+        // fontWeight={fontWeightTextArea}
       />
     </Box>
   );
