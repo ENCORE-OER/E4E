@@ -12,8 +12,10 @@ export interface TextBoxProps extends BoxProps {
   index?: number;
   onTextChange: (newText: string, index?: number) => void;
   isDisabled?: boolean;
-  fontSizeTextArea?: 'x-large' | 'sm' | string;
-  fontWeightTextArea?: 'bold' | 'normal' | string;
+  isBoldText?: boolean;
+  isLargeFontSize?: boolean;
+  // fontSizeTextArea?: 'x-large' | 'sm' | string;
+  // fontWeightTextArea?: 'bold' | 'normal' | string;
 }
 
 const TextBox = ({
@@ -27,6 +29,8 @@ const TextBox = ({
   rows,
   resize,
   isDisabled,
+  isBoldText,
+  isLargeFontSize,
   // fontSizeTextArea,
   // fontWeightTextArea,
   ...rest
@@ -63,8 +67,10 @@ const TextBox = ({
         resize={resize || 'vertical'}
         w="100%"
         isDisabled={isDisabled}
-        // fontSize={fontSizeTextArea}
-        // fontWeight={fontWeightTextArea}
+        fontSize={isLargeFontSize ? 'x-large' : undefined}
+        fontWeight={isBoldText ? 'bold' : undefined}
+      // fontSize={fontSizeTextArea}
+      // fontWeight={fontWeightTextArea}
       />
     </Box>
   );

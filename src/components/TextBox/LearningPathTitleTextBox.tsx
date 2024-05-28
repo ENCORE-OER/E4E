@@ -27,6 +27,8 @@ export default function LearningPathTitleTextBox({
       placeholder={placeholder}
       backgroundColorTextArea={bg}
       isDisabled={isDisabled}
+      isBoldText={true}
+      isLargeFontSize={true}
       // fontSize="x-large"
       // fontWeight="bold"
       w="80%"
