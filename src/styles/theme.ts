@@ -38,6 +38,8 @@ const config = {
       900: '#FFA1A1',
     },
     genAI_dark: '#FF6B6B',
+    error_label: '#bf5521ff',
+    warning_label: '#FFB74D',
   },
   fonts: {
     heading: 'Exo, sans-serif',

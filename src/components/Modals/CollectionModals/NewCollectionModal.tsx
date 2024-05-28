@@ -127,16 +127,16 @@ export default function NewCollectionModal({
                 }
               }}
               errorBorderColor={
-                nameCollection.length === maxLength ? 'orange.300' : 'red.300'
+                nameCollection.length === maxLength ? 'warning_label' : 'error_label'
               }
             />
             {nameCollection.length === maxLength && (
-              <FormErrorMessage color="orange.300">
+              <FormErrorMessage color="warning_label">
                 Length max 30!
               </FormErrorMessage>
             )}
             {!nameCollection && countClick > 0 && (
-              <FormErrorMessage>
+              <FormErrorMessage color="error_label">
                 Write a name for the collection!
               </FormErrorMessage>
             )}

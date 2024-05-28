@@ -12,7 +12,7 @@ export default function InfoTextBox({
   ...rest
 }: InfoTextBoxProps) {
   return (
-    <Flex w={isSmallerScreen ? '100%' : '65%'} align="center" gap={3} {...rest}>
+    <Flex w={isSmallerScreen !== undefined ? (isSmallerScreen === false ? '100%' : '65%') : '100%'} align="center" gap={3} {...rest}>
       <IconInfoCircle fontSize={'x-large'} />
       <Text fontSize="small">{textInfo}</Text>
     </Flex>

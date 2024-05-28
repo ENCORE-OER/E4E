@@ -261,7 +261,8 @@ export default function SharedParameterTab({
         <Flex w="100%" alignItems="center">
           <Box w="60%">
             <LearningObjectiveTextBox
-              isGenerateButtonClicked={isGenerateButtonClicked}
+              // isGenerateButtonClicked={isGenerateButtonClicked}
+              isHighlighted={isGenerateButtonClicked}
               learningObjective={learningObjective}
               handleLearningObjective={handleLearningObjective}
               placeholder='Click "Generate" to get the learning objective or write it manually.'

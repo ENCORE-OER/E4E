@@ -54,10 +54,10 @@ export default function PathDesignHeaderBars({
             <Text
               fontSize="sm"
               fontWeight="bold"
-              // paddingRight={`${SPACING}%`}
-              // w={`${DIMENSION - SPACING}%`}
-              // flex='1'
-              // w="50%"
+            // paddingRight={`${SPACING}%`}
+            // w={`${DIMENSION - SPACING}%`}
+            // flex='1'
+            // w="50%"
             >
               Select the resources within the collection
             </Text>
@@ -76,14 +76,6 @@ export default function PathDesignHeaderBars({
           // flex='1'
           w="50%"
         >
-          {/* <Text
-            fontSize="sm"
-            fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
-          >
-            Select the collection with relevant resources*
-          </Text> */}
           <CustomDropDownMenu
             data={collections}
             onData={handleCollectionSelection}
@@ -93,6 +85,9 @@ export default function PathDesignHeaderBars({
             itemIndex={collectionIndex}
             defaultMenuTitle="Choose a collection"
           />
+          {isNextButtonClicked &&
+            collectionIndex < 0 &&
+            <Text color="error_label" fontSize="sm">Choose at least a skill or a concept!</Text>}
         </Box>
 
         {/* Resources */}

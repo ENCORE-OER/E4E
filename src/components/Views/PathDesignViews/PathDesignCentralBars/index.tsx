@@ -42,6 +42,8 @@ export default function PathDesignCentralBars({
     selectedContext,
     selectedGroupDimension,
     selectedLearnerExperience,
+    selectedSkillConceptTags,
+    selectedOptions
   } = useLearningPathDesignContext();
 
   return (
@@ -69,6 +71,8 @@ export default function PathDesignCentralBars({
       selectedContext={selectedContext}
       selectedGroupDimension={selectedGroupDimension}
       selectedLearnerExperience={selectedLearnerExperience}
+      selectedSkillConceptTags={selectedSkillConceptTags}
+      selectedOptions={selectedOptions}
     />
   );
 }

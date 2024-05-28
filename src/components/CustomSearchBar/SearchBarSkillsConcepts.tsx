@@ -6,11 +6,13 @@ import {
   AutoCompleteList,
   AutoCompleteTag,
 } from '@choc-ui/chakra-autocomplete';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 import {
+  OerConceptInfo,
   OerInCollectionProps,
+  OerSkillInfo,
   SkillItemProps,
 } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
@@ -27,89 +29,173 @@ type SearchBarV2Props = {
   setSelectedTags?: Dispatch<SetStateAction<string[]>>;
   isHighlighted: boolean;
 };
+
 export default function SearchBarSkillsConcepts({
   collectionIndex,
   resourcesIndex,
   isHighlighted,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
-  const { selectedSkillConceptsTags, handleSkillsChange } =
+  const { selectedSkillConceptTags, setSelectedSkillConceptTags } =
     useLearningPathDesignContext();
   const hydrated = useHasHydrated();
-  const [inputValue, setInputValue] = useState<string[]>([]);
-  const uniqueItems = new Set<SkillItemProps>(); // Utilizza un Set per evitare duplicati
+  const [inputValue, setInputValue] = useState<string>('');
+  const [uniqueItems, setUniqueItems] = useState<SkillItemProps[]>([]);
+  const [deleteTag, setDeleteTag] = useState<boolean>();
+  const [filteredTags, setFilteredTags] = useState<SkillItemProps[]>(selectedSkillConceptTags);
 
-  // verify that the collectionIndex is valid
+  // Verify that the collectionIndex is valid
   const collection = collections[collectionIndex];
+  // const oers = collection?.oers ?? [];
+  const oers = useMemo(() => {
+    console.log("Calculating oers");
+    return collection?.oers || [];
+  }, [collection]); // useMemo helps in optimizing performance by preventing expensive computations from being executed on every render if their dependencies haven't changed.
 
-  const oers = collection?.oers ?? [];
-  //console.log(oers);
-
-  const handleTagsRemove = async (tag: Tag) => {
+  // Handle removal of tags
+  const handleTagsRemove = (tag: Tag) => {
     const tagLabel = tag.label;
-
-    handleSkillsChange((prev: SkillItemProps[]) => {
-      return prev.filter((value: SkillItemProps) => value.label !== tagLabel);
-    });
+    setSelectedSkillConceptTags((prev: SkillItemProps[]) => prev.filter((value: SkillItemProps) => value.label !== tagLabel));
+    console.log("Tag deleted!");
     tag.onRemove();
   };
 
-  const renderSkillAndConceptItems = () => {
-    console.log('renderSkillAndConceptItems...');
-    uniqueItems.clear(); // Clear the set to avoid duplicates
+  // Handle selection of options
+  const handleSelectOption = (selectedValue: string) => {
+    console.log('handleSelectionOption!');
+    setSelectedSkillConceptTags((prev: SkillItemProps[]) => {
+      const selectedItem = uniqueItems.find((item: SkillItemProps) => item.label === selectedValue);
+      if (selectedItem && !prev.some((item: SkillItemProps) => item.label === selectedItem.label)) {
+        return [...prev, selectedItem];
+      }
+      return prev;
+    });
+    setInputValue(''); // Reset the input value
+  };
+
+  useEffect(() => {
+    console.log("Entro in questo use effect");
+    // console.log("Oers: ", oers);
+    // console.log("Resource Index: ", resourcesIndex);
+    // console.log("Collection", collection);
+
+    if (!collection) return;
+
+    const itemsMap = new Map<string, SkillItemProps>(); // Use a Map to ensure unique labels
+
+    // Function to add skills and concepts to the Map
+    const addSkillsAndConcepts = (skills: SkillItemProps[] | OerSkillInfo[], concepts: SkillItemProps[] | OerConceptInfo[]) => {
+      skills.forEach((skill: SkillItemProps | OerSkillInfo) => {
+        if (!itemsMap.has(skill.label)) {
+          itemsMap.set(skill.label, skill);
+        }
+      });
+      concepts.forEach((concept: SkillItemProps | OerConceptInfo) => {
+        if (!itemsMap.has(concept.label)) {
+          itemsMap.set(concept.label, concept);
+        }
+      });
+    };
+
+    // Add skills and concepts from the selected resources or all resources
     if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
       resourcesIndex.forEach((index: number) => {
-        oers[index]?.skills?.forEach((skill) => {
-          const skillId = skill.id;
-          const skillLabel = skill.label;
-          const isLabelAlreadySelected = [...uniqueItems].some(
-            (item: SkillItemProps) => item.label === skillLabel
-          );
-          if (!isLabelAlreadySelected) {
-            // Avoid duplicates: Check if the item is already in the set
-            uniqueItems.add({ id: skillId, label: skillLabel });
-          }
-        });
-
-        oers[index]?.concepts?.forEach((concept) => {
-          const conceptId = concept.id;
-          const conceptLabel = concept.label;
-          const isLabelAlreadySelected = [...uniqueItems].some(
-            (item: SkillItemProps) => item.label === conceptLabel
-          );
-          if (!isLabelAlreadySelected) {
-            // Avoid duplicates: Check if the item is already in the set
-            uniqueItems.add({ id: conceptId, label: conceptLabel });
-          }
-        });
+        const oer = oers[index];
+        if (oer) {
+          addSkillsAndConcepts(oer.skills || [], oer.concepts || []);
+        }
       });
     } else {
-      oers?.forEach((oer: OerInCollectionProps) => {
-        oer?.skills?.forEach((skill) => {
-          const skillId = skill.id;
-          const skillLabel = skill.label;
-          uniqueItems.add({ id: skillId, label: skillLabel });
-        });
-
-        oer?.concepts?.forEach((concept) => {
-          const conceptId = concept.id;
-          const conceptLabel = concept.label;
-          uniqueItems.add({ id: conceptId, label: conceptLabel });
-        });
+      oers.forEach((oer: OerInCollectionProps) => {
+        addSkillsAndConcepts(oer.skills || [], oer.concepts || []);
       });
     }
 
-    // while (!hydrated) {
-    // }
-    return (
-      <>
+    const newUniqueItems = Array.from(itemsMap.values()); // Update uniqueItems state
+    setUniqueItems(newUniqueItems);
+
+    // Remove tags not covered by the selected resources
+    const validItems = new Set(newUniqueItems.map((item: SkillItemProps) => item.label));
+    const tempFilteredTags = selectedSkillConceptTags.filter((tag: SkillItemProps) => validItems.has(tag.label));
+    // const tagsToRemove = selectedSkillConceptsTags.filter((tag: SkillItemProps) => !validItems.has(tag.label));
+
+    // Remove tags not covered by the selected resources
+    if (tempFilteredTags.length !== selectedSkillConceptTags.length) {
+      setFilteredTags(tempFilteredTags);
+      setDeleteTag(true);
+    }
+    // setSelectedSkillConceptsTags((prev: SkillItemProps[]) => prev.filter((tag: SkillItemProps) => validItems.has(tag.label)));
+  }, [oers, resourcesIndex, collection]);
+
+  useEffect(() => {
+    console.log("DELETE TAG");
+    if (deleteTag) {
+      if (filteredTags.length === 0) {
+        setSelectedSkillConceptTags([])
+      } else if (filteredTags.length < selectedSkillConceptTags.length) {
+        setSelectedSkillConceptTags(filteredTags);
+        setDeleteTag(false);
+      }
+    }
+  }, [deleteTag]);
+
+  // useEffect(() => {
+  //   // Only check if there are selected resources
+  //   if (resourcesIndex !== undefined && resourcesIndex.length > 0) {
+  //     const validItems = new Set(uniqueItems.map(item => item.label));
+  //     // Filter the selected tags to check if they are still covered by the selected assets
+  //     const filteredTags = selectedSkillConceptsTags.filter((tag: SkillItemProps) => validItems.has(tag.label));
+  //     // If the selected tags have changed, update the status
+  //     if (filteredTags.length !== selectedSkillConceptsTags.length) {
+  //       handleSkillsChange(filteredTags);
+  //     }
+  //   }
+  // }, [resourcesIndex, selectedSkillConceptsTags]);
+
+  if (!collection || !collection.oers) {
+    return null; // Ensure the collection is valid
+  }
+
+  return (
+    <Box
+      border={
+        isHighlighted && selectedSkillConceptTags.length === 0
+          ? '2.5px solid #bf5521ff'
+          : '1px solid #CED4DA'
+      }
+      borderRadius={'lg'}
+    >
+      <AutoComplete
+        openOnFocus
+        multiple
+        defaultValues={selectedSkillConceptTags?.map((item: SkillItemProps) => item.label) ?? []}
+        onSelectOption={(e) => handleSelectOption(e.item.value)}
+      >
+        {hydrated &&
+          <AutoCompleteInput
+            variant="filled"
+            placeholder="Search for keywords..."
+            bg="white"
+            _placeholder={{ color: 'gray.400' }}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.currentTarget.value)}
+          >
+            {hydrated && (
+              ({ tags }) => tags.map((tag, tid) =>
+                selectedSkillConceptTags?.some((item: SkillItemProps) => item.label === tag.label) &&
+                (
+                  <AutoCompleteTag
+                    key={tid}
+                    label={tag.label}
+                    onRemove={() => handleTagsRemove(tag)}
+                  />
+                )))}
+          </AutoCompleteInput>}
         {hydrated && (
           <AutoCompleteList>
-            {[...uniqueItems].map(
+            {uniqueItems.map(
               (uniqueItem: SkillItemProps) =>
-                !selectedSkillConceptsTags?.some(
-                  (item: SkillItemProps) => item.id === uniqueItem.id
-                ) && (
+                !selectedSkillConceptTags?.some((item: SkillItemProps) => item.label === uniqueItem.label) && (
                   <AutoCompleteItem
                     key={`item-${uniqueItem.id}`}
                     value={uniqueItem.label}
@@ -121,93 +207,6 @@ export default function SearchBarSkillsConcepts({
             )}
           </AutoCompleteList>
         )}
-      </>
-    );
-  };
-
-  useEffect(() => {
-    // Remove the selected tags when the collectionIndex changes and the selectedSkillConceptTags is empty
-    setInputValue([]);
-  }, [collectionIndex]);
-
-  useEffect(() => {
-    if (selectedSkillConceptsTags && uniqueItems) {
-      renderSkillAndConceptItems();
-    }
-  }, [selectedSkillConceptsTags, uniqueItems]);
-
-  if (!collection || !collection.oers) {
-    return null; // control that the collection is valid
-  }
-
-  return (
-    <Box
-      border={
-        isHighlighted && selectedSkillConceptsTags.length === 0
-          ? '1.5px solid #bf5521ff'
-          : '1px solid #CED4DA'
-      }
-      borderRadius={'lg'}
-    >
-      <AutoComplete
-        openOnFocus
-        multiple
-        // defaultValues={selectedSkillConceptsTags}
-        defaultValues={
-          selectedSkillConceptsTags?.map(
-            (item: SkillItemProps) => item.label
-          ) ?? []
-        }
-        onSelectOption={(e) => {
-          const selectedValue = e.item.value;
-          //console.log(selectedValue);
-
-          handleSkillsChange((prev: SkillItemProps[]) => {
-            // const updatedValues = prev.filter(
-            //   // to avoid duplicate
-            //   (value: SkillItemProps) => value.label !== selectedValue
-            // );
-            // return [...updatedValues, selectedValue];
-            const selectedItem = [...uniqueItems].find(
-              (item) => item.label === selectedValue
-            );
-            const isAlreadySelected = prev.some(
-              (item) => item === selectedItem
-            );
-
-            if (selectedItem && !isAlreadySelected) {
-              return [...prev, selectedItem];
-            }
-
-            return prev;
-          });
-          setInputValue([]); // Reset the input value
-        }}
-      >
-        <AutoCompleteInput
-          variant="filled"
-          placeholder="Search for keywords..."
-          bg="white"
-          _placeholder={{ color: 'gray.400' }}
-          value={inputValue}
-          onChange={(e) => {
-            e.preventDefault();
-            const currentValue = e.currentTarget.value;
-            console.log(currentValue);
-            setInputValue([currentValue]); // Imposta il valore di inputValue con il nuovo valore
-          }}
-        >
-          {({ tags }) =>
-            tags.map((tag, tid) => (
-              <AutoCompleteTag
-                key={tid}
-                label={tag.label}
-                onRemove={() => handleTagsRemove(tag)}
-              />
-            ))
-          }
-        </AutoCompleteInput>
-        {renderSkillAndConceptItems()}
       </AutoComplete>
     </Box>
   );

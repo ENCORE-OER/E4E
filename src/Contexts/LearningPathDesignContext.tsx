@@ -23,7 +23,7 @@ type LearnignPathDesignContextProps = {
   selectedGroupDimension: Option | null;
   selectedLearnerExperience: Option | null;
   learningTextContext: string;
-  selectedSkillConceptsTags: SkillItemProps[];
+  selectedSkillConceptTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
@@ -41,14 +41,14 @@ type LearnignPathDesignContextProps = {
   handleResetAll: (value: boolean) => void;
   // handleApiKey: (value: string) => void;
   handleIdLearningScenario: (id: string) => void;
-  setSelectedSkillConceptsTags: (newSkills: SkillItemProps[]) => void;
   handleEducatorExperienceChange: (selected: Option | null) => void;
   handleContextChange: (selected: Option | null) => void;
   handleGroupDimensionChange: (selected: Option | null) => void;
   handleLearnerExperienceChange: (selected: Option | null) => void;
   handleSetLearningTextContext: (newText: string) => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
-  handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
+  setSelectedSkillConceptTags: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
+  handleSkillsChange: (newSkills: SkillItemProps[]) => void;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
   setNumberOfLO: React.Dispatch<React.SetStateAction<number>>;
@@ -147,7 +147,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   );
 
   // Use for storage of the tags in the skill and concept selection
-  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
+  const [selectedSkillConceptTags, setSelectedSkillConceptTags] =
     useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
 
   // Use for storage of the text in the text input
@@ -247,7 +247,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // handleResourceIndexChange(-1);
     setResourcesIndex([]);
     setBloomLevelIndex(-1);
-    setSelectedSkillConceptsTags([]);
+    setSelectedSkillConceptTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
     setLearningObjectiveObjects([]);
@@ -350,10 +350,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   //handlers for tags selection
-  const handleSkillsChange: React.Dispatch<
-    React.SetStateAction<SkillItemProps[]>
-  > = (newSkills) => {
-    setSelectedSkillConceptsTags(newSkills);
+  const handleSkillsChange = (newSkills: SkillItemProps[]) => {
+    setSelectedSkillConceptTags(newSkills);
   };
 
   //handlers for step of learning objective page
@@ -368,38 +366,39 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [resetCheckBoxOptions]); // Dipendenza dell'effetto collaterale
 
-  useEffect(() => {
-    // Carica i dati dallo `localStorage` e imposta le variabili di stato
-    // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
-  }, []);
+  // useEffect(() => {
+  //   // Carica i dati dallo `localStorage` e imposta le variabili di stato
+  //   // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
+  // }, []);
+
+  // useEffect(() => {
+  //   // Salva le variabili nello `localStorage` quando cambiano
+  //   // Usa setLocalStorage per salvare i valori
+  // }, [
+  //   collectionIndex,
+  //   resourcesIndex,
+  //   bloomLevelIndex,
+  //   selectedSkillConceptsTags,
+  //   learningTextContext,
+  //   selectedOptions,
+  //   selectedEducatorExperience,
+  //   selectedContext,
+  //   selectedGroupDimension,
+  //   selectedLearnerExperience,
+  //   resetCheckBoxOptions,
+  //   step,
+  //   currentBloomOptions,
+  // ]);
 
   useEffect(() => {
-    // Salva le variabili nello `localStorage` quando cambiano
-    // Usa setLocalStorage per salvare i valori
-  }, [
-    collectionIndex,
-    resourcesIndex,
-    bloomLevelIndex,
-    selectedSkillConceptsTags,
-    learningTextContext,
-    selectedOptions,
-    selectedEducatorExperience,
-    selectedContext,
-    selectedGroupDimension,
-    selectedLearnerExperience,
-    resetCheckBoxOptions,
-    step,
-    currentBloomOptions,
-  ]);
-
-  useEffect(() => {
-    if (collectionIndex !== -1) {
+    if (collectionIndex > -1) {
       setStep(2);
     }
   }, []);
 
   useEffect(() => {
-    if (bloomLevelIndex !== -1) {
+    if (bloomLevelIndex > -1) {
+      handleStepChange(2);
       switch (bloomLevelIndex) {
         case 0:
           setCurrentBloomOptions(Remember);
@@ -425,12 +424,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [bloomLevelIndex]);
 
-  useEffect(() => {
-    //console.log(bloomLevelIndex);learningObjectiveTextContext
-    if (bloomLevelIndex !== -1) {
-      handleStepChange(2);
-    }
-  }, [bloomLevelIndex]);
 
   return (
     <LearningPathDesignContext.Provider
@@ -447,8 +440,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedGroupDimension,
         selectedLearnerExperience,
         learningTextContext,
-        selectedSkillConceptsTags,
-        setSelectedSkillConceptsTags,
+        selectedSkillConceptTags,
+        setSelectedSkillConceptTags,
         bloomLevelIndex,
         currentBloomOptions,
         step,

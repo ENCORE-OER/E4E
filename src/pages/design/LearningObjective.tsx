@@ -18,14 +18,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const {
     DIMENSION,
     SPACING,
-    // LANGUAGE_GEN_LO_API,
-    // TEMPERATURE_GEN_LO_API,
     bloomLevelIndex,
     //learningTextContext: text,
     step,
     collectionIndex,
     resourcesIndex,
-    selectedSkillConceptsTags,
+    selectedSkillConceptTags,
     handleStepChange,
     selectedOptions,
     //handleResetStep0,
@@ -39,10 +37,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // selectedGroupDimension, // used for the api call
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
-    selectedCustomLearningObjective,
-    // handleSelectedCustomLearningObjectiveChange,
-    // selectedLearningObjectiveIndex,
-    // handleSelectedLearningObjectiveIndexChange,
     handleResetAll,
     // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
@@ -80,6 +74,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const [isNextButtonClicked, setIsNextButtonClicked] =
     useState<boolean>(false); // Used to highlight the required fields when the user clicks on the next button or try to generate the learning objectives
 
+  const [isGenerateLOClicked, setIsGenerateLOClicked] = useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
+
+
+  const [isEmptyLearningObjectivesPresent, setIsEmptyLearningObjectivesPresent] =
+    useState<boolean>(false); // Used to know if there are empty learning objectives
+
   // const [totalLearningObjectives, setTotalLearningObjectives] = useState<string[]>([]); // Array to keep track of the all learning objectives (generated + empty)
   // const [learningObjectiveObjects, setLearningObjectiveObjects] = useState<ObjectLearningObjectiveProps[]>([]);   // Array of {learningObject, isSelected, isGenerated}, to keep track if an added empty LO was selected before click on "Generate LO" button
 
@@ -96,6 +96,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // Change to step 1 only if a collection is selected
     if (newCollectionIndex > -1) {
       handleStepChange(1); // Update the state to show the text when a collection is selected
+      if (isNextButtonClicked) {
+        setIsNextButtonClicked(!isNextButtonClicked)
+      }
     }
   };
 
@@ -110,6 +113,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
   const handleResourceChange = (newResourceIndex: number) => {
+    console.log("Entro in handleResourceChange")
     if (newResourceIndex > -1) {
       if (resourcesIndex.includes(newResourceIndex)) {
         const updatedResourcesIndex = resourcesIndex.filter(
@@ -202,30 +206,40 @@ const Home = (/*props: DiscoverPageProps*/) => {
       // selectedResource !== null &&
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
-      selectedSkillConceptsTags.length > 0 &&
+      selectedSkillConceptTags.length > 0 &&
       learningTextContext?.trim() !== '' &&
       selectedOptions.length > 0 && // verbsBloomLevel
       // selectedLearningObjectiveIndex > -1 &&
-      learningObjectiveObjects.length > 0 // that means that the learning objectives have been generated and the Educator has selected one
+      learningObjectiveObjects.length > 0 && // that means that the learning objectives have been generated and the Educator has selected one
+      !isEmptyLearningObjectivesPresent // Check if there are some empty learning objectives
     ) {
-      // handleSelectedCustomLearningObjectiveChange(
-      //   learningObjectiveObjects[selectedLearningObjectiveIndex]
-      //     .learningObjective
-      // );
-      console.log(
-        'selectedCustomLearningObjective: ' + selectedCustomLearningObjective
-      );
-      //saveLearningScenario();
+      if (isNextButtonClicked) {
+        setIsNextButtonClicked(!isNextButtonClicked);
+      }
       router.push({
         pathname: '/design/learningPathDesign',
       });
     } else {
-      addToast({
-        message:
-          'Please ensure all required fields are filled out before proceeding.',
-        type: 'warning',
-      });
       setIsNextButtonClicked(true);
+      if (collectionIndex < 0) {
+        addToast({
+          message:
+            'Choose a collection and then fill in the required fields.',
+          type: 'warning',
+        });
+      } else if (isEmptyLearningObjectivesPresent) {
+        addToast({
+          message:
+            'No empty learning objectives accepted! Please edit or delete empty texts.',
+          type: 'warning',
+        });
+      } else {
+        addToast({
+          message:
+            'Please ensure all required fields are filled in before proceeding. The information to fill in is higlighted in red.',
+          type: 'warning',
+        });
+      }
     }
   };
 
@@ -241,6 +255,20 @@ const Home = (/*props: DiscoverPageProps*/) => {
     console.log('Selected Collection: ', selectedCollection);
     console.log('Selected Resource: ', selectedResource);
   }, [selectedCollection, selectedResource]);
+
+  useEffect(() => {
+    setIsEmptyLearningObjectivesPresent(learningObjectiveObjects.some(
+      (objectLO) => objectLO.learningObjective === ''
+    ))
+  }, [learningObjectiveObjects])
+
+  useEffect(() => {
+    if ((!isNextButtonClicked && isGenerateLOClicked) ||
+      (isNextButtonClicked && !isGenerateLOClicked)) {
+      setIsGenerateLOClicked(!isGenerateLOClicked)
+    }
+    console.log("next button: ", isNextButtonClicked);
+  }, [isNextButtonClicked])
 
   return (
     <Flex w="100%" h="100%">
@@ -319,7 +347,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 collectionIndex={collectionIndex}
                 resourcesIndex={resourcesIndex}
                 bloomLevelIndex={bloomLevelIndex}
-                isNextButtonClicked={isNextButtonClicked}
+                isNextButtonClicked={isGenerateLOClicked}
                 isSmallerScreen={isSmallerScreen}
                 bloomLevelTitleTextBox="Select the Bloom level for the learning objective*"
                 skillConceptTitleTextBox="Add here the skills or the concepts to be covered*"
@@ -333,7 +361,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 bloomLevelIndex={bloomLevelIndex}
                 selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
                 selectedContext={selectedContext}
-                selectedSkillConceptsTags={selectedSkillConceptsTags}
+                selectedSkillConceptsTags={selectedSkillConceptTags}
                 selectedOptions={selectedOptions}
                 // selectedGroupDimension={selectedGroupDimension}
                 // selectedLearnerExperience={selectedLearnerExperience}
@@ -346,6 +374,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 // handleSelectedLearningObjectiveIndexChange={
                 //   handleSelectedLearningObjectiveIndexChange
                 // }
+                isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
+                isGenerateLOClicked={isGenerateLOClicked}
+                setIsGenerateLOClicked={setIsGenerateLOClicked}
+                isNextButtonClicked={isNextButtonClicked}
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}

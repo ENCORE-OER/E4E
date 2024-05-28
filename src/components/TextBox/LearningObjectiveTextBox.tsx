@@ -4,22 +4,23 @@ type LearningObjectiveTextBoxProps = {
   learningObjective: string;
   index?: number;
   handleLearningObjective: (text: string, index?: number) => void;
-  isGenerateButtonClicked?: boolean; // Used to highlight the box when the user try to go ahead with an empty text
+  // isGenerateButtonClicked?: boolean; // Used to highlight the box when the user try to go ahead with an empty text
   placeholder?: string;
   bg?: string;
+  isHighlighted?: boolean
 };
 
 export default function LearningObjectiveTextBox({
   learningObjective,
   handleLearningObjective,
-  isGenerateButtonClicked,
   placeholder,
   index,
   bg,
+  isHighlighted
 }: LearningObjectiveTextBoxProps) {
   return (
     <TextBox
-      isHighlighted={isGenerateButtonClicked && learningObjective == ''}
+      isHighlighted={isHighlighted}
       text={learningObjective || ''}
       index={index}
       onTextChange={handleLearningObjective}

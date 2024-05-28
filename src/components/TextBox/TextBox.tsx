@@ -40,7 +40,7 @@ const TextBox = ({
       {...rest}
       border={
         isHighlighted && text === ''
-          ? '1.5px solid #bf5521ff'
+          ? '2.5px solid #bf5521ff'
           : '1px solid #CED4DA'
       }
       borderRadius={'lg'}

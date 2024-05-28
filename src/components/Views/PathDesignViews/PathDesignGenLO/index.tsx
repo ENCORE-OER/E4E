@@ -34,9 +34,13 @@ export interface PathDesignGenLOProps {
     SetStateAction<ObjectLearningObjectiveProps[]>
   >;
   // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
+  isNextButtonClicked: boolean;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
+  isGenerateLOClicked?: boolean;
+  setIsGenerateLOClicked?: Dispatch<SetStateAction<boolean>>;
   isHighligted?: boolean;
   isSmallerScreen?: boolean | undefined;
+  isEmptyLearningObjectivesPresent: boolean;
 }
 
 export default function PathDesignGenLO({
@@ -56,9 +60,13 @@ export default function PathDesignGenLO({
   learningObjectiveObjects,
   setLearningObjectiveObjects,
   // handleSelectedLearningObjectiveIndexChange,
+  isNextButtonClicked,
   setIsNextButtonClicked,
+  isGenerateLOClicked,
+  setIsGenerateLOClicked,
   isHighligted,
   isSmallerScreen,
+  isEmptyLearningObjectivesPresent
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
@@ -70,6 +78,9 @@ export default function PathDesignGenLO({
   const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   // const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
+  // const [isGenerateLOClicked, setIsGenerateLOClicked] = useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
+  const [isAtLeastOneLOGenerated, setIsAtLeastOneLOGenerated] = useState<boolean>(false); // State to check in real time if there is at least one generated learning objective
+
 
   // handle deleting last learning objective
   const [isDeleteAlertDialogOpen, setIsDeleteAlertDialogOpen] =
@@ -159,7 +170,7 @@ export default function PathDesignGenLO({
   };
 
   const handleDeleteLO = (indexLO: number) => {
-    const updatedObjectLOs = [...learningObjectiveObjects].filter(
+    const updatedObjectLOs = learningObjectiveObjects.filter(
       (objectLO: ObjectLearningObjectiveProps, index: number) =>
         indexLO !== index
     );
@@ -175,6 +186,11 @@ export default function PathDesignGenLO({
   };
 
   useEffect(() => {
+    setIsAtLeastOneLOGenerated(learningObjectiveObjects.some(
+      (learningObjectiveObject: ObjectLearningObjectiveProps) =>
+        learningObjectiveObject.isGenerated
+    ));
+
     // Starting with at least one learning objective
     if (learningObjectiveObjects.length < numberOfLO) {
       // Add objectives until the desired number is reached
@@ -200,6 +216,7 @@ export default function PathDesignGenLO({
       setLearningObjectiveObjects(updatedObjectives);
       setNumberOfLO(newNumberOfLO);
     } else if (learningObjectiveObjects.length === 0) {
+      setIsAtLeastOneLOGenerated(false);
       handleAddLearningObjective();
     }
   }, [numberOfLO, learningObjectiveObjects.length]);
@@ -217,6 +234,7 @@ export default function PathDesignGenLO({
         selectedOptions={selectedOptions}
         learningTextContext={learningTextContext}
         setIsLessGeneratedLO={setIsLessGeneratedLO}
+        isNextButtonClicked={isNextButtonClicked}
         setIsNextButtonClicked={setIsNextButtonClicked}
         bloomLevelIndex={bloomLevelIndex}
         selectedBloomLevel={selectedBloomLevel}
@@ -231,16 +249,18 @@ export default function PathDesignGenLO({
         MIN_LO={MIN_LO}
         numberOfLO={numberOfLO}
         setNumberOfLO={setNumberOfLO}
-        isEmptyLearningObjectivesPresent={learningObjectiveObjects.some(
-          (objectLO) => objectLO.learningObjective === ''
-        )}
+        isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
+        setIsGenerateLOClicked={setIsGenerateLOClicked}
       />
 
-      <Flex paddingTop={'1.5rem'}>
-        <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
-      </Flex>
+      {isGenerateLOClicked && isAtLeastOneLOGenerated &&
+        <Flex>
+          <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
+        </Flex>
+      }
+
       <Flex
-        p="15px"
+        py="1rem"
         direction="column"
         border={
           isHighligted &&
@@ -248,7 +268,7 @@ export default function PathDesignGenLO({
             learningObjectiveObjects.filter(
               (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
             ).length === 0
-            ? '1.5px solid #bf5521ff'
+            ? '2.5px solid #bf5521ff'
             : 'null'
         }
         borderRadius={'lg'}
@@ -290,6 +310,7 @@ export default function PathDesignGenLO({
                   }}
                   isSmallerScreen={isSmallerScreen}
                   label_tooltip_delete="Delete"
+                  isNextButtonClicked={isNextButtonClicked}
                 />
               )
             )

@@ -1,4 +1,4 @@
-import { Button, Flex, Tooltip } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import IconDelete from '../Icons/IconDelete/IconDelete';
 import LearningObjectiveTextBox from '../TextBox/LearningObjectiveTextBox';
 
@@ -10,28 +10,30 @@ type BoxLearningObjectiveProps = {
   isGenerated?: boolean;
   label_tooltip_delete?: string;
   isSmallerScreen?: boolean;
+  isNextButtonClicked: boolean;
 };
 
 export default function BoxLearningObjective({
   textLearningObjective,
-  label_tooltip_delete,
+  // label_tooltip_delete,
   index,
   handleUpdateLO,
   handleDeleteLO,
-  isSmallerScreen,
+  // isSmallerScreen,
   isGenerated,
+  isNextButtonClicked
 }: BoxLearningObjectiveProps) {
   return (
-    <Flex direction="row" gap={1} w="90%">
+    <Flex direction="row" gap={1}>
       <LearningObjectiveTextBox
-        // isGenerateButtonClicked={isGenerateButtonClicked}
         learningObjective={textLearningObjective}
         index={index}
         handleLearningObjective={handleUpdateLO}
         placeholder="Type your learning objective here..."
         bg={isGenerated ? 'accent.200' : undefined}
+        isHighlighted={isNextButtonClicked}
       />
-      <Tooltip
+      {/* <Tooltip
         hasArrow
         placement="top"
         label={
@@ -46,11 +48,11 @@ export default function BoxLearningObjective({
         p={2}
         fontSize={'sm'}
         borderRadius={5}
-      >
-        <Button variant="ghost" onClick={() => handleDeleteLO(index)} p={0}>
-          <IconDelete />
-        </Button>
-      </Tooltip>
+      > */}
+      <Button variant="ghost" onClick={() => handleDeleteLO(index)} p={0}>
+        <IconDelete />
+      </Button>
+      {/* </Tooltip> */}
     </Flex>
   );
 }

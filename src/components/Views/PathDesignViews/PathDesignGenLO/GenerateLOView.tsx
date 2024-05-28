@@ -28,6 +28,7 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   numberOfLO: number;
   setNumberOfLO: Dispatch<SetStateAction<number>>;
   isEmptyLearningObjectivesPresent: boolean;
+  setIsGenerateLOClicked?: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function GenerateLOView({
@@ -45,6 +46,7 @@ export default function GenerateLOView({
   // totalLearningObjectives,
   // setTotalLearningObjectives,
   // handleSelectedLearningObjectiveIndexChange,
+  isNextButtonClicked,
   setIsNextButtonClicked,
   isLoading,
   setIsLoading,
@@ -55,6 +57,7 @@ export default function GenerateLOView({
   numberOfLO,
   setNumberOfLO,
   isEmptyLearningObjectivesPresent,
+  setIsGenerateLOClicked
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -140,7 +143,7 @@ export default function GenerateLOView({
     } else if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
-      selectedOptions.length === 0 ||
+      selectedOptions.length === 0 || // Bloom's verbs
       learningTextContext === ''
     ) {
       addToast({
@@ -148,7 +151,11 @@ export default function GenerateLOView({
           'Please fill out all the required fields before generating learning objectives.',
         type: 'warning',
       });
-      setIsNextButtonClicked(true);
+      // Set isNextButtonClicked to 'true' in order to trigger the 'isHighlighted' parameter and highlight the empty values necessary to generate LOs
+      // setIsNextButtonClicked(true);
+      if (setIsGenerateLOClicked !== undefined) {
+        setIsGenerateLOClicked(true);
+      }
       // return;
     } else {
       try {
@@ -274,8 +281,14 @@ export default function GenerateLOView({
         }
       } catch (error) {
         console.error(error);
+        // Set isNextButtonClicked to 'false' in order to don't trigger anymore 'isHighlighted' parameter if an Educator is for example editing a value
       } finally {
-        setIsNextButtonClicked(false);
+        if (isNextButtonClicked) {
+          setIsNextButtonClicked(false);
+        }
+        if (setIsGenerateLOClicked !== undefined) {
+          setIsGenerateLOClicked(false);
+        }
       }
     }
   };
