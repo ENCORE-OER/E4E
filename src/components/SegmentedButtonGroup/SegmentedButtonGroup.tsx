@@ -156,11 +156,11 @@ export default function SegmentedButtonGroup({
                   isHighlighted={highlightedOptions.includes('YourExperience')}
                   isSmallerScreen={isSmallerScreen}
                 />
-                {isNextButtonClicked && selectedEducatorExperience === null &&
+                {isNextButtonClicked && selectedEducatorExperience === null && (
                   <Text color="error_label" fontSize="sm">
                     Select an educator experience!
                   </Text>
-                }
+                )}
               </Box>
             </Box>
             <Box w="50%">
@@ -174,11 +174,11 @@ export default function SegmentedButtonGroup({
                   isHighlighted={highlightedOptions.includes('Context')}
                   isSmallerScreen={isSmallerScreen}
                 />
-                {isNextButtonClicked && selectedContext === null &&
+                {isNextButtonClicked && selectedContext === null && (
                   <Text color="error_label" fontSize="sm">
                     Select an educational context!
                   </Text>
-                }
+                )}
               </Box>
             </Box>
           </Flex>
@@ -195,11 +195,11 @@ export default function SegmentedButtonGroup({
                   isHighlighted={highlightedOptions.includes('GroupDimension')}
                   isSmallerScreen={isSmallerScreen}
                 />
-                {isNextButtonClicked && selectedGroupDimension === null &&
+                {isNextButtonClicked && selectedGroupDimension === null && (
                   <Text color="error_label" fontSize="sm">
                     Select a group dimension!
                   </Text>
-                }
+                )}
               </Box>
             </Box>
             <Box w="50%">
@@ -215,11 +215,11 @@ export default function SegmentedButtonGroup({
                   )}
                   isSmallerScreen={isSmallerScreen}
                 />
-                {isNextButtonClicked && selectedLearnerExperience === null &&
+                {isNextButtonClicked && selectedLearnerExperience === null && (
                   <Text color="error_label" fontSize="sm">
                     {`Select a learner\'s experience!`}
                   </Text>
-                }
+                )}
               </Box>
             </Box>
           </Flex>
