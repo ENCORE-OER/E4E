@@ -13,7 +13,7 @@ export default function OverwriteAlertDialog({
   onClose,
   onConfirm,
   modalText,
-  modalHeader
+  modalHeader,
 }: OverwriteAlertDialogProps) {
   return (
     <CustomAlertDialog

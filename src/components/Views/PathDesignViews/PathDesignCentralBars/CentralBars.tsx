@@ -1,10 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 import { PathDesignCentralBarsProps } from '.';
-import {
-  ArrayProps,
-  SkillItemProps
-} from '../../../../types/encoreElements';
+import { ArrayProps, SkillItemProps } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import UnderlinedButton from '../../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import CheckboxMenu from '../../../CheckboxMenu/CheckboxMenu';
@@ -56,7 +53,7 @@ export default function CentralBars({
   verbsTitleTextBox,
   selectedSkillConceptTags,
   selectedOptions,
-  defaultContext
+  defaultContext,
 }: CentralBarsProps) {
   const hydrated = useHasHydrated();
 
@@ -73,7 +70,6 @@ export default function CentralBars({
   const onOpenOverwriteAlertDialog = () => {
     setIsOverwriteAlertDialogOpen(true);
   };
-
 
   // =========================================
 
@@ -201,8 +197,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTextBox}
           </Text>
@@ -217,14 +213,16 @@ export default function CentralBars({
               handleClick={() => {
                 if (learningTextContext !== '') {
                   onOpenOverwriteAlertDialog();
-                } else
-                  handleSetLearningTextContext(defaultContext)
+                } else handleSetLearningTextContext(defaultContext);
               }}
               nameButton="Show the default"
               fontSize="sm"
               color="primary"
               fontWeight="normal"
-              isDisabled={learningTextContext !== '' && learningTextContext === defaultContext}
+              isDisabled={
+                learningTextContext !== '' &&
+                learningTextContext === defaultContext
+              }
             />
             <IconInfoCircleTooltip label_tooltip="The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps." />
           </Flex>
