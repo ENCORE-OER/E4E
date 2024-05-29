@@ -1,16 +1,14 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 import { PathDesignCentralBarsProps } from '.';
-import {
-  ArrayProps,
-  Option,
-  SkillItemProps,
-} from '../../../../types/encoreElements';
+import { ArrayProps, SkillItemProps } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import UnderlinedButton from '../../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import CheckboxMenu from '../../../CheckboxMenu/CheckboxMenu';
 import CustomDropDownMenu from '../../../CustomDropDownMenu/CustomDropDownMenu';
 import SearchBarSkillsConcepts from '../../../CustomSearchBar/SearchBarSkillsConcepts';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
+import ContextOverwriteAlertDialog from '../../../Modals/AlertDialogs/OverwriteAlertDialog/ContextOverwriteAlertDialog';
 import TextBox from '../../../TextBox/TextBox';
 
 export interface CentralBarsProps extends PathDesignCentralBarsProps {
@@ -24,12 +22,13 @@ export interface CentralBarsProps extends PathDesignCentralBarsProps {
   resetCheckBoxOptions: boolean;
   learningTextContext: string;
   handleSetLearningTextContext: (newText: string) => void;
-  selectedEducatorExperience: Option | null;
-  selectedContext: Option | null;
-  selectedGroupDimension: Option | null;
-  selectedLearnerExperience: Option | null;
+  // selectedEducatorExperience: Option | null;
+  // selectedContext: Option | null;
+  // selectedGroupDimension: Option | null;
+  // selectedLearnerExperience: Option | null;
   selectedSkillConceptTags: SkillItemProps[];
   selectedOptions: string[];
+  defaultContext: string;
 }
 
 export default function CentralBars({
@@ -52,15 +51,27 @@ export default function CentralBars({
   contextTitleTextBox: contextTextBox,
   placeholderContextBox,
   verbsTitleTextBox,
-  selectedEducatorExperience,
-  selectedContext,
-  selectedGroupDimension,
-  selectedLearnerExperience,
   selectedSkillConceptTags,
   selectedOptions,
+  defaultContext,
 }: CentralBarsProps) {
-  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
   const hydrated = useHasHydrated();
+
+  // =========================================
+  // Handle alert dialog when set the default context
+
+  const [isOverwriteAlertDialogOpen, setIsOverwriteAlertDialogOpen] =
+    useState<boolean>(false);
+
+  const onCloseOverwriteAlertDialog = () => {
+    setIsOverwriteAlertDialogOpen(false);
+  };
+
+  const onOpenOverwriteAlertDialog = () => {
+    setIsOverwriteAlertDialogOpen(true);
+  };
+
+  // =========================================
 
   return (
     <Flex paddingTop="1.5rem" w="100%" direction="column">
@@ -199,12 +210,19 @@ export default function CentralBars({
             direction="row"
           >
             <UnderlinedButton
-              handleClick={() => handleSetLearningTextContext(defaultContext)}
+              handleClick={() => {
+                if (learningTextContext !== '') {
+                  onOpenOverwriteAlertDialog();
+                } else handleSetLearningTextContext(defaultContext);
+              }}
               nameButton="Show the default"
               fontSize="sm"
               color="primary"
               fontWeight="normal"
-              isDisabled={learningTextContext !== ''}
+              isDisabled={
+                learningTextContext !== '' &&
+                learningTextContext === defaultContext
+              }
             />
             <IconInfoCircleTooltip label_tooltip="The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps." />
           </Flex>
@@ -230,6 +248,14 @@ export default function CentralBars({
           )}
         </Box>
       </Flex>
+      <ContextOverwriteAlertDialog
+        isOpen={isOverwriteAlertDialogOpen}
+        onClose={onCloseOverwriteAlertDialog}
+        onConfirm={() => {
+          handleSetLearningTextContext(defaultContext);
+          onCloseOverwriteAlertDialog();
+        }}
+      />
     </Flex>
   );
 }

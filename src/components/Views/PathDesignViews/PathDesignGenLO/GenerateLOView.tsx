@@ -12,7 +12,7 @@ import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
-import OverwriteAlertDialog from '../../../Modals/AlertDialogs/OverwriteAlertDialog';
+import OverwriteLOAlertDialog from '../../../Modals/AlertDialogs/OverwriteAlertDialog/OverwriteLOAlertDialog';
 import NumberInputWithButtons from '../../../TextBox/NumberInputWithButtons';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
@@ -382,11 +382,10 @@ export default function GenerateLOView({
         </Flex>
       </Flex>
 
-      <OverwriteAlertDialog
+      <OverwriteLOAlertDialog
         isOpen={isOverwriteAlertDialogOpen}
         onClose={onCloseOverwriteAlertDialog}
         onConfirm={handleGenerateLO}
-        modalText="The previous generated learning objectives will be overwritten, are you sure to continue?"
       />
 
       {/* {isLoading && (

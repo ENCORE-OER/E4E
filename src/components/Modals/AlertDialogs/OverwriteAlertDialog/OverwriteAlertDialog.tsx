@@ -1,10 +1,11 @@
-import CustomAlertDialog from '.';
+import CustomAlertDialog from '..';
 
-type OverwriteAlertDialogProps = {
+export type OverwriteAlertDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  modalText: string;
+  modalText?: string;
+  modalHeader?: string;
 };
 
 export default function OverwriteAlertDialog({
@@ -12,6 +13,7 @@ export default function OverwriteAlertDialog({
   onClose,
   onConfirm,
   modalText,
+  modalHeader,
 }: OverwriteAlertDialogProps) {
   return (
     <CustomAlertDialog
@@ -21,8 +23,8 @@ export default function OverwriteAlertDialog({
         onConfirm();
         onClose();
       }}
-      modalText={modalText}
-      modalHeader="Re-Generate learning objective(s)"
+      modalText={modalText || ''}
+      modalHeader={modalHeader || ''}
       confirmButtonColorScheme="green"
       confirmButtonText="Confirm"
     />
