@@ -1,6 +1,6 @@
 import { CheckIcon } from '@chakra-ui/icons';
 import { Tooltip } from '@chakra-ui/react';
-import IconEdit from '../../Icons/IconEdit/IconEdit';
+import IconEdit from '../../../Icons/IconEdit/IconEdit';
 import UnderlinedButton from './UnderlinedButton';
 
 type EditButtonLearningObjectiveBoxProps = {

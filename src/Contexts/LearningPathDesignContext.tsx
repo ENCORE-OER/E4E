@@ -23,35 +23,41 @@ type LearnignPathDesignContextProps = {
   selectedGroupDimension: Option | null;
   selectedLearnerExperience: Option | null;
   learningTextContext: string;
-  selectedSkillConceptsTags: SkillItemProps[];
+  selectedSkillConceptTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
   collectionIndex: number;
   resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
-  selectedLearningObjectiveIndex: number; // Indexes of the selected learning
+  // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
   resetCheckBoxOptions: boolean;
+  MAX_LO: number; // Max number of learning objectives that an Educator can set
+  MIN_LO: number; // Min number of learning objectives that an Educator can set
+  numberOfLO: number; // Number of LO specified by the user
   selectedCustomLearningObjective: string; // selected and edited learning objective in step 2 and 3
   storedLearningObjective: string; // Learning Objective stored with save button
   resetAll: boolean;
   handleResetAll: (value: boolean) => void;
   // handleApiKey: (value: string) => void;
   handleIdLearningScenario: (id: string) => void;
-  setSelectedSkillConceptsTags: (newSkills: SkillItemProps[]) => void;
   handleEducatorExperienceChange: (selected: Option | null) => void;
   handleContextChange: (selected: Option | null) => void;
   handleGroupDimensionChange: (selected: Option | null) => void;
   handleLearnerExperienceChange: (selected: Option | null) => void;
   handleSetLearningTextContext: (newText: string) => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
-  handleSkillsChange: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
+  setSelectedSkillConceptTags: React.Dispatch<
+    React.SetStateAction<SkillItemProps[]>
+  >;
+  handleSkillsChange: (newSkills: SkillItemProps[]) => void;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
+  setNumberOfLO: React.Dispatch<React.SetStateAction<number>>;
   setLearningObjectiveObjects: React.Dispatch<
     React.SetStateAction<ObjectLearningObjectiveProps[]>
   >;
-  handleSelectedLearningObjectiveIndexChange: (index: number) => void;
+  // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
   setResourcesIndex: React.Dispatch<React.SetStateAction<number[]>>;
   //handleResourceIndexChange: (resourceIndex: number) => void;
@@ -60,8 +66,12 @@ type LearnignPathDesignContextProps = {
   handleLearningObjective: () => void;
 
   // ====================
-  // Lesson Card
+  // Learning path
+  titleLearningPath: string;
+  setTitleLearningPath: React.Dispatch<React.SetStateAction<string>>;
+  handleTitleLearningPath: (newTitle: string) => void;
 
+  // Lesson Card
   lessonCards: LessonCardProps[];
   setLessonCards: React.Dispatch<React.SetStateAction<LessonCardProps[]>>;
   handleLessonCards: (lessonCard: LessonCardProps | LessonCardProps[]) => void;
@@ -143,7 +153,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   );
 
   // Use for storage of the tags in the skill and concept selection
-  const [selectedSkillConceptsTags, setSelectedSkillConceptsTags] =
+  const [selectedSkillConceptTags, setSelectedSkillConceptTags] =
     useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
 
   // Use for storage of the text in the text input
@@ -158,6 +168,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
+  // Max and Min number of learning objectives that an Educator can hold
+  const MAX_LO = 5;
+  const MIN_LO = 1;
+
+  // Number of learning objectives specified by the user with the numberInputTextBox
+  const [numberOfLO, setNumberOfLO] = useLocalStorage<number>('numberOfLO', 1);
+
   // Array {learningObjective: string, isSelected: boolean, isGenerated: boolean} of to store all the learning objectives (generated + added empty)
   const [learningObjectiveObjects, setLearningObjectiveObjects] =
     useLocalStorage<ObjectLearningObjectiveProps[]>(
@@ -165,8 +182,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       []
     );
 
-  const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
-    useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
+  // const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
+  //   useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
 
   // Used to store the learning objetive chosen by the Educator from the list of generated learning objectives
   const [selectedCustomLearningObjective, setCustomLearningObjective] =
@@ -202,44 +219,16 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //   setApiKey(value);
   // };
 
-  // ========================================================
-  // ----- Lesson card -----
-
-  // Pass Fail Conditions for each Lesson Card
-  // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
-
-  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
-    'lessonCards',
-    []
-  );
-
-  const handleLessonCards = (
-    lessonCard: LessonCardProps | LessonCardProps[]
-  ) => {
-    if (Array.isArray(lessonCard)) {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [
-        ...prevLessonCards,
-        ...lessonCard,
-      ]);
-    } else {
-      setLessonCards((prevLessonCards: LessonCardProps[]) => [
-        ...prevLessonCards,
-        lessonCard,
-      ]);
-    }
-  };
-
-  // ========================================================
-
   const resetState = () => {
     handleStepChange(0);
     // handleResourceIndexChange(-1);
     setResourcesIndex([]);
     setBloomLevelIndex(-1);
-    setSelectedSkillConceptsTags([]);
+    setSelectedSkillConceptTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
     setLearningObjectiveObjects([]);
+    setNumberOfLO(MIN_LO);
   };
 
   // Reset all the parameters. Use this with resetAll button
@@ -291,15 +280,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //   setLearningObjectiveObjects((prev: ObjectLearningObjectiveProps[]) => [...prev, ...newLearningObjectiveObjects])
   // }
 
-  const handleSelectedLearningObjectiveIndexChange = (index: number) => {
-    // This is for the case to collect more indexes
-    // if (index === -1) {
-    //   setSelectedLearningObjectiveIndex([]);
-    // }
-    // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
+  // const handleSelectedLearningObjectiveIndexChange = (index: number) => {
+  //   // This is for the case to collect more indexes
+  //   // if (index === -1) {
+  //   //   setSelectedLearningObjectiveIndex([]);
+  //   // }
+  //   // setSelectedLearningObjectiveIndex(prevIndexes => [...prevIndexes, index]);
 
-    setSelectedLearningObjectiveIndex(index);
-  };
+  //   setSelectedLearningObjectiveIndex(index);
+  // };
 
   // Used to recover the learning objective to show from the stored learning objective
   const handleLearningObjective = () => {
@@ -338,16 +327,58 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   //handlers for tags selection
-  const handleSkillsChange: React.Dispatch<
-    React.SetStateAction<SkillItemProps[]>
-  > = (newSkills) => {
-    setSelectedSkillConceptsTags(newSkills);
+  const handleSkillsChange = (newSkills: SkillItemProps[]) => {
+    setSelectedSkillConceptTags(newSkills);
   };
 
   //handlers for step of learning objective page
   const handleStepChange = (newStep: number) => {
     setStep(newStep);
   };
+
+  // ========================================================
+  // ----- Learning Path Design (Page 3) -----
+
+  // ========================================================
+  // ----- Lesson card -----
+
+  // Pass Fail Conditions for each Lesson Card
+  // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
+
+  const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
+    'lessonCards',
+    []
+  );
+
+  const handleLessonCards = (
+    lessonCard: LessonCardProps | LessonCardProps[]
+  ) => {
+    if (Array.isArray(lessonCard)) {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        ...lessonCard,
+      ]);
+    } else {
+      setLessonCards((prevLessonCards: LessonCardProps[]) => [
+        ...prevLessonCards,
+        lessonCard,
+      ]);
+    }
+  };
+
+  // ========================================================
+
+  // Title learning path
+  const [titleLearningPath, setTitleLearningPath] = useLocalStorage<string>(
+    'titleLearningPath',
+    ''
+  );
+
+  const handleTitleLearningPath = (newTitle: string) => {
+    setTitleLearningPath(newTitle);
+  };
+
+  // ========================================================
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -356,38 +387,39 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [resetCheckBoxOptions]); // Dipendenza dell'effetto collaterale
 
-  useEffect(() => {
-    // Carica i dati dallo `localStorage` e imposta le variabili di stato
-    // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
-  }, []);
+  // useEffect(() => {
+  //   // Carica i dati dallo `localStorage` e imposta le variabili di stato
+  //   // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
+  // }, []);
+
+  // useEffect(() => {
+  //   // Salva le variabili nello `localStorage` quando cambiano
+  //   // Usa setLocalStorage per salvare i valori
+  // }, [
+  //   collectionIndex,
+  //   resourcesIndex,
+  //   bloomLevelIndex,
+  //   selectedSkillConceptsTags,
+  //   learningTextContext,
+  //   selectedOptions,
+  //   selectedEducatorExperience,
+  //   selectedContext,
+  //   selectedGroupDimension,
+  //   selectedLearnerExperience,
+  //   resetCheckBoxOptions,
+  //   step,
+  //   currentBloomOptions,
+  // ]);
 
   useEffect(() => {
-    // Salva le variabili nello `localStorage` quando cambiano
-    // Usa setLocalStorage per salvare i valori
-  }, [
-    collectionIndex,
-    resourcesIndex,
-    bloomLevelIndex,
-    selectedSkillConceptsTags,
-    learningTextContext,
-    selectedOptions,
-    selectedEducatorExperience,
-    selectedContext,
-    selectedGroupDimension,
-    selectedLearnerExperience,
-    resetCheckBoxOptions,
-    step,
-    currentBloomOptions,
-  ]);
-
-  useEffect(() => {
-    if (collectionIndex !== -1) {
+    if (collectionIndex > -1) {
       setStep(2);
     }
   }, []);
 
   useEffect(() => {
-    if (bloomLevelIndex !== -1) {
+    if (bloomLevelIndex > -1) {
+      handleStepChange(2);
       switch (bloomLevelIndex) {
         case 0:
           setCurrentBloomOptions(Remember);
@@ -413,13 +445,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [bloomLevelIndex]);
 
-  useEffect(() => {
-    //console.log(bloomLevelIndex);learningObjectiveTextContext
-    if (bloomLevelIndex !== -1) {
-      handleStepChange(2);
-    }
-  }, [bloomLevelIndex]);
-
   return (
     <LearningPathDesignContext.Provider
       value={{
@@ -435,8 +460,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedGroupDimension,
         selectedLearnerExperience,
         learningTextContext,
-        selectedSkillConceptsTags,
-        setSelectedSkillConceptsTags,
+        selectedSkillConceptTags,
+        setSelectedSkillConceptTags,
         bloomLevelIndex,
         currentBloomOptions,
         step,
@@ -444,8 +469,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         resetCheckBoxOptions,
         collectionIndex,
         resourcesIndex,
+        MAX_LO,
+        MIN_LO,
+        numberOfLO,
         learningObjectiveObjects,
-        selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
+        // selectedLearningObjectiveIndex, // index of the selected learning objective in step 2
         selectedCustomLearningObjective, // selected and edited learning objective in step 2 and 3
         storedLearningObjective, // Learning Objective stored with save button
         resetAll,
@@ -464,13 +492,20 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleCollectionIndexChange,
         setResourcesIndex,
         // handleResourceIndexChange,
+        setNumberOfLO,
         setLearningObjectiveObjects,
-        handleSelectedLearningObjectiveIndexChange,
+        // handleSelectedLearningObjectiveIndexChange,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
         handleStoredLearningObjective,
         handleLearningObjective,
 
         // ===================
+
+        // Learning path
+        titleLearningPath,
+        setTitleLearningPath,
+        handleTitleLearningPath,
+
         // LESSON CARD
 
         lessonCards,

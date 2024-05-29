@@ -1,5 +1,5 @@
 import { FaSave } from 'react-icons/fa';
-import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButton';
+import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import IconEdit from '../../Icons/IconEdit/IconEdit';
 import IconExport from '../../Icons/IconExport/IconExport';
 import IconGraph from '../../Icons/IconGraph/IconGraph';

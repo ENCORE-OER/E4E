@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
-import { CheckboxGroup, Checkbox, Stack, Box } from '@chakra-ui/react';
-import { useHasHydrated } from '../../utils/utils';
+import { Box, Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useHasHydrated } from '../../utils/utils';
 
 type CheckboxMenuProps = {
   onOptionsChange: (newSelectedOptions: string[]) => void;
@@ -41,7 +41,7 @@ export default function CheckboxMenu({
       padding={1}
       border={
         isHighlighted && selectedOptions.length === 0 && options.length > 0
-          ? '1.5px solid #bf5521ff'
+          ? '2.5px solid #bf5521ff'
           : 'null'
       }
       borderRadius={'lg'}

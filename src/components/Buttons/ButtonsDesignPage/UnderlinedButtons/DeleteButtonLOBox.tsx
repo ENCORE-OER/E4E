@@ -1,5 +1,5 @@
 import { Tooltip } from '@chakra-ui/react';
-import IconDelete from '../../Icons/IconDelete/IconDelete';
+import IconDelete from '../../../Icons/IconDelete/IconDelete';
 import UnderlinedButton from './UnderlinedButton';
 
 type DeleteButtonLOBoxProps = {

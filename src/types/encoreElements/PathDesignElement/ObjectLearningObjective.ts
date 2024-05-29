@@ -1,5 +1,5 @@
 export type ObjectLearningObjectiveProps = {
   learningObjective: string;
-  isSelected: boolean;
+  isSelected?: boolean;
   isGenerated?: boolean;
 };

@@ -5,6 +5,7 @@ import {
   OerInCollectionProps,
 } from '../../../../types/encoreElements';
 import CustomDropDownMenu from '../../../CustomDropDownMenu/CustomDropDownMenu';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 
 type PathDesignHeaderBarsProps = {
   SPACING: number;
@@ -49,16 +50,21 @@ export default function PathDesignHeaderBars({
           Select the collection with relevant resources*
         </Text>
         {step >= 1 && (
-          <Text
-            fontSize="sm"
-            fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            // w={`${DIMENSION - SPACING}%`}
-            // flex='1'
-            w="50%"
-          >
-            Select the resources within the collection*
-          </Text>
+          <Flex direction="row" gap={1} w="50%" align="center">
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              // paddingRight={`${SPACING}%`}
+              // w={`${DIMENSION - SPACING}%`}
+              // flex='1'
+              // w="50%"
+            >
+              Select the resources within the collection
+            </Text>
+            <IconInfoCircleTooltip
+              label_tooltip={`If no resources are selected, all resources will be considered.`}
+            />
+          </Flex>
         )}
       </Flex>
 
@@ -70,14 +76,6 @@ export default function PathDesignHeaderBars({
           // flex='1'
           w="50%"
         >
-          {/* <Text
-            fontSize="sm"
-            fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
-          >
-            Select the collection with relevant resources*
-          </Text> */}
           <CustomDropDownMenu
             data={collections}
             onData={handleCollectionSelection}
@@ -87,6 +85,11 @@ export default function PathDesignHeaderBars({
             itemIndex={collectionIndex}
             defaultMenuTitle="Choose a collection"
           />
+          {isNextButtonClicked && collectionIndex < 0 && (
+            <Text color="error_label" fontSize="sm">
+              Choose at least a skill or a concept!
+            </Text>
+          )}
         </Box>
 
         {/* Resources */}

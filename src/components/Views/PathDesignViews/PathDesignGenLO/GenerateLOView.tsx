@@ -11,8 +11,9 @@ import {
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLOButton from '../../../Buttons/ButtonsDesignPage/GenerateLOButton';
-import InputsGenerateAI from '../../../Inputs/InputsGenAISetup/InputsGenerateAI';
-import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
+import OverwriteAlertDialog from '../../../Modals/AlertDialogs/OverwriteAlertDialog';
+import NumberInputWithButtons from '../../../TextBox/NumberInputWithButtons';
 
 interface GenerateLOViewProps extends PathDesignGenLOProps {
   apiKey: string | undefined;
@@ -23,13 +24,20 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  MAX_LO: number;
+  MIN_LO: number;
+  numberOfLO: number;
+  setNumberOfLO: Dispatch<SetStateAction<number>>;
+  isEmptyLearningObjectivesPresent: boolean;
+  setIsGenerateLOClicked?: Dispatch<SetStateAction<boolean>>;
+  isAtLeastOneLOGenerated: boolean;
 }
 
 export default function GenerateLOView({
   apiKey,
-  handleApiKey,
+  // handleApiKey,
   setupModel,
-  handleSetupModel,
+  // handleSetupModel,
   setIsLessGeneratedLO,
   bloomLevelIndex,
   selectedBloomLevel,
@@ -39,36 +47,42 @@ export default function GenerateLOView({
   learningTextContext,
   // totalLearningObjectives,
   // setTotalLearningObjectives,
-  handleSelectedLearningObjectiveIndexChange,
+  // handleSelectedLearningObjectiveIndexChange,
+  isNextButtonClicked,
   setIsNextButtonClicked,
   isLoading,
   setIsLoading,
   learningObjectiveObjects,
   setLearningObjectiveObjects,
+  MAX_LO,
+  MIN_LO,
+  numberOfLO,
+  setNumberOfLO,
+  isEmptyLearningObjectivesPresent,
+  setIsGenerateLOClicked,
+  isAtLeastOneLOGenerated,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
-  const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
   const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
-  // Max and Min number of learning objectives
-  const MAX_LO = 5;
-  const MIN_LO = 1;
+  // =========================================
+  // Handle alert dialog when re-generate learning objectives
 
-  // const handleNumberChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-  //   let newNumber = Number(e.target.value);
-  //   console.log('newNumber', newNumber);
+  const [isOverwriteAlertDialogOpen, setIsOverwriteAlertDialogOpen] =
+    useState<boolean>(false);
 
-  //   // Limit the number of learning objectives to 5
-  //   newNumber = Math.min(newNumber, 5);
-  //   console.log('number modified', newNumber);
-  //   setNumberOfLO(newNumber);
-  //   if (newNumber > 0) {
-  //     setIsNumberOfLOZero(false);
-  //   }
-  // };
+  const onCloseOverwriteAlertDialog = () => {
+    setIsOverwriteAlertDialogOpen(false);
+  };
+
+  const onOpenOverwriteAlertDialog = () => {
+    setIsOverwriteAlertDialogOpen(true);
+  };
+
+  // =========================================
 
   const postGenerateLearningObjective = async (
     apiKey: string | undefined,
@@ -117,10 +131,25 @@ export default function GenerateLOView({
     setIsLessGeneratedLO(false);
     console.log('objectLOs: ', learningObjectiveObjects?.map((obj) => obj));
 
-    if (
+    //  // Number of the learning objectives to generate
+    const numberLOToGenerate = learningObjectiveObjects
+      ?.filter(
+        // We filter counting the previously or empty learning objectives
+        (objectLO: ObjectLearningObjectiveProps) =>
+          objectLO.learningObjective === '' || objectLO.isGenerated
+      )
+      .map((objectLO: ObjectLearningObjectiveProps) => objectLO).length;
+
+    if (!isEmptyLearningObjectivesPresent && numberLOToGenerate === 0) {
+      addToast({
+        message:
+          'In order to generate new learning objectives, there must be empty learning objectives or at least one previously generate learning objective!',
+        type: 'error',
+      });
+    } else if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
-      selectedOptions.length === 0 ||
+      selectedOptions.length === 0 || // Bloom's verbs
       learningTextContext === ''
     ) {
       addToast({
@@ -128,7 +157,11 @@ export default function GenerateLOView({
           'Please fill out all the required fields before generating learning objectives.',
         type: 'warning',
       });
-      setIsNextButtonClicked(true);
+      // Set isNextButtonClicked to 'true' in order to trigger the 'isHighlighted' parameter and highlight the empty values necessary to generate LOs
+      // setIsNextButtonClicked(true);
+      if (setIsGenerateLOClicked !== undefined) {
+        setIsGenerateLOClicked(true);
+      }
       // return;
     } else {
       try {
@@ -137,22 +170,21 @@ export default function GenerateLOView({
           'Previous OBJECT learning objectives: ',
           learningObjectiveObjects
         );
-        // Reset the selected learning objective index (to -1)
+
         if (numberOfLO > 0) {
           setIsLoading(true);
-          // setTotalLearningObjectives(
-          //   objectLOs?.
-          //     filter((objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated).
-          //     map((objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective) || []);
+
+          // We filter the learning objectives deleting the previous generated learning objectives or empty learning objectives
           setLearningObjectiveObjects(
             learningObjectiveObjects
               ?.filter(
                 (objectLO: ObjectLearningObjectiveProps) =>
-                  !objectLO.isGenerated
+                  !objectLO.isGenerated || objectLO.learningObjective === ''
               )
               .map((objectLO: ObjectLearningObjectiveProps) => objectLO) || []
           );
-          handleSelectedLearningObjectiveIndexChange(-1);
+
+          // handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: string[] = [];
           console.log('Generate learning objectives');
           console.log('Education context: ', selectedContext);
@@ -170,7 +202,10 @@ export default function GenerateLOView({
           let i = 0;
           const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
           // Call the API until the number of learning objectives is reached.
-          while (learningObjectives.length < numberOfLO && i < MAX_API_CALL) {
+          while (
+            learningObjectives.length < numberLOToGenerate &&
+            i < MAX_API_CALL
+          ) {
             //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
@@ -203,7 +238,7 @@ export default function GenerateLOView({
                 // Avoid duplicates
                 if (
                   !learningObjectives.includes(textLO) &&
-                  learningObjectives.length < numberOfLO
+                  learningObjectives.length < numberLOToGenerate
                 ) {
                   learningObjectives.push(textLO);
                   //console.log('textLO', textLO);
@@ -215,10 +250,10 @@ export default function GenerateLOView({
             console.log('learningObjectives', learningObjectives);
             i++;
           }
-          if (learningObjectives.length < numberOfLO) {
+          if (learningObjectives.length < numberLOToGenerate) {
             setIsLessGeneratedLO(true);
           }
-          // setTotalLearningObjectives(prevLearningObjectives => [...prevLearningObjectives, ...learningObjectives]);
+          // Repopulate the learning objectives array
           setLearningObjectiveObjects(
             (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
               ...prevLearningObjectives,
@@ -237,8 +272,8 @@ export default function GenerateLOView({
             });
           } else {
             addToast({
-              message: 'Learning objectives generated!',
-              type: 'info',
+              message: 'Learning objectives succesfully generated!',
+              type: 'success',
             });
           }
         } else {
@@ -252,9 +287,23 @@ export default function GenerateLOView({
         }
       } catch (error) {
         console.error(error);
+        // Set isNextButtonClicked to 'false' in order to don't trigger anymore 'isHighlighted' parameter if an Educator is for example editing a value
       } finally {
-        setIsNextButtonClicked(false);
+        if (isNextButtonClicked) {
+          setIsNextButtonClicked(false);
+        }
+        if (setIsGenerateLOClicked !== undefined) {
+          setIsGenerateLOClicked(false);
+        }
       }
+    }
+  };
+
+  const handleClickOnGenerateLOButton = () => {
+    if (isAtLeastOneLOGenerated) {
+      onOpenOverwriteAlertDialog();
+    } else {
+      handleGenerateLO();
     }
   };
 
@@ -270,7 +319,10 @@ export default function GenerateLOView({
     ) {
       setIsLoading(false);
     }
-  }, [learningObjectiveObjects]);
+    // else if (numberOfLO > learningObjectiveObjects.length && numberOfLO > MIN_LO) {
+    //   setNumberOfLO(numberOfLO - 1);
+    // }
+  }, [learningObjectiveObjects.length]);
 
   return (
     <Flex direction="column" w="100%">
@@ -280,12 +332,12 @@ export default function GenerateLOView({
             setupModel={setupModel}
             handleSetupModel={handleSetupModel}
           /> */}
-      <InputsGenerateAI
+      {/* <InputsGenerateAI
         apiKey={apiKey}
         handleApiKey={handleApiKey}
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
-      />
+      /> */}
       <Flex
         w="100%"
         direction="row"
@@ -297,7 +349,7 @@ export default function GenerateLOView({
         <Text fontWeight={'bold'}>
           Desired number of learning objective(s):
         </Text>
-        <NumberInputTextBox
+        <NumberInputWithButtons
           numberInput={numberOfLO}
           setNumberInput={setNumberOfLO}
           minNumber={MIN_LO}
@@ -305,17 +357,37 @@ export default function GenerateLOView({
           isNumberZero={isNumberOfLOZero}
           setIsNumberZero={setIsNumberOfLOZero}
           label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
-          min_label_tooltip={`You must have at least ${MIN_LO} learning objective.`}
+          min_label_tooltip={
+            !isEmptyLearningObjectivesPresent
+              ? `No empty learning objectives available.`
+              : `You must have at least ${MIN_LO} learning objective.`
+          }
           max_label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
+          isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
+          isLoading={isLoading}
           pr="10%"
         />
-        <Flex flex="1" justify="flex-end">
+        <Flex
+          flex="1"
+          justify="flex-end"
+          direction="row"
+          align="center"
+          gap={1}
+        >
+          <IconInfoCircleTooltip label_tooltip="This button allows you to automatically generate learning objectvies using AI. Generation will only occur if you have empty or previously generated learning objectives. The colored texts are those generated by AI." />
           <GenerateLOButton
-            handleGenerateLO={handleGenerateLO}
+            handleGenerateLO={handleClickOnGenerateLOButton}
             numberOfLO={numberOfLO}
           />
         </Flex>
       </Flex>
+
+      <OverwriteAlertDialog
+        isOpen={isOverwriteAlertDialogOpen}
+        onClose={onCloseOverwriteAlertDialog}
+        onConfirm={handleGenerateLO}
+        modalText="The previous generated learning objectives will be overwritten, are you sure to continue?"
+      />
 
       {/* {isLoading && (
         <LoadingSpinner textLoading="Generating Learning Objectives..." />

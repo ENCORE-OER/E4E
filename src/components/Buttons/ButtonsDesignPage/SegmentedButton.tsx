@@ -56,7 +56,7 @@ const SegmentedButton = <T extends {}>({
       isAttached
       size="lg"
       w="100%"
-      border={isHighlighted ? '1.5px solid #bf5521ff' : '1.5px solid darkgrey'}
+      border={isHighlighted ? '2.5px solid #bf5521ff' : '1.5px solid darkgrey'}
       borderRadius="26"
       style={{ animation: isHighlighted ? 'blink 1s infinite' : 'none' }}
       orientation={isSmallerScreen ? 'vertical' : 'horizontal'}

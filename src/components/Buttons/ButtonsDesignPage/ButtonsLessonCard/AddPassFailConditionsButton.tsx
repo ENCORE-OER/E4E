@@ -1,5 +1,5 @@
 import IconPlus from '../../../Icons/IconPlus/IconPlus';
-import UnderlinedButton from '../UnderlinedButton';
+import UnderlinedButton from '../UnderlinedButtons/UnderlinedButton';
 
 type AddPassFailConditionsButtonProps = {
   isSmallerScreen?: boolean | undefined;

@@ -13,7 +13,6 @@ type DeleteAlertDialogProps = {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  item_name: string;
   modalText: string;
   modalHeader: string;
   confirmButtonColorScheme: string;
@@ -22,7 +21,6 @@ type DeleteAlertDialogProps = {
 
 export default function CustomAlertDialog({
   isOpen,
-  item_name,
   onClose,
   onConfirm,
   modalText,
@@ -36,9 +34,7 @@ export default function CustomAlertDialog({
       <ModalContent>
         <ModalHeader>{modalHeader}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          {modalText} <strong>{item_name}</strong>?
-        </ModalBody>
+        <ModalBody>{modalText}</ModalBody>
 
         <ModalFooter gap="3">
           <Button onClick={onClose}>Cancel</Button>

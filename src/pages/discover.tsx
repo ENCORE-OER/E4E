@@ -681,7 +681,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
             px={isSmallerScreen ? '15px' : '30px'}
             w="full"
             h="full"
-            backgroundColor="background"
+            bg="background"
             borderLeft="0.5px"
             borderLeftColor={'secondary'}
             borderLeftStyle={'solid'}

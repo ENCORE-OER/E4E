@@ -50,6 +50,7 @@ import axios from 'axios';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapStringToString } from '../../../utils/utils';
+import LearningObjectiveTextBox from '../../TextBox/LearningObjectiveTextBox';
 
 type SharedParameterProps = {
   isSmallerScreen?: boolean;
@@ -259,11 +260,11 @@ export default function SharedParameterTab({
         </Flex>
         <Flex w="100%" alignItems="center">
           <Box w="60%">
-            <TextBox
-              isHighlighted={isGenerateButtonClicked && learningObjective == ''}
-              text={learningObjective || ''}
-              onTextChange={handleLearningObjective}
-              resize="vertical"
+            <LearningObjectiveTextBox
+              // isGenerateButtonClicked={isGenerateButtonClicked}
+              isHighlighted={isGenerateButtonClicked}
+              learningObjective={learningObjective}
+              handleLearningObjective={handleLearningObjective}
               placeholder='Click "Generate" to get the learning objective or write it manually.'
             />
           </Box>

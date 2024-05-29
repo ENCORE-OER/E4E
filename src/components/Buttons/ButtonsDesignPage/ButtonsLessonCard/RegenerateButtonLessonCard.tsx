@@ -1,5 +1,5 @@
 import { FaArrowRotateLeft } from 'react-icons/fa6';
-import UnderlinedButton from '../UnderlinedButton';
+import UnderlinedButton from '../UnderlinedButtons/UnderlinedButton';
 
 type RegenerateButtonLessonCardProps = {
   handleRegenerateClick: () => void;

@@ -13,6 +13,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
@@ -49,6 +50,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // handleLearningObjective,
     //learningObjectives,
     learningObjectiveObjects,
+    titleLearningPath,
+    handleTitleLearningPath,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -313,38 +316,44 @@ const Home = (/*props: DiscoverPageProps*/) => {
                   showBox={showBox}
                   setShowBox={setShowBox}
                   isUpDown={true}
-                  showButtonName="Learning objective(s)"
+                  showButtonName={
+                    learningObjectiveObjects.length > 1
+                      ? 'Learning objectives'
+                      : 'Learning objective'
+                  }
                   fontWeight="bold"
                   color="primary"
                   border="none"
+                  letterSpacing={0}
                 />
               </Flex>
               {showBox && hydrated && (
                 <Flex direction="column" gap={2} pt={3}>
-                  {learningObjectiveObjects
-                    .filter(
-                      (objectLO: ObjectLearningObjectiveProps) =>
-                        objectLO.isSelected
+                  {learningObjectiveObjects.map(
+                    (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                      <BoxSelectedLO
+                        key={index}
+                        index={index}
+                        learningObjective={objectLO.learningObjective}
+                      />
                     )
-                    .map(
-                      (
-                        objectLO: ObjectLearningObjectiveProps,
-                        index: number
-                      ) => (
-                        <BoxSelectedLO
-                          key={index}
-                          index={index}
-                          learningObjective={objectLO.learningObjective}
-                        />
-                      )
-                    )}
+                  )}
                 </Flex>
               )}
             </Flex>
 
             <Flex pt="2rem">
-              <Heading fontSize={'x-large'}>
+              {/* TODO: Add a Textarea. The title of the lesson plan must be editable. */}
+              {/* <Heading fontSize={'x-large'}>
                 Introduction to usability - lesson plan
+              </Heading> */}
+
+              <Heading fontWeight={'bold'} w="100%">
+                <LearningPathTitleTextBox
+                  titleLearningPath={titleLearningPath}
+                  handleTitleLearningPath={handleTitleLearningPath}
+                  placeholder="Enter a title describing the lesson plan..."
+                />
               </Heading>
             </Flex>
             <Flex paddingTop="1rem">

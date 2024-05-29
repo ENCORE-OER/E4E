@@ -126,10 +126,10 @@ export default function CustomDropDownMenu({
       flex="1"
       border={
         isHighlighted && handleHighlight()
-          ? '1.5px solid #bf5521ff'
+          ? '2.5px solid #bf5521ff'
           : '1px solid #CED4DA'
       }
-      borderRadius="7px"
+      borderRadius="lg"
     >
       <Menu
         isOpen={isOpen}

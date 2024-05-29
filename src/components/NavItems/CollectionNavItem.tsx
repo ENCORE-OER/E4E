@@ -170,8 +170,10 @@ const CollectionNavItem = ({
           }
           onCloseDeleteAlertDialog();
         }}
-        item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText="This collection is not empty. Are you sure you want to delete "
+        // item_name={itemToDelete ? itemToDelete.collection_name : ''}
+        modalText={`This collection is not empty. Are you sure you want to delete ${
+          itemToDelete ? itemToDelete.collection_name : ''
+        }`}
       />
     </>
   );

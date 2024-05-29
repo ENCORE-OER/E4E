@@ -10,6 +10,7 @@ import {
 } from '../../../../types/encoreElements';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
+import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 export default function PathDesignGenLessonPlan() {
@@ -31,96 +32,151 @@ export default function PathDesignGenLessonPlan() {
   const [learningActivitiesIndex, setLearningActivitiesIndex] = useState<
     number[][]
   >([]);
-  // const [selectedAssessmentActivities, setSelectedAssessmentActivities] = useState<boolean>(false);
+  const [selectedAssessmentActivities, setSelectedAssessmentActivities] =
+    useState<boolean>(false);
   const [assessmentActivitiesIndex, setAssessmentActivitiesIndex] = useState<
     number[][]
   >([]);
 
-  const RememberActivities: ArrayProps[] = [
+  const RememberLearningActivities: ArrayProps[] = [
+    { name: 'Abstract Node' },
     { name: 'Create a list of keywords' },
     { name: 'Memorise a list of keywords' },
     { name: 'Read material' },
     { name: 'Watch a video' },
   ];
 
-  const UnderstandActivities: ArrayProps[] = [
+  const UnderstandLearningActivities: ArrayProps[] = [
     { name: 'Mind map' },
     { name: 'Summary' },
   ];
 
+  const ApplyLearningActivities: ArrayProps[] = [
+    { name: 'Problem Solving' },
+    { name: 'Prompt Engineering' },
+  ];
+
+  const CreateLearningActivities: ArrayProps[] = [{ name: 'Find Solution' }];
+
   const dataLearningActivities: MultipleArrayProps[] = [
     {
-      activities: RememberActivities,
+      activities: RememberLearningActivities,
       title: 'Remember',
     },
     {
-      activities: UnderstandActivities,
+      activities: UnderstandLearningActivities,
       title: 'Understand',
+    },
+    {
+      activities: ApplyLearningActivities,
+      title: 'Apply',
+    },
+    {
+      activities: CreateLearningActivities,
+      title: 'Create',
     },
   ];
 
-  const EvaluateActivities: ArrayProps[] = [
+  // const EvaluateAssessmentActivities: ArrayProps[] = [
+  //   { name: 'Multiple choice questions' },
+  //   { name: 'Short answer questions' },
+  //   { name: 'True or false questions' },
+  //   { name: 'Matching questions' },
+  //   { name: 'Fill in the blanks' },
+  //   { name: 'Essay questions' },
+  // ];
+
+  const RememberAssessmentActivities: ArrayProps[] = [
+    { name: 'Close Ended Question' },
     { name: 'Multiple choice questions' },
-    { name: 'Short answer questions' },
+    { name: 'Open Question' },
     { name: 'True or false questions' },
-    { name: 'Matching questions' },
-    { name: 'Fill in the blanks' },
-    { name: 'Essay questions' },
+  ];
+
+  const UnderstandAssessmentActivities: ArrayProps[] = [
+    { name: 'Cases Evaluation' },
+    { name: 'Collaborative Modeling' },
+    { name: 'Flow Chart' },
+  ];
+
+  const ApplyAssessmentActivities: ArrayProps[] = [
+    { name: 'Analyzing-Plotting Data' },
+    { name: 'Calculation' },
+    { name: 'Image Evaluation' },
+  ];
+
+  const CreateAssessmentActivities: ArrayProps[] = [
+    { name: 'Brainstorming' },
+    { name: 'Coding Question' },
+    { name: 'Innovation Pitch' },
+    { name: 'Simulation' },
   ];
 
   const dataAssessmentActivities: MultipleArrayProps[] = [
+    // {
+    //   activities: EvaluateAssessmentActivities,
+    //   title: 'Evaluate',
+    // },
     {
-      activities: EvaluateActivities,
-      title: 'Evaluate',
+      activities: RememberAssessmentActivities,
+      title: 'Remember',
+    },
+    {
+      activities: UnderstandAssessmentActivities,
+      title: 'Understand',
+    },
+    {
+      activities: ApplyAssessmentActivities,
+      title: 'Apply',
+    },
+    {
+      activities: CreateAssessmentActivities,
+      title: 'Create',
     },
   ];
 
-  const handleActivitySelection = () => {
-    setSelectedLearningActivities(true);
-  };
+  // const handleActivityChange = (
+  //   newIndexBloomActivity: number,
+  //   newIndexActivity: number
+  // ) => {
+  //   if (newIndexBloomActivity <= -1 && newIndexActivity <= -1) {
+  //     setLearningActivitiesIndex([]);
+  //     setAssessmentActivitiesIndex([]);
+  //   } else {
+  //     // Populate the learning activities index array until the new index bloom activity with empty arrays
+  //     while (learningActivitiesIndex.length <= newIndexBloomActivity) {
+  //       setLearningActivitiesIndex((prevIndex) => [...prevIndex, []]);
+  //     }
 
-  const handleActivityChange = (
-    newIndexBloomActivity: number,
-    newIndexActivity: number
-  ) => {
-    if (newIndexBloomActivity <= -1 && newIndexActivity <= -1) {
-      setLearningActivitiesIndex([]);
-      setAssessmentActivitiesIndex([]);
-    } else {
-      // Populate the learning activities index array until the new index bloom activity with empty arrays
-      while (learningActivitiesIndex.length <= newIndexBloomActivity) {
-        setLearningActivitiesIndex((prevIndex) => [...prevIndex, []]);
-      }
+  //     // Check if the learning activities index array already contains the new index bloom activity
+  //     const updatedActivitiesIndex = learningActivitiesIndex[
+  //       newIndexBloomActivity
+  //     ]?.includes(newIndexActivity)
+  //       ? learningActivitiesIndex[newIndexBloomActivity].filter(
+  //         (index) => index !== newIndexActivity
+  //       ) // If YES, remove the new index activity from the array
+  //       : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
 
-      // Check if the learning activities index array already contains the new index bloom activity
-      const updatedActivitiesIndex = learningActivitiesIndex[
-        newIndexBloomActivity
-      ]?.includes(newIndexActivity)
-        ? learningActivitiesIndex[newIndexBloomActivity].filter(
-            (index) => index !== newIndexActivity
-          ) // If YES, remove the new index activity from the array
-        : [...learningActivitiesIndex[newIndexBloomActivity], newIndexActivity]; // If NO, add the new index activity to the array
+  //     // Update the learning activities index array with the new index activity
+  //     setLearningActivitiesIndex((prevIndex) => {
+  //       const updatedIndex = [...prevIndex];
+  //       updatedIndex[newIndexBloomActivity] = updatedActivitiesIndex;
+  //       return updatedIndex;
+  //     });
 
-      // Update the learning activities index array with the new index activity
-      setLearningActivitiesIndex((prevIndex) => {
-        const updatedIndex = [...prevIndex];
-        updatedIndex[newIndexBloomActivity] = updatedActivitiesIndex;
-        return updatedIndex;
-      });
-
-      // if (learningActivitiesIndex[newIndexBloomActivity] !== undefined && learningActivitiesIndex[newIndexBloomActivity].length > 0 && learningActivitiesIndex[newIndexBloomActivity]?.includes(newIndexActivity)) {
-      //     const updatedActivitiesIndex = learningActivitiesIndex[newIndexBloomActivity]?.filter(
-      //         (index: number) => index !== newIndexActivity
-      //     );
-      //     setLearningActivitiesIndex([updatedActivitiesIndex]);
-      // } else {
-      //     setLearningActivitiesIndex((prevIndex: number[][]) => [
-      //         ...prevIndex,
-      //         [newIndexActivity],
-      //     ]);
-      // }
-    }
-  };
+  //     // if (learningActivitiesIndex[newIndexBloomActivity] !== undefined && learningActivitiesIndex[newIndexBloomActivity].length > 0 && learningActivitiesIndex[newIndexBloomActivity]?.includes(newIndexActivity)) {
+  //     //     const updatedActivitiesIndex = learningActivitiesIndex[newIndexBloomActivity]?.filter(
+  //     //         (index: number) => index !== newIndexActivity
+  //     //     );
+  //     //     setLearningActivitiesIndex([updatedActivitiesIndex]);
+  //     // } else {
+  //     //     setLearningActivitiesIndex((prevIndex: number[][]) => [
+  //     //         ...prevIndex,
+  //     //         [newIndexActivity],
+  //     //     ]);
+  //     // }
+  //   }
+  // };
 
   const postGenerateLessonPlan = async (
     apiKey: string,
@@ -183,8 +239,8 @@ export default function PathDesignGenLessonPlan() {
   };
 
   return (
-    <Flex direction="column" rowGap={3} pt="3rem" w="80%">
-      <Flex>
+    <Flex direction="column" rowGap={3} pt="3rem" w="100%">
+      <Flex direction="row" align="center" gap={1} wrap="wrap" w="100%">
         <ShowHideButton
           showBox={showBox}
           setShowBox={setShowBox}
@@ -193,41 +249,47 @@ export default function PathDesignGenLessonPlan() {
           fontWeight="bold"
           color="primary"
           border="none"
+          letterSpacing={0}
+        />
+        <IconInfoCircleTooltip
+          label_tooltip={`If no activities are selected, all activities will be considered as possible choices.`}
         />
       </Flex>
       {showBox && (
-        <Flex direction="column" rowGap={3} w="100%">
-          <Flex border={selectedLearningActivities ? '1px' : 'none'}>
-            <RowBoxGenLessonPlan
-              numberInput={numberOfLearningActivities}
-              setNumberInput={setNumberOfLearningActivities}
-              isNumberZero={isNumberOfLAZero}
-              setIsNumberZero={setIsNumberOfLAZero}
-              defaultMenuTitle="Choose types of learning activities..."
-              description="in class activities"
-              dataMenu={dataLearningActivities}
-              onDataMenu={handleActivitySelection}
-              onSelectionChangeMenu={handleActivityChange}
-              itemIndexMenu={learningActivitiesIndex}
-            />
-          </Flex>
-          <Flex>
-            <RowBoxGenLessonPlan
-              numberInput={numberOfAssessmentActivities}
-              setNumberInput={setNumberOfAssessmentActivities}
-              isNumberZero={isNumberOfAAZero}
-              setIsNumberZero={setIsNumberOfAAZero}
-              defaultMenuTitle="Choose types of assessment activities..."
-              description="assessment activities"
-              dataMenu={dataAssessmentActivities}
-              onDataMenu={handleActivitySelection}
-              onSelectionChangeMenu={handleActivityChange}
-              itemIndexMenu={assessmentActivitiesIndex}
-            />
-          </Flex>
+        <Flex direction="column" rowGap={3} w="100%" pt={3}>
+          <RowBoxGenLessonPlan
+            numberInput={numberOfLearningActivities}
+            setNumberInput={setNumberOfLearningActivities}
+            isNumberZero={isNumberOfLAZero}
+            setIsNumberZero={setIsNumberOfLAZero}
+            defaultMenuTitle="Choose types of learning activities..."
+            description="in class activities"
+            dataMenu={dataLearningActivities}
+            // onDataMenu={handleLearningActivitySelection}
+            // onSelectionChangeMenu={handleLearningActivityChange}
+            itemIndexMenu={learningActivitiesIndex}
+            setItemIndexMenu={setLearningActivitiesIndex}
+            isAtleastItemSelected={selectedLearningActivities}
+            SetIsAtleastItemSelected={setSelectedLearningActivities}
+          />
+          <RowBoxGenLessonPlan
+            numberInput={numberOfAssessmentActivities}
+            setNumberInput={setNumberOfAssessmentActivities}
+            isNumberZero={isNumberOfAAZero}
+            setIsNumberZero={setIsNumberOfAAZero}
+            defaultMenuTitle="Choose types of assessment activities..."
+            description="assessment activities"
+            dataMenu={dataAssessmentActivities}
+            // onDataMenu={handleAssessmentActivitySelection}
+            // onSelectionChangeMenu={handleAssessmentActivityChange}
+            itemIndexMenu={assessmentActivitiesIndex}
+            setItemIndexMenu={setAssessmentActivitiesIndex}
+            isAtleastItemSelected={selectedAssessmentActivities}
+            SetIsAtleastItemSelected={setSelectedAssessmentActivities}
+          />
         </Flex>
       )}
-      <Flex w="100%" justifyContent="flex-end">
+      <Flex w="100%" justifyContent="flex-start" pt={3}>
         <GenerateLessonPlanButton
           handleGenerateLessonPlan={handleGenerateLessonPlan}
         />
