@@ -46,33 +46,38 @@ export default function PathDesignCentralBars({
     selectedOptions,
   } = useLearningPathDesignContext();
 
+  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
+
   return (
-    <CentralBars
-      SPACING={SPACING}
-      DIMENSION={DIMENSION}
-      bloomLevels={bloomLevels}
-      handleBloomLevelChange={handleBloomLevelChange}
-      currentBloomOptions={currentBloomOptions}
-      handleOptionsChange={handleOptionsChange}
-      resetCheckBoxOptions={resetCheckBoxOptions}
-      learningTextContext={learningTextContext}
-      handleSetLearningTextContext={handleSetLearningTextContext}
-      isNextButtonClicked={isNextButtonClicked}
-      collectionIndex={collectionIndex}
-      resourcesIndex={resourcesIndex}
-      bloomLevelIndex={bloomLevelIndex}
-      step={step}
-      bloomLevelTitleTextBox={bloomLevelTitleTextBox}
-      verbsTitleTextBox={verbsTitleTextBox}
-      skillConceptTitleTextBox={skillConceptTitleTextBox}
-      contextTitleTextBox={contextTitleTextBox}
-      placeholderContextBox={placeholderContextBox}
-      selectedEducatorExperience={selectedEducatorExperience}
-      selectedContext={selectedContext}
-      selectedGroupDimension={selectedGroupDimension}
-      selectedLearnerExperience={selectedLearnerExperience}
-      selectedSkillConceptTags={selectedSkillConceptTags}
-      selectedOptions={selectedOptions}
-    />
+    <>
+      <CentralBars
+        SPACING={SPACING}
+        DIMENSION={DIMENSION}
+        bloomLevels={bloomLevels}
+        handleBloomLevelChange={handleBloomLevelChange}
+        currentBloomOptions={currentBloomOptions}
+        handleOptionsChange={handleOptionsChange}
+        resetCheckBoxOptions={resetCheckBoxOptions}
+        learningTextContext={learningTextContext}
+        handleSetLearningTextContext={handleSetLearningTextContext}
+        isNextButtonClicked={isNextButtonClicked}
+        collectionIndex={collectionIndex}
+        resourcesIndex={resourcesIndex}
+        bloomLevelIndex={bloomLevelIndex}
+        step={step}
+        bloomLevelTitleTextBox={bloomLevelTitleTextBox}
+        verbsTitleTextBox={verbsTitleTextBox}
+        skillConceptTitleTextBox={skillConceptTitleTextBox}
+        contextTitleTextBox={contextTitleTextBox}
+        placeholderContextBox={placeholderContextBox}
+        // selectedEducatorExperience={selectedEducatorExperience}
+        // selectedContext={selectedContext}
+        // selectedGroupDimension={selectedGroupDimension}
+        // selectedLearnerExperience={selectedLearnerExperience}
+        selectedSkillConceptTags={selectedSkillConceptTags}
+        selectedOptions={selectedOptions}
+        defaultContext={defaultContext}
+      />
+    </>
   );
 }
