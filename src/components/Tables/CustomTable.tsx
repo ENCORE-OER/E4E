@@ -7,14 +7,27 @@ import {
   Td,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react';
-import { DragDropContext, Draggable, DraggableProvided, DropResult, Droppable, DroppableProvided } from 'react-beautiful-dnd';
-import { DataTableLearningPathProps, TableLearningPathProps } from '../../types/encoreElements';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvided,
+  DropResult,
+  Droppable,
+  DroppableProvided,
+} from 'react-beautiful-dnd';
+import {
+  DataTableLearningPathProps,
+  TableLearningPathProps,
+} from '../../types/encoreElements';
 import IconDrag from '../Icons/IconDrag/IconDrag';
 
-export default function CustomTable({ titles, data, handleData }: TableLearningPathProps) {
-
+export default function CustomTable({
+  titles,
+  data,
+  handleData,
+}: TableLearningPathProps) {
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
@@ -52,11 +65,19 @@ export default function CustomTable({ titles, data, handleData }: TableLearningP
               ))}
             </Tr>
           </Thead>
-          <Droppable droppableId="droppable" >
+          <Droppable droppableId="droppable">
             {(provided: DroppableProvided) => (
-              <Tbody bg="white" {...provided.droppableProps} ref={provided.innerRef}>
+              <Tbody
+                bg="white"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
                 {data.map((row: DataTableLearningPathProps, index: number) => (
-                  <Draggable key={row.number} draggableId={`draggable-${row.number}`} index={index}>
+                  <Draggable
+                    key={row.number}
+                    draggableId={`draggable-${row.number}`}
+                    index={index}
+                  >
                     {(provided: DraggableProvided) => (
                       <Tr
                         ref={provided.innerRef}

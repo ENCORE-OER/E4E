@@ -72,12 +72,16 @@ const data = [
 ];
 
 export default function TableLearningPath() {
-
-  const [tableData, setTableData] = useState<DataTableLearningPathProps[]>(data);
+  const [tableData, setTableData] =
+    useState<DataTableLearningPathProps[]>(data);
 
   return (
     <Flex direction="column">
-      <CustomTable data={tableData} handleData={setTableData} titles={titleColumns} />
+      <CustomTable
+        data={tableData}
+        handleData={setTableData}
+        titles={titleColumns}
+      />
     </Flex>
   );
 }

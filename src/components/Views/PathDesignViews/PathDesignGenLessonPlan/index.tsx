@@ -285,14 +285,14 @@ export default function PathDesignGenLessonPlan() {
           showBox={showBox}
           setShowBox={setShowBox}
           // isUpDown={false}
-          showButtonName="Specify the number of activities in the lesson plan"
+          showButtonName="Specify the number and type of learning activities"
           fontWeight="bold"
           color="primary"
           border="none"
           letterSpacing={0}
         />
         <IconInfoCircleTooltip
-          label_tooltip={`If no activities are selected, all activities will be considered as possible choices.`}
+          label_tooltip={`By default the number of activities is set to 4 (2 in class activities, 2 assessment activities). If no activitiy is selected, all types of exercises will be considered as possible choices.`}
         />
       </Flex>
       {showBox && (
