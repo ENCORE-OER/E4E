@@ -70,6 +70,8 @@ type LearnignPathDesignContextProps = {
   titleLearningPath: string;
   setTitleLearningPath: React.Dispatch<React.SetStateAction<string>>;
   handleTitleLearningPath: (newTitle: string) => void;
+  isEditLessonPlanClicked: boolean;
+  handleEditLessonPlanClick: (isClicked: boolean) => void;
 
   // Lesson Card
   lessonCards: LessonCardProps[];
@@ -378,6 +380,16 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setTitleLearningPath(newTitle);
   };
 
+  // Lesson plan Edit button click
+  const [isEditLessonPlanClicked, setIsEditLessonPlanClicked] = useLocalStorage<boolean>(
+    'isLessonPlanEditClicked',
+    false
+  );
+
+  const handleEditLessonPlanClick = (isClicked: boolean) => {
+    setIsEditLessonPlanClicked(isClicked);
+  };
+
   // ========================================================
 
   useEffect(() => {
@@ -505,6 +517,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         titleLearningPath,
         setTitleLearningPath,
         handleTitleLearningPath,
+        isEditLessonPlanClicked,
+        handleEditLessonPlanClick,
 
         // LESSON CARD
 

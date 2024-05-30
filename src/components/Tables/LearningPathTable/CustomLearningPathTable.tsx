@@ -20,13 +20,14 @@ import {
 import {
   DataTableLearningPathProps,
   TableLearningPathProps,
-} from '../../types/encoreElements';
-import IconDrag from '../Icons/IconDrag/IconDrag';
+} from '../../../types/encoreElements';
+import IconDrag from '../../Icons/IconDrag/IconDrag';
 
-export default function CustomTable({
+export default function CustomLearningPathTable({
   titles,
   data,
   handleData,
+  isEditLessonPlanClicked
 }: TableLearningPathProps) {
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -49,9 +50,10 @@ export default function CustomTable({
             borderColor="primary"
           >
             <Tr>
-              <Th p={0}>
-                <Box></Box>
-              </Th>
+              {isEditLessonPlanClicked &&
+                <Th p={0}>
+                  <Box></Box>
+                </Th>}
               {titles.map((title: string, index: number) => (
                 <Th
                   key={index}
@@ -87,11 +89,12 @@ export default function CustomTable({
                         // borderColor="primary"
                         alignItems="center"
                       >
-                        <Td borderWidth="2px" borderColor="primary" p={0}>
-                          <Flex {...provided.dragHandleProps} justify="center">
-                            <IconDrag />
-                          </Flex>
-                        </Td>
+                        {isEditLessonPlanClicked &&
+                          <Td borderWidth="2px" borderColor="primary" p={0}>
+                            <Flex {...provided.dragHandleProps} justify="center">
+                              <IconDrag />
+                            </Flex>
+                          </Td>}
                         <Td
                           borderWidth="2px"
                           borderColor="primary"

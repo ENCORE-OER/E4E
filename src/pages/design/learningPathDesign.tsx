@@ -185,90 +185,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  // useEffect(() => {
-  //   //handleLearningObjectives();
-  //   setIsLoading(false);
-  //   //handleSetCustomLearningObjectives();
-  // }, [oersById]);
 
-  // useEffect(() => {
-
-  // }, []);
-
-  // // setIndexCollectionClicked is used in CollectionMenu component
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   if (collections?.length > 0 && hydrated) {
-  //     if (collections[collectionIndex]?.oers?.length > 0) {
-  //       try {
-  //         const fetchOerData = async () => {
-  //           const oerData = await Promise.all(
-  //             collections[collectionIndex]?.oers?.map(
-  //               async (oer: OerInCollectionProps) => {
-  //                 const oerFound = await getDataOerById(oer?.id);
-  //                 return oerFound;
-  //               }
-  //             )
-  //           );
-  //           setOersById(oerData);
-  //         };
-
-  //         fetchOerData();
-
-  //         //console.log(oersById);
-
-  //         // this part is commented because we don't need to select a concept to create a learning path
-  //         /* if (
-  //           collections[indexCollectionClicked]?.conceptsSelected?.length === 0
-  //         ) {
-  //           addToast({
-  //             message:
-  //               'You need to select concepts from the saved OERs to create learning paths.',
-  //             type: 'warning',
-  //           });
-  //           throw new Error('No concepts selected in this collection!');
-
-  //         } else {
-  //           setConceptSelectedIndex(0);
-  //         }*/
-  //         setIsLoading(false);
-  //       } catch (error) {
-  //         addToast({
-  //           message: `${error}`,
-  //           type: 'error',
-  //         });
-
-  //         setIsLoading(false);
-  //       }
-  //     } else {
-  //       addToast({
-  //         message: 'No OERs found in this collection!',
-  //         type: 'error',
-  //       });
-  //       addToast({
-  //         message: 'You need to save OERs to create learning paths.',
-  //         type: 'warning',
-  //       });
-  //     }
-  //   } else if (collections?.length === 0 && collectionIndex < 0) {
-  //     addToast({
-  //       message: 'No collection created!',
-  //       type: 'error',
-  //     });
-  //     addToast({
-  //       message:
-  //         'Before accessing Plan, create a collection and save the OERs that interest you.',
-  //       type: 'warning',
-  //     });
-  //     setTimeout(() => {
-  //       router.push({
-  //         pathname: '/',
-  //       });
-  //     }, 1000);
-  //   }
-
-  //   setIsLoading(false);
-  // }, [hydrated, collectionIndex]);
 
   return (
     <LearningPathProvider>
@@ -291,7 +208,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -300,7 +217,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}

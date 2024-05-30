@@ -1,9 +1,10 @@
 import { Button, Flex } from '@chakra-ui/react';
 import { useState } from 'react';
-import { DataTableLearningPathProps } from '../../types/encoreElements';
-import AddContentButton from '../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
-import IconVerticalPoints from '../Icons/IconVerticalPoints/IconVerticalPoints';
-import CustomTable from './CustomTable';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext';
+import { DataTableLearningPathProps } from '../../../types/encoreElements';
+import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
+import IconVerticalPoints from '../../Icons/IconVerticalPoints/IconVerticalPoints';
+import CustomLearningPathTable from './CustomLearningPathTable';
 
 const titleColumns = [
   'Nb',
@@ -75,12 +76,15 @@ export default function TableLearningPath() {
   const [tableData, setTableData] =
     useState<DataTableLearningPathProps[]>(data);
 
+  const { isEditLessonPlanClicked } = useLearningPathDesignContext();
+
   return (
     <Flex direction="column">
-      <CustomTable
+      <CustomLearningPathTable
         data={tableData}
         handleData={setTableData}
         titles={titleColumns}
+        isEditLessonPlanClicked={isEditLessonPlanClicked}
       />
     </Flex>
   );
