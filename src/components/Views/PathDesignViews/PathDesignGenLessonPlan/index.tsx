@@ -220,6 +220,46 @@ export default function PathDesignGenLessonPlan() {
     }
   };
 
+  // const postGenerateCoursePlan = async (
+  //   apiKey: string,
+  //   setupModel: string,
+  //   // language: string,
+  //   macroSubjects: string,
+  //   title: string,
+  //   level: number,
+  //   topic: string,
+  //   numberOfLessons: number,
+  //   lessonDuration: number,
+  //   temperature: number
+  // ): Promise<OutputLessonPlanProps[]> => {
+  //   try {
+  //     const resp = await axios.post(
+  //       '/api/encore/genAI/generateCoursePlan',
+  //       {
+  //         // language: language,
+  //         macroSubjects: macroSubjects,
+  //         title: title,
+  //         level: level,
+  //         topic: topic,
+  //         numberOfLessons: numberOfLessons,
+  //         lessonDuration: lessonDuration,
+  //         temperature: temperature,
+  //       },
+  //       {
+  //         headers: {
+  //           ApiKey: apiKey,
+  //           SetupModel: setupModel,
+  //         },
+  //       }
+  //     );
+
+  //     return resp?.data;
+  //   } catch (error) {
+  //     console.error(error);
+  //     return [];
+  //   }
+  // };
+
   const handleGenerateLessonPlan = async () => {
     const resp = await postGenerateLessonPlan(
       'apiKey',

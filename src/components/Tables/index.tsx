@@ -1,4 +1,6 @@
 import { Button, Flex } from '@chakra-ui/react';
+import { useState } from 'react';
+import { DataTableLearningPathProps } from '../../types/encoreElements';
 import AddContentButton from '../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
 import IconVerticalPoints from '../Icons/IconVerticalPoints/IconVerticalPoints';
 import CustomTable from './CustomTable';
@@ -30,9 +32,9 @@ const data = [
   {
     number: 2,
     type: <Button variant="solid">Type</Button>,
-    activity: 'Activity A',
+    activity: 'Activity B',
     time: '30 min',
-    description: 'Description A',
+    description: 'Description B',
     content: <AddContentButton />,
     action: (
       <Button shadow={'none'} bg="none" w="fit-content">
@@ -43,9 +45,9 @@ const data = [
   {
     number: 3,
     type: <Button variant="solid">Type</Button>,
-    activity: 'Activity A',
+    activity: 'Activity C',
     time: '20 min',
-    description: 'Description A',
+    description: 'Description C',
     content: <AddContentButton />,
     action: (
       <Button shadow={'none'} bg="none" w="fit-content">
@@ -56,9 +58,9 @@ const data = [
   {
     number: 4,
     type: <Button variant="solid">Type</Button>,
-    activity: 'Activity A',
+    activity: 'Activity D',
     time: '10 min',
-    description: 'Description A',
+    description: 'Description D',
     content: <AddContentButton />,
     action: (
       <Button shadow={'none'} bg="none" w="fit-content">
@@ -70,9 +72,12 @@ const data = [
 ];
 
 export default function TableLearningPath() {
+
+  const [tableData, setTableData] = useState<DataTableLearningPathProps[]>(data);
+
   return (
     <Flex direction="column">
-      <CustomTable data={data} titles={titleColumns} />
+      <CustomTable data={tableData} handleData={setTableData} titles={titleColumns} />
     </Flex>
   );
 }

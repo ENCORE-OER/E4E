@@ -50,7 +50,7 @@ const getConfig = () => {
       ),
       child: <TabTable />,
       pt: '3%',
-      isDisabled: true,
+      // isDisabled: true,
     },
     {
       label: (

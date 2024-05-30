@@ -39,7 +39,7 @@ export default async function generateLessonPlan(
     // console.log(topic, context, level);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/LessonPlanner/planlesson';
+    const url = '/LessonPlanner/planLesson';
 
     try {
       const respLessonPlan = await axiosGenerativeAI.post(
