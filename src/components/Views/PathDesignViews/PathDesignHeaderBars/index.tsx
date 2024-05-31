@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   CollectionProps,
   OerInCollectionProps,
@@ -54,10 +54,10 @@ export default function PathDesignHeaderBars({
             <Text
               fontSize="sm"
               fontWeight="bold"
-              // paddingRight={`${SPACING}%`}
-              // w={`${DIMENSION - SPACING}%`}
-              // flex='1'
-              // w="50%"
+            // paddingRight={`${SPACING}%`}
+            // w={`${DIMENSION - SPACING}%`}
+            // flex='1'
+            // w="50%"
             >
               Select the resources within the collection
             </Text>

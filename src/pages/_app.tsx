@@ -10,8 +10,8 @@ import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { CollectionsProvider } from '../Contexts/CollectionsContext/CollectionsContext';
 import { CreateOERsProvider } from '../Contexts/CreateOERsContext';
-import { LearningPathDesignProvider } from '../Contexts/LearningPathDesignContext';
 import { GeneralContextProvider } from '../Contexts/GeneralContext';
+import { LearningPathDesignProvider } from '../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import reportWebVitals from '../reportWebVitals';
 import theme from '../styles/theme';
 

@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -202,7 +202,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  const handleNextClick = async ({ handleFunction }: { handleFunction: () => Promise<void> }) => {
+  const handleNextClick = async ({
+    handleFunction,
+  }: {
+    handleFunction: () => Promise<void>;
+  }) => {
     if (
       selectedCollection !== null &&
       // selectedResource !== null &&

@@ -70,6 +70,11 @@ export const mapOptionToNumber = (
   return -1;
 };
 
+export const mapNumberToString = (number: number, enumObject: any): string => {
+  if (!number) return '';
+  return enumObject[number];
+};
+
 export const mapStringToString = (string: string, enumObject: any): string => {
   if (!string) return '';
   return enumObject[string];

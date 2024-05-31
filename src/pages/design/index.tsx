@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import InputsGenerateAI from '../../components/Inputs/InputsGenAISetup/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';
@@ -103,7 +103,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -112,7 +112,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}

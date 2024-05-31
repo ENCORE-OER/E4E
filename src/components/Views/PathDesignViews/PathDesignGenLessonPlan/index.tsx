@@ -1,9 +1,9 @@
 import { Box, CircularProgress, Flex } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../../../Contexts/CollectionsContext/CollectionsContext';
 import { useGeneralContext } from '../../../../Contexts/GeneralContext';
-import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   ArrayProps,
   BloomLevelsEnum,
@@ -13,15 +13,20 @@ import {
   OerInCollectionProps,
   OutputLessonPlanProps,
   RespAnalyzedMaterialProps,
+  TypeOfActivityEnum
 } from '../../../../types/encoreElements';
-import { mapOptionToNumber } from '../../../../utils/utils';
+import { mapNumberToString, mapOptionToNumber } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 type PathDesignGenLessonPlanProps = {
-  handleNextClick: ({ handleFunction }: { handleFunction: () => Promise<void> }) => Promise<void>;
+  handleNextClick: ({
+    handleFunction,
+  }: {
+    handleFunction: () => Promise<void>;
+  }) => Promise<void>;
 };
 
 export default function PathDesignGenLessonPlan({
@@ -36,6 +41,8 @@ export default function PathDesignGenLessonPlan({
     bloomLevelIndex,
     bloomLevels,
     learningTextContext,
+    handleTitleLearningPath,
+    setLessonsActivities,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel } = useGeneralContext();
@@ -43,10 +50,12 @@ export default function PathDesignGenLessonPlan({
   // Show Generate Lesson Plan area
   const [showBox, setShowBox] = useState(false); // used to show the generate lesson plan
 
+  // const [lessonPlan, setLessonPlan] = useState<LessonProps[]>([]);  // State for store the lessonPlanFrom
   const [numberOfLearningActivities, setNumberOfLearningActivities] =
     useState<number>(2); // Number of learning activities to generate for the lesson plan
   const [numberOfAssessmentActivities, setNumberOfAssessmentActivities] =
     useState<number>(2); // Number of assessment activities to generate for the lesson plan
+  const [totalNumberLessonActivities, setTotalNumberLessonActivities] = useState<number>(numberOfLearningActivities + numberOfAssessmentActivities)
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLAZero, setIsNumberOfLAZero] = useState<boolean>(false); // State to check if the number of learning activities is invalid (zero)
   const [isNumberOfAAZero, setIsNumberOfAAZero] = useState<boolean>(false); // State to check if the number of assessment activities is invalid (zero)
@@ -273,7 +282,6 @@ export default function PathDesignGenLessonPlan({
   };
 
   const handleGenerateLessonPlan = async () => {
-
     try {
       const oers = collections[collectionIndex].oers;
       // Analyze selected resources
@@ -327,6 +335,10 @@ export default function PathDesignGenLessonPlan({
           );
 
           if (analyzedMaterial) {
+
+            // Set the title of the lesson plan
+            handleTitleLearningPath(analyzedMaterial.Title || '');
+
             // Generate a lesson plan based on the selected resources
             const learninObjective = learningObjectiveObjects
               .map(
@@ -342,7 +354,7 @@ export default function PathDesignGenLessonPlan({
             );
             console.log(bloomLevel);
 
-            const resp = await postGenerateLessonPlan(
+            const generatedLessonPlan: OutputLessonPlanProps[] = await postGenerateLessonPlan(
               apiKey, // apiKey
               setupModel, // setupModel
               analyzedMaterial.MainTopics, // mainTopics
@@ -356,7 +368,32 @@ export default function PathDesignGenLessonPlan({
               0.3 // temperature
             );
 
-            console.log('Generate lesson plan', resp);
+
+
+            // generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => {
+            //   const lesson: LessonProps = {
+            //     lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'} activity`,
+            //     lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+            //     activityType: `${generatedLesson.Type ? mapNumberToString(Number(generatedLesson.Details), TypeOfActivityEnum) : 'Frontal lecture'}`,
+            //     activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details}`,
+            //     topic: generatedLesson.Topic,
+            //     timeDuration: Number(generatedLesson.Duration),
+            //     passFailConditions: [],
+            //   }
+
+            //   setLessonPlan((prevLessons: LessonProps[]) => [...prevLessons, lesson])
+            // })
+
+            setLessonsActivities(generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
+              lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'} activity`,
+              lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+              activityType: `${generatedLesson.Type ? mapNumberToString(Number(generatedLesson.Details), TypeOfActivityEnum) : 'Frontal lecture'}`,
+              activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details}`,
+              topic: generatedLesson.Topic,
+              timeDuration: Number(generatedLesson.Duration),
+              passFailConditions: [],
+            })));
+            console.log('Generate lesson plan', generatedLessonPlan);
           }
         } catch (error) {
           console.error(error);
@@ -377,7 +414,9 @@ export default function PathDesignGenLessonPlan({
     try {
       // const textURL = handleExtractText("http://www.mdpi.com/books/pdfview/book/745");
       // console.log('Extracted Text:', textURL);
-      await handleNextClick({ handleFunction: () => handleGenerateLessonPlan() });
+      await handleNextClick({
+        handleFunction: () => handleGenerateLessonPlan(),
+      });
       // await handleGenerateLessonPlan();
     } catch (error) {
       console.error('Error extracting text:', error);
@@ -385,6 +424,12 @@ export default function PathDesignGenLessonPlan({
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (numberOfAssessmentActivities + numberOfLearningActivities != totalNumberLessonActivities) {
+      setTotalNumberLessonActivities(numberOfAssessmentActivities + numberOfLearningActivities)
+    }
+  }, [numberOfAssessmentActivities, numberOfLearningActivities])
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="100%">

@@ -1,6 +1,6 @@
 import { Box, Checkbox, CheckboxGroup, Stack } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { useHasHydrated } from '../../utils/utils';
 
 type CheckboxMenuProps = {

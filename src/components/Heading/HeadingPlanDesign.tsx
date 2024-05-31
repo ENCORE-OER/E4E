@@ -3,7 +3,7 @@ import { Box, Flex, Heading, HStack, Input, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { CollectionProps } from '../../types/encoreElements';
 //import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
-import { useLearningPathContext } from '../../Contexts/learningPathContext';
+import { useLearningPathContext } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 import CollectionMenu from '../DropDownMenu/CollectionMenu';
 
 type HeadingPlanDesignProps = {
@@ -28,7 +28,7 @@ export default function HeadingPlanDesign({
       <Flex
         w="100%"
         justifyContent="left"
-        //justify="space-between"
+      //justify="space-between"
       >
         <Heading>{title}</Heading>
       </Flex>

@@ -2,9 +2,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { LearningPathProvider } from '../../Contexts/learningPathContext';
+import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import BoxSelectedLO from '../../components/Boxes/BoxSelectedLO';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import ShowHideButton from '../../components/Buttons/ShowHideButton';
@@ -206,7 +206,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -215,7 +215,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -264,11 +264,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Heading> */}
 
               <Heading fontWeight={'bold'} w="100%">
-                <LearningPathTitleTextBox
-                  titleLearningPath={titleLearningPath}
-                  handleTitleLearningPath={handleTitleLearningPath}
-                  placeholder="Enter a title describing the lesson plan..."
-                />
+                {hydrated &&
+                  <LearningPathTitleTextBox
+                    titleLearningPath={titleLearningPath}
+                    handleTitleLearningPath={handleTitleLearningPath}
+                    placeholder="Enter a title describing the lesson plan..."
+                  />}
               </Heading>
             </Flex>
             <Flex paddingTop="1rem">

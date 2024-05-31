@@ -2,7 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import SegmentedButton from '../Buttons/ButtonsDesignPage/SegmentedButton';
 //import { useCollectionsContext } from '../CollectionsContext/CollectionsContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { useHasHydrated } from '../../utils/utils';
 
 type Option = {

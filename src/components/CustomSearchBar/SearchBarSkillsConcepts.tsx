@@ -8,7 +8,7 @@ import {
 } from '@choc-ui/chakra-autocomplete';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   OerConceptInfo,
   OerInCollectionProps,

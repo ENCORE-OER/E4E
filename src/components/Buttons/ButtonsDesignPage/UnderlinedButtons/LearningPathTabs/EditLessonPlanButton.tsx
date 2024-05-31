@@ -1,4 +1,4 @@
-import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import IconEdit from '../../../../Icons/IconEdit/IconEdit';
 import UnderlinedButton from '../UnderlinedButton';
 

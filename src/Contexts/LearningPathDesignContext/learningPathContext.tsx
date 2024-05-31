@@ -2,8 +2,8 @@
 
 import React, { useContext, useMemo, useState } from 'react';
 import { v4 } from 'uuid';
-import { APIV2 } from '../data/api';
-import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
+import { APIV2 } from '../../data/api';
+import { PolyglotFlow, PolyglotFlowInfo } from '../../types/polyglot/PolyglotFlow';
 
 interface LearningPathContextProps {
   learningPath: PolyglotFlow | undefined;
