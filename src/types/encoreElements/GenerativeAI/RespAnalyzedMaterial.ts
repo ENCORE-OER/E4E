@@ -1,9 +1,9 @@
 import { MainTopicProps } from '.';
 
-export type AnalyzedMaterialProps = {
+export type RespAnalyzedMaterialProps = {
   Language: string;
   MacroSubject: string;
   Title: string;
-  PerceivedDifficulty: string;
+  PerceivedDifficulty: number;
   MainTopics: MainTopicProps[];
 };

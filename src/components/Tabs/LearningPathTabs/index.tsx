@@ -78,29 +78,17 @@ const getConfig = () => {
       pt: '3%',
     },
     {
-      label: (
-        <AddActivityLessonPlanButton
-          isDisabled={true}
-        />
-      ),
+      label: <AddActivityLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: (
-        <ExportLessonPlanButton
-          isDisabled={true}
-        />
-      ),
+      label: <ExportLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: (
-        <SaveLessonPlanButton
-          isDisabled={true}
-        />
-      ),
+      label: <SaveLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
     },

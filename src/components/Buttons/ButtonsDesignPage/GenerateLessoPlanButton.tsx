@@ -2,10 +2,12 @@ import StandardButton from './StandardButton';
 
 interface GenerateLessonPlanButtonProps {
   handleGenerateLessonPlan: () => void;
+  isDisabled?: boolean;
 }
 
 export default function GenerateLessonPlanButton({
   handleGenerateLessonPlan,
+  isDisabled
 }: GenerateLessonPlanButtonProps) {
   //   const isDisabled = !numberOfLO || numberOfLO <= 0;
   return (
@@ -15,7 +17,7 @@ export default function GenerateLessonPlanButton({
       //   isDisabled={isDisabled}
       w="fit-content"
       // display={'flex'}
-      isDisabled={true}
+      isDisabled={isDisabled}
     />
   );
 }

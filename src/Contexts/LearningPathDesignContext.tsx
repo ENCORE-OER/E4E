@@ -381,10 +381,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // Lesson plan Edit button click
-  const [isEditLessonPlanClicked, setIsEditLessonPlanClicked] = useLocalStorage<boolean>(
-    'isLessonPlanEditClicked',
-    false
-  );
+  const [isEditLessonPlanClicked, setIsEditLessonPlanClicked] =
+    useLocalStorage<boolean>('isLessonPlanEditClicked', false);
 
   const handleEditLessonPlanClick = (isClicked: boolean) => {
     setIsEditLessonPlanClicked(isClicked);

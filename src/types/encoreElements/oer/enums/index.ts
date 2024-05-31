@@ -1,2 +1,2 @@
+export * from './TypeOfActivity';
 export * from './TypeOfAssignment';
-export * from './TypeOfExercise';

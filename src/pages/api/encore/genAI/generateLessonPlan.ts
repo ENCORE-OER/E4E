@@ -20,7 +20,7 @@ export default async function generateLessonPlan(
     const {
       mainTopics,
       language,
-      macroSubjects,
+      macroSubject,
       title,
       level,
       learningObjective,
@@ -47,7 +47,7 @@ export default async function generateLessonPlan(
         {
           mainTopics: mainTopics,
           language: language,
-          macroSubjects: macroSubjects,
+          macroSubject: macroSubject,
           title: title,
           level: level,
           learningObjective: learningObjective,

@@ -27,7 +27,7 @@ export default function CustomLearningPathTable({
   titles,
   data,
   handleData,
-  isEditLessonPlanClicked
+  isEditLessonPlanClicked,
 }: TableLearningPathProps) {
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -50,10 +50,11 @@ export default function CustomLearningPathTable({
             borderColor="primary"
           >
             <Tr>
-              {isEditLessonPlanClicked &&
+              {isEditLessonPlanClicked && (
                 <Th p={0}>
                   <Box></Box>
-                </Th>}
+                </Th>
+              )}
               {titles.map((title: string, index: number) => (
                 <Th
                   key={index}
@@ -89,12 +90,16 @@ export default function CustomLearningPathTable({
                         // borderColor="primary"
                         alignItems="center"
                       >
-                        {isEditLessonPlanClicked &&
+                        {isEditLessonPlanClicked && (
                           <Td borderWidth="2px" borderColor="primary" p={0}>
-                            <Flex {...provided.dragHandleProps} justify="center">
+                            <Flex
+                              {...provided.dragHandleProps}
+                              justify="center"
+                            >
                               <IconDrag />
                             </Flex>
-                          </Td>}
+                          </Td>
+                        )}
                         <Td
                           borderWidth="2px"
                           borderColor="primary"
