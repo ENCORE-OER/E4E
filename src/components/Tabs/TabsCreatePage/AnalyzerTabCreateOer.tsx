@@ -111,7 +111,7 @@ export default function AnalyzerTabCreateOer({
           handleApiKey={handleApiKey}
           setupModel={setupModel}
           handleSetupModel={handleSetupModel}
-        // isSmallerScreen={isSmallerScreen}
+          // isSmallerScreen={isSmallerScreen}
         />
         <Text as="b" pb="0.5rem">
           Educational resource input (text or URL)

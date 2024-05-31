@@ -37,7 +37,10 @@ export default function CollectionModal({
     title: oerToSave?.title ?? '',
     description: oerToSave?.description ?? '',
     concepts: oerToSave?.concepts ?? [],
-    urlSource: (oerToSave?.generated_by_ai ? oerToSave?.source : oerToSave?.oer_url[0].url) ?? [],
+    urlSource:
+      (oerToSave?.generated_by_ai
+        ? oerToSave?.source
+        : oerToSave?.oer_url[0].url) ?? [],
     generated_by_ai: oerToSave?.generated_by_ai ?? false,
   };
 

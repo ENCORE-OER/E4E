@@ -39,7 +39,9 @@ export default function SingleResourceCard({
   ) ?? ['Unknwon'];
   const mediaTypes =
     oer?.media_type?.map((item: OerMediaTypeInfo) => item.name) ?? [];
-  const linkOer = oer?.oer_url.map((item: OerUrlInfo) => item.url || item.source_roer_url) || [];
+  const linkOer =
+    oer?.oer_url.map((item: OerUrlInfo) => item.url || item.source_roer_url) ||
+    [];
 
   const [times_used, setTimes_used] = useState<number>(0);
   const [total_likes, setTotal_likes] = useState<number>(0);

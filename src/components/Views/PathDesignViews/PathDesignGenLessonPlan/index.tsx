@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Box, CircularProgress, Flex } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useCollectionsContext } from '../../../../Contexts/CollectionsContext/CollectionsContext';
@@ -12,7 +12,7 @@ import {
   ObjectLearningObjectiveProps,
   OerInCollectionProps,
   OutputLessonPlanProps,
-  RespAnalyzedMaterialProps
+  RespAnalyzedMaterialProps,
 } from '../../../../types/encoreElements';
 import { mapOptionToNumber } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
@@ -21,15 +21,22 @@ import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleT
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 type PathDesignGenLessonPlanProps = {
-  handleNextClick: () => void;
-}
+  handleNextClick: ({ handleFunction }: { handleFunction: () => Promise<void> }) => Promise<void>;
+};
 
 export default function PathDesignGenLessonPlan({
-  handleNextClick
+  handleNextClick,
 }: PathDesignGenLessonPlanProps) {
   // const { chosenTargetLevel } = useCreateOERsContext();
 
-  const { collectionIndex, resourcesIndex, learningObjectiveObjects, bloomLevelIndex, bloomLevels, learningTextContext } = useLearningPathDesignContext();
+  const {
+    collectionIndex,
+    resourcesIndex,
+    learningObjectiveObjects,
+    bloomLevelIndex,
+    bloomLevels,
+    learningTextContext,
+  } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel } = useGeneralContext();
 
@@ -40,7 +47,7 @@ export default function PathDesignGenLessonPlan({
     useState<number>(2); // Number of learning activities to generate for the lesson plan
   const [numberOfAssessmentActivities, setNumberOfAssessmentActivities] =
     useState<number>(2); // Number of assessment activities to generate for the lesson plan
-  // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLAZero, setIsNumberOfLAZero] = useState<boolean>(false); // State to check if the number of learning activities is invalid (zero)
   const [isNumberOfAAZero, setIsNumberOfAAZero] = useState<boolean>(false); // State to check if the number of assessment activities is invalid (zero)
 
@@ -208,7 +215,7 @@ export default function PathDesignGenLessonPlan({
     context: string,
     temperature: number
   ): Promise<OutputLessonPlanProps[]> => {
-    console.log("Generating lesson plan...");
+    console.log('Generating lesson plan...');
     try {
       const resp = await axios.post(
         '../api/encore/genAI/generateLessonPlan',
@@ -263,98 +270,121 @@ export default function PathDesignGenLessonPlan({
     } catch (error) {
       console.error('Error during the API call:', error);
     }
-  }
+  };
 
   const handleGenerateLessonPlan = async () => {
 
-    handleNextClick();
+    try {
+      const oers = collections[collectionIndex].oers;
+      // Analyze selected resources
+      let oer: OerInCollectionProps = {
+        id: 0,
+        title: '',
+        description: '',
+        concepts: [],
+        urlSource: [],
+        generated_by_ai: false,
+      };
 
-    const oers = collections[collectionIndex].oers;
-    // Analyze selected resources
-    let oer: OerInCollectionProps = {
-      id: 0,
-      title: '',
-      description: '',
-      concepts: [],
-      urlSource: [],
-      generated_by_ai: false,
-    };
-
-    // If at least a resources are selected
-    if (resourcesIndex.length > 0) {
-      let index = 0;
-      while ((oer.urlSource.length === 0 || oer.urlSource === '') && index < resourcesIndex.length) {
-        oers[resourcesIndex[index]].urlSource !== (undefined || [] || '')
-          ? oer = oers[resourcesIndex[index]]
-          : undefined
-        index++;
+      // If at least a resources are selected
+      if (resourcesIndex.length > 0) {
+        let index = 0;
+        while (
+          (oer.urlSource.length === 0 || oer.urlSource === '') &&
+          index < resourcesIndex.length
+        ) {
+          oers[resourcesIndex[index]].urlSource !== (undefined || [] || '')
+            ? (oer = oers[resourcesIndex[index]])
+            : undefined;
+          index++;
+        }
+        // If no resources are selected takes directly from the collection
+      } else {
+        let index = 0;
+        while (
+          (oer.urlSource.length === 0 || oer.urlSource === '') &&
+          index < oers.length
+        ) {
+          oers[index].urlSource !== (undefined || [] || '')
+            ? (oer = oers[index])
+            : undefined;
+          index++;
+        }
       }
-      // If no resources are selected takes directly from the collection
-    } else {
-      let index = 0;
-      while ((oer.urlSource.length === 0 || oer.urlSource === '') && index < oers.length) {
-        oers[index].urlSource !== (undefined || [] || '')
-          ? oer = oers[index]
-          : undefined
-        index++;
-      }
-    }
 
-    // If 
-    if (oer !== undefined) {
-      // If generated it only has an URL string, otherwhise it may have an array of URL
-      const urlSource = Array.isArray(oer.urlSource) ? oer.urlSource[0] : oer.urlSource;
+      // If there is oer with url
+      if (oer !== undefined) {
+        // If generated it only has an URL string, otherwhise it may have an array of URL
+        const urlSource = Array.isArray(oer.urlSource)
+          ? oer.urlSource[0]
+          : oer.urlSource;
 
-      try {
-        const analyzedMaterial = await postAnalyzeMaterial(
-          apiKey,
-          setupModel,
-          urlSource,
-        );
-
-        if (analyzedMaterial) {
-
-          // Generate a lesson plan based on the selected resources
-          const learninObjective = learningObjectiveObjects.map((objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective).join(' & ')
-          console.log(learninObjective);
-
-          const bloomLevel = mapOptionToNumber(bloomLevels[bloomLevelIndex], BloomLevelsEnum)
-          console.log(bloomLevel);
-
-          const resp = await postGenerateLessonPlan(
-            apiKey, // apiKey
-            setupModel, // setupModel
-            analyzedMaterial.MainTopics,  // mainTopics
-            analyzedMaterial.Language, // language 
-            analyzedMaterial.MacroSubject,  // macroSubject
-            analyzedMaterial.Title, // title
-            analyzedMaterial.PerceivedDifficulty, // level
-            learninObjective, // learning objective
-            bloomLevel, // bloom level enum
-            learningTextContext,  // learning context
-            0.3 // temperature
+        try {
+          const analyzedMaterial = await postAnalyzeMaterial(
+            apiKey,
+            setupModel,
+            urlSource
           );
 
-          console.log('Generate lesson plan', resp);
+          if (analyzedMaterial) {
+            // Generate a lesson plan based on the selected resources
+            const learninObjective = learningObjectiveObjects
+              .map(
+                (objectLO: ObjectLearningObjectiveProps) =>
+                  objectLO.learningObjective
+              )
+              .join(' & ');
+            console.log(learninObjective);
+
+            const bloomLevel = mapOptionToNumber(
+              bloomLevels[bloomLevelIndex],
+              BloomLevelsEnum
+            );
+            console.log(bloomLevel);
+
+            const resp = await postGenerateLessonPlan(
+              apiKey, // apiKey
+              setupModel, // setupModel
+              analyzedMaterial.MainTopics, // mainTopics
+              analyzedMaterial.Language, // language
+              analyzedMaterial.MacroSubject, // macroSubject
+              analyzedMaterial.Title, // title
+              analyzedMaterial.PerceivedDifficulty, // level
+              learninObjective, // learning objective
+              bloomLevel, // bloom level enum
+              learningTextContext, // learning context
+              0.3 // temperature
+            );
+
+            console.log('Generate lesson plan', resp);
+          }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        console.error('Oer is undefined!');
       }
-    } else {
-      console.error("Oer is undefined!")
+    } catch (error) {
+      console.error(error);
     }
+    // finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const handleGenerateLessonPlanClick = async () => {
+    setIsLoading(true);
     try {
       // const textURL = handleExtractText("http://www.mdpi.com/books/pdfview/book/745");
       // console.log('Extracted Text:', textURL);
-
-      await handleGenerateLessonPlan();
+      await handleNextClick({ handleFunction: () => handleGenerateLessonPlan() });
+      // await handleGenerateLessonPlan();
     } catch (error) {
       console.error('Error extracting text:', error);
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="100%">
@@ -407,11 +437,16 @@ export default function PathDesignGenLessonPlan({
           />
         </Flex>
       )}
-      <Flex w="100%" justifyContent="flex-start" pt={3}>
+      <Flex w="100%" justifyContent="flex-start" pt={3} direction="row">
         <GenerateLessonPlanButton
           handleGenerateLessonPlan={handleGenerateLessonPlanClick}
-        // isDisabled={true}
+          isDisabled={isLoading}
         />
+        {isLoading && (
+          <Box ml={4}>
+            <CircularProgress isIndeterminate color="yellow.400" />
+          </Box>
+        )}
       </Flex>
     </Flex>
   );

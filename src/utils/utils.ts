@@ -1,6 +1,6 @@
 import axios from 'axios';
-import htmlparser2, { DomHandler } from 'htmlparser2';
-import mammoth from 'mammoth';
+import { DomHandler, DomUtils, Parser } from 'htmlparser2';
+import { extractRawText } from 'mammoth';
 import { getDocument } from 'pdfjs-dist';
 import { TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';
 import { useEffect, useState } from 'react';
@@ -128,9 +128,7 @@ export const handleExtractText = async (source: string) => {
 
 // Function to convert DOM to string
 const domToString = (dom: any): string => {
-  return dom
-    .map((node: any) => htmlparser2.DomUtils.textContent(node))
-    .join(' ');
+  return dom.map((node: any) => DomUtils.textContent(node)).join(' ');
 };
 
 // This method asynchronously extracts text from a web page given its URL.
@@ -146,7 +144,7 @@ const extractTextFromUrl = async (url: string): Promise<string> => {
     console.log(html as string);
     // Extract the text from the HTML document.
     const handler = new DomHandler();
-    const parser = new htmlparser2.Parser(handler);
+    const parser = new Parser(handler);
     parser.write(html);
     parser.end();
     const dom = handler.dom;
@@ -210,7 +208,7 @@ const extractTextFromDocxUrl = async (url: string): Promise<string> => {
   });
   console.log(response);
   if (response?.data !== undefined) {
-    const result = await mammoth.extractRawText({ arrayBuffer: response.data });
+    const result = await extractRawText({ arrayBuffer: response.data });
     return extractUsefulText(result.value);
   } else {
     return '';

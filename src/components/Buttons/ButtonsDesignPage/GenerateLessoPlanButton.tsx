@@ -7,7 +7,7 @@ interface GenerateLessonPlanButtonProps {
 
 export default function GenerateLessonPlanButton({
   handleGenerateLessonPlan,
-  isDisabled
+  isDisabled,
 }: GenerateLessonPlanButtonProps) {
   //   const isDisabled = !numberOfLO || numberOfLO <= 0;
   return (

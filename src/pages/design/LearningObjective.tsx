@@ -202,7 +202,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  const handleNextClick = () => {
+  const handleNextClick = async ({ handleFunction }: { handleFunction: () => Promise<void> }) => {
     if (
       selectedCollection !== null &&
       // selectedResource !== null &&
@@ -218,6 +218,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
       if (isNextButtonClicked) {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
+
+      await handleFunction();
+
       router.push({
         pathname: '/design/learningPathDesign',
       });
@@ -402,7 +405,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            handleNextClick={handleNextClick}
+            // handleNextClick={handleNextClick}
             handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
