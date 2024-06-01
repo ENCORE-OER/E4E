@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   CollectionProps,
   OerInCollectionProps,
@@ -77,7 +77,9 @@ export default function PathDesignHeaderBars({
           w="50%"
         >
           <CustomDropDownMenu
-            data={collections}
+            data={collections.filter(
+              (collection: CollectionProps) => collection.oers.length > 0
+            )}
             onData={handleCollectionSelection}
             onSelectionChange={handleCollectionChange}
             isHighlighted={isNextButtonClicked}

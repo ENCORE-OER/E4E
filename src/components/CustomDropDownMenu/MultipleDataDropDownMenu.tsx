@@ -129,13 +129,13 @@ export default function MultipleDataDropDownMenu({
   //   // console.log(collectionIndex);1
   // }, [selectedOptions]);
 
-  useEffect(() => {
-    multipleData.flatMap((data) =>
-      data.activities.map((item) => {
-        console.log('multipleData:', item.name);
-      })
-    );
-  }, [multipleData]);
+  // useEffect(() => {
+  //   multipleData.flatMap((data) =>
+  //     data.activities.map((item) => {
+  //       console.log('multipleData:', item.name);
+  //     })
+  //   );
+  // }, [multipleData]);
 
   return (
     <Flex
@@ -315,7 +315,6 @@ export default function MultipleDataDropDownMenu({
                   )}
               </MenuOptionGroup>
             ))}
-          ;
         </MenuList>
       </Menu>
     </Flex>

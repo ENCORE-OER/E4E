@@ -2,9 +2,9 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { LearningPathProvider } from '../../Contexts/learningPathContext';
+import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import BoxSelectedLO from '../../components/Boxes/BoxSelectedLO';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import ShowHideButton from '../../components/Buttons/ShowHideButton';
@@ -185,91 +185,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  // useEffect(() => {
-  //   //handleLearningObjectives();
-  //   setIsLoading(false);
-  //   //handleSetCustomLearningObjectives();
-  // }, [oersById]);
-
-  // useEffect(() => {
-
-  // }, []);
-
-  // // setIndexCollectionClicked is used in CollectionMenu component
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   if (collections?.length > 0 && hydrated) {
-  //     if (collections[collectionIndex]?.oers?.length > 0) {
-  //       try {
-  //         const fetchOerData = async () => {
-  //           const oerData = await Promise.all(
-  //             collections[collectionIndex]?.oers?.map(
-  //               async (oer: OerInCollectionProps) => {
-  //                 const oerFound = await getDataOerById(oer?.id);
-  //                 return oerFound;
-  //               }
-  //             )
-  //           );
-  //           setOersById(oerData);
-  //         };
-
-  //         fetchOerData();
-
-  //         //console.log(oersById);
-
-  //         // this part is commented because we don't need to select a concept to create a learning path
-  //         /* if (
-  //           collections[indexCollectionClicked]?.conceptsSelected?.length === 0
-  //         ) {
-  //           addToast({
-  //             message:
-  //               'You need to select concepts from the saved OERs to create learning paths.',
-  //             type: 'warning',
-  //           });
-  //           throw new Error('No concepts selected in this collection!');
-
-  //         } else {
-  //           setConceptSelectedIndex(0);
-  //         }*/
-  //         setIsLoading(false);
-  //       } catch (error) {
-  //         addToast({
-  //           message: `${error}`,
-  //           type: 'error',
-  //         });
-
-  //         setIsLoading(false);
-  //       }
-  //     } else {
-  //       addToast({
-  //         message: 'No OERs found in this collection!',
-  //         type: 'error',
-  //       });
-  //       addToast({
-  //         message: 'You need to save OERs to create learning paths.',
-  //         type: 'warning',
-  //       });
-  //     }
-  //   } else if (collections?.length === 0 && collectionIndex < 0) {
-  //     addToast({
-  //       message: 'No collection created!',
-  //       type: 'error',
-  //     });
-  //     addToast({
-  //       message:
-  //         'Before accessing Plan, create a collection and save the OERs that interest you.',
-  //       type: 'warning',
-  //     });
-  //     setTimeout(() => {
-  //       router.push({
-  //         pathname: '/',
-  //       });
-  //     }, 1000);
-  //   }
-
-  //   setIsLoading(false);
-  // }, [hydrated, collectionIndex]);
-
   return (
     <LearningPathProvider>
       <Flex w="100%" h="100%">
@@ -310,22 +225,24 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
             <Flex paddingTop="1.5rem" direction="column">
               <Flex>
-                <ShowHideButton
-                  // isClicked={isClicked}
-                  // setIsClicked={setIsClicked}
-                  showBox={showBox}
-                  setShowBox={setShowBox}
-                  isUpDown={true}
-                  showButtonName={
-                    learningObjectiveObjects.length > 1
-                      ? 'Learning objectives'
-                      : 'Learning objective'
-                  }
-                  fontWeight="bold"
-                  color="primary"
-                  border="none"
-                  letterSpacing={0}
-                />
+                {hydrated && (
+                  <ShowHideButton
+                    // isClicked={isClicked}
+                    // setIsClicked={setIsClicked}
+                    showBox={showBox}
+                    setShowBox={setShowBox}
+                    isUpDown={true}
+                    showButtonName={
+                      learningObjectiveObjects.length > 1
+                        ? 'Learning objectives'
+                        : 'Learning objective'
+                    }
+                    fontWeight="bold"
+                    color="primary"
+                    border="none"
+                    letterSpacing={0}
+                  />
+                )}
               </Flex>
               {showBox && hydrated && (
                 <Flex direction="column" gap={2} pt={3}>
@@ -349,16 +266,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Heading> */}
 
               <Heading fontWeight={'bold'} w="100%">
-                <LearningPathTitleTextBox
-                  titleLearningPath={titleLearningPath}
-                  handleTitleLearningPath={handleTitleLearningPath}
-                  placeholder="Enter a title describing the lesson plan..."
-                />
+                {hydrated && (
+                  <LearningPathTitleTextBox
+                    titleLearningPath={titleLearningPath}
+                    handleTitleLearningPath={handleTitleLearningPath}
+                    placeholder="Enter a title describing the lesson plan..."
+                  />
+                )}
               </Heading>
             </Flex>
-            <Flex paddingTop="1rem">
-              <LearningPathTabs isSmallerScreen={isSmallerScreen} />
-            </Flex>
+            <Flex paddingTop="1rem">{hydrated && <LearningPathTabs />}</Flex>
             <Flex paddingTop={'1.5rem'}>
               <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
             </Flex>

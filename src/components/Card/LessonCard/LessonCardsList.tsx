@@ -1,7 +1,7 @@
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import LessonCard from '.';
-import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   LessonCardProps,
   PassFailConditionsProps,
@@ -111,18 +111,20 @@ export default function LessonCardsList({
       {
         lesson: {
           lessonTitle: 'Lesson title',
+          lessonType: 'Lesson Type',
           activityDescription: 'Activity description',
           activityType: 'Activity Type',
-          lessonType: 'Lesson Type',
+          timeDuration: 20,
           passFailConditions: [],
         },
       },
       {
         lesson: {
           lessonTitle: 'Lesson title',
+          lessonType: 'Lesson Type',
           activityDescription: 'Activity description',
           activityType: 'Activity Type',
-          lessonType: 'Lesson Type',
+          timeDuration: 30,
           passFailConditions: [],
         },
       },

@@ -3,10 +3,13 @@ import { useLocalStorage } from 'usehooks-ts';
 import {
   ArrayProps,
   LessonCardProps,
+  LessonProps,
   ObjectLearningObjectiveProps,
   Option,
+  OptionsTypeOfAssignmentProps,
   SkillItemProps,
-} from '../types/encoreElements/index';
+  activityTypesObjectsProps,
+} from '../../types/encoreElements/index';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -70,8 +73,31 @@ type LearnignPathDesignContextProps = {
   titleLearningPath: string;
   setTitleLearningPath: React.Dispatch<React.SetStateAction<string>>;
   handleTitleLearningPath: (newTitle: string) => void;
+  isEditLessonPlanClicked: boolean;
+  handleEditLessonPlanClick: (isClicked: boolean) => void;
+  handleSaveLessonPlanClick: () => void;
+  editRowIndex: number | null;
+  handleEditLesson: (index: number) => void;
+  handleSaveLesson: () => void;
 
-  // Lesson Card
+  activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
+  optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[]; // Array of all the lesson types
+  // Lessons Activities
+  totalNumberLessonActivities: number;
+  // setTotalNumberLessonActivities: React.Dispatch<React.SetStateAction<number>>;
+  handleNumberLessonActivities: (newNumber: number) => void;
+  numberLearningActivities: number;
+  // setNumberLearningActivities: React.Dispatch<React.SetStateAction<number>>;
+  handleNumberLearningActivities: (newNumber: number) => void;
+  numberAssessmentActivities: number;
+  // setNumberAssessmentActivities: React.Dispatch<React.SetStateAction<number>>;
+  handleNumberAssessmentActivities: (newNumber: number) => void;
+  lessonActivities: LessonProps[];
+  setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
+  addEmptyLessonActivity: () => void;
+  removeLessonActivity: (index: number) => void;
+
+  // Lessons Cards
   lessonCards: LessonCardProps[];
   setLessonCards: React.Dispatch<React.SetStateAction<LessonCardProps[]>>;
   handleLessonCards: (lessonCard: LessonCardProps | LessonCardProps[]) => void;
@@ -336,20 +362,178 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setStep(newStep);
   };
 
-  // ========================================================
+  // =============================================================================================================
   // ----- Learning Path Design (Page 3) -----
 
+  // Title learning path
+  const [titleLearningPath, setTitleLearningPath] = useLocalStorage<string>(
+    'titleLearningPath',
+    ''
+  );
+
+  const handleTitleLearningPath = (newTitle: string) => {
+    setTitleLearningPath(newTitle);
+  };
+
+  // Lesson plan Edit button click
+  const [isEditLessonPlanClicked, setIsEditLessonPlanClicked] =
+    useLocalStorage<boolean>('isLessonPlanEditClicked', false);
+
+  const handleEditLessonPlanClick = (isClicked: boolean) => {
+    // if (isClicked) {
+    //   handleSaveLesson();
+    // }
+    setIsEditLessonPlanClicked(isClicked);
+  };
+
+  const handleSaveLessonPlanClick = () => {
+    if (editRowIndex !== null) {
+      handleSaveLesson();
+    } else if (isEditLessonPlanClicked) {
+      setIsEditLessonPlanClicked(false);
+    }
+  };
+
+  // State to track the index of the row currently in edit mode
+  const [editRowIndex, setEditRowIndex] = useLocalStorage<number | null>(
+    'editRowIndex',
+    null
+  );
+
+  // Function to handle initiating edit mode for a row
+  const handleEditLesson = (index: number) => {
+    // Set the index of the row in edit mode
+    setEditRowIndex(index);
+  };
+
+  // Function to handle saving changes and exit edit mode
+  const handleSaveLesson = () => {
+    // Save changes and disable edit mode
+    setEditRowIndex(null);
+  };
+
+  // Lesson
+
   // ========================================================
-  // ----- Lesson card -----
+  // ----- Lessons -----
+
+  // Data activity type
+  // const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
+  const activityTypes: activityTypesObjectsProps[] = [
+    { lessonType: 'Assessment', activityType: 'Open Question' },
+    { lessonType: 'Assessment', activityType: 'Short Answer Question' },
+    { lessonType: 'Assessment', activityType: 'True or False' },
+    { lessonType: 'Assessment', activityType: 'Fill in the Blanks' },
+    { lessonType: 'Assessment', activityType: 'Single Choice' },
+    { lessonType: 'Assessment', activityType: 'Multiple Choice' },
+    { lessonType: 'Assessment', activityType: 'Essay' },
+    { lessonType: 'Learning', activityType: 'Knowledge Exposition' },
+    { lessonType: 'Learning', activityType: 'Debate' },
+    { lessonType: 'Learning', activityType: 'Brainstorming' },
+    { lessonType: 'Learning', activityType: 'Group Discussion' },
+    { lessonType: 'Assessment', activityType: 'Simulation' },
+    { lessonType: 'Learning', activityType: 'Inquiry-based Learning' },
+    { lessonType: 'Other', activityType: 'Non-written Material Analysis' },
+    { lessonType: 'Other', activityType: 'Non-written Material Production' },
+    { lessonType: 'Assessment', activityType: 'Case Study Analysis' },
+    { lessonType: 'Learning', activityType: 'Project-based Learning' },
+    { lessonType: 'Assessment', activityType: 'Problem-solving Activity' },
+  ];
+
+  const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
+    {
+      name: 'Learning',
+      colorBackground: 'blue.200',
+    },
+    {
+      name: 'Assessment',
+      colorBackground: 'blue.100',
+    },
+    {
+      name: 'Other',
+      colorBackground: 'gray.200',
+    },
+  ];
 
   // Pass Fail Conditions for each Lesson Card
   // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
 
+  const [totalNumberLessonActivities, setTotalNumberLessonActivities] =
+    useLocalStorage<number>('totalNumberOfLessonActivities', 0);
+
+  const handleNumberLessonActivities = (newNumber: number) => {
+    setTotalNumberLessonActivities(newNumber);
+  };
+
+  const [numberAssessmentActivities, setNumberAssessmentActivities] =
+    useLocalStorage<number>('numberAssessmentActivities', 0);
+
+  const handleNumberAssessmentActivities = (newNumber: number) => {
+    setNumberAssessmentActivities(newNumber);
+  };
+
+  const [numberLearningActivities, setNumberLearningActivities] =
+    useLocalStorage<number>('numberLearningActivities', 0);
+
+  const handleNumberLearningActivities = (newNumber: number) => {
+    setNumberLearningActivities(newNumber);
+  };
+
+  // Lesson activities. General da used for both table and cards.
+  const [lessonActivities, setLessonActivities] = useLocalStorage<
+    LessonProps[]
+  >('lessonsActivities', []);
+
+  // Function to add a new activity
+  const addEmptyLessonActivity = () => {
+    const newLessonActivity = {
+      lessonTitle: '',
+      lessonType: '',
+      activityType: '',
+      activityDescription: '',
+      timeDuration: 0,
+      passFailConditions: [],
+    };
+    setLessonActivities((prevLessonActivities: LessonProps[]) => [
+      ...prevLessonActivities,
+      newLessonActivity,
+    ]);
+  };
+
+  // Function to remove a lessonActivity from the lessonActivities array given the index
+  const removeLessonActivity = (indexToRemove: number) => {
+    setLessonActivities((prevLessonActivities: LessonProps[]) => {
+      // Copy the array of lessonActivities excluding the element to remove
+      const updatedLessonActivities = [...prevLessonActivities];
+      updatedLessonActivities.splice(indexToRemove, 1);
+      return updatedLessonActivities;
+    });
+  };
+
+  // TO_CHECK: useful?
+  // const handleLessonActivities = (
+  //   lessonCard: LessonProps | LessonProps[]
+  // ) => {
+  //   if (Array.isArray(lessonCard)) {
+  //     setLessonsActivities((prevLessonsActivities: LessonProps[]) => [
+  //       ...prevLessonsActivities,
+  //       ...lessonCard,
+  //     ]);
+  //   } else {
+  //     setLessonsActivities((prevLessonsActivities: LessonProps[]) => [
+  //       ...prevLessonsActivities,
+  //       lessonCard,
+  //     ]);
+  //   }
+  // };
+
+  // Lesson cards(tiles)
   const [lessonCards, setLessonCards] = useLocalStorage<LessonCardProps[]>(
     'lessonCards',
     []
   );
 
+  // TO_CHECK: useful?
   const handleLessonCards = (
     lessonCard: LessonCardProps | LessonCardProps[]
   ) => {
@@ -368,17 +552,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // ========================================================
 
-  // Title learning path
-  const [titleLearningPath, setTitleLearningPath] = useLocalStorage<string>(
-    'titleLearningPath',
-    ''
-  );
-
-  const handleTitleLearningPath = (newTitle: string) => {
-    setTitleLearningPath(newTitle);
-  };
-
-  // ========================================================
+  // =============================================================================================================
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -505,9 +679,29 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         titleLearningPath,
         setTitleLearningPath,
         handleTitleLearningPath,
+        isEditLessonPlanClicked,
+        handleEditLessonPlanClick,
+        handleSaveLessonPlanClick,
+        editRowIndex,
+        handleEditLesson,
+        handleSaveLesson,
 
-        // LESSON CARD
+        activityTypes,
+        optionsTypeOfAssignment,
+        // Lessons Activities
+        totalNumberLessonActivities,
+        handleNumberLessonActivities,
+        numberLearningActivities,
+        handleNumberLearningActivities,
+        numberAssessmentActivities,
+        handleNumberAssessmentActivities,
 
+        lessonActivities,
+        setLessonActivities,
+        addEmptyLessonActivity,
+        removeLessonActivity,
+
+        // LESSONS CARDS
         lessonCards,
         setLessonCards,
         handleLessonCards,

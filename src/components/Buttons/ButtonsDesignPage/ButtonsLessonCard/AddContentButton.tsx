@@ -8,7 +8,8 @@ export default function AddContentButton({ ...rest }: ButtonProps) {
       px={7}
       bg="gray.300"
       // onClick={handleAddContentClick}
-      borderRadius={10}
+      borderRadius="lg"
+      fontSize="small"
     >
       Add Content
     </Button>

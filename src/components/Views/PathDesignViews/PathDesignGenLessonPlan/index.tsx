@@ -1,29 +1,67 @@
-import { Flex } from '@chakra-ui/react';
+import { Box, CircularProgress, Flex } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
-import { useCreateOERsContext } from '../../../../Contexts/CreateOERsContext';
+import { useEffect, useState } from 'react';
+import { useCollectionsContext } from '../../../../Contexts/CollectionsContext/CollectionsContext';
+import { useGeneralContext } from '../../../../Contexts/GeneralContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   ArrayProps,
+  BloomLevelsEnum,
+  LessonProps,
   MainTopicProps,
   MultipleArrayProps,
+  ObjectLearningObjectiveProps,
+  OerInCollectionProps,
   OutputLessonPlanProps,
+  RespAnalyzedMaterialProps,
+  TypeOfActivityEnum,
 } from '../../../../types/encoreElements';
+import { CustomToast } from '../../../../utils/Toast/CustomToast';
+import { mapNumberToString, mapOptionToNumber } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
 import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
-export default function PathDesignGenLessonPlan() {
-  const { chosenTargetLevel } = useCreateOERsContext();
+type PathDesignGenLessonPlanProps = {
+  handleNextClick: ({
+    handleFunction,
+  }: {
+    handleFunction: () => Promise<boolean>;
+  }) => Promise<void>;
+};
+
+export default function PathDesignGenLessonPlan({
+  handleNextClick,
+}: PathDesignGenLessonPlanProps) {
+  // const { chosenTargetLevel } = useCreateOERsContext();
+
+  const {
+    collectionIndex,
+    resourcesIndex,
+    learningObjectiveObjects,
+    bloomLevelIndex,
+    bloomLevels,
+    learningTextContext,
+    handleTitleLearningPath,
+    lessonActivities,
+    setLessonActivities,
+  } = useLearningPathDesignContext();
+  const { collections } = useCollectionsContext();
+  const { apiKey, setupModel } = useGeneralContext();
+  const { addToast } = CustomToast();
 
   // Show Generate Lesson Plan area
   const [showBox, setShowBox] = useState(false); // used to show the generate lesson plan
 
+  // const [lessonPlan, setLessonPlan] = useState<LessonProps[]>([]);  // State for store the lessonPlanFrom
   const [numberOfLearningActivities, setNumberOfLearningActivities] =
     useState<number>(2); // Number of learning activities to generate for the lesson plan
   const [numberOfAssessmentActivities, setNumberOfAssessmentActivities] =
     useState<number>(2); // Number of assessment activities to generate for the lesson plan
-  // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [totalNumberLessonActivities, setTotalNumberLessonActivities] =
+    useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLAZero, setIsNumberOfLAZero] = useState<boolean>(false); // State to check if the number of learning activities is invalid (zero)
   const [isNumberOfAAZero, setIsNumberOfAAZero] = useState<boolean>(false); // State to check if the number of assessment activities is invalid (zero)
 
@@ -179,11 +217,11 @@ export default function PathDesignGenLessonPlan() {
   // };
 
   const postGenerateLessonPlan = async (
-    apiKey: string,
-    setupModel: string,
+    apiKey: string | undefined,
+    setupModel: string | undefined,
     maintopics: MainTopicProps[],
     language: string,
-    macroSubjects: string,
+    macroSubject: string,
     title: string,
     level: number,
     learningobjective: string,
@@ -191,13 +229,14 @@ export default function PathDesignGenLessonPlan() {
     context: string,
     temperature: number
   ): Promise<OutputLessonPlanProps[]> => {
+    console.log('Generating lesson plan...');
     try {
       const resp = await axios.post(
-        '/api/encore/genAI/generateLessonPlan',
+        '../api/encore/genAI/generateLessonPlan',
         {
           mainTopics: maintopics,
           language: language,
-          macroSubjects: macroSubjects,
+          macroSubject: macroSubject,
           title: title,
           level: level,
           learningObjective: learningobjective,
@@ -216,27 +255,264 @@ export default function PathDesignGenLessonPlan() {
       return resp?.data;
     } catch (error) {
       console.error(error);
+      addToast({
+        message: `Error during lesson plan generation.`,
+        type: 'error',
+      });
       return [];
     }
   };
 
-  const handleGenerateLessonPlan = async () => {
-    const resp = await postGenerateLessonPlan(
-      'apiKey',
-      'setupModel',
-      [{ Topic: 'maintopics', Type: 2, Description: '' }],
-      'language',
-      'macroSubjects',
-      'title',
-      chosenTargetLevel || 0,
-      'learningobjective',
-      0,
-      'context',
-      0.3
-    );
+  const postAnalyzeMaterial = async (
+    apiKey: string | undefined,
+    setupModel: string | undefined,
+    material: string
+  ): Promise<RespAnalyzedMaterialProps | undefined> => {
+    console.log('Analyzing material: ');
 
-    console.log('Generate lesson plan', resp);
+    try {
+      const resp = await axios.post(
+        '../api/encore/genAI/materialAnalyzer',
+        {
+          material: material,
+        },
+        {
+          headers: {
+            ApiKey: apiKey,
+            SetupModel: setupModel,
+          },
+        }
+      );
+
+      return resp.data;
+    } catch (error) {
+      console.error('Error during the API call', error);
+      addToast({
+        message: `Error during material analyzation.`,
+        type: 'error',
+      });
+    }
   };
+
+  const handleGenerateLessonPlan = async (): Promise<boolean> => {
+    let isPossibleToContinue = false;
+    try {
+      const oers = collections[collectionIndex].oers;
+      // Analyze selected resources
+      let oer: OerInCollectionProps = {
+        id: 0,
+        title: '',
+        description: '',
+        concepts: [],
+        urlSource: [],
+        generated_by_ai: false,
+      };
+
+      // If at least a resources are selected
+      if (resourcesIndex.length > 0) {
+        let index = 0;
+        while (
+          (oer.urlSource.length === 0 || oer.urlSource === '') &&
+          index < resourcesIndex.length
+        ) {
+          oers[resourcesIndex[index]].urlSource !== (undefined || [] || '')
+            ? (oer = oers[resourcesIndex[index]])
+            : undefined;
+          index++;
+        }
+        // If no resources are selected takes directly from the collection
+      } else {
+        let index = 0;
+        while (
+          (oer.urlSource.length === 0 || oer.urlSource === '') &&
+          index < oers.length
+        ) {
+          oers[index].urlSource !== (undefined || [] || '')
+            ? (oer = oers[index])
+            : undefined;
+          index++;
+        }
+      }
+
+      // If there is oer with url
+      if (oer !== undefined) {
+        // If generated it only has an URL string, otherwhise it may have an array of URL
+        const urlSource = Array.isArray(oer.urlSource)
+          ? oer.urlSource[0]
+          : oer.urlSource;
+
+        try {
+          const analyzedMaterial = await postAnalyzeMaterial(
+            apiKey,
+            setupModel,
+            urlSource
+          );
+
+          if (analyzedMaterial) {
+            // Set the title of the lesson plan
+            handleTitleLearningPath(analyzedMaterial.Title || '');
+
+            // Generate a lesson plan based on the selected resources
+            const learninObjective = learningObjectiveObjects
+              .map(
+                (objectLO: ObjectLearningObjectiveProps) =>
+                  objectLO.learningObjective
+              )
+              .join(' & ');
+            console.log(learninObjective);
+
+            const bloomLevel = mapOptionToNumber(
+              bloomLevels[bloomLevelIndex],
+              BloomLevelsEnum
+            );
+            console.log(bloomLevel);
+
+            const generatedLessonPlan: OutputLessonPlanProps[] =
+              (await postGenerateLessonPlan(
+                apiKey, // apiKey
+                setupModel, // setupModel
+                analyzedMaterial.MainTopics, // mainTopics
+                analyzedMaterial.Language, // language
+                analyzedMaterial.MacroSubject, // macroSubject
+                analyzedMaterial.Title, // title
+                analyzedMaterial.PerceivedDifficulty, // level
+                learninObjective, // learning objective
+                bloomLevel, // bloom level enum
+                learningTextContext, // learning context
+                0.3 // temperature
+              )) || [];
+
+            // generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => {
+            //   const lesson: LessonProps = {
+            //     lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'} activity`,
+            //     lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+            //     activityType: `${generatedLesson.Type ? mapNumberToString(Number(generatedLesson.Details), TypeOfActivityEnum) : 'Frontal lecture'}`,
+            //     activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details}`,
+            //     topic: generatedLesson.Topic,
+            //     timeDuration: Number(generatedLesson.Duration),
+            //     passFailConditions: [],
+            //   }
+
+            //   setLessonPlan((prevLessons: LessonProps[]) => [...prevLessons, lesson])
+            // })
+
+            if (generatedLessonPlan && generatedLessonPlan.length > 0) {
+              setLessonActivities(
+                generatedLessonPlan?.map(
+                  (generatedLesson: OutputLessonPlanProps) => ({
+                    lessonTitle: `${
+                      generatedLesson.Type ? '' : 'Frontal lecture'
+                    } activity`,
+                    lessonType: generatedLesson.Type
+                      ? 'Assessment'
+                      : 'Learning',
+                    activityType: `${
+                      generatedLesson.Type
+                        ? mapNumberToString(
+                            Number(generatedLesson.Details),
+                            TypeOfActivityEnum
+                          )
+                        : 'Frontal lecture'
+                    }`,
+                    activityDescription: `${
+                      generatedLesson.Type ? '' : generatedLesson.Details
+                    }`,
+                    topic: generatedLesson.Topic,
+                    timeDuration: Number(generatedLesson.Duration),
+                    passFailConditions: [],
+                  })
+                ) || []
+              );
+              isPossibleToContinue = true;
+            }
+          }
+        } catch (error) {
+          console.error(error);
+          if (isPossibleToContinue) {
+            isPossibleToContinue = false;
+          }
+        }
+      } else {
+        console.error('Oer is undefined!');
+        if (isPossibleToContinue) {
+          isPossibleToContinue = false;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      if (isPossibleToContinue) {
+        isPossibleToContinue = false;
+      }
+      addToast({
+        message: `Error during lesson plan generation.`,
+        type: 'error',
+      });
+    } finally {
+      if (!isPossibleToContinue) {
+        const tempLessonsActivities: LessonProps[] = [];
+        for (let i = 0; i < numberOfLearningActivities; i++) {
+          tempLessonsActivities.push({
+            lessonTitle: '',
+            lessonType: 'Learning',
+            activityType: '',
+            activityDescription: '',
+            topic: '',
+            timeDuration: 0,
+            passFailConditions: [],
+          });
+        }
+        for (let i = 0; i < numberOfAssessmentActivities; i++) {
+          tempLessonsActivities.push({
+            lessonTitle: '',
+            lessonType: 'Assessment',
+            activityType: '',
+            activityDescription: '',
+            topic: '',
+            timeDuration: 0,
+            passFailConditions: [],
+          });
+        }
+        setLessonActivities(tempLessonsActivities);
+      }
+    }
+
+    return isPossibleToContinue;
+  };
+
+  const handleGenerateLessonPlanClick = async () => {
+    setIsLoading(true);
+    try {
+      // const textURL = handleExtractText("http://www.mdpi.com/books/pdfview/book/745");
+      // console.log('Extracted Text:', textURL);
+      await handleNextClick({
+        handleFunction: () => handleGenerateLessonPlan(),
+      });
+      // await handleGenerateLessonPlan();
+    } catch (error) {
+      console.error('Error generating the lesson plan:', error);
+      addToast({
+        message: `Error generating the lesson plan: ${error}.`,
+        type: 'error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (
+      numberOfAssessmentActivities + numberOfLearningActivities !=
+      totalNumberLessonActivities
+    ) {
+      setTotalNumberLessonActivities(
+        numberOfAssessmentActivities + numberOfLearningActivities
+      );
+    }
+  }, [numberOfAssessmentActivities, numberOfLearningActivities]);
+
+  useEffect(() => {
+    console.log(lessonActivities);
+  }, [lessonActivities]);
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="100%">
@@ -245,14 +521,14 @@ export default function PathDesignGenLessonPlan() {
           showBox={showBox}
           setShowBox={setShowBox}
           // isUpDown={false}
-          showButtonName="Specify the number of activities in the lesson plan"
+          showButtonName="Specify the number and type of learning activities"
           fontWeight="bold"
           color="primary"
           border="none"
           letterSpacing={0}
         />
         <IconInfoCircleTooltip
-          label_tooltip={`If no activities are selected, all activities will be considered as possible choices.`}
+          label_tooltip={`By default the number of activities is set to 4 (2 in class activities, 2 assessment activities). If no activitiy is selected, all types of exercises will be considered as possible choices.`}
         />
       </Flex>
       {showBox && (
@@ -289,10 +565,16 @@ export default function PathDesignGenLessonPlan() {
           />
         </Flex>
       )}
-      <Flex w="100%" justifyContent="flex-start" pt={3}>
+      <Flex w="100%" justifyContent="flex-start" pt={3} direction="row">
         <GenerateLessonPlanButton
-          handleGenerateLessonPlan={handleGenerateLessonPlan}
+          handleGenerateLessonPlan={handleGenerateLessonPlanClick}
+          isDisabled={isLoading}
         />
+        {isLoading && (
+          <Box ml={4}>
+            <CircularProgress isIndeterminate color="yellow.400" />
+          </Box>
+        )}
       </Flex>
     </Flex>
   );

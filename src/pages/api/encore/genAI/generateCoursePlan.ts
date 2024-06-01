@@ -18,7 +18,7 @@ export default async function generateCoursePlan(
   if (req.method === 'POST') {
     // get the data from the request body
     const {
-      language,
+      // language,
       macroSubjects,
       title,
       level,
@@ -38,13 +38,13 @@ export default async function generateCoursePlan(
     // console.log(topic, context, level);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/CoursePlanner/plancourse';
+    const url = '/CoursePlanner/planCourse';
 
     try {
       const respCoursePlan = await axiosGenerativeAI.post(
         url,
         {
-          language: language,
+          // language: language,
           macroSubjects: macroSubjects,
           title: title,
           level: level,

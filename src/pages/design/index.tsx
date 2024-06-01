@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import InputsGenerateAI from '../../components/Inputs/InputsGenAISetup/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';

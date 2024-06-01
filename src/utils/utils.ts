@@ -1,7 +1,11 @@
-// Use this file to add any utility functions that you want to use in your project
-
+import axios from 'axios';
+import { DomHandler, DomUtils, Parser } from 'htmlparser2';
+import { extractRawText } from 'mammoth';
+import { getDocument } from 'pdfjs-dist';
+import { TextItem, TextMarkedContent } from 'pdfjs-dist/types/src/display/api';
 import { useEffect, useState } from 'react';
 import {
+  ArrayProps,
   GeneratedExerciseProps,
   Option,
   OptionsData,
@@ -30,13 +34,45 @@ export const isObject = (variable: any) => {
 export const zip = <T, K>(a: T[], b: K[]) =>
   a.map((k, i) => ({ first: k, second: b[i] }));
 
+// Method to check if is an Option object
+const isOption = (obj: any): obj is Option => {
+  return (
+    obj &&
+    typeof obj.title === 'string' &&
+    (typeof obj.description === 'undefined' ||
+      typeof obj.description === 'string')
+  );
+};
+
+// Method to check if is an ArrayProps object
+const isArrayProps = (obj: any): obj is ArrayProps => {
+  return obj && (typeof obj.name === 'string' || typeof obj.title === 'string');
+};
+
 // Function to map the selected option to the corresponding index. Usually used to give a number to the API
+
 export const mapOptionToNumber = (
-  option: Option | null,
+  option: Option | ArrayProps | null,
   enumObject: any
 ): number => {
   if (!option) return -1;
-  return enumObject[option.title];
+
+  if (isOption(option)) {
+    return enumObject[option.title] ?? -1;
+  } else if (isArrayProps(option)) {
+    return option.title
+      ? enumObject[option.title] ?? -1
+      : option.name
+        ? enumObject[option.name] ?? -1
+        : -1;
+  }
+
+  return -1;
+};
+
+export const mapNumberToString = (number: number, enumObject: any): string => {
+  if (number === undefined || number === null) return '';
+  return enumObject[number];
 };
 
 export const mapStringToString = (string: string, enumObject: any): string => {
@@ -62,6 +98,138 @@ export const stringArrayToOptionsObject = (
 
   console.log('optionsObject', optionsObject);
   return optionsObject;
+};
+
+// This method extracts text from either a file or a URL.
+export const handleExtractText = async (source: string) => {
+  // if the input is a copied-pasted text, return it, else extract the text from the path or the text from the url
+  if (source.length > 300) {
+    return source;
+  } else {
+    try {
+      // check if the source is a url or a path
+      if (source.startsWith('http')) {
+        if (source.endsWith('.txt')) {
+          return await extractTextFromTxtUrl(source);
+        } else if (source.endsWith('.pdf')) {
+          return await extractTextFromPdfUrl(source);
+        } else if (source.endsWith('.docx')) {
+          return await extractTextFromDocxUrl(source);
+        } else {
+          return await extractTextFromUrl(source);
+        }
+      }
+      // else {
+      //     // Handle local file logic here
+      //     console.log('Local file handling not implemented.');
+      // }
+    } catch (error) {
+      console.error('Error extracting text:', error);
+      // setText('Error extracting text.');
+      return '';
+    }
+  }
+};
+
+// Function to convert DOM to string
+const domToString = (dom: any): string => {
+  return dom.map((node: any) => DomUtils.textContent(node)).join(' ');
+};
+
+// This method asynchronously extracts text from a web page given its URL.
+const extractTextFromUrl = async (url: string): Promise<string> => {
+  const response = await axios({
+    method: 'get',
+    url: `/api/textExtraction/analyzeUrl?url=${encodeURIComponent(url)}`,
+    responseType: 'json',
+  });
+  console.log(response);
+  if (response?.data !== undefined) {
+    const html = response?.data;
+    console.log(html as string);
+    // Extract the text from the HTML document.
+    const handler = new DomHandler();
+    const parser = new Parser(handler);
+    parser.write(html);
+    parser.end();
+    const dom = handler.dom;
+    const extractedText = domToString(dom);
+    return extractUsefulText(extractedText || '');
+  } else {
+    return '';
+  }
+};
+
+// This method extracts text from a text file.
+const extractTextFromTxtUrl = async (url: string): Promise<string> => {
+  const response = await axios({
+    method: 'get',
+    url: `/api/textExtraction/analyzeUrl?url=${encodeURIComponent(url)}`,
+    responseType: 'arraybuffer',
+  });
+  console.log(response);
+  return response?.data ? response?.data : '';
+};
+
+// To check if the type is TextItem
+const isTextItem = (item: TextItem | TextMarkedContent): item is TextItem => {
+  return (item as TextItem).str !== undefined;
+};
+
+// This method extracts text from a PDF file.
+const extractTextFromPdfUrl = async (url: string): Promise<string> => {
+  const response = await axios({
+    method: 'get',
+    url: `/api/textExtraction/analyzeUrl?url=${encodeURIComponent(url)}`,
+    responseType: 'arraybuffer',
+  });
+  console.log(response);
+  if (response?.data !== undefined) {
+    const pdfData = new Uint8Array(response?.data);
+    const pdf = await getDocument({ data: pdfData }).promise;
+    let text = '';
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      // Append the text extracted from this page to the result.
+      text += content.items
+        .filter(isTextItem)
+        .map((item: TextItem) => item.str)
+        .join(' ');
+    }
+    return extractUsefulText(text);
+  } else {
+    return '';
+  }
+};
+
+// This method extracts text from Word document (DocX) file.
+const extractTextFromDocxUrl = async (url: string): Promise<string> => {
+  // Read the DocX document from the response stream asynchronously.
+  const response = await axios({
+    method: 'get',
+    url: `/api/textExtraction/analyzeUrl?url=${encodeURIComponent(url)}`,
+    responseType: 'arraybuffer',
+  });
+  console.log(response);
+  if (response?.data !== undefined) {
+    const result = await extractRawText({ arrayBuffer: response.data });
+    return extractUsefulText(result.value);
+  } else {
+    return '';
+  }
+};
+
+// this method parses the text and removes all the useless characters
+const extractUsefulText = (inputText: string): string => {
+  // Remove line breaks, extra spaces, \n, and \r
+  inputText = inputText.replace(/[\n\r\t]+/g, ' ');
+
+  // Remove content that doesn't contain letters or numbers
+  inputText = inputText.replace(/[^\p{L}\p{N}\s]+/gu, '');
+
+  // Trim any leading or trailing spaces
+  return inputText.trim();
 };
 
 // export const stringArrayToOptionsObject = (

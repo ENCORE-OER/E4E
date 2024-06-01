@@ -1,12 +1,24 @@
-export enum TypeOfExerciseEnum {
+export enum TypeOfActivityEnum {
   Open = 0,
   short_answer_question = 1,
   true_or_false = 2,
-
   fill_in_the_blanks = 3, // information_search
-
   single_choice = 4, // multiple_choice
   multiple_choice = 5, // multiple_select
+  essay = 6,
+  knowledge_exposition = 7,
+
+  debate = 8,
+  brainstorming = 9,
+  group_discussion = 10,
+  simulation = 11,
+  inquiry_based_learning = 12,
+
+  non_written_material_analysis = 13,
+  non_written_material_production = 14,
+  case_study_analysis = 15,
+  project_based_learning = 16,
+  problem_solving_activity = 17,
 }
 
 // The list of activities that are used in this API is the complete TypeOfExercise enum:

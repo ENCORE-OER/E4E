@@ -269,6 +269,7 @@ export default function ResourceCardsList({
         //oer={fill_the_gaps_data}
         updateLikeOER={updateLikeOER}
         setUpdateLikeOER={setUpdateLikeOER}
+        isAddContentModal={isAddContentModal}
       />
     </>
   );

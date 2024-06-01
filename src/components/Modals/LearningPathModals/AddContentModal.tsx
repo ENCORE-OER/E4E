@@ -15,12 +15,12 @@ export default function AddContentModal({
   onClose,
 }: AddContentModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'full'}>
+    <Modal isOpen={isOpen} onClose={onClose} size={'100%'}>
       <ModalOverlay />
-      <ModalContent w="80%" minH="80%">
+      <ModalContent w="80%" h="80%">
         <ModalHeader>Add Content</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody overflowY={'auto'}>
           <Flex w="100%" justify={'center'}>
             <AddContentTabs />
           </Flex>

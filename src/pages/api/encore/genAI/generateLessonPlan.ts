@@ -20,7 +20,7 @@ export default async function generateLessonPlan(
     const {
       mainTopics,
       language,
-      macroSubjects,
+      macroSubject,
       title,
       level,
       learningObjective,
@@ -39,7 +39,7 @@ export default async function generateLessonPlan(
     // console.log(topic, context, level);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    const url = '/LessonPlanner/planlesson';
+    const url = '/LessonPlanner/planLesson';
 
     try {
       const respLessonPlan = await axiosGenerativeAI.post(
@@ -47,7 +47,7 @@ export default async function generateLessonPlan(
         {
           mainTopics: mainTopics,
           language: language,
-          macroSubjects: macroSubjects,
+          macroSubject: macroSubject,
           title: title,
           level: level,
           learningObjective: learningObjective,

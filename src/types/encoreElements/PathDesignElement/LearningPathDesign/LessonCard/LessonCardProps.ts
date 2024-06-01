@@ -10,4 +10,5 @@ export type LessonCardProps = {
     newCondition: PassFailConditionsProps
   ) => {};
   handleOpenModal?: (index: number, conditionIndex: number | null) => void;
+  isEditClicked?: boolean;
 };

@@ -24,6 +24,7 @@ import EditFillGaps from '../../components/Tabs/TabsCreatePage/EditFillGaps';
 import EditMultipleChoice from '../../components/Tabs/TabsCreatePage/EditMultipleChoice';
 import EditOpenQuestion from '../../components/Tabs/TabsCreatePage/EditOpenQuestion';
 import {
+  OerInCollectionProps,
   domainOptions,
   licenseOption,
   tyopeOfResourcesOption,
@@ -120,11 +121,13 @@ const Edit = () => {
 
   const handleAddExerciseToCollection = async () => {
     if (!loading && response) {
-      const temp = {
+      const temp: OerInCollectionProps = {
         id: response.data.id,
         title: response.data.title,
         description: response.data.description,
         concepts: [],
+        urlSource: response.data.source,
+        generated_by_ai: response.data.generated_by_ai,
       };
       console.log('temp', temp);
       await addResource(collections[collectionIndex].id, temp);

@@ -52,8 +52,9 @@ export default async function materialAnalyzer(
       console.log('fillGapsExercise', analyzeMaterial?.data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal server error!' });
       res.status(400).json({ error: 'Bad request!' });
+      res.status(404).json({ error: 'This page could not be found!' });
+      res.status(500).json({ error: 'Internal server error!' });
     }
   } else {
     res.status(405).json({ error: 'Method not allowed' });

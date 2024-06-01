@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import LessonCardsList from '../../Card/LessonCard/LessonCardsList';
 
 type TabTilesProps = {
@@ -5,6 +7,14 @@ type TabTilesProps = {
 };
 
 export default function TabTiles({ isSmallerScreen }: TabTilesProps) {
+  const { handleEditLessonPlanClick, isEditLessonPlanClicked } =
+    useLearningPathDesignContext();
+
+  useEffect(() => {
+    if (isEditLessonPlanClicked) {
+      handleEditLessonPlanClick(false);
+    }
+  }, []);
   return (
     // <LessonCard
     //   lessonTitle="Activity Title"

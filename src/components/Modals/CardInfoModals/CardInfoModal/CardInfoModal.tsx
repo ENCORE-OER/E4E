@@ -38,6 +38,7 @@ export interface CardInfoModalProps {
   oer: OerProps | OerFreeSearchProps | null | undefined;
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
+  isAddContentModal: boolean | undefined; // To know if is from "Add content modal"
 }
 
 export default function CardInfoModal({
@@ -47,6 +48,7 @@ export default function CardInfoModal({
   onCardInfoClose,
   updateLikeOER,
   setUpdateLikeOER,
+  isAddContentModal,
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
     useCollectionsContext();
@@ -290,6 +292,7 @@ export default function CardInfoModal({
             linkOer={linkOer ? linkOer[0] : ''}
             handleOpenAddCollectionModal={handleOpenAddCollectionModal}
             handleViewResource={handleViewResource}
+            isAddContentModal={isAddContentModal}
           />
           <BodyCardInfoModal
             collectionsColor={collectionsColor}

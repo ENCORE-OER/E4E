@@ -1,9 +1,9 @@
-import { FaSave } from 'react-icons/fa';
-import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
-import IconEdit from '../../Icons/IconEdit/IconEdit';
-import IconExport from '../../Icons/IconExport/IconExport';
+import AddActivityLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/AddActivityLessonPlanButton';
+import EditLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/EditLessonPlanButton';
+import ExportLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/ExportLessonPlanButton';
+import PublishLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/PublishLessonPlanButton';
+import SaveLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/SaveLessonPlanButton';
 import IconGraph from '../../Icons/IconGraph/IconGraph';
-import IconPlus from '../../Icons/IconPlus/IconPlus';
 import IconTable from '../../Icons/IconTable/IconTable';
 import IconTiles from '../../Icons/IconTiles/IconTiles';
 import {
@@ -17,7 +17,7 @@ import { default as TabTable } from './TabTable';
 import TabTiles from './TabTiles';
 
 export type LearningPathTabsProps = {
-  isSmallerScreen?: boolean;
+  // isSmallerScreen?: boolean;
 } & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
@@ -36,6 +36,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
       color="primary"
       {...rest}
       w="100%"
+      minH="100%"
     />
   );
 }
@@ -50,7 +51,7 @@ const getConfig = () => {
       ),
       child: <TabTable />,
       pt: '3%',
-      isDisabled: true,
+      // isDisabled: true,
     },
     {
       label: (
@@ -71,57 +72,30 @@ const getConfig = () => {
     // Fixed Buttons on top-right of the Tabs
     {
       label: (
-        <UnderlinedButton
-          handleClick={() => console.log('Edit')}
-          nameButton="Edit"
-          rightIcon={<IconEdit />}
-          color="primary"
-          fontWeight="normal"
-          isDisabled={true}
+        <EditLessonPlanButton
+        // isDisabled={true}
         />
       ),
       isButton: true,
       pt: '3%',
     },
     {
-      label: (
-        <UnderlinedButton
-          handleClick={() => console.log('Add activity')}
-          nameButton="Add activity"
-          rightIcon={<IconPlus />}
-          color="primary"
-          fontWeight="normal"
-          isDisabled={true}
-        />
-      ),
+      label: <AddActivityLessonPlanButton />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: (
-        <UnderlinedButton
-          handleClick={() => console.log('Export')}
-          nameButton="Export"
-          rightIcon={<IconExport />}
-          color="primary"
-          fontWeight="normal"
-          isDisabled={true}
-        />
-      ),
+      label: <ExportLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: (
-        <UnderlinedButton
-          handleClick={() => console.log('Save')}
-          nameButton="Save"
-          rightIcon={<FaSave />}
-          color="primary"
-          fontWeight="normal"
-          isDisabled={true}
-        />
-      ),
+      label: <SaveLessonPlanButton />,
+      isButton: true,
+      pt: '3%',
+    },
+    {
+      label: <PublishLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
     },

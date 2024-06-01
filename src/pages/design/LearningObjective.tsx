@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -202,7 +202,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  const handleNextClick = () => {
+  const handleNextClick = async ({
+    handleFunction,
+  }: {
+    handleFunction: () => Promise<boolean>;
+  }) => {
     if (
       selectedCollection !== null &&
       // selectedResource !== null &&
@@ -218,9 +222,26 @@ const Home = (/*props: DiscoverPageProps*/) => {
       if (isNextButtonClicked) {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
-      router.push({
-        pathname: '/design/learningPathDesign',
-      });
+
+      const isPossibleToContinue = await handleFunction();
+
+      if (isPossibleToContinue) {
+        addToast({
+          message: `Lesson plan successfully generated.`,
+          type: 'success',
+        });
+        router.push({
+          pathname: '/design/learningPathDesign',
+        });
+      } else {
+        addToast({
+          message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
+          type: 'error',
+        });
+        router.push({
+          pathname: '/design/learningPathDesign',
+        });
+      }
     } else {
       setIsNextButtonClicked(true);
       if (collectionIndex < 0) {
@@ -396,13 +417,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setNumberOfLO={setNumberOfLO}
               />
 
-              <PathDesignGenLessonPlan />
+              <PathDesignGenLessonPlan handleNextClick={handleNextClick} />
             </Flex>
           )}
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            handleNextClick={handleNextClick}
+            // handleNextClick={handleNextClick}
             handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>

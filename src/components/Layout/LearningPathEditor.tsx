@@ -1,6 +1,6 @@
 import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
-import { useLearningPathContext } from '../../Contexts/learningPathContext';
+import { useLearningPathContext } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
 import { OerFreeSearchProps } from '../../types/encoreElements/oer/OerFreeSearch';
 import { PolyglotFlow } from '../../types/polyglot/PolyglotFlow';
