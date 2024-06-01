@@ -7,6 +7,7 @@ import {
   ObjectLearningObjectiveProps,
   Option,
   SkillItemProps,
+  TypeOfActivityStringEnum,
 } from '../../types/encoreElements/index';
 
 // Context props
@@ -74,6 +75,7 @@ type LearnignPathDesignContextProps = {
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
 
+  activityTypes: string[] // Array of all the activity types
   // Lessons Activities
   totalNumberLessonActivities: number;
   // setTotalNumberLessonActivities: React.Dispatch<React.SetStateAction<number>>;
@@ -378,6 +380,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ========================================================
   // ----- Lessons -----
 
+  // Data activity type
+  const activityTypes: string[] = Object.values(TypeOfActivityStringEnum)
+
   // Pass Fail Conditions for each Lesson Card
   // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
 
@@ -579,6 +584,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         isEditLessonPlanClicked,
         handleEditLessonPlanClick,
 
+        activityTypes,
         // Lessons Activities
         totalNumberLessonActivities,
         handleNumberLessonActivities,

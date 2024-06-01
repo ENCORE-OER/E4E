@@ -368,7 +368,7 @@ export default function PathDesignGenLessonPlan({
             console.log(bloomLevel);
 
             const generatedLessonPlan: OutputLessonPlanProps[] =
-              await postGenerateLessonPlan(
+              (await postGenerateLessonPlan(
                 apiKey, // apiKey
                 setupModel, // setupModel
                 analyzedMaterial.MainTopics, // mainTopics
@@ -380,7 +380,7 @@ export default function PathDesignGenLessonPlan({
                 bloomLevel, // bloom level enum
                 learningTextContext, // learning context
                 0.3 // temperature
-              ) || [];
+              )) || [];
 
             // generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => {
             //   const lesson: LessonProps = {
@@ -402,7 +402,9 @@ export default function PathDesignGenLessonPlan({
                   (generatedLesson: OutputLessonPlanProps) => ({
                     lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'
                       } activity`,
-                    lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+                    lessonType: generatedLesson.Type
+                      ? 'Assessment'
+                      : 'Learning',
                     activityType: `${generatedLesson.Type
                       ? mapNumberToString(
                         Number(generatedLesson.Details),
@@ -442,8 +444,7 @@ export default function PathDesignGenLessonPlan({
         message: `Error during lesson plan generation.`,
         type: 'error',
       });
-    }
-    finally {
+    } finally {
       if (!isPossibleToContinue) {
         const tempLessonsActivities: LessonProps[] = [];
         for (let i = 0; i < numberOfLearningActivities; i++) {
@@ -455,7 +456,7 @@ export default function PathDesignGenLessonPlan({
             topic: '',
             timeDuration: 0,
             passFailConditions: [],
-          })
+          });
         }
         for (let i = 0; i < numberOfAssessmentActivities; i++) {
           tempLessonsActivities.push({
@@ -466,7 +467,7 @@ export default function PathDesignGenLessonPlan({
             topic: '',
             timeDuration: 0,
             passFailConditions: [],
-          })
+          });
         }
         setLessonActivities(tempLessonsActivities);
       }
@@ -506,10 +507,9 @@ export default function PathDesignGenLessonPlan({
     }
   }, [numberOfAssessmentActivities, numberOfLearningActivities]);
 
-
   useEffect(() => {
     console.log(lessonActivities);
-  }, [lessonActivities])
+  }, [lessonActivities]);
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="100%">

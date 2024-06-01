@@ -1,13 +1,8 @@
-import { Button, Flex } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Flex } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import {
-  DataTableLearningPathProps,
-  LessonProps,
-} from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
-import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
-import IconVerticalPoints from '../../Icons/IconVerticalPoints/IconVerticalPoints';
+import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
 import CustomLearningPathTable from './CustomLearningPathTable';
 
 const titleColumns = [
@@ -21,9 +16,20 @@ const titleColumns = [
 ];
 
 export default function TableLearningPath() {
-  const { isEditLessonPlanClicked, lessonActivities: lessonsActivities } =
+  const { isEditLessonPlanClicked, lessonActivities, setLessonActivities } =
     useLearningPathDesignContext();
   const hydrated = useHasHydrated();
+
+  // Handle "Add Content Modal"
+  const [isAddContentModalOpen, setIsAddContentModalOpen] = useState<boolean>(false);
+
+  const handleAddContentClick = () => {
+    setIsAddContentModalOpen(true);
+  };
+
+  const handleCloseAddContentModal = () => {
+    setIsAddContentModalOpen(false);
+  };
 
   // const data: DataTableLearningPathProps[] =
   //   lessonsActivities?.map(
@@ -42,35 +48,41 @@ export default function TableLearningPath() {
   //     })
   //   ) || [];
 
-  const [tableData, setTableData] =
-    useState<DataTableLearningPathProps[]>([]);
+  // const [tableData, setTableData] = useState<DataTableLearningPathProps[]>([]);
 
-  useEffect(() => {
-    setTableData(lessonsActivities?.map(
-      (lesson: LessonProps, index: number) => ({
-        number: index + 1,
-        type: <Button variant="solid">{lesson.lessonType}</Button>,
-        activity: lesson.activityType,
-        time: lesson.timeDuration,
-        description: lesson.activityDescription,
-        content: <AddContentButton />,
-        action: (
-          <Button shadow={'none'} bg="none" w="fit-content">
-            <IconVerticalPoints />
-          </Button>
-        ),
-      })
-    ) || [])
-  }, [lessonsActivities])
+  // useEffect(() => {
+  //   setTableData(
+  //     lessonActivities?.map((lesson: LessonProps, index: number) => ({
+  //       number: index + 1,
+  //       type: <Button variant="solid">{lesson.lessonType}</Button>,
+  //       activity: lesson.activityType,
+  //       time: lesson.timeDuration,
+  //       description: lesson.activityDescription,
+  //       content: <AddContentButton />,
+  //       action: (
+  //         <Button shadow={'none'} bg="none" w="fit-content">
+  //           <IconVerticalPoints />
+  //         </Button>
+  //       ),
+  //     })) || []
+  //   );
+  // }, [lessonActivities]);
 
   return (
     <Flex direction="column">
-      {hydrated && <CustomLearningPathTable
-        data={tableData}
-        handleData={setTableData}
-        titles={titleColumns}
-        isEditLessonPlanClicked={isEditLessonPlanClicked}
-      />}
+      {hydrated && (
+        <CustomLearningPathTable
+          data={lessonActivities}
+          handleData={setLessonActivities}
+          titles={titleColumns}
+          isEditLessonPlanClicked={isEditLessonPlanClicked}
+          handleAddContentClick={handleAddContentClick}
+        />
+      )}
+      <AddContentModal
+        isOpen={isAddContentModalOpen}
+        onClose={handleCloseAddContentModal}
+      />
     </Flex>
   );
 }

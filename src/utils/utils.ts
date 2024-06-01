@@ -71,7 +71,7 @@ export const mapOptionToNumber = (
 };
 
 export const mapNumberToString = (number: number, enumObject: any): string => {
-  if (!number) return '';
+  if (number === undefined || number === null) return '';
   return enumObject[number];
 };
 

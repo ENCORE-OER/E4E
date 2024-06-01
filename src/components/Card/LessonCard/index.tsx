@@ -37,7 +37,7 @@ export default function LessonCard({
   const [showBox, setShowBox] = useState<boolean>(false); // used to show the Activity
 
   // Handle "Add Content Modal"
-  const [isAddContentModalOpen, setIsAddContentModalOpen] = useState(false);
+  const [isAddContentModalOpen, setIsAddContentModalOpen] = useState<boolean>(false);
 
   const handleAddContentClick = () => {
     setIsAddContentModalOpen(true);

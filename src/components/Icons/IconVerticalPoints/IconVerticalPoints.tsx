@@ -12,6 +12,8 @@ export default function IconVerticalPoints({
     <Icon
       as={FaEllipsisVertical}
       onClick={() => (handleClick ? handleClick() : null)}
+      fontWeight="bold"
+      fontSize="large"
     ></Icon>
   );
 }
