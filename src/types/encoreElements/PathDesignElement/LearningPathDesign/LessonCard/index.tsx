@@ -1,3 +1,4 @@
+export * from './ActivityTypesObjects';
 export * from './AddContentModalProps';
 export * from './AddPassFailConditionModalProps';
 export * from './LessonCardProps';

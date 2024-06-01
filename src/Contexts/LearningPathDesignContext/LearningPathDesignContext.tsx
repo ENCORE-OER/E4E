@@ -6,8 +6,9 @@ import {
   LessonProps,
   ObjectLearningObjectiveProps,
   Option,
+  OptionsTypeOfAssignmentProps,
   SkillItemProps,
-  TypeOfActivityStringEnum,
+  activityTypesObjectsProps
 } from '../../types/encoreElements/index';
 
 // Context props
@@ -75,7 +76,8 @@ type LearnignPathDesignContextProps = {
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
 
-  activityTypes: string[]; // Array of all the activity types
+  activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
+  optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[]; // Array of all the lesson types
   // Lessons Activities
   totalNumberLessonActivities: number;
   // setTotalNumberLessonActivities: React.Dispatch<React.SetStateAction<number>>;
@@ -381,7 +383,42 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ----- Lessons -----
 
   // Data activity type
-  const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
+  // const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
+  const activityTypes: activityTypesObjectsProps[] = [
+    { lessonType: 'Assessment', activityType: 'Open Question' },
+    { lessonType: 'Assessment', activityType: 'Short Answer Question' },
+    { lessonType: 'Assessment', activityType: 'True or False' },
+    { lessonType: 'Assessment', activityType: 'Fill in the Blanks' },
+    { lessonType: 'Assessment', activityType: 'Single Choice' },
+    { lessonType: 'Assessment', activityType: 'Multiple Choice' },
+    { lessonType: 'Assessment', activityType: 'Essay' },
+    { lessonType: 'Learning', activityType: 'Knowledge Exposition' },
+    { lessonType: 'Learning', activityType: 'Debate' },
+    { lessonType: 'Learning', activityType: 'Brainstorming' },
+    { lessonType: 'Learning', activityType: 'Group Discussion' },
+    { lessonType: 'Assessment', activityType: 'Simulation' },
+    { lessonType: 'Learning', activityType: 'Inquiry-based Learning' },
+    { lessonType: 'Other', activityType: 'Non-written Material Analysis' },
+    { lessonType: 'Other', activityType: 'Non-written Material Production' },
+    { lessonType: 'Assessment', activityType: 'Case Study Analysis' },
+    { lessonType: 'Learning', activityType: 'Project-based Learning' },
+    { lessonType: 'Assessment', activityType: 'Problem-solving Activity' },
+  ];
+
+  const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
+    {
+      name: 'Learning',
+      colorBackground: 'blue.200',
+    },
+    {
+      name: 'Assessment',
+      colorBackground: 'blue.100',
+    },
+    {
+      name: 'Other',
+      colorBackground: 'gray.200',
+    },
+  ];
 
   // Pass Fail Conditions for each Lesson Card
   // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
@@ -585,6 +622,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleEditLessonPlanClick,
 
         activityTypes,
+        optionsTypeOfAssignment,
         // Lessons Activities
         totalNumberLessonActivities,
         handleNumberLessonActivities,

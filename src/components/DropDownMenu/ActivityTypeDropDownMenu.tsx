@@ -8,18 +8,21 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { activityTypesObjectsProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 
 type ActivityTypeDropDownMenuProps = {
   // options: string[];
+  lessonType: string;
   title: string;
   onChange: (selectedIndex: number) => void;
 };
 
 export default function ActivityTypeDropDownMenu({
   // options,
+  lessonType,
   title,
   onChange,
 }: ActivityTypeDropDownMenuProps) {
@@ -28,9 +31,13 @@ export default function ActivityTypeDropDownMenu({
   const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
-    setSelectedOption(activityTypes[index]);
-    onChange(index); // Chiamata alla funzione di callback con l'indice selezionato
+    setSelectedOption(activityTypes.filter((type: activityTypesObjectsProps) => type.lessonType === lessonType)[index]?.activityType);
+    onChange(index);
   };
+
+  useEffect(() => {
+    handleSelect(-1);
+  }, [lessonType])
 
   return (
     <Flex w="100%" flex="1" borderRadius="lg">
@@ -53,11 +60,11 @@ export default function ActivityTypeDropDownMenu({
             </Text>
           )}
         </MenuButton>
-        <MenuList borderRadius="lg">
+        <MenuList borderRadius="lg" maxH={"200px"} overflowY={"auto"} w="fit-content">
           {hydrated &&
-            activityTypes.map((activityType: string, index: number) => (
+            activityTypes.filter((type: activityTypesObjectsProps) => type.lessonType === lessonType).map((activityType: activityTypesObjectsProps, index: number) => (
               <MenuItem key={index} onClick={() => handleSelect(index)}>
-                {activityType}
+                {activityType.activityType}
               </MenuItem>
             ))}
         </MenuList>

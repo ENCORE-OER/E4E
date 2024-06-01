@@ -93,13 +93,12 @@ const getConfig = () => {
       label: <SaveLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
-
     },
     {
       label: <PublishLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
-    }
+    },
   ];
 
   return config;

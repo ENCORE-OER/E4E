@@ -7,14 +7,14 @@ type TabTilesProps = {
 };
 
 export default function TabTiles({ isSmallerScreen }: TabTilesProps) {
-
-  const { handleEditLessonPlanClick, isEditLessonPlanClicked } = useLearningPathDesignContext();
+  const { handleEditLessonPlanClick, isEditLessonPlanClicked } =
+    useLearningPathDesignContext();
 
   useEffect(() => {
     if (isEditLessonPlanClicked) {
       handleEditLessonPlanClick(false);
     }
-  }, [])
+  }, []);
   return (
     // <LessonCard
     //   lessonTitle="Activity Title"

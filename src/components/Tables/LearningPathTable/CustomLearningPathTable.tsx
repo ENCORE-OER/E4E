@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import { useEffect } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -18,14 +19,13 @@ import {
   Droppable,
   DroppableProvided,
 } from 'react-beautiful-dnd';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   LessonProps,
-  OptionsTypeOfAssignmentProps,
   TableLearningPathProps,
-  TypeOfActivityEnum,
-  TypeOfActivityStringEnum,
+  activityTypesObjectsProps
 } from '../../../types/encoreElements';
-import { mapStringToString, useHasHydrated } from '../../../utils/utils';
+import { useHasHydrated } from '../../../utils/utils';
 import ActionButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/ActionButton';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
 import ActivityTypeDropDownMenu from '../../DropDownMenu/ActivityTypeDropDownMenu';
@@ -35,21 +35,6 @@ import CustomNumberInput from '../../NumberInput/CustomNumberInput';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 import LabelEmptyFieldTable from '../../Texts/LabelEmptyFieldTable';
 
-const OptionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
-  {
-    name: 'Learning',
-    colorBackground: 'blue.200',
-  },
-  {
-    name: 'Assessment',
-    colorBackground: 'blue.100',
-  },
-  {
-    name: 'Other',
-    colorBackground: 'gray.200',
-  },
-];
-
 export default function CustomLearningPathTable({
   titles,
   data,
@@ -58,6 +43,8 @@ export default function CustomLearningPathTable({
   handleAddContentClick,
 }: TableLearningPathProps) {
   const hydrated = useHasHydrated();
+
+  const { activityTypes, optionsTypeOfAssignment } = useLearningPathDesignContext();
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -74,7 +61,7 @@ export default function CustomLearningPathTable({
       idx === index
         ? {
           ...item,
-          lessonType: OptionsTypeOfAssignment[selectedTypeIndex].name,
+          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
         }
         : item
     );
@@ -82,17 +69,25 @@ export default function CustomLearningPathTable({
   };
 
   const handleActivityTypeChange = (
-    index: number,
+    index: number,  // index row
     selectedTypeIndex: number
   ) => {
+    const filteredActivityTypes = activityTypes.filter(
+      (type: activityTypesObjectsProps) => type.lessonType === data[index].lessonType
+    );
+
+    const selectedActivityType = filteredActivityTypes[selectedTypeIndex]?.activityType;
+
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
           ...item,
-          activityType: mapStringToString(TypeOfActivityEnum[selectedTypeIndex], TypeOfActivityStringEnum),
+          activityType: selectedActivityType,
         }
         : item
     );
+
+    console.log(updatedData);
     handleData(updatedData);
   };
 
@@ -109,6 +104,10 @@ export default function CustomLearningPathTable({
     );
     handleData(updatedData);
   };
+
+  useEffect(() => {
+    console.log("DATA: ", data);
+  }, [data])
 
   return (
     <TableContainer fontSize={'sm'} borderRadius="lg" borderStyle="solid">
@@ -183,11 +182,15 @@ export default function CustomLearningPathTable({
                                 {`${indexRow + 1}.`}
                               </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
                               <Flex w="100%" justify="center">
-                                {isEditLessonPlanClicked ? (
+                                {isEditLessonPlanClicked && hydrated ? (
                                   <LessonDropDownMenu
-                                    options={OptionsTypeOfAssignment}
+                                    options={optionsTypeOfAssignment}
                                     title={row.lessonType}
                                     onChange={(selectedTypeIndex) =>
                                       handleLessonTypeChange(
@@ -201,11 +204,16 @@ export default function CustomLearningPathTable({
                                 )}
                               </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
                               <Flex w="100%" justify="center">
-                                {isEditLessonPlanClicked ? (
+                                {isEditLessonPlanClicked && hydrated ? (
                                   <ActivityTypeDropDownMenu
                                     title={row.activityType}
+                                    lessonType={row.lessonType}
                                     onChange={(selectedTypeIndex) =>
                                       handleActivityTypeChange(
                                         indexRow,
@@ -244,7 +252,11 @@ export default function CustomLearningPathTable({
                                 )}
                               </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
                               <Flex w="100%" justify="center">
                                 {isEditLessonPlanClicked ? (
                                   <Textarea
@@ -265,19 +277,26 @@ export default function CustomLearningPathTable({
                                 )}
                               </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
                               <Flex w="100%" justify="center">
                                 <AddContentButton
                                   onClick={handleAddContentClick}
                                 />
                               </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
                               <Flex w="100%" justify="center">
                                 <ActionButton />
                               </Flex>
                             </Td>
-
                           </Tr>
                         )}
                       </Draggable>
@@ -289,6 +308,6 @@ export default function CustomLearningPathTable({
           </DragDropContext>
         )}
       </Table>
-    </TableContainer >
+    </TableContainer>
   );
 }

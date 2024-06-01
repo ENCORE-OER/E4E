@@ -6,7 +6,7 @@ export enum TypeOfActivityEnum {
   single_choice = 4, // multiple_choice
   multiple_choice = 5, // multiple_select
   essay = 6,
-  knoledge_exposition = 7,
+  knowledge_exposition = 7,
 
   debate = 8,
   brainstorming = 9,
