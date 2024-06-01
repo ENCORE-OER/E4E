@@ -16,7 +16,7 @@ import { default as TabTable } from './TabTable';
 import TabTiles from './TabTiles';
 
 export type LearningPathTabsProps = {
-  isSmallerScreen?: boolean;
+  // isSmallerScreen?: boolean;
 } & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {

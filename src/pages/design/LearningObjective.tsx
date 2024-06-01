@@ -205,7 +205,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handleNextClick = async ({
     handleFunction,
   }: {
-    handleFunction: () => Promise<void>;
+    handleFunction: () => Promise<boolean>;
   }) => {
     if (
       selectedCollection !== null &&
@@ -223,11 +223,22 @@ const Home = (/*props: DiscoverPageProps*/) => {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
 
-      await handleFunction();
+      const isPossibleToContinue = await handleFunction();
 
-      router.push({
-        pathname: '/design/learningPathDesign',
-      });
+      if (isPossibleToContinue) {
+        addToast({
+          message: `Lesson plan successfully generated.`,
+          type: 'success',
+        });
+        router.push({
+          pathname: '/design/learningPathDesign',
+        });
+      } else {
+        addToast({
+          message: `Impossible to proceed forward. Try again.`,
+          type: 'error',
+        });
+      }
     } else {
       setIsNextButtonClicked(true);
       if (collectionIndex < 0) {

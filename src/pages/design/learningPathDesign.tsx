@@ -225,22 +225,23 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
             <Flex paddingTop="1.5rem" direction="column">
               <Flex>
-                <ShowHideButton
-                  // isClicked={isClicked}
-                  // setIsClicked={setIsClicked}
-                  showBox={showBox}
-                  setShowBox={setShowBox}
-                  isUpDown={true}
-                  showButtonName={
-                    learningObjectiveObjects.length > 1
-                      ? 'Learning objectives'
-                      : 'Learning objective'
-                  }
-                  fontWeight="bold"
-                  color="primary"
-                  border="none"
-                  letterSpacing={0}
-                />
+                {hydrated &&
+                  <ShowHideButton
+                    // isClicked={isClicked}
+                    // setIsClicked={setIsClicked}
+                    showBox={showBox}
+                    setShowBox={setShowBox}
+                    isUpDown={true}
+                    showButtonName={
+                      learningObjectiveObjects.length > 1
+                        ? 'Learning objectives'
+                        : 'Learning objective'
+                    }
+                    fontWeight="bold"
+                    color="primary"
+                    border="none"
+                    letterSpacing={0}
+                  />}
               </Flex>
               {showBox && hydrated && (
                 <Flex direction="column" gap={2} pt={3}>
@@ -264,16 +265,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Heading> */}
 
               <Heading fontWeight={'bold'} w="100%">
-                {hydrated &&
+                {hydrated && (
                   <LearningPathTitleTextBox
                     titleLearningPath={titleLearningPath}
                     handleTitleLearningPath={handleTitleLearningPath}
                     placeholder="Enter a title describing the lesson plan..."
-                  />}
+                  />
+                )}
               </Heading>
             </Flex>
             <Flex paddingTop="1rem">
-              <LearningPathTabs isSmallerScreen={isSmallerScreen} />
+              {hydrated &&
+                <LearningPathTabs />}
             </Flex>
             <Flex paddingTop={'1.5rem'}>
               <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />

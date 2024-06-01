@@ -75,17 +75,17 @@ type LearnignPathDesignContextProps = {
   handleEditLessonPlanClick: (isClicked: boolean) => void;
 
   // Lessons Activities
-  totalNumberLessonActivities: number,
+  totalNumberLessonActivities: number;
   // setTotalNumberLessonActivities: React.Dispatch<React.SetStateAction<number>>;
   handleNumberLessonActivities: (newNumber: number) => void;
-  numberLearningActivities: number,
+  numberLearningActivities: number;
   // setNumberLearningActivities: React.Dispatch<React.SetStateAction<number>>;
   handleNumberLearningActivities: (newNumber: number) => void;
-  numberAssessmentActivities: number,
+  numberAssessmentActivities: number;
   // setNumberAssessmentActivities: React.Dispatch<React.SetStateAction<number>>;
   handleNumberAssessmentActivities: (newNumber: number) => void;
-  lessonsActivities: LessonProps[];
-  setLessonsActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
+  lessonActivities: LessonProps[];
+  setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -373,8 +373,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setIsEditLessonPlanClicked(isClicked);
   };
 
-  // Lesson 
-
+  // Lesson
 
   // ========================================================
   // ----- Lessons -----
@@ -382,39 +381,31 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Pass Fail Conditions for each Lesson Card
   // const [passFailConditions, setPassFailConditions] = useLocalStorage<PassFailConditionsProps[]>('passFailConditions', []);
 
-
-  const [totalNumberLessonActivities, setTotalNumberLessonActivities] = useLocalStorage<number>(
-    'totalNumberOfLessonActivities',
-    0
-  );
+  const [totalNumberLessonActivities, setTotalNumberLessonActivities] =
+    useLocalStorage<number>('totalNumberOfLessonActivities', 0);
 
   const handleNumberLessonActivities = (newNumber: number) => {
     setTotalNumberLessonActivities(newNumber);
   };
 
-  const [numberAssessmentActivities, setNumberAssessmentActivities] = useLocalStorage<number>(
-    'numberAssessmentActivities',
-    0
-  );
+  const [numberAssessmentActivities, setNumberAssessmentActivities] =
+    useLocalStorage<number>('numberAssessmentActivities', 0);
 
   const handleNumberAssessmentActivities = (newNumber: number) => {
     setNumberAssessmentActivities(newNumber);
   };
 
-  const [numberLearningActivities, setNumberLearningActivities] = useLocalStorage<number>(
-    'numberLearningActivities',
-    0
-  );
+  const [numberLearningActivities, setNumberLearningActivities] =
+    useLocalStorage<number>('numberLearningActivities', 0);
 
   const handleNumberLearningActivities = (newNumber: number) => {
     setNumberLearningActivities(newNumber);
-  }
+  };
 
   // Lesson activities. General da used for both table and cards.
-  const [lessonsActivities, setLessonsActivities] = useLocalStorage<LessonProps[]>(
-    'lessonsActivities',
-    []
-  );
+  const [lessonActivities, setLessonActivities] = useLocalStorage<
+    LessonProps[]
+  >('lessonsActivities', []);
 
   // TO_CHECK: useful?
   // const handleLessonActivities = (
@@ -596,8 +587,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         numberAssessmentActivities,
         handleNumberAssessmentActivities,
 
-        lessonsActivities,
-        setLessonsActivities,
+        lessonActivities,
+        setLessonActivities,
 
         // LESSONS CARDS
         lessonCards,
