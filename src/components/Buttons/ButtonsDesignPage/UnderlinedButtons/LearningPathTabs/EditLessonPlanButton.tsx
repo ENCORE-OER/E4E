@@ -16,9 +16,11 @@ export default function EditLessonPlanButton({
   return (
     <Flex
       background={isEditLessonPlanClicked ? 'gray.200' : undefined}
-      p={isEditLessonPlanClicked ? 1 : undefined}
-      borderRadius={isEditLessonPlanClicked ? 'lg' : undefined}
+      // p={isEditLessonPlanClicked ? 1 : undefined}
+      // borderRadius={isEditLessonPlanClicked ? 'lg' : undefined}
       // borderBottom={isEditLessonPlanClicked ? '3px solid' : undefined}
+      p={1}
+      _hover={{ bg: 'gray.200' }}
     >
       <UnderlinedButton
         handleClick={() => handleEditLessonPlanClick(!isEditLessonPlanClicked)}

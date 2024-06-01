@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Table,
   TableContainer,
@@ -9,9 +8,9 @@ import {
   Textarea,
   Th,
   Thead,
-  Tr,
+  Tr
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -43,11 +42,13 @@ export default function CustomLearningPathTable({
   handleAddContentClick,
   activityTypes,
   optionsTypeOfAssignment,
-  removeLessonActivity
+  removeLessonActivity,
+  editRowIndex,
+  handleEditLesson,
+  // handleSaveLesson
 }: TableLearningPathProps) {
   const hydrated = useHasHydrated();
-  // State to track the index of the row currently in edit mode
-  const [editRowIndex, setEditRowIndex] = useState<number | null>(null);
+
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -108,18 +109,6 @@ export default function CustomLearningPathTable({
       idx === index ? { ...item, activityDescription: value } : item
     );
     handleData(updatedData);
-  };
-
-  // Function to handle initiating edit mode for a row
-  const handleEditLesson = (index: number) => {
-    // Set the index of the row in edit mode
-    setEditRowIndex(index);
-  };
-
-  // Function to handle saving changes and exit edit mode
-  const handleSaveLesson = () => {
-    // Save changes and disable edit mode
-    setEditRowIndex(null);
   };
 
   useEffect(() => {
@@ -229,8 +218,7 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" px={0}>
                                 {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex
-                                  && hydrated ? (
+                                  (indexRow === editRowIndex && hydrated) ? (
                                   <ActivityTypeDropDownMenu
                                     title={row.activityType}
                                     lessonType={row.lessonType}
@@ -317,13 +305,24 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" gap={1} px={0}>
                                 <ActionButton
-                                  isEditLessonPlanClicked={isEditLessonPlanClicked}
-                                  handleDeleteLesson={() => removeLessonActivity(indexRow)}
-                                  handleEditLesson={() => handleEditLesson(indexRow)}
+                                  isEditLessonPlanClicked={
+                                    isEditLessonPlanClicked
+                                  }
+                                  handleDeleteLesson={() =>
+                                    removeLessonActivity(indexRow)
+                                  }
+                                  handleEditLesson={() =>
+                                    handleEditLesson(indexRow)
+                                  }
                                 />
-                                {editRowIndex === indexRow && (
-                                  <Button fontSize="small" onClick={handleSaveLesson}>Done</Button>
-                                )}
+                                {/* {editRowIndex === indexRow && (
+                                  <Button
+                                    fontSize="small"
+                                    onClick={handleSaveLesson}
+                                  >
+                                    Done
+                                  </Button>
+                                )} */}
                               </Flex>
                             </Td>
                           </Tr>

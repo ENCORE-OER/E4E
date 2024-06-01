@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import IconUpload from '../../../../Icons/IconUpload/IconUpload';
 import UnderlinedButton from '../UnderlinedButton';
@@ -11,13 +12,16 @@ export default function PublishLessonPlanButton({
 }: PublishLessonPlanButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
-    <UnderlinedButton
-      handleClick={() => console.log('Publish')}
-      nameButton="Publish"
-      rightIcon={<IconUpload />}
-      color="primary"
-      fontWeight="normal"
-      isDisabled={isDisabled || isEditLessonPlanClicked}
-    />
+    <Flex p={1} _hover={{ bg: 'gray.200' }}>
+      <UnderlinedButton
+        handleClick={() => console.log('Publish')}
+        nameButton="Publish"
+        rightIcon={<IconUpload />}
+        color="primary"
+        fontWeight="normal"
+        isDisabled={isDisabled || isEditLessonPlanClicked}
+
+      />
+    </Flex>
   );
 }

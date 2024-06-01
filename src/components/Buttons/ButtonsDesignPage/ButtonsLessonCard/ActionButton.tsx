@@ -1,4 +1,12 @@
-import { Button, Flex, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+} from '@chakra-ui/react';
 import { useState } from 'react';
 import IconDelete from '../../../Icons/IconDelete/IconDelete';
 import IconEdit from '../../../Icons/IconEdit/IconEdit';
@@ -9,23 +17,21 @@ type ActionButtonProps = {
   handleDeleteLesson: () => void;
   handleEditLesson: () => void;
   isEditLessonPlanClicked: boolean;
-}
+};
 
 export default function ActionButton({
   handleDeleteLesson,
   isEditLessonPlanClicked,
-  handleEditLesson
+  handleEditLesson,
 }: ActionButtonProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleOpen = () => {
-    if (!isOpen)
-      setIsOpen(true);
+    if (!isOpen) setIsOpen(true);
   };
 
   const handleClose = () => {
-    if (isOpen)
-      setIsOpen(false);
+    if (isOpen) setIsOpen(false);
   };
 
   return (
@@ -40,19 +46,24 @@ export default function ActionButton({
         <IconVerticalPoints />
       </MenuButton>
       <MenuList w="fit-content" fontSize="small">
-        <MenuItem onClick={() => {
-          handleClose();
-          handleEditLesson();
-        }} isDisabled={isEditLessonPlanClicked}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleEditLesson();
+          }}
+          isDisabled={isEditLessonPlanClicked}
+        >
           <Flex direction="row" gap={2}>
             <IconEdit />
             <Text>Edit</Text>
           </Flex>
         </MenuItem>
-        <MenuItem onClick={() => {
-          handleClose();
-          handleDeleteLesson()
-        }}>
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            handleDeleteLesson();
+          }}
+        >
           <Flex direction="row" gap={2}>
             <IconDelete />
             <Text>Delete</Text>
@@ -65,6 +76,6 @@ export default function ActionButton({
           </Flex>
         </MenuItem>
       </MenuList>
-    </Menu >
+    </Menu>
   );
 }

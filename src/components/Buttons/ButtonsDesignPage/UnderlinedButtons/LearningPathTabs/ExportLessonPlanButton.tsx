@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import IconExport from '../../../../Icons/IconExport/IconExport';
 import UnderlinedButton from '../UnderlinedButton';
@@ -11,13 +12,15 @@ export default function ExportLessonPlanButton({
 }: ExportLessonPlanButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
-    <UnderlinedButton
-      handleClick={() => console.log('Export')}
-      nameButton="Export"
-      rightIcon={<IconExport />}
-      color="primary"
-      fontWeight="normal"
-      isDisabled={isDisabled || isEditLessonPlanClicked}
-    />
+    <Flex p={1} _hover={{ bg: 'gray.200' }}>
+      <UnderlinedButton
+        handleClick={() => console.log('Export')}
+        nameButton="Export"
+        rightIcon={<IconExport />}
+        color="primary"
+        fontWeight="normal"
+        isDisabled={isDisabled || isEditLessonPlanClicked}
+      />
+    </Flex>
   );
 }

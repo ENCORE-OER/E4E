@@ -14,6 +14,9 @@ export interface TableLearningPathProps {
   activityTypes: activityTypesObjectsProps[];
   optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[];
   isEditLessonPlanClicked: boolean;
+  editRowIndex: number | null;
+  handleEditLesson: (index: number) => void;
+  // handleSaveLesson: () => void;
   handleAddContentClick: () => void;
   removeLessonActivity: (index: number) => void;
 }

@@ -6,5 +6,5 @@ import { FaArrowRotateLeft } from 'react-icons/fa6';
 // }
 
 export default function IconRegenerate({ ...rest }: IconProps) {
-    return <Icon {...rest} as={FaArrowRotateLeft} fontSize="x-large" />;
+  return <Icon {...rest} as={FaArrowRotateLeft} fontSize="x-large" />;
 }

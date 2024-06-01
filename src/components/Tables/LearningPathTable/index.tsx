@@ -16,8 +16,16 @@ const titleColumns = [
 ];
 
 export default function TableLearningPath() {
-  const { isEditLessonPlanClicked, lessonActivities, setLessonActivities, activityTypes, removeLessonActivity, optionsTypeOfAssignment } =
-    useLearningPathDesignContext();
+  const {
+    isEditLessonPlanClicked,
+    lessonActivities,
+    setLessonActivities,
+    activityTypes,
+    removeLessonActivity,
+    optionsTypeOfAssignment,
+    editRowIndex,
+    handleEditLesson
+  } = useLearningPathDesignContext();
   const hydrated = useHasHydrated();
 
   // Handle "Add Content Modal"
@@ -81,6 +89,8 @@ export default function TableLearningPath() {
           activityTypes={activityTypes}
           optionsTypeOfAssignment={optionsTypeOfAssignment}
           removeLessonActivity={removeLessonActivity}
+          editRowIndex={editRowIndex}
+          handleEditLesson={handleEditLesson}
         />
       )}
       <AddContentModal

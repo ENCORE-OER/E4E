@@ -75,6 +75,10 @@ type LearnignPathDesignContextProps = {
   handleTitleLearningPath: (newTitle: string) => void;
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
+  handleSaveLessonPlanClick: () => void;
+  editRowIndex: number | null;
+  handleEditLesson: (index: number) => void;
+  handleSaveLesson: () => void;
 
   activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
   optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[]; // Array of all the lesson types
@@ -376,8 +380,36 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     useLocalStorage<boolean>('isLessonPlanEditClicked', false);
 
   const handleEditLessonPlanClick = (isClicked: boolean) => {
+    // if (isClicked) {
+    //   handleSaveLesson();
+    // }
     setIsEditLessonPlanClicked(isClicked);
   };
+
+  const handleSaveLessonPlanClick = () => {
+    if (isEditLessonPlanClicked) {
+      setIsEditLessonPlanClicked(false);
+    }
+    if (editRowIndex !== null) {
+      handleSaveLesson();
+    }
+  };
+
+  // State to track the index of the row currently in edit mode
+  const [editRowIndex, setEditRowIndex] = useLocalStorage<number | null>('editRowIndex', null);
+
+  // Function to handle initiating edit mode for a row
+  const handleEditLesson = (index: number) => {
+    // Set the index of the row in edit mode
+    setEditRowIndex(index);
+  };
+
+  // Function to handle saving changes and exit edit mode
+  const handleSaveLesson = () => {
+    // Save changes and disable edit mode
+    setEditRowIndex(null);
+  };
+
 
   // Lesson
 
@@ -461,7 +493,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       timeDuration: 0,
       passFailConditions: [],
     };
-    setLessonActivities((prevLessonActivities: LessonProps[]) => [...prevLessonActivities, newLessonActivity]);
+    setLessonActivities((prevLessonActivities: LessonProps[]) => [
+      ...prevLessonActivities,
+      newLessonActivity,
+    ]);
   };
 
   // Function to remove a lessonActivity from the lessonActivities array given the index
@@ -645,6 +680,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleTitleLearningPath,
         isEditLessonPlanClicked,
         handleEditLessonPlanClick,
+        handleSaveLessonPlanClick,
+        editRowIndex,
+        handleEditLesson,
+        handleSaveLesson,
 
         activityTypes,
         optionsTypeOfAssignment,

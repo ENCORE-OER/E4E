@@ -80,7 +80,7 @@ const getConfig = () => {
       pt: '3%',
     },
     {
-      label: <AddActivityLessonPlanButton isDisabled={true} />,
+      label: <AddActivityLessonPlanButton />,
       isButton: true,
       pt: '3%',
     },
@@ -90,7 +90,7 @@ const getConfig = () => {
       pt: '3%',
     },
     {
-      label: <SaveLessonPlanButton isDisabled={true} />,
+      label: <SaveLessonPlanButton />,
       isButton: true,
       pt: '3%',
     },
