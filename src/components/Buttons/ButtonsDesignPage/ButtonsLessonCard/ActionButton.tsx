@@ -8,23 +8,25 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
+import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import IconDelete from '../../../Icons/IconDelete/IconDelete';
 import IconEdit from '../../../Icons/IconEdit/IconEdit';
 import IconRegenerate from '../../../Icons/IconRegenerate/IconRegenerate';
 import IconVerticalPoints from '../../../Icons/IconVerticalPoints/IconVerticalPoints';
 
 type ActionButtonProps = {
-  handleDeleteLesson: () => void;
-  handleEditLesson: () => void;
+  handleDeleteLessonActivity: () => void;
+  handleEditLessonActivity: () => void;
   isEditLessonPlanClicked: boolean;
 };
 
 export default function ActionButton({
-  handleDeleteLesson,
+  handleDeleteLessonActivity,
   isEditLessonPlanClicked,
-  handleEditLesson,
+  handleEditLessonActivity,
 }: ActionButtonProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { addToast } = CustomToast()
 
   const handleOpen = () => {
     if (!isOpen) setIsOpen(true);
@@ -33,6 +35,16 @@ export default function ActionButton({
   const handleClose = () => {
     if (isOpen) setIsOpen(false);
   };
+
+  const handleDeleteClick = () => {
+    handleClose();
+    handleDeleteLessonActivity();
+
+    addToast({
+      message: 'Lesson activity succesfully deleted',
+      type: 'success'
+    })
+  }
 
   return (
     <Menu>
@@ -49,7 +61,7 @@ export default function ActionButton({
         <MenuItem
           onClick={() => {
             handleClose();
-            handleEditLesson();
+            handleEditLessonActivity();
           }}
           isDisabled={isEditLessonPlanClicked}
         >
@@ -59,10 +71,7 @@ export default function ActionButton({
           </Flex>
         </MenuItem>
         <MenuItem
-          onClick={() => {
-            handleClose();
-            handleDeleteLesson();
-          }}
+          onClick={handleDeleteClick}
         >
           <Flex direction="row" gap={2}>
             <IconDelete />

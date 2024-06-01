@@ -31,6 +31,7 @@ export default function AddContentTabs(props: AddContentTabsProps) {
       color="primary"
       {...rest}
       w="100%"
+      overflowY="auto"
     />
   );
 }
@@ -49,6 +50,7 @@ const getConfig = () => {
       ),
       child: <TabGenerateAI />,
       pt: '3%',
+      // overflowY: 'auto'
     },
     {
       label: (

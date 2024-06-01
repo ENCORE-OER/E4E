@@ -8,7 +8,7 @@ import {
   Textarea,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import {
@@ -45,10 +45,9 @@ export default function CustomLearningPathTable({
   removeLessonActivity,
   editRowIndex,
   handleEditLesson,
-  // handleSaveLesson
-}: TableLearningPathProps) {
+} // handleSaveLesson
+  : TableLearningPathProps) {
   const hydrated = useHasHydrated();
-
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -255,9 +254,10 @@ export default function CustomLearningPathTable({
                                     maxW="100px"
                                   />
                                 ) : (
-                                  `${row.timeDuration ?? 0} min` || (
-                                    <LabelEmptyFieldTable label="Minutes" />
-                                  )
+                                  row.timeDuration > 0 ?
+                                    `${row.timeDuration} min` : (
+                                      <LabelEmptyFieldTable label="Minutes" />
+                                    )
                                 )}
                               </Flex>
                             </Td>
@@ -308,10 +308,10 @@ export default function CustomLearningPathTable({
                                   isEditLessonPlanClicked={
                                     isEditLessonPlanClicked
                                   }
-                                  handleDeleteLesson={() =>
+                                  handleDeleteLessonActivity={() =>
                                     removeLessonActivity(indexRow)
                                   }
-                                  handleEditLesson={() =>
+                                  handleEditLessonActivity={() =>
                                     handleEditLesson(indexRow)
                                   }
                                 />

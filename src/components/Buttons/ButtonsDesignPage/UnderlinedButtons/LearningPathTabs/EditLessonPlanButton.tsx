@@ -23,12 +23,12 @@ export default function EditLessonPlanButton({
       _hover={{ bg: 'gray.200' }}
     >
       <UnderlinedButton
-        handleClick={() => handleEditLessonPlanClick(!isEditLessonPlanClicked)}
+        handleClick={() => handleEditLessonPlanClick(true)}
         nameButton="Edit"
         rightIcon={<IconEdit />}
         color="primary"
         fontWeight="normal"
-        isDisabled={isDisabled}
+        isDisabled={isEditLessonPlanClicked || isDisabled}
       />
     </Flex>
   );

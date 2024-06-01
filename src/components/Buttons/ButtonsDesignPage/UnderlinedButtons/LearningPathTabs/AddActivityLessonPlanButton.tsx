@@ -10,7 +10,6 @@ type AddActivityLessonPlanButtonProps = {
 export default function AddActivityLessonPlanButton({
   isDisabled,
 }: AddActivityLessonPlanButtonProps) {
-
   const { addEmptyLessonActivity } = useLearningPathDesignContext();
   return (
     <Flex p={1} _hover={{ bg: 'gray.200' }}>

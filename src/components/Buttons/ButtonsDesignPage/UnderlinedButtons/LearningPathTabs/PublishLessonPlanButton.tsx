@@ -20,7 +20,6 @@ export default function PublishLessonPlanButton({
         color="primary"
         fontWeight="normal"
         isDisabled={isDisabled || isEditLessonPlanClicked}
-
       />
     </Flex>
   );

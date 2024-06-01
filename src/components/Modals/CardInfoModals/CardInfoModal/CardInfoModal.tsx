@@ -38,6 +38,7 @@ export interface CardInfoModalProps {
   oer: OerProps | OerFreeSearchProps | null | undefined;
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
+  isAddContentModal: boolean | undefined; // To know if is from "Add content modal"
 }
 
 export default function CardInfoModal({
@@ -47,6 +48,7 @@ export default function CardInfoModal({
   onCardInfoClose,
   updateLikeOER,
   setUpdateLikeOER,
+  isAddContentModal,
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
     useCollectionsContext();
@@ -204,7 +206,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-              []
+            []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -290,6 +292,7 @@ export default function CardInfoModal({
             linkOer={linkOer ? linkOer[0] : ''}
             handleOpenAddCollectionModal={handleOpenAddCollectionModal}
             handleViewResource={handleViewResource}
+            isAddContentModal={isAddContentModal}
           />
           <BodyCardInfoModal
             collectionsColor={collectionsColor}
@@ -328,9 +331,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-          //times_used={times_used}
-          //setTimes_used={setTimes_used}
-          //getCount={getCount}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
       <ExerciseInfoModal

@@ -387,16 +387,18 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleSaveLessonPlanClick = () => {
-    if (isEditLessonPlanClicked) {
-      setIsEditLessonPlanClicked(false);
-    }
     if (editRowIndex !== null) {
       handleSaveLesson();
+    } else if (isEditLessonPlanClicked) {
+      setIsEditLessonPlanClicked(false);
     }
   };
 
   // State to track the index of the row currently in edit mode
-  const [editRowIndex, setEditRowIndex] = useLocalStorage<number | null>('editRowIndex', null);
+  const [editRowIndex, setEditRowIndex] = useLocalStorage<number | null>(
+    'editRowIndex',
+    null
+  );
 
   // Function to handle initiating edit mode for a row
   const handleEditLesson = (index: number) => {
@@ -409,7 +411,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // Save changes and disable edit mode
     setEditRowIndex(null);
   };
-
 
   // Lesson
 

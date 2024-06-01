@@ -1,5 +1,6 @@
 import {
   Box,
+  Checkbox,
   Flex,
   Heading,
   HStack,
@@ -24,6 +25,7 @@ export interface HeaderCardInfoModalProps {
   authors: string;
   handleOpenAddCollectionModal?: () => void;
   handleViewResource?: () => void;
+  isAddContentModal: boolean | undefined; // To know if is from "Add content modal"
 }
 
 export default function HeaderCardInfoModal({
@@ -37,6 +39,7 @@ export default function HeaderCardInfoModal({
   linkOer,
   handleOpenAddCollectionModal,
   handleViewResource,
+  isAddContentModal
 }: HeaderCardInfoModalProps) {
   return (
     <ModalHeader>
@@ -47,7 +50,16 @@ export default function HeaderCardInfoModal({
           showTagGreen={showTagGreen}
           showTagGenAI={isGeneratedByAI}
         />
-        {collectionsColor?.length &&
+        {isAddContentModal &&
+          <Checkbox
+            colorScheme="yellow"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            isDisabled={true}
+          />
+        }
+        {(!isAddContentModal || isAddContentModal === undefined) && collectionsColor?.length &&
           collectionsColor?.map(
             (
               collection_color: ColorCollectionProps | undefined,

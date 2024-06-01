@@ -6,7 +6,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { OptionsTypeOfAssignmentProps } from '../../types/encoreElements';
@@ -46,7 +46,7 @@ export default function LessonDropDownMenu({
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'lightblue' }}
           textAlign="center"
-        // border={'1px solid #CED4DA'}
+          // border={'1px solid #CED4DA'}
         >
           {selectedOption || title || (
             <Text color="gray.400" fontWeight={'light'}>

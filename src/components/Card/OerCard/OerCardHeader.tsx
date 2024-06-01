@@ -82,6 +82,7 @@ export default function OerCardHeader({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
+                isDisabled={true}
               />
             )}
           </Button>
