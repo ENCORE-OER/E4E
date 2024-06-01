@@ -1,4 +1,5 @@
 import { FaSave } from 'react-icons/fa';
+import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import UnderlinedButton from '../UnderlinedButton';
 
 type SaveLessonPlanButtonProps = {
@@ -8,6 +9,7 @@ type SaveLessonPlanButtonProps = {
 export default function SaveLessonPlanButton({
   isDisabled,
 }: SaveLessonPlanButtonProps) {
+  const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
     <UnderlinedButton
       handleClick={() => console.log('Save')}
@@ -15,7 +17,7 @@ export default function SaveLessonPlanButton({
       rightIcon={<FaSave />}
       color="primary"
       fontWeight="normal"
-      isDisabled={isDisabled}
+      isDisabled={isDisabled || isEditLessonPlanClicked}
     />
   );
 }

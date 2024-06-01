@@ -8,7 +8,7 @@ import {
   Textarea,
   Th,
   Thead,
-  Tr
+  Tr,
 } from '@chakra-ui/react';
 import {
   DragDropContext,
@@ -21,9 +21,11 @@ import {
 import {
   LessonProps,
   OptionsTypeOfAssignmentProps,
-  TableLearningPathProps
+  TableLearningPathProps,
+  TypeOfActivityEnum,
+  TypeOfActivityStringEnum,
 } from '../../../types/encoreElements';
-import { useHasHydrated } from '../../../utils/utils';
+import { mapStringToString, useHasHydrated } from '../../../utils/utils';
 import ActionButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/ActionButton';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
 import ActivityTypeDropDownMenu from '../../DropDownMenu/ActivityTypeDropDownMenu';
@@ -35,17 +37,17 @@ import LabelEmptyFieldTable from '../../Texts/LabelEmptyFieldTable';
 
 const OptionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
   {
-    name: "Learning",
-    colorBackground: "blue.200"
+    name: 'Learning',
+    colorBackground: 'blue.200',
   },
   {
-    name: "Assessment",
-    colorBackground: "blue.100"
+    name: 'Assessment',
+    colorBackground: 'blue.100',
   },
   {
-    name: "Other",
-    colorBackground: 'gray.200'
-  }
+    name: 'Other',
+    colorBackground: 'gray.200',
+  },
 ];
 
 export default function CustomLearningPathTable({
@@ -53,7 +55,7 @@ export default function CustomLearningPathTable({
   data,
   handleData,
   isEditLessonPlanClicked,
-  handleAddContentClick
+  handleAddContentClick,
 }: TableLearningPathProps) {
   const hydrated = useHasHydrated();
 
@@ -69,17 +71,30 @@ export default function CustomLearningPathTable({
 
   const handleLessonTypeChange = (index: number, selectedTypeIndex: number) => {
     const updatedData = data.map((item: LessonProps, idx: number) =>
-      idx === index ? { ...item, lessonType: OptionsTypeOfAssignment[selectedTypeIndex].name } : item
+      idx === index
+        ? {
+          ...item,
+          lessonType: OptionsTypeOfAssignment[selectedTypeIndex].name,
+        }
+        : item
     );
     handleData(updatedData);
-  }
+  };
 
-  const handleActivityTypeChange = (index: number, selectedTypeIndex: number) => {
+  const handleActivityTypeChange = (
+    index: number,
+    selectedTypeIndex: number
+  ) => {
     const updatedData = data.map((item, idx) =>
-      idx === index ? { ...item, activityType: OptionsTypeOfAssignment[selectedTypeIndex].name } : item
+      idx === index
+        ? {
+          ...item,
+          activityType: mapStringToString(TypeOfActivityEnum[selectedTypeIndex], TypeOfActivityStringEnum),
+        }
+        : item
     );
     handleData(updatedData);
-  }
+  };
 
   const handleTimeDurationChange = (index: number, value: string) => {
     const updatedData = data.map((item: LessonProps, idx: number) =>
@@ -96,7 +111,7 @@ export default function CustomLearningPathTable({
   };
 
   return (
-    <TableContainer fontSize={'sm'} borderRadius="md" borderStyle="solid">
+    <TableContainer fontSize={'sm'} borderRadius="lg" borderStyle="solid">
       <Table borderWidth="1px" borderColor="primary">
         <Thead
           bg="primary"
@@ -104,7 +119,7 @@ export default function CustomLearningPathTable({
           borderWidth="2px"
           borderColor="primary"
         >
-          <Tr>
+          <Tr w="fit-content">
             {isEditLessonPlanClicked && (
               <Th px={0}>
                 <Box></Box>
@@ -120,9 +135,7 @@ export default function CustomLearningPathTable({
                   textTransform="none"
                   px={0}
                 >
-                  <Flex justify="center">
-                    {title}
-                  </Flex>
+                  <Flex justify="center">{title}</Flex>
                 </Th>
               ))}
           </Tr>
@@ -154,11 +167,9 @@ export default function CustomLearningPathTable({
                                 borderColor="primary"
                                 p={0}
                                 {...provided.dragHandleProps}
+                                w="fit-content"
                               >
-                                <Flex
-                                  w="100%"
-                                  justify="center"
-                                >
+                                <Flex w="100%" justify="center">
                                   <IconDrag />
                                 </Flex>
                               </Td>
@@ -166,63 +177,107 @@ export default function CustomLearningPathTable({
                             <Td
                               borderWidth="2px"
                               borderColor="primary"
-                              justifyContent={'center'}
+                              w="fit-content"
                             >
-                              {`${indexRow + 1}.`}
+                              <Flex w="100%" justify="center">
+                                {`${indexRow + 1}.`}
+                              </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" >
-                              {isEditLessonPlanClicked ?
-                                <LessonDropDownMenu
-                                  options={OptionsTypeOfAssignment}
-                                  title={row.lessonType}
-                                  onChange={(selectedTypeIndex) => handleLessonTypeChange(indexRow, selectedTypeIndex)}
+                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                              <Flex w="100%" justify="center">
+                                {isEditLessonPlanClicked ? (
+                                  <LessonDropDownMenu
+                                    options={OptionsTypeOfAssignment}
+                                    title={row.lessonType}
+                                    onChange={(selectedTypeIndex) =>
+                                      handleLessonTypeChange(
+                                        indexRow,
+                                        selectedTypeIndex
+                                      )
+                                    }
+                                  />
+                                ) : (
+                                  <TagLessonType labelTag={row.lessonType} />
+                                )}
+                              </Flex>
+                            </Td>
+                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                              <Flex w="100%" justify="center">
+                                {isEditLessonPlanClicked ? (
+                                  <ActivityTypeDropDownMenu
+                                    title={row.activityType}
+                                    onChange={(selectedTypeIndex) =>
+                                      handleActivityTypeChange(
+                                        indexRow,
+                                        selectedTypeIndex
+                                      )
+                                    }
+                                  />
+                                ) : (
+                                  row.activityType || (
+                                    <LabelEmptyFieldTable label="Type of Activity" />
+                                  )
+                                )}
+                              </Flex>
+                            </Td>
+                            <Td
+                              borderWidth="2px"
+                              borderColor="primary"
+                              w="fit-content"
+                            >
+                              <Flex w="100%" justify="center">
+                                {isEditLessonPlanClicked ? (
+                                  <CustomNumberInput
+                                    valueNumber={row.timeDuration ?? 0}
+                                    handleChangeValue={(value: string) =>
+                                      handleTimeDurationChange(indexRow, value)
+                                    }
+                                    steppers={true}
+                                    fontSize="small"
+                                    minW="75px"
+                                    maxW="100px"
+                                  />
+                                ) : (
+                                  `${row.timeDuration ?? 0} min` || (
+                                    <LabelEmptyFieldTable label="Minutes" />
+                                  )
+                                )}
+                              </Flex>
+                            </Td>
+                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                              <Flex w="100%" justify="center">
+                                {isEditLessonPlanClicked ? (
+                                  <Textarea
+                                    value={row.activityDescription || ''}
+                                    onChange={(e) =>
+                                      handleDescriptionChange(
+                                        indexRow,
+                                        e.target.value
+                                      )
+                                    }
+                                    placeholder="Short summary of the activity"
+                                    fontSize="small"
+                                  />
+                                ) : (
+                                  row.activityDescription || (
+                                    <LabelEmptyFieldTable label="Short summary of the activity" />
+                                  )
+                                )}
+                              </Flex>
+                            </Td>
+                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                              <Flex w="100%" justify="center">
+                                <AddContentButton
+                                  onClick={handleAddContentClick}
                                 />
-                                : <TagLessonType labelTag={row.lessonType} />
-                              }
+                              </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary">
-                              {isEditLessonPlanClicked ?
-                                <ActivityTypeDropDownMenu
-                                  title={row.activityType}
-                                  onChange={(selectedTypeIndex) => handleActivityTypeChange(indexRow, selectedTypeIndex)}
-                                />
-                                :
-                                (row.activityType ||
-                                  (<LabelEmptyFieldTable label='Type of Activity' />))
-                              }
+                            <Td borderWidth="2px" borderColor="primary" w="fit-content">
+                              <Flex w="100%" justify="center">
+                                <ActionButton />
+                              </Flex>
                             </Td>
-                            <Td borderWidth="2px" borderColor="primary" justifyContent={'center'}>
-                              {isEditLessonPlanClicked ?
-                                <CustomNumberInput
-                                  valueNumber={row.timeDuration ?? 0}
-                                  handleChangeValue={(value: string) => handleTimeDurationChange(indexRow, value)}
-                                  steppers={true}
-                                  fontSize="small"
-                                  minW="75px"
-                                  maxW="100px"
-                                />
-                                : (`${row.timeDuration ?? 0} min` ||
-                                  (<LabelEmptyFieldTable label='Minutes' />))
-                              }
-                            </Td>
-                            <Td borderWidth="2px" borderColor="primary">
-                              {isEditLessonPlanClicked ?
-                                <Textarea
-                                  value={row.activityDescription || ''}
-                                  onChange={(e) => handleDescriptionChange(indexRow, e.target.value)}
-                                  placeholder='Short summary of the activity'
-                                  fontSize="small"
-                                />
-                                : (row.activityDescription ||
-                                  (<LabelEmptyFieldTable label='Short summary of the activity' />))
-                              }
-                            </Td>
-                            <Td borderWidth="2px" borderColor="primary">
-                              <AddContentButton onClick={handleAddContentClick} />
-                            </Td>
-                            <Td borderWidth="2px" borderColor="primary">
-                              <ActionButton />
-                            </Td>
+
                           </Tr>
                         )}
                       </Draggable>
@@ -234,6 +289,6 @@ export default function CustomLearningPathTable({
           </DragDropContext>
         )}
       </Table>
-    </TableContainer>
+    </TableContainer >
   );
 }

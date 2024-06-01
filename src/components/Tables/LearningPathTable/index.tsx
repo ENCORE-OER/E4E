@@ -21,7 +21,8 @@ export default function TableLearningPath() {
   const hydrated = useHasHydrated();
 
   // Handle "Add Content Modal"
-  const [isAddContentModalOpen, setIsAddContentModalOpen] = useState<boolean>(false);
+  const [isAddContentModalOpen, setIsAddContentModalOpen] =
+    useState<boolean>(false);
 
   const handleAddContentClick = () => {
     setIsAddContentModalOpen(true);

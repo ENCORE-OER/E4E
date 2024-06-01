@@ -1,3 +1,4 @@
+import { Flex } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import IconEdit from '../../../../Icons/IconEdit/IconEdit';
 import UnderlinedButton from '../UnderlinedButton';
@@ -13,13 +14,20 @@ export default function EditLessonPlanButton({
     useLearningPathDesignContext();
 
   return (
-    <UnderlinedButton
-      handleClick={() => handleEditLessonPlanClick(!isEditLessonPlanClicked)}
-      nameButton="Edit"
-      rightIcon={<IconEdit />}
-      color="primary"
-      fontWeight="normal"
-      isDisabled={isDisabled}
-    />
+    <Flex
+      background={isEditLessonPlanClicked ? 'gray.200' : undefined}
+      p={isEditLessonPlanClicked ? 1 : undefined}
+      borderRadius={isEditLessonPlanClicked ? "lg" : undefined}
+    // borderBottom={isEditLessonPlanClicked ? '3px solid' : undefined}
+    >
+      <UnderlinedButton
+        handleClick={() => handleEditLessonPlanClick(!isEditLessonPlanClicked)}
+        nameButton="Edit"
+        rightIcon={<IconEdit />}
+        color="primary"
+        fontWeight="normal"
+        isDisabled={isDisabled}
+      />
+    </Flex>
   );
 }

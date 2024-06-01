@@ -4,4 +4,3 @@ export * from './LessonCardProps';
 export * from './LessonProps';
 export * from './OptionsTypeOfAssignment';
 export * from './PassFailConditionsProps';
-

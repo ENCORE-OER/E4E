@@ -235,8 +235,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
         });
       } else {
         addToast({
-          message: `Impossible to proceed forward. Try again.`,
+          message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
           type: 'error',
+        });
+        router.push({
+          pathname: '/design/learningPathDesign',
         });
       }
     } else {
@@ -313,7 +316,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -322,7 +325,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}

@@ -1,6 +1,7 @@
 import AddActivityLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/AddActivityLessonPlanButton';
 import EditLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/EditLessonPlanButton';
 import ExportLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/ExportLessonPlanButton';
+import PublishLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/PublishLessonPlanButton';
 import SaveLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/SaveLessonPlanButton';
 import IconGraph from '../../Icons/IconGraph/IconGraph';
 import IconTable from '../../Icons/IconTable/IconTable';
@@ -35,6 +36,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
       color="primary"
       {...rest}
       w="100%"
+      minH="100%"
     />
   );
 }
@@ -91,7 +93,13 @@ const getConfig = () => {
       label: <SaveLessonPlanButton isDisabled={true} />,
       isButton: true,
       pt: '3%',
+
     },
+    {
+      label: <PublishLessonPlanButton isDisabled={true} />,
+      isButton: true,
+      pt: '3%',
+    }
   ];
 
   return config;
