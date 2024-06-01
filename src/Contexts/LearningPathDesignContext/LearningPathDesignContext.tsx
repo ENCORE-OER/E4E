@@ -8,7 +8,7 @@ import {
   Option,
   OptionsTypeOfAssignmentProps,
   SkillItemProps,
-  activityTypesObjectsProps
+  activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
 
 // Context props
@@ -90,6 +90,8 @@ type LearnignPathDesignContextProps = {
   handleNumberAssessmentActivities: (newNumber: number) => void;
   lessonActivities: LessonProps[];
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
+  addEmptyLessonActivity: () => void;
+  removeLessonActivity: (index: number) => void;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -449,6 +451,29 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     LessonProps[]
   >('lessonsActivities', []);
 
+  // Function to add a new activity
+  const addEmptyLessonActivity = () => {
+    const newLessonActivity = {
+      lessonTitle: '',
+      lessonType: '',
+      activityType: '',
+      activityDescription: '',
+      timeDuration: 0,
+      passFailConditions: [],
+    };
+    setLessonActivities((prevLessonActivities: LessonProps[]) => [...prevLessonActivities, newLessonActivity]);
+  };
+
+  // Function to remove a lessonActivity from the lessonActivities array given the index
+  const removeLessonActivity = (indexToRemove: number) => {
+    setLessonActivities((prevLessonActivities: LessonProps[]) => {
+      // Copy the array of lessonActivities excluding the element to remove
+      const updatedLessonActivities = [...prevLessonActivities];
+      updatedLessonActivities.splice(indexToRemove, 1);
+      return updatedLessonActivities;
+    });
+  };
+
   // TO_CHECK: useful?
   // const handleLessonActivities = (
   //   lessonCard: LessonProps | LessonProps[]
@@ -633,6 +658,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
         lessonActivities,
         setLessonActivities,
+        addEmptyLessonActivity,
+        removeLessonActivity,
 
         // LESSONS CARDS
         lessonCards,

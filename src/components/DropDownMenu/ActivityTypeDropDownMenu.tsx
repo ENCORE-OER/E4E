@@ -31,13 +31,17 @@ export default function ActivityTypeDropDownMenu({
   const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
-    setSelectedOption(activityTypes.filter((type: activityTypesObjectsProps) => type.lessonType === lessonType)[index]?.activityType);
+    setSelectedOption(
+      activityTypes.filter(
+        (type: activityTypesObjectsProps) => type.lessonType === lessonType
+      )[index]?.activityType
+    );
     onChange(index);
   };
 
   useEffect(() => {
     handleSelect(-1);
-  }, [lessonType])
+  }, [lessonType]);
 
   return (
     <Flex w="100%" flex="1" borderRadius="lg">
@@ -60,13 +64,23 @@ export default function ActivityTypeDropDownMenu({
             </Text>
           )}
         </MenuButton>
-        <MenuList borderRadius="lg" maxH={"200px"} overflowY={"auto"} w="fit-content">
+        <MenuList
+          borderRadius="lg"
+          maxH={'200px'}
+          overflowY={'auto'}
+          w="fit-content"
+        >
           {hydrated &&
-            activityTypes.filter((type: activityTypesObjectsProps) => type.lessonType === lessonType).map((activityType: activityTypesObjectsProps, index: number) => (
-              <MenuItem key={index} onClick={() => handleSelect(index)}>
-                {activityType.activityType}
-              </MenuItem>
-            ))}
+            activityTypes
+              .filter(
+                (type: activityTypesObjectsProps) =>
+                  type.lessonType === lessonType
+              )
+              .map((activityType: activityTypesObjectsProps, index: number) => (
+                <MenuItem key={index} onClick={() => handleSelect(index)}>
+                  {activityType.activityType}
+                </MenuItem>
+              ))}
         </MenuList>
       </Menu>
     </Flex>
