@@ -39,7 +39,7 @@ export default function HeaderCardInfoModal({
   linkOer,
   handleOpenAddCollectionModal,
   handleViewResource,
-  isAddContentModal
+  isAddContentModal,
 }: HeaderCardInfoModalProps) {
   return (
     <ModalHeader>
@@ -50,7 +50,7 @@ export default function HeaderCardInfoModal({
           showTagGreen={showTagGreen}
           showTagGenAI={isGeneratedByAI}
         />
-        {isAddContentModal &&
+        {isAddContentModal && (
           <Checkbox
             colorScheme="yellow"
             onClick={(e) => {
@@ -58,8 +58,9 @@ export default function HeaderCardInfoModal({
             }}
             isDisabled={true}
           />
-        }
-        {(!isAddContentModal || isAddContentModal === undefined) && collectionsColor?.length &&
+        )}
+        {(!isAddContentModal || isAddContentModal === undefined) &&
+          collectionsColor?.length &&
           collectionsColor?.map(
             (
               collection_color: ColorCollectionProps | undefined,

@@ -11,17 +11,18 @@ type SaveLessonPlanButtonProps = {
 export default function SaveLessonPlanButton({
   isDisabled,
 }: SaveLessonPlanButtonProps) {
-  const { isEditLessonPlanClicked, editRowIndex, handleSaveLessonPlanClick } = useLearningPathDesignContext();
+  const { isEditLessonPlanClicked, editRowIndex, handleSaveLessonPlanClick } =
+    useLearningPathDesignContext();
   const { addToast } = CustomToast();
 
   const handleClick = () => {
     handleSaveLessonPlanClick();
 
     addToast({
-      message: "Lesson Plan succesfully saved",
-      type: "success"
-    })
-  }
+      message: 'Lesson Plan succesfully saved',
+      type: 'success',
+    });
+  };
 
   return (
     <Flex p={1} _hover={{ bg: 'gray.200' }}>
@@ -31,7 +32,9 @@ export default function SaveLessonPlanButton({
         rightIcon={<FaSave />}
         color="primary"
         fontWeight="normal"
-        isDisabled={(!isEditLessonPlanClicked && editRowIndex === null) || isDisabled}
+        isDisabled={
+          (!isEditLessonPlanClicked && editRowIndex === null) || isDisabled
+        }
         _hover={{ bg: 'gray.200' }}
       />
     </Flex>

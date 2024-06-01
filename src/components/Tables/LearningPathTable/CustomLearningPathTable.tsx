@@ -44,9 +44,8 @@ export default function CustomLearningPathTable({
   optionsTypeOfAssignment,
   removeLessonActivity,
   editRowIndex,
-  handleEditLesson,
-} // handleSaveLesson
-  : TableLearningPathProps) {
+  handleEditLesson, // handleSaveLesson
+}: TableLearningPathProps) {
   const hydrated = useHasHydrated();
 
   const handleDragEnd = (result: DropResult) => {
@@ -63,9 +62,9 @@ export default function CustomLearningPathTable({
     const updatedData = data.map((item: LessonProps, idx: number) =>
       idx === index
         ? {
-          ...item,
-          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-        }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
         : item
     );
     handleData(updatedData);
@@ -86,9 +85,9 @@ export default function CustomLearningPathTable({
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
-          ...item,
-          activityType: selectedActivityType,
-        }
+            ...item,
+            activityType: selectedActivityType,
+          }
         : item
     );
 
@@ -194,7 +193,7 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" px={0}>
                                 {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                indexRow === editRowIndex ? (
                                   <LessonDropDownMenu
                                     options={optionsTypeOfAssignment}
                                     title={row.lessonType}
@@ -217,7 +216,7 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" px={0}>
                                 {isEditLessonPlanClicked ||
-                                  (indexRow === editRowIndex && hydrated) ? (
+                                (indexRow === editRowIndex && hydrated) ? (
                                   <ActivityTypeDropDownMenu
                                     title={row.activityType}
                                     lessonType={row.lessonType}
@@ -242,7 +241,7 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" px={0}>
                                 {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                indexRow === editRowIndex ? (
                                   <CustomNumberInput
                                     valueNumber={row.timeDuration ?? 0}
                                     handleChangeValue={(value: string) =>
@@ -253,11 +252,10 @@ export default function CustomLearningPathTable({
                                     minW="75px"
                                     maxW="100px"
                                   />
+                                ) : row.timeDuration > 0 ? (
+                                  `${row.timeDuration} min`
                                 ) : (
-                                  row.timeDuration > 0 ?
-                                    `${row.timeDuration} min` : (
-                                      <LabelEmptyFieldTable label="Minutes" />
-                                    )
+                                  <LabelEmptyFieldTable label="Minutes" />
                                 )}
                               </Flex>
                             </Td>
@@ -268,7 +266,7 @@ export default function CustomLearningPathTable({
                             >
                               <Flex w="100%" justify="center" px={0}>
                                 {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                indexRow === editRowIndex ? (
                                   <Textarea
                                     value={row.activityDescription || ''}
                                     onChange={(e) =>

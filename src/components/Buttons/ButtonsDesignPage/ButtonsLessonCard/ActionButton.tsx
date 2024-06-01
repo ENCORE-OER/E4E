@@ -26,7 +26,7 @@ export default function ActionButton({
   handleEditLessonActivity,
 }: ActionButtonProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { addToast } = CustomToast()
+  const { addToast } = CustomToast();
 
   const handleOpen = () => {
     if (!isOpen) setIsOpen(true);
@@ -42,9 +42,9 @@ export default function ActionButton({
 
     addToast({
       message: 'Lesson activity succesfully deleted',
-      type: 'success'
-    })
-  }
+      type: 'success',
+    });
+  };
 
   return (
     <Menu>
@@ -70,9 +70,7 @@ export default function ActionButton({
             <Text>Edit</Text>
           </Flex>
         </MenuItem>
-        <MenuItem
-          onClick={handleDeleteClick}
-        >
+        <MenuItem onClick={handleDeleteClick}>
           <Flex direction="row" gap={2}>
             <IconDelete />
             <Text>Delete</Text>
