@@ -5,11 +5,12 @@ export default function AddContentButton({ ...rest }: ButtonProps) {
     <Button
       {...rest}
       variant="solid"
-      px={7}
+      // px={7}
       bg="gray.300"
       // onClick={handleAddContentClick}
       borderRadius="lg"
       fontSize="small"
+      size={"sm"}
     >
       Add Content
     </Button>

@@ -15,7 +15,7 @@ export default function TabTable() {
   return (
     <Flex w="100%" direction="column" h="100%">
       {isEditLessonPlanClicked && (
-        <Text pb={5} fontWeight="bold" fontSize="lg" color="gray.400">
+        <Text pb={5} fontWeight="bold" fontSize="lg" color="gray.500">
           Edit table mode
         </Text>
       )}

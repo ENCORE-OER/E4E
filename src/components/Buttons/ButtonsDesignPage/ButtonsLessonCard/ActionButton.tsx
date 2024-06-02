@@ -54,6 +54,8 @@ export default function ActionButton({
         bg="none"
         w="fit-content"
         onClick={handleOpen}
+        size={"sm"}
+        p={0}
       >
         <IconVerticalPoints />
       </MenuButton>

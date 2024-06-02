@@ -52,6 +52,7 @@ export default function ActivityTypeDropDownMenu({
           w="fit-content"
           fontSize="small"
           fontWeight="normal"
+          size="sm"
           py={0}
           as={Button}
           rightIcon={<ChevronDownIcon />}

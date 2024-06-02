@@ -78,7 +78,7 @@ export default function TableLearningPath() {
   // }, [lessonActivities]);
 
   return (
-    <Flex direction="column">
+    <Flex direction="column" overflow={"auto"}>
       {hydrated && (
         <CustomLearningPathTable
           data={lessonActivities}

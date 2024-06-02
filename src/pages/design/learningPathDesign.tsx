@@ -206,7 +206,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -215,7 +215,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -275,7 +275,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 )}
               </Heading>
             </Flex>
-            <Flex paddingTop="1rem">{hydrated && <LearningPathTabs />}</Flex>
+            <Flex paddingTop="1rem" w="100%">{hydrated && <LearningPathTabs />}</Flex>
             <Flex paddingTop={'1.5rem'}>
               <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
             </Flex>

@@ -41,12 +41,13 @@ export default function LessonDropDownMenu({
           fontSize="sm"
           fontWeight="normal"
           py={0}
+          size="sm"
           // px={3}
           as={Button}
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'lightblue' }}
           textAlign="center"
-          // border={'1px solid #CED4DA'}
+        // border={'1px solid #CED4DA'}
         >
           {selectedOption || title || (
             <Text color="gray.400" fontWeight={'light'}>

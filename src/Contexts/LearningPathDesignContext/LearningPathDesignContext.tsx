@@ -387,9 +387,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleSaveLessonPlanClick = () => {
-    if (editRowIndex !== null) {
+    if (editRowIndex !== null && !isEditLessonPlanClicked) {
       handleSaveLesson();
     } else if (isEditLessonPlanClicked) {
+      if (editRowIndex !== null) {
+        handleSaveLesson();
+      }
       setIsEditLessonPlanClicked(false);
     }
   };
