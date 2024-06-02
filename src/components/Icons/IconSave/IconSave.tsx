@@ -6,5 +6,5 @@ import { FaSave } from 'react-icons/fa';
 // }
 
 export default function IconSave({ ...rest }: IconProps) {
-    return <Icon {...rest} as={FaSave} fontSize="x-large" fontWeight="bold" />;
+  return <Icon {...rest} as={FaSave} fontSize="x-large" fontWeight="bold" />;
 }

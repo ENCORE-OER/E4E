@@ -10,6 +10,7 @@ import {
   SkillItemProps,
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -60,9 +61,13 @@ type LearnignPathDesignContextProps = {
   setLearningObjectiveObjects: React.Dispatch<
     React.SetStateAction<ObjectLearningObjectiveProps[]>
   >;
+  handleAddLearningObjective: () => void;
+  handleUpdateLO: (updatedText: string, index?: number) => void
+  handleDeleteLO: (indexLO: number) => void;
   // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
   setResourcesIndex: React.Dispatch<React.SetStateAction<number[]>>;
+  handleResourceChange: (newResourceIndex: number) => void;
   //handleResourceIndexChange: (resourceIndex: number) => void;
   handleSelectedCustomLearningObjectiveChange: (newValue: string) => void;
   handleStoredLearningObjective: () => void;
@@ -118,6 +123,7 @@ export const useLearningPathDesignContext = () =>
 // Create a provider to wrap the app and provide the context to all its children
 export const LearningPathDesignProvider = ({ children }: any) => {
   // const hydrated = useHasHydrated();
+  const { addToast } = CustomToast();
   const DIMENSION = 30;
   const SPACING = 3;
   const LANGUAGE_GEN_LO_API = 'english';
@@ -173,6 +179,25 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     []
   );
 
+  // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
+  const handleResourceChange = (newResourceIndex: number) => {
+    if (newResourceIndex > -1) {
+      if (resourcesIndex.includes(newResourceIndex)) {
+        const updatedResourcesIndex = resourcesIndex.filter(
+          (index: number) => index !== newResourceIndex
+        );
+        setResourcesIndex(updatedResourcesIndex);
+      } else {
+        setResourcesIndex((prevIndex: number[]) => [
+          ...prevIndex,
+          newResourceIndex,
+        ]);
+      }
+    } else {
+      setResourcesIndex([]);
+    }
+  };
+
   const [bloomLevelIndex, setBloomLevelIndex] = useLocalStorage<number>(
     'bloomLevelIndex',
     -1
@@ -207,6 +232,67 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       'learningObjectiveObjects',
       []
     );
+
+  // Function to create/add a custom learning objective
+  const handleAddLearningObjective = () => {
+    console.log('Add new learning objective');
+    try {
+      setLearningObjectiveObjects(
+        (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
+          ...prevObjectLOs,
+          {
+            learningObjective: '',
+            isSelected: false,
+            isGenerated: false,
+          },
+        ]
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Function to update the learning objective when the user edits it
+  const handleUpdateLO = (updatedText: string, index?: number) => {
+    if (index !== undefined) {
+      console.log('Update learning objective');
+
+      // const updatedGeneratedLOs = [...totalLearningObjectives];
+      // // console.log('GeneratedLOs', updatedGeneratedLOs);
+      // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
+      // setTotalLearningObjectives(updatedGeneratedLOs);
+
+      // ... Update using the <ObjectLearningObjectiveProps> array ...
+      const updatedObjectLOs = [...learningObjectiveObjects];
+      updatedObjectLOs[index].learningObjective = updatedText;
+      if (updatedObjectLOs[index].isGenerated) {
+        updatedObjectLOs[index].isGenerated = false;
+      }
+      // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
+      // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
+      setLearningObjectiveObjects(updatedObjectLOs);
+    }
+  };
+
+  const handleDeleteLO = (indexLO: number) => {
+    try {
+      const updatedObjectLOs = learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps, index: number) =>
+          indexLO !== index
+      );
+      setLearningObjectiveObjects(updatedObjectLOs);
+      if (numberOfLO > updatedObjectLOs.length) {
+        setNumberOfLO(numberOfLO - 1);
+      }
+
+      addToast({
+        message: `Learning objective successfully deleted!`,
+        type: 'success',
+      });
+    } catch (error) {
+      console.error(error)
+    }
+  };
 
   // const [selectedLearningObjectiveIndex, setSelectedLearningObjectiveIndex] =
   //   useLocalStorage<number>('selectedLearningObjectiveIndex', -1);
@@ -622,6 +708,37 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [bloomLevelIndex]);
 
+  useEffect(() => {
+    // Starting with at least one learning objective
+    if (learningObjectiveObjects.length < numberOfLO) {
+      // Add objectives until the desired number is reached
+      const difference = numberOfLO - learningObjectiveObjects.length;
+      for (let i = 0; i < difference; i++) {
+        handleAddLearningObjective();
+      }
+      // Handle the change value of numberOfLO when decrease it
+    } else if (numberOfLO < learningObjectiveObjects.length) {
+      // Remove empty objectives
+      const difference = learningObjectiveObjects.length - numberOfLO;
+      let count = 0;
+      const updatedObjectives = learningObjectiveObjects.filter((obj) => {
+        if (count < difference && obj.learningObjective === '') {
+          count++;
+          return false;
+        }
+        return true;
+      });
+
+      // Update the number of objectives
+      const newNumberOfLO = learningObjectiveObjects.length - count;
+      setLearningObjectiveObjects(updatedObjectives);
+      setNumberOfLO(newNumberOfLO);
+    } else if (learningObjectiveObjects.length === 0) {
+      // setIsAtLeastOneLOGenerated(false);
+      handleAddLearningObjective();
+    }
+  }, [numberOfLO, learningObjectiveObjects.length]);
+
   return (
     <LearningPathDesignContext.Provider
       value={{
@@ -668,9 +785,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleOptionsChange,
         handleCollectionIndexChange,
         setResourcesIndex,
+        handleResourceChange,
         // handleResourceIndexChange,
         setNumberOfLO,
         setLearningObjectiveObjects,
+
+        handleAddLearningObjective,
+        handleUpdateLO,
+        handleDeleteLO,
         // handleSelectedLearningObjectiveIndexChange,
         handleSelectedCustomLearningObjectiveChange, // handler for the selected learning objective in step 2
         handleStoredLearningObjective,

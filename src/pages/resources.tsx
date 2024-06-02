@@ -6,7 +6,7 @@ import {
   HStack,
   Icon,
   Spacer,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -279,8 +279,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

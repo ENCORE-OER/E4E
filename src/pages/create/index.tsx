@@ -1,11 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';

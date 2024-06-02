@@ -30,7 +30,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     //handleResetStep0,
     handleCollectionIndexChange,
     setResourcesIndex,
-    // handleResourceIndexChange,
+    handleResourceChange,
     // takes the value of the selected option in "Educational Scenario"
     selectedContext, // used for the api call
     // selectedLearnerExperience, // used for the api call
@@ -43,6 +43,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     setLearningObjectiveObjects,
+    handleUpdateLO,
+    handleDeleteLO,
     MAX_LO,
     MIN_LO,
     numberOfLO,
@@ -102,26 +104,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
       setSelectedResource(true);
     } else if (resourcesIndex.length === 0 && selectedResource === true) {
       setSelectedResource(null);
-    }
-  };
-
-  // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
-  const handleResourceChange = (newResourceIndex: number) => {
-    console.log('Entro in handleResourceChange');
-    if (newResourceIndex > -1) {
-      if (resourcesIndex.includes(newResourceIndex)) {
-        const updatedResourcesIndex = resourcesIndex.filter(
-          (index: number) => index !== newResourceIndex
-        );
-        setResourcesIndex(updatedResourcesIndex);
-      } else {
-        setResourcesIndex((prevIndex: number[]) => [
-          ...prevIndex,
-          newResourceIndex,
-        ]);
-      }
-    } else {
-      setResourcesIndex([]);
     }
   };
 
@@ -377,24 +359,14 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 verbsTitleTextBox="Select the verbs related to your learning objective*"
               />
               <PathDesignGenLO
-                // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
-                // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
                 bloomLevelIndex={bloomLevelIndex}
                 selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
                 selectedContext={selectedContext}
                 selectedSkillConceptsTags={selectedSkillConceptTags}
                 selectedOptions={selectedOptions}
-                // selectedGroupDimension={selectedGroupDimension}
-                // selectedLearnerExperience={selectedLearnerExperience}
-                // selectedEducatorExperience={selectedEducatorExperience}
                 learningTextContext={learningTextContext}
-                // totalLearningObjectives={totalLearningObjectives}
-                // setTotalLearningObjectives={setTotalLearningObjectives}
                 learningObjectiveObjects={learningObjectiveObjects}
                 setLearningObjectiveObjects={setLearningObjectiveObjects}
-                // handleSelectedLearningObjectiveIndexChange={
-                //   handleSelectedLearningObjectiveIndexChange
-                // }
                 isEmptyLearningObjectivesPresent={
                   isEmptyLearningObjectivesPresent
                 }
@@ -402,6 +374,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsGenerateLOClicked={setIsGenerateLOClicked}
                 isNextButtonClicked={isNextButtonClicked}
                 setIsNextButtonClicked={setIsNextButtonClicked}
+                handleUpdateLO={handleUpdateLO}
+                handleDeleteLO={handleDeleteLO}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
                 // apiKey={apiKey}

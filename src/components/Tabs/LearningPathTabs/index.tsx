@@ -75,33 +75,48 @@ const getConfig = (isSmallerScreen?: boolean) => {
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-        // isDisabled={true}
+          // isDisabled={true}
         />
       ),
       isButton: true,
       pt: '3%',
     },
     {
-      label: <AddActivityLessonPlanButton name="Add activity" isSmallerScreen={isSmallerScreen} />,
+      label: (
+        <AddActivityLessonPlanButton
+          name="Add activity"
+          isSmallerScreen={isSmallerScreen}
+        />
+      ),
       isButton: true,
       pt: '3%',
     },
     {
-      label: <ExportLessonPlanButton name="Export" isDisabled={true} isSmallerScreen={isSmallerScreen} />,
+      label: (
+        <ExportLessonPlanButton
+          name="Export"
+          isDisabled={true}
+          isSmallerScreen={isSmallerScreen}
+        />
+      ),
       isButton: true,
       pt: '3%',
     },
     {
-      label: <SaveLessonPlanButton name="Save" isSmallerScreen={isSmallerScreen} />,
+      label: (
+        <SaveLessonPlanButton name="Save" isSmallerScreen={isSmallerScreen} />
+      ),
       isButton: true,
       pt: '3%',
     },
     {
-      label: <PublishLessonPlanButton
-        name='Publish'
-        isDisabled={true}
-        isSmallerScreen={isSmallerScreen}
-      />,
+      label: (
+        <PublishLessonPlanButton
+          name="Publish"
+          isDisabled={true}
+          isSmallerScreen={isSmallerScreen}
+        />
+      ),
       isButton: true,
       pt: '3%',
     },

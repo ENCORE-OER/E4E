@@ -27,7 +27,7 @@ export default function PublishLessonPlanButton({
       <Flex p={1} _hover={{ bg: 'gray.200' }}>
         <UnderlinedButton
           handleClick={() => console.log('Publish')}
-          nameButton={!isSmallerScreen ? name : ""}
+          nameButton={!isSmallerScreen ? name : ''}
           rightIcon={<IconUpload />}
           color="primary"
           fontWeight="normal"

@@ -21,7 +21,7 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   setupModel: string | undefined;
   handleSetupModel: (value: string) => void;
   // isLessGeneratedLO: boolean;
-  setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
+  // setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   MAX_LO: number;
@@ -38,7 +38,7 @@ export default function GenerateLOView({
   // handleApiKey,
   setupModel,
   // handleSetupModel,
-  setIsLessGeneratedLO,
+  // setIsLessGeneratedLO,
   bloomLevelIndex,
   selectedBloomLevel,
   selectedContext,
@@ -66,7 +66,6 @@ export default function GenerateLOView({
 
   // const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   const [isNumberOfLOZero, setIsNumberOfLOZero] = useState<boolean>(false); // State to check if the number of learning objectives is invalid (zero)
-  const [isApiKeyInvalid, setIsApiKeyInvalid] = useState<boolean>(false); // State to check if the API response is empty
 
   // =========================================
   // Handle alert dialog when re-generate learning objectives
@@ -128,7 +127,7 @@ export default function GenerateLOView({
     //     type: 'warning',
     //   });
     // } else
-    setIsLessGeneratedLO(false);
+    // setIsLessGeneratedLO(false);
     console.log('objectLOs: ', learningObjectiveObjects?.map((obj) => obj));
 
     //  // Number of the learning objectives to generate
@@ -201,35 +200,41 @@ export default function GenerateLOView({
           // so I have to call the API only half the number of learning objectives
           let i = 0;
           const MAX_API_CALL = 5; // Maximum number of API calls. This for limit the number of API calls to avoid infinite loop
+          let noResponse = false;
+          let isLessGeneratedLO = false;
           // Call the API until the number of learning objectives is reached.
           while (
             learningObjectives.length < numberLOToGenerate &&
-            i < MAX_API_CALL
+            i < MAX_API_CALL &&
+            !noResponse
           ) {
             //for (let i = 0; i < Math.round(numberOfLO / 2); i++) {
             console.log('LO number ' + i);
 
-            const resp = await postGenerateLearningObjective(
-              apiKey, // apiKey
-              setupModel, // setupModel
-              mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
-              learningTextContext, // learningContext
-              selectedSkillConceptsTags
-                .map((skill: SkillItemProps) => skill.label)
-                .join(', '), // skills
-              mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
-            );
+            let resp: string[] | undefined = [];
+            try {
+              resp = await postGenerateLearningObjective(
+                apiKey, // apiKey
+                setupModel, // setupModel
+                mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
+                learningTextContext, // learningContext
+                selectedSkillConceptsTags
+                  .map((skill: SkillItemProps) => skill.label)
+                  .join(', '), // skills
+                mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
+              );
+            } catch (error) {
+              console.log(error)
+            }
 
             console.log('resp', resp);
 
+            // If there is not response
             if (!resp) {
               console.log('No response');
               //learningObjectives.push('');
-              setIsApiKeyInvalid(true);
-              setIsLoading(false);
+              noResponse = true;
             } else {
-              // const textLO = cutResponse(resp);
-              // learningObjectives.push(textLO);
 
               // The API returns an array of 2 learning objectives
               for (const textLO of resp) {
@@ -244,14 +249,15 @@ export default function GenerateLOView({
                   //console.log('textLO', textLO);
                 }
               }
-              setIsApiKeyInvalid(false);
+              noResponse = false;
             }
 
             console.log('learningObjectives', learningObjectives);
             i++;
           }
+          // Check if there are less generated learning objectives 
           if (learningObjectives.length < numberLOToGenerate) {
-            setIsLessGeneratedLO(true);
+            isLessGeneratedLO = true;
           }
           // Repopulate the learning objectives array
           setLearningObjectiveObjects(
@@ -265,12 +271,23 @@ export default function GenerateLOView({
             ]
           );
 
-          if (isApiKeyInvalid) {
+          if (noResponse) {
+            //TODO: specify better the error
+            // addToast({
+            //   message: 'Invalid API Key. Please enter a valid OpenAI API Key.',
+            //   type: 'error',
+            // });
             addToast({
-              message: 'Invalid API Key. Please enter a valid OpenAI API Key.',
+              message: 'Error during learning objectives generation.',
               type: 'error',
             });
-          } else {
+          } else if (isLessGeneratedLO) {
+            addToast({
+              message: "Sorry, but we were unable to generate the requested number of learning objectives.",
+              type: "warning"
+            })
+          }
+          else {
             addToast({
               message: 'Learning objectives succesfully generated!',
               type: 'success',
@@ -278,7 +295,7 @@ export default function GenerateLOView({
           }
         } else {
           setIsNumberOfLOZero(true);
-          console.log('Number of learning objectives is 0');
+          // console.log('Number of learning objectives is 0');
           addToast({
             message:
               'Please enter the number of learning objectives to generate.',
@@ -289,6 +306,7 @@ export default function GenerateLOView({
         console.error(error);
         // Set isNextButtonClicked to 'false' in order to don't trigger anymore 'isHighlighted' parameter if an Educator is for example editing a value
       } finally {
+        setIsLoading(false);
         if (isNextButtonClicked) {
           setIsNextButtonClicked(false);
         }
@@ -312,10 +330,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }

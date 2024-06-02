@@ -7,7 +7,7 @@ import {
   Heading,
   Icon,
   Spacer,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -186,7 +186,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

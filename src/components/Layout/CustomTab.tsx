@@ -61,7 +61,6 @@ export const CustomTab = (props: CustomTabProps) => {
             </Tab>
           ))} */}
 
-
         <Flex>
           {config
             .filter((elem) => !elem.isButton)

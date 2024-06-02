@@ -4,11 +4,10 @@ import { LessonPlanTabButtonProps } from '../../../../../types/encoreElements';
 import IconExport from '../../../../Icons/IconExport/IconExport';
 import UnderlinedButton from '../UnderlinedButton';
 
-
 export default function ExportLessonPlanButton({
   name,
   isDisabled,
-  isSmallerScreen
+  isSmallerScreen,
 }: LessonPlanTabButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
@@ -28,7 +27,7 @@ export default function ExportLessonPlanButton({
       <Flex p={1} _hover={{ bg: 'gray.200' }}>
         <UnderlinedButton
           handleClick={() => console.log('Export')}
-          nameButton={!isSmallerScreen ? name : ""}
+          nameButton={!isSmallerScreen ? name : ''}
           rightIcon={<IconExport />}
           color="primary"
           fontWeight="normal"

@@ -7,7 +7,7 @@ import UnderlinedButton from '../UnderlinedButton';
 export default function EditLessonPlanButton({
   name,
   isDisabled,
-  isSmallerScreen
+  isSmallerScreen,
 }: LessonPlanTabButtonProps) {
   const { handleEditLessonPlanClick, isEditLessonPlanClicked } =
     useLearningPathDesignContext();
@@ -36,7 +36,7 @@ export default function EditLessonPlanButton({
       >
         <UnderlinedButton
           handleClick={() => handleEditLessonPlanClick(true)}
-          nameButton={!isSmallerScreen ? name : ""}
+          nameButton={!isSmallerScreen ? name : ''}
           rightIcon={<IconEdit />}
           color="primary"
           fontWeight="normal"
