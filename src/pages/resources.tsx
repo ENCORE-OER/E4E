@@ -6,8 +6,7 @@ import {
   HStack,
   Icon,
   Spacer,
-  useBreakpointValue,
-  useDisclosure,
+  useDisclosure
 } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -31,7 +30,7 @@ import {
   OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated } from '../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 interface DiscoverPageProps {
   // accessToken: string | undefined;
@@ -61,17 +60,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     (OerProps | undefined | OerFreeSearchProps)[]
   >([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
 
   // ==================================================================
 
@@ -289,8 +279,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-          //minH="0px"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

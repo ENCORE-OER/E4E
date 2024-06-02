@@ -1,26 +1,40 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Tooltip } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { LessonPlanTabButtonProps } from '../../../../../types/encoreElements';
 import IconExport from '../../../../Icons/IconExport/IconExport';
 import UnderlinedButton from '../UnderlinedButton';
 
-type ExportLessonPlanButtonProps = {
-  isDisabled?: boolean;
-};
 
 export default function ExportLessonPlanButton({
+  name,
   isDisabled,
-}: ExportLessonPlanButtonProps) {
+  isSmallerScreen
+}: LessonPlanTabButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
-    <Flex p={1} _hover={{ bg: 'gray.200' }}>
-      <UnderlinedButton
-        handleClick={() => console.log('Export')}
-        nameButton="Export"
-        rightIcon={<IconExport />}
-        color="primary"
-        fontWeight="normal"
-        isDisabled={isDisabled || isEditLessonPlanClicked}
-      />
-    </Flex>
+    <Tooltip
+      hasArrow
+      placement="top"
+      label={name}
+      aria-label={name}
+      //ml="1px"
+      bg="white"
+      color="primary"
+      p={2}
+      fontSize={'sm'}
+      borderRadius={5}
+      isDisabled={!isSmallerScreen}
+    >
+      <Flex p={1} _hover={{ bg: 'gray.200' }}>
+        <UnderlinedButton
+          handleClick={() => console.log('Export')}
+          nameButton={!isSmallerScreen ? name : ""}
+          rightIcon={<IconExport />}
+          color="primary"
+          fontWeight="normal"
+          isDisabled={isDisabled || isEditLessonPlanClicked}
+        />
+      </Flex>
+    </Tooltip>
   );
 }

@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -13,6 +13,7 @@ import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGe
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useIsSmallerScreen } from '../../utils/utils';
 
 const Home = (/*props: DiscoverPageProps*/) => {
   const {
@@ -50,17 +51,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
 
   // ==================================================================
 
@@ -223,8 +215,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
 
+      // Generate Lesson Plan
       const isPossibleToContinue = await handleFunction();
 
+      // Plan successfully generated
       if (isPossibleToContinue) {
         addToast({
           message: `Lesson plan successfully generated.`,
@@ -233,6 +227,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
         router.push({
           pathname: '/design/learningPathDesign',
         });
+        // Plan not generated
       } else {
         addToast({
           message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
@@ -316,7 +311,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -325,7 +320,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}

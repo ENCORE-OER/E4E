@@ -1,26 +1,39 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Tooltip } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { LessonPlanTabButtonProps } from '../../../../../types/encoreElements';
 import IconPlus from '../../../../Icons/IconPlus/IconPlus';
 import UnderlinedButton from '../UnderlinedButton';
 
-type AddActivityLessonPlanButtonProps = {
-  isDisabled?: boolean;
-};
-
 export default function AddActivityLessonPlanButton({
+  name,
   isDisabled,
-}: AddActivityLessonPlanButtonProps) {
+  isSmallerScreen
+}: LessonPlanTabButtonProps) {
   const { addEmptyLessonActivity } = useLearningPathDesignContext();
   return (
-    <Flex p={1} _hover={{ bg: 'gray.200' }}>
-      <UnderlinedButton
-        handleClick={addEmptyLessonActivity}
-        nameButton="Add activity"
-        rightIcon={<IconPlus />}
-        color="primary"
-        fontWeight="normal"
-        isDisabled={isDisabled}
-      />
-    </Flex>
+    <Tooltip
+      hasArrow
+      placement="top"
+      label={name}
+      aria-label={name}
+      //ml="1px"
+      bg="white"
+      color="primary"
+      p={2}
+      fontSize={'sm'}
+      borderRadius={5}
+      isDisabled={!isSmallerScreen}
+    >
+      <Flex p={1} _hover={{ bg: 'gray.200' }}>
+        <UnderlinedButton
+          handleClick={addEmptyLessonActivity}
+          nameButton={!isSmallerScreen ? name : ""}
+          rightIcon={<IconPlus />}
+          color="primary"
+          fontWeight="normal"
+          isDisabled={isDisabled}
+        />
+      </Flex>
+    </Tooltip>
   );
 }

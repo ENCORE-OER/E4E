@@ -21,8 +21,8 @@ export type LearningPathTabsProps = {
 } & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
-  const { ...rest } = props;
-  const config = getConfig();
+  const { isSmallerScreen, ...rest } = props;
+  const config = getConfig(isSmallerScreen);
 
   return (
     <CustomTab
@@ -41,7 +41,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
   );
 }
 
-const getConfig = () => {
+const getConfig = (isSmallerScreen?: boolean) => {
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
   const config: CustomTabConfigProps = [
@@ -73,6 +73,8 @@ const getConfig = () => {
     {
       label: (
         <EditLessonPlanButton
+          name="Edit"
+          isSmallerScreen={isSmallerScreen}
         // isDisabled={true}
         />
       ),
@@ -80,22 +82,26 @@ const getConfig = () => {
       pt: '3%',
     },
     {
-      label: <AddActivityLessonPlanButton />,
+      label: <AddActivityLessonPlanButton name="Add activity" isSmallerScreen={isSmallerScreen} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: <ExportLessonPlanButton isDisabled={true} />,
+      label: <ExportLessonPlanButton name="Export" isDisabled={true} isSmallerScreen={isSmallerScreen} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: <SaveLessonPlanButton />,
+      label: <SaveLessonPlanButton name="Save" isSmallerScreen={isSmallerScreen} />,
       isButton: true,
       pt: '3%',
     },
     {
-      label: <PublishLessonPlanButton isDisabled={true} />,
+      label: <PublishLessonPlanButton
+        name='Publish'
+        isDisabled={true}
+        isSmallerScreen={isSmallerScreen}
+      />,
       isButton: true,
       pt: '3%',
     },

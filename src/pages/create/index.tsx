@@ -4,8 +4,7 @@ import {
   Button,
   Flex,
   Heading,
-  Text,
-  useBreakpointValue,
+  Text
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -15,6 +14,7 @@ import AnalyzerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalyzerT
 import SharedParameterTab from '../../components/Tabs/TabsCreatePage/SharedParameterTab';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useIsSmallerScreen } from '../../utils/utils';
 // import { stringArrayToOptionsObject } from '../../utils/utils';
 
 interface CreateProps {
@@ -24,12 +24,7 @@ interface CreateProps {
 const Create = ({ isAddContentModal }: CreateProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
     //isGenerateButtonClicked,
     apiGeneratedExerciseData,

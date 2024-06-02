@@ -7,8 +7,7 @@ import {
   Heading,
   Icon,
   Spacer,
-  Text,
-  useBreakpointValue,
+  Text
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -30,17 +29,12 @@ import {
   tyopeOfResourcesOption,
 } from '../../types/encoreElements/index';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 const Edit = () => {
   const { user } = useUser();
   const router = useRouter();
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const { collections, addResource } = useCollectionsContext();
@@ -192,7 +186,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

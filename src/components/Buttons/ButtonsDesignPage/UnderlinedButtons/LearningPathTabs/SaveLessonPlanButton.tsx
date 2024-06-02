@@ -1,16 +1,15 @@
-import { Flex } from '@chakra-ui/react';
-import { FaSave } from 'react-icons/fa';
+import { Flex, Tooltip } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { LessonPlanTabButtonProps } from '../../../../../types/encoreElements';
 import { CustomToast } from '../../../../../utils/Toast/CustomToast';
+import IconSave from '../../../../Icons/IconSave/IconSave';
 import UnderlinedButton from '../UnderlinedButton';
 
-type SaveLessonPlanButtonProps = {
-  isDisabled?: boolean;
-};
-
 export default function SaveLessonPlanButton({
+  name,
   isDisabled,
-}: SaveLessonPlanButtonProps) {
+  isSmallerScreen
+}: LessonPlanTabButtonProps) {
   const { isEditLessonPlanClicked, editRowIndex, handleSaveLessonPlanClick } =
     useLearningPathDesignContext();
   const { addToast } = CustomToast();
@@ -25,18 +24,32 @@ export default function SaveLessonPlanButton({
   };
 
   return (
-    <Flex p={1} _hover={{ bg: 'gray.200' }}>
-      <UnderlinedButton
-        handleClick={handleClick}
-        nameButton="Save"
-        rightIcon={<FaSave />}
-        color="primary"
-        fontWeight="normal"
-        isDisabled={
-          (!isEditLessonPlanClicked && editRowIndex === null) || isDisabled
-        }
-        _hover={{ bg: 'gray.200' }}
-      />
-    </Flex>
+    <Tooltip
+      hasArrow
+      placement="top"
+      label={name}
+      aria-label={name}
+      //ml="1px"
+      bg="white"
+      color="primary"
+      p={2}
+      fontSize={'sm'}
+      borderRadius={5}
+      isDisabled={!isSmallerScreen}
+    >
+      <Flex p={1} _hover={{ bg: 'gray.200' }}>
+        <UnderlinedButton
+          handleClick={handleClick}
+          nameButton={!isSmallerScreen ? name : ""}
+          rightIcon={<IconSave />}
+          color="primary"
+          fontWeight="normal"
+          isDisabled={
+            (!isEditLessonPlanClicked && editRowIndex === null) || isDisabled
+          }
+          _hover={{ bg: 'gray.200' }}
+        />
+      </Flex>
+    </Tooltip>
   );
 }

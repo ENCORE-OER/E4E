@@ -1,3 +1,4 @@
+import { useBreakpointValue } from '@chakra-ui/react';
 import axios from 'axios';
 import { DomHandler, DomUtils, Parser } from 'htmlparser2';
 import { extractRawText } from 'mammoth';
@@ -21,6 +22,16 @@ export const useHasHydrated = () => {
   }, []);
 
   return hasHydrated;
+};
+
+// Use this for the responsive design of the page
+export const useIsSmallerScreen = (): boolean => {
+  return useBreakpointValue({
+    base: true,
+    sm: true,
+    md: false,
+    lg: false,
+  }) as boolean;
 };
 
 export const isObject = (variable: any) => {

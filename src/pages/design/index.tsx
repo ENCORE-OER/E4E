@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
@@ -12,7 +12,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import InfoAPISetupTextBox from '../../components/TextBox/InfoAPISetupTextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 const Home = () => {
   const router = useRouter();
@@ -21,6 +21,7 @@ const Home = () => {
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
     SPACING,
     // handleEducatorExperienceChange,
@@ -34,16 +35,6 @@ const Home = () => {
 
   const { apiKey, setupModel, handleApiKey, handleSetupModel } =
     useGeneralContext();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
 
   // ==================================================================
 
@@ -103,7 +94,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -112,7 +103,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}
