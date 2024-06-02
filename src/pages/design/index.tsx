@@ -45,7 +45,7 @@ const Home = () => {
   const handleNextClick = () => {
     if (areOptionsComplete) {
       router.push({
-        pathname: '/design/LearningObjective',
+        pathname: '/design/learningObjective',
       });
     } else {
       addToast({
@@ -94,7 +94,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -103,7 +103,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}

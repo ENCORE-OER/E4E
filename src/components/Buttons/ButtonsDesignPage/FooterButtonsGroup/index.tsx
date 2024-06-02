@@ -39,6 +39,7 @@ export default function FooterButtonsGroup({
             buttonText="Previous"
             handleClick={handlePrevButtonClick}
             w="100%"
+          // color=""
           />
         )}
 

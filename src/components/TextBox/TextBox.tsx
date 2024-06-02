@@ -14,6 +14,7 @@ export interface TextBoxProps extends BoxProps {
   isDisabled?: boolean;
   isBoldText?: boolean;
   isLargeFontSize?: boolean;
+  minHTextArea?: string | number;
   // fontSizeTextArea?: 'x-large' | 'sm' | string;
   // fontWeightTextArea?: 'bold' | 'normal' | string;
 }
@@ -31,6 +32,7 @@ const TextBox = ({
   isDisabled,
   isBoldText,
   isLargeFontSize,
+  minHTextArea,
   // fontSizeTextArea,
   // fontWeightTextArea,
   ...rest
@@ -54,6 +56,7 @@ const TextBox = ({
           : '1px solid #CED4DA'
       }
       borderRadius={'lg'}
+    // minh={minH}
     >
       <Textarea
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
@@ -69,8 +72,9 @@ const TextBox = ({
         isDisabled={isDisabled}
         fontSize={isLargeFontSize ? 'x-large' : undefined}
         fontWeight={isBoldText ? 'bold' : undefined}
-        // fontSize={fontSizeTextArea}
-        // fontWeight={fontWeightTextArea}
+        minH={minHTextArea}
+      // fontSize={fontSizeTextArea}
+      // fontWeight={fontWeightTextArea}
       />
     </Box>
   );

@@ -27,6 +27,7 @@ type LearnignPathDesignContextProps = {
   selectedGroupDimension: Option | null;
   selectedLearnerExperience: Option | null;
   learningTextContext: string;
+  defaultLearningContext: string; // Default learning context build with a prompt using selectedEducatorExperience, selectedContext, selectedGroupDimension, selectedLearnerExperience
   selectedSkillConceptTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
@@ -50,6 +51,7 @@ type LearnignPathDesignContextProps = {
   handleGroupDimensionChange: (selected: Option | null) => void;
   handleLearnerExperienceChange: (selected: Option | null) => void;
   handleSetLearningTextContext: (newText: string) => void;
+  handleDefaultLearningContext: () => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
   setSelectedSkillConceptTags: React.Dispatch<
     React.SetStateAction<SkillItemProps[]>
@@ -62,7 +64,7 @@ type LearnignPathDesignContextProps = {
     React.SetStateAction<ObjectLearningObjectiveProps[]>
   >;
   handleAddLearningObjective: () => void;
-  handleUpdateLO: (updatedText: string, index?: number) => void
+  handleUpdateLO: (updatedText: string, index?: number) => void;
   handleDeleteLO: (indexLO: number) => void;
   // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   handleCollectionIndexChange: (newCollectionIndex: number) => void;
@@ -209,7 +211,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Use for storage of the text in the text input
   const [learningTextContext, setLearningTextContext] = useLocalStorage<string>(
-    'text',
+    'learningTextContext',
+    ''
+  );
+
+  // Use for storage of the text in the text input
+  const [defaultLearningContext, setDefaultLearningContext] = useLocalStorage<string>(
+    'defaultLearningContext',
     ''
   );
 
@@ -290,7 +298,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         type: 'success',
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -415,6 +423,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const handleStoredLearningObjective = () => {
     setStoredLearningObjective(selectedCustomLearningObjective);
   };
+
+  const handleDefaultLearningContext = () => {
+    setDefaultLearningContext(`Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`)
+  }
 
   //handlers for text input
   const handleSetLearningTextContext = (newText: string) => {
@@ -739,6 +751,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [numberOfLO, learningObjectiveObjects.length]);
 
+  useEffect(() => {
+    handleSetLearningTextContext(defaultLearningContext);
+  }, [defaultLearningContext])
+
   return (
     <LearningPathDesignContext.Provider
       value={{
@@ -754,6 +770,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         selectedGroupDimension,
         selectedLearnerExperience,
         learningTextContext,
+        defaultLearningContext,
         selectedSkillConceptTags,
         setSelectedSkillConceptTags,
         bloomLevelIndex,
@@ -779,6 +796,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleGroupDimensionChange,
         handleLearnerExperienceChange,
         handleSetLearningTextContext,
+        handleDefaultLearningContext,
         handleBloomLevelChange,
         handleSkillsChange,
         handleStepChange,

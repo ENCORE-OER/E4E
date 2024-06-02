@@ -224,7 +224,7 @@ export default function GenerateLOView({
                 mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
               );
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
 
             console.log('resp', resp);
@@ -235,7 +235,6 @@ export default function GenerateLOView({
               //learningObjectives.push('');
               noResponse = true;
             } else {
-
               // The API returns an array of 2 learning objectives
               for (const textLO of resp) {
                 // Check if the learning objective is not already in the list
@@ -255,7 +254,7 @@ export default function GenerateLOView({
             console.log('learningObjectives', learningObjectives);
             i++;
           }
-          // Check if there are less generated learning objectives 
+          // Check if there are less generated learning objectives
           if (learningObjectives.length < numberLOToGenerate) {
             isLessGeneratedLO = true;
           }
@@ -283,11 +282,11 @@ export default function GenerateLOView({
             });
           } else if (isLessGeneratedLO) {
             addToast({
-              message: "Sorry, but we were unable to generate the requested number of learning objectives.",
-              type: "warning"
-            })
-          }
-          else {
+              message:
+                'Sorry, but we were unable to generate the requested number of learning objectives.',
+              type: 'warning',
+            });
+          } else {
             addToast({
               message: 'Learning objectives succesfully generated!',
               type: 'success',
@@ -330,10 +329,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }

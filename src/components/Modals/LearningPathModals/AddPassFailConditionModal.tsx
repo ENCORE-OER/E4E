@@ -42,7 +42,7 @@ export default function AddPassFailConditionModal({
               value={isPass ? 'pass' : 'fail'}
               onChange={(e) => setIsPass(e.target.value === 'pass')}
             >
-              <option value="pass">If pass: </option>
+              <option value="pass" >If pass: </option>
               <option value="fail">If fail: </option>
             </Select>
           </Flex>

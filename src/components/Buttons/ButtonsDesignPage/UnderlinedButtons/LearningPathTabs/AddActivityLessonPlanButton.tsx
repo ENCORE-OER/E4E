@@ -10,8 +10,9 @@ export default function AddActivityLessonPlanButton({
   isDisabled,
   isSmallerScreen,
 }: LessonPlanTabButtonProps) {
-  const { addEmptyLessonActivity, handleEditLesson, lessonActivities } = useLearningPathDesignContext();
-  const hydrated = useHasHydrated()
+  const { addEmptyLessonActivity, handleEditLesson, lessonActivities } =
+    useLearningPathDesignContext();
+  const hydrated = useHasHydrated();
 
   const indexNewActivity = lessonActivities.length;
 
@@ -20,7 +21,7 @@ export default function AddActivityLessonPlanButton({
     if (hydrated) {
       handleEditLesson(indexNewActivity);
     }
-  }
+  };
   return (
     <Tooltip
       hasArrow

@@ -28,7 +28,7 @@ export interface CentralBarsProps extends PathDesignCentralBarsProps {
   // selectedLearnerExperience: Option | null;
   selectedSkillConceptTags: SkillItemProps[];
   selectedOptions: string[];
-  defaultContext: string;
+  defaultLearningContext: string;
 }
 
 export default function CentralBars({
@@ -46,14 +46,14 @@ export default function CentralBars({
   bloomLevelIndex,
   currentBloomOptions,
   step,
-  bloomLevelTitleTextBox: bloomLevelTextBox,
-  skillConceptTitleTextBox: skillConceptTextBox,
-  contextTitleTextBox: contextTextBox,
+  bloomLevelTitleTextBox,
+  skillConceptTitleTextBox,
+  contextTitleTextBox,
   placeholderContextBox,
   verbsTitleTextBox,
   selectedSkillConceptTags,
   selectedOptions,
-  defaultContext,
+  defaultLearningContext,
 }: CentralBarsProps) {
   const hydrated = useHasHydrated();
 
@@ -83,7 +83,7 @@ export default function CentralBars({
           // paddingRight={`${SPACING}%`}
           w="100%"
         >
-          {skillConceptTextBox}
+          {skillConceptTitleTextBox}
         </Text>
         <Box w="100%" pt={1}>
           {hydrated && (
@@ -119,7 +119,7 @@ export default function CentralBars({
           w="50%"
           pt={1}
         >
-          {bloomLevelTextBox}
+          {bloomLevelTitleTextBox}
         </Text>
         {/* Verbs Bloom Level Text Box */}
         {step >= 2 &&
@@ -197,10 +197,10 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
+          // paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
           >
-            {contextTextBox}
+            {contextTitleTextBox}
           </Text>
           <Flex
             align="center"
@@ -213,15 +213,15 @@ export default function CentralBars({
               handleClick={() => {
                 if (learningTextContext !== '') {
                   onOpenOverwriteAlertDialog();
-                } else handleSetLearningTextContext(defaultContext);
+                } else handleSetLearningTextContext(defaultLearningContext);
               }}
-              nameButton="Show the default"
+              nameButton="Set the default"
               fontSize="sm"
               color="primary"
               fontWeight="normal"
               isDisabled={
                 learningTextContext !== '' &&
-                learningTextContext === defaultContext
+                learningTextContext === defaultLearningContext
               }
             />
             <IconInfoCircleTooltip label_tooltip="The default context instruction is formulated automatically in case the context box remains empty based on the information inserted in the previous steps." />
@@ -240,6 +240,7 @@ export default function CentralBars({
             isHighlighted={isNextButtonClicked}
             text={learningTextContext}
             onTextChange={handleSetLearningTextContext}
+            minHTextArea="85px"
           />
           {isNextButtonClicked && learningTextContext.length === 0 && (
             <Text color="error_label" fontSize="sm">
@@ -252,7 +253,7 @@ export default function CentralBars({
         isOpen={isOverwriteAlertDialogOpen}
         onClose={onCloseOverwriteAlertDialog}
         onConfirm={() => {
-          handleSetLearningTextContext(defaultContext);
+          handleSetLearningTextContext(defaultLearningContext);
           onCloseOverwriteAlertDialog();
         }}
       />

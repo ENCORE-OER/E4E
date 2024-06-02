@@ -25,9 +25,9 @@ import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 type PathDesignGenLessonPlanProps = {
   handleNextClick: ({
-    handleFunction,
+    handleGenerationFunction,
   }: {
-    handleFunction: () => Promise<boolean>;
+    handleGenerationFunction?: () => Promise<boolean>;
   }) => Promise<void>;
 };
 
@@ -400,23 +400,20 @@ export default function PathDesignGenLessonPlan({
               setLessonActivities(
                 generatedLessonPlan?.map(
                   (generatedLesson: OutputLessonPlanProps) => ({
-                    lessonTitle: `${
-                      generatedLesson.Type ? '' : 'Frontal lecture'
-                    } activity`,
+                    lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'
+                      } activity`,
                     lessonType: generatedLesson.Type
                       ? 'Assessment'
                       : 'Learning',
-                    activityType: `${
-                      generatedLesson.Type
-                        ? mapNumberToString(
-                            Number(generatedLesson.Details),
-                            TypeOfActivityEnum
-                          )
-                        : 'Frontal lecture'
-                    }`,
-                    activityDescription: `${
-                      generatedLesson.Type ? '' : generatedLesson.Details
-                    }`,
+                    activityType: `${generatedLesson.Type
+                      ? mapNumberToString(
+                        Number(generatedLesson.Details),
+                        TypeOfActivityEnum
+                      )
+                      : 'Frontal lecture'
+                      }`,
+                    activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details
+                      }`,
                     topic: generatedLesson.Topic,
                     timeDuration: Number(generatedLesson.Duration),
                     passFailConditions: [],
@@ -485,7 +482,7 @@ export default function PathDesignGenLessonPlan({
       // const textURL = handleExtractText("http://www.mdpi.com/books/pdfview/book/745");
       // console.log('Extracted Text:', textURL);
       await handleNextClick({
-        handleFunction: () => handleGenerateLessonPlan(),
+        handleGenerationFunction: () => handleGenerateLessonPlan(),
       });
       // await handleGenerateLessonPlan();
     } catch (error) {

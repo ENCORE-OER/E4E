@@ -59,7 +59,7 @@ const getConfig = (isSmallerScreen?: boolean) => {
       ),
       child: <TabTiles />,
       pt: '3%',
-      isDisabled: true,
+      // isDisabled: true,
     },
     {
       label: (
@@ -75,7 +75,7 @@ const getConfig = (isSmallerScreen?: boolean) => {
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-          // isDisabled={true}
+        // isDisabled={true}
         />
       ),
       isButton: true,

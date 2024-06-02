@@ -38,15 +38,12 @@ export default function PathDesignCentralBars({
     resetCheckBoxOptions,
     learningTextContext,
     handleSetLearningTextContext,
-    selectedEducatorExperience,
-    selectedContext,
-    selectedGroupDimension,
-    selectedLearnerExperience,
     selectedSkillConceptTags,
     selectedOptions,
+    defaultLearningContext,
   } = useLearningPathDesignContext();
 
-  const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
+  // const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
 
   return (
     <CentralBars
@@ -75,7 +72,7 @@ export default function PathDesignCentralBars({
       // selectedLearnerExperience={selectedLearnerExperience}
       selectedSkillConceptTags={selectedSkillConceptTags}
       selectedOptions={selectedOptions}
-      defaultContext={defaultContext}
+      defaultLearningContext={defaultLearningContext}
     />
   );
 }

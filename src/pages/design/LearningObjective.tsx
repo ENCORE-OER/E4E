@@ -49,6 +49,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     MIN_LO,
     numberOfLO,
     setNumberOfLO,
+    handleDefaultLearningContext,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -105,13 +106,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     } else if (resourcesIndex.length === 0 && selectedResource === true) {
       setSelectedResource(null);
     }
-  };
-
-  const handlePrevButtonClick = () => {
-    //handleResetStep0();
-    router.push({
-      pathname: '/design',
-    });
   };
 
   // const saveLearningScenario = async () => {
@@ -176,10 +170,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  const handleNextClick = async ({
-    handleFunction,
+  const handleNextWithLessonPlanGenerationClick = async ({
+    handleGenerationFunction,
   }: {
-    handleFunction: () => Promise<boolean>;
+    handleGenerationFunction?: () => Promise<boolean>;
   }) => {
     if (
       selectedCollection !== null &&
@@ -187,7 +181,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
       selectedSkillConceptTags.length > 0 &&
-      learningTextContext?.trim() !== '' &&
+      // learningTextContext?.trim() !== '' &&  // Set automatically the default learning context
       selectedOptions.length > 0 && // verbsBloomLevel
       // selectedLearningObjectiveIndex > -1 &&
       learningObjectiveObjects.length > 0 && // that means that the learning objectives have been generated and the Educator has selected one
@@ -197,27 +191,34 @@ const Home = (/*props: DiscoverPageProps*/) => {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
 
-      // Generate Lesson Plan
-      const isPossibleToContinue = await handleFunction();
+      if (learningTextContext?.trim() === '') {
+        handleDefaultLearningContext();
+      }
 
-      // Plan successfully generated
-      if (isPossibleToContinue) {
-        addToast({
-          message: `Lesson plan successfully generated.`,
-          type: 'success',
-        });
-        router.push({
-          pathname: '/design/learningPathDesign',
-        });
-        // Plan not generated
-      } else {
-        addToast({
-          message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
-          type: 'error',
-        });
-        router.push({
-          pathname: '/design/learningPathDesign',
-        });
+      if (handleGenerationFunction) {
+        console.log("SONO NELL'HANDLE GENERATION FUNCTION");
+        // Generate Lesson Plan
+        const isPossibleToContinue = await handleGenerationFunction();
+
+        // Plan successfully generated
+        if (isPossibleToContinue) {
+          addToast({
+            message: `Lesson plan successfully generated.`,
+            type: 'success',
+          });
+          router.push({
+            pathname: '/design/learningPathDesign',
+          });
+          // Plan not generated
+        } else {
+          addToast({
+            message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
+            type: 'error',
+          });
+          router.push({
+            pathname: '/design/learningPathDesign',
+          });
+        }
       }
     } else {
       setIsNextButtonClicked(true);
@@ -240,6 +241,22 @@ const Home = (/*props: DiscoverPageProps*/) => {
         });
       }
     }
+  };
+
+  const handleNextClick = () => {
+
+    handleNextWithLessonPlanGenerationClick({});
+
+    router.push({
+      pathname: '/design/learningPathDesign',
+    });
+  }
+
+  const handlePrevButtonClick = () => {
+    //handleResetStep0();
+    router.push({
+      pathname: '/design',
+    });
   };
 
   useEffect(() => {
@@ -386,13 +403,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setNumberOfLO={setNumberOfLO}
               />
 
-              <PathDesignGenLessonPlan handleNextClick={handleNextClick} />
+              <PathDesignGenLessonPlan handleNextClick={handleNextWithLessonPlanGenerationClick} />
             </Flex>
           )}
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            // handleNextClick={handleNextClick}
+            handleNextClick={handleNextClick}
             handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
