@@ -237,16 +237,16 @@ export default function CentralBars({
             bgTextArea="white"
             placeholder={placeholderContextBox}
             placeholderColor={'gray.400'}
-            isHighlighted={isNextButtonClicked}
+            // isHighlighted={isNextButtonClicked}
             text={learningTextContext}
             onTextChange={handleSetLearningTextContext}
             minHTextArea="85px"
           />
-          {isNextButtonClicked && learningTextContext.length === 0 && (
+          {/* {isNextButtonClicked && learningTextContext.length === 0 && (
             <Text color="error_label" fontSize="sm">
               Specify the context or set the default one!
             </Text>
-          )}
+          )} */}
         </Box>
       </Flex>
       <ContextOverwriteAlertDialog

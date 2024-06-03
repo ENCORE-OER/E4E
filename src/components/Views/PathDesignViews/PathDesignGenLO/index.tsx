@@ -1,10 +1,9 @@
 import { Flex } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useGeneralContext } from '../../../../Contexts/GeneralContext';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
-  ObjectLearningObjectiveProps,
-  Option,
-  SkillItemProps,
+  ObjectLearningObjectiveProps
 } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
@@ -14,23 +13,7 @@ import InfoGenAITextBox from '../../../TextBox/InfoGenAITextBox';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
-  bloomLevelIndex: number;
   selectedBloomLevel: string;
-  selectedContext: Option | null;
-  selectedSkillConceptsTags: SkillItemProps[];
-  selectedOptions: string[];
-  learningTextContext: string;
-  MAX_LO: number;
-  MIN_LO: number;
-  numberOfLO: number;
-  setNumberOfLO: Dispatch<SetStateAction<number>>;
-  learningObjectiveObjects: ObjectLearningObjectiveProps[];
-  setLearningObjectiveObjects: Dispatch<
-    SetStateAction<ObjectLearningObjectiveProps[]>
-  >;
-  // handleAddLearningObjective: () => void;
-  handleUpdateLO: (updatedText: string, index?: number) => void;
-  handleDeleteLO: (indexLO: number) => void;
   isNextButtonClicked: boolean;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isGenerateLOClicked?: boolean;
@@ -41,21 +24,7 @@ export interface PathDesignGenLOProps {
 }
 
 export default function PathDesignGenLO({
-  bloomLevelIndex,
   selectedBloomLevel,
-  selectedContext,
-  selectedSkillConceptsTags,
-  selectedOptions,
-  learningTextContext,
-  MAX_LO,
-  MIN_LO,
-  numberOfLO,
-  setNumberOfLO,
-  learningObjectiveObjects,
-  setLearningObjectiveObjects,
-  // handleAddLearningObjective,
-  handleUpdateLO,
-  handleDeleteLO,
   isNextButtonClicked,
   setIsNextButtonClicked,
   isGenerateLOClicked,
@@ -69,6 +38,26 @@ export default function PathDesignGenLO({
 
   const { apiKey, setupModel, handleApiKey, handleSetupModel } =
     useGeneralContext();
+
+  const {
+    bloomLevelIndex,
+    // takes the value of the selected option in "Educational Scenario"
+    selectedOptions,
+    selectedContext, // used for the api call
+    selectedSkillConceptTags,
+    learningTextContext, // used for the api call (learning context)
+    defaultLearningContext: defaultContext,
+    handleDefaultLearningContext,
+    // ----- Learning Objective Objects -----
+    learningObjectiveObjects,
+    setLearningObjectiveObjects,
+    handleUpdateLO,
+    handleDeleteLO,
+    MAX_LO,
+    MIN_LO,
+    numberOfLO,
+    setNumberOfLO,
+  } = useLearningPathDesignContext();
 
   // Used to handle generated learning objectives
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
@@ -154,7 +143,7 @@ export default function PathDesignGenLO({
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
         selectedContext={selectedContext}
-        selectedSkillConceptsTags={selectedSkillConceptsTags}
+        selectedSkillConceptTags={selectedSkillConceptTags}
         selectedOptions={selectedOptions}
         learningTextContext={learningTextContext}
         // setIsLessGeneratedLO={setIsLessGeneratedLO}
@@ -178,6 +167,8 @@ export default function PathDesignGenLO({
         isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
         setIsGenerateLOClicked={setIsGenerateLOClicked}
         isAtLeastOneLOGenerated={isAtLeastOneLOGenerated}
+        handleDefaultLearningContext={handleDefaultLearningContext}
+        defaultLearningContext={defaultContext}
       />
 
       {isGenerateLOClicked && isAtLeastOneLOGenerated && (
@@ -191,10 +182,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '2.5px solid #bf5521ff'
             : 'null'
         }
@@ -219,33 +210,33 @@ export default function PathDesignGenLO({
             // numberOfLO > 0 &&
             // !isLoading &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxLearningObjective
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    index={index}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={() => {
-                      if (learningObjectiveObjects.length > 1) {
-                        handleDeleteLO(index);
-                      } else {
-                        onOpenDeleteAlertDialog();
-                      }
-                    }}
-                    isSmallerScreen={isSmallerScreen}
-                    label_tooltip_delete="Delete"
-                    isNextButtonClicked={isNextButtonClicked}
-                    isDisabled={
-                      isLoading &&
-                      (objectLO.isGenerated ||
-                        objectLO.learningObjective.trim().length === 0)
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxLearningObjective
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  index={index}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={() => {
+                    if (learningObjectiveObjects.length > 1) {
+                      handleDeleteLO(index);
+                    } else {
+                      onOpenDeleteAlertDialog();
                     }
-                  />
-                )
+                  }}
+                  isSmallerScreen={isSmallerScreen}
+                  label_tooltip_delete="Delete"
+                  isNextButtonClicked={isNextButtonClicked}
+                  isDisabled={
+                    isLoading &&
+                    (objectLO.isGenerated ||
+                      objectLO.learningObjective.trim().length === 0)
+                  }
+                />
               )
+            )
           }
         </Flex>
         {isLoading && (

@@ -215,12 +215,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     ''
   );
 
-  // Use for storage of the text in the text input
-  const [defaultLearningContext, setDefaultLearningContext] = useLocalStorage<string>(
-    'defaultLearningContext',
-    ''
-  );
-
   // Use for storage of the options in the verbs checkbox menu
   const [selectedOptions, setSelectedOptions] = useLocalStorage<string[]>(
     'selectedOptions',
@@ -425,8 +419,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   const handleDefaultLearningContext = () => {
-    setDefaultLearningContext(`Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`)
-  }
+    handleSetLearningTextContext(defaultLearningContext);
+  };
 
   //handlers for text input
   const handleSetLearningTextContext = (newText: string) => {
@@ -655,6 +649,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // =============================================================================================================
 
+
+  const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
+
+
   useEffect(() => {
     if (resetCheckBoxOptions) {
       // Imposta il reset a false dopo l'effetto collaterale
@@ -752,8 +750,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   }, [numberOfLO, learningObjectiveObjects.length]);
 
   useEffect(() => {
-    handleSetLearningTextContext(defaultLearningContext);
-  }, [defaultLearningContext])
+    if (defaultLearningContext.trim() !== '') {
+      handleSetLearningTextContext(defaultLearningContext);
+    }
+  }, [defaultLearningContext]);
 
   return (
     <LearningPathDesignContext.Provider

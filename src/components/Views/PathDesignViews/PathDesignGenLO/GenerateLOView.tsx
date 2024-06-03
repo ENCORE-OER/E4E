@@ -6,7 +6,8 @@ import {
   BloomLevelString,
   EducationContextEnum,
   ObjectLearningObjectiveProps,
-  SkillItemProps,
+  Option,
+  SkillItemProps
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
@@ -20,14 +21,25 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   handleApiKey: (value: string) => void;
   setupModel: string | undefined;
   handleSetupModel: (value: string) => void;
-  // isLessGeneratedLO: boolean;
-  // setIsLessGeneratedLO: Dispatch<SetStateAction<boolean>>;
   isLoading: boolean;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  bloomLevelIndex: number;
+  selectedOptions: string[];
+  selectedContext: Option | null;
+  selectedSkillConceptTags: SkillItemProps[];
+  learningTextContext: string;
+  defaultLearningContext: string;
+  handleDefaultLearningContext: () => void;
   MAX_LO: number;
   MIN_LO: number;
   numberOfLO: number;
   setNumberOfLO: Dispatch<SetStateAction<number>>;
+  learningObjectiveObjects: ObjectLearningObjectiveProps[];
+  setLearningObjectiveObjects: Dispatch<
+    SetStateAction<ObjectLearningObjectiveProps[]>
+  >;
+  handleUpdateLO: (updatedText: string, index?: number) => void;
+  handleDeleteLO: (indexLO: number) => void;
   isEmptyLearningObjectivesPresent: boolean;
   setIsGenerateLOClicked?: Dispatch<SetStateAction<boolean>>;
   isAtLeastOneLOGenerated: boolean;
@@ -35,19 +47,13 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
 
 export default function GenerateLOView({
   apiKey,
-  // handleApiKey,
   setupModel,
-  // handleSetupModel,
-  // setIsLessGeneratedLO,
   bloomLevelIndex,
   selectedBloomLevel,
   selectedContext,
-  selectedSkillConceptsTags,
+  selectedSkillConceptTags: selectedSkillConceptsTags,
   selectedOptions,
   learningTextContext,
-  // totalLearningObjectives,
-  // setTotalLearningObjectives,
-  // handleSelectedLearningObjectiveIndexChange,
   isNextButtonClicked,
   setIsNextButtonClicked,
   isLoading,
@@ -61,6 +67,8 @@ export default function GenerateLOView({
   isEmptyLearningObjectivesPresent,
   setIsGenerateLOClicked,
   isAtLeastOneLOGenerated,
+  handleDefaultLearningContext,
+  defaultLearningContext
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -148,8 +156,8 @@ export default function GenerateLOView({
     } else if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
-      selectedOptions.length === 0 || // Bloom's verbs
-      learningTextContext === ''
+      selectedOptions.length === 0  // Bloom's verbs
+      // || learningTextContext === '' // If empty we'll set automatically the default one
     ) {
       addToast({
         message:
@@ -217,7 +225,7 @@ export default function GenerateLOView({
                 apiKey, // apiKey
                 setupModel, // setupModel
                 mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
-                learningTextContext, // learningContext
+                learningTextContext || defaultLearningContext, // learningContext
                 selectedSkillConceptsTags
                   .map((skill: SkillItemProps) => skill.label)
                   .join(', '), // skills
@@ -316,11 +324,41 @@ export default function GenerateLOView({
     }
   };
 
-  const handleClickOnGenerateLOButton = () => {
-    if (isAtLeastOneLOGenerated) {
-      onOpenOverwriteAlertDialog();
+  const handleGenerationLONoContext = async () => {
+    if (learningTextContext?.trim() === '') {
+      console.log("setting default learning context")
+      handleDefaultLearningContext();
+    }
+
+    await handleGenerateLO();
+  }
+
+  const handleClickOnGenerateLOButton = async () => {
+    // Before we check if there are some empty fields needed for the generation
+    if (
+      bloomLevelIndex === -1 ||
+      selectedSkillConceptsTags.length === 0 ||
+      selectedOptions.length === 0  // Bloom's verbs
+      // || learningTextContext === '' // If empty we'll set automatically the default one
+    ) {
+      addToast({
+        message:
+          'Please fill out all the required fields before generating learning objectives.',
+        type: 'warning',
+      });
+      // Set isNextButtonClicked to 'true' in order to trigger the 'isHighlighted' parameter and highlight the empty values necessary to generate LOs
+      // setIsNextButtonClicked(true);
+      if (setIsGenerateLOClicked !== undefined) {
+        setIsGenerateLOClicked(true);
+      }
+      // return;
     } else {
-      handleGenerateLO();
+      if (isAtLeastOneLOGenerated) {
+        onOpenOverwriteAlertDialog();
+      } else {
+        // await handleGenerateLO();
+        await handleGenerationLONoContext()
+      }
     }
   };
 
@@ -329,10 +367,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
@@ -402,7 +440,7 @@ export default function GenerateLOView({
       <OverwriteLOAlertDialog
         isOpen={isOverwriteAlertDialogOpen}
         onClose={onCloseOverwriteAlertDialog}
-        onConfirm={handleGenerateLO}
+        onConfirm={handleGenerationLONoContext}
       />
 
       {/* {isLoading && (

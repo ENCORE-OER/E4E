@@ -43,6 +43,7 @@ export default function PathDesignGenLessonPlan({
     bloomLevelIndex,
     bloomLevels,
     learningTextContext,
+    defaultLearningContext,
     handleTitleLearningPath,
     lessonActivities,
     setLessonActivities,
@@ -295,6 +296,7 @@ export default function PathDesignGenLessonPlan({
   };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
+    console.log("SONO IN HANDLE GENERATE LESSON PLAN")
     let isPossibleToContinue = false;
     try {
       const oers = collections[collectionIndex].oers;
@@ -378,7 +380,7 @@ export default function PathDesignGenLessonPlan({
                 analyzedMaterial.PerceivedDifficulty, // level
                 learninObjective, // learning objective
                 bloomLevel, // bloom level enum
-                learningTextContext, // learning context
+                learningTextContext || defaultLearningContext, // learning context
                 0.3 // temperature
               )) || [];
 

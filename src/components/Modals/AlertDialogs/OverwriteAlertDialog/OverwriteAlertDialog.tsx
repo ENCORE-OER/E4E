@@ -25,8 +25,10 @@ export default function OverwriteAlertDialog({
       }}
       modalText={modalText || ''}
       modalHeader={modalHeader || ''}
-      confirmButtonColorScheme="green"
+      confirmButtonColorScheme="orange"
       confirmButtonText="Confirm"
+    // borderColorModal="orange"
+    // borderModal="3px solid"
     />
   );
 }

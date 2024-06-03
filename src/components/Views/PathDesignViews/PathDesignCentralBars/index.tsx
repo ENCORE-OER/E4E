@@ -40,7 +40,8 @@ export default function PathDesignCentralBars({
     handleSetLearningTextContext,
     selectedSkillConceptTags,
     selectedOptions,
-    defaultLearningContext,
+    // defaultLearningContext,
+    defaultLearningContext: defaultContext,
   } = useLearningPathDesignContext();
 
   // const defaultContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
@@ -72,7 +73,7 @@ export default function PathDesignCentralBars({
       // selectedLearnerExperience={selectedLearnerExperience}
       selectedSkillConceptTags={selectedSkillConceptTags}
       selectedOptions={selectedOptions}
-      defaultLearningContext={defaultLearningContext}
+      defaultLearningContext={defaultContext}
     />
   );
 }

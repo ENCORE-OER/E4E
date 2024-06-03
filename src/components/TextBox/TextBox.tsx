@@ -1,5 +1,5 @@
 import { Box, BoxProps, Textarea } from '@chakra-ui/react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 
 export interface TextBoxProps extends BoxProps {
   bgTextArea?: string;
@@ -15,8 +15,6 @@ export interface TextBoxProps extends BoxProps {
   isBoldText?: boolean;
   isLargeFontSize?: boolean;
   minHTextArea?: string | number;
-  // fontSizeTextArea?: 'x-large' | 'sm' | string;
-  // fontWeightTextArea?: 'bold' | 'normal' | string;
 }
 
 const TextBox = ({
@@ -33,10 +31,10 @@ const TextBox = ({
   isBoldText,
   isLargeFontSize,
   minHTextArea,
-  // fontSizeTextArea,
-  // fontWeightTextArea,
   ...rest
 }: TextBoxProps) => {
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     if (index != undefined) {
@@ -44,7 +42,19 @@ const TextBox = ({
     } else {
       onTextChange(newText);
     }
+    adjustHeight();
   };
+
+  const adjustHeight = () => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = 'auto';
+      textAreaRef.current.style.height = textAreaRef.current.scrollHeight + 'px';
+    }
+  };
+
+  useEffect(() => {
+    adjustHeight();
+  }, [text]);
 
   return (
     <Box
@@ -56,9 +66,9 @@ const TextBox = ({
           : '1px solid #CED4DA'
       }
       borderRadius={'lg'}
-    // minh={minH}
     >
       <Textarea
+        ref={textAreaRef}
         css={{ ':hover': { backgroundColor: '#E2E8F0' } }}
         bg={bgTextArea}
         variant="solid"
@@ -73,8 +83,6 @@ const TextBox = ({
         fontSize={isLargeFontSize ? 'x-large' : undefined}
         fontWeight={isBoldText ? 'bold' : undefined}
         minH={minHTextArea}
-      // fontSize={fontSizeTextArea}
-      // fontWeight={fontWeightTextArea}
       />
     </Box>
   );

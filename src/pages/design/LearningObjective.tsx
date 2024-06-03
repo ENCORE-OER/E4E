@@ -31,25 +31,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleCollectionIndexChange,
     setResourcesIndex,
     handleResourceChange,
-    // takes the value of the selected option in "Educational Scenario"
-    selectedContext, // used for the api call
-    // selectedLearnerExperience, // used for the api call
-    // selectedEducatorExperience, // used for the api call
-    // selectedGroupDimension, // used for the api call
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
     handleResetAll,
     // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
-    setLearningObjectiveObjects,
-    handleUpdateLO,
-    handleDeleteLO,
-    MAX_LO,
-    MIN_LO,
-    numberOfLO,
-    setNumberOfLO,
-    handleDefaultLearningContext,
+    handleDefaultLearningContext
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -244,13 +232,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const handleNextClick = () => {
-
     handleNextWithLessonPlanGenerationClick({});
 
     router.push({
       pathname: '/design/learningPathDesign',
     });
-  }
+  };
 
   const handlePrevButtonClick = () => {
     //handleResetStep0();
@@ -376,14 +363,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 verbsTitleTextBox="Select the verbs related to your learning objective*"
               />
               <PathDesignGenLO
-                bloomLevelIndex={bloomLevelIndex}
                 selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
-                selectedContext={selectedContext}
-                selectedSkillConceptsTags={selectedSkillConceptTags}
-                selectedOptions={selectedOptions}
-                learningTextContext={learningTextContext}
-                learningObjectiveObjects={learningObjectiveObjects}
-                setLearningObjectiveObjects={setLearningObjectiveObjects}
                 isEmptyLearningObjectivesPresent={
                   isEmptyLearningObjectivesPresent
                 }
@@ -391,19 +371,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsGenerateLOClicked={setIsGenerateLOClicked}
                 isNextButtonClicked={isNextButtonClicked}
                 setIsNextButtonClicked={setIsNextButtonClicked}
-                handleUpdateLO={handleUpdateLO}
-                handleDeleteLO={handleDeleteLO}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
-                MAX_LO={MAX_LO}
-                MIN_LO={MIN_LO}
-                numberOfLO={numberOfLO}
-                setNumberOfLO={setNumberOfLO}
               />
 
-              <PathDesignGenLessonPlan handleNextClick={handleNextWithLessonPlanGenerationClick} />
+              <PathDesignGenLessonPlan
+                handleNextClick={handleNextWithLessonPlanGenerationClick}
+              />
             </Flex>
           )}
           <FooterButtonsGroup
