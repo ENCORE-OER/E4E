@@ -38,7 +38,7 @@ const Create = ({ isAddContentModal }: CreateProps) => {
       {!isAddContentModal && <Navbar user={user} pageName="Create" />}
 
       <Box
-        py="115px"
+        py={!isAddContentModal ? "115px" : "1rem"}
         pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
         w="full"
         minH="100vh"

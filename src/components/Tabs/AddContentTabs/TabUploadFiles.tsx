@@ -40,11 +40,12 @@ export default function TabUploadFiles() {
   };
 
   return (
-    <Flex w="100%">
-      <Flex justify="center" direction="column" w="100%">
+    <Flex w="100%" justify="center">
+      <Flex direction="column" >
         <UploadButton
           handleUploadFile={handleUploadFile}
-          disabled={uploading}
+          // disabled={uploading}
+          disabled={true}
         />
         {uploading && <Text>File Uploading...</Text>}
       </Flex>

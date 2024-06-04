@@ -31,7 +31,11 @@ import {
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
-const Edit = () => {
+type EditProps = {
+  isAddContentModal?: boolean; // Used for the AddContentModal
+}
+
+const Edit = ({ isAddContentModal }: EditProps) => {
   const { user } = useUser();
   const router = useRouter();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
@@ -172,12 +176,12 @@ const Edit = () => {
   return (
     <>
       <Flex w="100%" h="100%">
-        <SideBar pagePath={'/create'} />
-        <Navbar user={user} pageName="Create" />
+        {!isAddContentModal && <SideBar pagePath={'/create'} />}
+        {!isAddContentModal && <Navbar user={user} pageName="Create" />}
         <Box
           //ml="200px"
-          py="115px"
-          pl={isSmallerScreen ? '90px' : '240px'}
+          py={!isAddContentModal ? "115px" : "1rem"}
+          pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
           w="full"
           h={'full'}
           bg="background"
@@ -186,7 +190,7 @@ const Edit = () => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

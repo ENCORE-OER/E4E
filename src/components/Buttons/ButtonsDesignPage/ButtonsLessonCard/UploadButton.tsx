@@ -35,7 +35,7 @@ export default function UploadButton({
         handleClick={handleUpload}
         w="fit-content"
         leftIcon={<IconUpload />}
-        disabled={disabled}
+        isDisabled={disabled}
       />
     </>
   );

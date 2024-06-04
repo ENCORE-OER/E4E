@@ -61,6 +61,7 @@ export const CustomTab = (props: CustomTabProps) => {
             </Tab>
           ))} */}
 
+        {/* Tabs */}
         <Flex>
           {config
             .filter((elem) => !elem.isButton)
@@ -71,6 +72,7 @@ export const CustomTab = (props: CustomTabProps) => {
             ))}
         </Flex>
 
+        {/* Buttons */}
         <Flex flex="1" justify="flex-end" columnGap={5}>
           {config
             .filter((elem) => elem.isButton)

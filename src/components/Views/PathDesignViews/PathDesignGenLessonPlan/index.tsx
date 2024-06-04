@@ -351,23 +351,28 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${generatedLesson.Type ? `${mapStringToString(
-            TypeOfActivityEnum[Number(generatedLesson.Details)],
-            TypeOfActivityStringEnum
-          )}` : 'Frontal lecture'
-            } activity`,
+          lessonTitle: `${
+            generatedLesson.Type
+              ? `${mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )}`
+              : 'Frontal lecture'
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : 'Frontal lecture'
-            }`,
-          activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
-            }`,
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : 'Frontal lecture'
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -584,10 +589,7 @@ export default function PathDesignGenLessonPlan({
       selectedResources !== undefined ? selectedResources.length : oers.length;
     try {
       // Try one by one if there is an URl that works
-      while (
-        !isPossibleToContinue &&
-        indexAnalyzeMaterial < maxLength
-      ) {
+      while (!isPossibleToContinue && indexAnalyzeMaterial < maxLength) {
         // Get the URL of the OER
         const oer = getUrlOER(
           oers,

@@ -245,6 +245,7 @@ export default function CollectionView({
             collectionName={collections[collectionIndex]?.name}
             data={collections[collectionIndex]}
             fileName={collections[collectionIndex]?.name}
+            isAddContentModal={isAddContentModal}
           />
           <HStack pb="3">
             <Text
@@ -264,7 +265,7 @@ export default function CollectionView({
                 isAscending={isAscending}
                 setAscending={setAscending}
                 handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+              //setIsLoading={setIsLoading}
               />
             </Flex>
           </HStack>

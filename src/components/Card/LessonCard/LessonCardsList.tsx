@@ -1,12 +1,15 @@
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, DraggableProvided, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
 import LessonCard from '.';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
   LessonCardProps,
+  LessonProps,
   PassFailConditionsProps,
 } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
+import IconDrag from '../../Icons/IconDrag/IconDrag';
 import AddPassFailConditionModal from '../../Modals/LearningPathModals/AddPassFailConditionModal';
 
 type LessonCardsListProps = {
@@ -18,7 +21,7 @@ export default function LessonCardsList({
 }: LessonCardsListProps) {
   const hydrated = useHasHydrated();
 
-  const { lessonCards, setLessonCards } = useLearningPathDesignContext();
+  const { lessonCards, setLessonCards, lessonActivities, setLessonActivities, isEditLessonPlanClicked } = useLearningPathDesignContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [condition, setCondition] = useState<string>('');
@@ -105,31 +108,35 @@ export default function LessonCardsList({
     onOpen();
   };
 
-  useEffect(() => {
-    console.log('Sto settando');
-    setLessonCards([
-      {
-        lesson: {
-          lessonTitle: 'Lesson title',
-          lessonType: 'Lesson Type',
-          activityDescription: 'Activity description',
-          activityType: 'Activity Type',
-          timeDuration: 20,
-          passFailConditions: [],
-        },
-      },
-      {
-        lesson: {
-          lessonTitle: 'Lesson title',
-          lessonType: 'Lesson Type',
-          activityDescription: 'Activity description',
-          activityType: 'Activity Type',
-          timeDuration: 30,
-          passFailConditions: [],
-        },
-      },
-    ]);
-  }, []);
+  const handleDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
+
+    const items = Array.from(lessonActivities);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setLessonActivities(items);
+  };
+
+  // // Function to convert a LessonProps object to LessonCardProps
+  // const convertLessonToCard = (lesson: LessonProps, indexCard?: number): LessonCardProps => {
+  //   return {
+  //     lesson: lesson,
+  //     indexCard: indexCard,
+  //     // Other properties if needed
+  //   };
+  // };
+
+  // // Function to fill an array of LessonCardProps from an array of LessonProps
+  // const convertLessonsToCards = (lessons: LessonProps[]): LessonCardProps[] => {
+  //   return lessons.map((lesson, index) => convertLessonToCard(lesson, index));
+  // };
+
+  // useEffect(() => {
+  //   console.log('Sto settando');
+  //   const newLessonCards = convertLessonsToCards(lessonActivities);
+  //   setLessonCards(newLessonCards);
+  // }, [lessonActivities]);
 
   useEffect(() => {
     console.log(lessonCards);
@@ -141,19 +148,58 @@ export default function LessonCardsList({
 
   return (
     <>
-      <Flex direction="column" w="100%" gap={3}>
-        {hydrated &&
-          lessonCards.length > 0 &&
-          lessonCards.map((lessonCard: LessonCardProps, indexCard: number) => (
-            <LessonCard
-              key={indexCard}
-              indexCard={indexCard}
-              lesson={lessonCard.lesson}
-              isSmallerScreen={isSmallerScreen}
-              handleOpenModal={handleOpenModal}
-            />
-          ))}
-      </Flex>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided: DroppableProvided) => (
+            <Flex
+              direction="column"
+              w="100%"
+              gap={3}
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {hydrated &&
+                lessonActivities.length > 0 &&
+                lessonActivities.map((lessonActivity: LessonProps, indexCard: number) => (
+                  <Draggable
+                    key={indexCard}
+                    draggableId={`draggable-${indexCard}`}
+                    index={indexCard}
+                  >
+                    {(provided: DraggableProvided) => (
+                      <Flex
+                        direction="row"
+                        align="center"
+                        gap={2}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                      >
+                        {isEditLessonPlanClicked && (
+                          <Flex
+                            justify="center"
+                            px={1}
+                            {...provided.dragHandleProps}
+                          >
+                            <IconDrag />
+                          </Flex>)
+                        }
+                        <LessonCard
+                          key={indexCard}
+                          indexCard={indexCard}
+                          lesson={lessonActivity}
+                          isSmallerScreen={isSmallerScreen}
+                          handleOpenModal={handleOpenModal}
+                        />
+                      </Flex>
+                    )}
+                  </Draggable>
+                ))}
+              {provided.placeholder}
+            </Flex>
+          )}
+        </Droppable>
+      </DragDropContext>
+
       {selectedCardIndex !== null && (
         <AddPassFailConditionModal
           // handleOpenModal={() => { if (selectedCardIndex) handleOpenModal(selectedCardIndex) }}
