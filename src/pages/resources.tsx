@@ -59,7 +59,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   const {
     collectionIndex: selectedCollectionIndex,
     // resourcesIndex,
-    setResourcesIndex
+    setResourcesIndex,
   } = useLearningPathDesignContext();
 
   const collectionRef = useRef<HTMLDivElement>(null);
@@ -172,7 +172,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         // setResourcesIndex((prevResources: number[]) =>
         //   prevResources?.filter(
         //     (resource: number) =>
-        //       resource 
+        //       resource
         //   ));
 
         // At the moment reset the selected resources
@@ -299,8 +299,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

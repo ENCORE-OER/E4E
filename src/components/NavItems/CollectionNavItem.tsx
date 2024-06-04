@@ -47,7 +47,11 @@ const CollectionNavItem = ({
   isSmallerScreen,
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
-  const { handleCollectionIndexChange, setResourcesIndex, collectionIndex: selectedCollectionIndex } = useLearningPathDesignContext();
+  const {
+    handleCollectionIndexChange,
+    setResourcesIndex,
+    collectionIndex: selectedCollectionIndex,
+  } = useLearningPathDesignContext();
 
   // handle the click on the collection
   //const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
@@ -121,7 +125,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -177,8 +181,9 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
-          }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${
+          itemToDelete ? itemToDelete.collection_name : ''
+        }`}
       />
     </>
   );

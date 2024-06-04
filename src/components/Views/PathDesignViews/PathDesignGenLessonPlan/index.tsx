@@ -15,9 +15,10 @@ import {
   OutputLessonPlanProps,
   RespAnalyzedMaterialProps,
   TypeOfActivityEnum,
+  TypeOfActivityStringEnum,
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
-import { mapNumberToString, mapOptionToNumber } from '../../../../utils/utils';
+import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
@@ -350,23 +351,23 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${
-            generatedLesson.Type ? '' : 'Frontal lecture'
-          } activity`,
+          lessonTitle: `${generatedLesson.Type ? `${mapStringToString(
+            TypeOfActivityEnum[Number(generatedLesson.Details)],
+            TypeOfActivityStringEnum
+          )}` : 'Frontal lecture'
+            } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${
-            generatedLesson.Type
-              ? mapNumberToString(
-                  Number(generatedLesson.Details),
-                  TypeOfActivityEnum
-                )
-              : 'Frontal lecture'
-          }`,
-          activityDescription: `${
-            generatedLesson.Type
-              ? generatedLesson.Topic
-              : generatedLesson.Details
-          }`,
+          activityType: `${generatedLesson.Type
+            ? mapStringToString(
+              TypeOfActivityEnum[Number(generatedLesson.Details)],
+              TypeOfActivityStringEnum
+            )
+            : 'Frontal lecture'
+            }`,
+          activityDescription: `${generatedLesson.Type
+            ? generatedLesson.Topic
+            : generatedLesson.Details
+            }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -584,7 +585,7 @@ export default function PathDesignGenLessonPlan({
     try {
       // Try one by one if there is an URl that works
       while (
-        isPossibleToContinue === undefined &&
+        !isPossibleToContinue &&
         indexAnalyzeMaterial < maxLength
       ) {
         // Get the URL of the OER

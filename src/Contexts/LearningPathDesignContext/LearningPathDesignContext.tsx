@@ -533,6 +533,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     { lessonType: 'Assessment', activityType: 'Case Study Analysis' },
     { lessonType: 'Learning', activityType: 'Project-based Learning' },
     { lessonType: 'Assessment', activityType: 'Problem-solving Activity' },
+    { lessonType: 'Learning', activityType: 'Frontal Lecture' }
   ];
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
