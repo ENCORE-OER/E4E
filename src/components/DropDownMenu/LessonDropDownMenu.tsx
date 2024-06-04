@@ -41,6 +41,7 @@ export default function LessonDropDownMenu({
           fontSize="sm"
           fontWeight="normal"
           py={0}
+          size="sm"
           // px={3}
           as={Button}
           rightIcon={<ChevronDownIcon />}

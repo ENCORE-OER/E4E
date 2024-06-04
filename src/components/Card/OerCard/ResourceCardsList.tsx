@@ -132,7 +132,7 @@ export default function ResourceCardsList({
                           isAddContentModal={isAddContentModal}
                         />
                       </Box>
-                      {isResourcePage && (
+                      {isResourcePage && !isAddContentModal && (
                         <Button
                           variant="ghost"
                           _hover={{ bg: 'gray.300' }}

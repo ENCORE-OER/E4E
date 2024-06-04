@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
@@ -13,6 +13,7 @@ import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGe
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useIsSmallerScreen } from '../../utils/utils';
 
 const Home = (/*props: DiscoverPageProps*/) => {
   const {
@@ -29,38 +30,20 @@ const Home = (/*props: DiscoverPageProps*/) => {
     //handleResetStep0,
     handleCollectionIndexChange,
     setResourcesIndex,
-    // handleResourceIndexChange,
-    // takes the value of the selected option in "Educational Scenario"
-    selectedContext, // used for the api call
-    // selectedLearnerExperience, // used for the api call
-    // selectedEducatorExperience, // used for the api call
-    // selectedGroupDimension, // used for the api call
+    handleResourceChange,
     bloomLevels, // used for the api call
     learningTextContext, // used for the api call (learning context)
     handleResetAll,
     // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
-    setLearningObjectiveObjects,
-    MAX_LO,
-    MIN_LO,
-    numberOfLO,
-    setNumberOfLO,
+    handleDefaultLearningContext,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
   const { user } = useUser();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
 
   // ==================================================================
 
@@ -111,33 +94,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
     } else if (resourcesIndex.length === 0 && selectedResource === true) {
       setSelectedResource(null);
     }
-  };
-
-  // Create this function in the LearningPathDesignContext??? This is also needed in LearningPath page???
-  const handleResourceChange = (newResourceIndex: number) => {
-    console.log('Entro in handleResourceChange');
-    if (newResourceIndex > -1) {
-      if (resourcesIndex.includes(newResourceIndex)) {
-        const updatedResourcesIndex = resourcesIndex.filter(
-          (index: number) => index !== newResourceIndex
-        );
-        setResourcesIndex(updatedResourcesIndex);
-      } else {
-        setResourcesIndex((prevIndex: number[]) => [
-          ...prevIndex,
-          newResourceIndex,
-        ]);
-      }
-    } else {
-      setResourcesIndex([]);
-    }
-  };
-
-  const handlePrevButtonClick = () => {
-    //handleResetStep0();
-    router.push({
-      pathname: '/design',
-    });
   };
 
   // const saveLearningScenario = async () => {
@@ -202,10 +158,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  const handleNextClick = async ({
-    handleFunction,
+  const handleNextWithLessonPlanGenerationClick = async ({
+    handleGenerationFunction,
   }: {
-    handleFunction: () => Promise<boolean>;
+    handleGenerationFunction?: () => Promise<boolean>;
   }) => {
     if (
       selectedCollection !== null &&
@@ -213,7 +169,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
       selectedSkillConceptTags.length > 0 &&
-      learningTextContext?.trim() !== '' &&
+      // learningTextContext?.trim() !== '' &&  // Set automatically the default learning context
       selectedOptions.length > 0 && // verbsBloomLevel
       // selectedLearningObjectiveIndex > -1 &&
       learningObjectiveObjects.length > 0 && // that means that the learning objectives have been generated and the Educator has selected one
@@ -223,24 +179,34 @@ const Home = (/*props: DiscoverPageProps*/) => {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
 
-      const isPossibleToContinue = await handleFunction();
+      if (learningTextContext?.trim() === '') {
+        handleDefaultLearningContext();
+      }
 
-      if (isPossibleToContinue) {
-        addToast({
-          message: `Lesson plan successfully generated.`,
-          type: 'success',
-        });
-        router.push({
-          pathname: '/design/learningPathDesign',
-        });
-      } else {
-        addToast({
-          message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
-          type: 'error',
-        });
-        router.push({
-          pathname: '/design/learningPathDesign',
-        });
+      if (handleGenerationFunction) {
+        console.log("SONO NELL'HANDLE GENERATION FUNCTION");
+        // Generate Lesson Plan
+        const isPossibleToContinue = await handleGenerationFunction();
+
+        // Plan successfully generated
+        if (isPossibleToContinue) {
+          addToast({
+            message: `Lesson plan successfully generated.`,
+            type: 'success',
+          });
+          router.push({
+            pathname: '/design/learningPathDesign',
+          });
+          // Plan not generated
+        } else {
+          addToast({
+            message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
+            type: 'error',
+          });
+          router.push({
+            pathname: '/design/learningPathDesign',
+          });
+        }
       }
     } else {
       setIsNextButtonClicked(true);
@@ -264,6 +230,41 @@ const Home = (/*props: DiscoverPageProps*/) => {
       }
     }
   };
+
+  const handleNextClick = () => {
+    handleNextWithLessonPlanGenerationClick({});
+
+    router.push({
+      pathname: '/design/learningPathDesign',
+    });
+  };
+
+  const handlePrevButtonClick = () => {
+    //handleResetStep0();
+    router.push({
+      pathname: '/design',
+    });
+  };
+
+  // // Handle delete of a collection if it's selected in "Learning Objective" page
+  // useEffect(() => {
+  //   const collectionDelated = !collections.some(
+  //     (collection: CollectionProps, index: number) => index === collectionIndex
+  //   );
+  //   if (collectionDelated) {
+  //     handleCollectionChange(-1);
+  //   }
+  // }, [collections.length]);
+
+  // Handle delete of a resource if it's selected in "Learning Objective" page
+  // useEffect(() => {
+  //   const oerDelated = !collections[collectionIndex]?.oers.some(
+  //     (oer: OerInCollectionProps, index: number) => index === collectionIndex
+  //   );
+  //   if (oerDelated) {
+  //     handleCollectionChange(-1);
+  //   }
+  // }, [collections[collectionIndex]?.oers.length])
 
   useEffect(() => {
     handleCollectionSelection();
@@ -360,7 +361,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             collections={collections}
             handleCollectionSelection={handleCollectionSelection}
             handleCollectionChange={handleCollectionChange}
-            resources={collections[collectionIndex]?.oers} // Create an array of resources names???
+            resources={collections[collectionIndex]?.oers || []} // Create an array of resources names???
             handleResourceSelection={handleResourceSelection}
             handleResourceChange={handleResourceChange}
             isNextButtonClicked={isNextButtonClicked}
@@ -382,24 +383,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 verbsTitleTextBox="Select the verbs related to your learning objective*"
               />
               <PathDesignGenLO
-                // LANGUAGE_GEN_LO_API={LANGUAGE_GEN_LO_API}
-                // TEMPERATURE_GEN_LO_API={TEMPERATURE_GEN_LO_API}
-                bloomLevelIndex={bloomLevelIndex}
                 selectedBloomLevel={bloomLevels[bloomLevelIndex]?.name || ''}
-                selectedContext={selectedContext}
-                selectedSkillConceptsTags={selectedSkillConceptTags}
-                selectedOptions={selectedOptions}
-                // selectedGroupDimension={selectedGroupDimension}
-                // selectedLearnerExperience={selectedLearnerExperience}
-                // selectedEducatorExperience={selectedEducatorExperience}
-                learningTextContext={learningTextContext}
-                // totalLearningObjectives={totalLearningObjectives}
-                // setTotalLearningObjectives={setTotalLearningObjectives}
-                learningObjectiveObjects={learningObjectiveObjects}
-                setLearningObjectiveObjects={setLearningObjectiveObjects}
-                // handleSelectedLearningObjectiveIndexChange={
-                //   handleSelectedLearningObjectiveIndexChange
-                // }
                 isEmptyLearningObjectivesPresent={
                   isEmptyLearningObjectivesPresent
                 }
@@ -409,21 +393,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 setIsNextButtonClicked={setIsNextButtonClicked}
                 isHighligted={isNextButtonClicked}
                 isSmallerScreen={isSmallerScreen}
-                // apiKey={apiKey}
-                // handleApiKey={handleApiKey}
-                MAX_LO={MAX_LO}
-                MIN_LO={MIN_LO}
-                numberOfLO={numberOfLO}
-                setNumberOfLO={setNumberOfLO}
               />
 
-              <PathDesignGenLessonPlan handleNextClick={handleNextClick} />
+              <PathDesignGenLessonPlan
+                handleNextClick={handleNextWithLessonPlanGenerationClick}
+              />
             </Flex>
           )}
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            // handleNextClick={handleNextClick}
+            handleNextClick={handleNextClick}
             handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>

@@ -9,12 +9,12 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { activityTypesObjectsProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 
 type ActivityTypeDropDownMenuProps = {
   // options: string[];
+  activityTypes: activityTypesObjectsProps[];
   lessonType: string;
   title: string;
   onChange: (selectedIndex: number) => void;
@@ -22,13 +22,14 @@ type ActivityTypeDropDownMenuProps = {
 
 export default function ActivityTypeDropDownMenu({
   // options,
+  activityTypes,
   lessonType,
   title,
   onChange,
 }: ActivityTypeDropDownMenuProps) {
   const hydrated = useHasHydrated();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const { activityTypes } = useLearningPathDesignContext();
+  // const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
     setSelectedOption(
@@ -52,6 +53,7 @@ export default function ActivityTypeDropDownMenu({
           w="fit-content"
           fontSize="small"
           fontWeight="normal"
+          size="sm"
           py={0}
           as={Button}
           rightIcon={<ChevronDownIcon />}

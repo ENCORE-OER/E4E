@@ -1,12 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';
@@ -15,6 +8,7 @@ import AnalyzerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalyzerT
 import SharedParameterTab from '../../components/Tabs/TabsCreatePage/SharedParameterTab';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { useIsSmallerScreen } from '../../utils/utils';
 // import { stringArrayToOptionsObject } from '../../utils/utils';
 
 interface CreateProps {
@@ -24,12 +18,7 @@ interface CreateProps {
 const Create = ({ isAddContentModal }: CreateProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
     //isGenerateButtonClicked,
     apiGeneratedExerciseData,
@@ -49,7 +38,7 @@ const Create = ({ isAddContentModal }: CreateProps) => {
       {!isAddContentModal && <Navbar user={user} pageName="Create" />}
 
       <Box
-        py="115px"
+        py={!isAddContentModal ? '115px' : '1rem'}
         pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
         w="full"
         minH="100vh"

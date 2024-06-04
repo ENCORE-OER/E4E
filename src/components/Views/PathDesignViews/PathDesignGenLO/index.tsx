@@ -1,13 +1,8 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { PiSmileySadLight } from 'react-icons/pi';
 import { useGeneralContext } from '../../../../Contexts/GeneralContext';
-import {
-  ObjectLearningObjectiveProps,
-  Option,
-  SkillItemProps,
-} from '../../../../types/encoreElements';
-import { CustomToast } from '../../../../utils/Toast/CustomToast';
+import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { ObjectLearningObjectiveProps } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
@@ -16,24 +11,7 @@ import InfoGenAITextBox from '../../../TextBox/InfoGenAITextBox';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {
-  bloomLevelIndex: number;
   selectedBloomLevel: string;
-  selectedContext: Option | null;
-  selectedSkillConceptsTags: SkillItemProps[];
-  selectedOptions: string[];
-  // selectedGroupDimension: Option | null;
-  // selectedLearnerExperience: Option | null;
-  // selectedEducatorExperience: Option | null;
-  learningTextContext: string;
-  MAX_LO: number;
-  MIN_LO: number;
-  numberOfLO: number;
-  setNumberOfLO: Dispatch<SetStateAction<number>>;
-  learningObjectiveObjects: ObjectLearningObjectiveProps[];
-  setLearningObjectiveObjects: Dispatch<
-    SetStateAction<ObjectLearningObjectiveProps[]>
-  >;
-  // handleSelectedLearningObjectiveIndexChange: (index: number) => void;
   isNextButtonClicked: boolean;
   setIsNextButtonClicked: Dispatch<SetStateAction<boolean>>;
   isGenerateLOClicked?: boolean;
@@ -44,22 +22,7 @@ export interface PathDesignGenLOProps {
 }
 
 export default function PathDesignGenLO({
-  bloomLevelIndex,
   selectedBloomLevel,
-  selectedContext,
-  selectedSkillConceptsTags,
-  selectedOptions,
-  // selectedGroupDimension,
-  // selectedLearnerExperience,
-  // selectedEducatorExperience,
-  learningTextContext,
-  MAX_LO,
-  MIN_LO,
-  numberOfLO,
-  setNumberOfLO,
-  learningObjectiveObjects,
-  setLearningObjectiveObjects,
-  // handleSelectedLearningObjectiveIndexChange,
   isNextButtonClicked,
   setIsNextButtonClicked,
   isGenerateLOClicked,
@@ -69,13 +32,32 @@ export default function PathDesignGenLO({
   isEmptyLearningObjectivesPresent,
 }: PathDesignGenLOProps) {
   const hydrated = useHasHydrated();
-  const { addToast } = CustomToast();
+  // const { addToast } = CustomToast();
 
   const { apiKey, setupModel, handleApiKey, handleSetupModel } =
     useGeneralContext();
 
+  const {
+    bloomLevelIndex,
+    // takes the value of the selected option in "Educational Scenario"
+    selectedOptions,
+    selectedContext, // used for the api call
+    selectedSkillConceptTags,
+    learningTextContext, // used for the api call (learning context)
+    defaultLearningContext: defaultContext,
+    handleDefaultLearningContext,
+    // ----- Learning Objective Objects -----
+    learningObjectiveObjects,
+    setLearningObjectiveObjects,
+    handleUpdateLO,
+    handleDeleteLO,
+    MAX_LO,
+    MIN_LO,
+    numberOfLO,
+    setNumberOfLO,
+  } = useLearningPathDesignContext();
+
   // Used to handle generated learning objectives
-  const [isLessGeneratedLO, setIsLessGeneratedLO] = useState<boolean>(false); // State to check if the number of generated learning objectives is equal to the desired number
   const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
   // const [numberOfLO, setNumberOfLO] = useState<number>(1); // Number of learning objectives to generate. Default and min number is 1
   // const [isGenerateLOClicked, setIsGenerateLOClicked] = useState<boolean>(false); // State to know when the "Generate learning objective" button is clicked
@@ -99,28 +81,6 @@ export default function PathDesignGenLO({
   // Show Generate Learning Objectives area
   // const [showBox, setShowBox] = useState(false); // used to show the API setup boxes
   // const [isClicked, setIsClicked] = useState(false); // used for the API setup button
-
-  // Function to update the learning objective when the user edits it
-  const handleUpdateLO = (updatedText: string, index?: number) => {
-    if (index != undefined) {
-      console.log('Update learning objective');
-
-      // const updatedGeneratedLOs = [...totalLearningObjectives];
-      // // console.log('GeneratedLOs', updatedGeneratedLOs);
-      // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
-      // setTotalLearningObjectives(updatedGeneratedLOs);
-
-      // ... Update using the <ObjectLearningObjectiveProps> array ...
-      const updatedObjectLOs = [...learningObjectiveObjects];
-      updatedObjectLOs[index].learningObjective = updatedText;
-      if (updatedObjectLOs[index].isGenerated) {
-        updatedObjectLOs[index].isGenerated = false;
-      }
-      // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
-      // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
-      setLearningObjectiveObjects(updatedObjectLOs);
-    }
-  };
 
   // // Function to handle the click on the checkbox to select the learning objectives
   // const handleCheckBoxClick = (index: number) => {
@@ -152,71 +112,9 @@ export default function PathDesignGenLO({
   //   }
   // };
 
-  // Function to create/add a custom learning objective
-  const handleAddLearningObjective = () => {
-    console.log('Add new learning objective');
-    try {
-      setLearningObjectiveObjects(
-        (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
-          ...prevObjectLOs,
-          {
-            learningObjective: '',
-            isSelected: false,
-            isGenerated: false,
-          },
-        ]
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleDeleteLO = (indexLO: number) => {
-    const updatedObjectLOs = learningObjectiveObjects.filter(
-      (objectLO: ObjectLearningObjectiveProps, index: number) =>
-        indexLO !== index
-    );
-    setLearningObjectiveObjects(updatedObjectLOs);
-    if (numberOfLO > updatedObjectLOs.length) {
-      setNumberOfLO(numberOfLO - 1);
-    }
-
-    addToast({
-      message: `Learning objective successfully deleted!`,
-      type: 'success',
-    });
-  };
-
-  useEffect(() => {
-    // Starting with at least one learning objective
-    if (learningObjectiveObjects.length < numberOfLO) {
-      // Add objectives until the desired number is reached
-      const difference = numberOfLO - learningObjectiveObjects.length;
-      for (let i = 0; i < difference; i++) {
-        handleAddLearningObjective();
-      }
-      // Handle the change value of numberOfLO when decrease it
-    } else if (numberOfLO < learningObjectiveObjects.length) {
-      // Remove empty objectives
-      const difference = learningObjectiveObjects.length - numberOfLO;
-      let count = 0;
-      const updatedObjectives = learningObjectiveObjects.filter((obj) => {
-        if (count < difference && obj.learningObjective === '') {
-          count++;
-          return false;
-        }
-        return true;
-      });
-
-      // Update the number of objectives
-      const newNumberOfLO = learningObjectiveObjects.length - count;
-      setLearningObjectiveObjects(updatedObjectives);
-      setNumberOfLO(newNumberOfLO);
-    } else if (learningObjectiveObjects.length === 0) {
-      setIsAtLeastOneLOGenerated(false);
-      handleAddLearningObjective();
-    }
-  }, [numberOfLO, learningObjectiveObjects.length]);
+  // -----
+  // See useEffect in LearningPathDesignContext
+  // -----
 
   useEffect(() => {
     const update = learningObjectiveObjects.some(
@@ -228,6 +126,12 @@ export default function PathDesignGenLO({
     }
   }, [learningObjectiveObjects]);
 
+  useEffect(() => {
+    if (learningObjectiveObjects.length === 0) {
+      setIsAtLeastOneLOGenerated(false);
+    }
+  }, []);
+
   return (
     <Flex pt="1.5rem" direction="column" w="100%">
       {/* {showBox && ( */}
@@ -237,10 +141,10 @@ export default function PathDesignGenLO({
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
         selectedContext={selectedContext}
-        selectedSkillConceptsTags={selectedSkillConceptsTags}
+        selectedSkillConceptTags={selectedSkillConceptTags}
         selectedOptions={selectedOptions}
         learningTextContext={learningTextContext}
-        setIsLessGeneratedLO={setIsLessGeneratedLO}
+        // setIsLessGeneratedLO={setIsLessGeneratedLO}
         isNextButtonClicked={isNextButtonClicked}
         setIsNextButtonClicked={setIsNextButtonClicked}
         bloomLevelIndex={bloomLevelIndex}
@@ -252,6 +156,8 @@ export default function PathDesignGenLO({
         setIsLoading={setIsLoading}
         learningObjectiveObjects={learningObjectiveObjects}
         setLearningObjectiveObjects={setLearningObjectiveObjects}
+        handleUpdateLO={handleUpdateLO}
+        handleDeleteLO={handleDeleteLO}
         MAX_LO={MAX_LO}
         MIN_LO={MIN_LO}
         numberOfLO={numberOfLO}
@@ -259,6 +165,8 @@ export default function PathDesignGenLO({
         isEmptyLearningObjectivesPresent={isEmptyLearningObjectivesPresent}
         setIsGenerateLOClicked={setIsGenerateLOClicked}
         isAtLeastOneLOGenerated={isAtLeastOneLOGenerated}
+        handleDefaultLearningContext={handleDefaultLearningContext}
+        defaultLearningContext={defaultContext}
       />
 
       {isGenerateLOClicked && isAtLeastOneLOGenerated && (
@@ -281,7 +189,7 @@ export default function PathDesignGenLO({
         }
         borderRadius={'lg'}
       >
-        {isLessGeneratedLO && (
+        {/* {isLessGeneratedLO && (
           <Flex direction={'row'} align={'center'} pb={5}>
             <PiSmileySadLight />
             <Text
@@ -290,10 +198,10 @@ export default function PathDesignGenLO({
               fontWeight={'bold'}
               textColor={'orange.300'}
             >
-              {`Sorry, but we were unable to generate the requested number of learning objectives.`}{' '}
+              Sorry, but we were unable to generate the requested number of learning objectives.
             </Text>
           </Flex>
-        )}
+        )} */}
 
         <Flex direction="column" rowGap={3}>
           {

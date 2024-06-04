@@ -3,7 +3,6 @@ import {
   OerAuthorsInfo,
   OerConceptInfo,
   OerMediaTypeInfo,
-  OerQuizQuestionInfo,
   OerResourceFormatInfo,
   OerSkillInfo,
   OerSourceRoerInfo,
@@ -82,24 +81,23 @@ export type OerFreeSearchProps = {
   times_used: number;
   instructional_oer: boolean;
   assessment_oer: boolean;
-  assessment_oer_type: string | null;
   generated_by_ai: boolean;
-  level: string | null; // Level should be merge with "coverage" and "detailed_coverage
-  number_of_distractors: number | null;
-  number_of_words: number | null;
-  temperature: number | null;
-  type_of_exercise: string | null;
-  number_of_correct_answer: number | null;
-  number_of_easy_distractors: number | null;
-  quiz_questions: OerQuizQuestionInfo[];
-  type_of_question: string | null;
-  category: string | null;
-  question: string | null;
-  question_response: string | null;
-  coding_starter_code: any | null;
-  coding_test_cases: any[];
-  fill_template: string | null;
-  fill_template_with_gaps: string | null;
-  options: string[];
-  search_rank?: number | null;
+  topic: string | null;
+  learning_objective: string | null;
+  exercise_values: {
+    options: string[];
+    question: string;
+    solution: string;
+    temperature: number | null;
+    target_level: number;
+    fill_template: string | null;
+    coding_test_cases: any[];
+    type_of_assignment: string;
+    assessment_oer_type: string | null;
+    coding_starter_code: string;
+    number_of_distractors: number | null;
+    fill_template_with_gaps: string | null;
+    number_of_correct_answer: number | null;
+    number_of_easy_distractors: number | null;
+  };
 };

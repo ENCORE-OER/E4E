@@ -6,7 +6,6 @@ import {
   HStack,
   Icon,
   Spacer,
-  useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
 
@@ -22,6 +21,7 @@ import { LuFolderPlus } from 'react-icons/lu';
 import CollectionModal from '../components/Modals/CollectionModals';
 import CollectionNavItem from '../components/NavItems/CollectionNavItem';
 import CollectionView from '../components/Views/CollectionViews/CollectionView';
+import { useLearningPathDesignContext } from '../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { APIV2 } from '../data/api';
 import {
   CollectionProps,
@@ -31,7 +31,7 @@ import {
   OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated } from '../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 interface DiscoverPageProps {
   // accessToken: string | undefined;
@@ -55,23 +55,21 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     addCollection, // for InfoCardModal
     addResource, // for InfoCardModal
   } = useCollectionsContext();
+
+  const {
+    collectionIndex: selectedCollectionIndex,
+    // resourcesIndex,
+    setResourcesIndex,
+  } = useLearningPathDesignContext();
+
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<
     (OerProps | undefined | OerFreeSearchProps)[]
   >([]);
   const hydrated = useHasHydrated(); // used to avoid hydration failed
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
 
   // ==================================================================
 
@@ -169,6 +167,18 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
 
       setIsDeletingResource(true);
 
+      // TODO:Update the ResourcesIndex if we are deleting an oer that belonged to the selected Collection chosen in Learning Objecive page
+      if (collectionIndex === selectedCollectionIndex) {
+        // setResourcesIndex((prevResources: number[]) =>
+        //   prevResources?.filter(
+        //     (resource: number) =>
+        //       resource
+        //   ));
+
+        // At the moment reset the selected resources
+        setResourcesIndex([]);
+      }
+
       console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
       addToast({
@@ -178,7 +188,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     }
   };
 
-  const handleDeleteButtonClick = (
+  const handleDeleteButtonClick = async (
     collectionIndex: number,
     idOer: number | undefined
   ) => {
@@ -208,7 +218,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
       ) {
         onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
       } else {
-        handleDeleteResource(collectionIndex, idOer);
+        await handleDeleteResource(collectionIndex, idOer);
       }
     } catch (error) {
       console.error(error);
@@ -279,7 +289,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
       {!isAddContentModal && <Navbar user={user} pageName="Your resources" />}
       <Box
         //ml="200px"
-        py="115px"
+        py={!isAddContentModal ? '115px' : '1rem'}
         pl={isSmallerScreen || isAddContentModal ? '70px' : '240px'}
         //w="full"
         flex="1"

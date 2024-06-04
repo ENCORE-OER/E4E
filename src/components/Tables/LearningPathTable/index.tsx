@@ -40,45 +40,8 @@ export default function TableLearningPath() {
     setIsAddContentModalOpen(false);
   };
 
-  // const data: DataTableLearningPathProps[] =
-  //   lessonsActivities?.map(
-  //     (lesson: LessonProps, index: number) => ({
-  //       number: index + 1,
-  //       type: <Button variant="solid">{lesson.lessonType}</Button>,
-  //       activity: lesson.activityType,
-  //       time: lesson.timeDuration,
-  //       description: lesson.activityDescription,
-  //       content: <AddContentButton />,
-  //       action: (
-  //         <Button shadow={'none'} bg="none" w="fit-content">
-  //           <IconVerticalPoints />
-  //         </Button>
-  //       ),
-  //     })
-  //   ) || [];
-
-  // const [tableData, setTableData] = useState<DataTableLearningPathProps[]>([]);
-
-  // useEffect(() => {
-  //   setTableData(
-  //     lessonActivities?.map((lesson: LessonProps, index: number) => ({
-  //       number: index + 1,
-  //       type: <Button variant="solid">{lesson.lessonType}</Button>,
-  //       activity: lesson.activityType,
-  //       time: lesson.timeDuration,
-  //       description: lesson.activityDescription,
-  //       content: <AddContentButton />,
-  //       action: (
-  //         <Button shadow={'none'} bg="none" w="fit-content">
-  //           <IconVerticalPoints />
-  //         </Button>
-  //       ),
-  //     })) || []
-  //   );
-  // }, [lessonActivities]);
-
   return (
-    <Flex direction="column">
+    <Flex direction="column" overflow={'auto'}>
       {hydrated && (
         <CustomLearningPathTable
           data={lessonActivities}

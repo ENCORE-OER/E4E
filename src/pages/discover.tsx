@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-  useBreakpointValue,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
@@ -29,7 +22,7 @@ import {
 } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated } from '../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 // type DiscoverPageProps = {
 //   accessToken: string | undefined;
@@ -37,6 +30,7 @@ import { useHasHydrated } from '../utils/utils';
 
 const Discover = (/*props: DiscoverPageProps*/) => {
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
   //const abortController = new AbortController();
@@ -75,14 +69,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   //   md: 450,
   //   lg: 500,
   // });
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
   //const isSmallerThan600px = useBreakpointValue({ 1200: true, 2000: false });
   //const isSmallerThan600px = useMediaQuery('(max-width: 600px)');
 

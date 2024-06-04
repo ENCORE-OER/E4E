@@ -10,6 +10,7 @@ import {
   useState,
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
+import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import DeleteAlertDialog from '../Modals/AlertDialogs/DeleteAlertDialog/DeleteAlertDialog';
@@ -46,6 +47,11 @@ const CollectionNavItem = ({
   isSmallerScreen,
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
+  const {
+    handleCollectionIndexChange,
+    setResourcesIndex,
+    collectionIndex: selectedCollectionIndex,
+  } = useLearningPathDesignContext();
 
   // handle the click on the collection
   //const [collectionClicked, setCollectionClicked] = useState<boolean>(false);
@@ -90,6 +96,10 @@ const CollectionNavItem = ({
       setCollectionClicked(false);
     }
     deleteCollection(idColl, nameColl);
+    if (selectedCollectionIndex === collectionIndex) {
+      handleCollectionIndexChange(-1);
+      setResourcesIndex([]);
+    }
   };
 
   const handleDeleteButtonClick = (idColl: number, nameColl: string) => {

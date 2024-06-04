@@ -12,7 +12,9 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-export type CustomTabStyleProps = ThemingProps<'Tabs'> &
+export type CustomTabStyleProps = {
+  isSmallerScreen?: boolean;
+} & ThemingProps<'Tabs'> &
   UseTabsProps &
   Omit<HTMLChakraProps<'div'>, 'onChange'>;
 
@@ -52,14 +54,15 @@ export const CustomTab = (props: CustomTabProps) => {
       index={selectedIndex}
       onChange={(index) => setSelectedIndex(index)}
     >
-      <TabList>
+      <TabList flexWrap="wrap" rowGap={2}>
         {/* {config.map((tab, id) => (
             <Tab key={id} _selected={_selected}>
               {tab.label}
             </Tab>
           ))} */}
 
-        <Flex w="100%">
+        {/* Tabs */}
+        <Flex>
           {config
             .filter((elem) => !elem.isButton)
             .map((tab, id) => (
@@ -69,7 +72,8 @@ export const CustomTab = (props: CustomTabProps) => {
             ))}
         </Flex>
 
-        <Flex justify="flex-end" gap={5}>
+        {/* Buttons */}
+        <Flex flex="1" justify="flex-end" columnGap={5}>
           {config
             .filter((elem) => elem.isButton)
             .map((button, id) => (

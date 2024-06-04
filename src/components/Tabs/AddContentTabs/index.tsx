@@ -32,6 +32,7 @@ export default function AddContentTabs(props: AddContentTabsProps) {
       {...rest}
       w="100%"
       overflowY="auto"
+      justifyItems="center"
     />
   );
 }

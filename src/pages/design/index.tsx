@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useGeneralContext } from '../../Contexts/GeneralContext';
@@ -12,7 +12,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import InfoAPISetupTextBox from '../../components/TextBox/InfoAPISetupTextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 const Home = () => {
   const router = useRouter();
@@ -21,6 +21,7 @@ const Home = () => {
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
     SPACING,
     // handleEducatorExperienceChange,
@@ -37,16 +38,6 @@ const Home = () => {
 
   // ==================================================================
 
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
-
-  // ==================================================================
-
   const handleOptionsComplete = (areComplete: boolean) => {
     setAreOptionsComplete(areComplete);
   };
@@ -54,7 +45,7 @@ const Home = () => {
   const handleNextClick = () => {
     if (areOptionsComplete) {
       router.push({
-        pathname: '/design/LearningObjective',
+        pathname: '/design/learningObjective',
       });
     } else {
       addToast({

@@ -15,9 +15,10 @@ import {
   OutputLessonPlanProps,
   RespAnalyzedMaterialProps,
   TypeOfActivityEnum,
+  TypeOfActivityStringEnum,
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
-import { mapNumberToString, mapOptionToNumber } from '../../../../utils/utils';
+import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
@@ -25,9 +26,9 @@ import RowBoxGenLessonPlan from './RowBoxGenLessonPlan';
 
 type PathDesignGenLessonPlanProps = {
   handleNextClick: ({
-    handleFunction,
+    handleGenerationFunction,
   }: {
-    handleFunction: () => Promise<boolean>;
+    handleGenerationFunction?: () => Promise<boolean>;
   }) => Promise<void>;
 };
 
@@ -43,12 +44,14 @@ export default function PathDesignGenLessonPlan({
     bloomLevelIndex,
     bloomLevels,
     learningTextContext,
+    defaultLearningContext,
     handleTitleLearningPath,
     lessonActivities,
     setLessonActivities,
+    setTitleLearningPath,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
-  const { apiKey, setupModel } = useGeneralContext();
+  const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
   const { addToast } = CustomToast();
 
   // Show Generate Lesson Plan area
@@ -268,7 +271,7 @@ export default function PathDesignGenLessonPlan({
     setupModel: string | undefined,
     material: string
   ): Promise<RespAnalyzedMaterialProps | undefined> => {
-    console.log('Analyzing material: ');
+    console.log('Analyzing material...');
 
     try {
       const resp = await axios.post(
@@ -294,150 +297,497 @@ export default function PathDesignGenLessonPlan({
     }
   };
 
-  const handleGenerateLessonPlan = async (): Promise<boolean> => {
-    let isPossibleToContinue = false;
+  const generationLessonPlan = async (
+    analyzedMaterial: RespAnalyzedMaterialProps
+  ): Promise<boolean> => {
+    let isPlanGenerated = false;
+
+    // Set the title of the lesson plan
+    handleTitleLearningPath(analyzedMaterial.Title || '');
+
+    // Generate a lesson plan based on the selected resources
+    const learninObjective = learningObjectiveObjects
+      .map(
+        (objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective
+      )
+      .join(' & ');
+    console.log(learninObjective);
+
+    const bloomLevel = mapOptionToNumber(
+      bloomLevels[bloomLevelIndex],
+      BloomLevelsEnum
+    );
+    console.log(bloomLevel);
+
+    const generatedLessonPlan: OutputLessonPlanProps[] =
+      (await postGenerateLessonPlan(
+        apiKey, // apiKey
+        setupModel, // setupModel
+        analyzedMaterial.MainTopics, // mainTopics
+        analyzedMaterial.Language, // language
+        analyzedMaterial.MacroSubject, // macroSubject
+        analyzedMaterial.Title, // title
+        analyzedMaterial.PerceivedDifficulty, // level
+        learninObjective, // learning objective
+        bloomLevel, // bloom level enum
+        learningTextContext || defaultLearningContext, // learning context
+        0.3 // temperature
+      )) || [];
+
+    // generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => {
+    //   const lesson: LessonProps = {
+    //     lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'} activity`,
+    //     lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+    //     activityType: `${generatedLesson.Type ? mapNumberToString(Number(generatedLesson.Details), TypeOfActivityEnum) : 'Frontal lecture'}`,
+    //     activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details}`,
+    //     topic: generatedLesson.Topic,
+    //     timeDuration: Number(generatedLesson.Duration),
+    //     passFailConditions: [],
+    //   }
+
+    //   setLessonPlan((prevLessons: LessonProps[]) => [...prevLessons, lesson])
+    // })
+
+    if (generatedLessonPlan !== undefined && generatedLessonPlan?.length > 0) {
+      console.log('GENERATED LESSON PLAN');
+      setLessonActivities(
+        generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
+          lessonTitle: `${
+            generatedLesson.Type
+              ? `${mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )}`
+              : 'Frontal lecture'
+          } activity`,
+          lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : 'Frontal lecture'
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
+          topic: generatedLesson.Topic,
+          timeDuration: Number(generatedLesson.Duration),
+          passFailConditions: [],
+        })) || []
+      );
+
+      isPlanGenerated = true; // This means that
+    }
+
+    return isPlanGenerated;
+  };
+
+  const analyzeAndPlan = async (
+    material: string,
+    isPossibleToContinue: boolean
+  ): Promise<boolean> => {
+    let tempIsPossibleToContinue = isPossibleToContinue;
     try {
-      const oers = collections[collectionIndex].oers;
-      // Analyze selected resources
-      let oer: OerInCollectionProps = {
-        id: 0,
-        title: '',
-        description: '',
-        concepts: [],
-        urlSource: [],
-        generated_by_ai: false,
-      };
+      // Analyze the url material
+      const analyzedMaterial = await postAnalyzeMaterial(
+        apiKey,
+        setupModel,
+        material
+      );
 
-      // If at least a resources are selected
-      if (resourcesIndex.length > 0) {
-        let index = 0;
-        while (
-          (oer.urlSource.length === 0 || oer.urlSource === '') &&
-          index < resourcesIndex.length
-        ) {
-          oers[resourcesIndex[index]].urlSource !== (undefined || [] || '')
-            ? (oer = oers[resourcesIndex[index]])
-            : undefined;
-          index++;
-        }
-        // If no resources are selected takes directly from the collection
+      console.log(analyzedMaterial);
+
+      // In the case the material analyzer had worked
+      if (analyzedMaterial !== undefined) {
+        tempIsPossibleToContinue = await generationLessonPlan(analyzedMaterial);
+        console.log(tempIsPossibleToContinue);
       } else {
-        let index = 0;
-        while (
-          (oer.urlSource.length === 0 || oer.urlSource === '') &&
-          index < oers.length
-        ) {
-          oers[index].urlSource !== (undefined || [] || '')
-            ? (oer = oers[index])
-            : undefined;
-          index++;
-        }
+        throw console.error('Error with the analyzed material.');
       }
+    } catch (error) {
+      console.error(error);
+      if (tempIsPossibleToContinue) {
+        tempIsPossibleToContinue = false;
+      }
+    }
 
-      // If there is oer with url
-      if (oer !== undefined) {
-        // If generated it only has an URL string, otherwhise it may have an array of URL
-        const urlSource = Array.isArray(oer.urlSource)
-          ? oer.urlSource[0]
-          : oer.urlSource;
+    return tempIsPossibleToContinue;
+  };
 
-        try {
-          const analyzedMaterial = await postAnalyzeMaterial(
-            apiKey,
-            setupModel,
-            urlSource
-          );
+  // const getUrlOERs = (oers: OerInCollectionProps[]): OerInCollectionProps => {
+  //   console.log("SONO IN GET URL OERS");
+  //   let tempOer: OerInCollectionProps = {
+  //     id: 0,
+  //     title: '',
+  //     description: '',
+  //     concepts: [],
+  //     urlSource: [],
+  //     generated_by_ai: false,
+  //   };
+  //   let index = 0;
+  //   if (resourcesIndex.length > 0) {
+  //     while (
+  //       (tempOer.urlSource.length === 0 || tempOer.urlSource === undefined) &&   // If a OER is found we'll have at least an URL
+  //       index < resourcesIndex.length
+  //     ) {
+  //       const tempUrlSource = oers[resourcesIndex[index]].urlSource;
+  //       if (tempUrlSource !== undefined && tempUrlSource.length > 0) {
+  //         tempOer = oers[resourcesIndex[index]] // At the moment take the first OER with an URL Source
+  //       }
+  //       index++;
+  //       console.log("OER fo the GEN: ", tempOer);
+  //     }
+  //   } else {
+  //     while (
+  //       (tempOer.urlSource.length === 0 || // Only length because also if is a string the length=0 means that is an empty string
+  //         tempOer.urlSource === undefined) &&
+  //       index < oers.length
+  //     ) {
+  //       if (oers[index].urlSource !== undefined && oers[index].urlSource.length > 0) {
+  //         tempOer = oers[index];
+  //       }
+  //       index++;
+  //     }
+  //   }
+  //   return tempOer;
+  // }
 
-          if (analyzedMaterial) {
-            // Set the title of the lesson plan
-            handleTitleLearningPath(analyzedMaterial.Title || '');
+  // To get the URL of a OER.
+  const getUrlOER = (
+    oers: OerInCollectionProps[],
+    index: number
+  ): OerInCollectionProps => {
+    // To take from selected oers pass to this function ResourcesIndexes[index], otherwise only index
+    console.log('SONO IN GET URL OERS');
+    let tempOer: OerInCollectionProps = {
+      id: 0,
+      title: '',
+      description: '',
+      concepts: [],
+      urlSource: [],
+      generated_by_ai: false,
+    };
 
-            // Generate a lesson plan based on the selected resources
-            const learninObjective = learningObjectiveObjects
-              .map(
-                (objectLO: ObjectLearningObjectiveProps) =>
-                  objectLO.learningObjective
-              )
-              .join(' & ');
-            console.log(learninObjective);
+    const tempUrlSource = oers[index].urlSource;
+    if (tempUrlSource !== undefined && tempUrlSource.length > 0) {
+      tempOer = oers[index];
+    }
 
-            const bloomLevel = mapOptionToNumber(
-              bloomLevels[bloomLevelIndex],
-              BloomLevelsEnum
-            );
-            console.log(bloomLevel);
+    return tempOer;
+  };
 
-            const generatedLessonPlan: OutputLessonPlanProps[] =
-              (await postGenerateLessonPlan(
-                apiKey, // apiKey
-                setupModel, // setupModel
-                analyzedMaterial.MainTopics, // mainTopics
-                analyzedMaterial.Language, // language
-                analyzedMaterial.MacroSubject, // macroSubject
-                analyzedMaterial.Title, // title
-                analyzedMaterial.PerceivedDifficulty, // level
-                learninObjective, // learning objective
-                bloomLevel, // bloom level enum
-                learningTextContext, // learning context
-                0.3 // temperature
-              )) || [];
+  const getDescriptionOERs = (oers: OerInCollectionProps[]): string => {
+    console.log('SONO IN GET DESCRIPTION');
 
-            // generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => {
-            //   const lesson: LessonProps = {
-            //     lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'} activity`,
-            //     lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-            //     activityType: `${generatedLesson.Type ? mapNumberToString(Number(generatedLesson.Details), TypeOfActivityEnum) : 'Frontal lecture'}`,
-            //     activityDescription: `${generatedLesson.Type ? '' : generatedLesson.Details}`,
-            //     topic: generatedLesson.Topic,
-            //     timeDuration: Number(generatedLesson.Duration),
-            //     passFailConditions: [],
-            //   }
+    let indexDescription = 0;
+    let tempDescription = '';
 
-            //   setLessonPlan((prevLessons: LessonProps[]) => [...prevLessons, lesson])
-            // })
+    // // To take only one description
+    // while (
+    //   oer.description === '' ||   // If an OER is found we'll have at least a description
+    //   oer.description === undefined &&
+    //   indexDescription < resourcesIndex.length
+    // ) {
+    //   const tempDescription = oers[resourcesIndex[indexDescription]].description
+    //   if (tempDescription !== '' && tempDescription !== undefined) {
+    //     (oer = oers[resourcesIndex[indexDescription]]) // At the moment take the first OER with a description
+    //   }
+    //   indexDescription++;
+    //   console.log("OER for the GEN: ", oer);
+    // }
 
-            if (generatedLessonPlan && generatedLessonPlan.length > 0) {
-              setLessonActivities(
-                generatedLessonPlan?.map(
-                  (generatedLesson: OutputLessonPlanProps) => ({
-                    lessonTitle: `${
-                      generatedLesson.Type ? '' : 'Frontal lecture'
-                    } activity`,
-                    lessonType: generatedLesson.Type
-                      ? 'Assessment'
-                      : 'Learning',
-                    activityType: `${
-                      generatedLesson.Type
-                        ? mapNumberToString(
-                            Number(generatedLesson.Details),
-                            TypeOfActivityEnum
-                          )
-                        : 'Frontal lecture'
-                    }`,
-                    activityDescription: `${
-                      generatedLesson.Type ? '' : generatedLesson.Details
-                    }`,
-                    topic: generatedLesson.Topic,
-                    timeDuration: Number(generatedLesson.Duration),
-                    passFailConditions: [],
-                  })
-                ) || []
-              );
-              isPossibleToContinue = true;
+    if (resourcesIndex.length > 0) {
+      // Take a Text with all the descriptions
+      while (indexDescription < resourcesIndex.length) {
+        const description = oers[resourcesIndex[indexDescription]]?.description;
+        if (description !== '' && description !== undefined) {
+          // If it is the first description to add
+          if (tempDescription === '' || tempDescription === undefined) {
+            // Check if chars length for AnalyzeMaterial API is respected
+            if (
+              tempDescription.length + description.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              console.log('TEXT TOO BIG. EXIT FROM LOOP');
+              indexDescription = resourcesIndex.length; // Exit from the loop
+            } else {
+              tempDescription =
+                oers[resourcesIndex[indexDescription]].description;
+              indexDescription++;
+            }
+            // If it's not the first description to add
+          } else {
+            const newDescription = ' & ' + description;
+            // Check if chars length for AnalyzeMaterial API is respected
+            if (
+              tempDescription.length + newDescription.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              indexDescription = resourcesIndex.length; // Exit from the loop
+            } else {
+              tempDescription +=
+                ' & ' + oers[resourcesIndex[indexDescription]].description; // Add every description
+              indexDescription++;
             }
           }
-        } catch (error) {
-          console.error(error);
-          if (isPossibleToContinue) {
-            isPossibleToContinue = false;
+        }
+        console.log('DESCRIPTIONS TEXT: ', tempDescription);
+        indexDescription++;
+      }
+    } else {
+      // No selected resources
+
+      while (indexDescription < oers.length) {
+        const description = oers[indexDescription]?.description;
+        if (description !== '' && description !== undefined) {
+          // If it is the first description to add
+          if (tempDescription === '' || tempDescription === undefined) {
+            // Check if chars length for AnalyzeMaterial API is respected
+            if (
+              tempDescription.length + description.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              console.log('TEXT TOO BIG. EXIT FROM LOOP');
+              indexDescription = oers.length; // Exit from the loop
+            } else {
+              tempDescription = oers[indexDescription].description;
+              indexDescription++;
+            }
+            // If it's not the first description to add
+          } else {
+            const newDescription = ' & ' + description;
+            // Check if chars length for AnalyzeMaterial API is respected
+            if (
+              tempDescription.length + newDescription.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              indexDescription = oers.length; // Exit from the loop
+            } else {
+              tempDescription += ' & ' + oers[indexDescription].description; // Add every description
+              indexDescription++;
+            }
           }
         }
-      } else {
-        console.error('Oer is undefined!');
-        if (isPossibleToContinue) {
-          isPossibleToContinue = false;
+        console.log('DESCRIPTIONS TEXT: ', tempDescription);
+        indexDescription++;
+      }
+    }
+
+    return tempDescription;
+  };
+
+  const getUrlAnalyzeAndPlan = async (
+    oers: OerInCollectionProps[],
+    selectedResources?: number[]
+  ): Promise<boolean> => {
+    let isPossibleToContinue = false;
+    let indexAnalyzeMaterial = 0;
+    const maxLength =
+      selectedResources !== undefined ? selectedResources.length : oers.length;
+    try {
+      // Try one by one if there is an URl that works
+      while (!isPossibleToContinue && indexAnalyzeMaterial < maxLength) {
+        // Get the URL of the OER
+        const oer = getUrlOER(
+          oers,
+          selectedResources !== undefined
+            ? selectedResources[indexAnalyzeMaterial]
+            : indexAnalyzeMaterial
+        );
+
+        // If an URL is been found
+        if (
+          oer !== undefined &&
+          oer.urlSource.length > 0 &&
+          oer.urlSource !== undefined
+        ) {
+          console.log(oer.urlSource);
+          console.log('Oer not undefined!');
+
+          // If generated, it only has an URL string, otherwhise it may have an array of URL
+          const urlSource = Array.isArray(oer.urlSource)
+            ? oer.urlSource[0]
+            : oer.urlSource;
+
+          console.log(urlSource);
+
+          isPossibleToContinue = await analyzeAndPlan(
+            urlSource,
+            isPossibleToContinue
+          );
+        }
+
+        indexAnalyzeMaterial++;
+      }
+
+      // If no oers url useful for analyze the material try with the descriptions
+      if (!isPossibleToContinue) {
+        let descriptionsTextToAnalyze = '';
+
+        // Get the descriptions
+        descriptionsTextToAnalyze = getDescriptionOERs(oers);
+        console.log('SONO USCITO DA GET DESCRIPTION');
+
+        // If the getted descriptions string is not empty
+        if (
+          descriptionsTextToAnalyze !== '' &&
+          descriptionsTextToAnalyze !== undefined
+        ) {
+          console.log('Descriptions Text to Analyze is not EMPTY!');
+
+          isPossibleToContinue = await analyzeAndPlan(
+            descriptionsTextToAnalyze,
+            isPossibleToContinue
+          );
         }
       }
+    } catch (error) {
+      console.error(error);
+      if (isPossibleToContinue) {
+        isPossibleToContinue = false;
+      }
+    }
+
+    return isPossibleToContinue;
+  };
+
+  // TODO: take only a description from an OER if it useful
+  // const getDescriptionOER = (oer: OerInCollectionProps, oers: OerInCollectionProps[], indexDescription: number): string => {
+  //   let tempDescription = '';
+
+  //   return tempDescription
+  // }
+
+  const generationEmptyLessonPlan = () => {
+    const tempLessonsActivities: LessonProps[] = [];
+    for (let i = 0; i < numberOfLearningActivities; i++) {
+      tempLessonsActivities.push({
+        lessonTitle: '',
+        lessonType: 'Learning',
+        activityType: '',
+        activityDescription: '',
+        topic: '',
+        timeDuration: 0,
+        passFailConditions: [],
+      });
+    }
+    for (let i = 0; i < numberOfAssessmentActivities; i++) {
+      tempLessonsActivities.push({
+        lessonTitle: '',
+        lessonType: 'Assessment',
+        activityType: '',
+        activityDescription: '',
+        topic: '',
+        timeDuration: 0,
+        passFailConditions: [],
+      });
+    }
+    setLessonActivities(tempLessonsActivities);
+    setTitleLearningPath('');
+  };
+
+  const handleGenerateLessonPlan = async (): Promise<boolean> => {
+    console.log('SONO IN HANDLE GENERATE LESSON PLAN');
+    let isPossibleToContinue = false;
+    try {
+      const oers = collections[collectionIndex]?.oers;
+      // Analyze selected resources
+      // let oer: OerInCollectionProps = {
+      //   id: 0,
+      //   title: '',
+      //   description: '',
+      //   concepts: [],
+      //   urlSource: [],
+      //   generated_by_ai: false,
+      // };
+
+      // let descriptionsTextToAnalyze: string = '';
+      // let analyzedMaterial: RespAnalyzedMaterialProps | undefined = undefined;
+      // let indexAnalyzeMaterial = 0;
+
+      // If at least a resource is selected
+      if (resourcesIndex.length > 0) {
+        console.log('RESOURCES SELECTED');
+
+        isPossibleToContinue = await getUrlAnalyzeAndPlan(oers, resourcesIndex);
+      } else {
+        // If no resources are selected takes directly from the collection
+        console.log('NO RESOURCES SELECTED!');
+        isPossibleToContinue = await getUrlAnalyzeAndPlan(oers);
+      }
+
+      // // If there is oer with url
+      // if (oer !== undefined && oer.urlSource.length > 0 && oer.urlSource !== undefined) {
+      //   console.log(oer.urlSource);
+      //   console.log("Oer not undefined!");
+
+      //   // If generated it only has an URL string, otherwhise it may have an array of URL
+      //   const urlSource = Array.isArray(oer.urlSource)
+      //     ? oer.urlSource[0]
+      //     : oer.urlSource;
+
+      //   console.log(urlSource);
+
+      //   try {
+      //     const analyzedMaterial = await postAnalyzeMaterial(
+      //       apiKey,
+      //       setupModel,
+      //       urlSource
+      //     );
+
+      //     console.log(analyzedMaterial);
+
+      //     if (analyzedMaterial !== undefined) {
+      //       isPossibleToContinue = await generationLessonPlan(analyzedMaterial);
+      //     } else {
+      //       throw console.error("Error with the analyzed material.")
+      //     }
+      //   } catch (error) {
+      //     console.error(error);
+      //     if (isPossibleToContinue) {
+      //       isPossibleToContinue = false;
+      //     }
+      //   }
+      //   // Try using the oers descriptions
+      // } else
+      // if (descriptionsTextToAnalyze !== '' && descriptionsTextToAnalyze !== undefined) {
+
+      //   console.log("Descriptions Text to Analyze is not EMPTY!");
+
+      //   try {
+      //     const analyzedMaterial = await postAnalyzeMaterial(
+      //       apiKey,
+      //       setupModel,
+      //       descriptionsTextToAnalyze
+      //     );
+
+      //     console.log(analyzedMaterial);
+
+      //     if (analyzedMaterial !== undefined) {
+      //       isPossibleToContinue = await generationLessonPlan(analyzedMaterial);
+      //     } else {
+      //       throw console.error("Error with the analyzed material.")
+      //     }
+      //   } catch (error) {
+      //     console.error(error);
+      //     if (isPossibleToContinue) {
+      //       isPossibleToContinue = false;
+      //     }
+      //   }
+      // } else {
+      //   console.error('No OERs usable to generate a Lesson Plan!');
+      //   if (isPossibleToContinue) {
+      //     isPossibleToContinue = false;
+      //   }
+      //   addToast({
+      //     message: 'No OERs usable to generate a Lesson Plan.',
+      //     type: 'error',
+      //   });
+      // }
     } catch (error) {
       console.error(error);
       if (isPossibleToContinue) {
@@ -449,34 +799,10 @@ export default function PathDesignGenLessonPlan({
       });
     } finally {
       if (!isPossibleToContinue) {
-        const tempLessonsActivities: LessonProps[] = [];
-        for (let i = 0; i < numberOfLearningActivities; i++) {
-          tempLessonsActivities.push({
-            lessonTitle: '',
-            lessonType: 'Learning',
-            activityType: '',
-            activityDescription: '',
-            topic: '',
-            timeDuration: 0,
-            passFailConditions: [],
-          });
-        }
-        for (let i = 0; i < numberOfAssessmentActivities; i++) {
-          tempLessonsActivities.push({
-            lessonTitle: '',
-            lessonType: 'Assessment',
-            activityType: '',
-            activityDescription: '',
-            topic: '',
-            timeDuration: 0,
-            passFailConditions: [],
-          });
-        }
-        setLessonActivities(tempLessonsActivities);
+        generationEmptyLessonPlan();
       }
+      return isPossibleToContinue;
     }
-
-    return isPossibleToContinue;
   };
 
   const handleGenerateLessonPlanClick = async () => {
@@ -485,7 +811,7 @@ export default function PathDesignGenLessonPlan({
       // const textURL = handleExtractText("http://www.mdpi.com/books/pdfview/book/745");
       // console.log('Extracted Text:', textURL);
       await handleNextClick({
-        handleFunction: () => handleGenerateLessonPlan(),
+        handleGenerationFunction: () => handleGenerateLessonPlan(),
       });
       // await handleGenerateLessonPlan();
     } catch (error) {

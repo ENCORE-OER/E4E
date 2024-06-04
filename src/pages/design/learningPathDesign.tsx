@@ -1,5 +1,5 @@
 import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading, useBreakpointValue } from '@chakra-ui/react';
+import { Box, Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
@@ -15,7 +15,7 @@ import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
 import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
 
 // type DiscoverPageProps = {
@@ -25,6 +25,7 @@ import { useHasHydrated } from '../../utils/utils';
 const Home = (/*props: DiscoverPageProps*/) => {
   const { user } = useUser();
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
     SPACING,
     // collectionIndex,
@@ -56,18 +57,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const router = useRouter();
   // const { collections } = useCollectionsContext();
-
-  // ==================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
-
-  // ==================================================================
 
   // const [oersById, setOersById] = useState<
   //   (OerProps | OerFreeSearchProps | undefined)[]
@@ -181,7 +170,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/LearningObjective',
+      pathname: '/design/learningObjective',
     });
   };
 
@@ -275,7 +264,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 )}
               </Heading>
             </Flex>
-            <Flex paddingTop="1rem">{hydrated && <LearningPathTabs />}</Flex>
+            <Flex paddingTop="1rem" w="100%">
+              {hydrated && (
+                <LearningPathTabs isSmallerScreen={isSmallerScreen} />
+              )}
+            </Flex>
             <Flex paddingTop={'1.5rem'}>
               <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
             </Flex>

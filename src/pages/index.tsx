@@ -23,7 +23,7 @@ import {
   OerMediaTypeInfo,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated } from '../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 type DiscoverPageProps = {
   accessToken: string | undefined;
@@ -31,6 +31,7 @@ type DiscoverPageProps = {
 
 const Home = (props: DiscoverPageProps) => {
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
   const [searchValue, setSearchValue] = useState<string[]>([]);
   //const [page] = useState(true);
@@ -81,16 +82,6 @@ const Home = (props: DiscoverPageProps) => {
     md: 470, // Altezza fissa per schermi di dimensioni medie
     lg: 520, // Altezza fissa per schermi più grandi
   });
-  // =======================================================================
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
-
   // =======================================================================
 
   const handleDomainFromDropDownMenu = (data: string[] | number[]) => {

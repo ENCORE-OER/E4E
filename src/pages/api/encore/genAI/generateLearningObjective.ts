@@ -82,12 +82,14 @@ export default async function generateLearningObjective(
       console.log('respLearningObjective', respLearningObjective?.data);
       //console.log(respLearningObjective);
     } catch (error) {
-      console.error('Error: ' + error);
-      res.status(500).json({ error: 'Internal server error!' });
-      res.status(400).json({ error: 'Bad request!' });
-      res.status(401).json({ error: 'Unauthorized!' });
+      console.error('--->' + error);
+      res
+        .status(500)
+        .json({ error: 'Internal server error!', errorStatus: 500 });
+      res.status(400).json({ error: 'Bad request!', errorStatus: 400 });
+      res.status(401).json({ error: 'Unauthorized!', errorStatus: 401 });
     }
   } else {
-    res.status(405).json({ error: 'Method not allowed' });
+    res.status(405).json({ error: 'Method not allowed', errorStatus: 405 });
   }
 }

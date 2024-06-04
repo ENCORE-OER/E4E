@@ -8,7 +8,6 @@ import {
   Icon,
   Spacer,
   Text,
-  useBreakpointValue,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -30,17 +29,16 @@ import {
   tyopeOfResourcesOption,
 } from '../../types/encoreElements/index';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
-const Edit = () => {
+type EditProps = {
+  isAddContentModal?: boolean; // Used for the AddContentModal
+};
+
+const Edit = ({ isAddContentModal }: EditProps) => {
   const { user } = useUser();
   const router = useRouter();
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
+  const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const hydrated = useHasHydrated();
   const { addToast } = CustomToast();
   const { collections, addResource } = useCollectionsContext();
@@ -178,12 +176,12 @@ const Edit = () => {
   return (
     <>
       <Flex w="100%" h="100%">
-        <SideBar pagePath={'/create'} />
-        <Navbar user={user} pageName="Create" />
+        {!isAddContentModal && <SideBar pagePath={'/create'} />}
+        {!isAddContentModal && <Navbar user={user} pageName="Create" />}
         <Box
           //ml="200px"
-          py="115px"
-          pl={isSmallerScreen ? '90px' : '240px'}
+          py={!isAddContentModal ? '115px' : '1rem'}
+          pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
           w="full"
           h={'full'}
           bg="background"

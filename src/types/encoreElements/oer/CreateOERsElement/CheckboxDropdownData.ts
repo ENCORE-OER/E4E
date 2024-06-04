@@ -8,8 +8,7 @@ export const tyopeOfResourcesOption: string[] = [
 ];
 
 export const licenseOption: string[] = [
-  '1st year Bachelor',
-  '2nd year Bachelor',
-  'Adult Education',
-  'Professional',
+  'Educational use permitted',
+  'Creative Commons Aributtion Non-Commercial Share Alike',
+  'Other',
 ];

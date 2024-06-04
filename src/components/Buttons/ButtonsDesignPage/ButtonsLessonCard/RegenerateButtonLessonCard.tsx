@@ -4,11 +4,13 @@ import UnderlinedButton from '../UnderlinedButtons/UnderlinedButton';
 type RegenerateButtonLessonCardProps = {
   handleRegenerateClick: () => void;
   isSmallerScreen?: boolean | undefined;
+  isDisabled?: boolean;
 };
 
 export default function RegenerateButtonLessonCard({
   handleRegenerateClick,
   isSmallerScreen,
+  isDisabled,
 }: RegenerateButtonLessonCardProps) {
   return (
     <UnderlinedButton
@@ -18,6 +20,7 @@ export default function RegenerateButtonLessonCard({
       rightIcon={<FaArrowRotateLeft fontSize={'x-large'} color="grey" />}
       color="grey"
       fontWeight="normal"
+      isDisabled={isDisabled}
     />
   );
 }

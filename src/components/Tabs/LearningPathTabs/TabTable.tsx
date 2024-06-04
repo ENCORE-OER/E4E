@@ -4,18 +4,16 @@ import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesi
 import TableLearningPath from '../../Tables/LearningPathTable';
 
 export default function TabTable() {
-  const { handleEditLessonPlanClick, isEditLessonPlanClicked } =
+  const { handleSaveLessonPlanClick, isEditLessonPlanClicked } =
     useLearningPathDesignContext();
 
   useEffect(() => {
-    if (isEditLessonPlanClicked) {
-      handleEditLessonPlanClick(false);
-    }
+    handleSaveLessonPlanClick();
   }, []);
   return (
     <Flex w="100%" direction="column" h="100%">
       {isEditLessonPlanClicked && (
-        <Text pb={5} fontWeight="bold" fontSize="lg" color="gray.400">
+        <Text pb={5} fontWeight="bold" fontSize="lg" color="gray.500">
           Edit table mode
         </Text>
       )}

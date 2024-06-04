@@ -86,12 +86,12 @@ export default function CardInfoModal({
   const [source, setSource] = useState<string>(''); // Source of the generated exercise
   const [language, setLanguage] = useState<string>('');
   const [n_o_d, setN_o_d] = useState<number | null>(null); // Number of Distractors
-  const [n_o_w, setN_o_w] = useState<number | null>(null); // Number of Words
+  // const [n_o_w, setN_o_w] = useState<number | null>(null); // Number of Words
   const [n_o_ed, setN_o_ed] = useState<number | null>(null); //Number of Easy Distractor
-  const [n_o_ca, setN_o_ca] = useState<number | null>(null); //Number of Correct Answers
-  const [type_of_exercise, setType_of_exercise] = useState<string | null>(null); // Type of exercise (is only for the multiple choice question)
-  const [type_of_question, setType_of_question] = useState<string | null>(null); // Type of question (is only for the open question)
-  const [category, setCategory] = useState<string | null>(null); // Category of the exercise
+  // const [n_o_ca, setN_o_ca] = useState<number | null>(null); //Number of Correct Answers
+  // const [type_of_exercise, setType_of_exercise] = useState<string | null>(null); // Type of exercise (is only for the multiple choice question)
+  // const [type_of_question, setType_of_question] = useState<string | null>(null); // Type of question (is only for the open question)
+  // const [category, setCategory] = useState<string | null>(null); // Category of the exercise
   const [question, setQuestion] = useState<string | null>(null); // Question of the exercise
   const [question_response, setQuestion_response] = useState<string | null>(
     null
@@ -229,19 +229,23 @@ export default function CardInfoModal({
           setIsGeneratedByAI(oer.generated_by_ai || false);
           setSource(oer.source || '');
           setLanguage(oer.language || '');
-          setN_o_d(oer.number_of_distractors || null);
-          setN_o_w(oer.number_of_words || null);
-          setN_o_ca(oer.number_of_correct_answer || null);
-          setN_o_ed(oer.number_of_easy_distractors || null);
-          setType_of_exercise(oer.type_of_exercise || null);
-          setType_of_question(oer.type_of_question || null);
-          setCategory(oer.category || null);
-          setQuestion(oer.question || null);
-          setQuestion_response(oer.question || null);
-          setFill_template(oer.fill_template || null);
-          setFill_template_with_gaps(oer.fill_template_with_gaps || null);
-          setOptions(oer.options || []);
-          setAssessment_oer_type(oer.assessment_oer_type || null);
+          setN_o_d(oer.exercise_values.number_of_distractors || null);
+          // setN_o_w(oer.number_of_words || null);
+          // setN_o_ca(oer.number_of_correct_answer || null);
+          setN_o_ed(oer.exercise_values.number_of_easy_distractors || null);
+          // setType_of_exercise(oer.exercise_values.type_of_exercise || null);
+          // setType_of_question(oer.exercise_values.type_of_question || null);
+          // setCategory(oer.category || null);
+          setQuestion(oer.exercise_values.question || null);
+          setQuestion_response(oer.exercise_values.solution || null);
+          setFill_template(oer.exercise_values.fill_template || null);
+          setFill_template_with_gaps(
+            oer.exercise_values.fill_template_with_gaps || null
+          );
+          setOptions(oer.exercise_values.options || []);
+          setAssessment_oer_type(
+            oer.exercise_values.assessment_oer_type || null
+          );
         }
       } catch (error) {
         console.error(error);
@@ -346,12 +350,12 @@ export default function CardInfoModal({
         source={source}
         language={language}
         n_o_d={n_o_d}
-        n_o_w={n_o_w}
+        // n_o_w={n_o_w}
         n_o_ed={n_o_ed}
-        n_o_ca={n_o_ca}
-        type_of_exercise={type_of_exercise}
-        type_of_question={type_of_question}
-        category={category}
+        // n_o_ca={n_o_ca}
+        // type_of_exercise={type_of_exercise}
+        // type_of_question={type_of_question}
+        // category={category}
         question={question}
         question_response={question_response}
         fill_template={fill_template}

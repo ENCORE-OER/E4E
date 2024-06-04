@@ -7,9 +7,9 @@ import {
   MenuList,
   Text,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { TopicData } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
-import { useState } from 'react';
 
 type CreateOerTopicMenuProps = {
   data: TopicData | undefined;
@@ -46,7 +46,7 @@ export default function CreateOerTopicMenu({
         >
           {selectedTopic || title}
         </MenuButton>
-        <MenuList width="auto">
+        <MenuList width="auto" maxH={'350px'} overflowY={'auto'}>
           {hydrated &&
             data?.MainTopics.slice(
               0,
