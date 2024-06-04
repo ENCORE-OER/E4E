@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 
 type GeneralContextProps = {
-  MAX_CHARS_TEXT_TO_ANALYZE: number;  // Maximum number of characters accepted by the AnalyzeMaterial API
+  MAX_CHARS_TEXT_TO_ANALYZE: number; // Maximum number of characters accepted by the AnalyzeMaterial API
   apiKey: string | undefined;
   handleApiKey: (value: string) => void;
   setupModel: string | undefined;
@@ -18,8 +18,7 @@ export const useGeneralContext = () => useContext(GeneralContext);
 
 // Create a provider to wrap the app and provide the context to all its children
 export const GeneralContextProvider = ({ children }: any) => {
-
-  const MAX_CHARS_TEXT_TO_ANALYZE = 60000;  // Maximum number of characters accepted by the AnalyzeMaterial API
+  const MAX_CHARS_TEXT_TO_ANALYZE = 60000; // Maximum number of characters accepted by the AnalyzeMaterial API
 
   const [apiKey, setApiKey] = useLocalStorage<string | undefined>(
     'apiKey',

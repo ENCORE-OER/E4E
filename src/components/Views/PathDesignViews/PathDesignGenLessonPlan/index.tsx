@@ -295,7 +295,9 @@ export default function PathDesignGenLessonPlan({
     }
   };
 
-  const generationLessonPlan = async (analyzedMaterial: RespAnalyzedMaterialProps): Promise<boolean> => {
+  const generationLessonPlan = async (
+    analyzedMaterial: RespAnalyzedMaterialProps
+  ): Promise<boolean> => {
     let isPlanGenerated = false;
 
     // Set the title of the lesson plan
@@ -304,8 +306,7 @@ export default function PathDesignGenLessonPlan({
     // Generate a lesson plan based on the selected resources
     const learninObjective = learningObjectiveObjects
       .map(
-        (objectLO: ObjectLearningObjectiveProps) =>
-          objectLO.learningObjective
+        (objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective
       )
       .join(' & ');
     console.log(learninObjective);
@@ -346,38 +347,42 @@ export default function PathDesignGenLessonPlan({
     // })
 
     if (generatedLessonPlan !== undefined && generatedLessonPlan?.length > 0) {
-      console.log("GENERATED LESSON PLAN");
+      console.log('GENERATED LESSON PLAN');
       setLessonActivities(
-        generatedLessonPlan?.map(
-          (generatedLesson: OutputLessonPlanProps) => ({
-            lessonTitle: `${generatedLesson.Type ? '' : 'Frontal lecture'
-              } activity`,
-            lessonType: generatedLesson.Type
-              ? 'Assessment'
-              : 'Learning',
-            activityType: `${generatedLesson.Type
+        generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
+          lessonTitle: `${
+            generatedLesson.Type ? '' : 'Frontal lecture'
+          } activity`,
+          lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
+          activityType: `${
+            generatedLesson.Type
               ? mapNumberToString(
-                Number(generatedLesson.Details),
-                TypeOfActivityEnum
-              )
+                  Number(generatedLesson.Details),
+                  TypeOfActivityEnum
+                )
               : 'Frontal lecture'
-              }`,
-            activityDescription: `${generatedLesson.Type ? generatedLesson.Topic : generatedLesson.Details
-              }`,
-            topic: generatedLesson.Topic,
-            timeDuration: Number(generatedLesson.Duration),
-            passFailConditions: [],
-          })
-        ) || []
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
+          topic: generatedLesson.Topic,
+          timeDuration: Number(generatedLesson.Duration),
+          passFailConditions: [],
+        })) || []
       );
 
-      isPlanGenerated = true;  // This means that 
+      isPlanGenerated = true; // This means that
     }
 
     return isPlanGenerated;
-  }
+  };
 
-  const analyzeAndPlan = async (material: string, isPossibleToContinue: boolean): Promise<boolean> => {
+  const analyzeAndPlan = async (
+    material: string,
+    isPossibleToContinue: boolean
+  ): Promise<boolean> => {
     let tempIsPossibleToContinue = isPossibleToContinue;
     try {
       // Analyze the url material
@@ -394,7 +399,7 @@ export default function PathDesignGenLessonPlan({
         tempIsPossibleToContinue = await generationLessonPlan(analyzedMaterial);
         console.log(tempIsPossibleToContinue);
       } else {
-        throw console.error("Error with the analyzed material.")
+        throw console.error('Error with the analyzed material.');
       }
     } catch (error) {
       console.error(error);
@@ -404,7 +409,7 @@ export default function PathDesignGenLessonPlan({
     }
 
     return tempIsPossibleToContinue;
-  }
+  };
 
   // const getUrlOERs = (oers: OerInCollectionProps[]): OerInCollectionProps => {
   //   console.log("SONO IN GET URL OERS");
@@ -445,9 +450,12 @@ export default function PathDesignGenLessonPlan({
   // }
 
   // To get the URL of a OER.
-  const getUrlOER = (oers: OerInCollectionProps[], index: number): OerInCollectionProps => {
+  const getUrlOER = (
+    oers: OerInCollectionProps[],
+    index: number
+  ): OerInCollectionProps => {
     // To take from selected oers pass to this function ResourcesIndexes[index], otherwise only index
-    console.log("SONO IN GET URL OERS");
+    console.log('SONO IN GET URL OERS');
     let tempOer: OerInCollectionProps = {
       id: 0,
       title: '',
@@ -463,10 +471,10 @@ export default function PathDesignGenLessonPlan({
     }
 
     return tempOer;
-  }
+  };
 
   const getDescriptionOERs = (oers: OerInCollectionProps[]): string => {
-    console.log("SONO IN GET DESCRIPTION");
+    console.log('SONO IN GET DESCRIPTION');
 
     let indexDescription = 0;
     let tempDescription = '';
@@ -487,90 +495,114 @@ export default function PathDesignGenLessonPlan({
 
     if (resourcesIndex.length > 0) {
       // Take a Text with all the descriptions
-      while (
-        indexDescription < resourcesIndex.length
-      ) {
+      while (indexDescription < resourcesIndex.length) {
         const description = oers[resourcesIndex[indexDescription]]?.description;
         if (description !== '' && description !== undefined) {
           // If it is the first description to add
           if (tempDescription === '' || tempDescription === undefined) {
             // Check if chars length for AnalyzeMaterial API is respected
-            if (tempDescription.length + description.length > MAX_CHARS_TEXT_TO_ANALYZE) {
-              console.log("TEXT TOO BIG. EXIT FROM LOOP");
-              indexDescription = resourcesIndex.length;  // Exit from the loop 
+            if (
+              tempDescription.length + description.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              console.log('TEXT TOO BIG. EXIT FROM LOOP');
+              indexDescription = resourcesIndex.length; // Exit from the loop
             } else {
-              tempDescription = oers[resourcesIndex[indexDescription]].description;
+              tempDescription =
+                oers[resourcesIndex[indexDescription]].description;
               indexDescription++;
             }
             // If it's not the first description to add
           } else {
-            const newDescription = " & " + description;
+            const newDescription = ' & ' + description;
             // Check if chars length for AnalyzeMaterial API is respected
-            if (tempDescription.length + newDescription.length > MAX_CHARS_TEXT_TO_ANALYZE) {
-              indexDescription = resourcesIndex.length;  // Exit from the loop 
+            if (
+              tempDescription.length + newDescription.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              indexDescription = resourcesIndex.length; // Exit from the loop
             } else {
-              tempDescription += " & " + oers[resourcesIndex[indexDescription]].description; // Add every description
+              tempDescription +=
+                ' & ' + oers[resourcesIndex[indexDescription]].description; // Add every description
               indexDescription++;
             }
           }
         }
-        console.log("DESCRIPTIONS TEXT: ", tempDescription);
-        indexDescription++
+        console.log('DESCRIPTIONS TEXT: ', tempDescription);
+        indexDescription++;
       }
-
     } else {
       // No selected resources
 
-      while (
-        indexDescription < oers.length
-      ) {
+      while (indexDescription < oers.length) {
         const description = oers[indexDescription]?.description;
         if (description !== '' && description !== undefined) {
           // If it is the first description to add
           if (tempDescription === '' || tempDescription === undefined) {
             // Check if chars length for AnalyzeMaterial API is respected
-            if (tempDescription.length + description.length > MAX_CHARS_TEXT_TO_ANALYZE) {
-              console.log("TEXT TOO BIG. EXIT FROM LOOP");
-              indexDescription = oers.length;  // Exit from the loop 
+            if (
+              tempDescription.length + description.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              console.log('TEXT TOO BIG. EXIT FROM LOOP');
+              indexDescription = oers.length; // Exit from the loop
             } else {
               tempDescription = oers[indexDescription].description;
               indexDescription++;
             }
             // If it's not the first description to add
           } else {
-            const newDescription = " & " + description;
+            const newDescription = ' & ' + description;
             // Check if chars length for AnalyzeMaterial API is respected
-            if (tempDescription.length + newDescription.length > MAX_CHARS_TEXT_TO_ANALYZE) {
-              indexDescription = oers.length;  // Exit from the loop 
+            if (
+              tempDescription.length + newDescription.length >
+              MAX_CHARS_TEXT_TO_ANALYZE
+            ) {
+              indexDescription = oers.length; // Exit from the loop
             } else {
-              tempDescription += " & " + oers[indexDescription].description; // Add every description
+              tempDescription += ' & ' + oers[indexDescription].description; // Add every description
               indexDescription++;
             }
           }
         }
-        console.log("DESCRIPTIONS TEXT: ", tempDescription);
-        indexDescription++
+        console.log('DESCRIPTIONS TEXT: ', tempDescription);
+        indexDescription++;
       }
     }
 
     return tempDescription;
-  }
+  };
 
-  const getUrlAnalyzeAndPlan = async (oers: OerInCollectionProps[], selectedResources?: number[]): Promise<boolean> => {
+  const getUrlAnalyzeAndPlan = async (
+    oers: OerInCollectionProps[],
+    selectedResources?: number[]
+  ): Promise<boolean> => {
     let isPossibleToContinue = false;
     let indexAnalyzeMaterial = 0;
-    const maxLength = selectedResources !== undefined ? selectedResources.length : oers.length;
+    const maxLength =
+      selectedResources !== undefined ? selectedResources.length : oers.length;
     try {
       // Try one by one if there is an URl that works
-      while (isPossibleToContinue === undefined && indexAnalyzeMaterial < maxLength) {
-
+      while (
+        isPossibleToContinue === undefined &&
+        indexAnalyzeMaterial < maxLength
+      ) {
         // Get the URL of the OER
-        const oer = getUrlOER(oers, selectedResources !== undefined ? selectedResources[indexAnalyzeMaterial] : indexAnalyzeMaterial);
+        const oer = getUrlOER(
+          oers,
+          selectedResources !== undefined
+            ? selectedResources[indexAnalyzeMaterial]
+            : indexAnalyzeMaterial
+        );
 
         // If an URL is been found
-        if (oer !== undefined && oer.urlSource.length > 0 && oer.urlSource !== undefined) {
+        if (
+          oer !== undefined &&
+          oer.urlSource.length > 0 &&
+          oer.urlSource !== undefined
+        ) {
           console.log(oer.urlSource);
-          console.log("Oer not undefined!");
+          console.log('Oer not undefined!');
 
           // If generated, it only has an URL string, otherwhise it may have an array of URL
           const urlSource = Array.isArray(oer.urlSource)
@@ -579,7 +611,10 @@ export default function PathDesignGenLessonPlan({
 
           console.log(urlSource);
 
-          isPossibleToContinue = await analyzeAndPlan(urlSource, isPossibleToContinue);
+          isPossibleToContinue = await analyzeAndPlan(
+            urlSource,
+            isPossibleToContinue
+          );
         }
 
         indexAnalyzeMaterial++;
@@ -587,19 +622,23 @@ export default function PathDesignGenLessonPlan({
 
       // If no oers url useful for analyze the material try with the descriptions
       if (!isPossibleToContinue) {
-
         let descriptionsTextToAnalyze = '';
 
         // Get the descriptions
         descriptionsTextToAnalyze = getDescriptionOERs(oers);
-        console.log("SONO USCITO DA GET DESCRIPTION");
+        console.log('SONO USCITO DA GET DESCRIPTION');
 
         // If the getted descriptions string is not empty
-        if (descriptionsTextToAnalyze !== '' && descriptionsTextToAnalyze !== undefined) {
+        if (
+          descriptionsTextToAnalyze !== '' &&
+          descriptionsTextToAnalyze !== undefined
+        ) {
+          console.log('Descriptions Text to Analyze is not EMPTY!');
 
-          console.log("Descriptions Text to Analyze is not EMPTY!");
-
-          isPossibleToContinue = await analyzeAndPlan(descriptionsTextToAnalyze, isPossibleToContinue);
+          isPossibleToContinue = await analyzeAndPlan(
+            descriptionsTextToAnalyze,
+            isPossibleToContinue
+          );
         }
       }
     } catch (error) {
@@ -610,7 +649,7 @@ export default function PathDesignGenLessonPlan({
     }
 
     return isPossibleToContinue;
-  }
+  };
 
   // TODO: take only a description from an OER if it useful
   // const getDescriptionOER = (oer: OerInCollectionProps, oers: OerInCollectionProps[], indexDescription: number): string => {
@@ -644,7 +683,7 @@ export default function PathDesignGenLessonPlan({
       });
     }
     setLessonActivities(tempLessonsActivities);
-  }
+  };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
     console.log('SONO IN HANDLE GENERATE LESSON PLAN');
@@ -667,15 +706,13 @@ export default function PathDesignGenLessonPlan({
 
       // If at least a resource is selected
       if (resourcesIndex.length > 0) {
-        console.log("RESOURCES SELECTED");
+        console.log('RESOURCES SELECTED');
 
         isPossibleToContinue = await getUrlAnalyzeAndPlan(oers, resourcesIndex);
-
       } else {
         // If no resources are selected takes directly from the collection
-        console.log("NO RESOURCES SELECTED!");
+        console.log('NO RESOURCES SELECTED!');
         isPossibleToContinue = await getUrlAnalyzeAndPlan(oers);
-
       }
 
       // // If there is oer with url
@@ -711,7 +748,7 @@ export default function PathDesignGenLessonPlan({
       //     }
       //   }
       //   // Try using the oers descriptions
-      // } else 
+      // } else
       // if (descriptionsTextToAnalyze !== '' && descriptionsTextToAnalyze !== undefined) {
 
       //   console.log("Descriptions Text to Analyze is not EMPTY!");
@@ -746,7 +783,6 @@ export default function PathDesignGenLessonPlan({
       //     type: 'error',
       //   });
       // }
-
     } catch (error) {
       console.error(error);
       if (isPossibleToContinue) {

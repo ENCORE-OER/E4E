@@ -21,6 +21,7 @@ import { LuFolderPlus } from 'react-icons/lu';
 import CollectionModal from '../components/Modals/CollectionModals';
 import CollectionNavItem from '../components/NavItems/CollectionNavItem';
 import CollectionView from '../components/Views/CollectionViews/CollectionView';
+import { useLearningPathDesignContext } from '../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { APIV2 } from '../data/api';
 import {
   CollectionProps,
@@ -54,6 +55,13 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     addCollection, // for InfoCardModal
     addResource, // for InfoCardModal
   } = useCollectionsContext();
+
+  const {
+    collectionIndex: selectedCollectionIndex,
+    // resourcesIndex,
+    setResourcesIndex
+  } = useLearningPathDesignContext();
+
   const collectionRef = useRef<HTMLDivElement>(null);
 
   const [oersById, setOersById] = useState<
@@ -159,6 +167,18 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
 
       setIsDeletingResource(true);
 
+      // TODO:Update the ResourcesIndex if we are deleting an oer that belonged to the selected Collection chosen in Learning Objecive page
+      if (collectionIndex === selectedCollectionIndex) {
+        // setResourcesIndex((prevResources: number[]) =>
+        //   prevResources?.filter(
+        //     (resource: number) =>
+        //       resource 
+        //   ));
+
+        // At the moment reset the selected resources
+        setResourcesIndex([]);
+      }
+
       console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
       addToast({
@@ -168,7 +188,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     }
   };
 
-  const handleDeleteButtonClick = (
+  const handleDeleteButtonClick = async (
     collectionIndex: number,
     idOer: number | undefined
   ) => {
@@ -198,7 +218,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
       ) {
         onOpenDeleteAlertDialog(collectionIndex, idOer, oer_title);
       } else {
-        handleDeleteResource(collectionIndex, idOer);
+        await handleDeleteResource(collectionIndex, idOer);
       }
     } catch (error) {
       console.error(error);
@@ -279,8 +299,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-          //minH="0px"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

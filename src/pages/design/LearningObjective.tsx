@@ -12,7 +12,6 @@ import PathDesignCentralBars from '../../components/Views/PathDesignViews/PathDe
 import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGenLO';
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
-import { CollectionProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useIsSmallerScreen } from '../../utils/utils';
 
@@ -247,12 +246,25 @@ const Home = (/*props: DiscoverPageProps*/) => {
     });
   };
 
-  useEffect(() => {
-    const collectionDelated = !collections.some((collection: CollectionProps, index: number) => index === collectionIndex);
-    if (collectionDelated) {
-      handleCollectionIndexChange(-1);
-    }
-  }, [collections.length])
+  // // Handle delete of a collection if it's selected in "Learning Objective" page
+  // useEffect(() => {
+  //   const collectionDelated = !collections.some(
+  //     (collection: CollectionProps, index: number) => index === collectionIndex
+  //   );
+  //   if (collectionDelated) {
+  //     handleCollectionChange(-1);
+  //   }
+  // }, [collections.length]);
+
+  // Handle delete of a resource if it's selected in "Learning Objective" page
+  // useEffect(() => {
+  //   const oerDelated = !collections[collectionIndex]?.oers.some(
+  //     (oer: OerInCollectionProps, index: number) => index === collectionIndex
+  //   );
+  //   if (oerDelated) {
+  //     handleCollectionChange(-1);
+  //   }
+  // }, [collections[collectionIndex]?.oers.length])
 
   useEffect(() => {
     handleCollectionSelection();
