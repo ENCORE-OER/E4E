@@ -1,6 +1,13 @@
 import { Flex, useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, DraggableProvided, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Draggable,
+  DraggableProvided,
+  Droppable,
+  DroppableProvided,
+  DropResult,
+} from 'react-beautiful-dnd';
 import LessonCard from '.';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
@@ -21,7 +28,13 @@ export default function LessonCardsList({
 }: LessonCardsListProps) {
   const hydrated = useHasHydrated();
 
-  const { lessonCards, setLessonCards, lessonActivities, setLessonActivities, isEditLessonPlanClicked } = useLearningPathDesignContext();
+  const {
+    lessonCards,
+    setLessonCards,
+    lessonActivities,
+    setLessonActivities,
+    isEditLessonPlanClicked,
+  } = useLearningPathDesignContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [condition, setCondition] = useState<string>('');
@@ -160,40 +173,42 @@ export default function LessonCardsList({
             >
               {hydrated &&
                 lessonActivities.length > 0 &&
-                lessonActivities.map((lessonActivity: LessonProps, indexCard: number) => (
-                  <Draggable
-                    key={indexCard}
-                    draggableId={`draggable-${indexCard}`}
-                    index={indexCard}
-                  >
-                    {(provided: DraggableProvided) => (
-                      <Flex
-                        direction="row"
-                        align="center"
-                        gap={2}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                      >
-                        {isEditLessonPlanClicked && (
-                          <Flex
-                            justify="center"
-                            px={1}
-                            {...provided.dragHandleProps}
-                          >
-                            <IconDrag />
-                          </Flex>)
-                        }
-                        <LessonCard
-                          key={indexCard}
-                          indexCard={indexCard}
-                          lesson={lessonActivity}
-                          isSmallerScreen={isSmallerScreen}
-                          handleOpenModal={handleOpenModal}
-                        />
-                      </Flex>
-                    )}
-                  </Draggable>
-                ))}
+                lessonActivities.map(
+                  (lessonActivity: LessonProps, indexCard: number) => (
+                    <Draggable
+                      key={indexCard}
+                      draggableId={`draggable-${indexCard}`}
+                      index={indexCard}
+                    >
+                      {(provided: DraggableProvided) => (
+                        <Flex
+                          direction="row"
+                          align="center"
+                          gap={2}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                        >
+                          {isEditLessonPlanClicked && (
+                            <Flex
+                              justify="center"
+                              px={1}
+                              {...provided.dragHandleProps}
+                            >
+                              <IconDrag />
+                            </Flex>
+                          )}
+                          <LessonCard
+                            key={indexCard}
+                            indexCard={indexCard}
+                            lesson={lessonActivity}
+                            isSmallerScreen={isSmallerScreen}
+                            handleOpenModal={handleOpenModal}
+                          />
+                        </Flex>
+                      )}
+                    </Draggable>
+                  )
+                )}
               {provided.placeholder}
             </Flex>
           )}

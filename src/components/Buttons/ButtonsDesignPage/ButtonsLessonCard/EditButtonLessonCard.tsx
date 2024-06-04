@@ -6,12 +6,14 @@ type EditButtonLessonCardProps = {
   isEditClicked: boolean;
   handleEditClick: () => void;
   isSmallerScreen?: boolean | undefined;
+  isDisabled?: boolean;
 };
 
 export default function EditButtonLessonCard({
   isEditClicked,
   handleEditClick,
   isSmallerScreen,
+  isDisabled,
 }: EditButtonLessonCardProps) {
   return (
     <UnderlinedButton
@@ -27,6 +29,7 @@ export default function EditButtonLessonCard({
       }
       color="grey"
       fontWeight="normal"
+      isDisabled={isDisabled}
     />
   );
 }

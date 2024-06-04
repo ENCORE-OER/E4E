@@ -58,7 +58,7 @@ export default function LessonCard({
             <Flex flex="1" justify="flex-start" direction="row" align="center">
               <TagLessonType labelTag={lesson.lessonType} />
               <TagLessonDuration time={lesson.timeDuration} />
-              <TagLessonCompulsory isChecked={true} />
+              <TagLessonCompulsory isChecked={true} isDisabled={true} />
             </Flex>
 
             <Flex
@@ -71,6 +71,7 @@ export default function LessonCard({
               <EditButtonLessonCard
                 handleEditClick={() => console.log('edit')}
                 isEditClicked={false}
+                isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}

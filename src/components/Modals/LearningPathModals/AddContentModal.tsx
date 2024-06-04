@@ -25,7 +25,13 @@ export default function AddContentModal({
           <Flex direction="row" align="center" w="95%">
             <Heading>Add Content</Heading>
             <Flex flex="1" justify="flex-end">
-              <Button isDisabled={true} w="fit-content" rightIcon={<IconSave />}>Save and Close</Button>
+              <Button
+                isDisabled={true}
+                w="fit-content"
+                rightIcon={<IconSave />}
+              >
+                Save and Close
+              </Button>
             </Flex>
           </Flex>
         </ModalHeader>

@@ -48,6 +48,7 @@ export default function PathDesignGenLessonPlan({
     handleTitleLearningPath,
     lessonActivities,
     setLessonActivities,
+    setTitleLearningPath,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -686,6 +687,7 @@ export default function PathDesignGenLessonPlan({
       });
     }
     setLessonActivities(tempLessonsActivities);
+    setTitleLearningPath('');
   };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {

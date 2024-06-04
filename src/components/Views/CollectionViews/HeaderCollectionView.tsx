@@ -15,7 +15,7 @@ export default function HeaderCollectionView({
   collectionName,
   data,
   fileName,
-  isAddContentModal
+  isAddContentModal,
 }: HeaderCollectionViewProps) {
   return (
     <Flex w="100%" pb="3" bg="background">
@@ -25,7 +25,14 @@ export default function HeaderCollectionView({
       </Heading>
       <Spacer />
       {!isAddContentModal && <DownloadButton data={data} fileName={fileName} />}
-      {isAddContentModal && <StandardButton buttonText='Attach Selected' handleClick={() => console.log("Attach Selected!")} size={"sm"} isDisabled={true} />}
+      {isAddContentModal && (
+        <StandardButton
+          buttonText="Attach Selected"
+          handleClick={() => console.log('Attach Selected!')}
+          size={'sm'}
+          isDisabled={true}
+        />
+      )}
     </Flex>
   );
 }

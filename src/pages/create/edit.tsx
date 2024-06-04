@@ -33,7 +33,7 @@ import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 type EditProps = {
   isAddContentModal?: boolean; // Used for the AddContentModal
-}
+};
 
 const Edit = ({ isAddContentModal }: EditProps) => {
   const { user } = useUser();
@@ -180,7 +180,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
         {!isAddContentModal && <Navbar user={user} pageName="Create" />}
         <Box
           //ml="200px"
-          py={!isAddContentModal ? "115px" : "1rem"}
+          py={!isAddContentModal ? '115px' : '1rem'}
           pl={isSmallerScreen || isAddContentModal ? '90px' : '240px'}
           w="full"
           h={'full'}
@@ -190,7 +190,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

@@ -10,7 +10,7 @@ type RegenerateButtonLessonCardProps = {
 export default function RegenerateButtonLessonCard({
   handleRegenerateClick,
   isSmallerScreen,
-  isDisabled
+  isDisabled,
 }: RegenerateButtonLessonCardProps) {
   return (
     <UnderlinedButton
