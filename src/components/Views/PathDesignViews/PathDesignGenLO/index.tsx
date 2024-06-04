@@ -2,9 +2,7 @@ import { Flex } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useGeneralContext } from '../../../../Contexts/GeneralContext';
 import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import {
-  ObjectLearningObjectiveProps
-} from '../../../../types/encoreElements';
+import { ObjectLearningObjectiveProps } from '../../../../types/encoreElements';
 import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
@@ -182,10 +180,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-            learningObjectiveObjects.length > 0 &&
-            learningObjectiveObjects.filter(
-              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-            ).length === 0
+          learningObjectiveObjects.length > 0 &&
+          learningObjectiveObjects.filter(
+            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+          ).length === 0
             ? '2.5px solid #bf5521ff'
             : 'null'
         }
@@ -210,33 +208,33 @@ export default function PathDesignGenLO({
             // numberOfLO > 0 &&
             // !isLoading &&
             learningObjectiveObjects.length > 0 &&
-            hydrated &&
-            learningObjectiveObjects.map(
-              (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                <BoxLearningObjective
-                  key={index}
-                  textLearningObjective={objectLO.learningObjective}
-                  isGenerated={objectLO.isGenerated}
-                  index={index}
-                  handleUpdateLO={handleUpdateLO}
-                  handleDeleteLO={() => {
-                    if (learningObjectiveObjects.length > 1) {
-                      handleDeleteLO(index);
-                    } else {
-                      onOpenDeleteAlertDialog();
+              hydrated &&
+              learningObjectiveObjects.map(
+                (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                  <BoxLearningObjective
+                    key={index}
+                    textLearningObjective={objectLO.learningObjective}
+                    isGenerated={objectLO.isGenerated}
+                    index={index}
+                    handleUpdateLO={handleUpdateLO}
+                    handleDeleteLO={() => {
+                      if (learningObjectiveObjects.length > 1) {
+                        handleDeleteLO(index);
+                      } else {
+                        onOpenDeleteAlertDialog();
+                      }
+                    }}
+                    isSmallerScreen={isSmallerScreen}
+                    label_tooltip_delete="Delete"
+                    isNextButtonClicked={isNextButtonClicked}
+                    isDisabled={
+                      isLoading &&
+                      (objectLO.isGenerated ||
+                        objectLO.learningObjective.trim().length === 0)
                     }
-                  }}
-                  isSmallerScreen={isSmallerScreen}
-                  label_tooltip_delete="Delete"
-                  isNextButtonClicked={isNextButtonClicked}
-                  isDisabled={
-                    isLoading &&
-                    (objectLO.isGenerated ||
-                      objectLO.learningObjective.trim().length === 0)
-                  }
-                />
+                  />
+                )
               )
-            )
           }
         </Flex>
         {isLoading && (

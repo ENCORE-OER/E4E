@@ -12,6 +12,7 @@ import PathDesignCentralBars from '../../components/Views/PathDesignViews/PathDe
 import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGenLO';
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
+import { CollectionProps } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useIsSmallerScreen } from '../../utils/utils';
 
@@ -37,7 +38,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // handleIdLearningScenario,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
-    handleDefaultLearningContext
+    handleDefaultLearningContext,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -247,6 +248,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   useEffect(() => {
+    const collectionDelated = !collections.some((collection: CollectionProps, index: number) => index === collectionIndex);
+    if (collectionDelated) {
+      handleCollectionIndexChange(-1);
+    }
+  }, [collections.length])
+
+  useEffect(() => {
     handleCollectionSelection();
   }, [collectionIndex]);
 
@@ -341,7 +349,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             collections={collections}
             handleCollectionSelection={handleCollectionSelection}
             handleCollectionChange={handleCollectionChange}
-            resources={collections[collectionIndex]?.oers} // Create an array of resources names???
+            resources={collections[collectionIndex]?.oers || []} // Create an array of resources names???
             handleResourceSelection={handleResourceSelection}
             handleResourceChange={handleResourceChange}
             isNextButtonClicked={isNextButtonClicked}

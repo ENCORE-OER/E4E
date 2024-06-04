@@ -25,7 +25,6 @@ export default async function materialAnalyzer(
     console.log('req.body', req.body);
     // console.log('req.body stringified', JSON.stringify(req.body));
 
-    // const url = '/Analyser/analyseMaterial';
     const url = '/MaterialAnalyser/analyseMaterial';
 
     try {

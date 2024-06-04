@@ -7,7 +7,7 @@ import {
   EducationContextEnum,
   ObjectLearningObjectiveProps,
   Option,
-  SkillItemProps
+  SkillItemProps,
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
@@ -68,7 +68,7 @@ export default function GenerateLOView({
   setIsGenerateLOClicked,
   isAtLeastOneLOGenerated,
   handleDefaultLearningContext,
-  defaultLearningContext
+  defaultLearningContext,
 }: GenerateLOViewProps) {
   const { addToast } = CustomToast();
 
@@ -156,7 +156,7 @@ export default function GenerateLOView({
     } else if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
-      selectedOptions.length === 0  // Bloom's verbs
+      selectedOptions.length === 0 // Bloom's verbs
       // || learningTextContext === '' // If empty we'll set automatically the default one
     ) {
       addToast({
@@ -326,19 +326,19 @@ export default function GenerateLOView({
 
   const handleGenerationLONoContext = async () => {
     if (learningTextContext?.trim() === '') {
-      console.log("setting default learning context")
+      console.log('setting default learning context');
       handleDefaultLearningContext();
     }
 
     await handleGenerateLO();
-  }
+  };
 
   const handleClickOnGenerateLOButton = async () => {
     // Before we check if there are some empty fields needed for the generation
     if (
       bloomLevelIndex === -1 ||
       selectedSkillConceptsTags.length === 0 ||
-      selectedOptions.length === 0  // Bloom's verbs
+      selectedOptions.length === 0 // Bloom's verbs
       // || learningTextContext === '' // If empty we'll set automatically the default one
     ) {
       addToast({
@@ -357,7 +357,7 @@ export default function GenerateLOView({
         onOpenOverwriteAlertDialog();
       } else {
         // await handleGenerateLO();
-        await handleGenerationLONoContext()
+        await handleGenerationLONoContext();
       }
     }
   };
@@ -367,10 +367,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }

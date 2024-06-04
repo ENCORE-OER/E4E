@@ -649,9 +649,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // =============================================================================================================
 
-
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
-
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
