@@ -105,7 +105,7 @@ SmallSingleResourceCardProps) {
           publication_date={oer?.publication_date ?? ''}
           overall_score={oer?.overall_score ?? 0}
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
-          assessment_oer_type={oer?.assessment_oer_type ?? ''}
+          assessment_oer_type={oer?.exercise_values.assessment_oer_type ?? ''}
           maxHCard="155px"
           maxWCard="350px"
           mbCard="2"

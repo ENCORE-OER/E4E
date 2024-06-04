@@ -12,7 +12,7 @@ import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { TopicData, targetLevelOptions } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
-import CreateOerTopicMenu from '../../DropDownMenuItem/CreateOerTopicMenu';
+import CreateOerTopicMenu from '../../DropDownMenu/CreateOerTopicMenu';
 import InputGenAISetup from '../../Inputs/InputsGenAISetup';
 import TextBox from '../../TextBox/TextBox';
 
@@ -65,15 +65,21 @@ export default function AnalyzerTabCreateOer({
       return resp.data;
     } catch (error) {
       console.error('Error during the API call:', error);
+      addToast({
+        message:
+          'Error in analyzing the material. Try again or change the material.',
+        type: 'error',
+      });
     }
   };
 
   const handleAnalyze = async () => {
     setLoading(true);
     const analyzedMaterial = await analyzeMaterial(sourceText);
+    console.log('topic data:', analyzedMaterial);
     setLoading(false);
     setTopicData(analyzedMaterial);
-    console.log('topic data:', topicData);
+
     if (analyzedMaterial) {
       handleTitle(analyzedMaterial?.Title);
       handleMacroSubject(analyzedMaterial?.MacroSubject);

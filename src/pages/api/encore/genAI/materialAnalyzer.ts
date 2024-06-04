@@ -48,7 +48,7 @@ export default async function materialAnalyzer(
         // }
       );
       res.status(200).json(analyzeMaterial?.data);
-      console.log('fillGapsExercise', analyzeMaterial?.data);
+      console.log('analyzedMaterial: ', analyzeMaterial?.data);
     } catch (error) {
       console.error(error);
       res.status(400).json({ error: 'Bad request!' });

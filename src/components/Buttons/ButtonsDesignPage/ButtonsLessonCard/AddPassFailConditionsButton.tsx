@@ -21,6 +21,7 @@ export default function AddPassFailConditionsButton({
       rightIcon={<IconPlus />}
       color="grey"
       fontWeight="normal"
+      isDisabled={true}
     />
   );
 }

@@ -113,7 +113,7 @@ export default function SingleResourceCard({
           publication_date={oer?.publication_date ?? ''}
           overall_score={oer?.overall_score ?? 0}
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
-          assessment_oer_type={oer?.assessment_oer_type ?? ''}
+          assessment_oer_type={oer?.exercise_values.assessment_oer_type ?? ''}
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
           //pxCard={isSmallerScreen ? '5px' : undefined}
