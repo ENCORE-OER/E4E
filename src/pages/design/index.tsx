@@ -45,7 +45,7 @@ const Home = () => {
   const handleNextClick = () => {
     if (areOptionsComplete) {
       router.push({
-        pathname: '/design/learningObjective',
+        pathname: '/design/LearningObjective',
       });
     } else {
       addToast({
