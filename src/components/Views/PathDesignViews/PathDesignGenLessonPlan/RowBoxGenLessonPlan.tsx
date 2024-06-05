@@ -121,6 +121,7 @@ export default function RowBoxGenLessonPlan({
           itemIndex={itemIndexMenu}
           defaultMenuTitle={defaultMenuTitle}
           isCheckBoxNeeded={true}
+          maxNumberItems={numberInput}
         />
       </Box>
     </Flex>

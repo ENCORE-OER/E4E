@@ -5,7 +5,7 @@ import brandLogo from '../../public/logo_encore.png';
 import Nav from '../Layout/NavBar';
 
 type NavBarProps = {
-  user: UserProfile | undefined;
+  user?: UserProfile;
   pageName?: string;
 };
 
@@ -40,26 +40,29 @@ export default function Navbar({ user, pageName }: NavBarProps) {
         <Text variant="navbar_label">{pageName}</Text>
       </HStack>
       <HStack>
-        {!user ? (
-          <div className="rounded-lg bg-cyan-400 pr-2 pl-2 pt-1 pb-1">
-            <Link
-              href={'/api/auth/login'}
-              className="text-white"
-              style={{ textDecoration: 'none' }}
-            >
-              Sign in
-            </Link>
-          </div>
-        ) : (
-          <HStack>
-            <div>{user.name}</div>
-            <Link href={'/api/auth/logout'} style={{ textDecoration: 'none' }}>
-              <Button colorScheme="red" size={['sm', 'md']}>
-                Log out
-              </Button>
-            </Link>
-          </HStack>
-        )}
+        {user !== undefined ? (
+          !user ? (
+            <div className="rounded-lg bg-cyan-400 pr-2 pl-2 pt-1 pb-1">
+              <Link
+                href={'/api/auth/login'}
+                className="text-white"
+                style={{ textDecoration: 'none' }}
+              >
+                Sign in
+              </Link>
+            </div>
+          ) : (
+            <HStack>
+              <div>{user.name}</div>
+              <Link href={'/api/auth/logout'} style={{ textDecoration: 'none' }}>
+                <Button colorScheme="red" size={['sm', 'md']}>
+                  Log out
+                </Button>
+              </Link>
+            </HStack>
+          )) :
+          undefined
+        }
       </HStack>
     </Nav>
   );

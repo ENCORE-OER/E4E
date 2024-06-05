@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ interface CreateProps {
 }
 
 const Create = ({ isAddContentModal }: CreateProps) => {
-  const { user } = useUser();
+  // const { user } = useUser();
   const router = useRouter();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
@@ -35,7 +35,9 @@ const Create = ({ isAddContentModal }: CreateProps) => {
   return (
     <Flex w="100%" h="100%">
       {!isAddContentModal && <SideBar pagePath={'/create'} />}
-      {!isAddContentModal && <Navbar user={user} pageName="Create" />}
+      {!isAddContentModal && <Navbar
+        // user={user}
+        pageName="Create" />}
 
       <Box
         py={!isAddContentModal ? '115px' : '1rem'}

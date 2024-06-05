@@ -31,6 +31,7 @@ type MultipleDataDropDownMenuProps = {
   isBloomLevel?: boolean;
   itemIndex: number[][];
   defaultMenuTitle: string;
+  maxNumberItems: number; // Maximum number of items to select
   isYellowOnFocus?: boolean;
   isCheckBoxNeeded?: boolean;
 };
@@ -46,6 +47,7 @@ export default function MultipleDataDropDownMenu({
   itemIndex,
   defaultMenuTitle,
   isCheckBoxNeeded,
+  // maxNumberItems,
 }: MultipleDataDropDownMenuProps) {
   const [menuTitle, setMenuTitle] = useState<string | undefined>(
     defaultMenuTitle
@@ -168,7 +170,7 @@ export default function MultipleDataDropDownMenu({
           _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
           //aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
-          // isDisabled={true}
+        // isDisabled={true}
         >
           <Flex direction="row" w="100%" align="center" gap={3}>
             <Flex
@@ -247,8 +249,8 @@ export default function MultipleDataDropDownMenu({
         <MenuList
           maxH="25rem"
           overflowY="auto"
-          // whiteSpace="pre-wrap"
-          // overflowWrap={'normal'}
+        // whiteSpace="pre-wrap"
+        // overflowWrap={'normal'}
         >
           {isCheckBoxNeeded && (
             // Array.isArray(itemIndex) &&
@@ -280,7 +282,7 @@ export default function MultipleDataDropDownMenu({
                           onClick={
                             !isCheckBoxNeeded
                               ? () =>
-                                  handleMenuItemClick(data, indexData, index)
+                                handleMenuItemClick(data, indexData, index)
                               : undefined
                           }
                           bg={

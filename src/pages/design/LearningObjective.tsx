@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -41,7 +41,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
-  const { user } = useUser();
+  // const { user } = useUser();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
 
@@ -300,7 +300,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={'/design'} />
-      <Navbar user={user} pageName="Design" />
+      <Navbar
+        // user={user} 
+        pageName="Design" />
 
       <Box
         py="115px"
@@ -317,7 +319,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -326,7 +328,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}

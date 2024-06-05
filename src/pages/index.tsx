@@ -7,7 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -61,7 +61,7 @@ const Home = (props: DiscoverPageProps) => {
   // const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
-  const { user } = useUser();
+  // const { user } = useUser();
 
   //const [checkboxAnd, setCheckboxAnd] = useState(true);
   //const [checkboxOr, setCheckboxOr] = useState(false);
@@ -292,7 +292,9 @@ const Home = (props: DiscoverPageProps) => {
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
-      <Navbar user={user} pageName="Discover" />
+      <Navbar
+        // user={user}
+        pageName="Discover" />
       <Box
         w="full"
         minH="100vh"
@@ -406,11 +408,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

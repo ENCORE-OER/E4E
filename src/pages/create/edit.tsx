@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import {
   Box,
   Button,
@@ -36,7 +36,7 @@ type EditProps = {
 };
 
 const Edit = ({ isAddContentModal }: EditProps) => {
-  const { user } = useUser();
+  // const { user } = useUser();
   const router = useRouter();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const hydrated = useHasHydrated();
@@ -177,7 +177,10 @@ const Edit = ({ isAddContentModal }: EditProps) => {
     <>
       <Flex w="100%" h="100%">
         {!isAddContentModal && <SideBar pagePath={'/create'} />}
-        {!isAddContentModal && <Navbar user={user} pageName="Create" />}
+        {!isAddContentModal &&
+          <Navbar
+            // user={user} 
+            pageName="Create" />}
         <Box
           //ml="200px"
           py={!isAddContentModal ? '115px' : '1rem'}
@@ -190,7 +193,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

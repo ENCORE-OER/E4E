@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 //import DrawerCard from '../components/Drawers/DrawerCard';
@@ -40,7 +40,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const [domain] = useState<string[]>([]); // to save each type of domain of the resources
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
-  const { user } = useUser();
+  // const { user } = useUser();
   //const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -582,7 +582,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
-      <Navbar user={user} />
+      <Navbar
+        //  user={user}
+        pageName='Discover'
+      />
       <Flex
         direction="row"
         pl={isSmallerScreen ? '50px' : '200px'}
@@ -600,7 +603,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -641,7 +644,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
