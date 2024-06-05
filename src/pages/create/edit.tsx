@@ -177,10 +177,12 @@ const Edit = ({ isAddContentModal }: EditProps) => {
     <>
       <Flex w="100%" h="100%">
         {!isAddContentModal && <SideBar pagePath={'/create'} />}
-        {!isAddContentModal &&
+        {!isAddContentModal && (
           <Navbar
-            // user={user} 
-            pageName="Create" />}
+            // user={user}
+            pageName="Create"
+          />
+        )}
         <Box
           //ml="200px"
           py={!isAddContentModal ? '115px' : '1rem'}
@@ -193,7 +195,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

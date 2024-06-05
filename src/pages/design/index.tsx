@@ -45,7 +45,7 @@ const Home = () => {
   const handleNextClick = () => {
     if (areOptionsComplete) {
       router.push({
-        pathname: '/design/LearningObjective',
+        pathname: '/design/learningObjective',
       });
     } else {
       addToast({
@@ -78,8 +78,9 @@ const Home = () => {
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
       <Navbar
-        // user={user} 
-        pageName="Design" />
+        // user={user}
+        pageName="Design"
+      />
 
       <Box
         py="115px"

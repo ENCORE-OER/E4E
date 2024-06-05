@@ -4,7 +4,7 @@ import { MultipleArrayProps } from '../../../../types/encoreElements';
 import MultipleDataDropDownMenu from '../../../CustomDropDownMenu/MultipleDataDropDownMenu';
 import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
 
-type RowBoxGenLessonPlan = {
+type RowBoxGenLessonPlanProps = {
   numberInput: number; // Used to specify the number of activities to generate
   setNumberInput: Dispatch<SetStateAction<number>>;
   isNumberZero: boolean; // Used to check if the number input is zero
@@ -12,12 +12,6 @@ type RowBoxGenLessonPlan = {
   defaultMenuTitle: string; // Used to display the default title of the menu
   description: string; // Used to describe the number input
   dataMenu: MultipleArrayProps[]; // Used to populate the menu
-  // onDataMenu: () => void; // Used to handle the data of the menu
-  // onSelectionChangeMenu?: (
-  //   selectedBloomActiviesIndex: number,
-  //   selectedActivityIndex: number,
-  //   event?: any
-  // ) => void; // Used to handle the selection change of the menu
   itemIndexMenu: number[][]; // Used to store the index of the selected item in the menu
   setItemIndexMenu: Dispatch<SetStateAction<number[][]>>;
   isAtleastItemSelected: boolean;
@@ -32,13 +26,11 @@ export default function RowBoxGenLessonPlan({
   defaultMenuTitle,
   description,
   dataMenu,
-  // onDataMenu,
-  // onSelectionChangeMenu,
   itemIndexMenu,
   setItemIndexMenu,
   isAtleastItemSelected,
   SetIsAtleastItemSelected,
-}: RowBoxGenLessonPlan) {
+}: RowBoxGenLessonPlanProps) {
   const handleItemSelection = () => {
     if (!isAtleastItemSelected) SetIsAtleastItemSelected(true);
   };
@@ -105,14 +97,6 @@ export default function RowBoxGenLessonPlan({
         />
         <Text fontSize="md">{description}</Text>
       </Flex>
-      {/* <CustomDropDownMenu
-        data={dataMenu}
-        onData={onDataMenu}
-        onSelectionChange={onSelectionChangeMenu}
-        itemIndex={itemIndexMenu}
-        defaultMenuTitle={defaultMenuTitle}
-        isCheckBoxNeeded={true}
-      /> */}
       <Box w="400px">
         <MultipleDataDropDownMenu
           multipleData={dataMenu}

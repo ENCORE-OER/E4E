@@ -35,9 +35,12 @@ const Create = ({ isAddContentModal }: CreateProps) => {
   return (
     <Flex w="100%" h="100%">
       {!isAddContentModal && <SideBar pagePath={'/create'} />}
-      {!isAddContentModal && <Navbar
-        // user={user}
-        pageName="Create" />}
+      {!isAddContentModal && (
+        <Navbar
+          // user={user}
+          pageName="Create"
+        />
+      )}
 
       <Box
         py={!isAddContentModal ? '115px' : '1rem'}

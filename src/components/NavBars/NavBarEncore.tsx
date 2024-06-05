@@ -54,15 +54,17 @@ export default function Navbar({ user, pageName }: NavBarProps) {
           ) : (
             <HStack>
               <div>{user.name}</div>
-              <Link href={'/api/auth/logout'} style={{ textDecoration: 'none' }}>
+              <Link
+                href={'/api/auth/logout'}
+                style={{ textDecoration: 'none' }}
+              >
                 <Button colorScheme="red" size={['sm', 'md']}>
                   Log out
                 </Button>
               </Link>
             </HStack>
-          )) :
-          undefined
-        }
+          )
+        ) : undefined}
       </HStack>
     </Nav>
   );

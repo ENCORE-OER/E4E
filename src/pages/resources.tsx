@@ -286,10 +286,12 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   return (
     <Flex w="100%" h="100%" bg="background">
       {!isAddContentModal && <SideBar pagePath={router.pathname} />}
-      {!isAddContentModal &&
+      {!isAddContentModal && (
         <Navbar
-          //  user={user} 
-          pageName="Your resources" />}
+          //  user={user}
+          pageName="Your resources"
+        />
+      )}
       <Box
         //ml="200px"
         py={!isAddContentModal ? '115px' : '1rem'}
@@ -302,8 +304,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>

@@ -169,7 +169,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/LearningObjective',
+      pathname: '/design/learningObjective',
     });
   };
 
@@ -178,8 +178,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
       <Flex w="100%" h="100%">
         <SideBar pagePath={'/design'} />
         <Navbar
-          // user={user} 
-          pageName="Design" />
+          // user={user}
+          pageName="Design"
+        />
 
         <Box
           py="115px"

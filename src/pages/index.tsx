@@ -294,7 +294,8 @@ const Home = (props: DiscoverPageProps) => {
       <SideBar pagePath={router.pathname} />
       <Navbar
         // user={user}
-        pageName="Discover" />
+        pageName="Discover"
+      />
       <Box
         w="full"
         minH="100vh"
@@ -408,11 +409,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: '12px',
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: '15px',
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (
