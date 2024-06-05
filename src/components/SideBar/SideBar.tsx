@@ -10,10 +10,11 @@ import { IconBookmarkCheckCustom } from '../../public/Icons/svgToIcons/iconBookm
 import { IconDashboard } from '../../public/Icons/svgToIcons/iconDashboard';
 import { IconPathEdit } from '../../public/Icons/svgToIcons/iconPatheEdit';
 import { IconTelescope } from '../../public/Icons/svgToIcons/iconTelescope';
-import { IconPencilRuler } from '../../public/Icons/svgToIcons/iconPencilRuler';
 
 import { useState } from 'react';
 import { IconType } from 'react-icons';
+import { IconPencilRuler } from '../../public/Icons/svgToIcons/iconPencilRuler';
+import { IconRecognition } from '../../public/Icons/svgToIcons/iconRecognition';
 import SideBarNavItem from '../NavItems/SideBarNavItem';
 
 interface LinkItemProps {
@@ -27,6 +28,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Create', icon: IconPencilRuler, link: '/create' },
   { name: 'Your resources', icon: IconBookmarkCheckCustom, link: '/resources' },
   { name: 'Design', icon: IconPathEdit, link: '/design' },
+  { name: 'Recognition', icon: IconRecognition, link: '/recognition' },
 ];
 
 export default function Sidebar({
