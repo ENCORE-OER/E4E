@@ -239,8 +239,11 @@ const Home = (props: DiscoverPageProps) => {
         newSet[1].elems = greenIds;
         newSet[2].elems = entrepreneurialIds;
 
+        // Set metrics for the Venn Diagram
         setMetrics(newSet);
 
+
+        // Get All the data for the Menu of the Advanced Search
         const resp_dom = await api.getDomains();
         //console.log('Domain -----------> ' + resp_dom);
         setDomain(resp_dom);
@@ -250,6 +253,10 @@ const Home = (props: DiscoverPageProps) => {
         const resp_aud = await api.getAudience();
         //console.log('Audience -----------> ' + resp_aud);
         setAudience(resp_aud);
+
+        // Get all the keywords for the search bar
+        getAllKeywords();
+
       } catch (error) {
         console.error(error);
       }
@@ -284,10 +291,6 @@ const Home = (props: DiscoverPageProps) => {
       })();
     }
   }, [searchValue]);*/
-
-  useEffect(() => {
-    getAllKeywords();
-  }, []);
 
   return (
     <Flex w="100%" h="100%">
@@ -409,11 +412,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import Image from 'next/image'; // Import the Image component from Next.js
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import { useIsSmallerScreen } from '../utils/utils';
 
 
 const Recognition = () => {
-  const { user } = useUser();
+  // const { user } = useUser();
   const isSmallerScreen = useIsSmallerScreen();
   const [badgeClaimed, setBadgeClaimed] = useState(false);
 
@@ -22,7 +22,9 @@ const Recognition = () => {
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={'/recognition'} />
-      <Navbar user={user} pageName="Recognition" />
+      <Navbar
+        //  user={user} 
+        pageName="Recognition" />
 
       <Box
         py="115px"

@@ -32,7 +32,11 @@ export default function LessonDropDownMenu({
   };
 
   return (
-    <Flex w="100%" flex="1" borderRadius="lg">
+    <Flex
+      w="fit-content"
+      // flex="1"
+      borderRadius="lg"
+    >
       <Menu>
         <MenuButton
           bg={'blue.100'}
@@ -47,7 +51,7 @@ export default function LessonDropDownMenu({
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'lightblue' }}
           textAlign="center"
-          // border={'1px solid #CED4DA'}
+        // border={'1px solid #CED4DA'}
         >
           {selectedOption || title || (
             <Text color="gray.400" fontWeight={'light'}>

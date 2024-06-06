@@ -16,7 +16,7 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -103,10 +103,12 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   // ------------------------------  Handle tag click event  --------------------------------------------
   const handleTagClick = async (selectedTag: OerConceptInfo) => {
     //setConceptSelected(true);
-    setConceptsSelected([...conceptsSelected, selectedTag.label]);
+    setConceptsSelected((prevConceptsSelected: string[]) => [...prevConceptsSelected, selectedTag.label]);
     setCurrentPage(1);
 
+    // Get search data from the localStorage
     const searchData = localStorage.getItem('searchData');
+
     if (!searchData) {
       console.error('searchData not found in localStorage');
       // TODO: handle redirect
@@ -116,6 +118,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       return;
     }
 
+    // Convert the data in a JSON format
     const convertedData = JSON.parse(searchData);
     const concepts = convertedData['concepts'] || [''];
     const updatedConcepts = [...concepts, selectedTag.id.toString()];
@@ -149,6 +152,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
 
   // ====================================================================================================
 
+  // Handle query update
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -169,6 +173,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         const audience = convertedData['audience'];
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
+
 
         const respAPI = await API.getConceptsFreeSearch(
           keywords,
@@ -207,6 +212,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         // ===============================================================================================
 
         // const tagsArray = resultArray
+
+        // Populate concepts tags
         const tagsArray = respAPI.map(({ id, label }) => ({
           //value: String(text),
           //count: Number(value),
@@ -237,9 +244,10 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     router.query.audience,
   ]);
 
-  useEffect(() => {
-    console.log('tags', tags);
-  }, [tags]);
+  // useEffect(() => {
+  //   console.log('tags', tags);
+  // }, [tags]);
+
   return (
     <>
       <Stack spacing={0}>

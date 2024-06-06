@@ -23,7 +23,7 @@ export default function TableLearningPath() {
     activityTypes,
     removeLessonActivity,
     optionsTypeOfAssignment,
-    editRowIndex,
+    editLessonIndex: editRowIndex,
     handleEditLesson,
   } = useLearningPathDesignContext();
   const hydrated = useHasHydrated();

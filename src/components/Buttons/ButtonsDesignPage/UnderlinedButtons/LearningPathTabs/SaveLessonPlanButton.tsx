@@ -10,7 +10,7 @@ export default function SaveLessonPlanButton({
   isDisabled,
   isSmallerScreen,
 }: LessonPlanTabButtonProps) {
-  const { isEditLessonPlanClicked, editRowIndex, handleSaveLessonPlanClick } =
+  const { isEditLessonPlanClicked, editLessonIndex: editRowIndex, handleSaveLessonPlanClick } =
     useLearningPathDesignContext();
   const { addToast } = CustomToast();
 

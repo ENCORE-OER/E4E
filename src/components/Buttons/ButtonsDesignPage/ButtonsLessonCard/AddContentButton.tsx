@@ -10,7 +10,7 @@ export default function AddContentButton({ ...rest }: ButtonProps) {
       // onClick={handleAddContentClick}
       borderRadius="lg"
       fontSize="small"
-      size={'sm'}
+    // size={'sm'}
     >
       Add Content
     </Button>

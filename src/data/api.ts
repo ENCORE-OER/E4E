@@ -686,7 +686,7 @@ export class APIV2 {
   }
 
   // This has pagination (10 items per page)
-  async freeSearchOers(
+  async freeSearchKeywordsOers(
     page: number,
     keywords: string[],
     domainIds?: string[],
@@ -834,7 +834,7 @@ export class APIV2 {
     }
   }
 
-  // return the list of concepts involved in the filtered queryset.
+  // Returns the list of concepts (OerConceptInfo[]) involved in the filtered query.
   async getConceptsFreeSearch(
     keywords?: string[],
     domainIds?: string[],

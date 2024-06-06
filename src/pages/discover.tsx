@@ -196,6 +196,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     setIsLoading(false);
   };*/
 
+  // Method to run the search request
   const freeSearchOERs = async (
     page: number,
     keywords: string[],
@@ -213,7 +214,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
     //here we search the OERS using the query parameters
 
-    const api = new APIV2(undefined);
+    const api = new APIV2(undefined); // APIV2(access_token: string | undefined)
 
     try {
       //let resp: RespDataProps | null = null;
@@ -222,9 +223,11 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       // Check if there are keywords used for the search
       if (
         keywords?.length > 0
+        // 1
         //|| domains.length > 0 || types.length > 0 || audience.length > 0
       ) {
-        const resp = await api.freeSearchOers(
+        // Search request
+        const resp = await api.freeSearchKeywordsOers(
           page,
           keywords,
           domains,
@@ -235,17 +238,20 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           operator,
           concepts ?? []
         );
+        // Set number of OERs found with the search
         setOersLengthTotal(resp?.recordsFiltered);
 
-        // saving the keywords used fot the search in the database if there are results
-
+        // Saving the keywords used for the search in the database if there are results
+        // TODO: check if each keywords used for the search returns something. 
+        //(Could be that using 3 keywords only 2 of them are useful, while the third could be useless, that means it not return any oer if used alone).
         if (resp?.recordsFiltered > 0) {
-          const api = new APIV2(undefined);
+          //const api = new APIV2(undefined);
           keywords.forEach(async (keyword: string) => {
             await api.saveKeyword(keyword);
           });
         }
 
+        // Get the oers from the response
         const oers = resp?.data;
 
         // calling the API for the serch
@@ -259,6 +265,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         // ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
         //setFilteredLength(oersResp?.length);
 
+        // Set the new oers found
         setFiltered(oers);
 
         //if (oersResp?.length > 0) { // with freeSearchOersNoPagination() use oersResp?.length
@@ -288,10 +295,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       ) {
         // It's not an efficient solution, but it's the best for now
         // TODO: return only the first 10 OERs. Recall the API on click on the next page button
-        //oers = await api.freeSearchOers(  // --> advanced search with these doesn't work
+        // const resp = await api.freeSearchOers(  // --> advanced search with these doesn't work
         const resp = await api.searchOERsNoKeywords(
           page,
-          //domains,  // at the moment the filterig by domain is not implemented by the API
+          //domains,  // at the moment filtering by domain is not implemented by the API
           types,
           audience,
           order_by,
@@ -435,6 +442,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     console.log('filtered: ', filtered);
   }, [filtered]);
 
+  // Do the search request when the query is setted or updated
   useEffect(() => {
     const fetchOers = async () => {
       setIsLoading(true);
@@ -557,10 +565,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     }
   }, [endSearch]);
 
-  // list of colors for the bookmark icon of each resource
+  // List of colors for the bookmark icon of each resource
   useEffect(() => {
     if (filtered !== undefined || collections !== undefined) {
-      // return the color of the collection if the oer is in the collection
+      // Return the color of the collection if the oer is in the collection
       // if the oer is in more than one collection, return the color of the first collection
       const colors = filtered?.map(
         (filteredOer: OerProps | OerFreeSearchProps | undefined) => {
@@ -603,7 +611,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -644,7 +652,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

@@ -17,7 +17,7 @@ import { useHasHydrated } from '../../../utils/utils';
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const { filtered, setFiltered } = useContext(DiscoveryContext);
   const [previousContent, setPreviousContent] = useState<
     (OerProps | undefined | OerFreeSearchProps)[]
@@ -30,7 +30,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   filtered?.forEach(
     (
       oer:
-        | { media_type: OerMediaTypeInfo[] }
+        { media_type: OerMediaTypeInfo[] }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -157,12 +157,12 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     filtered?.forEach(
       (
         oer:
-          | { media_type: OerMediaTypeInfo[] }
+          { media_type: OerMediaTypeInfo[] }
           | OerProps
           | undefined
           | OerFreeSearchProps
       ) =>
-        oer?.media_type?.map((item: OerMediaTypeInfo) => {
+        oer?.media_type?.some((item: OerMediaTypeInfo) => {
           if (item.name === label) {
             resources.push(oer);
           }

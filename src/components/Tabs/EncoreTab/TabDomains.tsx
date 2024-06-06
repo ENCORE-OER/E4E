@@ -13,7 +13,7 @@ const baseSets = [
   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 ];
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const hydrated = useHasHydrated();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
@@ -77,12 +77,12 @@ export const TabDomains = ({}: TabDomainsProps) => {
   filtered?.forEach(
     (
       oer:
-        | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+        {
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -228,11 +228,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
             fontSizes={
               isSmallerScreen
                 ? {
-                    setLabel: '12px',
-                  }
+                  setLabel: '12px',
+                }
                 : {
-                    setLabel: '15px',
-                  }
+                  setLabel: '15px',
+                }
             }
           />
         )}

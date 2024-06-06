@@ -49,6 +49,7 @@ export default function PathDesignGenLessonPlan({
     lessonActivities,
     setLessonActivities,
     setTitleLearningPath,
+    handleEditLessonPlanClick
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -80,7 +81,7 @@ export default function PathDesignGenLessonPlan({
   >([]);
 
   const RememberLearningActivities: ArrayProps[] = [
-    { name: 'Abstract Node' },
+    // { name: 'Abstract Node' },
     { name: 'Create a list of keywords' },
     { name: 'Memorise a list of keywords' },
     { name: 'Read material' },
@@ -352,28 +353,25 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${
-            generatedLesson.Type
-              ? `${mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )}`
-              : 'Frontal lecture'
-          } activity`,
+          lessonTitle: `${generatedLesson.Type
+            ? `${mapStringToString(
+              TypeOfActivityEnum[Number(generatedLesson.Details)],
+              TypeOfActivityStringEnum
+            )}`
+            : 'Frontal lecture'
+            } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${
-            generatedLesson.Type
-              ? mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )
-              : 'Frontal lecture'
-          }`,
-          activityDescription: `${
-            generatedLesson.Type
-              ? generatedLesson.Topic
-              : generatedLesson.Details
-          }`,
+          activityType: `${generatedLesson.Type
+            ? mapStringToString(
+              TypeOfActivityEnum[Number(generatedLesson.Details)],
+              TypeOfActivityStringEnum
+            )
+            : 'Frontal lecture'
+            }`,
+          activityDescription: `${generatedLesson.Type
+            ? generatedLesson.Topic
+            : generatedLesson.Details
+            }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -688,6 +686,7 @@ export default function PathDesignGenLessonPlan({
     }
     setLessonActivities(tempLessonsActivities);
     setTitleLearningPath('');
+    handleEditLessonPlanClick(true);
   };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
