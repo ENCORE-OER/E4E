@@ -157,7 +157,7 @@ export default function CentralBars({
               defaultMenuTitle="Select Bloom Level"
             />
             <IconInfoCircleTooltip
-              label_tooltip={`Bloom's Taxonomy is a framework that categorizes educational objectives into six levels of cognitive complexity, ranging from simple recall to higher-order thinking skills like evaluation and creation.`}
+              label_tooltip={`Bloom's Revised Taxonomy is a framework for classifying learning objectives (i.e., what an educator expects or intends students to learn). It distinguishes six categories that differ in cognitive complexity, from the least complex 'remember' to the most complex 'create'.`}
             />
           </Flex>
           {isNextButtonClicked &&
@@ -197,8 +197,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            //w={`${DIMENSION - SPACING}%`}
+          // paddingRight={`${SPACING}%`}
+          //w={`${DIMENSION - SPACING}%`}
           >
             {contextTitleTextBox}
           </Text>
