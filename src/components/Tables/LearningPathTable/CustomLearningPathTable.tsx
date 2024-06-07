@@ -66,9 +66,9 @@ export default function CustomLearningPathTable({
     const updatedData = data.map((item: LessonProps, idx: number) =>
       idx === index
         ? {
-          ...item,
-          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-        }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
         : item
     );
     handleData(updatedData);
@@ -89,9 +89,9 @@ export default function CustomLearningPathTable({
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
-          ...item,
-          activityType: selectedActivityType,
-        }
+            ...item,
+            activityType: selectedActivityType,
+          }
         : item
     );
 
@@ -161,7 +161,7 @@ export default function CustomLearningPathTable({
                     color="white"
                     textTransform="none"
                     px={0}
-                  // maxW={index === 4 ? "30%" : 'auto'}
+                    // maxW={index === 4 ? "30%" : 'auto'}
                   >
                     <Flex justify="center" p={0}>
                       {title}
@@ -220,14 +220,14 @@ export default function CustomLearningPathTable({
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                    editRowIndex !== null
+                                  editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                    indexRow === editRowIndex ? (
+                                  indexRow === editRowIndex ? (
                                     <LessonDropDownMenu
                                       options={optionsTypeOfAssignment}
                                       title={row.lessonType}
@@ -250,14 +250,14 @@ export default function CustomLearningPathTable({
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                    editRowIndex !== null
+                                  editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                    indexRow === editRowIndex ? (
+                                  indexRow === editRowIndex ? (
                                     <ActivityTypeDropDownMenu
                                       activityTypes={activityTypes}
                                       title={row.activityType}
@@ -284,14 +284,14 @@ export default function CustomLearningPathTable({
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                    editRowIndex !== null
+                                  editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                    indexRow === editRowIndex ? (
+                                  indexRow === editRowIndex ? (
                                     <CustomNumberInput
                                       valueNumber={row.timeDuration ?? 0}
                                       handleChangeValue={(value: string) =>
@@ -322,14 +322,14 @@ export default function CustomLearningPathTable({
                                 // flex="1"
                                 px={
                                   isEditLessonPlanClicked ||
-                                    editRowIndex !== null
+                                  editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="flex-start" px={0}>
                                   {isEditLessonPlanClicked ||
-                                    indexRow === editRowIndex ? (
+                                  indexRow === editRowIndex ? (
                                     <Box
                                       as="button"
                                       onClick={() =>
@@ -340,7 +340,7 @@ export default function CustomLearningPathTable({
                                       }
                                       w="100%"
                                       textAlign="left"
-                                    // display="block"
+                                      // display="block"
                                     >
                                       {row.activityDescription || (
                                         <LabelEmptyFieldTable label="Short summary of the activity" />
@@ -359,7 +359,7 @@ export default function CustomLearningPathTable({
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                    editRowIndex !== null
+                                  editRowIndex !== null
                                     ? 2
                                     : 5
                                 }

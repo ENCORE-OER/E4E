@@ -31,7 +31,7 @@ export default function RowBoxGenLessonPlan({
   setItemIndexMenu,
   isAtleastItemSelected,
   SetIsAtleastItemSelected,
-  isLoading
+  isLoading,
 }: RowBoxGenLessonPlanProps) {
   const handleItemSelection = () => {
     if (!isAtleastItemSelected) SetIsAtleastItemSelected(true);
@@ -108,7 +108,7 @@ export default function RowBoxGenLessonPlan({
           max_label_tooltip="You can include maximum 5 activities."
           min_label_tooltip="By not including any activities, a random number of activities will be added to the lesson plan."
           isLoading={isLoading}
-        // pr="10%"
+          // pr="10%"
         />
         <Text fontSize="md">{description}</Text>
       </Flex>

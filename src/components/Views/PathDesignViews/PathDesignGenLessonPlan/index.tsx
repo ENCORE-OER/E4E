@@ -353,25 +353,28 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${generatedLesson.Type
+          lessonTitle: `${
+            generatedLesson.Type
               ? `${mapStringToString(
-                TypeOfActivityEnum[Number(generatedLesson.Details)],
-                TypeOfActivityStringEnum
-              )}`
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )}`
               : 'Frontal Lecture'
-            } activity`,
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
+          activityType: `${
+            generatedLesson.Type
               ? mapStringToString(
-                TypeOfActivityEnum[Number(generatedLesson.Details)],
-                TypeOfActivityStringEnum
-              )
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
               : 'Frontal Lecture'
-            }`,
-          activityDescription: `${generatedLesson.Type
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
               ? generatedLesson.Topic
               : generatedLesson.Details
-            }`,
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
