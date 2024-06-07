@@ -1,5 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
@@ -23,7 +22,7 @@ import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 // };
 
 const Home = (/*props: DiscoverPageProps*/) => {
-  const { user } = useUser();
+  // const { user } = useUser();
   const hydrated = useHasHydrated();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const {
@@ -53,6 +52,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     learningObjectiveObjects,
     titleLearningPath,
     handleTitleLearningPath,
+    isEditLessonPlanClicked,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -170,7 +170,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/LearningObjective',
+      pathname: '/design/learningObjective',
     });
   };
 
@@ -178,7 +178,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
     <LearningPathProvider>
       <Flex w="100%" h="100%">
         <SideBar pagePath={'/design'} />
-        <Navbar user={user} pageName="Design" />
+        <Navbar
+          // user={user}
+          pageName="Design"
+        />
 
         <Box
           py="115px"
@@ -255,13 +258,16 @@ const Home = (/*props: DiscoverPageProps*/) => {
               </Heading> */}
 
               <Heading fontWeight={'bold'} w="100%">
-                {hydrated && (
-                  <LearningPathTitleTextBox
-                    titleLearningPath={titleLearningPath}
-                    handleTitleLearningPath={handleTitleLearningPath}
-                    placeholder="Enter a title describing the lesson plan..."
-                  />
-                )}
+                {hydrated &&
+                  (isEditLessonPlanClicked ? (
+                    <LearningPathTitleTextBox
+                      titleLearningPath={titleLearningPath}
+                      handleTitleLearningPath={handleTitleLearningPath}
+                      placeholder="Enter a title describing the lesson plan..."
+                    />
+                  ) : (
+                    <Text>{titleLearningPath}</Text>
+                  ))}
               </Heading>
             </Flex>
             <Flex paddingTop="1rem" w="100%">

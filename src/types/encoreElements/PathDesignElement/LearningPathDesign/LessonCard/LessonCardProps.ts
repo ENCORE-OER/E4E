@@ -1,9 +1,15 @@
-import { LessonProps } from './LessonProps';
-import { PassFailConditionsProps } from './PassFailConditionsProps';
+import { Dispatch, SetStateAction } from 'react';
+import {
+  activityTypesObjectsProps,
+  LessonProps,
+  OptionsTypeOfAssignmentProps,
+  PassFailConditionsProps,
+} from '.';
 
 export type LessonCardProps = {
   lesson: LessonProps;
-  indexCard?: number; // Specifies the order of the lessons
+  handleData: Dispatch<SetStateAction<LessonProps[]>>;
+  indexCard: number; // Specifies the order of the lessons
   isSmallerScreen?: boolean;
   handleAddCondition?: (
     index: number,
@@ -11,4 +17,9 @@ export type LessonCardProps = {
   ) => {};
   handleOpenModal?: (index: number, conditionIndex: number | null) => void;
   isEditClicked?: boolean;
+  editLessonIndex: number | null;
+  handleEditLesson: (index: number) => void;
+  isEditLessonPlanClicked: boolean;
+  optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[];
+  activityTypes: activityTypesObjectsProps[];
 };

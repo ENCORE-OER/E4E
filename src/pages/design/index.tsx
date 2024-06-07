@@ -1,4 +1,4 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 const Home = () => {
   const router = useRouter();
-  const { user } = useUser();
+  // const { user } = useUser();
   const [areOptionsComplete, setAreOptionsComplete] = useState(false);
   const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
   const { addToast } = CustomToast();
@@ -45,7 +45,7 @@ const Home = () => {
   const handleNextClick = () => {
     if (areOptionsComplete) {
       router.push({
-        pathname: '/design/LearningObjective',
+        pathname: '/design/learningObjective',
       });
     } else {
       addToast({
@@ -77,7 +77,10 @@ const Home = () => {
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
-      <Navbar user={user} pageName="Design" />
+      <Navbar
+        // user={user}
+        pageName="Design"
+      />
 
       <Box
         py="115px"

@@ -7,7 +7,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
@@ -61,7 +61,7 @@ const Home = (props: DiscoverPageProps) => {
   // const [isClicked, setIsClicked] = useState(false); // used for the button advanced search
 
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
-  const { user } = useUser();
+  // const { user } = useUser();
 
   //const [checkboxAnd, setCheckboxAnd] = useState(true);
   //const [checkboxOr, setCheckboxOr] = useState(false);
@@ -239,8 +239,10 @@ const Home = (props: DiscoverPageProps) => {
         newSet[1].elems = greenIds;
         newSet[2].elems = entrepreneurialIds;
 
+        // Set metrics for the Venn Diagram
         setMetrics(newSet);
 
+        // Get All the data for the Menu of the Advanced Search
         const resp_dom = await api.getDomains();
         //console.log('Domain -----------> ' + resp_dom);
         setDomain(resp_dom);
@@ -250,6 +252,9 @@ const Home = (props: DiscoverPageProps) => {
         const resp_aud = await api.getAudience();
         //console.log('Audience -----------> ' + resp_aud);
         setAudience(resp_aud);
+
+        // Get all the keywords for the search bar
+        getAllKeywords();
       } catch (error) {
         console.error(error);
       }
@@ -285,14 +290,13 @@ const Home = (props: DiscoverPageProps) => {
     }
   }, [searchValue]);*/
 
-  useEffect(() => {
-    getAllKeywords();
-  }, []);
-
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
-      <Navbar user={user} pageName="Discover" />
+      <Navbar
+        // user={user}
+        pageName="Discover"
+      />
       <Box
         w="full"
         minH="100vh"

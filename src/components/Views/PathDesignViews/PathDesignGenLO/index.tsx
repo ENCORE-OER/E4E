@@ -25,7 +25,7 @@ export default function PathDesignGenLO({
   selectedBloomLevel,
   isNextButtonClicked,
   setIsNextButtonClicked,
-  isGenerateLOClicked,
+  // isGenerateLOClicked,
   setIsGenerateLOClicked,
   isHighligted,
   isSmallerScreen,
@@ -169,7 +169,7 @@ export default function PathDesignGenLO({
         defaultLearningContext={defaultContext}
       />
 
-      {isGenerateLOClicked && isAtLeastOneLOGenerated && (
+      {isAtLeastOneLOGenerated && (
         <Flex>
           <InfoGenAITextBox isSmallerScreen={isSmallerScreen} />
         </Flex>

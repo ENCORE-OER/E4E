@@ -49,6 +49,7 @@ export default function PathDesignGenLessonPlan({
     lessonActivities,
     setLessonActivities,
     setTitleLearningPath,
+    handleEditLessonPlanClick,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -80,7 +81,7 @@ export default function PathDesignGenLessonPlan({
   >([]);
 
   const RememberLearningActivities: ArrayProps[] = [
-    { name: 'Abstract Node' },
+    // { name: 'Abstract Node' },
     { name: 'Create a list of keywords' },
     { name: 'Memorise a list of keywords' },
     { name: 'Read material' },
@@ -358,7 +359,7 @@ export default function PathDesignGenLessonPlan({
                   TypeOfActivityEnum[Number(generatedLesson.Details)],
                   TypeOfActivityStringEnum
                 )}`
-              : 'Frontal lecture'
+              : 'Frontal Lecture'
           } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
           activityType: `${
@@ -367,7 +368,7 @@ export default function PathDesignGenLessonPlan({
                   TypeOfActivityEnum[Number(generatedLesson.Details)],
                   TypeOfActivityStringEnum
                 )
-              : 'Frontal lecture'
+              : 'Frontal Lecture'
           }`,
           activityDescription: `${
             generatedLesson.Type
@@ -688,6 +689,7 @@ export default function PathDesignGenLessonPlan({
     }
     setLessonActivities(tempLessonsActivities);
     setTitleLearningPath('');
+    handleEditLessonPlanClick(true);
   };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
@@ -873,6 +875,7 @@ export default function PathDesignGenLessonPlan({
             setItemIndexMenu={setLearningActivitiesIndex}
             isAtleastItemSelected={selectedLearningActivities}
             SetIsAtleastItemSelected={setSelectedLearningActivities}
+            isLoading={isLoading}
           />
           <RowBoxGenLessonPlan
             numberInput={numberOfAssessmentActivities}
@@ -888,6 +891,7 @@ export default function PathDesignGenLessonPlan({
             setItemIndexMenu={setAssessmentActivitiesIndex}
             isAtleastItemSelected={selectedAssessmentActivities}
             SetIsAtleastItemSelected={setSelectedAssessmentActivities}
+            isLoading={isLoading}
           />
         </Flex>
       )}

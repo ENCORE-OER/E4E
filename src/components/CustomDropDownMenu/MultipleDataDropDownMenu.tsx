@@ -1,3 +1,4 @@
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import {
   Button,
   Checkbox,
@@ -8,11 +9,10 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
-
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
-import { ArrayProps, MultipleArrayProps } from '../../types/encoreElements';
+import { MultipleArrayProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import DeselectAllButton from '../Buttons/ButtonsDesignPage/DeselectAllButton';
 
@@ -31,6 +31,7 @@ type MultipleDataDropDownMenuProps = {
   isBloomLevel?: boolean;
   itemIndex: number[][];
   defaultMenuTitle: string;
+  maxNumberItems: number; // Maximum number of items to select
   isYellowOnFocus?: boolean;
   isCheckBoxNeeded?: boolean;
 };
@@ -46,6 +47,7 @@ export default function MultipleDataDropDownMenu({
   itemIndex,
   defaultMenuTitle,
   isCheckBoxNeeded,
+  maxNumberItems,
 }: MultipleDataDropDownMenuProps) {
   const [menuTitle, setMenuTitle] = useState<string | undefined>(
     defaultMenuTitle
@@ -71,12 +73,6 @@ export default function MultipleDataDropDownMenu({
     }
   }, [itemIndex, multipleData, defaultMenuTitle]);
 
-  // const handleData = () => {
-  //   if (onData) {
-  //     // onData(selectedOptions);
-  //     onData()
-  //   }
-  // };
   const handleMenuItemClick = (
     data: MultipleArrayProps,
     indexData: number,
@@ -92,12 +88,6 @@ export default function MultipleDataDropDownMenu({
     if (!isCheckBoxNeeded) {
       setIsOpen(false);
     }
-
-    //TODO: fix this, the problem is that idk how to delete the tags without refreshing the page => FIXED: use .clear() method
-    // if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
-    //   // Refresha la pagina
-    //   window.location.reload();
-    // }
   };
 
   const handleDeleteAllClick = () => {
@@ -123,19 +113,32 @@ export default function MultipleDataDropDownMenu({
     // return itemIndex.length > 0 ? false : true;
   };
 
-  // useEffect(() => {
-  //   handleData();
-  //   // console.log(bloomLevelIndex);
-  //   // console.log(collectionIndex);1
-  // }, [selectedOptions]);
+  const selectedItemsCount = itemIndex.flat().length;
 
-  // useEffect(() => {
-  //   multipleData.flatMap((data) =>
-  //     data.activities.map((item) => {
-  //       console.log('multipleData:', item.name);
-  //     })
-  //   );
-  // }, [multipleData]);
+  // Monitor changes in maxNumberItems and update itemIndex accordingly
+  useEffect(() => {
+    if (selectedItemsCount > maxNumberItems) {
+      const newItemIndex = [...itemIndex];
+      let totalItems = selectedItemsCount;
+
+      for (let i = newItemIndex.length - 1; i >= 0; i--) {
+        for (let j = newItemIndex[i].length - 1; j >= 0; j--) {
+          if (totalItems > maxNumberItems) {
+            newItemIndex[i].pop();
+            totalItems--;
+          } else {
+            break;
+          }
+        }
+      }
+
+      if (onSelectionChange) {
+        newItemIndex.forEach((indices, i) => {
+          indices.forEach((index) => onSelectionChange(i, index));
+        });
+      }
+    }
+  }, [maxNumberItems, selectedItemsCount, itemIndex, onSelectionChange]);
 
   return (
     <Flex
@@ -191,56 +194,10 @@ export default function MultipleDataDropDownMenu({
                 /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
 
                 <Text align="left" noOfLines={1}>
-                  {/* {
-                      selectedOptions.includes('All') &&
-                        options?.length === selectedOptions.length
-                        ? 'All'
-                        : selectedOptions.length > 0
-                          ? selectedOptions.join(', ')
-                          : menuTitle // Utilizza il valore memorizzato in menuTitle
-                    } */}
                   {menuTitle}
                 </Text>
               )}
             </Flex>
-
-            {/* TODO: Implementation of X button inside the MENU to deselect all the options selected before. */}
-            {/* PROBLEM: It's not possible to e.stopPropagation() to menu button */}
-            {/* {!isOpen &&
-                isCheckBoxNeeded &&
-                Array.isArray(itemIndex) &&
-                itemIndex.length > 0 &&
-                (
-                  <Flex justify={'flex-end'}>
-                    <Button
-                      // position='absolute'
-                      // right={0}
-  
-                      bg='none'
-                      _hover={{ backgroundColor: 'blue.300' }}
-                      w='fit-content'
-                      p={0}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteAllClick();
-                      }}
-                    >
-                      <CloseIcon
-                        fontSize='small'
-                      // as="button"
-                      // bg='none'
-                      // _hover={{ backgroundColor: 'gray.300' }}
-                      // w='fit-content'
-                      // p={0}
-                      // onClick={(e) => {
-                      //   e.stopPropagation();
-                      //   handleDeleteAllClick();
-                      // }}
-                      />
-                    </Button>
-                  </Flex>
-                )
-              } */}
           </Flex>
         </MenuButton>
 
@@ -267,32 +224,43 @@ export default function MultipleDataDropDownMenu({
             </Flex>
           )}
           {hydrated &&
-            multipleData?.map((data: MultipleArrayProps, indexData: number) => (
+            multipleData?.map((data, indexData) => (
               <MenuOptionGroup key={indexData} w="fit-content">
                 <Text fontWeight="bold" py={2} px={5} bg="accent.900">
                   {data.title}
                 </Text>
                 {hydrated &&
-                  data?.activities?.map(
-                    (activity: ArrayProps, index: number) => (
-                      <Flex p={0.5} key={index}>
-                        <MenuItem
-                          onClick={
-                            !isCheckBoxNeeded
-                              ? () =>
-                                  handleMenuItemClick(data, indexData, index)
-                              : undefined
-                          }
-                          bg={
-                            itemIndex[indexData]?.includes(index)
-                              ? 'accent.200'
-                              : undefined
-                          }
-                          borderRadius={5}
-                        >
-                          <Flex direction={'row'} w="100%">
-                            <Text flex="1">{activity.name}</Text>
-                            {isCheckBoxNeeded && (
+                  data?.activities?.map((activity, index) => (
+                    <Flex p={0.5} key={index}>
+                      <MenuItem
+                        onClick={
+                          !isCheckBoxNeeded
+                            ? () => handleMenuItemClick(data, indexData, index)
+                            : undefined
+                        }
+                        bg={
+                          itemIndex[indexData]?.includes(index)
+                            ? 'accent.200'
+                            : undefined
+                        }
+                        borderRadius={5}
+                      >
+                        <Flex direction={'row'} w="100%">
+                          <Text flex="1">{activity.name}</Text>
+                          {isCheckBoxNeeded && (
+                            <Tooltip
+                              label="Maximum number of activities selected."
+                              aria-label="Maximum number of activities selected."
+                              isDisabled={
+                                selectedItemsCount < maxNumberItems ||
+                                itemIndex[indexData]?.includes(index)
+                              }
+                              bg="white"
+                              color="primary"
+                              // p={2}
+                              fontSize={'sm'}
+                              borderRadius={5}
+                            >
                               <Flex flex="1" justify={'flex-end'}>
                                 <Checkbox
                                   key={index}
@@ -305,14 +273,18 @@ export default function MultipleDataDropDownMenu({
                                     itemIndex[indexData]?.includes(index) ||
                                     false
                                   }
+                                  isDisabled={
+                                    selectedItemsCount >= maxNumberItems &&
+                                    !itemIndex[indexData]?.includes(index)
+                                  }
                                 />
                               </Flex>
-                            )}
-                          </Flex>
-                        </MenuItem>
-                      </Flex>
-                    )
-                  )}
+                            </Tooltip>
+                          )}
+                        </Flex>
+                      </MenuItem>
+                    </Flex>
+                  ))}
               </MenuOptionGroup>
             ))}
         </MenuList>

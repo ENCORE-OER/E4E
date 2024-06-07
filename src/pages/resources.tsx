@@ -9,7 +9,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 
@@ -46,7 +46,7 @@ export interface OerItemToDeleteProps {
 
 const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   const router = useRouter();
-  const { user } = useUser();
+  // const { user } = useUser();
   const {
     collections,
     deleteCollection,
@@ -286,7 +286,12 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   return (
     <Flex w="100%" h="100%" bg="background">
       {!isAddContentModal && <SideBar pagePath={router.pathname} />}
-      {!isAddContentModal && <Navbar user={user} pageName="Your resources" />}
+      {!isAddContentModal && (
+        <Navbar
+          //  user={user}
+          pageName="Your resources"
+        />
+      )}
       <Box
         //ml="200px"
         py={!isAddContentModal ? '115px' : '1rem'}

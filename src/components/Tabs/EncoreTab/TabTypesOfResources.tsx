@@ -162,7 +162,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
           | undefined
           | OerFreeSearchProps
       ) =>
-        oer?.media_type?.map((item: OerMediaTypeInfo) => {
+        oer?.media_type?.some((item: OerMediaTypeInfo) => {
           if (item.name === label) {
             resources.push(oer);
           }

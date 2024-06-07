@@ -6,6 +6,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  ResponsiveValue,
   Text,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -16,12 +17,14 @@ type LessonDropDownMenuProps = {
   options: OptionsTypeOfAssignmentProps[]; // type of assignment (learning, assessment, others)
   title: string;
   onChange: (selectedIndex: number) => void;
+  size?: ResponsiveValue<string>;
 };
 
 export default function LessonDropDownMenu({
   options,
   title,
   onChange,
+  size,
 }: LessonDropDownMenuProps) {
   const hydrated = useHasHydrated();
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -32,16 +35,20 @@ export default function LessonDropDownMenu({
   };
 
   return (
-    <Flex w="100%" flex="1" borderRadius="lg">
+    <Flex
+      w="fit-content"
+      // flex="1"
+      borderRadius="lg"
+    >
       <Menu>
         <MenuButton
           bg={'blue.100'}
           borderRadius="lg"
           w="fit-content"
-          fontSize="sm"
+          fontSize={size}
           fontWeight="normal"
           py={0}
-          size="sm"
+          size={size}
           // px={3}
           as={Button}
           rightIcon={<ChevronDownIcon />}
