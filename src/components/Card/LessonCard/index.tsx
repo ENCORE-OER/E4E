@@ -65,9 +65,9 @@ export default function LessonCard({
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
           ? {
-            ...item,
-            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-          }
+              ...item,
+              lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+            }
           : item
       )
     );
@@ -103,9 +103,9 @@ export default function LessonCard({
       prevLessons.map((item, idx) =>
         idx === indexCard
           ? {
-            ...item,
-            activityType: selectedActivityType,
-          }
+              ...item,
+              activityType: selectedActivityType,
+            }
           : item
       )
     );
@@ -113,20 +113,34 @@ export default function LessonCard({
 
   const getActivityIcon = (lessonType: string, activityType: string) => {
     const activity = activityTypes.find(
-      (type) => type.lessonType === lessonType && type.activityType === activityType
+      (type) =>
+        type.lessonType === lessonType && type.activityType === activityType
     );
     return activity ? activity.icon : null;
   };
 
-  const selectedActivityIcon = getActivityIcon(lesson.lessonType, lesson.activityType);
+  const selectedActivityIcon = getActivityIcon(
+    lesson.lessonType,
+    lesson.activityType
+  );
 
   // const [passFailConditions, setPassFailConditions] = useState<PassFailConditionsProps[]>([]);
 
   useEffect(() => {
     if (editLessonIndex === indexCard) {
-      handleActivityTypeChange(activityTypes.findIndex((type) => type.activityType === lesson.activityType));
+      handleActivityTypeChange(
+        activityTypes.findIndex(
+          (type) => type.activityType === lesson.activityType
+        )
+      );
     }
-  }, [editLessonIndex, indexCard, lesson.activityType, handleActivityTypeChange, activityTypes]);
+  }, [
+    editLessonIndex,
+    indexCard,
+    lesson.activityType,
+    handleActivityTypeChange,
+    activityTypes,
+  ]);
 
   return (
     <>
@@ -181,7 +195,7 @@ export default function LessonCard({
                 isEditClicked={
                   editLessonIndex === indexCard || isEditLessonPlanClicked
                 }
-              // isDisabled={true}
+                // isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}
@@ -210,7 +224,7 @@ export default function LessonCard({
                 value={lesson.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
-              // fontSize="small"
+                // fontSize="small"
               />
             ) : (
               <Text
@@ -291,13 +305,16 @@ export default function LessonCard({
                   }
                   size="md"
                 />
+              ) : lesson.activityType ? (
+                <Flex align="center" gap={2}>
+                  <Text>{lesson.activityType}</Text>
+                  {selectedActivityIcon && <Icon>{selectedActivityIcon}</Icon>}
+                </Flex>
               ) : (
-                lesson.activityType ?
-                  <Flex align="center" gap={2}>
-                    <Text>{lesson.activityType}</Text>
-                    {selectedActivityIcon && <Icon>{selectedActivityIcon}</Icon>}
-                  </Flex> :
-                  <LabelEmptyFieldTable fontSize="auto" label="Type of Activity" />
+                <LabelEmptyFieldTable
+                  fontSize="auto"
+                  label="Type of Activity"
+                />
               )}
             </Flex>
 

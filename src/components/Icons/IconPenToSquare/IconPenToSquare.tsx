@@ -7,7 +7,7 @@ export default function IconPenToSquare({ ...rest }: IconProps) {
       {...rest}
       as={FaPenToSquare}
       fontSize={'x-large'}
-    //   fontWeight={'bold'}
+      //   fontWeight={'bold'}
     />
   );
 }

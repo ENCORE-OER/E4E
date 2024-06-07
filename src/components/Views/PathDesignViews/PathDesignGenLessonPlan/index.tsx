@@ -354,23 +354,23 @@ export default function PathDesignGenLessonPlan({
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
           lessonTitle: `${generatedLesson.Type
-            ? `${mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )}`
-            : 'Frontal Lecture'
+              ? `${mapStringToString(
+                TypeOfActivityEnum[Number(generatedLesson.Details)],
+                TypeOfActivityStringEnum
+              )}`
+              : 'Frontal Lecture'
             } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
           activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : 'Frontal Lecture'
+              ? mapStringToString(
+                TypeOfActivityEnum[Number(generatedLesson.Details)],
+                TypeOfActivityStringEnum
+              )
+              : 'Frontal Lecture'
             }`,
           activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
+              ? generatedLesson.Topic
+              : generatedLesson.Details
             }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
@@ -872,6 +872,7 @@ export default function PathDesignGenLessonPlan({
             setItemIndexMenu={setLearningActivitiesIndex}
             isAtleastItemSelected={selectedLearningActivities}
             SetIsAtleastItemSelected={setSelectedLearningActivities}
+            isLoading={isLoading}
           />
           <RowBoxGenLessonPlan
             numberInput={numberOfAssessmentActivities}
@@ -887,6 +888,7 @@ export default function PathDesignGenLessonPlan({
             setItemIndexMenu={setAssessmentActivitiesIndex}
             isAtleastItemSelected={selectedAssessmentActivities}
             SetIsAtleastItemSelected={setSelectedAssessmentActivities}
+            isLoading={isLoading}
           />
         </Flex>
       )}

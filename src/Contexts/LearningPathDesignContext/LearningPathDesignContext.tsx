@@ -522,25 +522,97 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Data activity type
   // const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
   const activityTypes: activityTypesObjectsProps[] = [
-    { lessonType: 'Assessment', activityType: 'Open Question', icon: <IconPenToSquare /> },
-    { lessonType: 'Assessment', activityType: 'Short Answer Question', icon: <IconPenToSquare /> },
-    { lessonType: 'Assessment', activityType: 'True or False', icon: <IconQuiz /> },
-    { lessonType: 'Assessment', activityType: 'Fill in the Blanks', icon: <IconPenToSquare /> },
-    { lessonType: 'Assessment', activityType: 'Single Choice', icon: <IconQuiz /> },
-    { lessonType: 'Assessment', activityType: 'Multiple Choice', icon: <IconQuiz /> },
-    { lessonType: 'Assessment', activityType: 'Essay', icon: <IconPenToSquare /> },
-    { lessonType: 'Learning', activityType: 'Knowledge Exposition', icon: <IconFrontalLecture /> },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Open Question',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Short Answer Question',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'True or False',
+      icon: <IconQuiz />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Fill in the Blanks',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Single Choice',
+      icon: <IconQuiz />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Multiple Choice',
+      icon: <IconQuiz />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Essay',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Knowledge Exposition',
+      icon: <IconFrontalLecture />,
+    },
     { lessonType: 'Learning', activityType: 'Debate', icon: <IconGroup /> },
-    { lessonType: 'Learning', activityType: 'Brainstorming', icon: <IconGroup /> },
-    { lessonType: 'Learning', activityType: 'Group Discussion', icon: <IconGroup /> },
-    { lessonType: 'Assessment', activityType: 'Simulation', icon: <IconPenToSquare /> },
-    { lessonType: 'Learning', activityType: 'Inquiry-based Learning', icon: <IconGroup /> },
-    { lessonType: 'Other', activityType: 'Non-written Material Analysis', icon: <IconAnalytics /> },
-    { lessonType: 'Other', activityType: 'Non-written Material Production', icon: <IconPencilBrush /> },
-    { lessonType: 'Assessment', activityType: 'Case Study Analysis', icon: <IconAnalytics /> },
-    { lessonType: 'Learning', activityType: 'Project-based Learning', icon: <IconProject /> },
-    { lessonType: 'Assessment', activityType: 'Problem-solving Activity', icon: <IconQuiz /> },
-    { lessonType: 'Learning', activityType: 'Frontal Lecture', icon: <IconFrontalLecture /> },
+    {
+      lessonType: 'Learning',
+      activityType: 'Brainstorming',
+      icon: <IconGroup />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Group Discussion',
+      icon: <IconGroup />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Simulation',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Inquiry-based Learning',
+      icon: <IconGroup />,
+    },
+    {
+      lessonType: 'Other',
+      activityType: 'Non-written Material Analysis',
+      icon: <IconAnalytics />,
+    },
+    {
+      lessonType: 'Other',
+      activityType: 'Non-written Material Production',
+      icon: <IconPencilBrush />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Case Study Analysis',
+      icon: <IconAnalytics />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Project-based Learning',
+      icon: <IconProject />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Problem-solving Activity',
+      icon: <IconQuiz />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Frontal Lecture',
+      icon: <IconFrontalLecture />,
+    },
   ];
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [

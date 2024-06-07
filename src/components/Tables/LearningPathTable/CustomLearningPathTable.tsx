@@ -327,7 +327,7 @@ export default function CustomLearningPathTable({
                                     : 5
                                 }
                               >
-                                <Flex w="100%" justify="center" px={0}>
+                                <Flex w="100%" justify="flex-start" px={0}>
                                   {isEditLessonPlanClicked ||
                                     indexRow === editRowIndex ? (
                                     <Box

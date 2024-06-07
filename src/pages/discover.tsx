@@ -298,7 +298,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         // const resp = await api.freeSearchOers(  // --> advanced search with these doesn't work
         const resp = await api.searchOERsNoKeywords(
           page,
-          //domains,  // at the moment filtering by domain is not implemented by the API
+          // keywords,
+          // domains,  // at the moment filtering by domain is not implemented by the API
           types,
           audience,
           order_by,
@@ -611,7 +612,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -652,7 +653,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

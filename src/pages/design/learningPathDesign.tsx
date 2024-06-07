@@ -1,4 +1,4 @@
-import { Box, Flex, Heading } from '@chakra-ui/react';
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
@@ -52,6 +52,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     learningObjectiveObjects,
     titleLearningPath,
     handleTitleLearningPath,
+    isEditLessonPlanClicked,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -197,7 +198,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -206,7 +207,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -258,11 +259,13 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
               <Heading fontWeight={'bold'} w="100%">
                 {hydrated && (
-                  <LearningPathTitleTextBox
-                    titleLearningPath={titleLearningPath}
-                    handleTitleLearningPath={handleTitleLearningPath}
-                    placeholder="Enter a title describing the lesson plan..."
-                  />
+                  isEditLessonPlanClicked ?
+                    <LearningPathTitleTextBox
+                      titleLearningPath={titleLearningPath}
+                      handleTitleLearningPath={handleTitleLearningPath}
+                      placeholder="Enter a title describing the lesson plan..."
+                    /> :
+                    <Text>{titleLearningPath}</Text>
                 )}
               </Heading>
             </Flex>

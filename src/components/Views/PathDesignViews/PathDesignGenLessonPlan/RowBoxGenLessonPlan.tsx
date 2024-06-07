@@ -2,7 +2,7 @@ import { Box, Flex, Text } from '@chakra-ui/react';
 import { Dispatch, SetStateAction } from 'react';
 import { MultipleArrayProps } from '../../../../types/encoreElements';
 import MultipleDataDropDownMenu from '../../../CustomDropDownMenu/MultipleDataDropDownMenu';
-import NumberInputTextBox from '../../../TextBox/NumberInputTextBox';
+import NumberInputWithButtons from '../../../TextBox/NumberInputWithButtons';
 
 type RowBoxGenLessonPlanProps = {
   numberInput: number; // Used to specify the number of activities to generate
@@ -16,6 +16,7 @@ type RowBoxGenLessonPlanProps = {
   setItemIndexMenu: Dispatch<SetStateAction<number[][]>>;
   isAtleastItemSelected: boolean;
   SetIsAtleastItemSelected: Dispatch<SetStateAction<boolean>>;
+  isLoading: boolean;
 };
 
 export default function RowBoxGenLessonPlan({
@@ -30,6 +31,7 @@ export default function RowBoxGenLessonPlan({
   setItemIndexMenu,
   isAtleastItemSelected,
   SetIsAtleastItemSelected,
+  isLoading
 }: RowBoxGenLessonPlanProps) {
   const handleItemSelection = () => {
     if (!isAtleastItemSelected) SetIsAtleastItemSelected(true);
@@ -86,7 +88,7 @@ export default function RowBoxGenLessonPlan({
       border={isAtleastItemSelected ? '1px' : 'none'}
     >
       <Flex minW="50%" align="center" gap={3} pr={5}>
-        <NumberInputTextBox
+        {/* <NumberInputTextBox
           numberInput={numberInput}
           setNumberInput={setNumberInput}
           minNumber={0}
@@ -94,6 +96,19 @@ export default function RowBoxGenLessonPlan({
           isNumberZero={isNumberZero}
           setIsNumberZero={setIsNumberZero}
           label_tooltip="Specify the number of activities you want to generate. Maximum number of activities is 5."
+        /> */}
+        <NumberInputWithButtons
+          numberInput={numberInput}
+          setNumberInput={setNumberInput}
+          minNumber={0}
+          maxNumber={5}
+          isNumberZero={isNumberZero}
+          setIsNumberZero={setIsNumberZero}
+          label_tooltip="Specify the number of activities you want include in the lesson plan. Maximum number of activities is 5."
+          max_label_tooltip="You can include maximum 5 activities."
+          min_label_tooltip="By not including any activities, a random number of activities will be added to the lesson plan."
+          isLoading={isLoading}
+        // pr="10%"
         />
         <Text fontSize="md">{description}</Text>
       </Flex>

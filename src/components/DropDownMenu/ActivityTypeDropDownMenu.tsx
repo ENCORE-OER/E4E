@@ -27,7 +27,7 @@ type ActivityTypeDropDownMenuProps = {
 type selectedOptionProps = {
   name: string;
   icon?: IconProps;
-}
+};
 
 export default function ActivityTypeDropDownMenu({
   // options,
@@ -35,10 +35,11 @@ export default function ActivityTypeDropDownMenu({
   lessonType,
   title,
   onChange,
-  size
+  size,
 }: ActivityTypeDropDownMenuProps) {
   const hydrated = useHasHydrated();
-  const [selectedOption, setSelectedOption] = useState<selectedOptionProps | null>(null);
+  const [selectedOption, setSelectedOption] =
+    useState<selectedOptionProps | null>(null);
   // const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
@@ -79,16 +80,18 @@ export default function ActivityTypeDropDownMenu({
           _expanded={{ bg: 'gray.200' }}
           textAlign="center"
         >
-          {selectedOption ?
+          {selectedOption ? (
             <Flex direction="row" gap={1} align="center">
               <Text>{selectedOption.name}</Text>
               <Icon>{selectedOption.icon}</Icon>
-            </Flex> :
+            </Flex>
+          ) : (
             title || (
               <Text color="gray.400" fontWeight={'light'}>
                 Type of Activity
               </Text>
-            )}
+            )
+          )}
         </MenuButton>
         <MenuList
           borderRadius="lg"

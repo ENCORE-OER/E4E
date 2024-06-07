@@ -611,7 +611,8 @@ export class APIV2 {
 
   async searchOERsNoKeywords(
     page: number,
-    //domainIds?: string[],   // at the moment the filterig by domain is not implemented by the API
+    // keywords?: string[],
+    // domainIds?: string[], // at the moment the filterig by domain is not implemented by the API
     resourceTypeIds?: string[],
     audienceIds?: string[],
     order_by?: string,
@@ -633,6 +634,14 @@ export class APIV2 {
 
       // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
 
+      // if (keywords) {
+      //   keywords?.forEach((keyword: string) => {
+      //     queryParams.append(
+      //       `${operator ? operator : 'and'}_keywords`,
+      //       keyword
+      //     );
+      //   });
+      // }
       // if (!domainIds?.includes(ID_ALL)) {
       //   domainIds?.forEach((domainId: string) => {
       //     queryParams.append(
@@ -720,7 +729,6 @@ export class APIV2 {
           queryParams.append('skill_domain', domainId);
         });
       }
-
       if (!resourceTypeIds?.includes(ID_ALL)) {
         resourceTypeIds?.forEach((resourceTypeId: string) => {
           queryParams.append('media_type', resourceTypeId);

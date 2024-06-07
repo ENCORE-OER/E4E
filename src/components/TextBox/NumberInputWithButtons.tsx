@@ -10,7 +10,7 @@ type NumberInputWithButtonsProps = {
   maxNumber: number;
   isNumberZero: boolean;
   setIsNumberZero: Dispatch<SetStateAction<boolean>>;
-  isEmptyLearningObjectivesPresent: boolean;
+  isEmptyLearningObjectivesPresent?: boolean;
   isLoading?: boolean;
   label_tooltip?: string;
   min_label_tooltip?: string;
@@ -51,7 +51,7 @@ export default function NumberInputWithButtons({
   const handleClickMinusButton = () => {
     // If there are empty objectives, decrease numberOfLO
     // otherwise, do nothing
-    if (isEmptyLearningObjectivesPresent) {
+    if ((isEmptyLearningObjectivesPresent !== undefined && isEmptyLearningObjectivesPresent) || isEmptyLearningObjectivesPresent === undefined) {
       // Decrease numberOfLO only if it's greater than the minimum allowed
       if (numberInput > minNumber) setNumberInput(numberInput - 1);
     }
@@ -81,8 +81,8 @@ export default function NumberInputWithButtons({
         placement={'top'}
         borderRadius={'md'}
         visibility={
-          (numberInput === minNumber || !isEmptyLearningObjectivesPresent) &&
-          min_label_tooltip
+          (numberInput === minNumber || (isEmptyLearningObjectivesPresent !== undefined && !isEmptyLearningObjectivesPresent)) &&
+            min_label_tooltip
             ? 'visible'
             : 'hidden'
         }
@@ -93,7 +93,7 @@ export default function NumberInputWithButtons({
           onClick={handleClickMinusButton}
           isDisabled={
             isLoading ||
-            !isEmptyLearningObjectivesPresent ||
+            (isEmptyLearningObjectivesPresent !== undefined && !isEmptyLearningObjectivesPresent) ||
             numberInput === minNumber
           }
         >
