@@ -2,10 +2,13 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
+  Icon,
+  IconProps,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
+  ResponsiveValue,
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -18,7 +21,13 @@ type ActivityTypeDropDownMenuProps = {
   lessonType: string;
   title: string;
   onChange: (selectedIndex: number) => void;
+  size?: ResponsiveValue<string>;
 };
+
+type selectedOptionProps = {
+  name: string;
+  icon?: IconProps;
+}
 
 export default function ActivityTypeDropDownMenu({
   // options,
@@ -26,17 +35,26 @@ export default function ActivityTypeDropDownMenu({
   lessonType,
   title,
   onChange,
+  size
 }: ActivityTypeDropDownMenuProps) {
   const hydrated = useHasHydrated();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<selectedOptionProps | null>(null);
   // const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
-    setSelectedOption(
-      activityTypes.filter(
-        (type: activityTypesObjectsProps) => type.lessonType === lessonType
-      )[index]?.activityType
-    );
+    const selected = activityTypes.filter(
+      (type: activityTypesObjectsProps) => type.lessonType === lessonType
+    )[index];
+
+    if (selected) {
+      setSelectedOption({
+        name: selected.activityType,
+        icon: selected.icon,
+      });
+    } else {
+      setSelectedOption(null);
+    }
+
     onChange(index);
   };
 
@@ -51,20 +69,26 @@ export default function ActivityTypeDropDownMenu({
           bg={'gray.100'}
           borderRadius="lg"
           w="fit-content"
-          fontSize="small"
+          //fontSize="small"
+          fontSize={size}
           fontWeight="normal"
-          size="sm"
+          size={size}
           py={0}
           as={Button}
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'gray.200' }}
           textAlign="center"
         >
-          {selectedOption || title || (
-            <Text color="gray.400" fontWeight={'light'}>
-              Type of Activity
-            </Text>
-          )}
+          {selectedOption ?
+            <Flex direction="row" gap={1} align="center">
+              <Text>{selectedOption.name}</Text>
+              <Icon>{selectedOption.icon}</Icon>
+            </Flex> :
+            title || (
+              <Text color="gray.400" fontWeight={'light'}>
+                Type of Activity
+              </Text>
+            )}
         </MenuButton>
         <MenuList
           borderRadius="lg"
@@ -80,7 +104,10 @@ export default function ActivityTypeDropDownMenu({
               )
               .map((activityType: activityTypesObjectsProps, index: number) => (
                 <MenuItem key={index} onClick={() => handleSelect(index)}>
-                  {activityType.activityType}
+                  <Flex direction="row" gap={1} align="center">
+                    <Text>{activityType.activityType}</Text>
+                    <Icon>{activityType.icon}</Icon>
+                  </Flex>
                 </MenuItem>
               ))}
         </MenuList>

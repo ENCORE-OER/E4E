@@ -49,7 +49,7 @@ export default function PathDesignGenLessonPlan({
     lessonActivities,
     setLessonActivities,
     setTitleLearningPath,
-    handleEditLessonPlanClick
+    handleEditLessonPlanClick,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -358,7 +358,7 @@ export default function PathDesignGenLessonPlan({
               TypeOfActivityEnum[Number(generatedLesson.Details)],
               TypeOfActivityStringEnum
             )}`
-            : 'Frontal lecture'
+            : 'Frontal Lecture'
             } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
           activityType: `${generatedLesson.Type
@@ -366,7 +366,7 @@ export default function PathDesignGenLessonPlan({
               TypeOfActivityEnum[Number(generatedLesson.Details)],
               TypeOfActivityStringEnum
             )
-            : 'Frontal lecture'
+            : 'Frontal Lecture'
             }`,
           activityDescription: `${generatedLesson.Type
             ? generatedLesson.Topic

@@ -242,7 +242,6 @@ const Home = (props: DiscoverPageProps) => {
         // Set metrics for the Venn Diagram
         setMetrics(newSet);
 
-
         // Get All the data for the Menu of the Advanced Search
         const resp_dom = await api.getDomains();
         //console.log('Domain -----------> ' + resp_dom);
@@ -256,7 +255,6 @@ const Home = (props: DiscoverPageProps) => {
 
         // Get all the keywords for the search bar
         getAllKeywords();
-
       } catch (error) {
         console.error(error);
       }
@@ -412,11 +410,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: '12px',
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: '15px',
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (

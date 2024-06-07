@@ -10,7 +10,7 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -127,6 +127,15 @@ export default function CustomLearningPathTable({
     }
   };
 
+  useEffect(() => {
+    if (editRowIndex !== null) {
+      const activityTypeIndex = activityTypes.findIndex(
+        (type) => type.activityType === data[editRowIndex].activityType
+      );
+      handleActivityTypeChange(editRowIndex, activityTypeIndex);
+    }
+  }, [editRowIndex, activityTypes, data, handleActivityTypeChange]);
+
   // useEffect(() => {
   //   console.log('DATA: ', data);
   // }, [data]);
@@ -228,6 +237,7 @@ export default function CustomLearningPathTable({
                                           selectedTypeIndex
                                         )
                                       }
+                                      size="sm"
                                     />
                                   ) : (
                                     <TagLessonType labelTag={row.lessonType} />
@@ -259,6 +269,7 @@ export default function CustomLearningPathTable({
                                           selectedTypeIndex
                                         )
                                       }
+                                      size="sm"
                                     />
                                   ) : (
                                     row.activityType || (
@@ -356,6 +367,7 @@ export default function CustomLearningPathTable({
                                 <Flex w="100%" justify="center" px={0}>
                                   <AddContentButton
                                     size="sm"
+                                    fontSize="sm"
                                     onClick={handleAddContentClick}
                                   />
                                 </Flex>

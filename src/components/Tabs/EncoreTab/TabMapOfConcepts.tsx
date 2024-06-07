@@ -16,7 +16,7 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -103,7 +103,10 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   // ------------------------------  Handle tag click event  --------------------------------------------
   const handleTagClick = async (selectedTag: OerConceptInfo) => {
     //setConceptSelected(true);
-    setConceptsSelected((prevConceptsSelected: string[]) => [...prevConceptsSelected, selectedTag.label]);
+    setConceptsSelected((prevConceptsSelected: string[]) => [
+      ...prevConceptsSelected,
+      selectedTag.label,
+    ]);
     setCurrentPage(1);
 
     // Get search data from the localStorage
@@ -173,7 +176,6 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         const audience = convertedData['audience'];
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
-
 
         const respAPI = await API.getConceptsFreeSearch(
           keywords,

@@ -4,10 +4,11 @@ import {
   CardFooter,
   CardHeader,
   Flex,
+  Icon,
   Text,
-  Textarea
+  Textarea,
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   activityTypesObjectsProps,
   LessonCardProps,
@@ -40,7 +41,7 @@ export default function LessonCard({
   handleEditLesson,
   isEditLessonPlanClicked,
   optionsTypeOfAssignment,
-  activityTypes
+  activityTypes,
 }: LessonCardProps) {
   const hydrated = useHasHydrated();
 
@@ -60,7 +61,6 @@ export default function LessonCard({
   };
 
   const handleLessonTypeChange = (selectedTypeIndex: number) => {
-
     handleData((previousLessons: LessonProps[]) =>
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
@@ -76,23 +76,24 @@ export default function LessonCard({
   const handleTimeDurationChange = (value: string) => {
     handleData((prevLessons: LessonProps[]) =>
       prevLessons.map((item: LessonProps, idx: number) =>
-        idx === indexCard ? { ...item, timeDuration: parseInt(value, 10) || 0 } : item
-      ));
+        idx === indexCard
+          ? { ...item, timeDuration: parseInt(value, 10) || 0 }
+          : item
+      )
+    );
   };
 
   const handleDescriptionChange = (value: string) => {
     handleData((previousData: LessonProps[]) =>
       previousData.map((item: LessonProps, idx: number) =>
         idx === indexCard ? { ...item, activityDescription: value } : item
-      ));
+      )
+    );
   };
 
-  const handleActivityTypeChange = (
-    selectedTypeIndex: number
-  ) => {
+  const handleActivityTypeChange = (selectedTypeIndex: number) => {
     const filteredActivityTypes = activityTypes.filter(
-      (type: activityTypesObjectsProps) =>
-        type.lessonType === lesson.lessonType
+      (type: activityTypesObjectsProps) => type.lessonType === lesson.lessonType
     );
 
     const selectedActivityType =
@@ -106,49 +107,64 @@ export default function LessonCard({
             activityType: selectedActivityType,
           }
           : item
-      ));
+      )
+    );
   };
 
+  const getActivityIcon = (lessonType: string, activityType: string) => {
+    const activity = activityTypes.find(
+      (type) => type.lessonType === lessonType && type.activityType === activityType
+    );
+    return activity ? activity.icon : null;
+  };
+
+  const selectedActivityIcon = getActivityIcon(lesson.lessonType, lesson.activityType);
+
   // const [passFailConditions, setPassFailConditions] = useState<PassFailConditionsProps[]>([]);
+
+  useEffect(() => {
+    if (editLessonIndex === indexCard) {
+      handleActivityTypeChange(activityTypes.findIndex((type) => type.activityType === lesson.activityType));
+    }
+  }, [editLessonIndex, indexCard, lesson.activityType, handleActivityTypeChange, activityTypes]);
 
   return (
     <>
       <Card display="flex" borderRadius={'10px'} border={'1px'} w="100%">
         <CardHeader pb={0}>
           <Flex w="100%" direction="row">
-            <Flex flex="1" justify="flex-start" direction="row" align="center" gap={2}>
-              {isEditLessonPlanClicked ||
-                indexCard === editLessonIndex ? (
+            <Flex
+              flex="1"
+              justify="flex-start"
+              direction="row"
+              align="center"
+              gap={2}
+            >
+              {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <LessonDropDownMenu
                   options={optionsTypeOfAssignment}
                   title={lesson.lessonType}
                   onChange={(selectedTypeIndex) =>
-                    handleLessonTypeChange(
-                      selectedTypeIndex
-                    )
+                    handleLessonTypeChange(selectedTypeIndex)
                   }
                 />
               ) : (
                 <TagLessonType labelTag={lesson.lessonType} />
               )}
-              {isEditLessonPlanClicked ||
-                indexCard === editLessonIndex ? (
+              {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <CustomNumberInput
                   valueNumber={lesson.timeDuration ?? 0}
                   handleChangeValue={(value: string) =>
-                    handleTimeDurationChange(
-                      value
-                    )
+                    handleTimeDurationChange(value)
                   }
                   steppers={true}
-                  fontSize="small"
+                  // fontSize="small"
                   size="sm"
                   minW="75px"
                   maxW="100px"
                 />
               ) : (
                 <TagLessonDuration time={lesson.timeDuration} />
-
               )}
               <TagLessonCompulsory isChecked={true} isDisabled={true} />
             </Flex>
@@ -162,7 +178,9 @@ export default function LessonCard({
             >
               <EditButtonLessonCard
                 handleEditClick={() => handleEditLesson(indexCard)}
-                isEditClicked={editLessonIndex === indexCard || isEditLessonPlanClicked}
+                isEditClicked={
+                  editLessonIndex === indexCard || isEditLessonPlanClicked
+                }
               // isDisabled={true}
               />
               <RegenerateButtonLessonCard
@@ -187,23 +205,26 @@ export default function LessonCard({
                 fontSize="x-large"
               />
             </Flex>
-            {isEditLessonPlanClicked ||
-              indexCard === editLessonIndex ?
+            {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
               <Textarea
                 value={lesson.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
               // fontSize="small"
-              /> :
+              />
+            ) : (
               <Text
                 noOfLines={showBox ? undefined : 1}
                 variant="description_card"
               >
                 {lesson.activityDescription || (
-                  <LabelEmptyFieldTable label="Short summary of the activity" fontSize='md' />
+                  <LabelEmptyFieldTable
+                    label="Short summary of the activity"
+                    fontSize="auto"
+                  />
                 )}
               </Text>
-            }
+            )}
             <Flex direction="column" gap={0.5} pt={1}>
               {showBox &&
                 hydrated &&
@@ -251,31 +272,42 @@ export default function LessonCard({
 
         <CardFooter>
           <Flex direction="row" w="100%" align="center">
-            <Flex direction="row" gap={1} flex="1" justify="flex-start" align="center">
+            <Flex
+              direction="row"
+              gap={1}
+              flex="1"
+              justify="flex-start"
+              align="center"
+            >
               <Text fontWeight="bold">Activity type: </Text>
-              {/* <Text>{lesson.activityType}</Text>
-              <Icon as={IconBookOpen} /> */}
-              {isEditLessonPlanClicked ||
-                indexCard === editLessonIndex ? (
+              {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <ActivityTypeDropDownMenu
                   activityTypes={activityTypes}
                   title={lesson.activityType}
                   //selectedOption={row.activityType}
                   lessonType={lesson.lessonType}
                   onChange={(selectedTypeIndex) =>
-                    handleActivityTypeChange(
-                      selectedTypeIndex
-                    )
+                    handleActivityTypeChange(selectedTypeIndex)
                   }
+                  size="md"
                 />
               ) : (
-                lesson.activityType || (
-                  <LabelEmptyFieldTable label="Type of Activity" fontSize="md" />
-                )
+                lesson.activityType ?
+                  <Flex align="center" gap={2}>
+                    <Text>{lesson.activityType}</Text>
+                    {selectedActivityIcon && <Icon>{selectedActivityIcon}</Icon>}
+                  </Flex> :
+                  <LabelEmptyFieldTable fontSize="auto" label="Type of Activity" />
               )}
             </Flex>
 
-            <Flex direction="row" gap={3} flex="1" justify="flex-end" align="center">
+            <Flex
+              direction="row"
+              gap={3}
+              flex="1"
+              justify="flex-end"
+              align="center"
+            >
               <AddPassFailConditionsButton
                 handleOpenModal={() => {
                   handleOpenModal !== undefined &&
@@ -283,7 +315,6 @@ export default function LessonCard({
                     handleOpenModal(indexCard, null);
                 }}
                 isSmallerScreen={isSmallerScreen}
-
               />
               <AddContentButton onClick={handleAddContentClick} />
             </Flex>

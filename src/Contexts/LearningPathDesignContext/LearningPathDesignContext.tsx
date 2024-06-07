@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
+import IconAnalytics from '../../components/Icons/IconAnalytics/IconAnalytics';
+import IconFrontalLecture from '../../components/Icons/IconFrontalLecture/IconFrontalLecture';
+import IconGroup from '../../components/Icons/IconGroups/IconGroup';
+import IconPencilBrush from '../../components/Icons/IconPencilBrush/IconPencilBrush';
+import IconPenToSquare from '../../components/Icons/IconPenToSquare/IconPenToSquare';
+import IconProject from '../../components/Icons/IconProject/IconProject';
+import IconQuiz from '../../components/Icons/IconQuiz/IconQuiz';
 import {
   ArrayProps,
   LessonCardProps,
@@ -515,25 +522,25 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Data activity type
   // const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
   const activityTypes: activityTypesObjectsProps[] = [
-    { lessonType: 'Assessment', activityType: 'Open Question' },
-    { lessonType: 'Assessment', activityType: 'Short Answer Question' },
-    { lessonType: 'Assessment', activityType: 'True or False' },
-    { lessonType: 'Assessment', activityType: 'Fill in the Blanks' },
-    { lessonType: 'Assessment', activityType: 'Single Choice' },
-    { lessonType: 'Assessment', activityType: 'Multiple Choice' },
-    { lessonType: 'Assessment', activityType: 'Essay' },
-    { lessonType: 'Learning', activityType: 'Knowledge Exposition' },
-    { lessonType: 'Learning', activityType: 'Debate' },
-    { lessonType: 'Learning', activityType: 'Brainstorming' },
-    { lessonType: 'Learning', activityType: 'Group Discussion' },
-    { lessonType: 'Assessment', activityType: 'Simulation' },
-    { lessonType: 'Learning', activityType: 'Inquiry-based Learning' },
-    { lessonType: 'Other', activityType: 'Non-written Material Analysis' },
-    { lessonType: 'Other', activityType: 'Non-written Material Production' },
-    { lessonType: 'Assessment', activityType: 'Case Study Analysis' },
-    { lessonType: 'Learning', activityType: 'Project-based Learning' },
-    { lessonType: 'Assessment', activityType: 'Problem-solving Activity' },
-    { lessonType: 'Learning', activityType: 'Frontal Lecture' },
+    { lessonType: 'Assessment', activityType: 'Open Question', icon: <IconPenToSquare /> },
+    { lessonType: 'Assessment', activityType: 'Short Answer Question', icon: <IconPenToSquare /> },
+    { lessonType: 'Assessment', activityType: 'True or False', icon: <IconQuiz /> },
+    { lessonType: 'Assessment', activityType: 'Fill in the Blanks', icon: <IconPenToSquare /> },
+    { lessonType: 'Assessment', activityType: 'Single Choice', icon: <IconQuiz /> },
+    { lessonType: 'Assessment', activityType: 'Multiple Choice', icon: <IconQuiz /> },
+    { lessonType: 'Assessment', activityType: 'Essay', icon: <IconPenToSquare /> },
+    { lessonType: 'Learning', activityType: 'Knowledge Exposition', icon: <IconFrontalLecture /> },
+    { lessonType: 'Learning', activityType: 'Debate', icon: <IconGroup /> },
+    { lessonType: 'Learning', activityType: 'Brainstorming', icon: <IconGroup /> },
+    { lessonType: 'Learning', activityType: 'Group Discussion', icon: <IconGroup /> },
+    { lessonType: 'Assessment', activityType: 'Simulation', icon: <IconPenToSquare /> },
+    { lessonType: 'Learning', activityType: 'Inquiry-based Learning', icon: <IconGroup /> },
+    { lessonType: 'Other', activityType: 'Non-written Material Analysis', icon: <IconAnalytics /> },
+    { lessonType: 'Other', activityType: 'Non-written Material Production', icon: <IconPencilBrush /> },
+    { lessonType: 'Assessment', activityType: 'Case Study Analysis', icon: <IconAnalytics /> },
+    { lessonType: 'Learning', activityType: 'Project-based Learning', icon: <IconProject /> },
+    { lessonType: 'Assessment', activityType: 'Problem-solving Activity', icon: <IconQuiz /> },
+    { lessonType: 'Learning', activityType: 'Frontal Lecture', icon: <IconFrontalLecture /> },
   ];
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [

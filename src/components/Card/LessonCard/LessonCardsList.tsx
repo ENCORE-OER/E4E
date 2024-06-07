@@ -37,7 +37,7 @@ export default function LessonCardsList({
     editLessonIndex,
     handleEditLesson,
     optionsTypeOfAssignment,
-    activityTypes
+    activityTypes,
   } = useLearningPathDesignContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -201,7 +201,7 @@ export default function LessonCardsList({
                               <IconDrag />
                             </Flex>
                           )}
-                          {hydrated &&
+                          {hydrated && (
                             <LessonCard
                               key={indexCard}
                               indexCard={indexCard}
@@ -214,7 +214,8 @@ export default function LessonCardsList({
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
                               activityTypes={activityTypes}
-                            />}
+                            />
+                          )}
                         </Flex>
                       )}
                     </Draggable>

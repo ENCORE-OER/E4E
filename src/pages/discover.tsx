@@ -242,7 +242,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         setOersLengthTotal(resp?.recordsFiltered);
 
         // Saving the keywords used for the search in the database if there are results
-        // TODO: check if each keywords used for the search returns something. 
+        // TODO: check if each keywords used for the search returns something.
         //(Could be that using 3 keywords only 2 of them are useful, while the third could be useless, that means it not return any oer if used alone).
         if (resp?.recordsFiltered > 0) {
           //const api = new APIV2(undefined);
@@ -611,7 +611,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -652,7 +652,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

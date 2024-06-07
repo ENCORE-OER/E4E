@@ -7,8 +7,6 @@ import SideBar from '../components/SideBar/SideBar';
 import qrCodeImage from '../public/qr-code.png'; // Adjust the path as needed
 import { useIsSmallerScreen } from '../utils/utils';
 
-
-
 const Recognition = () => {
   // const { user } = useUser();
   const isSmallerScreen = useIsSmallerScreen();
@@ -23,8 +21,9 @@ const Recognition = () => {
     <Flex w="100%" h="100%">
       <SideBar pagePath={'/recognition'} />
       <Navbar
-        //  user={user} 
-        pageName="Recognition" />
+        //  user={user}
+        pageName="Recognition"
+      />
 
       <Box
         py="115px"
@@ -40,8 +39,9 @@ const Recognition = () => {
 
           <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
             <Text>
-              Earn recognition for your activity on the ENCORE platform with an open badge!
-              Claim your badge by following this link to the <b>orcapods.org</b> platform.
+              Earn recognition for your activity on the ENCORE platform with an
+              open badge! Claim your badge by following this link to the{' '}
+              <b>orcapods.org</b> platform.
             </Text>
           </Box>
           <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
@@ -67,7 +67,9 @@ const Recognition = () => {
                 <Text>Your badge has been claimed successfully!</Text>
               </Box>
             ) : (
-              <Text>Please use one of the methods above to claim your badge.</Text>
+              <Text>
+                Please use one of the methods above to claim your badge.
+              </Text>
             )}
           </Box>
         </Box>
