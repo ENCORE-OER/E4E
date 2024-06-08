@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
+import PreviousButton from '../../components/Buttons/ButtonsDesignPage/UnderlinedButtons/PreviousButton';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
@@ -38,6 +39,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
     handleDefaultLearningContext,
+    lessonActivities,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -207,6 +209,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
             pathname: '/design/learningPathDesign',
           });
         }
+      } else {
+        router.push({
+          pathname: '/design/learningPathDesign',
+        });
       }
     } else {
       setIsNextButtonClicked(true);
@@ -232,11 +238,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
   };
 
   const handleNextClick = () => {
-    handleNextWithLessonPlanGenerationClick({});
-
-    router.push({
-      pathname: '/design/learningPathDesign',
-    });
+    if (lessonActivities.length > 0) {
+      handleNextWithLessonPlanGenerationClick({});
+    } else {
+      addToast({
+        message:
+          'You have do generate a lesson plan before to can navigate to the next page without generate a new lesson plan.',
+        type: 'warning',
+      });
+    }
+    // router.push({
+    //   pathname: '/design/learningPathDesign',
+    // });
   };
 
   const handlePrevButtonClick = () => {
@@ -334,16 +347,24 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
               w="100%"
+              pb="1.5rem"
             >
               <LearningStepper
                 activeStep={1}
                 isSmallerScreen={isSmallerScreen}
               />
             </Box>
+
+            <PreviousButton
+              handlePreviousClick={handlePrevButtonClick}
+              isSmallerScreen={isSmallerScreen}
+              label_tooltip="Back to the educational scenario step."
+            />
+
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
               w="100%"
-              paddingTop="2rem"
+              paddingTop="1rem"
             >
               <Text>
                 This section is designed to assist you in crafting a
@@ -407,7 +428,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             SPACING={SPACING}
             handleResetAll={handleResetAll}
             handleNextClick={handleNextClick}
-            handlePrevButtonClick={handlePrevButtonClick}
+            // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>

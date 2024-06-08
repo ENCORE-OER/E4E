@@ -350,6 +350,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setLearningTextContext('');
     setLearningObjectiveObjects([]);
     setNumberOfLO(MIN_LO);
+    setLessonActivities([]);
   };
 
   // Reset all the parameters. Use this with resetAll button
