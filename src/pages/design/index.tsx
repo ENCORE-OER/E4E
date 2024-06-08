@@ -2,15 +2,12 @@
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useGeneralContext } from '../../Contexts/GeneralContext';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
-import InputsGenerateAI from '../../components/Inputs/InputsGenAISetup/InputsGenerateAI';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SegmentedButtonGroup from '../../components/SegmentedButtonGroup/SegmentedButtonGroup';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
-import InfoAPISetupTextBox from '../../components/TextBox/InfoAPISetupTextBox';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
@@ -33,8 +30,8 @@ const Home = () => {
     handleResetAll,
   } = useLearningPathDesignContext();
 
-  const { apiKey, setupModel, handleApiKey, handleSetupModel } =
-    useGeneralContext();
+  // const { apiKey, setupModel, handleApiKey, handleSetupModel } =
+  //   useGeneralContext();
 
   // ==================================================================
 
@@ -97,7 +94,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -106,7 +103,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}
@@ -118,7 +115,7 @@ const Home = () => {
               />
             </Flex>
 
-            <Flex w="100%" paddingTop="1.5rem" direction={'column'}>
+            {/* <Flex w="100%" paddingTop="1.5rem" direction={'column'}>
               <Text fontWeight="bold" fontSize="lg" pb={1}>
                 API Setup
               </Text>
@@ -131,7 +128,7 @@ const Home = () => {
                 />
                 <InfoAPISetupTextBox />
               </Flex>
-            </Flex>
+            </Flex> */}
 
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}

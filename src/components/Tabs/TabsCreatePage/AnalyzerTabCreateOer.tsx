@@ -13,7 +13,6 @@ import { useGeneralContext } from '../../../Contexts/GeneralContext';
 import { TopicData, targetLevelOptions } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import CreateOerTopicMenu from '../../DropDownMenu/CreateOerTopicMenu';
-import InputGenAISetup from '../../Inputs/InputsGenAISetup';
 import TextBox from '../../TextBox/TextBox';
 
 type AnalyzerTabCreateOerProps = {
@@ -38,7 +37,11 @@ export default function AnalyzerTabCreateOer({
     handleSourceText,
     apiGeneratedExerciseData,
   } = useCreateOERsContext();
-  const { apiKey, handleApiKey, setupModel, handleSetupModel } =
+  const { apiKey,
+    //  handleApiKey, 
+    setupModel,
+    // handleSetupModel
+  } =
     useGeneralContext();
   const [topicData, setTopicData] = useState<TopicData>();
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
@@ -112,13 +115,13 @@ export default function AnalyzerTabCreateOer({
   return (
     <>
       <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-        <InputGenAISetup
+        {/* <InputGenAISetup
           apiKey={apiKey}
           handleApiKey={handleApiKey}
           setupModel={setupModel}
           handleSetupModel={handleSetupModel}
           // isSmallerScreen={isSmallerScreen}
-        />
+        /> */}
         <Text as="b" pb="0.5rem">
           Educational resource input (text or URL)
         </Text>
