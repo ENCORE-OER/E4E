@@ -170,7 +170,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const handlePrevButtonClick = () => {
     //handleResetStep1();
     router.push({
-      pathname: '/design/learningObjective',
+      pathname: '/design/LearningObjective',
     });
   };
 
@@ -198,7 +198,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -207,7 +207,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingTop="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
