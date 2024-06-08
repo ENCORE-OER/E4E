@@ -1,7 +1,6 @@
 // import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import Image from 'next/image'; // Import the Image component from Next.js
-import { useState } from 'react';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import qrCodeImage from '../public/qr-code.png'; // Adjust the path as needed
@@ -10,12 +9,10 @@ import { useIsSmallerScreen } from '../utils/utils';
 const Recognition = () => {
   // const { user } = useUser();
   const isSmallerScreen = useIsSmallerScreen();
-  const [badgeClaimed, setBadgeClaimed] = useState(false);
 
   const handleClaimBadge = () => {
     const badgeClaimUrl = 'https://openeducator.orcapods.org/achievements/92a20f9f-659a-4440-afcf-2af512f7cf6f/claim';
     window.open(badgeClaimUrl, '_blank');
-    setBadgeClaimed(true);
   };
 
   return (
