@@ -6,6 +6,7 @@ import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/l
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import BoxSelectedLO from '../../components/Boxes/BoxSelectedLO';
 import FooterButtonsGroup from '../../components/Buttons/ButtonsDesignPage/FooterButtonsGroup';
+import PreviousButton from '../../components/Buttons/ButtonsDesignPage/UnderlinedButtons/PreviousButton';
 import ShowHideButton from '../../components/Buttons/ShowHideButton';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
@@ -198,16 +199,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
 
             <Box
               paddingTop="1.5rem"
+              paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -215,7 +217,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
               />
             </Box>
 
-            <Flex paddingTop="1.5rem" direction="column">
+            <PreviousButton handlePreviousClick={handlePrevButtonClick} isSmallerScreen={isSmallerScreen} label_tooltip="Back to the learning objective step." />
+
+            <Flex paddingTop="1rem" direction="column">
               <Flex>
                 {hydrated && (
                   <ShowHideButton
@@ -296,7 +300,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

@@ -7,14 +7,14 @@ interface FooterButtonsGroupProps {
   SPACING: number;
   handleResetAll?: (value: boolean) => void;
   handleNextClick?: () => void;
-  handlePrevButtonClick?: () => void;
+  // handlePrevButtonClick?: () => void;
 }
 
 export default function FooterButtonsGroup({
   SPACING,
   handleResetAll,
   handleNextClick,
-  handlePrevButtonClick,
+  // handlePrevButtonClick,
 }: FooterButtonsGroupProps) {
   return (
     <Flex paddingTop="1.5rem" w="100%">
@@ -34,14 +34,14 @@ export default function FooterButtonsGroup({
           />
         )}
 
-        {handlePrevButtonClick && (
+        {/* {handlePrevButtonClick && (
           <StandardButton
             buttonText="Previous"
             handleClick={handlePrevButtonClick}
             w="100%"
             // color=""
           />
-        )}
+        )} */}
 
         {handleNextClick && (
           <StandardButton

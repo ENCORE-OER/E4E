@@ -37,12 +37,12 @@ export default function AnalyzerTabCreateOer({
     handleSourceText,
     apiGeneratedExerciseData,
   } = useCreateOERsContext();
-  const { apiKey,
-    //  handleApiKey, 
+  const {
+    apiKey,
+    //  handleApiKey,
     setupModel,
     // handleSetupModel
-  } =
-    useGeneralContext();
+  } = useGeneralContext();
   const [topicData, setTopicData] = useState<TopicData>();
   const [selectedTopicIndex, setSelectedTopicIndex] = useState<number>(0);
   const [loading, setLoading] = useState(false);
