@@ -13,8 +13,9 @@ const Recognition = () => {
   const [badgeClaimed, setBadgeClaimed] = useState(false);
 
   const handleClaimBadge = () => {
+    const badgeClaimUrl = 'https://openeducator.orcapods.org/achievements/92a20f9f-659a-4440-afcf-2af512f7cf6f/claim';
+    window.open(badgeClaimUrl, '_blank');
     setBadgeClaimed(true);
-    // Additional logic to handle the badge claim, such as making an API call
   };
 
   return (
@@ -62,15 +63,9 @@ const Recognition = () => {
           </Box>
 
           <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-            {badgeClaimed ? (
-              <Box>
-                <Text>Your badge has been claimed successfully!</Text>
-              </Box>
-            ) : (
-              <Text>
-                Please use one of the methods above to claim your badge.
-              </Text>
-            )}
+            <Text>
+              Please use one of the methods above to claim your badge.
+            </Text>
           </Box>
         </Box>
       </Box>
