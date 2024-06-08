@@ -13,9 +13,8 @@ interface FooterButtonsGroupProps {
 export default function FooterButtonsGroup({
   SPACING,
   handleResetAll,
-  handleNextClick,
-} // handlePrevButtonClick,
-: FooterButtonsGroupProps) {
+  handleNextClick, // handlePrevButtonClick,
+}: FooterButtonsGroupProps) {
   return (
     <Flex paddingTop="1.5rem" w="100%">
       <Flex
