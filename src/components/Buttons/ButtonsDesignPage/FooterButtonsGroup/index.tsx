@@ -14,8 +14,8 @@ export default function FooterButtonsGroup({
   SPACING,
   handleResetAll,
   handleNextClick,
-  // handlePrevButtonClick,
-}: FooterButtonsGroupProps) {
+} // handlePrevButtonClick,
+: FooterButtonsGroupProps) {
   return (
     <Flex paddingTop="1.5rem" w="100%">
       <Flex

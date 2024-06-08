@@ -242,8 +242,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
       handleNextWithLessonPlanGenerationClick({});
     } else {
       addToast({
-        message: "You have do generate a lesson plan before to can navigate to the next page without generate a new lesson plan.",
-        type: "warning"
+        message:
+          'You have do generate a lesson plan before to can navigate to the next page without generate a new lesson plan.',
+        type: 'warning',
       });
     }
     // router.push({
@@ -332,7 +333,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -341,7 +342,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -354,7 +355,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
               />
             </Box>
 
-            <PreviousButton handlePreviousClick={handlePrevButtonClick} isSmallerScreen={isSmallerScreen} label_tooltip="Back to the educational scenario step." />
+            <PreviousButton
+              handlePreviousClick={handlePrevButtonClick}
+              isSmallerScreen={isSmallerScreen}
+              label_tooltip="Back to the educational scenario step."
+            />
 
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -423,7 +428,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             SPACING={SPACING}
             handleResetAll={handleResetAll}
             handleNextClick={handleNextClick}
-          // handlePrevButtonClick={handlePrevButtonClick}
+            // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>
