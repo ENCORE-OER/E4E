@@ -11,7 +11,8 @@ const Recognition = () => {
   const isSmallerScreen = useIsSmallerScreen();
 
   const handleClaimBadge = () => {
-    const badgeClaimUrl = 'https://openeducator.orcapods.org/achievements/92a20f9f-659a-4440-afcf-2af512f7cf6f/claim';
+    const badgeClaimUrl =
+      'https://openeducator.orcapods.org/achievements/92a20f9f-659a-4440-afcf-2af512f7cf6f/claim';
     window.open(badgeClaimUrl, '_blank');
   };
 
