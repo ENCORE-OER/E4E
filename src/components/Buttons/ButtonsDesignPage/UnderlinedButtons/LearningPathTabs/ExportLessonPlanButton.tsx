@@ -16,7 +16,8 @@ export default function ExportLessonPlanButton({
   handleExportToPDF,
 }: LessonPlanTabButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
-  const [showAdditionalButtons, setShowAdditionalButtons] = useState<boolean>(false); // State to manage the visibility of additional buttons
+  const [showAdditionalButtons, setShowAdditionalButtons] =
+    useState<boolean>(false); // State to manage the visibility of additional buttons
 
   return (
     <Tooltip
@@ -56,14 +57,42 @@ export default function ExportLessonPlanButton({
             zIndex={10} // Ensure that additional buttons are above the tooltip
             pt={2}
             flexDirection="column"
-            bg={"background"}
+            bg={'background'}
             w="fit-content"
-          // justifyContent="flex-start"
+            // justifyContent="flex-start"
           >
-            <Button w="100%" onClick={handleExportToPDF} leftIcon={<IconPDF />} justifyContent={"flex-start"}>Download as pdf</Button>
-            <Button w="100%" leftIcon={<IconDocument />} isDisabled={true} justifyContent={"flex-start"}>Download as doc</Button>
-            <Button w="100%" leftIcon={<IconSpreadsheet />} isDisabled={true} justifyContent={"flex-start"}>Download as spreadsheet</Button>
-            <Button w="100%" leftIcon={<IconCopy fontSize="x-large" fontWeight="auto" />} isDisabled={true} justifyContent={"flex-start"}>Copy as text</Button>
+            <Button
+              w="100%"
+              onClick={handleExportToPDF}
+              leftIcon={<IconPDF />}
+              justifyContent={'flex-start'}
+            >
+              Download as pdf
+            </Button>
+            <Button
+              w="100%"
+              leftIcon={<IconDocument />}
+              isDisabled={true}
+              justifyContent={'flex-start'}
+            >
+              Download as doc
+            </Button>
+            <Button
+              w="100%"
+              leftIcon={<IconSpreadsheet />}
+              isDisabled={true}
+              justifyContent={'flex-start'}
+            >
+              Download as spreadsheet
+            </Button>
+            <Button
+              w="100%"
+              leftIcon={<IconCopy fontSize="x-large" fontWeight="auto" />}
+              isDisabled={true}
+              justifyContent={'flex-start'}
+            >
+              Copy as text
+            </Button>
           </ButtonGroup>
         )}
       </Flex>

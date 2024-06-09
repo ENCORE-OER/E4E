@@ -47,7 +47,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
     setIsPrinting(true);
     setTimeout(() => {
       exportToPDF();
-    });
+    }, 100);
   };
   const config = getConfig(
     exportLearningPath,
