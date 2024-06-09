@@ -1,7 +1,7 @@
+import { Flex } from '@chakra-ui/react';
 import { RefObject, useRef, useState } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import { CustomToast } from '../../../utils/Toast/CustomToast';
 import AddActivityLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/AddActivityLessonPlanButton';
 import EditLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/EditLessonPlanButton';
 import ExportLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/ExportLessonPlanButton';
@@ -15,6 +15,7 @@ import {
   CustomTabConfigProps,
   CustomTabStyleProps,
 } from '../../Layout/CustomTab';
+import PDFContent from '../../PDFContent/PDFContent';
 import LearningPathTabLabel from './LearningPathTabLabel';
 import TabGraph from './TabGraph';
 import { default as TabTable } from './TabTable';
@@ -27,27 +28,28 @@ export type LearningPathTabsProps = {
 export default function LearningPathTabs(props: LearningPathTabsProps) {
   const { isSmallerScreen, ...rest } = props;
   const { titleLearningPath } = useLearningPathDesignContext();
-  const { addToast } = CustomToast();
+  // const { addToast } = CustomToast();
   const [isPrinting, setIsPrinting] = useState(false); // State to know if we're exporting data
   const tableRef = useRef<HTMLDivElement>(null);
   // Method to export the table in PDF
   const exportToPDF = useReactToPrint({
-    content: () => tableRef.current,
+    // content: () => tableRef.current,
+    content: () => document.getElementById('printContent'),
     documentTitle: titleLearningPath,
     // onBeforePrint: () => setIsPrinting(true),
     onAfterPrint: () => {
       setIsPrinting(false);
-      addToast({
-        message: 'Learning path successfully exported in PDF',
-        type: 'success',
-      });
+      // addToast({
+      //   message: 'Learning path successfully exported in PDF',
+      //   type: 'success',
+      // });
     },
   });
   const exportLearningPath = () => {
     setIsPrinting(true);
     setTimeout(() => {
       exportToPDF();
-    }, 100);
+    });
   };
   const config = getConfig(
     exportLearningPath,
@@ -57,19 +59,31 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
   );
 
   return (
-    <CustomTab
-      config={config}
-      isLazy={true}
-      _selected={{
-        fontWeight: 'bold',
-        borderBottom: '3px solid',
-        color: 'primary',
-      }}
-      color="primary"
-      {...rest}
-      w="100%"
-      minH="100%"
-    />
+    <Flex>
+      <CustomTab
+        config={config}
+        isLazy={true}
+        _selected={{
+          fontWeight: 'bold',
+          borderBottom: '3px solid',
+          color: 'primary',
+        }}
+        color="primary"
+        {...rest}
+        w="100%"
+        minH="100%"
+      />
+      <Flex
+        id="printContent"
+        style={{ display: 'none' }}
+        className="hidden printable"
+      >
+        <PDFContent
+          titleLearningPath={titleLearningPath}
+          isPrinting={isPrinting}
+        />
+      </Flex>
+    </Flex>
   );
 }
 

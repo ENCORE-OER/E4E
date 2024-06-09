@@ -101,3 +101,14 @@ body {
 .venn-diagram {
   transition: all 0.3s ease;
 }
+
+/* To hide the content to download in PDF */
+@media print {
+  .printable {
+    display: block !important;
+  }
+}
+
+.hidden {
+  display: none;
+}
