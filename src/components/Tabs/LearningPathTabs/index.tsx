@@ -47,7 +47,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
     setIsPrinting(true);
     setTimeout(() => {
       exportToPDF();
-    }, 500);
+    });
   };
   const config = getConfig(
     exportLearningPath,
@@ -112,7 +112,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-          // isDisabled={true}
+        // isDisabled={true}
         />
       ),
       isButton: true,
@@ -134,7 +134,7 @@ const getConfig = (
           name="Export"
           // isDisabled={true}
           isSmallerScreen={isSmallerScreen}
-          handleClick={exportToPDF}
+          handleExportToPDF={exportToPDF}
         />
       ),
       isButton: true,
