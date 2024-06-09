@@ -1,15 +1,22 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { forwardRef, useEffect } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import TableLearningPath from '../../Tables/LearningPathTable';
 
-export default function TabTable() {
+export type TabTableProps = {
+  isPrinting: boolean;
+};
+
+// export default function TabTable() {
+const TabTable = forwardRef<HTMLDivElement, TabTableProps>((props, ref) => {
+  const { isPrinting } = props;
   const { handleSaveLessonPlanClick, isEditLessonPlanClicked } =
     useLearningPathDesignContext();
 
   useEffect(() => {
     handleSaveLessonPlanClick();
   }, []);
+
   return (
     <Flex w="100%" direction="column" h="100%">
       {isEditLessonPlanClicked && (
@@ -17,7 +24,10 @@ export default function TabTable() {
           Edit table mode
         </Text>
       )}
-      <TableLearningPath />
+      <TableLearningPath ref={ref} isPrinting={isPrinting} />
     </Flex>
   );
-}
+});
+
+TabTable.displayName = 'TabTable';
+export default TabTable;

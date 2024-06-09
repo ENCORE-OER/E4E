@@ -4,13 +4,13 @@ import { CustomToast } from '../../../utils/Toast/CustomToast';
 
 interface IconCopyProps extends IconProps {
   fontSize: string | number;
-  url: string;
+  url?: string;
 }
 
 export default function IconCopy({ fontSize, url, ...rest }: IconCopyProps) {
   const { addToast } = CustomToast();
-  const handleIconClick = async (url: string) => {
-    if (url.trim() != '') {
+  const handleIconClick = async (url?: string) => {
+    if (url !== undefined && url.trim() != '') {
       try {
         await navigator.clipboard.writeText(url);
         console.log(url);

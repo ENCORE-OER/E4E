@@ -19,4 +19,5 @@ export interface TableLearningPathProps {
   // handleSaveLesson: () => void;
   handleAddContentClick: () => void;
   removeLessonActivity: (index: number) => void;
+  isPrinting: boolean;
 }
