@@ -112,7 +112,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-        // isDisabled={true}
+          // isDisabled={true}
         />
       ),
       isButton: true,
