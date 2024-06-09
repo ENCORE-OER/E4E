@@ -73,8 +73,15 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
         w="100%"
         minH="100%"
       />
-      <Flex id="printContent" style={{ display: 'none' }} className='hidden printable'>
-        <PDFContent titleLearningPath={titleLearningPath} isPrinting={isPrinting} />
+      <Flex
+        id="printContent"
+        style={{ display: 'none' }}
+        className="hidden printable"
+      >
+        <PDFContent
+          titleLearningPath={titleLearningPath}
+          isPrinting={isPrinting}
+        />
       </Flex>
     </Flex>
   );
@@ -119,7 +126,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-        // isDisabled={true}
+          // isDisabled={true}
         />
       ),
       isButton: true,
