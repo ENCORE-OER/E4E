@@ -8,6 +8,7 @@ export default function ExportLessonPlanButton({
   name,
   isDisabled,
   isSmallerScreen,
+  handleClick,
 }: LessonPlanTabButtonProps) {
   const { isEditLessonPlanClicked } = useLearningPathDesignContext();
   return (
@@ -26,7 +27,7 @@ export default function ExportLessonPlanButton({
     >
       <Flex p={1} _hover={{ bg: 'gray.200' }}>
         <UnderlinedButton
-          handleClick={() => console.log('Export')}
+          handleClick={handleClick ? handleClick : () => console.log('Export')}
           nameButton={!isSmallerScreen ? name : ''}
           rightIcon={<IconExport />}
           color="primary"

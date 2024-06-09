@@ -1,6 +1,7 @@
 import {
   Box,
   Flex,
+  Link,
   Table,
   TableContainer,
   Tbody,
@@ -10,7 +11,7 @@ import {
   Tr,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -35,18 +36,23 @@ import CustomNumberInput from '../../NumberInput/CustomNumberInput';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 import LabelEmptyFieldTable from '../../Texts/LabelEmptyFieldTable';
 
-export default function CustomLearningPathTable({
-  titles,
-  data,
-  handleData,
-  isEditLessonPlanClicked,
-  handleAddContentClick,
-  activityTypes,
-  optionsTypeOfAssignment,
-  removeLessonActivity,
-  editRowIndex,
-  handleEditLesson, // handleSaveLesson
-}: TableLearningPathProps) {
+const CustomLearningPathTable = forwardRef<
+  HTMLDivElement,
+  TableLearningPathProps
+>((props, ref) => {
+  const {
+    titles,
+    data,
+    handleData,
+    isEditLessonPlanClicked,
+    handleAddContentClick,
+    activityTypes,
+    optionsTypeOfAssignment,
+    removeLessonActivity,
+    editRowIndex,
+    handleEditLesson, // handleSaveLesson
+    isPrinting,
+  } = props;
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentDescription, setCurrentDescription] = useState('');
@@ -141,7 +147,7 @@ export default function CustomLearningPathTable({
   // }, [data]);
 
   return (
-    <>
+    <Flex ref={ref}>
       <TableContainer fontSize={'sm'} borderRadius="lg" borderStyle="solid">
         <Table borderWidth="1px" borderColor="primary">
           <Thead
@@ -161,6 +167,10 @@ export default function CustomLearningPathTable({
                     color="white"
                     textTransform="none"
                     px={0}
+                    display={
+                      isPrinting && title === 'Action' ? 'none' : 'table-cell'
+                    }
+                    // className={isPrinting && title === 'Action' ? 'hide-on-print' : ''}
                     // maxW={index === 4 ? "30%" : 'auto'}
                   >
                     <Flex justify="center" p={0}>
@@ -191,6 +201,7 @@ export default function CustomLearningPathTable({
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                             >
+                              {/* Drag item */}
                               {isEditLessonPlanClicked && (
                                 <Td
                                   borderWidth="2px"
@@ -204,6 +215,7 @@ export default function CustomLearningPathTable({
                                   </Flex>
                                 </Td>
                               )}
+                              {/* Number */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -214,6 +226,7 @@ export default function CustomLearningPathTable({
                                   {`${indexRow + 1}.`}
                                 </Flex>
                               </Td>
+                              {/* Lesson Type */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -244,6 +257,7 @@ export default function CustomLearningPathTable({
                                   )}
                                 </Flex>
                               </Td>
+                              {/* Activity Type */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -278,6 +292,7 @@ export default function CustomLearningPathTable({
                                   )}
                                 </Flex>
                               </Td>
+                              {/* Time */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -313,6 +328,7 @@ export default function CustomLearningPathTable({
                                   )}
                                 </Flex>
                               </Td>
+                              {/* Description */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -353,6 +369,7 @@ export default function CustomLearningPathTable({
                                   )}
                                 </Flex>
                               </Td>
+                              {/* Content */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
@@ -365,18 +382,31 @@ export default function CustomLearningPathTable({
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
-                                  <AddContentButton
-                                    size="sm"
-                                    fontSize="sm"
-                                    onClick={handleAddContentClick}
-                                  />
+                                  {!isPrinting || row.content?.length === 0 ? (
+                                    <AddContentButton
+                                      size="sm"
+                                      fontSize="sm"
+                                      onClick={handleAddContentClick}
+                                    />
+                                  ) : (
+                                    row.content?.map(
+                                      (content: string, index: number) => (
+                                        <Link key={index} href={content}>
+                                          {content}
+                                        </Link>
+                                      )
+                                    )
+                                  )}
                                 </Flex>
                               </Td>
+                              {/* Action */}
                               <Td
                                 borderWidth="2px"
                                 borderColor="primary"
                                 w="fit-content"
                                 px={2}
+                                // className={isPrinting ? 'hide-on-print' : ''}
+                                display={isPrinting ? 'none' : 'table-cell'}
                               >
                                 <Flex w="100%" justify="center" gap={1} px={0}>
                                   <ActionButton
@@ -411,6 +441,9 @@ export default function CustomLearningPathTable({
         handleCurrentDescription={setCurrentDescription}
         saveDescription={saveDescription}
       />
-    </>
+    </Flex>
   );
-}
+});
+
+CustomLearningPathTable.displayName = 'CustomLearningPathTable';
+export default CustomLearningPathTable;

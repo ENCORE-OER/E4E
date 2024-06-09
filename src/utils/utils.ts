@@ -260,3 +260,26 @@ const extractUsefulText = (inputText: string): string => {
 
 //   return optionsObject;
 // };
+
+// // Export to Excel function
+// export const exportToExcel = (data: any) => {
+//   const worksheet = XLSX.utils.json_to_sheet(
+//     data.map((item: any, index: number) => ({
+//       Nb: index + 1,
+//       Type: item.lessonType,
+//       Activity: item.activityType,
+//       Time: item.timeDuration,
+//       Description: item.activityDescription,
+//       Content: item.content,
+//     }))
+//   );
+//   const workbook = { Sheets: { data: worksheet }, SheetNames: ['data'] };
+//   const excelBuffer = XLSX.write(workbook, {
+//     bookType: 'xlsx',
+//     type: 'array',
+//   });
+//   const dataBlob = new Blob([excelBuffer], {
+//     type: 'application/octet-stream',
+//   });
+//   saveAs(dataBlob, 'learning_path_table.xlsx');
+// };

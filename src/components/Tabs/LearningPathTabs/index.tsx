@@ -1,3 +1,7 @@
+import { RefObject, useRef, useState } from 'react';
+import { useReactToPrint } from 'react-to-print';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
 import AddActivityLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/AddActivityLessonPlanButton';
 import EditLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/EditLessonPlanButton';
 import ExportLessonPlanButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/LearningPathTabs/ExportLessonPlanButton';
@@ -22,7 +26,35 @@ export type LearningPathTabsProps = {
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
   const { isSmallerScreen, ...rest } = props;
-  const config = getConfig(isSmallerScreen);
+  const { titleLearningPath } = useLearningPathDesignContext();
+  const { addToast } = CustomToast();
+  const [isPrinting, setIsPrinting] = useState(false); // State to know if we're exporting data
+  const tableRef = useRef<HTMLDivElement>(null);
+  // Method to export the table in PDF
+  const exportToPDF = useReactToPrint({
+    content: () => tableRef.current,
+    documentTitle: titleLearningPath,
+    // onBeforePrint: () => setIsPrinting(true),
+    onAfterPrint: () => {
+      setIsPrinting(false);
+      addToast({
+        message: 'Learning path successfully exported in PDF',
+        type: 'success',
+      });
+    },
+  });
+  const exportLearningPath = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      exportToPDF();
+    }, 500);
+  };
+  const config = getConfig(
+    exportLearningPath,
+    tableRef,
+    isPrinting,
+    isSmallerScreen
+  );
 
   return (
     <CustomTab
@@ -41,7 +73,12 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
   );
 }
 
-const getConfig = (isSmallerScreen?: boolean) => {
+const getConfig = (
+  exportToPDF: () => void,
+  tableRef: RefObject<HTMLDivElement>,
+  isPrinting: boolean,
+  isSmallerScreen?: boolean
+) => {
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
   const config: CustomTabConfigProps = [
@@ -49,7 +86,7 @@ const getConfig = (isSmallerScreen?: boolean) => {
       label: (
         <LearningPathTabLabel iconTab={IconTable} spacing={2} name="Table" />
       ),
-      child: <TabTable />,
+      child: <TabTable ref={tableRef} isPrinting={isPrinting} />,
       pt: '3%',
       // isDisabled: true,
     },
@@ -95,8 +132,9 @@ const getConfig = (isSmallerScreen?: boolean) => {
       label: (
         <ExportLessonPlanButton
           name="Export"
-          isDisabled={true}
+          // isDisabled={true}
           isSmallerScreen={isSmallerScreen}
+          handleClick={exportToPDF}
         />
       ),
       isButton: true,
