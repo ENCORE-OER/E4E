@@ -20,7 +20,7 @@ import DropDownMenuItem, {
 } from '../DropDownMenuItem/DropDownMenuItem';
 
 export type onDataType =
-  number
+  | number
   | string
   | OerAudienceInfo
   | OerMediaTypeInfo
@@ -83,8 +83,8 @@ export default function DropDownMenu({
         {/* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */}
         <Text align="left" noOfLines={1}>
           {selectedOptions.includes('All') &&
-            (options?.length === selectedOptions.length ||
-              optionsObj?.length === selectedOptions.length)
+          (options?.length === selectedOptions.length ||
+            optionsObj?.length === selectedOptions.length)
             ? 'All'
             : selectedOptions.length > 0
               ? selectedOptions.join(', ')

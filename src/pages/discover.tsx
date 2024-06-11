@@ -243,7 +243,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 37) ? "True" : "False"), // If ALL is selected the array is empty. See "DropDownMenu" component
           // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 38) ? "True" : "False"),
           // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 39) ? "True" : "False"),
-          domains,  // at the moment filtering by domain is not implemented by the API
+          domains, // at the moment filtering by domain is not implemented by the API
           types,
           audience,
           order_by,
@@ -269,7 +269,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
         // Set the new oers found
         setFiltered(oers);
-
       } else {
         throw new Error('No keywords or filters provided');
       }
@@ -573,7 +572,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -614,7 +613,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

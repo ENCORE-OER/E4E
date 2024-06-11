@@ -150,39 +150,43 @@ export default function SearchBarEncore({
                 setFreeText(currentValue); // could be useful for create AutoCompleteItem in AutoCompleteList
               }
             }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                const currentValue = e.currentTarget.value
-                  .trim()
-                  .replace(/\s+/g, ' ');
 
-                if (currentValue !== '' && /\S/.test(currentValue)) {
-                  setInputValue((prev) => [
-                    ...new Set([...prev, currentValue]),
-                  ]); // to avoid duplicate // Set() is more efficient than filter()
-                  //setKeywordsSelected((prev) => [...new Set([...prev, currentValue])]);
-                  e.currentTarget.value = '';
+            // Selection of a suggestion pressing the "Enter" on the keyboard works
+            // onKeyDown={(e) => {
+            //   if (e.key === 'Enter') {
+            //     e.preventDefault();
+            //     const currentValue = e.currentTarget.value
+            //       .trim()
+            //       .replace(/\s+/g, ' ');
 
-                  /*setInputValue((prev) => {
-                    const updatedValues = prev.filter(
-                      (value: string) => value !== currentValue
-                    );  // to avoid duplicate
-                    return [...updatedValues, currentValue];
-                  });
+            //     if (currentValue !== '' && /\S/.test(currentValue)) {
+            //       console.log("Selected Value: ", currentValue);
+            //       // setInputValue((prev) => [
+            //       //   ...new Set([...prev, currentValue]),
+            //       // ]); // to avoid duplicate // Set() is more efficient than filter()
+            //       //setKeywordsSelected((prev) => [...new Set([...prev, currentValue])]);
+            //       e.currentTarget.value = '';
+            //       setFreeText('');
 
-                  e.currentTarget.value = '';
+            //       /*setInputValue((prev) => {
+            //         const updatedValues = prev.filter(
+            //           (value: string) => value !== currentValue
+            //         );  // to avoid duplicate
+            //         return [...updatedValues, currentValue];
+            //       });
 
-                  setKeywordsSelected((prev) => {
-                    const isKeywordSelected = prev?.includes(currentValue);
-                    if (!isKeywordSelected) {
-                      return [...prev, currentValue];
-                    }
-                    return prev;
-                  });*/
-                }
-              }
-            }}
+            //       e.currentTarget.value = '';
+
+            //       setKeywordsSelected((prev) => {
+            //         const isKeywordSelected = prev?.includes(currentValue);
+            //         if (!isKeywordSelected) {
+            //           return [...prev, currentValue];
+            //         }
+            //         return prev;
+            //       });*/
+            //     }
+            //   }
+            // }}
           >
             {({ tags }) =>
               tags?.map((tag, tid) => (
