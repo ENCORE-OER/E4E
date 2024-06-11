@@ -200,7 +200,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const freeSearchOERs = async (
     page: number,
     keywords: string[],
-    domains: string[],
+    domains: string[] | number[],
     types: string[],
     audience: string[],
     order_by: string,
@@ -217,20 +217,33 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     const api = new APIV2(undefined); // APIV2(access_token: string | undefined)
 
     try {
-      //let resp: RespDataProps | null = null;
-      //let oers: OerProps[] | undefined = [];
-
       // Check if there are keywords used for the search
       if (
-        keywords?.length > 0
-        // 1
-        //|| domains.length > 0 || types.length > 0 || audience.length > 0
+        keywords?.length > 0 ||
+        domains.length > 0 ||
+        types.length > 0 ||
+        audience.length > 0
       ) {
         // Search request
-        const resp = await api.freeSearchKeywordsOers(
+        // const resp = await api.freeSearchKeywordsOers(
+        //   page,
+        //   keywords,
+        //   domains,
+        //   types,
+        //   audience,
+        //   order_by,
+        //   order_asc,
+        //   operator,
+        //   concepts ?? []
+        // );
+
+        const resp = await api.searchOERsNoKeywords(
           page,
           keywords,
-          domains,
+          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 37) ? "True" : "False"), // If ALL is selected the array is empty. See "DropDownMenu" component
+          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 38) ? "True" : "False"),
+          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 39) ? "True" : "False"),
+          domains, // at the moment filtering by domain is not implemented by the API
           types,
           audience,
           order_by,
@@ -254,62 +267,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         // Get the oers from the response
         const oers = resp?.data;
 
-        // calling the API for the serch
-        // oersResp = await api.freeSearchOersNoPagination(
-        //   keywords,
-        //   domains,
-        //   types,
-        //   audience,
-        //   operator,
-        //   order_item
-        // ); // doesn't return all the oers data information (e.g. it doesn't return the media_type)
-        //setFilteredLength(oersResp?.length);
-
         // Set the new oers found
-        setFiltered(oers);
-
-        //if (oersResp?.length > 0) { // with freeSearchOersNoPagination() use oersResp?.length
-        // get all the oers data
-        // const oers = await Promise.all(
-        //   oersResp?.map(async (oer: OerProps) => {
-        //     console.log(oer);
-        //     const oerFound = await getDataOerById(
-        //       oer?.id,
-        //       abortController.signal
-        //     );
-        //     console.log(oerFound);
-        //     return oerFound;
-        //   })
-        // );
-
-        // Eventually, if the filtered search should not work with API, you should add the
-        // "if (domains.length > 0 || types.length > 0 || audience.length > 0)" code part (see the previous searchOERs function)
-
-        //   setFiltered(oersResp);
-        // }
-      } else if (
-        // check if there are filters without keywords
-        domains?.length > 0 ||
-        audience?.length > 0 ||
-        types?.length > 0
-      ) {
-        // It's not an efficient solution, but it's the best for now
-        // TODO: return only the first 10 OERs. Recall the API on click on the next page button
-        // const resp = await api.freeSearchOers(  // --> advanced search with these doesn't work
-        const resp = await api.searchOERsNoKeywords(
-          page,
-          // keywords,
-          // domains,  // at the moment filtering by domain is not implemented by the API
-          types,
-          audience,
-          order_by,
-          order_asc,
-          operator,
-          concepts ?? []
-        );
-        setOersLengthTotal(resp?.recordsFiltered);
-        const oers = resp?.data;
-
         setFiltered(oers);
       } else {
         throw new Error('No keywords or filters provided');
@@ -548,6 +506,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   // redirect to home page if no resources are found
   useEffect(() => {
     //setIsLoading(false);
+
+    // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
     if (endSearch && OersLengthTotal === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',

@@ -799,12 +799,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   useEffect(() => {
     // Starting with at least one learning objective
+    // This allow us to add many learning objectives how much the number specified is
     if (learningObjectiveObjects.length < numberOfLO) {
-      // Add objectives until the desired number is reached
-      const difference = numberOfLO - learningObjectiveObjects.length;
-      for (let i = 0; i < difference; i++) {
-        handleAddLearningObjective();
-      }
+      handleAddLearningObjective();
       // Handle the change value of numberOfLO when decrease it
     } else if (numberOfLO < learningObjectiveObjects.length) {
       // Remove empty objectives

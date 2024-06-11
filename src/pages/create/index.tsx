@@ -1,7 +1,7 @@
 // import { useUser } from '@auth0/nextjs-auth0/client';
 import { Box, Button, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import AnalyzerTabCreateOer from '../../components/Tabs/TabsCreatePage/AnalyzerTabCreateOer';
@@ -11,11 +11,17 @@ import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useIsSmallerScreen } from '../../utils/utils';
 // import { stringArrayToOptionsObject } from '../../utils/utils';
 
-interface CreateProps {
+export interface CreateProps {
   isAddContentModal?: boolean; // Used for the AddContentModal
+  isEditClicked?: boolean;
+  setIsEditClicked: Dispatch<SetStateAction<boolean>>;
 }
 
-const Create = ({ isAddContentModal }: CreateProps) => {
+const Create = ({
+  isAddContentModal,
+  isEditClicked,
+  setIsEditClicked
+}: CreateProps) => {
   // const { user } = useUser();
   const router = useRouter();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
@@ -31,6 +37,36 @@ const Create = ({ isAddContentModal }: CreateProps) => {
   const handleStep = (step: number) => {
     setStep(step);
   };
+
+  const handleEditClick = () => {
+    // if (typeOfExercisePanel === 'Fill the Gaps') {
+    //   handleOptionsChange(
+    //     stringArrayToOptionsObject(apiGeneratedExerciseData)
+    //   );
+    // }else if(typeOfExercisePanel === 'multipleChoice'){
+    //   // handleOptionsChange(
+    //   //   stringArrayToOptionsObject(apiGeneratedExerciseData)
+    //   // );
+    // }
+    if (apiGeneratedExerciseData.Assignment !== '') {
+      // todo: implement a better check
+
+      !isAddContentModal ?
+        router.push({
+          pathname: '/create/edit',
+        }) :
+        (isEditClicked !== undefined && !isEditClicked ?
+          setIsEditClicked(!isEditClicked) :
+          undefined
+        )
+    } else {
+      addToast({
+        message:
+          'Please generate an exercise before proceeding',
+        type: 'warning',
+      });
+    }
+  }
 
   return (
     <Flex w="100%" h="100%">
@@ -69,6 +105,7 @@ const Create = ({ isAddContentModal }: CreateProps) => {
               isSmallerScreen={isSmallerScreen}
               onChange={handleStep}
               step={step}
+              isAddContentModal={isAddContentModal}
             />
             {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo finde a better way to check if the exercise is generated
               <Box paddingTop={'2rem'}>
@@ -87,29 +124,7 @@ const Create = ({ isAddContentModal }: CreateProps) => {
                     colorScheme="yellow"
                     mt={4}
                     w="10%"
-                    onClick={() => {
-                      // if (typeOfExercisePanel === 'Fill the Gaps') {
-                      //   handleOptionsChange(
-                      //     stringArrayToOptionsObject(apiGeneratedExerciseData)
-                      //   );
-                      // }else if(typeOfExercisePanel === 'multipleChoice'){
-                      //   // handleOptionsChange(
-                      //   //   stringArrayToOptionsObject(apiGeneratedExerciseData)
-                      //   // );
-                      // }
-                      if (apiGeneratedExerciseData.Assignment !== '') {
-                        // todo: implement a better check
-                        router.push({
-                          pathname: '/create/edit',
-                        });
-                      } else {
-                        addToast({
-                          message:
-                            'Please generate an exercise before proceeding',
-                          type: 'warning',
-                        });
-                      }
-                    }}
+                    onClick={handleEditClick}
                   >
                     <Text as="b">Edit</Text>
                   </Button>

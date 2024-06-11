@@ -44,7 +44,7 @@ export default function PathDesignGenLO({
     selectedContext, // used for the api call
     selectedSkillConceptTags,
     learningTextContext, // used for the api call (learning context)
-    defaultLearningContext: defaultContext,
+    defaultLearningContext,
     handleDefaultLearningContext,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
@@ -166,7 +166,7 @@ export default function PathDesignGenLO({
         setIsGenerateLOClicked={setIsGenerateLOClicked}
         isAtLeastOneLOGenerated={isAtLeastOneLOGenerated}
         handleDefaultLearningContext={handleDefaultLearningContext}
-        defaultLearningContext={defaultContext}
+        defaultLearningContext={defaultLearningContext}
       />
 
       {isAtLeastOneLOGenerated && (

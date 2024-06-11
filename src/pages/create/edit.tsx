@@ -13,6 +13,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { MdSave } from 'react-icons/md';
+import { CreateProps } from '.';
 import { useCollectionsContext } from '../../Contexts/CollectionsContext/CollectionsContext';
 import { useCreateOERsContext } from '../../Contexts/CreateOERsContext';
 import CheckboxDropdown from '../../components/DropDownMenu/CheckboxDropdown';
@@ -31,11 +32,11 @@ import {
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
-type EditProps = {
-  isAddContentModal?: boolean; // Used for the AddContentModal
-};
-
-const Edit = ({ isAddContentModal }: EditProps) => {
+const Edit = ({
+  isAddContentModal,
+  isEditClicked,
+  setIsEditClicked
+}: CreateProps) => {
   // const { user } = useUser();
   const router = useRouter();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
@@ -137,6 +138,30 @@ const Edit = ({ isAddContentModal }: EditProps) => {
     }
   };
 
+  const handleBackClick = () => {
+    !isAddContentModal ?
+      router.push('/create') :
+      isEditClicked !== undefined && isEditClicked ?
+        setIsEditClicked(!isEditClicked) :
+        undefined
+  }
+
+  const handleSaveClick = () => {
+    handleOptionsComplete();
+    if (areOptionsComplete) {
+      handleData();
+      handleSaveButtonClick();
+
+      //console.log('Save');
+    } else {
+      addToast({
+        message:
+          'Please insert a title and a description of the exercise.',
+        type: 'warning',
+      });
+    }
+  }
+
   useEffect(() => {
     if (!loading && response && !toastDisplayed) {
       addToast({
@@ -195,7 +220,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>
@@ -293,9 +318,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
                 colorScheme="yellow"
                 mt={4}
                 w="100%"
-                onClick={() => {
-                  router.push('/create');
-                }}
+                onClick={handleBackClick}
               >
                 <Text>Back</Text>
               </Button>
@@ -314,21 +337,7 @@ const Edit = ({ isAddContentModal }: EditProps) => {
                 mt={4}
                 w="100%"
                 //isDisabled={true}
-                onClick={() => {
-                  handleOptionsComplete();
-                  if (areOptionsComplete) {
-                    handleData();
-                    handleSaveButtonClick();
-
-                    //console.log('Save');
-                  } else {
-                    addToast({
-                      message:
-                        'Please insert a title and a description of the exercise.',
-                      type: 'warning',
-                    });
-                  }
-                }}
+                onClick={handleSaveClick}
               >
                 <Text>Save</Text>
                 <Icon as={MdSave} w="40%" h="40%" />
