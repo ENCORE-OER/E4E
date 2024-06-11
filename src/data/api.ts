@@ -10,9 +10,9 @@ import {
   OerFreeSearchProps,
   OerMediaTypeInfo,
   OerProps,
+  OersDBProps,
   OerSkillInfo,
   OerSubjectInfo,
-  OersDBProps,
   RespDataProps,
 } from '../types/encoreElements';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
@@ -353,27 +353,26 @@ export class APIV2 {
     }
   }
 
-  async getDomains(
-    page = 1,
-    allDomains: OerDomainInfo[] = [],
-    stop = 10
-  ): Promise<OerDomainInfo[]> {
+  async getDomains() // page = 1,
+  // allDomains: OerDomainInfo[] = []
+  // stop = 10
+  : Promise<OerDomainInfo[]> {
     try {
       const resp_dom = await axiosNoCookie.get(
-        `https://encore-db.grial.eu/api/domains/?page=${page}`
+        `https://encore-db.grial.eu/api/domains/`
       );
 
       const domainsPage =
         resp_dom.data?.data?.map((domain: OerDomainInfo) => domain) || [];
-      const updatedDomains = [...allDomains, ...domainsPage];
+      // const updatedDomains = [...allDomains, ...domainsPage];
 
-      if (domainsPage.length === 10) {
-        if (stop > 0) {
-          return await this.getDomains(page + 1, updatedDomains, stop - 1);
-        }
-      }
+      // if (domainsPage.length === 10) {
+      //   if (stop > 0) {
+      //     return await this.getDomains(page + 1, updatedDomains, stop - 1);
+      //   }
+      // }
 
-      return updatedDomains;
+      return domainsPage;
     } catch (error) {
       throw error;
     }
@@ -611,8 +610,11 @@ export class APIV2 {
 
   async searchOERsNoKeywords(
     page: number,
-    // keywords?: string[],
-    // domainIds?: string[], // at the moment the filterig by domain is not implemented by the API
+    keywords?: string[],
+    domainIds?: string[] | number[], // at the moment the filterig by domain is not implemented by the API
+    // green_domain?: string,
+    // digital_domain?: string,
+    // entrepreneurhip_domain?: string,
     resourceTypeIds?: string[],
     audienceIds?: string[],
     order_by?: string,
@@ -634,37 +636,96 @@ export class APIV2 {
 
       // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
 
-      // if (keywords) {
-      //   keywords?.forEach((keyword: string) => {
-      //     queryParams.append(
-      //       `${operator ? operator : 'and'}_keywords`,
-      //       keyword
-      //     );
-      //   });
-      // }
-      // if (!domainIds?.includes(ID_ALL)) {
-      //   domainIds?.forEach((domainId: string) => {
-      //     queryParams.append(
-      //       `${operator ? operator : 'and'}_skill_domain`,
-      //       domainId
-      //     );
-      //   });
-      // }
-      if (!resourceTypeIds?.includes(ID_ALL)) {
-        resourceTypeIds?.forEach((resourceTypeId: string) => {
+      if (keywords) {
+        keywords?.forEach((keyword: string) => {
           queryParams.append(
-            `${operator ? operator : 'and'}_media_type`,
-            resourceTypeId
+            `${operator ? operator : 'and'}_keywords`,
+            keyword
           );
         });
       }
-      if (!audienceIds?.includes(ID_ALL)) {
-        audienceIds?.forEach((audienceId: string) => {
+      if (domainIds !== undefined && domainIds.length > 0) {
+        if (domainIds.length === 1) {
           queryParams.append(
-            `${operator ? operator : 'and'}_coverage`,
-            audienceId
+            'and_digital_domain',
+            `${domainIds[0] === 37 ? 'True' : 'False'}`
           );
-        });
+
+          queryParams.append(
+            'and_green_domain',
+            `${domainIds[0] === 38 ? 'True' : 'False'}`
+          );
+
+          queryParams.append(
+            'and_entrepreneurship_domain',
+            `${domainIds[0] === 39 ? 'True' : 'False'}`
+          );
+        } else {
+          queryParams.append(
+            'or_digital_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 37)
+                ? 'True'
+                : 'False'
+            }`
+          );
+
+          queryParams.append(
+            'or_green_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 38)
+                ? 'True'
+                : 'False'
+            }`
+          );
+
+          queryParams.append(
+            'or_entrepreneurship_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 39)
+                ? 'True'
+                : 'False'
+            }`
+          );
+        }
+      }
+      // if (green_domain !== undefined) {
+      //   queryParams.append(
+      //     `${operator ? operator : 'and'}_green_domain`,
+      //     green_domain
+      //   );
+      // }
+      // if (digital_domain !== undefined) {
+      //   queryParams.append(
+      //     `${operator ? operator : 'and'}_digital_domain`,
+      //     digital_domain
+      //   );
+      // }
+      // if (entrepreneurhip_domain !== undefined) {
+      //   queryParams.append(
+      //     `${operator ? operator : 'and'}_entrepreneurship_domain`,
+      //     entrepreneurhip_domain
+      //   );
+      // }
+
+      // TODO: is check to the ID_ALL useful? If "all" is selected the array should be empty.
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        if (resourceTypeIds?.length === 1) {
+          queryParams.append('and_media_type', resourceTypeIds[0]);
+        } else {
+          resourceTypeIds?.forEach((resourceTypeId: string) => {
+            queryParams.append('or_media_type', resourceTypeId);
+          });
+        }
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        if (audienceIds?.length === 1) {
+          queryParams.append('and_coverage', audienceIds[0]);
+        } else {
+          audienceIds?.forEach((audienceId: string) => {
+            queryParams.append('or_coverage', audienceId);
+          });
+        }
       }
       if (order_by !== undefined) {
         queryParams.append(

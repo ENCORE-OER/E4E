@@ -44,7 +44,7 @@ export default function PathDesignGenLO({
     selectedContext, // used for the api call
     selectedSkillConceptTags,
     learningTextContext, // used for the api call (learning context)
-    defaultLearningContext: defaultContext,
+    defaultLearningContext,
     handleDefaultLearningContext,
     // ----- Learning Objective Objects -----
     learningObjectiveObjects,
@@ -166,7 +166,7 @@ export default function PathDesignGenLO({
         setIsGenerateLOClicked={setIsGenerateLOClicked}
         isAtLeastOneLOGenerated={isAtLeastOneLOGenerated}
         handleDefaultLearningContext={handleDefaultLearningContext}
-        defaultLearningContext={defaultContext}
+        defaultLearningContext={defaultLearningContext}
       />
 
       {isAtLeastOneLOGenerated && (
@@ -180,10 +180,10 @@ export default function PathDesignGenLO({
         direction="column"
         border={
           isHighligted &&
-          learningObjectiveObjects.length > 0 &&
-          learningObjectiveObjects.filter(
-            (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
-          ).length === 0
+            learningObjectiveObjects.length > 0 &&
+            learningObjectiveObjects.filter(
+              (objectLO: ObjectLearningObjectiveProps) => !objectLO.isSelected
+            ).length === 0
             ? '2.5px solid #bf5521ff'
             : 'null'
         }
@@ -208,33 +208,33 @@ export default function PathDesignGenLO({
             // numberOfLO > 0 &&
             // !isLoading &&
             learningObjectiveObjects.length > 0 &&
-              hydrated &&
-              learningObjectiveObjects.map(
-                (objectLO: ObjectLearningObjectiveProps, index: number) => (
-                  <BoxLearningObjective
-                    key={index}
-                    textLearningObjective={objectLO.learningObjective}
-                    isGenerated={objectLO.isGenerated}
-                    index={index}
-                    handleUpdateLO={handleUpdateLO}
-                    handleDeleteLO={() => {
-                      if (learningObjectiveObjects.length > 1) {
-                        handleDeleteLO(index);
-                      } else {
-                        onOpenDeleteAlertDialog();
-                      }
-                    }}
-                    isSmallerScreen={isSmallerScreen}
-                    label_tooltip_delete="Delete"
-                    isNextButtonClicked={isNextButtonClicked}
-                    isDisabled={
-                      isLoading &&
-                      (objectLO.isGenerated ||
-                        objectLO.learningObjective.trim().length === 0)
+            hydrated &&
+            learningObjectiveObjects.map(
+              (objectLO: ObjectLearningObjectiveProps, index: number) => (
+                <BoxLearningObjective
+                  key={index}
+                  textLearningObjective={objectLO.learningObjective}
+                  isGenerated={objectLO.isGenerated}
+                  index={index}
+                  handleUpdateLO={handleUpdateLO}
+                  handleDeleteLO={() => {
+                    if (learningObjectiveObjects.length > 1) {
+                      handleDeleteLO(index);
+                    } else {
+                      onOpenDeleteAlertDialog();
                     }
-                  />
-                )
+                  }}
+                  isSmallerScreen={isSmallerScreen}
+                  label_tooltip_delete="Delete"
+                  isNextButtonClicked={isNextButtonClicked}
+                  isDisabled={
+                    isLoading &&
+                    (objectLO.isGenerated ||
+                      objectLO.learningObjective.trim().length === 0)
+                  }
+                />
               )
+            )
           }
         </Flex>
         {isLoading && (
