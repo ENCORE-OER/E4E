@@ -19,12 +19,14 @@ type AnalyzerTabCreateOerProps = {
   isSmallerScreen?: boolean;
   step: number;
   onChange: (step: number) => void;
+  isAddContentModal?: boolean;
 };
 
 export default function AnalyzerTabCreateOer({
   isSmallerScreen,
   step,
   onChange,
+  isAddContentModal
 }: AnalyzerTabCreateOerProps) {
   const {
     handleDescription,
@@ -51,9 +53,10 @@ export default function AnalyzerTabCreateOer({
   const analyzeMaterial = async (material: string) => {
     console.log('Analyzing material: ');
 
+    const url = `${isAddContentModal !== undefined && isAddContentModal ? '../' : ''}api/encore/genAI/materialAnalyzer`
     try {
       const resp = await axios.post(
-        'api/encore/genAI/materialAnalyzer',
+        url,
         {
           material: material,
         },
