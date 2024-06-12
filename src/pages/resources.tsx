@@ -6,7 +6,7 @@ import {
   HStack,
   Icon,
   Spacer,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 
 // import { useUser } from '@auth0/nextjs-auth0/client';
@@ -65,7 +65,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     // resourcesIndex,
     setResourcesIndex,
     resourcesSelected,
-    addSelectedResources
+    addSelectedResources,
   } = useLearningPathDesignContext();
 
   const collectionRef = useRef<HTMLDivElement>(null);
@@ -289,11 +289,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     }
   }, [collectionIndex]);
 
-
   useEffect(() => {
     setCollectionIndex(selectedCollectionIndex);
     setCollectionClicked(true);
-  }, [isAddContentModal])
+  }, [isAddContentModal]);
 
   return (
     <Flex w="100%" h="100%" bg="background">
@@ -316,8 +315,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -345,7 +344,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                 {isSmallerScreen ? '' : 'Collections'}
               </Heading>
               {!isSmallerScreen && <Spacer />}
-              {!isAddContentModal &&
+              {!isAddContentModal && (
                 <Button
                   variant="ghost"
                   _hover={{ bg: 'backgound' }}
@@ -355,11 +354,12 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                   }}
                 >
                   <Icon as={LuFolderPlus} w="30px" h="30px" />
-                </Button>}
+                </Button>
+              )}
             </HStack>
             <Box bg="background">
               {hydrated &&
-                (!isAddContentModal ?
+                (!isAddContentModal ? (
                   collections?.map(
                     (collection: CollectionProps, index: number) => (
                       <CollectionNavItem
@@ -377,7 +377,9 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                       >
                         {collection.name}
                       </CollectionNavItem>
-                    )) :
+                    )
+                  )
+                ) : (
                   <CollectionNavItem
                     index={collectionIndex}
                     collection={collections[collectionIndex]}
@@ -392,7 +394,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                   >
                     {collections[collectionIndex].name}
                   </CollectionNavItem>
-                )}
+                ))}
             </Box>
           </Box>
 
@@ -430,10 +432,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               isAddContentModal={isAddContentModal}
               resourcesSelected={resourcesSelected}
               addSelectedResources={addSelectedResources}
-            // updateResourcesSelected={updateResourcesSelected}
-            // addSelectedResource={addSelectedResource}
-            // removeSelectedResource={removeSelectedResource}
-            // resetSelectedResources={resetSelectedResources}
+              // updateResourcesSelected={updateResourcesSelected}
+              // addSelectedResource={addSelectedResource}
+              // removeSelectedResource={removeSelectedResource}
+              // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>

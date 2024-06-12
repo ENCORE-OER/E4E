@@ -47,7 +47,7 @@ export default function OerCardHeader({
   isAddContentModal,
   handleCheckboxClick,
   isChecked,
-  isDisabled
+  isDisabled,
 }: OerCardHeaderProps) {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -106,7 +106,7 @@ export default function OerCardHeader({
                 e.preventDefault();
                 e.stopPropagation();
                 handleCheckboxChange(e);
-                console.log("Button 1");
+                console.log('Button 1');
               }}
             >
               <Checkbox
@@ -121,7 +121,6 @@ export default function OerCardHeader({
               />
             </Button>
           )}
-
         </HStack>
         <Flex direction={'row'} align="center" gap="2">
           <Text noOfLines={1} variant="title_card">

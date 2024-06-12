@@ -1,20 +1,20 @@
-import StandardButton from "./StandardButton";
+import StandardButton from './StandardButton';
 
 type AttachButtonProps = {
-    handleAttachClick: () => void;
-    isDisabled: boolean;
-}
+  handleAttachClick: () => void;
+  isDisabled: boolean;
+};
 
 export default function AttachButton({
-    handleAttachClick,
-    isDisabled
+  handleAttachClick,
+  isDisabled,
 }: AttachButtonProps) {
-    return (
-        <StandardButton
-            buttonText="Attach Selected"
-            handleClick={handleAttachClick}
-            size={'sm'}
-            isDisabled={isDisabled}
-        />
-    );
+  return (
+    <StandardButton
+      buttonText="Attach Selected"
+      handleClick={handleAttachClick}
+      size={'sm'}
+      isDisabled={isDisabled}
+    />
+  );
 }

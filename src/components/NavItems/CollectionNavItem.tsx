@@ -46,7 +46,7 @@ const CollectionNavItem = ({
   setCollectionIndex,
   deleteCollection,
   isSmallerScreen,
-  isAddContentModal
+  isAddContentModal,
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
   const {
@@ -127,7 +127,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -155,7 +155,7 @@ const CollectionNavItem = ({
             </Heading>
           )}
         </Flex>
-        {!isAddContentModal &&
+        {!isAddContentModal && (
           <Button
             variant="ghost"
             _hover={{ bg: 'gray.300' }}
@@ -167,7 +167,8 @@ const CollectionNavItem = ({
             right={'0px'}
           >
             <DeleteIcon />
-          </Button>}
+          </Button>
+        )}
       </HStack>
 
       <DeleteAlertDialog
@@ -184,8 +185,9 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
-          }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${
+          itemToDelete ? itemToDelete.collection_name : ''
+        }`}
       />
     </>
   );

@@ -19,7 +19,7 @@ export default function HeaderCollectionView({
   fileName,
   isAddContentModal,
   handleAttachClick,
-  isDisabled
+  isDisabled,
 }: HeaderCollectionViewProps) {
   return (
     <Flex w="100%" pb="3" bg="background">
@@ -30,7 +30,10 @@ export default function HeaderCollectionView({
       <Spacer />
       {!isAddContentModal && <DownloadButton data={data} fileName={fileName} />}
       {isAddContentModal && (
-        <AttachButton handleAttachClick={handleAttachClick} isDisabled={isDisabled} />
+        <AttachButton
+          handleAttachClick={handleAttachClick}
+          isDisabled={isDisabled}
+        />
       )}
     </Flex>
   );

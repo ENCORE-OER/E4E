@@ -11,7 +11,7 @@ import {
   OerConceptInfo,
   OerInCollectionProps,
   SelectedConceptsFunction,
-  ToggleLikeFunction
+  ToggleLikeFunction,
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';

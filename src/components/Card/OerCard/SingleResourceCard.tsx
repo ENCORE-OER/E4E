@@ -33,7 +33,7 @@ export default function SingleResourceCard({
   isAddContentModal,
   handleCheckboxClick,
   isChecked,
-  isDisabled
+  isDisabled,
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -70,8 +70,6 @@ export default function SingleResourceCard({
 
     return resp;
   };
-
-
 
   useEffect(() => {
     if (oer !== undefined) {
