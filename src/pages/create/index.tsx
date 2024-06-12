@@ -20,7 +20,7 @@ export interface CreateProps {
 const Create = ({
   isAddContentModal,
   isEditClicked,
-  setIsEditClicked
+  setIsEditClicked,
 }: CreateProps) => {
   // const { user } = useUser();
   const router = useRouter();
@@ -51,22 +51,20 @@ const Create = ({
     if (apiGeneratedExerciseData.Assignment !== '') {
       // todo: implement a better check
 
-      !isAddContentModal ?
-        router.push({
-          pathname: '/create/edit',
-        }) :
-        (isEditClicked !== undefined && !isEditClicked ?
-          setIsEditClicked(!isEditClicked) :
-          undefined
-        )
+      !isAddContentModal
+        ? router.push({
+            pathname: '/create/edit',
+          })
+        : isEditClicked !== undefined && !isEditClicked
+          ? setIsEditClicked(!isEditClicked)
+          : undefined;
     } else {
       addToast({
-        message:
-          'Please generate an exercise before proceeding',
+        message: 'Please generate an exercise before proceeding',
         type: 'warning',
       });
     }
-  }
+  };
 
   return (
     <Flex w="100%" h="100%">

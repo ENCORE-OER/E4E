@@ -1,15 +1,15 @@
 import {
   Box,
   Flex,
-  Link,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  useDisclosure,
+  useDisclosure
 } from '@chakra-ui/react';
 import { forwardRef, useEffect, useState } from 'react';
 import {
@@ -72,9 +72,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item: LessonProps, idx: number) =>
       idx === index
         ? {
-            ...item,
-            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-          }
+          ...item,
+          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+        }
         : item
     );
     handleData(updatedData);
@@ -95,9 +95,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
-            ...item,
-            activityType: selectedActivityType,
-          }
+          ...item,
+          activityType: selectedActivityType,
+        }
         : item
     );
 
@@ -170,8 +170,8 @@ const CustomLearningPathTable = forwardRef<
                     display={
                       isPrinting && title === 'Action' ? 'none' : 'table-cell'
                     }
-                    // className={isPrinting && title === 'Action' ? 'hide-on-print' : ''}
-                    // maxW={index === 4 ? "30%" : 'auto'}
+                  // className={isPrinting && title === 'Action' ? 'hide-on-print' : ''}
+                  // maxW={index === 4 ? "30%" : 'auto'}
                   >
                     <Flex justify="center" p={0}>
                       {title}
@@ -233,14 +233,14 @@ const CustomLearningPathTable = forwardRef<
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                  editRowIndex !== null
+                                    editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                    indexRow === editRowIndex ? (
                                     <LessonDropDownMenu
                                       options={optionsTypeOfAssignment}
                                       title={row.lessonType}
@@ -264,14 +264,14 @@ const CustomLearningPathTable = forwardRef<
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                  editRowIndex !== null
+                                    editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                    indexRow === editRowIndex ? (
                                     <ActivityTypeDropDownMenu
                                       activityTypes={activityTypes}
                                       title={row.activityType}
@@ -299,14 +299,14 @@ const CustomLearningPathTable = forwardRef<
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                  editRowIndex !== null
+                                    editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
                                   {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                    indexRow === editRowIndex ? (
                                     <CustomNumberInput
                                       valueNumber={row.timeDuration ?? 0}
                                       handleChangeValue={(value: string) =>
@@ -338,14 +338,14 @@ const CustomLearningPathTable = forwardRef<
                                 // flex="1"
                                 px={
                                   isEditLessonPlanClicked ||
-                                  editRowIndex !== null
+                                    editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
                               >
                                 <Flex w="100%" justify="flex-start" px={0}>
                                   {isEditLessonPlanClicked ||
-                                  indexRow === editRowIndex ? (
+                                    indexRow === editRowIndex ? (
                                     <Box
                                       as="button"
                                       onClick={() =>
@@ -356,7 +356,7 @@ const CustomLearningPathTable = forwardRef<
                                       }
                                       w="100%"
                                       textAlign="left"
-                                      // display="block"
+                                    // display="block"
                                     >
                                       {row.activityDescription || (
                                         <LabelEmptyFieldTable label="Short summary of the activity" />
@@ -376,7 +376,7 @@ const CustomLearningPathTable = forwardRef<
                                 w="fit-content"
                                 px={
                                   isEditLessonPlanClicked ||
-                                  editRowIndex !== null
+                                    editRowIndex !== null
                                     ? 2
                                     : 5
                                 }
@@ -389,13 +389,11 @@ const CustomLearningPathTable = forwardRef<
                                       onClick={handleAddContentClick}
                                     />
                                   ) : (
-                                    row.content?.map(
-                                      (content: string, index: number) => (
-                                        <Link key={index} href={content}>
-                                          {content}
-                                        </Link>
-                                      )
-                                    )
+                                    // row.content?.map(
+                                    //   (content: ContentProps, index: number) => (
+                                    <Text>Prova</Text>
+                                    // )
+                                    // )
                                   )}
                                 </Flex>
                               </Td>

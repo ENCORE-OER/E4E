@@ -1,4 +1,5 @@
 import { PassFailConditionsProps } from '.';
+import { ContentProps } from './ContentProps';
 
 export type LessonProps = {
   lessonTitle: string; // Topic or activity type as title?
@@ -9,5 +10,5 @@ export type LessonProps = {
   timeDuration: number;
   passFailConditions: PassFailConditionsProps[]; // At the moment only useful for the cards(tiles)
   compulsory?: boolean;
-  content?: string[]; // Links to the OERs?
+  content?: ContentProps[]; // Links to the OERs?
 };

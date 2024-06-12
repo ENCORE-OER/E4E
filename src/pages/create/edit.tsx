@@ -35,7 +35,7 @@ import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 const Edit = ({
   isAddContentModal,
   isEditClicked,
-  setIsEditClicked
+  setIsEditClicked,
 }: CreateProps) => {
   // const { user } = useUser();
   const router = useRouter();
@@ -139,12 +139,12 @@ const Edit = ({
   };
 
   const handleBackClick = () => {
-    !isAddContentModal ?
-      router.push('/create') :
-      isEditClicked !== undefined && isEditClicked ?
-        setIsEditClicked(!isEditClicked) :
-        undefined
-  }
+    !isAddContentModal
+      ? router.push('/create')
+      : isEditClicked !== undefined && isEditClicked
+        ? setIsEditClicked(!isEditClicked)
+        : undefined;
+  };
 
   const handleSaveClick = () => {
     handleOptionsComplete();
@@ -155,12 +155,11 @@ const Edit = ({
       //console.log('Save');
     } else {
       addToast({
-        message:
-          'Please insert a title and a description of the exercise.',
+        message: 'Please insert a title and a description of the exercise.',
         type: 'warning',
       });
     }
-  }
+  };
 
   useEffect(() => {
     if (!loading && response && !toastDisplayed) {
@@ -220,7 +219,7 @@ const Edit = ({
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

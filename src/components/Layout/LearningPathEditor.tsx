@@ -1,11 +1,10 @@
-import { Box, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import { Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
 import { /*Dispatch, SetStateAction,*/ useEffect, useState } from 'react';
 import { useLearningPathContext } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 import { OerProps } from '../../types/encoreElements';
 import { OerFreeSearchProps } from '../../types/encoreElements/oer/OerFreeSearch';
 import { PolyglotFlow } from '../../types/polyglot/PolyglotFlow';
 import { useHasHydrated } from '../../utils/utils';
-import ResourceCardList from '../Card/OerCard/ResourceCardsList';
 //import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext';
 
 type LearningPathEditorProps = {
@@ -19,13 +18,13 @@ type LearningPathEditorProps = {
 
 export default function LearningPathEditor({
   conceptSelectedIndex,
-  oers,
-  collectionColor,
-  isLoading, //setConceptSelectedIndex,
+  // oers,
+  // collectionColor,
+  // isLoading, //setConceptSelectedIndex,
   wPathEditor,
 }: LearningPathEditorProps) {
   const hydrated = useHasHydrated();
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [currentPage, setCurrentPage] = useState<number>(1);
   const [learningPath, setLearningPath] = useState<PolyglotFlow>();
   const { getFragment } = useLearningPathContext();
   //const { collectionIndex } = useLearningPathDesignContext();
@@ -109,7 +108,7 @@ export default function LearningPathEditor({
               />
             </Flex>
 
-            {oers !== undefined && (
+            {/* {oers !== undefined && (
               <Box flex="1" p={5} w="90%" display="flex">
                 <Text pb={5} fontSize="20" fontWeight="semibold">
                   Relevant OERs
@@ -135,7 +134,7 @@ export default function LearningPathEditor({
                   />
                 )}
               </Box>
-            )}
+            )} */}
           </Flex>
         )}
     </Flex>

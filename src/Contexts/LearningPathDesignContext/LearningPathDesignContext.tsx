@@ -12,10 +12,11 @@ import {
   LessonCardProps,
   LessonProps,
   ObjectLearningObjectiveProps,
+  OerInCollectionProps,
   Option,
   OptionsTypeOfAssignmentProps,
   SkillItemProps,
-  activityTypesObjectsProps,
+  activityTypesObjectsProps
 } from '../../types/encoreElements/index';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 
@@ -39,7 +40,7 @@ type LearnignPathDesignContextProps = {
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
-  collectionIndex: number;
+  collectionIndex: number;// Index of the selected collection in the "Learning Objective" page
   resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
   // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
@@ -110,6 +111,12 @@ type LearnignPathDesignContextProps = {
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
   removeLessonActivity: (index: number) => void;
+
+  // Add Content
+  resourcesSelected: OerInCollectionProps[];
+  addSelectedResources: (oers: OerInCollectionProps | OerInCollectionProps[]) => void;
+  removeSelectedResource: (oer: OerInCollectionProps) => void;
+  resetSelectedResources: () => void;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -728,6 +735,67 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // ========================================================
 
+  // Add Content 
+  const [resourcesSelected, setResourcesSelected] = useState<OerInCollectionProps[]>([]);
+
+  // Add the selected resource to the array
+  const addSelectedResources = (
+    newResources: OerInCollectionProps | OerInCollectionProps[]
+  ): void => {
+    try {
+
+      // If are more resources
+      if (Array.isArray(newResources)) {
+        // Check if there is a new resource already selected
+        const isAllNewResources = resourcesSelected.some((resourceSelected: OerInCollectionProps) =>
+          newResources.forEach((resource: OerInCollectionProps) => resourceSelected.id === resource.id)
+        )
+
+        // If NO, add all the resources
+        if (isAllNewResources) {
+          setResourcesSelected((prevResources: OerInCollectionProps[]) => [...prevResources, ...newResources])
+          // Otherwise check on each resource and add only the ones not already selected
+        } else {
+          newResources.forEach((resource: OerInCollectionProps) => {
+            const isResourceIndexAlreadyAdded = resourcesSelected.some((resourceSelected: OerInCollectionProps) => resourceSelected.id === resource.id);
+            if (!isResourceIndexAlreadyAdded) {
+              setResourcesSelected((prevResources: OerInCollectionProps[]) => [...prevResources, resource])
+              // Update the UI or show a success notification
+            } else {
+              console.error("Resource already selected");
+            }
+          })
+        }
+
+        // If is only one resource
+      } else {
+        setResourcesSelected((prevResources: OerInCollectionProps[]) => [...prevResources, newResources])
+      }
+    } catch (error) {
+      // Handle errors or show an error notification
+    }
+  };
+
+  // Remove the selected resources from the array
+  const removeSelectedResource = (
+    resourceToRemove: OerInCollectionProps
+  ): void => {
+    try {
+      setResourcesSelected((prevResources: OerInCollectionProps[]) =>
+        prevResources.filter((resource: OerInCollectionProps) => resource.id !== resourceToRemove.id)
+      )
+      // Update the UI or show a success notification
+    } catch (error) {
+      // Handle errors or show an error notification
+    }
+  };
+
+  const resetSelectedResources = () => {
+    if (resourcesSelected.length > 0) {
+      setResourcesSelected([]);
+    }
+  }
+
   // =============================================================================================================
 
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
@@ -831,6 +899,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [defaultLearningContext]);
 
+  useEffect(() => {
+    console.log("SELECTED RESOURCES: ", resourcesSelected);
+  }, [resourcesSelected])
+
   return (
     <LearningPathDesignContext.Provider
       value={{
@@ -919,6 +991,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities,
         addEmptyLessonActivity,
         removeLessonActivity,
+
+        // Add content
+        resourcesSelected,
+        addSelectedResources,
+        removeSelectedResource,
+        resetSelectedResources,
 
         // LESSONS CARDS
         lessonCards,

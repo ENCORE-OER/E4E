@@ -27,6 +27,7 @@ interface CollectionNavItemProps {
   deleteCollection: (id: number, name: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 }
 
 interface ItemToDeleteProps {
@@ -45,6 +46,7 @@ const CollectionNavItem = ({
   setCollectionIndex,
   deleteCollection,
   isSmallerScreen,
+  isAddContentModal
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
   const {
@@ -125,7 +127,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -153,18 +155,19 @@ const CollectionNavItem = ({
             </Heading>
           )}
         </Flex>
-        <Button
-          variant="ghost"
-          _hover={{ bg: 'gray.300' }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleDeleteButtonClick(collection.id, collection.name);
-          }}
-          position="absolute"
-          right={'0px'}
-        >
-          <DeleteIcon />
-        </Button>
+        {!isAddContentModal &&
+          <Button
+            variant="ghost"
+            _hover={{ bg: 'gray.300' }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleDeleteButtonClick(collection.id, collection.name);
+            }}
+            position="absolute"
+            right={'0px'}
+          >
+            <DeleteIcon />
+          </Button>}
       </HStack>
 
       <DeleteAlertDialog
@@ -181,9 +184,8 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${
-          itemToDelete ? itemToDelete.collection_name : ''
-        }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
+          }`}
       />
     </>
   );

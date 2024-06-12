@@ -11,7 +11,7 @@ import {
   OerConceptInfo,
   OerInCollectionProps,
   SelectedConceptsFunction,
-  ToggleLikeFunction,
+  ToggleLikeFunction
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated } from '../../utils/utils';
@@ -25,6 +25,10 @@ type CollectionContextProps = {
   indexCollectionClicked: number;
   setIndexCollectionClicked: Dispatch<SetStateAction<number>>;
   setSelectedConceptsForCollection: SelectedConceptsFunction;
+  // updateResourcesSelected: SelectedResourcesFunction;
+  // addSelectedResource: SelectedResourcesFunction;
+  // removeSelectedResource: SelectedResourcesFunction;
+  // resetSelectedResources: (index: number) => void;
   toggleLikeOER: ToggleLikeFunction;
   likedOers: number[];
 };
@@ -297,6 +301,123 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
+  // // Update the value of resourcesSelected for a specific collection
+  // const updateResourcesSelected = async (
+  //   collectionIndex: number,
+  //   newResourcesSelected: number[]
+  // ): Promise<void> => {
+  //   console.log("UPDATE RESOURCES SELECTED!");
+  //   try {
+  //     // Check if the provided collection index is valid
+  //     if (collectionIndex < 0 || collectionIndex >= collections.length) {
+  //       throw new Error(`Invalid collection index: ${collectionIndex}`);
+  //     }
+
+  //     const updatedCollections = [...collections];
+  //     const collection = updatedCollections[collectionIndex];
+
+  //     // Replace the selected resources
+  //     collection.resourcesSelected = newResourcesSelected;
+
+  //     setCollections(updatedCollections);
+
+  //     // addToast({
+  //     //   message: `Resources attached successfully!`,
+  //     //   type: 'success',
+  //     // });
+  //   } catch (error) {
+  //     addToast({
+  //       message: `${error}`,
+  //       type: 'error',
+  //     });
+  //   }
+  // };
+
+  // // Add the selected resource to the array
+  // const addSelectedResource = async (
+  //   collectionIndex: number,
+  //   resourceIndex: number
+  // ): Promise<void> => {
+  //   try {
+  //     if (collectionIndex < 0 || collectionIndex >= collections.length) {
+  //       throw new Error(`Invalid collection index: ${collectionIndex}`);
+  //     }
+
+  //     const updatedCollections = [...collections];
+  //     const collection = updatedCollections[collectionIndex];
+
+  //     // Check if the resource index is already present in the collection
+  //     const isResourceIndexAlreadyAdded = collection.resourcesSelected?.includes(
+  //       resourceIndex
+  //     );
+
+  //     if (!isResourceIndexAlreadyAdded) {
+  //       // Add the resource index to the collection
+  //       collection.resourcesSelected?.push(resourceIndex);
+
+  //       // Update the collections state
+  //       setCollections(updatedCollections);
+
+  //       // Update the UI or show a success notification
+  //     } else {
+  //       // The resource index is already present in the collection, handle accordingly
+  //     }
+  //   } catch (error) {
+  //     // Handle errors or show an error notification
+  //   }
+  // };
+
+  // // Remove the selected resources from the array
+  // const removeSelectedResource = async (
+  //   collectionIndex: number,
+  //   resourceIndex: number
+  // ): Promise<void> => {
+  //   try {
+  //     if (collectionIndex < 0 || collectionIndex >= collections.length) {
+  //       throw new Error(`Invalid collection index: ${collectionIndex}`);
+  //     }
+
+  //     const updatedCollections = [...collections];
+  //     const collection = updatedCollections[collectionIndex];
+
+  //     // Filter the selected resource indices to remove the specified one
+  //     collection.resourcesSelected = collection.resourcesSelected?.filter(
+  //       (index: number) => index !== resourceIndex
+  //     );
+
+  //     // Update the collections state
+  //     setCollections(updatedCollections);
+
+  //     // Update the UI or show a success notification
+  //   } catch (error) {
+  //     // Handle errors or show an error notification
+  //   }
+  // };
+
+  // // Reset the array to empty
+  // const resetSelectedResources = async (
+  //   collectionIndex: number
+  // ): Promise<void> => {
+  //   try {
+  //     if (collectionIndex < 0 || collectionIndex >= collections.length) {
+  //       throw new Error(`Invalid collection index: ${collectionIndex}`);
+  //     }
+
+  //     const updatedCollections = [...collections];
+  //     const collection = updatedCollections[collectionIndex];
+
+  //     // Reset the array of selected resource indices for the collection
+  //     collection.resourcesSelected = [];
+
+  //     // Update the collections state
+  //     setCollections(updatedCollections);
+
+  //     // Update the UI or show a success notification
+  //   } catch (error) {
+  //     // Handle errors or show an error notification
+  //   }
+  // };
+
   const toggleLikeOER = async (idOer: number | undefined): Promise<void> => {
     if (idOer === undefined) {
       return;
@@ -335,6 +456,10 @@ export const CollectionsProvider = ({ children }: any) => {
         indexCollectionClicked, //used in CollectionMenu component
         setIndexCollectionClicked,
         setSelectedConceptsForCollection,
+        // updateResourcesSelected,
+        // addSelectedResource,
+        // removeSelectedResource,
+        // resetSelectedResources,
         toggleLikeOER,
         likedOers,
       }}

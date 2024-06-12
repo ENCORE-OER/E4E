@@ -6,7 +6,7 @@ import {
   CollectionProps,
   OerConceptInfo,
   OerInCollectionProps,
-  OerProps,
+  OerProps
 } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
@@ -52,6 +52,12 @@ interface CollectionViewProps extends BoxProps {
   setIsDeletingResource: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean; // Used for the view of the REsources Page in Add Content Modal
+  resourcesSelected: OerInCollectionProps[];
+  addSelectedResources: (Oers: OerInCollectionProps | OerInCollectionProps[]) => void;
+  // updateResourcesSelected: SelectedResourcesFunction;
+  // addSelectedResource: SelectedResourcesFunction;
+  // removeSelectedResource: SelectedResourcesFunction;
+  // resetSelectedResources: (index: number) => void;
 }
 
 export default function CollectionView({
@@ -78,6 +84,12 @@ export default function CollectionView({
   setIsDeletingResource,
   isSmallerScreen,
   isAddContentModal,
+  resourcesSelected,
+  addSelectedResources,
+  // updateResourcesSelected,
+  // addSelectedResource,
+  // removeSelectedResource,
+  // resetSelectedResources,
   ...rest
 }: CollectionViewProps) {
   const hydrated = useHasHydrated();
@@ -86,6 +98,7 @@ export default function CollectionView({
   const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isAscending, setAscending] = useState<boolean>(true);
+  const [resourcesSelectedTemp, setResourcesSelectedTemp] = useState<number[]>([]);
 
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
@@ -140,6 +153,50 @@ export default function CollectionView({
       setAscending(true);
     }
   };
+
+  const addResourceSelectedTemp = (newResourceSelected: number) => {
+    console.log("ADD RESOURCE!");
+    setResourcesSelectedTemp((prev: number[]) => {
+      if (!prev.includes(newResourceSelected)) {
+        return [...prev, newResourceSelected];
+      }
+      return prev;
+    });
+  };
+
+  const removeResourceSelectedTemp = (ResourceSelectedToRemove: number) => {
+    console.log("REMOVE RESOURCE");
+    setResourcesSelectedTemp(resourcesSelectedTemp.filter((resource: number) => resource !== ResourceSelectedToRemove));
+  };
+
+  const handleCheckboxClick = (indexOer: number) => {
+    // if (collectionIndex !== undefined) {
+    //   // If the oer is already selected, remove it
+    //   if (collections[collectionIndex].resourcesSelected?.includes(indexOer)) {
+    //     removeSelectedResource(collectionIndex, indexOer);
+    //     // Otherwise add it
+    //   } else {
+    //     addSelectedResource(collectionIndex, indexOer);
+    //   }
+    // }
+    console.log("CLICK CHECKBOX!");
+    if (resourcesSelectedTemp.includes(indexOer)) {
+      removeResourceSelectedTemp(indexOer);
+    } else {
+      addResourceSelectedTemp(indexOer);
+    }
+  }
+
+  const handleAttachClick = () => {
+
+    // Using the indexes array, take the OERs data
+    const resourcesToAdd = collections[collectionIndex].oers?.filter((oer: OerInCollectionProps, index: number) =>
+      resourcesSelectedTemp.includes(index)
+    );
+    console.log("Attaching Resources...", resourcesToAdd);
+    addSelectedResources(resourcesToAdd);
+    // setResourcesSelectedTemp([]);
+  }
 
   useEffect(() => {
     //alert("CollectionView");
@@ -246,6 +303,8 @@ export default function CollectionView({
             data={collections[collectionIndex]}
             fileName={collections[collectionIndex]?.name}
             isAddContentModal={isAddContentModal}
+            isDisabled={resourcesSelectedTemp.length === 0}
+            handleAttachClick={handleAttachClick}
           />
           <HStack pb="3">
             <Text
@@ -253,21 +312,22 @@ export default function CollectionView({
               fontSize="small"
               color="grey"
             >{`${collections[collectionIndex]?.oers?.length} resources`}</Text>
-            <Flex flex="1" w="full" justifyContent="flex-end">
-              <OerCardsSorting
-                filtered={oersById}
-                setFiltered={setOersById}
-                viewChanged={viewChanged}
-                setViewChanged={setViewChanged}
-                selectedSorting={selectedSorting}
-                setSelectedSorting={setSelectedSorting}
-                handleSortingChange={handleSortingChange}
-                isAscending={isAscending}
-                setAscending={setAscending}
-                handleItemSortingClick={handleItemSortingClick}
+            {!isAddContentModal &&
+              <Flex flex="1" w="full" justifyContent="flex-end">
+                <OerCardsSorting
+                  filtered={oersById}
+                  setFiltered={setOersById}
+                  viewChanged={viewChanged}
+                  setViewChanged={setViewChanged}
+                  selectedSorting={selectedSorting}
+                  setSelectedSorting={setSelectedSorting}
+                  handleSortingChange={handleSortingChange}
+                  isAscending={isAscending}
+                  setAscending={setAscending}
+                  handleItemSortingClick={handleItemSortingClick}
                 //setIsLoading={setIsLoading}
-              />
-            </Flex>
+                />
+              </Flex>}
           </HStack>
           {isLoading && (
             <div className="loading-spinner">
@@ -291,14 +351,19 @@ export default function CollectionView({
                 handlePageChange={handlePageChange}
                 isSmallerScreen={isSmallerScreen}
                 isAddContentModal={isAddContentModal}
+                handleCheckboxClick={handleCheckboxClick}
+                resourcesSelected={resourcesSelected}
+                resourcesSelectedTemp={resourcesSelectedTemp}
               />
-              <Flex justifyContent="center" padding="5">
-                <AddResourcesButton
-                  text="Add Resources ..."
-                  pathname="/"
-                  variant="primary"
-                />
-              </Flex>
+              {!isAddContentModal &&
+                <Flex justifyContent="center" padding="5">
+                  <AddResourcesButton
+                    text="Add Resources ..."
+                    pathname="/"
+                    variant="primary"
+                  />
+                </Flex>
+              }
             </VStack>
           )}
         </Box>

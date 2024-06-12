@@ -56,7 +56,7 @@ export default function HeaderCardInfoModal({
             onClick={(e) => {
               e.stopPropagation();
             }}
-            isDisabled={true}
+          // isDisabled={true}
           />
         )}
         {(!isAddContentModal || isAddContentModal === undefined) &&

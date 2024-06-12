@@ -18,6 +18,9 @@ interface SingleResourceCardProps {
   updateLikeOER: boolean;
   isSmallerScreen?: boolean; // used for the responsive design of the page
   isAddContentModal?: boolean;
+  handleCheckboxClick?: () => void;
+  isChecked?: boolean;
+  isDisabled?: boolean;
 }
 
 export default function SingleResourceCard({
@@ -28,6 +31,9 @@ export default function SingleResourceCard({
   updateLikeOER,
   isSmallerScreen,
   isAddContentModal,
+  handleCheckboxClick,
+  isChecked,
+  isDisabled
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -64,6 +70,8 @@ export default function SingleResourceCard({
 
     return resp;
   };
+
+
 
   useEffect(() => {
     if (oer !== undefined) {
@@ -124,6 +132,9 @@ export default function SingleResourceCard({
           isSmallerScreen={isSmallerScreen}
           oer_url={linkOer}
           isAddContentModal={isAddContentModal}
+          handleCheckboxClick={handleCheckboxClick}
+          isChecked={isChecked}
+          isDisabled={isDisabled}
         />
       )}
     </>
