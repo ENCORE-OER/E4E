@@ -111,7 +111,10 @@ type LearnignPathDesignContextProps = {
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
   removeLessonActivity: (index: number) => void;
-  handleUpdateLessonContent: (index: number, newContent: OerInCollectionProps[]) => void;
+  handleUpdateLessonContent: (
+    index: number,
+    newContent: OerInCollectionProps[]
+  ) => void;
 
   // Add Content
   resourcesSelected: OerInCollectionProps[];
@@ -696,20 +699,22 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     });
   };
 
-  const handleUpdateLessonContent = (lessonIndex: number, newContent: OerInCollectionProps[]) => {
-    console.log("Updating lesson content");
+  const handleUpdateLessonContent = (
+    lessonIndex: number,
+    newContent: OerInCollectionProps[]
+  ) => {
+    console.log('Updating lesson content');
     setLessonActivities((prevLessons: LessonProps[]) => {
       const updatedLessons = [...prevLessons];
       if (updatedLessons[lessonIndex]) {
         updatedLessons[lessonIndex].content = {
           ...updatedLessons[lessonIndex].content,
-          oers: newContent
+          oers: newContent,
         };
       }
       return updatedLessons;
     });
   };
-
 
   // TO_CHECK: useful?
   // const handleLessonActivities = (
@@ -845,8 +850,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       setResetCheckBoxOptions(false);
     }
   }, [resetCheckBoxOptions]); // Dipendenza dell'effetto collaterale
-
-
 
   // useEffect(() => {
   //   // Carica i dati dallo `localStorage` e imposta le variabili di stato

@@ -19,16 +19,24 @@ import { useHasHydrated } from '../../../utils/utils';
 import IconAttach from '../../Icons/IconAttach/IconAttach';
 import IconSave from '../../Icons/IconSave/IconSave';
 import AddContentTabs from '../../Tabs/AddContentTabs';
-import TagSelectedResourceTooltip from '../../Tags/TagsAddContent/TagSelectedResourceTooltip';
+import TagSelectedResource from '../../Tags/TagsAddContent/TagSelectedResource';
 
 export default function AddContentModal({
   isOpen,
   onClose,
-  indexLesson
+  indexLesson,
 }: AddContentModalProps) {
   const hydrated = useHasHydrated();
-  const { resourcesSelected, resetSelectedResources, handleUpdateLessonContent } =
-    useLearningPathDesignContext();
+  const {
+    resourcesSelected,
+    addSelectedResources,
+    lessonActivities,
+    resetSelectedResources,
+    handleUpdateLessonContent,
+  } = useLearningPathDesignContext();
+
+  console.log("PRENDO");
+  addSelectedResources(lessonActivities[indexLesson ?? -1]?.content?.oers ?? []);
 
   useEffect(() => {
     console.log(resourcesSelected);
@@ -62,7 +70,7 @@ export default function AddContentModal({
               >
                 {resourcesSelected?.map(
                   (resource: OerInCollectionProps, index: number) => (
-                    <TagSelectedResourceTooltip
+                    <TagSelectedResource
                       label={resource.title}
                       IconTag={IconAttach}
                       key={index}
@@ -77,7 +85,14 @@ export default function AddContentModal({
                 isDisabled={resourcesSelected.length === 0}
                 w="fit-content"
                 rightIcon={<IconSave />}
-                onClick={() => handleUpdateLessonContent(indexLesson !== undefined ? indexLesson : -1, resourcesSelected)}
+                onClick={() => {
+                  handleUpdateLessonContent(
+                    indexLesson !== undefined ? indexLesson : -1,
+                    resourcesSelected
+                  );
+                  onClose();
+                }
+                }
               >
                 Save and Close
               </Button>
