@@ -87,8 +87,12 @@ export default function AddContentModal({
               <Tooltip
                 hasArrow
                 placement="top"
-                label={"Save and add the attached resources to the lesson activity."}
-                aria-label={"Save and add the attached resources to the lesson activity."}
+                label={
+                  'Save and add the attached resources to the lesson activity.'
+                }
+                aria-label={
+                  'Save and add the attached resources to the lesson activity.'
+                }
                 //ml="1px"
                 bg="white"
                 color="primary"

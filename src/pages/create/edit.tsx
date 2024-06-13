@@ -57,12 +57,15 @@ const Edit = ({
   } = useCreateOERsContext();
 
   // This is the collection selected in "Learning Objective" page
-  const { collectionIndex: selectedCollectionIndex } = useLearningPathDesignContext();
+  const { collectionIndex: selectedCollectionIndex } =
+    useLearningPathDesignContext();
 
   const [response, setResponse] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [areOptionsComplete, setAreOptionsComplete] = useState(true);
-  const [collectionIndex, setCollectionIndex] = useState<number>(isAddContentModal ? selectedCollectionIndex : -1);
+  const [collectionIndex, setCollectionIndex] = useState<number>(
+    isAddContentModal ? selectedCollectionIndex : -1
+  );
   const [selectedLicence, setSelectedLicence] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState<string[]>([]);
   const [selectedTypeOfResource, setSelectedTypeOfResource] = useState<
@@ -156,8 +159,6 @@ const Edit = ({
       handleData();
       handleSaveButtonClick();
 
-
-
       //console.log('Save');
     } else {
       addToast({
@@ -225,7 +226,7 @@ const Edit = ({
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

@@ -24,10 +24,12 @@ const CollectionDropDownMenu = ({
   title,
   selectedIndex,
   onChange,
-  isHighlighted
+  isHighlighted,
 }: CollectionDropDownMenuProps) => {
   const hydrated = useHasHydrated();
-  const [selectedOption, setSelectedOption] = useState<string | null>(options[selectedIndex]?.name ?? null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(
+    options[selectedIndex]?.name ?? null
+  );
 
   const handleSelect = (index: number) => {
     setSelectedOption(options[index].name);
@@ -38,7 +40,6 @@ const CollectionDropDownMenu = ({
     // If the index is -1, it means that the item is not selected
     return selectedOption === null ? true : false;
   };
-
 
   return (
     <Box w="100%" flex="1" borderRadius="7px">
