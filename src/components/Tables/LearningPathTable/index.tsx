@@ -30,13 +30,15 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       handleEditLesson,
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
+    const [indexLesson, setIndexLesson] = useState<number>(-1);
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
       useState<boolean>(false);
 
-    const handleAddContentClick = () => {
+    const handleAddContentClick = (index: number) => {
       setIsAddContentModalOpen(true);
+      setIndexLesson(index);
     };
 
     const handleCloseAddContentModal = () => {
@@ -64,6 +66,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
         <AddContentModal
           isOpen={isAddContentModalOpen}
           onClose={handleCloseAddContentModal}
+          indexLesson={indexLesson}
         />
       </Flex>
     );

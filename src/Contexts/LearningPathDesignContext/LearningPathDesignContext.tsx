@@ -111,6 +111,7 @@ type LearnignPathDesignContextProps = {
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
   removeLessonActivity: (index: number) => void;
+  handleUpdateLessonContent: (index: number, newContent: OerInCollectionProps[]) => void;
 
   // Add Content
   resourcesSelected: OerInCollectionProps[];
@@ -695,6 +696,21 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     });
   };
 
+  const handleUpdateLessonContent = (lessonIndex: number, newContent: OerInCollectionProps[]) => {
+    console.log("Updating lesson content");
+    setLessonActivities((prevLessons: LessonProps[]) => {
+      const updatedLessons = [...prevLessons];
+      if (updatedLessons[lessonIndex]) {
+        updatedLessons[lessonIndex].content = {
+          ...updatedLessons[lessonIndex].content,
+          oers: newContent
+        };
+      }
+      return updatedLessons;
+    });
+  };
+
+
   // TO_CHECK: useful?
   // const handleLessonActivities = (
   //   lessonCard: LessonProps | LessonProps[]
@@ -830,6 +846,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [resetCheckBoxOptions]); // Dipendenza dell'effetto collaterale
 
+
+
   // useEffect(() => {
   //   // Carica i dati dallo `localStorage` e imposta le variabili di stato
   //   // Usa setcollectionIndex, setBloomLevelIndex e gli altri set per impostare i valori
@@ -915,6 +933,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       handleAddLearningObjective();
     }
   }, [numberOfLO, learningObjectiveObjects.length]);
+  useEffect(() => {
+    console.log(lessonActivities);
+  }, [lessonActivities]);
 
   useEffect(() => {
     if (defaultLearningContext.trim() !== '') {
@@ -1014,6 +1035,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities,
         addEmptyLessonActivity,
         removeLessonActivity,
+        handleUpdateLessonContent,
 
         // Add content
         resourcesSelected,

@@ -7,7 +7,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
@@ -24,9 +24,10 @@ import TagSelectedResourceTooltip from '../../Tags/TagsAddContent/TagSelectedRes
 export default function AddContentModal({
   isOpen,
   onClose,
+  indexLesson
 }: AddContentModalProps) {
   const hydrated = useHasHydrated();
-  const { resourcesSelected, resetSelectedResources } =
+  const { resourcesSelected, resetSelectedResources, handleUpdateLessonContent } =
     useLearningPathDesignContext();
 
   useEffect(() => {
@@ -52,19 +53,31 @@ export default function AddContentModal({
           <Flex direction="row" align="center" w="95%" gap={3}>
             <Heading>Add Content</Heading>
             {hydrated && resourcesSelected.length > 0 && (
-              <Flex direction="row" align="center" justifyContent="flex-start" gap={1} wrap="wrap">
+              <Flex
+                direction="row"
+                align="center"
+                justifyContent="flex-start"
+                gap={1}
+                wrap="wrap"
+              >
                 {resourcesSelected?.map(
                   (resource: OerInCollectionProps, index: number) => (
-                    <TagSelectedResourceTooltip label={resource.title} IconTag={IconAttach} key={index} oer={resource} />
+                    <TagSelectedResourceTooltip
+                      label={resource.title}
+                      IconTag={IconAttach}
+                      key={index}
+                      oer={resource}
+                    />
                   )
                 )}
               </Flex>
             )}
             <Flex flex="1" justify="flex-end">
               <Button
-                isDisabled={true}
+                isDisabled={resourcesSelected.length === 0}
                 w="fit-content"
                 rightIcon={<IconSave />}
+                onClick={() => handleUpdateLessonContent(indexLesson !== undefined ? indexLesson : -1, resourcesSelected)}
               >
                 Save and Close
               </Button>
