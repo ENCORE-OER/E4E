@@ -46,7 +46,7 @@ export default function AddContentModal({
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   useEffect(() => {
     console.log(resourcesSelected);
@@ -114,7 +114,11 @@ export default function AddContentModal({
                 cursor="pointer"
               >
                 <Button
-                  isDisabled={resourcesSelected.length === 0 && lessonActivities[indexLesson ?? -1]?.content?.oers?.length === 0}  // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
+                  isDisabled={
+                    resourcesSelected.length === 0 &&
+                    lessonActivities[indexLesson ?? -1]?.content?.oers
+                      ?.length === 0
+                  } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
                   w="fit-content"
                   rightIcon={<IconSave />}
                   onClick={() => handleSaveClick()}

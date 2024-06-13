@@ -170,7 +170,7 @@ export default function LessonCardsList({
           {(provided: DroppableProvided) => (
             <Flex
               direction="column"
-              w="100%"
+              w="90%"
               gap={3}
               {...provided.droppableProps}
               ref={provided.innerRef}
