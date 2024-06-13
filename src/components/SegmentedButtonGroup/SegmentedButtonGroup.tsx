@@ -185,7 +185,7 @@ export default function SegmentedButtonGroup({
 
           <Flex w="100%" paddingTop="1.5rem" gap={`${SPACING}%`}>
             <Box w="50%">
-              <Text as="b">Leaners{"'"} group dimension</Text>
+              <Text as="b">Learners{"'"} group dimension</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
                   options={GroupDimension}
@@ -203,7 +203,7 @@ export default function SegmentedButtonGroup({
               </Box>
             </Box>
             <Box w="50%">
-              <Text as="b">Leaners{"'"} experience</Text>
+              <Text as="b">Learners{"'"} experience</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
                   options={LeanerExperience}

@@ -13,10 +13,12 @@ import { mapOptionToNumber } from '../../../utils/utils';
 
 type CreateExerciseButtonProps = {
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 };
 
 export default function CreateExerciseButton({
   isSmallerScreen,
+  isAddContentModal,
 }: CreateExerciseButtonProps) {
   const {
     typeOfExercisePanel,
@@ -114,7 +116,9 @@ export default function CreateExerciseButton({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        '/api/encore/genAI/generateActivity',
+        `${
+          isAddContentModal !== undefined && isAddContentModal ? '..' : ''
+        }/api/encore/genAI/generateActivity`,
         requestData,
         {
           headers: {

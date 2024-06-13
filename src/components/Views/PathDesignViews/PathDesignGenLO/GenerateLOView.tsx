@@ -270,8 +270,8 @@ export default function GenerateLOView({
           setLearningObjectiveObjects(
             (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
               ...prevLearningObjectives,
-              ...learningObjectives.map((lo) => ({
-                learningObjective: lo,
+              ...learningObjectives.map((lo: string) => ({
+                learningObjective: 'Learners will be able to ' + lo,
                 isSelected: false,
                 isGenerated: true,
               })),

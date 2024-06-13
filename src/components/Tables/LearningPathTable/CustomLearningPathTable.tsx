@@ -428,7 +428,7 @@ const CustomLearningPathTable = forwardRef<
                                             key={index}
                                             whiteSpace="pre-wrap"
                                           >
-                                            {content.title}
+                                            {`- ${content.title};\n`}
                                           </Text>
                                         )
                                       )}

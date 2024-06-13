@@ -143,10 +143,17 @@ export default function ResourceCardsList({
                           isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
                           isAddContentModal={isAddContentModal}
                           handleCheckboxClick={() => {
-                            if (handleCheckboxClick) handleCheckboxClick(index);
+                            if (handleCheckboxClick) {
+                              // The index has to consider also the page
+                              handleCheckboxClick(
+                                index + (currentPage - 1) * itemsPerPage
+                              );
+                            }
                           }}
                           isChecked={
-                            resourcesSelectedTemp?.includes(index) ||
+                            resourcesSelectedTemp?.includes(
+                              index + (currentPage - 1) * itemsPerPage
+                            ) ||
                             resourcesSelected?.some(
                               (resource: OerInCollectionProps) =>
                                 resource.id === oer?.id

@@ -64,8 +64,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     collectionIndex: selectedCollectionIndex,
     // resourcesIndex,
     setResourcesIndex,
-    resourcesSelected,
-    addSelectedResources,
+    resourcesSelectedAddContent: resourcesSelected,
+    addSelectedResourcesAddContent: addSelectedResources,
   } = useLearningPathDesignContext();
 
   const collectionRef = useRef<HTMLDivElement>(null);

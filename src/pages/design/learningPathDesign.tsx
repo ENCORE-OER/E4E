@@ -274,7 +274,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                       placeholder="Enter a title describing the lesson plan..."
                     />
                   ) : (
-                    <Text>{titleLearningPath}</Text>
+                    <Text fontSize="xx-large">{titleLearningPath}</Text>
                   ))}
               </Heading>
             </Flex>

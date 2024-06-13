@@ -1,16 +1,18 @@
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
+import CreateExerciseButton from '../../Buttons/ButtonsCreateOerPage/CreateExerciseButton';
 import FillGapsPanel from './FillGapsPanel';
 import MultipleChoicePanel from './MultipleChiocePanel';
 import OpenQuestionPanel from './OpenQuestionPanel';
-import CreateExerciseButton from '../../Buttons/ButtonsCreateOerPage/CreateExerciseButton';
 
 type TabsCreateMenuProps = {
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 };
 
 export default function TabsCreateMenu({
   isSmallerScreen,
+  isAddContentModal,
 }: TabsCreateMenuProps) {
   const { handleIsGenerateButtonClicked, handleTypeOfExercisePanel } =
     useCreateOERsContext();
@@ -46,6 +48,7 @@ export default function TabsCreateMenu({
       </Tabs>
       <CreateExerciseButton //here the api call
         isSmallerScreen={isSmallerScreen}
+        isAddContentModal={isAddContentModal}
       />
     </>
   );

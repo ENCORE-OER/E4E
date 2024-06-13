@@ -867,7 +867,7 @@ export default function PathDesignGenLessonPlan({
             isNumberZero={isNumberOfLAZero}
             setIsNumberZero={setIsNumberOfLAZero}
             defaultMenuTitle="Choose types of learning activities..."
-            description="in class activities"
+            description="learning activities"
             dataMenu={dataLearningActivities}
             // onDataMenu={handleLearningActivitySelection}
             // onSelectionChangeMenu={handleLearningActivityChange}

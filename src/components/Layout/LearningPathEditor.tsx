@@ -68,7 +68,11 @@ export default function LearningPathEditor({
       {hydrated &&
         //(isChangeCollection || isChangeConcept) &&
         conceptSelectedIndex !== -1 && (
-          <Flex p="10px" w="100%" flexDirection="row">
+          <Flex
+            // p="10px"
+            w="100%"
+            flexDirection="row"
+          >
             {/**/}
             <Flex
               p={0}

@@ -117,12 +117,12 @@ type LearnignPathDesignContextProps = {
   ) => void;
 
   // Add Content
-  resourcesSelected: OerInCollectionProps[];
-  addSelectedResources: (
+  resourcesSelectedAddContent: OerInCollectionProps[];
+  addSelectedResourcesAddContent: (
     oers: OerInCollectionProps | OerInCollectionProps[]
   ) => void;
-  removeSelectedResource: (oer: OerInCollectionProps) => void;
-  resetSelectedResources: () => void;
+  removeSelectedResourceAddContent: (oer: OerInCollectionProps) => void;
+  resetSelectedResourcesAddContent: () => void;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -759,19 +759,19 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ========================================================
 
   // Add Content
-  const [resourcesSelected, setResourcesSelected] = useState<
+  const [resourcesSelectedAddContent, setResourcesSelected] = useState<
     OerInCollectionProps[]
   >([]);
 
   // Add the selected resource to the array
-  const addSelectedResources = (
+  const addSelectedResourcesAddContent = (
     newResources: OerInCollectionProps | OerInCollectionProps[]
   ): void => {
     try {
       // If are more resources
       if (Array.isArray(newResources)) {
         // Check if there is a new resource already selected
-        const isAllNewResources = resourcesSelected.some(
+        const isAllNewResources = resourcesSelectedAddContent.some(
           (resourceSelected: OerInCollectionProps) =>
             newResources.forEach(
               (resource: OerInCollectionProps) =>
@@ -788,10 +788,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
           // Otherwise check on each resource and add only the ones not already selected
         } else {
           newResources.forEach((resource: OerInCollectionProps) => {
-            const isResourceIndexAlreadyAdded = resourcesSelected.some(
-              (resourceSelected: OerInCollectionProps) =>
-                resourceSelected.id === resource.id
-            );
+            const isResourceIndexAlreadyAdded =
+              resourcesSelectedAddContent.some(
+                (resourceSelected: OerInCollectionProps) =>
+                  resourceSelected.id === resource.id
+              );
             if (!isResourceIndexAlreadyAdded) {
               setResourcesSelected((prevResources: OerInCollectionProps[]) => [
                 ...prevResources,
@@ -817,7 +818,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // Remove the selected resources from the array
-  const removeSelectedResource = (
+  const removeSelectedResourceAddContent = (
     resourceToRemove: OerInCollectionProps
   ): void => {
     try {
@@ -834,15 +835,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   };
 
-  const resetSelectedResources = () => {
-    if (resourcesSelected.length > 0) {
+  const resetSelectedResourcesAddContent = () => {
+    if (resourcesSelectedAddContent.length > 0) {
       setResourcesSelected([]);
     }
   };
 
   // =============================================================================================================
 
-  const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learnears on a ${selectedLearnerExperience?.title} level.`;
+  const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -947,8 +948,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   }, [defaultLearningContext]);
 
   useEffect(() => {
-    console.log('SELECTED RESOURCES: ', resourcesSelected);
-  }, [resourcesSelected]);
+    console.log('SELECTED RESOURCES: ', resourcesSelectedAddContent);
+  }, [resourcesSelectedAddContent]);
 
   return (
     <LearningPathDesignContext.Provider
@@ -1041,10 +1042,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         handleUpdateLessonContent,
 
         // Add content
-        resourcesSelected,
-        addSelectedResources,
-        removeSelectedResource,
-        resetSelectedResources,
+        resourcesSelectedAddContent,
+        addSelectedResourcesAddContent,
+        removeSelectedResourceAddContent,
+        resetSelectedResourcesAddContent,
 
         // LESSONS CARDS
         lessonCards,

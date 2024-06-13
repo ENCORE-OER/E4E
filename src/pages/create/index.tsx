@@ -107,7 +107,10 @@ const Create = ({
             />
             {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo finde a better way to check if the exercise is generated
               <Box paddingTop={'2rem'}>
-                <SharedParameterTab isSmallerScreen={isSmallerScreen} />{' '}
+                <SharedParameterTab
+                  isSmallerScreen={isSmallerScreen}
+                  isAddContentModal={isAddContentModal}
+                />{' '}
                 {/* in this there are also the different tabs for the exercises and the api call for the generation of the exercises*/}
               </Box>
             )}
