@@ -62,7 +62,6 @@ export const CustomTab = (props: CustomTabProps) => {
             </Tab>
           ))} */}
 
-
         {/* Tabs */}
         <Flex>
           {config

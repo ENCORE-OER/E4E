@@ -788,10 +788,11 @@ export const LearningPathDesignProvider = ({ children }: any) => {
           // Otherwise check on each resource and add only the ones not already selected
         } else {
           newResources.forEach((resource: OerInCollectionProps) => {
-            const isResourceIndexAlreadyAdded = resourcesSelectedAddContent.some(
-              (resourceSelected: OerInCollectionProps) =>
-                resourceSelected.id === resource.id
-            );
+            const isResourceIndexAlreadyAdded =
+              resourcesSelectedAddContent.some(
+                (resourceSelected: OerInCollectionProps) =>
+                  resourceSelected.id === resource.id
+              );
             if (!isResourceIndexAlreadyAdded) {
               setResourcesSelected((prevResources: OerInCollectionProps[]) => [
                 ...prevResources,

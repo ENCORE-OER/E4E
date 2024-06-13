@@ -41,7 +41,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleDefaultLearningContext,
     lessonActivities,
     resourcesSelectedAddContent,
-    resetSelectedResourcesAddContent
+    resetSelectedResourcesAddContent,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -51,9 +51,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // ==================================================================
 
-  const [isCollectionSelected, setIsCollectionSelected] = useState<boolean | null>(
-    null
-  );
+  const [isCollectionSelected, setIsCollectionSelected] = useState<
+    boolean | null
+  >(null);
   const [isResourceSelected, setIsResourceSelected] = useState<boolean | null>(
     null
   );
@@ -341,7 +341,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -350,7 +350,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -436,7 +436,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             SPACING={SPACING}
             handleResetAll={handleResetAll}
             handleNextClick={handleNextClick}
-          // handlePrevButtonClick={handlePrevButtonClick}
+            // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>

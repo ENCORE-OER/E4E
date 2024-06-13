@@ -12,7 +12,7 @@ type TabsCreateMenuProps = {
 
 export default function TabsCreateMenu({
   isSmallerScreen,
-  isAddContentModal
+  isAddContentModal,
 }: TabsCreateMenuProps) {
   const { handleIsGenerateButtonClicked, handleTypeOfExercisePanel } =
     useCreateOERsContext();
