@@ -273,10 +273,11 @@ export default function MultipleDataDropDownMenu({
                                     itemIndex[indexData]?.includes(index) ||
                                     false
                                   }
-                                  isDisabled={
-                                    selectedItemsCount >= maxNumberItems &&
-                                    !itemIndex[indexData]?.includes(index)
-                                  }
+                                  // isDisabled={
+                                  //   selectedItemsCount >= maxNumberItems &&
+                                  //   !itemIndex[indexData]?.includes(index)
+                                  // }
+                                  isDisabled={true}
                                 />
                               </Flex>
                             </Tooltip>

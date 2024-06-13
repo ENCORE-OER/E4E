@@ -26,6 +26,9 @@ type OerCardHeaderProps = {
   checkBookmark?: boolean;
   linkOer: string[];
   isAddContentModal?: boolean; // Used for the AddContent Modal to show the resources page
+  handleCheckboxClick?: () => void;
+  isChecked?: boolean;
+  isDisabled?: boolean;
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -42,7 +45,17 @@ export default function OerCardHeader({
   checkBookmark,
   linkOer,
   isAddContentModal,
+  handleCheckboxClick,
+  isChecked,
+  isDisabled,
 }: OerCardHeaderProps) {
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    if (handleCheckboxClick) {
+      handleCheckboxClick();
+    }
+  };
+
   return (
     <CardHeader pb="0" pt={ptCardHeader || '1.5'}>
       <Flex justify="left" direction="column">
@@ -54,38 +67,60 @@ export default function OerCardHeader({
             showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
-          <Button
-            style={{
-              border: 'none',
-              background: 'none',
-              cursor: 'pointer',
-              position: 'sticky',
-            }}
-            variant="ghost"
-            onClick={(e) => {
-              e.preventDefault();
-              //setIsSaved(!isSaved);
-              /*addCollection(idCollection, nameCollection);
-                  addResource(idCollection, idOer);*/
-            }}
-          >
-            {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
-            {!isAddContentModal ? (
+          {!isAddContentModal ? (
+            <Button
+              style={{
+                border: 'none',
+                background: 'none',
+                cursor: 'pointer',
+                position: 'sticky',
+              }}
+              variant="ghost"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                //setIsSaved(!isSaved);
+                // addCollection(idCollection, nameCollection);
+                // addResource(idCollection, idOer);
+              }}
+            >
+              {/*<BsBookmark fill={collection_color} color={collection_color} size={25} />*/}
               <IconBookmarkCheck
                 colorBookMark={collection_color}
                 size="25px"
                 isCheck={checkBookmark}
               />
-            ) : (
+            </Button>
+          ) : (
+            <Button
+              style={{
+                border: 'none',
+                background: 'none',
+                cursor: 'pointer',
+                position: 'sticky',
+              }}
+              w="fit-content"
+              p={0}
+              variant="ghost"
+              onClick={(e: any) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleCheckboxChange(e);
+                console.log('Button 1');
+              }}
+            >
               <Checkbox
+                as="button"
                 colorScheme="yellow"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                isDisabled={true}
+                // onClick={(e) => {
+                //   e.preventDefault();
+                //   e.stopPropagation();
+                // }}
+                isChecked={isChecked}
+                isDisabled={isDisabled}
               />
-            )}
-          </Button>
+            </Button>
+          )}
         </HStack>
         <Flex direction={'row'} align="center" gap="2">
           <Text noOfLines={1} variant="title_card">

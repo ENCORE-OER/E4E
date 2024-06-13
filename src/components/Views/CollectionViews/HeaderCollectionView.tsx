@@ -1,7 +1,7 @@
 import { Flex, Heading, Icon, Spacer } from '@chakra-ui/react';
 import { FcFolder } from 'react-icons/fc';
 import { CollectionProps } from '../../../types/encoreElements';
-import StandardButton from '../../Buttons/ButtonsDesignPage/StandardButton';
+import AttachButton from '../../Buttons/ButtonsDesignPage/AttachButton';
 import DownloadButton from '../../Buttons/DownloadButton';
 
 type HeaderCollectionViewProps = {
@@ -9,6 +9,8 @@ type HeaderCollectionViewProps = {
   data: CollectionProps;
   fileName: string;
   isAddContentModal?: boolean;
+  handleAttachClick: () => void;
+  isDisabled: boolean;
 };
 
 export default function HeaderCollectionView({
@@ -16,6 +18,8 @@ export default function HeaderCollectionView({
   data,
   fileName,
   isAddContentModal,
+  handleAttachClick,
+  isDisabled,
 }: HeaderCollectionViewProps) {
   return (
     <Flex w="100%" pb="3" bg="background">
@@ -26,11 +30,9 @@ export default function HeaderCollectionView({
       <Spacer />
       {!isAddContentModal && <DownloadButton data={data} fileName={fileName} />}
       {isAddContentModal && (
-        <StandardButton
-          buttonText="Attach Selected"
-          handleClick={() => console.log('Attach Selected!')}
-          size={'sm'}
-          isDisabled={true}
+        <AttachButton
+          handleAttachClick={handleAttachClick}
+          isDisabled={isDisabled}
         />
       )}
     </Flex>

@@ -54,12 +54,18 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     setSelectedConceptsForCollection,
     addCollection, // for InfoCardModal
     addResource, // for InfoCardModal
+    // updateResourcesSelected,
+    // addSelectedResource,
+    // removeSelectedResource,
+    // resetSelectedResources,
   } = useCollectionsContext();
 
   const {
     collectionIndex: selectedCollectionIndex,
     // resourcesIndex,
     setResourcesIndex,
+    resourcesSelected,
+    addSelectedResources,
   } = useLearningPathDesignContext();
 
   const collectionRef = useRef<HTMLDivElement>(null);
@@ -283,6 +289,11 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     }
   }, [collectionIndex]);
 
+  useEffect(() => {
+    setCollectionIndex(selectedCollectionIndex);
+    setCollectionClicked(true);
+  }, [isAddContentModal]);
+
   return (
     <Flex w="100%" h="100%" bg="background">
       {!isAddContentModal && <SideBar pagePath={router.pathname} />}
@@ -333,37 +344,57 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                 {isSmallerScreen ? '' : 'Collections'}
               </Heading>
               {!isSmallerScreen && <Spacer />}
-              <Button
-                variant="ghost"
-                _hover={{ bg: 'backgound' }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleOpenNewCollectionModal();
-                }}
-              >
-                <Icon as={LuFolderPlus} w="30px" h="30px" />
-              </Button>
+              {!isAddContentModal && (
+                <Button
+                  variant="ghost"
+                  _hover={{ bg: 'backgound' }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleOpenNewCollectionModal();
+                  }}
+                >
+                  <Icon as={LuFolderPlus} w="30px" h="30px" />
+                </Button>
+              )}
             </HStack>
             <Box bg="background">
               {hydrated &&
-                collections?.map(
-                  (collection: CollectionProps, index: number) => (
-                    <CollectionNavItem
-                      key={index}
-                      index={index}
-                      collection={collection}
-                      collectionRef={collectionRef}
-                      collectionClicked={collectionClicked}
-                      setCollectionClicked={setCollectionClicked}
-                      collectionIndex={collectionIndex}
-                      setCollectionIndex={setCollectionIndex}
-                      deleteCollection={deleteCollection}
-                      isSmallerScreen={isSmallerScreen}
-                    >
-                      {collection.name}
-                    </CollectionNavItem>
+                (!isAddContentModal ? (
+                  collections?.map(
+                    (collection: CollectionProps, index: number) => (
+                      <CollectionNavItem
+                        key={index}
+                        index={index}
+                        collection={collection}
+                        collectionRef={collectionRef}
+                        collectionClicked={collectionClicked}
+                        setCollectionClicked={setCollectionClicked}
+                        collectionIndex={collectionIndex}
+                        setCollectionIndex={setCollectionIndex}
+                        deleteCollection={deleteCollection}
+                        isSmallerScreen={isSmallerScreen}
+                        isAddContentModal={isAddContentModal}
+                      >
+                        {collection.name}
+                      </CollectionNavItem>
+                    )
                   )
-                )}
+                ) : (
+                  <CollectionNavItem
+                    index={collectionIndex}
+                    collection={collections[collectionIndex]}
+                    collectionRef={collectionRef}
+                    collectionClicked={collectionClicked}
+                    setCollectionClicked={setCollectionClicked}
+                    collectionIndex={collectionIndex}
+                    setCollectionIndex={setCollectionIndex}
+                    deleteCollection={deleteCollection}
+                    isSmallerScreen={isSmallerScreen}
+                    isAddContentModal={isAddContentModal}
+                  >
+                    {collections[collectionIndex].name}
+                  </CollectionNavItem>
+                ))}
             </Box>
           </Box>
 
@@ -399,6 +430,12 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               setIsDeletingResource={setIsDeletingResource}
               isSmallerScreen={isSmallerScreen}
               isAddContentModal={isAddContentModal}
+              resourcesSelected={resourcesSelected}
+              addSelectedResources={addSelectedResources}
+              // updateResourcesSelected={updateResourcesSelected}
+              // addSelectedResource={addSelectedResource}
+              // removeSelectedResource={removeSelectedResource}
+              // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>

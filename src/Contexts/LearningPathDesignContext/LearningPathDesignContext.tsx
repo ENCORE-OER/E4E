@@ -12,6 +12,7 @@ import {
   LessonCardProps,
   LessonProps,
   ObjectLearningObjectiveProps,
+  OerInCollectionProps,
   Option,
   OptionsTypeOfAssignmentProps,
   SkillItemProps,
@@ -39,7 +40,7 @@ type LearnignPathDesignContextProps = {
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
-  collectionIndex: number;
+  collectionIndex: number; // Index of the selected collection in the "Learning Objective" page
   resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
   // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
@@ -110,6 +111,18 @@ type LearnignPathDesignContextProps = {
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
   removeLessonActivity: (index: number) => void;
+  handleUpdateLessonContent: (
+    index: number,
+    newContent: OerInCollectionProps[]
+  ) => void;
+
+  // Add Content
+  resourcesSelected: OerInCollectionProps[];
+  addSelectedResources: (
+    oers: OerInCollectionProps | OerInCollectionProps[]
+  ) => void;
+  removeSelectedResource: (oer: OerInCollectionProps) => void;
+  resetSelectedResources: () => void;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -686,6 +699,23 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     });
   };
 
+  const handleUpdateLessonContent = (
+    lessonIndex: number,
+    newContent: OerInCollectionProps[]
+  ) => {
+    console.log('Updating lesson content');
+    setLessonActivities((prevLessons: LessonProps[]) => {
+      const updatedLessons = [...prevLessons];
+      if (updatedLessons[lessonIndex]) {
+        updatedLessons[lessonIndex].content = {
+          ...updatedLessons[lessonIndex].content,
+          oers: newContent,
+        };
+      }
+      return updatedLessons;
+    });
+  };
+
   // TO_CHECK: useful?
   // const handleLessonActivities = (
   //   lessonCard: LessonProps | LessonProps[]
@@ -727,6 +757,88 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // ========================================================
+
+  // Add Content
+  const [resourcesSelected, setResourcesSelected] = useState<
+    OerInCollectionProps[]
+  >([]);
+
+  // Add the selected resource to the array
+  const addSelectedResources = (
+    newResources: OerInCollectionProps | OerInCollectionProps[]
+  ): void => {
+    try {
+      // If are more resources
+      if (Array.isArray(newResources)) {
+        // Check if there is a new resource already selected
+        const isAllNewResources = resourcesSelected.some(
+          (resourceSelected: OerInCollectionProps) =>
+            newResources.forEach(
+              (resource: OerInCollectionProps) =>
+                resourceSelected.id === resource.id
+            )
+        );
+
+        // If NO, add all the resources
+        if (isAllNewResources) {
+          setResourcesSelected((prevResources: OerInCollectionProps[]) => [
+            ...prevResources,
+            ...newResources,
+          ]);
+          // Otherwise check on each resource and add only the ones not already selected
+        } else {
+          newResources.forEach((resource: OerInCollectionProps) => {
+            const isResourceIndexAlreadyAdded = resourcesSelected.some(
+              (resourceSelected: OerInCollectionProps) =>
+                resourceSelected.id === resource.id
+            );
+            if (!isResourceIndexAlreadyAdded) {
+              setResourcesSelected((prevResources: OerInCollectionProps[]) => [
+                ...prevResources,
+                resource,
+              ]);
+              // Update the UI or show a success notification
+            } else {
+              console.error('Resource already selected');
+            }
+          });
+        }
+
+        // If is only one resource
+      } else {
+        setResourcesSelected((prevResources: OerInCollectionProps[]) => [
+          ...prevResources,
+          newResources,
+        ]);
+      }
+    } catch (error) {
+      // Handle errors or show an error notification
+    }
+  };
+
+  // Remove the selected resources from the array
+  const removeSelectedResource = (
+    resourceToRemove: OerInCollectionProps
+  ): void => {
+    try {
+      setResourcesSelected((prevResources: OerInCollectionProps[]) =>
+        prevResources.filter(
+          (resource: OerInCollectionProps) =>
+            resource.id !== resourceToRemove.id
+        )
+      );
+      // Update the UI or show a success notification
+    } catch (error) {
+      // Handle errors or show an error notificationù
+      console.error(error);
+    }
+  };
+
+  const resetSelectedResources = () => {
+    if (resourcesSelected.length > 0) {
+      setResourcesSelected([]);
+    }
+  };
 
   // =============================================================================================================
 
@@ -824,12 +936,19 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       handleAddLearningObjective();
     }
   }, [numberOfLO, learningObjectiveObjects.length]);
+  useEffect(() => {
+    console.log(lessonActivities);
+  }, [lessonActivities]);
 
   useEffect(() => {
     if (defaultLearningContext.trim() !== '') {
       handleSetLearningTextContext(defaultLearningContext);
     }
   }, [defaultLearningContext]);
+
+  useEffect(() => {
+    console.log('SELECTED RESOURCES: ', resourcesSelected);
+  }, [resourcesSelected]);
 
   return (
     <LearningPathDesignContext.Provider
@@ -919,6 +1038,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities,
         addEmptyLessonActivity,
         removeLessonActivity,
+        handleUpdateLessonContent,
+
+        // Add content
+        resourcesSelected,
+        addSelectedResources,
+        removeSelectedResource,
+        resetSelectedResources,
 
         // LESSONS CARDS
         lessonCards,

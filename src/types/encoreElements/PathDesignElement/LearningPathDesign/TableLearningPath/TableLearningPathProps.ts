@@ -17,7 +17,7 @@ export interface TableLearningPathProps {
   editRowIndex: number | null;
   handleEditLesson: (index: number) => void;
   // handleSaveLesson: () => void;
-  handleAddContentClick: () => void;
+  handleAddContentClick: (index: number) => void;
   removeLessonActivity: (index: number) => void;
   isPrinting: boolean;
 }

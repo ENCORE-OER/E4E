@@ -39,6 +39,10 @@ export interface CardInfoModalProps {
   updateLikeOER: boolean;
   setUpdateLikeOER: Dispatch<React.SetStateAction<boolean>>;
   isAddContentModal: boolean | undefined; // To know if is from "Add content modal"
+  handleCheckboxClick?: (index: number) => void;
+  isChecked?: boolean;
+  isDisabled?: boolean;
+  indexOerOpened?: number;
 }
 
 export default function CardInfoModal({
@@ -49,6 +53,10 @@ export default function CardInfoModal({
   updateLikeOER,
   setUpdateLikeOER,
   isAddContentModal,
+  handleCheckboxClick,
+  isChecked,
+  isDisabled,
+  indexOerOpened,
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
     useCollectionsContext();
@@ -297,6 +305,12 @@ export default function CardInfoModal({
             handleOpenAddCollectionModal={handleOpenAddCollectionModal}
             handleViewResource={handleViewResource}
             isAddContentModal={isAddContentModal}
+            handleCheckboxClick={() => {
+              if (handleCheckboxClick)
+                handleCheckboxClick(indexOerOpened ?? -1);
+            }}
+            isChecked={isChecked}
+            isDisabled={isDisabled}
           />
           <BodyCardInfoModal
             collectionsColor={collectionsColor}

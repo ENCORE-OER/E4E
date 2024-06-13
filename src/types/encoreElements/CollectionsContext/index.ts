@@ -3,4 +3,5 @@ export * from './AddResourceFunctionProps';
 export * from './DeleteCollectionFunctionProps';
 export * from './DeleteResourceFunctionProps';
 export * from './SelectedConceptsFunctionProps';
+export * from './SelectedResourcesFunctionProps';
 export * from './ToggleLikeFunctionProps';

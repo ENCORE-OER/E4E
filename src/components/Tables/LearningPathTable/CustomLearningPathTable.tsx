@@ -1,11 +1,11 @@
 import {
   Box,
   Flex,
-  Link,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -22,17 +22,20 @@ import {
 } from 'react-beautiful-dnd';
 import {
   LessonProps,
+  OerInCollectionProps,
   TableLearningPathProps,
   activityTypesObjectsProps,
 } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import ActionButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/ActionButton';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
+import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import ActivityTypeDropDownMenu from '../../DropDownMenu/ActivityTypeDropDownMenu';
 import LessonDropDownMenu from '../../DropDownMenu/LessonDropDownMenu';
 import IconDrag from '../../Icons/IconDrag/IconDrag';
 import EditDescriptionModal from '../../Modals/LearningPathModals/EditDescriptionModal';
 import CustomNumberInput from '../../NumberInput/CustomNumberInput';
+import TagContent from '../../Tags/TagsAddContent/TagContent';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 import LabelEmptyFieldTable from '../../Texts/LabelEmptyFieldTable';
 
@@ -382,20 +385,62 @@ const CustomLearningPathTable = forwardRef<
                                 }
                               >
                                 <Flex w="100%" justify="center" px={0}>
-                                  {!isPrinting || row.content?.length === 0 ? (
+                                  {hydrated &&
+                                  (row.content?.oers?.length ?? 0) > 0 &&
+                                  !isPrinting ? (
+                                    <Flex direction="column" gap={0.5}>
+                                      {row.content?.oers?.map(
+                                        (
+                                          content: OerInCollectionProps,
+                                          index: number
+                                        ) => (
+                                          // <Text
+                                          //   key={index}
+                                          //   whiteSpace="pre-wrap"
+                                          // >
+                                          //   {content.title}
+                                          // </Text>
+                                          <TagContent
+                                            key={index}
+                                            label={content.title}
+                                          />
+                                        )
+                                      )}
+                                      <UnderlinedButton
+                                        fontWeight={0}
+                                        color="primary"
+                                        nameButton="Add/Edit Content"
+                                        size="sm"
+                                        fontSize="sm"
+                                        handleClick={() =>
+                                          handleAddContentClick(indexRow)
+                                        }
+                                      />
+                                    </Flex>
+                                  ) : isPrinting ? (
+                                    <Flex direction="column" gap={0.5}>
+                                      {row.content?.oers?.map(
+                                        (
+                                          content: OerInCollectionProps,
+                                          index: number
+                                        ) => (
+                                          <Text
+                                            key={index}
+                                            whiteSpace="pre-wrap"
+                                          >
+                                            {content.title}
+                                          </Text>
+                                        )
+                                      )}
+                                    </Flex>
+                                  ) : (
                                     <AddContentButton
                                       size="sm"
                                       fontSize="sm"
-                                      onClick={handleAddContentClick}
+                                      onClick={() =>
+                                        handleAddContentClick(indexRow)
+                                      }
                                     />
-                                  ) : (
-                                    row.content?.map(
-                                      (content: string, index: number) => (
-                                        <Link key={index} href={content}>
-                                          {content}
-                                        </Link>
-                                      )
-                                    )
                                   )}
                                 </Flex>
                               </Td>

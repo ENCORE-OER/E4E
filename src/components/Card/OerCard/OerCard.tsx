@@ -7,7 +7,10 @@ import OerCardHeader from './OerCardHeader';
 interface OerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
   isAddContentModal?: boolean;
+  handleCheckboxClick?: () => void;
   isSmallerScreen?: boolean; // used for the responsive design of the page (reduce number of resource type tags)
+  isChecked?: boolean;
+  isDisabled?: boolean;
 }
 
 export default function OerCard({
@@ -41,6 +44,9 @@ export default function OerCard({
   maxWCard,
   oer_url,
   isAddContentModal,
+  handleCheckboxClick,
+  isChecked,
+  isDisabled,
 }: OerCardProps) {
   return (
     <Card
@@ -72,6 +78,9 @@ export default function OerCard({
         checkBookmark={checkBookmark}
         linkOer={oer_url}
         isAddContentModal={isAddContentModal}
+        handleCheckboxClick={handleCheckboxClick}
+        isChecked={isChecked}
+        isDisabled={isDisabled}
       />
       <OerCardBody
         description={description}

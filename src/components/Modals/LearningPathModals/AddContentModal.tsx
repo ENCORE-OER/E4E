@@ -8,30 +8,118 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
 } from '@chakra-ui/react';
-import { AddContentModalProps } from '../../../types/encoreElements';
+import { useEffect } from 'react';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import {
+  AddContentModalProps,
+  OerInCollectionProps,
+} from '../../../types/encoreElements';
+import { useHasHydrated } from '../../../utils/utils';
+import IconAttach from '../../Icons/IconAttach/IconAttach';
 import IconSave from '../../Icons/IconSave/IconSave';
 import AddContentTabs from '../../Tabs/AddContentTabs';
+import TagSelectedResource from '../../Tags/TagsAddContent/TagSelectedResource';
 
 export default function AddContentModal({
   isOpen,
   onClose,
+  indexLesson,
 }: AddContentModalProps) {
+  const hydrated = useHasHydrated();
+  const {
+    resourcesSelected,
+    addSelectedResources,
+    lessonActivities,
+    resetSelectedResources,
+    handleUpdateLessonContent,
+  } = useLearningPathDesignContext();
+
+  useEffect(() => {
+    console.log(resourcesSelected);
+  }, [resourcesSelected]);
+
+  useEffect(() => {
+    if (isOpen) {
+      console.log('PRENDO');
+      addSelectedResources(
+        lessonActivities[indexLesson ?? -1]?.content?.oers ?? []
+      );
+    }
+  }, [isOpen]);
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={'100%'}>
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        onClose();
+        resetSelectedResources();
+      }}
+      size={'100%'}
+    >
       <ModalOverlay />
-      <ModalContent w="90%" h="90%">
+      <ModalContent w="90%" h="90%" bg="background">
         <ModalHeader>
-          <Flex direction="row" align="center" w="95%">
+          <Flex direction="row" align="center" w="95%" gap={3}>
             <Heading>Add Content</Heading>
-            <Flex flex="1" justify="flex-end">
-              <Button
-                isDisabled={true}
-                w="fit-content"
-                rightIcon={<IconSave />}
+            {hydrated && resourcesSelected.length > 0 && (
+              <Flex
+                direction="row"
+                align="center"
+                justifyContent="flex-start"
+                gap={1}
+                wrap="wrap"
               >
-                Save and Close
-              </Button>
+                {resourcesSelected?.map(
+                  (resource: OerInCollectionProps, index: number) => (
+                    <TagSelectedResource
+                      label={resource.title}
+                      IconTag={IconAttach}
+                      key={index}
+                      oer={resource}
+                    />
+                  )
+                )}
+              </Flex>
+            )}
+            <Flex flex="1" justify="flex-end">
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={
+                  'Save and add the attached resources to the lesson activity.'
+                }
+                aria-label={
+                  'Save and add the attached resources to the lesson activity.'
+                }
+                //ml="1px"
+                bg="white"
+                color="primary"
+                p={2}
+                fontSize={'sm'}
+                borderRadius={5}
+                cursor="pointer"
+              >
+                <Button
+                  isDisabled={resourcesSelected.length === 0}
+                  w="fit-content"
+                  rightIcon={<IconSave />}
+                  onClick={() => {
+                    try {
+                      handleUpdateLessonContent(
+                        indexLesson !== undefined ? indexLesson : -1,
+                        resourcesSelected
+                      );
+                      onClose();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  }}
+                >
+                  Save and Close
+                </Button>
+              </Tooltip>
             </Flex>
           </Flex>
         </ModalHeader>

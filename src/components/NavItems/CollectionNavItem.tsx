@@ -27,6 +27,7 @@ interface CollectionNavItemProps {
   deleteCollection: (id: number, name: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 }
 
 interface ItemToDeleteProps {
@@ -45,6 +46,7 @@ const CollectionNavItem = ({
   setCollectionIndex,
   deleteCollection,
   isSmallerScreen,
+  isAddContentModal,
 }: CollectionNavItemProps) => {
   const hydrated = useHasHydrated();
   const {
@@ -153,18 +155,20 @@ const CollectionNavItem = ({
             </Heading>
           )}
         </Flex>
-        <Button
-          variant="ghost"
-          _hover={{ bg: 'gray.300' }}
-          onClick={(e) => {
-            e.preventDefault();
-            handleDeleteButtonClick(collection.id, collection.name);
-          }}
-          position="absolute"
-          right={'0px'}
-        >
-          <DeleteIcon />
-        </Button>
+        {!isAddContentModal && (
+          <Button
+            variant="ghost"
+            _hover={{ bg: 'gray.300' }}
+            onClick={(e) => {
+              e.preventDefault();
+              handleDeleteButtonClick(collection.id, collection.name);
+            }}
+            position="absolute"
+            right={'0px'}
+          >
+            <DeleteIcon />
+          </Button>
+        )}
       </HStack>
 
       <DeleteAlertDialog

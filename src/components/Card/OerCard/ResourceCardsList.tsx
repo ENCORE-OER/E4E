@@ -13,7 +13,11 @@ import { Dispatch, SetStateAction, useState } from 'react';
 // import fill_the_gaps_data from '../../../data/json/examplesOutputGenOer/fill_the_gaps.json';
 // import open_question_data from '../../../data/json/examplesOutputGenOer/open_question.json';
 // import multiple_choice_data from '../../../data/json/examplesOutputGenOer/multiple_choice.json';
-import { OerFreeSearchProps, OerProps } from '../../../types/encoreElements';
+import {
+  OerFreeSearchProps,
+  OerInCollectionProps,
+  OerProps,
+} from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import CardInfoModal from '../../Modals/CardInfoModals/CardInfoModal/CardInfoModal';
 import Pagination from '../../Pagination/pagination';
@@ -37,6 +41,9 @@ type ResourceCardsListProps = {
   handlePageChange?: (newPage: number) => void;
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean;
+  handleCheckboxClick?: (index: number) => void;
+  resourcesSelected?: OerInCollectionProps[];
+  resourcesSelectedTemp?: number[];
 };
 
 export default function ResourceCardsList({
@@ -53,12 +60,16 @@ export default function ResourceCardsList({
   handlePageChange,
   isSmallerScreen,
   isAddContentModal,
+  handleCheckboxClick,
+  resourcesSelected,
+  resourcesSelectedTemp,
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [oerById, setOerById] = useState<
     OerProps | OerFreeSearchProps | undefined
   >(undefined);
+  const [indexOerOpen, setIndexOerOpen] = useState<number>(-1);
   //const [currentPage, setCurrentPage] = useState<number>(1);
 
   // To know if the user has liked or unliked an oer and to refresh the oer card
@@ -102,11 +113,12 @@ export default function ResourceCardsList({
                   ) => (
                     <HStack key={index}>
                       <Box
-                        onClick={async (e: any) => {
+                        onClick={(e: any) => {
                           e.preventDefault();
                           onOpen();
                           // handleOpenCardInfoModal();
                           setOerById(oer);
+                          setIndexOerOpen(index);
                         }}
                         as="button"
                       >
@@ -130,6 +142,20 @@ export default function ResourceCardsList({
                           updateLikeOER={updateLikeOER}
                           isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
                           isAddContentModal={isAddContentModal}
+                          handleCheckboxClick={() => {
+                            if (handleCheckboxClick) handleCheckboxClick(index);
+                          }}
+                          isChecked={
+                            resourcesSelectedTemp?.includes(index) ||
+                            resourcesSelected?.some(
+                              (resource: OerInCollectionProps) =>
+                                resource.id === oer?.id
+                            )
+                          }
+                          isDisabled={resourcesSelected?.some(
+                            (resource: OerInCollectionProps) =>
+                              resource.id === oer?.id
+                          )}
                         />
                       </Box>
                       {isResourcePage && !isAddContentModal && (
@@ -270,6 +296,18 @@ export default function ResourceCardsList({
         updateLikeOER={updateLikeOER}
         setUpdateLikeOER={setUpdateLikeOER}
         isAddContentModal={isAddContentModal}
+        handleCheckboxClick={() => {
+          if (handleCheckboxClick) handleCheckboxClick(indexOerOpen);
+        }}
+        isChecked={
+          resourcesSelectedTemp?.includes(indexOerOpen) ||
+          resourcesSelected?.some(
+            (resource: OerInCollectionProps) => resource.id === oerById?.id
+          )
+        }
+        isDisabled={resourcesSelected?.some(
+          (resource: OerInCollectionProps) => resource.id === oerById?.id
+        )}
       />
     </>
   );
