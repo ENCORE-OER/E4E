@@ -46,7 +46,7 @@ export default function HeaderCardInfoModal({
   isAddContentModal,
   handleCheckboxClick,
   isChecked,
-  isDisabled
+  isDisabled,
 }: HeaderCardInfoModalProps) {
   const hydrated = useHasHydrated();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,22 +75,21 @@ export default function HeaderCardInfoModal({
             isChecked={isChecked}
             isDisabled={isDisabled}
           />
-        ) :
-          (
-            collectionsColor?.length &&
-            collectionsColor?.map(
-              (
-                collection_color: ColorCollectionProps | undefined,
-                index: number
-              ) => (
-                <IconBookmarkCheckCollections
-                  key={index}
-                  collectionColor={collection_color?.color}
-                  collectionName={collection_color?.name}
-                />
-              )
+        ) : (
+          collectionsColor?.length &&
+          collectionsColor?.map(
+            (
+              collection_color: ColorCollectionProps | undefined,
+              index: number
+            ) => (
+              <IconBookmarkCheckCollections
+                key={index}
+                collectionColor={collection_color?.color}
+                collectionName={collection_color?.name}
+              />
             )
-          )}
+          )
+        )}
       </HStack>
       <Flex direction="row" gap="2" align="center" pb="5">
         <Heading size="md">{title}</Heading>

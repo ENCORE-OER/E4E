@@ -8,6 +8,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
@@ -46,7 +47,7 @@ export default function AddContentModal({
         lessonActivities[indexLesson ?? -1]?.content?.oers ?? []
       );
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   return (
     <Modal
@@ -83,24 +84,38 @@ export default function AddContentModal({
               </Flex>
             )}
             <Flex flex="1" justify="flex-end">
-              <Button
-                isDisabled={resourcesSelected.length === 0}
-                w="fit-content"
-                rightIcon={<IconSave />}
-                onClick={() => {
-                  try {
-                    handleUpdateLessonContent(
-                      indexLesson !== undefined ? indexLesson : -1,
-                      resourcesSelected
-                    );
-                    onClose();
-                  } catch (error) {
-                    console.error(error);
-                  }
-                }}
+              <Tooltip
+                hasArrow
+                placement="top"
+                label={"Save and add the attached resources to the lesson activity."}
+                aria-label={"Save and add the attached resources to the lesson activity."}
+                //ml="1px"
+                bg="white"
+                color="primary"
+                p={2}
+                fontSize={'sm'}
+                borderRadius={5}
+                cursor="pointer"
               >
-                Save and Close
-              </Button>
+                <Button
+                  isDisabled={resourcesSelected.length === 0}
+                  w="fit-content"
+                  rightIcon={<IconSave />}
+                  onClick={() => {
+                    try {
+                      handleUpdateLessonContent(
+                        indexLesson !== undefined ? indexLesson : -1,
+                        resourcesSelected
+                      );
+                      onClose();
+                    } catch (error) {
+                      console.error(error);
+                    }
+                  }}
+                >
+                  Save and Close
+                </Button>
+              </Tooltip>
             </Flex>
           </Flex>
         </ModalHeader>

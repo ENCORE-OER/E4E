@@ -42,7 +42,7 @@ export interface CardInfoModalProps {
   handleCheckboxClick?: (index: number) => void;
   isChecked?: boolean;
   isDisabled?: boolean;
-  indexOerOpened?: number
+  indexOerOpened?: number;
 }
 
 export default function CardInfoModal({
@@ -56,7 +56,7 @@ export default function CardInfoModal({
   handleCheckboxClick,
   isChecked,
   isDisabled,
-  indexOerOpened
+  indexOerOpened,
 }: CardInfoModalProps) {
   const { addCollection, addResource, collections, toggleLikeOER, likedOers } =
     useCollectionsContext();
@@ -214,7 +214,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-            []
+              []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -305,7 +305,10 @@ export default function CardInfoModal({
             handleOpenAddCollectionModal={handleOpenAddCollectionModal}
             handleViewResource={handleViewResource}
             isAddContentModal={isAddContentModal}
-            handleCheckboxClick={() => { if (handleCheckboxClick) handleCheckboxClick(indexOerOpened ?? -1) }}
+            handleCheckboxClick={() => {
+              if (handleCheckboxClick)
+                handleCheckboxClick(indexOerOpened ?? -1);
+            }}
             isChecked={isChecked}
             isDisabled={isDisabled}
           />
@@ -346,9 +349,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //times_used={times_used}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //times_used={times_used}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
       <ExerciseInfoModal

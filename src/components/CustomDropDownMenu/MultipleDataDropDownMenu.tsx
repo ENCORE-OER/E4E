@@ -171,7 +171,7 @@ export default function MultipleDataDropDownMenu({
           _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
           //aria-expanded={isOpen ? 'true' : 'false'}
           onClick={handleToggleMenu}
-          // isDisabled={true}
+        // isDisabled={true}
         >
           <Flex direction="row" w="100%" align="center" gap={3}>
             <Flex
@@ -204,8 +204,8 @@ export default function MultipleDataDropDownMenu({
         <MenuList
           maxH="25rem"
           overflowY="auto"
-          // whiteSpace="pre-wrap"
-          // overflowWrap={'normal'}
+        // whiteSpace="pre-wrap"
+        // overflowWrap={'normal'}
         >
           {isCheckBoxNeeded && (
             // Array.isArray(itemIndex) &&
@@ -273,10 +273,11 @@ export default function MultipleDataDropDownMenu({
                                     itemIndex[indexData]?.includes(index) ||
                                     false
                                   }
-                                  isDisabled={
-                                    selectedItemsCount >= maxNumberItems &&
-                                    !itemIndex[indexData]?.includes(index)
-                                  }
+                                  // isDisabled={
+                                  //   selectedItemsCount >= maxNumberItems &&
+                                  //   !itemIndex[indexData]?.includes(index)
+                                  // }
+                                  isDisabled={true}
                                 />
                               </Flex>
                             </Tooltip>
