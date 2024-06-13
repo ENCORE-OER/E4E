@@ -1,6 +1,7 @@
 import {
   Flex,
   HTMLChakraProps,
+  Spacer,
   Tab,
   TabList,
   TabPanel,
@@ -54,12 +55,13 @@ export const CustomTab = (props: CustomTabProps) => {
       index={selectedIndex}
       onChange={(index) => setSelectedIndex(index)}
     >
-      <TabList flexWrap="wrap" rowGap={2}>
+      <TabList columnGap={10} rowGap={2} w="100%" flexWrap="wrap">
         {/* {config.map((tab, id) => (
             <Tab key={id} _selected={_selected}>
               {tab.label}
             </Tab>
           ))} */}
+
 
         {/* Tabs */}
         <Flex>
@@ -71,7 +73,7 @@ export const CustomTab = (props: CustomTabProps) => {
               </Tab>
             ))}
         </Flex>
-
+        <Spacer />
         {/* Buttons */}
         <Flex flex="1" justify="flex-end" columnGap={5}>
           {config

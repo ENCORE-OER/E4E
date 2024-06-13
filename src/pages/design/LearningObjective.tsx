@@ -40,6 +40,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     learningObjectiveObjects,
     handleDefaultLearningContext,
     lessonActivities,
+    resourcesSelectedAddContent,
+    resetSelectedResourcesAddContent
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -49,10 +51,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   // ==================================================================
 
-  const [selectedCollection, setSelectedCollection] = useState<boolean | null>(
+  const [isCollectionSelected, setIsCollectionSelected] = useState<boolean | null>(
     null
   );
-  const [selectedResource, setSelectedResource] = useState<boolean | null>(
+  const [isResourceSelected, setIsResourceSelected] = useState<boolean | null>(
     null
   );
   // const [resourceIndex, setResourceIndex] = useState<number>(-1); // Used to keep track of the selected resource in the collection
@@ -72,7 +74,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleCollectionSelection = () => {
     // Update the state to show the text when a collection is selected
-    setSelectedCollection(true);
+    setIsCollectionSelected(true);
   };
 
   const handleCollectionChange = (newCollectionIndex: number) => {
@@ -91,10 +93,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handleResourceSelection = () => {
     // Update the state to show the text when a collection is selected
-    if (resourcesIndex.length > 0 && selectedResource === null) {
-      setSelectedResource(true);
-    } else if (resourcesIndex.length === 0 && selectedResource === true) {
-      setSelectedResource(null);
+    if (resourcesIndex.length > 0 && isResourceSelected === null) {
+      setIsResourceSelected(true);
+    } else if (resourcesIndex.length === 0 && isResourceSelected === true) {
+      setIsResourceSelected(null);
     }
   };
 
@@ -166,7 +168,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleGenerationFunction?: () => Promise<boolean>;
   }) => {
     if (
-      selectedCollection !== null &&
+      isCollectionSelected !== null &&
       // selectedResource !== null &&
       bloomLevelIndex !== null &&
       bloomLevelIndex > -1 &&
@@ -181,8 +183,14 @@ const Home = (/*props: DiscoverPageProps*/) => {
         setIsNextButtonClicked(!isNextButtonClicked);
       }
 
+      // Set default learning context if the actual is empty
       if (learningTextContext?.trim() === '') {
         handleDefaultLearningContext();
+      }
+
+      // Reset the variable
+      if (resourcesSelectedAddContent.length > 0) {
+        resetSelectedResourcesAddContent();
       }
 
       if (handleGenerationFunction) {
@@ -288,9 +296,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
   }, [resourcesIndex]);
 
   useEffect(() => {
-    console.log('Selected Collection: ', selectedCollection);
-    console.log('Selected Resource: ', selectedResource);
-  }, [selectedCollection, selectedResource]);
+    console.log('Selected Collection: ', isCollectionSelected);
+    console.log('Selected Resource: ', isResourceSelected);
+  }, [isCollectionSelected, isResourceSelected]);
 
   useEffect(() => {
     setIsEmptyLearningObjectivesPresent(
@@ -333,7 +341,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -342,7 +350,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -428,7 +436,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             SPACING={SPACING}
             handleResetAll={handleResetAll}
             handleNextClick={handleNextClick}
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>

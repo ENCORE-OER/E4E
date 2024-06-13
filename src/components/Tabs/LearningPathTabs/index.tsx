@@ -70,7 +70,7 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
         }}
         color="primary"
         {...rest}
-        w="100%"
+        minW="100%"
         minH="100%"
       />
       <Flex
@@ -126,7 +126,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-          // isDisabled={true}
+        // isDisabled={true}
         />
       ),
       isButton: true,

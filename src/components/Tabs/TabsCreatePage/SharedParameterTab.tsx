@@ -54,10 +54,12 @@ import LearningObjectiveTextBox from '../../TextBox/LearningObjectiveTextBox';
 
 type SharedParameterProps = {
   isSmallerScreen?: boolean;
+  isAddContentModal?: boolean;
 };
 
 export default function SharedParameterTab({
   isSmallerScreen,
+  isAddContentModal
 }: SharedParameterProps) {
   const {
     isGenerateButtonClicked,
@@ -167,7 +169,7 @@ export default function SharedParameterTab({
     setIsLoading(false);
 
     console.log(lO);
-    if (lO) handleLearningObjective(lO[0]);
+    if (lO) handleLearningObjective("Learners will be able to " + lO[0]);
   };
   return (
     <>
@@ -302,7 +304,7 @@ export default function SharedParameterTab({
         </Flex>
       </Box>
       <Box w={isSmallerScreen ? '95%' : '90%'} paddingTop="2rem">
-        <TabsCreateMenu isSmallerScreen={isSmallerScreen} />
+        <TabsCreateMenu isSmallerScreen={isSmallerScreen} isAddContentModal={isAddContentModal} />
         {/* this bring to the tabs and the api call */}
       </Box>
     </>

@@ -29,10 +29,10 @@ export default function AddContentModal({
 }: AddContentModalProps) {
   const hydrated = useHasHydrated();
   const {
-    resourcesSelected,
-    addSelectedResources,
+    resourcesSelectedAddContent: resourcesSelected,
+    addSelectedResourcesAddContent: addSelectedResources,
     lessonActivities,
-    resetSelectedResources,
+    resetSelectedResourcesAddContent: resetSelectedResources,
     handleUpdateLessonContent,
   } = useLearningPathDesignContext();
 

@@ -14,7 +14,7 @@ export default function TagSelectedResource({
   IconTag,
   oer,
 }: TagSelectedResourceProps) {
-  const { removeSelectedResource } = useLearningPathDesignContext();
+  const { removeSelectedResourceAddContent: removeSelectedResource } = useLearningPathDesignContext();
 
   const handleClick = () => {
     if (oer) {

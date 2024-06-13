@@ -129,12 +129,12 @@ export default function ResourceCardsList({
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
                                 : // : collectionsColor[   // to handle when we use the API with pagination
-                                  // (currentPage) > 1
-                                  //   ? index + itemsPerPage * (currentPage - 1)
-                                  //   : index]
-                                  collectionsColor[index]
+                                // (currentPage) > 1
+                                //   ? index + itemsPerPage * (currentPage - 1)
+                                //   : index]
+                                collectionsColor[index]
                               : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                                ''
+                              ''
                           }
                           // oer={fill_the_gaps_data}
                           oer={oer}
@@ -143,10 +143,13 @@ export default function ResourceCardsList({
                           isSmallerScreen={isSmallerScreen} // keep an eye on this to see if it's necessary
                           isAddContentModal={isAddContentModal}
                           handleCheckboxClick={() => {
-                            if (handleCheckboxClick) handleCheckboxClick(index);
+                            if (handleCheckboxClick) {
+                              // The index has to consider also the page
+                              handleCheckboxClick(index + ((currentPage - 1) * itemsPerPage));
+                            }
                           }}
                           isChecked={
-                            resourcesSelectedTemp?.includes(index) ||
+                            resourcesSelectedTemp?.includes(index + ((currentPage - 1) * itemsPerPage)) ||
                             resourcesSelected?.some(
                               (resource: OerInCollectionProps) =>
                                 resource.id === oer?.id
@@ -176,8 +179,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -262,8 +265,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
