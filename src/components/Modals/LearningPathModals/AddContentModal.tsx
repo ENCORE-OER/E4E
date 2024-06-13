@@ -36,6 +36,18 @@ export default function AddContentModal({
     handleUpdateLessonContent,
   } = useLearningPathDesignContext();
 
+  const handleSaveClick = () => {
+    try {
+      handleUpdateLessonContent(
+        indexLesson !== undefined ? indexLesson : -1,
+        resourcesSelected
+      );
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     console.log(resourcesSelected);
   }, [resourcesSelected]);
@@ -102,20 +114,12 @@ export default function AddContentModal({
                 cursor="pointer"
               >
                 <Button
-                  isDisabled={resourcesSelected.length === 0}
+                  isDisabled={resourcesSelected.length === 0 && lessonActivities[indexLesson ?? -1]?.content?.oers?.length === 0}  // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
                   w="fit-content"
                   rightIcon={<IconSave />}
-                  onClick={() => {
-                    try {
-                      handleUpdateLessonContent(
-                        indexLesson !== undefined ? indexLesson : -1,
-                        resourcesSelected
-                      );
-                      onClose();
-                    } catch (error) {
-                      console.error(error);
-                    }
-                  }}
+                  onClick={() => handleSaveClick()}
+                  bg="gray.300"
+                  borderRadius="lg"
                 >
                   Save and Close
                 </Button>
@@ -127,7 +131,7 @@ export default function AddContentModal({
 
         <ModalBody overflowY={'auto'}>
           <Flex w="100%" justify={'center'}>
-            <AddContentTabs />
+            {hydrated && <AddContentTabs />}
           </Flex>
         </ModalBody>
       </ModalContent>

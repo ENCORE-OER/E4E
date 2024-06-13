@@ -353,28 +353,25 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${
-            generatedLesson.Type
+          lessonTitle: `${generatedLesson.Type
               ? `${mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )}`
+                TypeOfActivityEnum[Number(generatedLesson.Details)],
+                TypeOfActivityStringEnum
+              )}`
               : 'Frontal Lecture'
-          } activity`,
+            } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${
-            generatedLesson.Type
+          activityType: `${generatedLesson.Type
               ? mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )
+                TypeOfActivityEnum[Number(generatedLesson.Details)],
+                TypeOfActivityStringEnum
+              )
               : 'Frontal Lecture'
-          }`,
-          activityDescription: `${
-            generatedLesson.Type
+            }`,
+          activityDescription: `${generatedLesson.Type
               ? generatedLesson.Topic
               : generatedLesson.Details
-          }`,
+            }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -867,7 +864,7 @@ export default function PathDesignGenLessonPlan({
             isNumberZero={isNumberOfLAZero}
             setIsNumberZero={setIsNumberOfLAZero}
             defaultMenuTitle="Choose types of learning activities..."
-            description="in class activities"
+            description="learning activities"
             dataMenu={dataLearningActivities}
             // onDataMenu={handleLearningActivitySelection}
             // onSelectionChangeMenu={handleLearningActivityChange}

@@ -44,18 +44,6 @@ const getConfig = () => {
     {
       label: (
         <AddContentTabLabel
-          iconTab={IconGenerateAI}
-          spacing={2}
-          name="Generate with AI"
-        />
-      ),
-      child: <TabGenerateAI />,
-      pt: '3%',
-      // overflowY: 'auto'
-    },
-    {
-      label: (
-        <AddContentTabLabel
           iconTab={IconAttach}
           spacing={2}
           name="Attach OERs"
@@ -74,6 +62,18 @@ const getConfig = () => {
       ),
       child: <TabUploadFiles />,
       pt: '3%',
+    },
+    {
+      label: (
+        <AddContentTabLabel
+          iconTab={IconGenerateAI}
+          spacing={2}
+          name="Generate with AI"
+        />
+      ),
+      child: <TabGenerateAI />,
+      pt: '3%',
+      // overflowY: 'auto'
     },
   ];
 
