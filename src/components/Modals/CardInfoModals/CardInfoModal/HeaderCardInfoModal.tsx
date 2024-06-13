@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ColorCollectionProps } from '../../../../types/encoreElements';
+import { useHasHydrated } from '../../../../utils/utils';
 import SaveResourceButton from '../../../Buttons/ResourceButtons/SaveResourceButton';
 import ViewResourceButton from '../../../Buttons/ResourceButtons/ViewResourceButton';
 import IconBookmarkCheckCollections from '../../../Icons/IconBookmarkCheck/IconBookmarkCheckCollections';
@@ -26,6 +27,9 @@ export interface HeaderCardInfoModalProps {
   handleOpenAddCollectionModal?: () => void;
   handleViewResource?: () => void;
   isAddContentModal: boolean | undefined; // To know if is from "Add content modal"
+  handleCheckboxClick?: () => void;
+  isChecked?: boolean;
+  isDisabled?: boolean;
 }
 
 export default function HeaderCardInfoModal({
@@ -40,7 +44,18 @@ export default function HeaderCardInfoModal({
   handleOpenAddCollectionModal,
   handleViewResource,
   isAddContentModal,
+  handleCheckboxClick,
+  isChecked,
+  isDisabled
 }: HeaderCardInfoModalProps) {
+  const hydrated = useHasHydrated();
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    if (handleCheckboxClick) {
+      handleCheckboxClick();
+    }
+  };
+
   return (
     <ModalHeader>
       <HStack pb="5" pr="10">
@@ -50,27 +65,30 @@ export default function HeaderCardInfoModal({
           showTagGreen={showTagGreen}
           showTagGenAI={isGeneratedByAI}
         />
-        {isAddContentModal && (
+        {hydrated && isAddContentModal ? (
           <Checkbox
             colorScheme="yellow"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={(e: any) => {
+              // e.stopPropagation();
+              handleCheckboxChange(e);
             }}
-            // isDisabled={true}
+            isChecked={isChecked}
+            isDisabled={isDisabled}
           />
-        )}
-        {(!isAddContentModal || isAddContentModal === undefined) &&
-          collectionsColor?.length &&
-          collectionsColor?.map(
-            (
-              collection_color: ColorCollectionProps | undefined,
-              index: number
-            ) => (
-              <IconBookmarkCheckCollections
-                key={index}
-                collectionColor={collection_color?.color}
-                collectionName={collection_color?.name}
-              />
+        ) :
+          (
+            collectionsColor?.length &&
+            collectionsColor?.map(
+              (
+                collection_color: ColorCollectionProps | undefined,
+                index: number
+              ) => (
+                <IconBookmarkCheckCollections
+                  key={index}
+                  collectionColor={collection_color?.color}
+                  collectionName={collection_color?.name}
+                />
+              )
             )
           )}
       </HStack>

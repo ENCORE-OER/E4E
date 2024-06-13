@@ -35,16 +35,18 @@ export default function AddContentModal({
     handleUpdateLessonContent,
   } = useLearningPathDesignContext();
 
-  console.log("PRENDO");
-  addSelectedResources(lessonActivities[indexLesson ?? -1]?.content?.oers ?? []);
-
   useEffect(() => {
     console.log(resourcesSelected);
   }, [resourcesSelected]);
 
-  // useEffect(() => {
-  //   resetSelectedResources();
-  // }, [])
+  useEffect(() => {
+    if (isOpen) {
+      console.log('PRENDO');
+      addSelectedResources(
+        lessonActivities[indexLesson ?? -1]?.content?.oers ?? []
+      );
+    }
+  }, [isOpen])
 
   return (
     <Modal
@@ -86,13 +88,16 @@ export default function AddContentModal({
                 w="fit-content"
                 rightIcon={<IconSave />}
                 onClick={() => {
-                  handleUpdateLessonContent(
-                    indexLesson !== undefined ? indexLesson : -1,
-                    resourcesSelected
-                  );
-                  onClose();
-                }
-                }
+                  try {
+                    handleUpdateLessonContent(
+                      indexLesson !== undefined ? indexLesson : -1,
+                      resourcesSelected
+                    );
+                    onClose();
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
               >
                 Save and Close
               </Button>

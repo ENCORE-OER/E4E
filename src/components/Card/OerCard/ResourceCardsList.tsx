@@ -69,6 +69,7 @@ export default function ResourceCardsList({
   const [oerById, setOerById] = useState<
     OerProps | OerFreeSearchProps | undefined
   >(undefined);
+  const [indexOerOpen, setIndexOerOpen] = useState<number>(-1);
   //const [currentPage, setCurrentPage] = useState<number>(1);
 
   // To know if the user has liked or unliked an oer and to refresh the oer card
@@ -117,6 +118,7 @@ export default function ResourceCardsList({
                           onOpen();
                           // handleOpenCardInfoModal();
                           setOerById(oer);
+                          setIndexOerOpen(index);
                         }}
                         as="button"
                       >
@@ -127,12 +129,12 @@ export default function ResourceCardsList({
                               ? isResourcePage && collectionsColor[0]
                                 ? collectionsColor[0]
                                 : // : collectionsColor[   // to handle when we use the API with pagination
-                                  // (currentPage) > 1
-                                  //   ? index + itemsPerPage * (currentPage - 1)
-                                  //   : index]
-                                  collectionsColor[index]
+                                // (currentPage) > 1
+                                //   ? index + itemsPerPage * (currentPage - 1)
+                                //   : index]
+                                collectionsColor[index]
                               : //: collectionsColor[index] //this is the logic to color the iconBookmark of each card with the right color. Without this logic, the color of the iconBookmark is always only the first #itemsPerPage colors of the collectionsColor array
-                                ''
+                              ''
                           }
                           // oer={fill_the_gaps_data}
                           oer={oer}
@@ -174,8 +176,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -260,8 +262,8 @@ export default function ResourceCardsList({
                             //alert("Non rispettato il primo if \n collectionIndex: " + collectionIndex)
                             //}
                           }}
-                          //position="absolute"
-                          //right={'0px'}
+                        //position="absolute"
+                        //right={'0px'}
                         >
                           <DeleteIcon />
                         </Button>
@@ -294,6 +296,20 @@ export default function ResourceCardsList({
         updateLikeOER={updateLikeOER}
         setUpdateLikeOER={setUpdateLikeOER}
         isAddContentModal={isAddContentModal}
+        handleCheckboxClick={() => {
+          if (handleCheckboxClick) handleCheckboxClick(indexOerOpen);
+        }}
+        isChecked={
+          resourcesSelectedTemp?.includes(indexOerOpen) ||
+          resourcesSelected?.some(
+            (resource: OerInCollectionProps) =>
+              resource.id === oerById?.id
+          )
+        }
+        isDisabled={resourcesSelected?.some(
+          (resource: OerInCollectionProps) =>
+            resource.id === oerById?.id
+        )}
       />
     </>
   );
