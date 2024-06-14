@@ -169,7 +169,7 @@ export default function SharedParameterTab({
     setIsLoading(false);
 
     console.log(lO);
-    if (lO) handleLearningObjective('Learners will be able to ' + lO[0]);
+    if (lO) handleLearningObjective(lO[0]);
   };
   return (
     <>
