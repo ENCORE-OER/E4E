@@ -271,7 +271,7 @@ export default function GenerateLOView({
             (prevLearningObjectives: ObjectLearningObjectiveProps[]) => [
               ...prevLearningObjectives,
               ...learningObjectives.map((lo: string) => ({
-                learningObjective: 'Learners will be able to ' + lo,
+                learningObjective: lo,
                 isSelected: false,
                 isGenerated: true,
               })),
@@ -367,10 +367,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
