@@ -257,7 +257,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Function to create/add a custom learning objective
   const handleAddLearningObjective = () => {
-    console.log('Add new learning objective');
+    console.log('Adding new learning objective...');
     try {
       setLearningObjectiveObjects(
         (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
@@ -273,6 +273,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       console.log(error);
     }
   };
+
 
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (updatedText: string, index?: number) => {
@@ -877,6 +878,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ]);
 
   useEffect(() => {
+    // console.log("Provo")
     if (collectionIndex > -1) {
       setStep(2);
     }
@@ -932,14 +934,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       const newNumberOfLO = learningObjectiveObjects.length - count;
       setLearningObjectiveObjects(updatedObjectives);
       setNumberOfLO(newNumberOfLO);
-    } else if (learningObjectiveObjects.length === 0) {
-      // setIsAtLeastOneLOGenerated(false);
-      handleAddLearningObjective();
     }
+    // With the first "if", thispart is now useless
+    // else if (learningObjectiveObjects.length === 0) {
+    //   // setIsAtLeastOneLOGenerated(false);
+    //   handleAddLearningObjective();
+    // }
   }, [numberOfLO, learningObjectiveObjects.length]);
-  useEffect(() => {
-    console.log(lessonActivities);
-  }, [lessonActivities]);
+
+  // useEffect(() => {
+  //   console.log(lessonActivities);
+  // }, [lessonActivities]);
 
   useEffect(() => {
     if (defaultLearningContext.trim() !== '') {
@@ -947,9 +952,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [defaultLearningContext]);
 
-  useEffect(() => {
-    console.log('SELECTED RESOURCES: ', resourcesSelectedAddContent);
-  }, [resourcesSelectedAddContent]);
+  // useEffect(() => {
+  //   console.log('SELECTED RESOURCES: ', resourcesSelectedAddContent);
+  // }, [resourcesSelectedAddContent]);
 
   return (
     <LearningPathDesignContext.Provider

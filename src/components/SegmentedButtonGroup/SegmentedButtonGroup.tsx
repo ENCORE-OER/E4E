@@ -65,36 +65,50 @@ export default function SegmentedButtonGroup({
   const [highlightedOptions, setHighlightedOptions] = useState<string[]>([]);
 
   useEffect(() => {
+
+    const areComplete: boolean =
+      selectedEducatorExperience !== null &&
+      selectedContext !== null &&
+      selectedGroupDimension !== null &&
+      selectedLearnerExperience !== null;
+
+    onOptionsChange(areComplete);
+    console.log('areComplete: ' + areComplete);
+
     if (isNextButtonClicked) {
       // Check the options and update the state of the options to be highlighted with the red color
       const optionsToHighlight: string[] = [];
 
       if (
-        !selectedEducatorExperience ||
-        optionsToHighlight.includes('YourExperience')
+        !selectedEducatorExperience &&
+        !optionsToHighlight.includes('YourExperience')
       ) {
         optionsToHighlight.push('YourExperience');
       }
 
-      if (!selectedContext || optionsToHighlight.includes('Context')) {
+      if (!selectedContext && !optionsToHighlight.includes('Context')) {
         optionsToHighlight.push('Context');
       }
 
       if (
-        !selectedGroupDimension ||
-        optionsToHighlight.includes('GroupDimension')
+        !selectedGroupDimension &&
+        !optionsToHighlight.includes('GroupDimension')
       ) {
         optionsToHighlight.push('GroupDimension');
       }
 
       if (
-        !selectedLearnerExperience ||
-        optionsToHighlight.includes('LeanerExperience')
+        !selectedLearnerExperience &&
+        !optionsToHighlight.includes('LeanerExperience')
       ) {
         optionsToHighlight.push('LeanerExperience');
       }
 
       setHighlightedOptions(optionsToHighlight);
+    } if (!isNextButtonClicked) {
+      if (highlightedOptions.length > 0) {
+        setHighlightedOptions([]);
+      }
     }
   }, [
     isNextButtonClicked,
@@ -112,33 +126,33 @@ export default function SegmentedButtonGroup({
     }
   }, [resetAll]);
 
-  useEffect(() => {
-    console.log('successo qualcosa: ', highlightedOptions);
-  }, [highlightedOptions]);
+  // useEffect(() => {
+  //   console.log('successo qualcosa: ', highlightedOptions);
+  // }, [highlightedOptions]);
 
-  useEffect(() => {
-    // Update the state of the highlighted options when isNextButtonClicked changes
-    if (!isNextButtonClicked) {
-      setHighlightedOptions([]);
-    }
-  }, [isNextButtonClicked]);
+  // useEffect(() => {
+  //   // Update the state of the highlighted options when isNextButtonClicked changes
+  //   if (!isNextButtonClicked) {
+  //     setHighlightedOptions([]);
+  //   }
+  // }, [isNextButtonClicked]);
 
-  useEffect(() => {
-    const areComplete: boolean =
-      !!selectedEducatorExperience &&
-      !!selectedContext &&
-      !!selectedGroupDimension &&
-      !!selectedLearnerExperience;
+  // useEffect(() => {
+  //   const areComplete: boolean =
+  //     selectedEducatorExperience !== null &&
+  //     selectedContext !== null &&
+  //     selectedGroupDimension !== null &&
+  //     selectedLearnerExperience !== null;
 
-    onOptionsChange(areComplete);
-    console.log('areComplete: ' + areComplete);
-  }, [
-    selectedEducatorExperience,
-    selectedContext,
-    selectedGroupDimension,
-    selectedLearnerExperience,
-    onOptionsChange,
-  ]);
+  //   onOptionsChange(areComplete);
+  //   console.log('areComplete: ' + areComplete);
+  // }, [
+  //   selectedEducatorExperience,
+  //   selectedContext,
+  //   selectedGroupDimension,
+  //   selectedLearnerExperience,
+  //   // onOptionsChange,
+  // ]);
 
   return (
     <>

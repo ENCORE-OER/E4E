@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 // import { useUser } from '@auth0/nextjs-auth0/client';
-import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
+import { asSets, ISet, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
@@ -20,7 +20,7 @@ import { APIV2 } from '../data/api';
 import {
   OerAudienceInfo,
   OerDomainInfo,
-  OerMediaTypeInfo,
+  OerMediaTypeInfo
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
@@ -44,7 +44,7 @@ const Home = (props: DiscoverPageProps) => {
   const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
   const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<ISet[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
   const [selectedDomains, setSelectedDomains] = useState<string[] | number[]>(
     []
@@ -410,11 +410,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

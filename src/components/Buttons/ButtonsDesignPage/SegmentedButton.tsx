@@ -36,9 +36,6 @@ const SegmentedButton = <T extends {}>({
   };
 
   useEffect(() => {
-    //console.log('cambiato qualcosa');
-  }, [selected]);
-  useEffect(() => {
     // Aggiorna il colore iniziale quando la prop preselectedTitle cambia
     if (preselectedTitle) {
       setColored(preselectedTitle);

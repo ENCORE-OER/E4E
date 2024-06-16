@@ -9,12 +9,13 @@ type NumberInputWithButtonsProps = {
   minNumber: number;
   maxNumber: number;
   isNumberZero: boolean;
-  setIsNumberZero: Dispatch<SetStateAction<boolean>>;
+  setIsNumberZero?: Dispatch<SetStateAction<boolean>>;
   isEmptyLearningObjectivesPresent?: boolean;
   isLoading?: boolean;
   label_tooltip?: string;
   min_label_tooltip?: string;
   max_label_tooltip?: string;
+  isDisabled?: boolean;
 } & FlexProps;
 
 export default function NumberInputWithButtons({
@@ -28,6 +29,7 @@ export default function NumberInputWithButtons({
   setNumberInput,
   isEmptyLearningObjectivesPresent,
   isLoading,
+  isDisabled,
   // setIsNumberZero,
   ...rest
 }: NumberInputWithButtonsProps) {
@@ -88,7 +90,7 @@ export default function NumberInputWithButtons({
           (numberInput === minNumber ||
             (isEmptyLearningObjectivesPresent !== undefined &&
               !isEmptyLearningObjectivesPresent)) &&
-          min_label_tooltip
+            min_label_tooltip
             ? 'visible'
             : 'hidden'
         }
@@ -101,7 +103,8 @@ export default function NumberInputWithButtons({
             isLoading ||
             (isEmptyLearningObjectivesPresent !== undefined &&
               !isEmptyLearningObjectivesPresent) ||
-            numberInput === minNumber
+            numberInput === minNumber ||
+            isDisabled
           }
         >
           <IconMinus />
@@ -135,7 +138,7 @@ export default function NumberInputWithButtons({
           }
           value={numberInput}
           onChange={handleNumberChange}
-          isDisabled={isLoading}
+          isDisabled={isLoading || isDisabled}
         />
       </Tooltip>
       <Tooltip
@@ -152,7 +155,7 @@ export default function NumberInputWithButtons({
           bg="none"
           p={0}
           onClick={handleClickPlusButton}
-          isDisabled={isLoading || numberInput === maxNumber}
+          isDisabled={isLoading || numberInput === maxNumber || isDisabled}
         >
           <IconPlus />
         </Button>

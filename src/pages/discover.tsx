@@ -572,7 +572,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -613,7 +613,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -631,9 +631,9 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         >
           <EncoreTab
             oers={filtered}
-            setOers={setFiltered}
+            // setOers={setFiltered}
             domains={domain}
-            searchCallBack={searchCallbackEncoreTab}
+            // searchCallBack={searchCallbackEncoreTab}
             flex="1" // "flex='1'" fill the rest of the page
             py={isSmallerScreen ? '15px' : '30px'}
             px={isSmallerScreen ? '15px' : '30px'}

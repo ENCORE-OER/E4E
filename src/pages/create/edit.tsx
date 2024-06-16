@@ -61,8 +61,8 @@ const Edit = ({
     useLearningPathDesignContext();
 
   const [response, setResponse] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [areOptionsComplete, setAreOptionsComplete] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [areOptionsComplete, setAreOptionsComplete] = useState<boolean>(true);
   const [collectionIndex, setCollectionIndex] = useState<number>(
     isAddContentModal ? selectedCollectionIndex : -1
   );
@@ -226,7 +226,7 @@ const Edit = ({
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Edit the exercise</Heading>
             </Flex>

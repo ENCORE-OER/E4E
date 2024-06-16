@@ -367,10 +367,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
@@ -410,7 +410,6 @@ export default function GenerateLOView({
           minNumber={MIN_LO}
           maxNumber={MAX_LO}
           isNumberZero={isNumberOfLOZero}
-          setIsNumberZero={setIsNumberOfLOZero}
           label_tooltip={`You can generate maximum ${MAX_LO} learning objectives at a time.`}
           min_label_tooltip={
             !isEmptyLearningObjectivesPresent
