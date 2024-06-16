@@ -206,7 +206,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     order_by: string,
     order_asc: string,
     operator: string,
-    concepts?: string[]
+    concepts?: string[],
+    isDomainsFilter?: boolean,
   ) => {
     setIsLoading(true);
     setEndSearch(false);
@@ -249,7 +250,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           order_by,
           order_asc,
           operator,
-          concepts ?? []
+          concepts ?? [],
+          isDomainsFilter
         );
         // Set number of OERs found with the search
         setOersLengthTotal(resp?.recordsFiltered);
@@ -439,6 +441,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       //const order_asc = convertedData['order_asc'];
       const operator = convertedData['operator'];
       const concepts = convertedData['concepts'];
+      const isDomainsFilter = convertedData['isDomainsFilter'];
 
       await freeSearchOERs(
         currentPage,
@@ -449,7 +452,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         selectedSorting,
         isAscending?.toString(),
         operator,
-        concepts
+        concepts,
+        isDomainsFilter
       );
       // .then((oers: OerFreeSearchProps | OerProps | undefined) => {
       //   console.log('New value oers: ', oers);

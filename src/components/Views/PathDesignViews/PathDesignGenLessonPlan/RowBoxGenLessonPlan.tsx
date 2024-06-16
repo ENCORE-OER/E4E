@@ -109,7 +109,7 @@ export default function RowBoxGenLessonPlan({
           min_label_tooltip="By not including any activities, a random number of activities will be added to the lesson plan."
           isLoading={isLoading}
           isDisabled={true}
-        // pr="10%"
+          // pr="10%"
         />
         <Text fontSize="md">{description}</Text>
       </Flex>

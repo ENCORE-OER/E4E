@@ -113,7 +113,7 @@ export default function AddContentModal({
                 borderRadius={5}
                 cursor="pointer"
               >
-                {hydrated &&
+                {hydrated && (
                   <Button
                     isDisabled={
                       resourcesSelected.length === 0 &&
@@ -128,7 +128,7 @@ export default function AddContentModal({
                   >
                     Save and Close
                   </Button>
-                }
+                )}
               </Tooltip>
             </Flex>
           </Flex>

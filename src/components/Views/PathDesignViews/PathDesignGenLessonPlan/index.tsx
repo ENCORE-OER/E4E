@@ -353,25 +353,28 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${generatedLesson.Type
-            ? `${mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )}`
-            : 'Frontal Lecture'
-            } activity`,
+          lessonTitle: `${
+            generatedLesson.Type
+              ? `${mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )}`
+              : 'Frontal Lecture'
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : 'Frontal Lecture'
-            }`,
-          activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
-            }`,
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : 'Frontal Lecture'
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -402,7 +405,7 @@ export default function PathDesignGenLessonPlan({
       // In the case the material analyzer had worked
       if (analyzedMaterial !== undefined) {
         tempIsPossibleToContinue = await generationLessonPlan(analyzedMaterial);
-        console.log("Continue: ", tempIsPossibleToContinue);
+        console.log('Continue: ', tempIsPossibleToContinue);
       } else {
         throw console.error('Error with the analyzed material.');
       }

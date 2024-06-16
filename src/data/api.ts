@@ -353,6 +353,62 @@ export class APIV2 {
     }
   }
 
+  async getMetricsTabDomains(
+    keywords?: string[],
+    domainIds?: string[], // at the moment the filterig by domain is not implemented by the API
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    operator?: string,
+    concepts?: string[]
+  ): Promise<MetricsOers[]> {
+    try {
+      const queryParams = new URLSearchParams();
+      const ID_ALL = '0';
+
+      if (keywords !== undefined) {
+        const queryParamsKeywords = keywords?.join(',');
+        queryParams.append('keywords', queryParamsKeywords);
+      }
+      // ------------------------------------------
+      // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
+      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
+      if (!domainIds?.includes(ID_ALL)) {
+        domainIds?.forEach((domainId: string) => {
+          queryParams.append('skill_domain', domainId);
+        });
+      }
+      if (!resourceTypeIds?.includes(ID_ALL)) {
+        resourceTypeIds?.forEach((resourceTypeId: string) => {
+          queryParams.append('media_type', resourceTypeId);
+        });
+      }
+      if (!audienceIds?.includes(ID_ALL)) {
+        audienceIds?.forEach((audienceId: string) => {
+          queryParams.append('coverage', audienceId);
+        });
+      }
+
+      if (operator !== undefined) {
+        queryParams.append('operator', operator);
+      }
+
+      concepts?.forEach((concept: string) => {
+        queryParams.append('concepts', concept);
+      });
+
+      const resp = await axiosNoCookie.get(
+        `https://encore-db.grial.eu/api/metrics/oers/?${queryParams}`
+      );
+
+      const metrics = resp.data?.data?.metrics;
+      // console.log(JSON.stringify(metrics));
+
+      return metrics;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getDomains() // page = 1,
   // allDomains: OerDomainInfo[] = []
   // stop = 10
@@ -620,7 +676,8 @@ export class APIV2 {
     order_by?: string,
     order_asc?: string,
     operator?: string,
-    concepts?: string[]
+    concepts?: string[],
+    isDomainsFilter?: boolean
   ): Promise<RespDataProps> {
     try {
       const queryParams = new URLSearchParams();
@@ -661,32 +718,72 @@ export class APIV2 {
             `${domainIds[0] === 39 ? 'True' : 'False'}`
           );
         } else {
-          queryParams.append(
-            'or_digital_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 37)
-                ? 'True'
-                : 'False'
-            }`
-          );
+          if (!isDomainsFilter) {
+            domainIds?.some((domainId: string | number) => domainId === 37)
+              ? queryParams.append('or_digital_domain', 'True')
+              : queryParams.append('and_digital_domain', 'False');
+            // queryParams.append(
+            //   'or_digital_domain',
+            //   `${
+            //     domainIds?.some((domainId: string | number) => domainId === 37)
+            //       ? 'True'
+            //       : 'False'
+            //   }`
+            // );
 
-          queryParams.append(
-            'or_green_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 38)
-                ? 'True'
-                : 'False'
-            }`
-          );
+            domainIds?.some((domainId: string | number) => domainId === 37)
+              ? queryParams.append('or_green_domain', 'True')
+              : queryParams.append('and_green_domain', 'False');
 
-          queryParams.append(
-            'or_entrepreneurship_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 39)
-                ? 'True'
-                : 'False'
-            }`
-          );
+            // queryParams.append(
+            //   'or_green_domain',
+            //   `${
+            //     domainIds?.some((domainId: string | number) => domainId === 38)
+            //       ? 'True'
+            //       : 'False'
+            //   }`
+            // );
+
+            domainIds?.some((domainId: string | number) => domainId === 37)
+              ? queryParams.append('or_entrepreneurship_domain', 'True')
+              : queryParams.append('and_entrepreneurship_domain', 'False');
+
+            // queryParams.append(
+            //   'or_entrepreneurship_domain',
+            //   `${
+            //     domainIds?.some((domainId: string | number) => domainId === 39)
+            //       ? 'True'
+            //       : 'False'
+            //   }`
+            // );
+          } else {
+            queryParams.append(
+              'and_digital_domain',
+              `${
+                domainIds?.some((domainId: string | number) => domainId === 37)
+                  ? 'True'
+                  : 'False'
+              }`
+            );
+
+            queryParams.append(
+              'and_green_domain',
+              `${
+                domainIds?.some((domainId: string | number) => domainId === 38)
+                  ? 'True'
+                  : 'False'
+              }`
+            );
+
+            queryParams.append(
+              'and_entrepreneurship_domain',
+              `${
+                domainIds?.some((domainId: string | number) => domainId === 39)
+                  ? 'True'
+                  : 'False'
+              }`
+            );
+          }
         }
       }
       // if (green_domain !== undefined) {
@@ -740,7 +837,7 @@ export class APIV2 {
       //   queryParams.append(`${operator ? operator : 'and'}_concepts`, concept);
       // });
       concepts?.forEach((concept: string) => {
-        queryParams.append('concepts', concept);
+        queryParams.append('and_concepts', concept);
       });
 
       //const url = `https://encore-db.grial.eu/api/no_pagination/boolean/oers/?${queryParams}`;

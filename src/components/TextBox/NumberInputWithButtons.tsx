@@ -90,7 +90,7 @@ export default function NumberInputWithButtons({
           (numberInput === minNumber ||
             (isEmptyLearningObjectivesPresent !== undefined &&
               !isEmptyLearningObjectivesPresent)) &&
-            min_label_tooltip
+          min_label_tooltip
             ? 'visible'
             : 'hidden'
         }

@@ -20,7 +20,7 @@ import { APIV2 } from '../data/api';
 import {
   OerAudienceInfo,
   OerDomainInfo,
-  OerMediaTypeInfo
+  OerMediaTypeInfo,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
@@ -137,6 +137,7 @@ const Home = (props: DiscoverPageProps) => {
         order_asc: 'true',
         operator: operator,
         concepts: [],
+        isDomainsFilter: false,
       };
       // }
 

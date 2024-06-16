@@ -274,7 +274,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   };
 
-
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (updatedText: string, index?: number) => {
     if (index !== undefined) {

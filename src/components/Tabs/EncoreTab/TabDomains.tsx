@@ -1,22 +1,46 @@
 import { Flex, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
-import { ISetLike, VennDiagram, asSets, mergeColors } from '@upsetjs/react';
-import { useContext, useMemo, useState } from 'react';
+import {
+  ISet,
+  ISetLike,
+  VennDiagram,
+  asSets,
+  mergeColors
+} from '@upsetjs/react';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { APIV2 } from '../../../data/api';
 import { OerProps } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
-import { useHasHydrated } from '../../../utils/utils';
+import { extractSetIds, useHasHydrated, useIsSmallerScreen } from '../../../utils/utils';
 export type TabDomainsProps = {};
 
-const baseSets = [
-  { name: 'DIGITAL', elems: [], domainId: 'Digital' },
-  { name: 'GREEN', elems: [], domainId: 'Green' },
-  { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
-];
+// const baseSets = [
+//   { name: 'DIGITAL', elems: [], domainId: 'Digital' },
+//   { name: 'GREEN', elems: [], domainId: 'Green' },
+//   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
+// ];
 
-export const TabDomains = ({}: TabDomainsProps) => {
+
+type baseSetsProps = {
+  id: number,
+  name: string,
+  elems: any[],
+  domainLabel: string,
+  domainId: number
+}
+
+
+export const TabDomains = ({ }: TabDomainsProps) => {
+  const API = useMemo(() => new APIV2(undefined), []);
+  const router = useRouter();
   const hydrated = useHasHydrated();
+  const isSmallerScreen = useIsSmallerScreen();
 
   const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [metrics, setMetrics] = useState<ISet[]>([]);
+  // const [totalOers, setTotalOers] = useState<string[]>([]);
 
   const filteredOers: any = {};
 
@@ -24,7 +48,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (OerProps | undefined | OerFreeSearchProps)[]
   >([]);
 
-  const [selectedOERIds, setSelectedOERIds] = useState([]);
+  const [selectedOERIds, setSelectedOERIds] = useState<number[]>([]);
 
   // ============================ VENN DIAGRAM ============================
   // To make the venn diagram responsive
@@ -43,15 +67,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
     //lg: 500, // height for large screens
     //xl: 550, // height for extra large screens
   });
-
-  // Use this for the responsive design of the page
-  const isSmallerScreen = useBreakpointValue({
-    base: true,
-    sm: true,
-    md: false,
-    lg: false,
-  });
-
   // =======================================================================
 
   // here i sorted the oers per domain
@@ -78,11 +93,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (
       oer:
         | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -118,34 +133,34 @@ export const TabDomains = ({}: TabDomainsProps) => {
     filteredOers[domainName].elems.push(oerId + '');
   }
 
-  const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {
-    const revised = filteredOers[index];
-    revised.elems = [...new Set(revised.elems)];
-    return revised;
-  });
+  // const dynamicSet = Object.keys(filteredOers)?.map((index: string) => {
+  //   const revised = filteredOers[index];
+  //   revised.elems = [...new Set(revised.elems)];
+  //   return revised;
+  // });
 
   const [selection, setSelection] = useState<
     ISetLike<unknown> | unknown[] | null
   >(null);
 
-  const sets = useMemo(() => {
-    const colors = [
-      '#49B61A',
-      '#03A8B9',
-      '#FFCF24',
-      'white',
-      'white',
-      'white',
-      'red',
-    ];
-    return asSets(
-      (dynamicSet ?? baseSets).map((s, i) => ({
-        ...s,
-        color: colors[i],
-        fontColor: 'white',
-      }))
-    );
-  }, [dynamicSet]);
+  // const sets = useMemo(() => {
+  //   const colors = [
+  //     '#49B61A',
+  //     '#03A8B9',
+  //     '#FFCF24',
+  //     'white',
+  //     'white',
+  //     'white',
+  //     'red',
+  //   ];
+  //   return asSets(
+  //     (dynamicSet ?? baseSets).map((s, i) => ({
+  //       ...s,
+  //       color: colors[i],
+  //       fontColor: 'white',
+  //     }))
+  //   );
+  // }, [dynamicSet]);
 
   const combinations = useMemo(() => ({ mergeColors }), []);
 
@@ -168,37 +183,196 @@ export const TabDomains = ({}: TabDomainsProps) => {
   const onClickDiagram = async (selection: any) => {
     if (!selection) return;
 
+    // TODO: For each selection I have to set a specific API call, for example if the selection is the part with green and digital, I have to call the API with and_skill_domains=ID&and_skill_domains=ID
+
     // Convert the selected OER IDs to an array
-    const selectedIds = selection.elems;
+    // const temp = selection.elems;
+    // const selectedDomains = temp?.map((elem: IBaseSet) => elem.toString());
+    // const selectedDomains = temp?.map((domain: any, index: number) => domain.get(index));
+    // console.log("Filtered OER IDs", selectedDomains);
+    // console.log(selection);
+    console.log("SET NAME:", selection?.name);
+    const nameSelection = selection?.name;
+    const domainIds = extractSetIds(nameSelection);
+    console.log(domainIds);
+    // const involvedDomainIds = selection.sets.map((setId: number) => {
+    //   const set = metrics.find((s: IExtendedSet) => s.id === setId);
+    //   return set ? set.domainId : null;
+    // }).filter((domainId: number | null) => domainId !== null);
+
+    // console.log("INVOLVED DOMAINS: ", involvedDomainIds);
+
+
     // Check if the selected IDs are equal to the currently selected IDs
-    if (selectedIds.length == 0) {
+    if (domainIds.length === 0) {
       return;
-    } else if (arraysEqual(selectedIds, selectedOERIds)) {
+    } else if (arraysEqual(domainIds, selectedOERIds)) {
       // Second click on the same slice, reset to initial state
       setSelectedOERIds([]);
       setFiltered(previousContent);
+
+      // TODO: initial API call
+
     } else {
       // First click on a slice, update the selected OER IDs
-      setSelectedOERIds(selectedIds);
+      setSelectedOERIds(domainIds);
       setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
-      const filteredObjects = filtered.filter(
-        (oer: OerProps | undefined | OerFreeSearchProps) =>
-          selectedIds.includes(oer?.id.toString())
-      );
-      setFiltered(filteredObjects);
+      // const filteredObjects = filtered.filter(
+      //   (oer: OerProps | undefined | OerFreeSearchProps) => {
+      //     if (oer) {
+      //       selectedIds.includes(oer?.id.toString())
+      //     }
+      //   }
+      // );
+      // setFiltered(filteredObjects);
+
+      // Get search data from the localStorage
+      const searchData = localStorage.getItem('searchData');
+
+      if (!searchData) {
+        console.error('searchData not found in localStorage');
+        // TODO: handle redirect
+        router.push({
+          pathname: '/',
+        });
+        return;
+      }
+
+      // Convert the data in a JSON format
+      const convertedData = JSON.parse(searchData);
+      // const domains = convertedData['domains'] || [''];
+      const updatedDomains = [...domainIds];
+
+      // Update the concepts array in the searchData object
+      convertedData['domains'] = updatedDomains;
+
+      console.log('convertedData - media types', convertedData['domains']);
+
+      convertedData['isDomainsFilter'] = true;
+
+      // Update the searchData in the localStorage
+      localStorage.setItem('searchData', JSON.stringify(convertedData));
+      // // Extract the labels and ids from the response of getConceptsFreeSearch
+      // const conceptLabels = tags.map(tag => tag.label);
+      // const conceptIds = tags.map(tag => tag.id);
+
+      // // Find the index of the selected concept in the labels array
+      // const selectedIndex = conceptLabels.indexOf(selectedTag.label);
+
+      // // Get the id of the selected concept
+      // const selectedConceptId = conceptIds[selectedIndex];
+
+      // localStorage.setItem('searchData', JSON.stringify(selectedConceptId));
+
+      // Update the query with the selected concept id
+      const updatedQuery = { ...router.query, domains: updatedDomains };
+      await router.push({
+        pathname: '/discover',
+        query: updatedQuery,
+      });
+
     }
   };
 
   // Function to check if two arrays are equal
-  const arraysEqual = (arr1: string[], arr2: string[]) => {
+  const arraysEqual = (arr1: string[] | number[], arr2: string[] | number[]) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) return false;
     }
     return true;
   };
+
+  // update metrics
+  useEffect(() => {
+    // inside useEffect is not allowed to use async directly. You have to create a function inside useEffect and call it immediately.
+    const fetchData = async () => {
+      try {
+        const searchData = localStorage.getItem('searchData');
+        if (!searchData) {
+          // TODO: handle redirect
+          router.push({
+            pathname: '/',
+          });
+          return;
+        }
+        const convertedData = JSON.parse(searchData);
+        const keywords = convertedData['keywords'];
+        const domains = convertedData['domains'];
+        const types = convertedData['types'];
+        const audience = convertedData['audience'];
+        const operator = convertedData['operator'];
+        const concepts = convertedData['concepts'];
+
+        // api get the Encore Metrics (Num of Oers and IDs for each Skill)
+        const resp_metrics: any = await API.getMetricsTabDomains(
+          keywords,
+          domains,
+          types,
+          audience,
+          operator,
+          concepts
+        );
+        console.log(
+          'Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers)
+        );
+        // setTotalOers(resp_metrics?.total_oers);
+
+        const digitalIds = resp_metrics?.digital_oers?.ids;
+        const greenIds = resp_metrics?.green_oers?.ids;
+        const entrepreneurialIds = resp_metrics?.entrepreneurial_oers?.ids;
+
+        const baseSets: baseSetsProps[] = [
+          { id: 0, name: 'DIGITAL', elems: [], domainLabel: 'Digital', domainId: 37 },
+          { id: 1, name: 'GREEN', elems: [], domainLabel: 'Green', domainId: 38 },
+          { id: 2, name: 'ENTREPRENEURSHIP', elems: [], domainLabel: 'Entrepreneurship', domainId: 39 },
+        ];
+
+        const colors = [
+          '#03A8B9',
+          '#49B61A',
+          '#FFCF24',
+          'white',
+          'white',
+          'white',
+          'red',
+        ];
+
+        const newSet = asSets(
+          baseSets.map((s: baseSetsProps, i: number) => ({
+            ...s,
+            id: i,
+            color: colors[i],
+            fontColor: 'white',
+          }))
+        );
+
+        // Update the elems field for each set dynamically
+        newSet[0].elems = digitalIds;
+        newSet[1].elems = greenIds;
+        newSet[2].elems = entrepreneurialIds;
+
+        // Set metrics for the Venn Diagram
+        setMetrics(newSet);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    setIsLoading(true);
+    fetchData();
+  }, [
+    API,
+    router.query.concepts,
+    router.query.keywords,
+    router.query.domains,
+    router.query.types,
+    router.query.audience,
+  ]);
 
   return (
     <>
@@ -211,11 +385,19 @@ export const TabDomains = ({}: TabDomainsProps) => {
       </Stack>
 
       <br />
-      <Flex>
-        {filtered.length > 0 && hydrated && (
+      <Flex justify="center">
+        <br />
+        <br />
+        {isLoading && (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading...</p>
+          </div>
+        )}
+        {!isLoading && filtered.length > 0 && hydrated && (
           <VennDiagram
             className="venn-diagram"
-            sets={sets}
+            sets={metrics}
             //style={{ maxWidth: 600 }}
             width={Number(vennDiagramWidth)}
             height={Number(vennDiagramHeight)}
@@ -228,11 +410,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
             fontSizes={
               isSmallerScreen
                 ? {
-                    setLabel: '12px',
-                  }
+                  setLabel: '12px',
+                }
                 : {
-                    setLabel: '15px',
-                  }
+                  setLabel: '15px',
+                }
             }
           />
         )}

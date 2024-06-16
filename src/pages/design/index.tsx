@@ -15,7 +15,8 @@ const Home = () => {
   const router = useRouter();
   // const { user } = useUser();
   const [areOptionsComplete, setAreOptionsComplete] = useState<boolean>(false);
-  const [isNextButtonClicked, setIsNextButtonClicked] = useState<boolean>(false);
+  const [isNextButtonClicked, setIsNextButtonClicked] =
+    useState<boolean>(false);
   const { addToast } = CustomToast();
   const hydrated = useHasHydrated();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
@@ -94,7 +95,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -103,7 +104,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}

@@ -65,7 +65,6 @@ export default function SegmentedButtonGroup({
   const [highlightedOptions, setHighlightedOptions] = useState<string[]>([]);
 
   useEffect(() => {
-
     const areComplete: boolean =
       selectedEducatorExperience !== null &&
       selectedContext !== null &&
@@ -105,7 +104,8 @@ export default function SegmentedButtonGroup({
       }
 
       setHighlightedOptions(optionsToHighlight);
-    } if (!isNextButtonClicked) {
+    }
+    if (!isNextButtonClicked) {
       if (highlightedOptions.length > 0) {
         setHighlightedOptions([]);
       }
