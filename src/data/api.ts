@@ -664,7 +664,7 @@ export class APIV2 {
     }
   }
 
-  async searchOERsNoKeywords(
+  async searchBooleanOERs(
     page: number,
     keywords?: string[],
     domainIds?: string[] | number[], // at the moment the filterig by domain is not implemented by the API
@@ -693,100 +693,107 @@ export class APIV2 {
 
       // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
 
-      if (keywords) {
-        keywords?.forEach((keyword: string) => {
-          queryParams.append(
-            `${operator ? operator : 'and'}_keywords`,
-            keyword
-          );
-        });
+      if (keywords && keywords.length > 0) {
+        if (operator) {
+          keywords?.forEach((keyword: string) => {
+            queryParams.append('and_keywords', keyword);
+          });
+        } else {
+          const queryParamsKeywords = keywords.join('|');
+          queryParams.append('and_keywords', queryParamsKeywords);
+        }
       }
       if (domainIds !== undefined && domainIds.length > 0) {
-        if (domainIds.length === 1) {
+        // if (domainIds.length === 1) {
+        //   queryParams.append(
+        //     'and_digital_domain',
+        //     `${domainIds[0] === 37 ? 'True' : 'False'}`
+        //   );
+
+        //   queryParams.append(
+        //     'and_green_domain',
+        //     `${domainIds[0] === 38 ? 'True' : 'False'}`
+        //   );
+
+        //   queryParams.append(
+        //     'and_entrepreneurship_domain',
+        //     `${domainIds[0] === 39 ? 'True' : 'False'}`
+        //   );
+        // } else {
+        console.log(isDomainsFilter);
+        if (!isDomainsFilter) {
+          // if (
+          //   !domainIds?.some((domainId: string | number) => domainId === 37)
+          // ) {
+          //   queryParams.append('and_digital_domain', 'False');
+          // }
           queryParams.append(
             'and_digital_domain',
-            `${domainIds[0] === 37 ? 'True' : 'False'}`
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 37)
+                ? 'True'
+                : 'False'
+            }`
+          );
+
+          // if (
+          //   !domainIds?.some((domainId: string | number) => domainId === 38)
+          // ) {
+          //   queryParams.append('and_green_domain', 'False');
+          // }
+
+          queryParams.append(
+            'and_green_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 38)
+                ? 'True'
+                : 'False'
+            }`
+          );
+
+          // if (
+          //   !domainIds?.some((domainId: string | number) => domainId === 39)
+          // ) {
+          //   queryParams.append('and_entrepreneurship_domain', 'False');
+          // }
+          queryParams.append(
+            'and_entrepreneurship_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 39)
+                ? 'True'
+                : 'False'
+            }`
+          );
+        } else {
+          queryParams.append(
+            'and_digital_domain',
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 37)
+                ? 'True'
+                : 'False'
+            }`
           );
 
           queryParams.append(
             'and_green_domain',
-            `${domainIds[0] === 38 ? 'True' : 'False'}`
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 38)
+                ? 'True'
+                : 'False'
+            }`
           );
 
           queryParams.append(
             'and_entrepreneurship_domain',
-            `${domainIds[0] === 39 ? 'True' : 'False'}`
+            `${
+              domainIds?.some((domainId: string | number) => domainId === 39)
+                ? 'True'
+                : 'False'
+            }`
           );
-        } else {
-          console.log(isDomainsFilter);
-          if (!isDomainsFilter) {
-            domainIds?.some((domainId: string | number) => domainId === 37)
-              ? queryParams.append('or_digital_domain', 'True')
-              : queryParams.append('and_digital_domain', 'False');
-            // queryParams.append(
-            //   'or_digital_domain',
-            //   `${
-            //     domainIds?.some((domainId: string | number) => domainId === 37)
-            //       ? 'True'
-            //       : 'False'
-            //   }`
-            // );
-
-            domainIds?.some((domainId: string | number) => domainId === 38)
-              ? queryParams.append('or_green_domain', 'True')
-              : queryParams.append('and_green_domain', 'False');
-
-            // queryParams.append(
-            //   'or_green_domain',
-            //   `${
-            //     domainIds?.some((domainId: string | number) => domainId === 38)
-            //       ? 'True'
-            //       : 'False'
-            //   }`
-            // );
-
-            domainIds?.some((domainId: string | number) => domainId === 39)
-              ? queryParams.append('or_entrepreneurship_domain', 'True')
-              : queryParams.append('and_entrepreneurship_domain', 'False');
-
-            // queryParams.append(
-            //   'or_entrepreneurship_domain',
-            //   `${
-            //     domainIds?.some((domainId: string | number) => domainId === 39)
-            //       ? 'True'
-            //       : 'False'
-            //   }`
-            // );
-          } else {
-            queryParams.append(
-              'and_digital_domain',
-              `${
-                domainIds?.some((domainId: string | number) => domainId === 37)
-                  ? 'True'
-                  : 'False'
-              }`
-            );
-
-            queryParams.append(
-              'and_green_domain',
-              `${
-                domainIds?.some((domainId: string | number) => domainId === 38)
-                  ? 'True'
-                  : 'False'
-              }`
-            );
-
-            queryParams.append(
-              'and_entrepreneurship_domain',
-              `${
-                domainIds?.some((domainId: string | number) => domainId === 39)
-                  ? 'True'
-                  : 'False'
-              }`
-            );
-          }
         }
       }
+      // }
       // if (green_domain !== undefined) {
       //   queryParams.append(
       //     `${operator ? operator : 'and'}_green_domain`,
@@ -807,22 +814,28 @@ export class APIV2 {
       // }
 
       // TODO: is check to the ID_ALL useful? If "all" is selected the array should be empty.
-      if (!resourceTypeIds?.includes(ID_ALL)) {
+      if (
+        resourceTypeIds &&
+        !resourceTypeIds?.includes(ID_ALL) &&
+        resourceTypeIds?.length > 0
+      ) {
         if (resourceTypeIds?.length === 1) {
           queryParams.append('and_media_type', resourceTypeIds[0]);
         } else {
-          resourceTypeIds?.forEach((resourceTypeId: string) => {
-            queryParams.append('or_media_type', resourceTypeId);
-          });
+          const resourceTypeIdsQuery = resourceTypeIds.join('|');
+          queryParams.append('and_media_type', resourceTypeIdsQuery);
         }
       }
-      if (!audienceIds?.includes(ID_ALL)) {
+      if (
+        audienceIds &&
+        !audienceIds?.includes(ID_ALL) &&
+        audienceIds.length > 0
+      ) {
         if (audienceIds?.length === 1) {
           queryParams.append('and_coverage', audienceIds[0]);
         } else {
-          audienceIds?.forEach((audienceId: string) => {
-            queryParams.append('or_coverage', audienceId);
-          });
+          const audienceIdsQuery = audienceIds?.join('|');
+          queryParams.append('and_coverage', audienceIdsQuery);
         }
       }
       if (order_by !== undefined) {

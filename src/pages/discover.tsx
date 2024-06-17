@@ -238,7 +238,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         //   concepts ?? []
         // );
 
-        const resp = await api.searchOERsNoKeywords(
+        const resp = await api.searchBooleanOERs(
           page,
           keywords,
           // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 37) ? "True" : "False"), // If ALL is selected the array is empty. See "DropDownMenu" component
@@ -576,7 +576,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -617,7 +617,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

@@ -31,7 +31,7 @@ export default function UploadButton({
       {/* <input type="file" onChange={handleChange} style={{ display: 'none' }} /> */}
       <StandardButton
         buttonText={'Upload From Your Computer'}
-        handleClick={() => console.log("Uploading...")}
+        handleClick={() => console.log('Uploading...')}
         w="fit-content"
         leftIcon={<IconUpload />}
         isDisabled={disabled}
