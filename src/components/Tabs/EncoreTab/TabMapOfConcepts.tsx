@@ -22,7 +22,10 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const hydrated = useHasHydrated();
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptInfo[]>([]);
-  const { filtered, setCurrentPage } = useContext(DiscoveryContext);
+  const {
+    //  filtered, 
+    setCurrentPage
+  } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
   //const [conceptCounts, setConceptCounts] = useState<Record<number, number>>({});
@@ -233,10 +236,13 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       }
     };
 
-    if (filtered?.length > 0) {
-      setIsLoading(true);
-      fetchData();
-    }
+    // if (filtered?.length > 0) {
+    //   setIsLoading(true);
+    //   fetchData();
+    // }
+
+    setIsLoading(true);
+    fetchData();
   }, [
     API,
     router.query.concepts,

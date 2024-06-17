@@ -718,6 +718,7 @@ export class APIV2 {
             `${domainIds[0] === 39 ? 'True' : 'False'}`
           );
         } else {
+          console.log(isDomainsFilter);
           if (!isDomainsFilter) {
             domainIds?.some((domainId: string | number) => domainId === 37)
               ? queryParams.append('or_digital_domain', 'True')
@@ -731,7 +732,7 @@ export class APIV2 {
             //   }`
             // );
 
-            domainIds?.some((domainId: string | number) => domainId === 37)
+            domainIds?.some((domainId: string | number) => domainId === 38)
               ? queryParams.append('or_green_domain', 'True')
               : queryParams.append('and_green_domain', 'False');
 
@@ -744,7 +745,7 @@ export class APIV2 {
             //   }`
             // );
 
-            domainIds?.some((domainId: string | number) => domainId === 37)
+            domainIds?.some((domainId: string | number) => domainId === 39)
               ? queryParams.append('or_entrepreneurship_domain', 'True')
               : queryParams.append('and_entrepreneurship_domain', 'False');
 

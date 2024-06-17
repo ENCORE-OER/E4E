@@ -4,7 +4,7 @@ import {
   ISetLike,
   VennDiagram,
   asSets,
-  mergeColors
+  mergeColors,
 } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -12,7 +12,11 @@ import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
 import { OerProps } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
-import { extractSetIds, useHasHydrated, useIsSmallerScreen } from '../../../utils/utils';
+import {
+  extractSetIds,
+  useHasHydrated,
+  useIsSmallerScreen,
+} from '../../../utils/utils';
 export type TabDomainsProps = {};
 
 // const baseSets = [
@@ -21,17 +25,15 @@ export type TabDomainsProps = {};
 //   { name: 'ENTERPRENEURSHIP', elems: [], domainId: 'Entrepreneurship' },
 // ];
 
-
 type baseSetsProps = {
-  id: number,
-  name: string,
-  elems: any[],
-  domainLabel: string,
-  domainId: number
-}
+  id: number;
+  name: string;
+  elems: any[];
+  domainLabel: string;
+  domainId: number;
+};
 
-
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -93,11 +95,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     (
       oer:
         | {
-          green_domain: boolean;
-          digital_domain: boolean;
-          entrepreneurship_domain: boolean;
-          id: number;
-        }
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -191,7 +193,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     // const selectedDomains = temp?.map((domain: any, index: number) => domain.get(index));
     // console.log("Filtered OER IDs", selectedDomains);
     // console.log(selection);
-    console.log("SET NAME:", selection?.name);
+    console.log('SET NAME:', selection?.name);
     const nameSelection = selection?.name;
     const domainIds = extractSetIds(nameSelection);
     console.log(domainIds);
@@ -202,7 +204,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
     // console.log("INVOLVED DOMAINS: ", involvedDomainIds);
 
-
     // Check if the selected IDs are equal to the currently selected IDs
     if (domainIds.length === 0) {
       return;
@@ -212,7 +213,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       setFiltered(previousContent);
 
       // TODO: initial API call
-
     } else {
       // First click on a slice, update the selected OER IDs
       setSelectedOERIds(domainIds);
@@ -272,12 +272,14 @@ export const TabDomains = ({ }: TabDomainsProps) => {
         pathname: '/discover',
         query: updatedQuery,
       });
-
     }
   };
 
   // Function to check if two arrays are equal
-  const arraysEqual = (arr1: string[] | number[], arr2: string[] | number[]) => {
+  const arraysEqual = (
+    arr1: string[] | number[],
+    arr2: string[] | number[]
+  ) => {
     if (arr1.length !== arr2.length) return false;
     for (let i = 0; i < arr1.length; i++) {
       if (arr1[i] !== arr2[i]) return false;
@@ -325,9 +327,27 @@ export const TabDomains = ({ }: TabDomainsProps) => {
         const entrepreneurialIds = resp_metrics?.entrepreneurial_oers?.ids;
 
         const baseSets: baseSetsProps[] = [
-          { id: 0, name: 'DIGITAL', elems: [], domainLabel: 'Digital', domainId: 37 },
-          { id: 1, name: 'GREEN', elems: [], domainLabel: 'Green', domainId: 38 },
-          { id: 2, name: 'ENTREPRENEURSHIP', elems: [], domainLabel: 'Entrepreneurship', domainId: 39 },
+          {
+            id: 0,
+            name: 'DIGITAL',
+            elems: [],
+            domainLabel: 'Digital',
+            domainId: 37,
+          },
+          {
+            id: 1,
+            name: 'GREEN',
+            elems: [],
+            domainLabel: 'Green',
+            domainId: 38,
+          },
+          {
+            id: 2,
+            name: 'ENTREPRENEURSHIP',
+            elems: [],
+            domainLabel: 'Entrepreneurship',
+            domainId: 39,
+          },
         ];
 
         const colors = [
@@ -410,11 +430,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
             fontSizes={
               isSmallerScreen
                 ? {
-                  setLabel: '12px',
-                }
+                    setLabel: '12px',
+                  }
                 : {
-                  setLabel: '15px',
-                }
+                    setLabel: '15px',
+                  }
             }
           />
         )}
