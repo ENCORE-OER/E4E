@@ -576,7 +576,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -617,7 +617,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

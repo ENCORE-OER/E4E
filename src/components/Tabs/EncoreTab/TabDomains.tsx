@@ -33,22 +33,27 @@ type baseSetsProps = {
   domainId: number;
 };
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
   const isSmallerScreen = useIsSmallerScreen();
 
-  const { filtered, setFiltered } = useContext(DiscoveryContext);
+  const {
+    filtered,
+    // setFiltered
+  } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<ISet[]>([]);
   // const [totalOers, setTotalOers] = useState<string[]>([]);
 
   const filteredOers: any = {};
 
-  const [previousContent, setPreviousContent] = useState<
-    (OerProps | undefined | OerFreeSearchProps)[]
-  >([]);
+  // const [previousContent, setPreviousContent] = useState<
+  //   (OerProps | undefined | OerFreeSearchProps)[]
+  // >([]);
+
+  const [firstDomains, setFirstDomains] = useState<number[]>([]);
 
   const [selectedOERIds, setSelectedOERIds] = useState<number[]>([]);
 
@@ -95,11 +100,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (
       oer:
         | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -182,8 +187,45 @@ export const TabDomains = ({}: TabDomainsProps) => {
      setFiltered(filteredOERs);
    };*/
 
+  const updateQuery = async (newDomainIds: number[], isFilter: boolean) => {
+    // Get search data from the localStorage
+    const searchData = localStorage.getItem('searchData');
+
+    if (!searchData) {
+      console.error('searchData not found in localStorage');
+      // TODO: handle redirect
+      router.push({
+        pathname: '/',
+      });
+      return;
+    }
+
+    // Convert the data in a JSON format
+    const convertedData = JSON.parse(searchData);
+    // const domains = convertedData['domains'] || [''];
+    const updatedDomains = [...newDomainIds];
+
+    // Update the concepts array in the searchData object
+    convertedData['domains'] = updatedDomains;
+
+    console.log('convertedData - media types', convertedData['domains']);
+
+    convertedData['isDomainsFilter'] = isFilter;
+
+    // Update the searchData in the localStorage
+    localStorage.setItem('searchData', JSON.stringify(convertedData));
+
+    // Update the query with the selected domains
+    const updatedQuery = { ...router.query, domains: updatedDomains };
+    await router.push({
+      pathname: '/discover',
+      query: updatedQuery,
+    });
+  }
+
   const onClickDiagram = async (selection: any) => {
-    if (!selection) return;
+    // This to disabilitate section that has zero elems
+    if (!selection || selection.elems.length === 0) return;
 
     // TODO: For each selection I have to set a specific API call, for example if the selection is the part with green and digital, I have to call the API with and_skill_domains=ID&and_skill_domains=ID
 
@@ -209,14 +251,20 @@ export const TabDomains = ({}: TabDomainsProps) => {
       return;
     } else if (arraysEqual(domainIds, selectedOERIds)) {
       // Second click on the same slice, reset to initial state
-      setSelectedOERIds([]);
-      setFiltered(previousContent);
+      // Reset the query
+
+      updateQuery(firstDomains, false);
+
+      // setSelectedOERIds([]);
+      // setFiltered(previousContent);
 
       // TODO: initial API call
     } else {
-      // First click on a slice, update the selected OER IDs
+      // First click on a slice, update the query
       setSelectedOERIds(domainIds);
-      setPreviousContent(filtered);
+      updateQuery(domainIds, true);
+
+      // setPreviousContent(filtered);
 
       // Filter the displayed OERs based on the selected IDs
       // const filteredObjects = filtered.filter(
@@ -228,50 +276,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
       // );
       // setFiltered(filteredObjects);
 
-      // Get search data from the localStorage
-      const searchData = localStorage.getItem('searchData');
-
-      if (!searchData) {
-        console.error('searchData not found in localStorage');
-        // TODO: handle redirect
-        router.push({
-          pathname: '/',
-        });
-        return;
-      }
-
-      // Convert the data in a JSON format
-      const convertedData = JSON.parse(searchData);
-      // const domains = convertedData['domains'] || [''];
-      const updatedDomains = [...domainIds];
-
-      // Update the concepts array in the searchData object
-      convertedData['domains'] = updatedDomains;
-
-      console.log('convertedData - media types', convertedData['domains']);
-
-      convertedData['isDomainsFilter'] = true;
-
-      // Update the searchData in the localStorage
-      localStorage.setItem('searchData', JSON.stringify(convertedData));
-      // // Extract the labels and ids from the response of getConceptsFreeSearch
-      // const conceptLabels = tags.map(tag => tag.label);
-      // const conceptIds = tags.map(tag => tag.id);
-
-      // // Find the index of the selected concept in the labels array
-      // const selectedIndex = conceptLabels.indexOf(selectedTag.label);
-
-      // // Get the id of the selected concept
-      // const selectedConceptId = conceptIds[selectedIndex];
-
-      // localStorage.setItem('searchData', JSON.stringify(selectedConceptId));
-
-      // Update the query with the selected concept id
-      const updatedQuery = { ...router.query, domains: updatedDomains };
-      await router.push({
-        pathname: '/discover',
-        query: updatedQuery,
-      });
     }
   };
 
@@ -286,6 +290,27 @@ export const TabDomains = ({}: TabDomainsProps) => {
     }
     return true;
   };
+
+  useEffect(() => {
+    if (firstDomains.length === 0) {
+      // Get search data from the localStorage
+      const searchData = localStorage.getItem('searchData');
+
+      if (!searchData) {
+        console.error('searchData not found in localStorage');
+        // TODO: handle redirect
+        router.push({
+          pathname: '/',
+        });
+        return;
+      }
+
+      // Convert the data in a JSON format
+      const convertedData = JSON.parse(searchData);
+      const domains = convertedData['domains'] || [''];
+      setFirstDomains(domains);
+    }
+  }, [])
 
   // update metrics
   useEffect(() => {
@@ -430,11 +455,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
             fontSizes={
               isSmallerScreen
                 ? {
-                    setLabel: '12px',
-                  }
+                  setLabel: '12px',
+                }
                 : {
-                    setLabel: '15px',
-                  }
+                  setLabel: '15px',
+                }
             }
           />
         )}

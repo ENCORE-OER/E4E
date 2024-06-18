@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   FormControl,
   FormErrorMessage,
@@ -7,7 +8,9 @@ import {
 } from '@chakra-ui/react';
 import { ReactNode, useRef, useState } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { IoMdClose } from "react-icons/io";
 import UploadButton from '../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
+import IconDocument from '../Icons/IconDocuments/IconDocument';
 
 type FileUploadProps = {
   register: UseFormRegisterReturn;
@@ -90,32 +93,38 @@ const UploadFile = () => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <FormControl isInvalid={!!errors.file_} isRequired>
-          <FileUpload
-            accept="application/*"
-            multiple
-            register={register('file_', { validate: validateFiles })}
-            onFilesSelected={handleFilesSelected}
-          >
-            <UploadButton />
-          </FileUpload>
-          <FormErrorMessage>
-            {errors.file_ && errors?.file_.message}
-          </FormErrorMessage>
-        </FormControl>
-        {/* {selectedFiles && selectedFiles.length > 0 && ( */}
-        <button type="submit">Confirm</button>
-        {/* )} */}
-      </form>
-      {selectedFiles && selectedFiles.length > 0 && (
-        <Flex justify="center" direction="column" mt={4}>
-          <Text mb={2}>Selected Files:</Text>
-          {Array.from(selectedFiles).map((file: File, index: number) => (
-            <Text key={index}>{file.name}</Text>
-          ))}
-        </Flex>
-      )}
+      <Flex justifyItems="center" direction="column" >
+        <form onSubmit={onSubmit}>
+          <FormControl isInvalid={!!errors.file_} isRequired>
+            <FileUpload
+              accept="application/*"
+              multiple
+              register={register('file_', { validate: validateFiles })}
+              onFilesSelected={handleFilesSelected}
+            >
+              <UploadButton />
+            </FileUpload>
+            <FormErrorMessage>
+              {errors.file_ && errors?.file_.message}
+            </FormErrorMessage>
+          </FormControl>
+          {/* {selectedFiles && selectedFiles.length > 0 && ( */}
+          <button type="submit">Confirm</button>
+          {/* )} */}
+        </form>
+        {selectedFiles && selectedFiles.length > 0 && (
+          <Flex w="100%" justifyItems="center" direction="column" pt={4}>
+            <Text mb={2}>Selected Files:</Text>
+            {Array.from(selectedFiles).map((file: File, index: number) => (
+              <Flex key={index} align="center" border="1px solid" bg="white" borderRadius="lg" p={2} gap={1}>
+                <IconDocument />
+                <Text >{file.name}</Text>
+                <Button variant="ghost" p={0}><IoMdClose fontSize="x-large" /></Button>
+              </Flex>
+            ))}
+          </Flex>
+        )}
+      </Flex>
     </>
   );
 };

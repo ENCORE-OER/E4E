@@ -721,50 +721,65 @@ export class APIV2 {
         //   );
         // } else {
         console.log(isDomainsFilter);
+        // This means User is not applying any filter, he's not using Tab Domains
         if (!isDomainsFilter) {
-          // if (
-          //   !domainIds?.some((domainId: string | number) => domainId === 37)
-          // ) {
-          //   queryParams.append('and_digital_domain', 'False');
-          // }
-          queryParams.append(
-            'and_digital_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 37)
-                ? 'True'
-                : 'False'
-            }`
-          );
+          // We apply OR operator if the selected are more than 1
+          const domainsQueryParams = domainIds
+            .map((domainId: string | number) => {
+              if (domainId === 37) {
+                return 'digital';
+              } else if (domainId === 38) {
+                return 'green';
+              } else if (domainId === 39) {
+                return 'entrepreneurship';
+              }
+            })
+            .join('|');
+          queryParams.append('and_skill_domains', domainsQueryParams);
 
-          // if (
-          //   !domainIds?.some((domainId: string | number) => domainId === 38)
-          // ) {
-          //   queryParams.append('and_green_domain', 'False');
-          // }
+          // To avoid to return OERs that contains also the not selected domains we have to specify that
+          if (
+            !domainIds?.some((domainId: string | number) => domainId === 37)
+          ) {
+            queryParams.append('and_digital_domain', 'False');
+          }
+          if (
+            !domainIds?.some((domainId: string | number) => domainId === 38)
+          ) {
+            queryParams.append('and_green_domain', 'False');
+          }
+          if (
+            !domainIds?.some((domainId: string | number) => domainId === 39)
+          ) {
+            queryParams.append('and_entrepreneurship_domain', 'False');
+          }
 
-          queryParams.append(
-            'and_green_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 38)
-                ? 'True'
-                : 'False'
-            }`
-          );
-
-          // if (
-          //   !domainIds?.some((domainId: string | number) => domainId === 39)
-          // ) {
-          //   queryParams.append('and_entrepreneurship_domain', 'False');
-          // }
-          queryParams.append(
-            'and_entrepreneurship_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 39)
-                ? 'True'
-                : 'False'
-            }`
-          );
+          // queryParams.append(
+          //   'and_digital_domain',
+          //   `${
+          //     domainIds?.some((domainId: string | number) => domainId === 37)
+          //       ? 'True'
+          //       : 'False'
+          //   }`
+          // );
+          // queryParams.append(
+          //   'and_green_domain',
+          //   `${
+          //     domainIds?.some((domainId: string | number) => domainId === 38)
+          //       ? 'True'
+          //       : 'False'
+          //   }`
+          // );
+          // queryParams.append(
+          //   'and_entrepreneurship_domain',
+          //   `${
+          //     domainIds?.some((domainId: string | number) => domainId === 39)
+          //       ? 'True'
+          //       : 'False'
+          //   }`
+          // );
         } else {
+          // Here if the User use the Tab Domains
           queryParams.append(
             'and_digital_domain',
             `${
