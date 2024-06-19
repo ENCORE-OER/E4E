@@ -4,11 +4,11 @@ import {
   FormControl,
   FormErrorMessage,
   InputGroup,
-  Text,
+  Text
 } from '@chakra-ui/react';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose } from 'react-icons/io';
 import UploadButton from '../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
 import IconDocument from '../Icons/IconDocuments/IconDocument';
 
@@ -61,6 +61,8 @@ type FormValues = {
 
 const UploadFile = () => {
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -75,6 +77,9 @@ const UploadFile = () => {
 
   const validateFiles = (value: FileList) => {
     if (value.length < 1) {
+      if (isFileSelected) {
+        setIsFileSelected(false);
+      }
       return 'Files are required';
     }
     for (const file of Array.from(value)) {
@@ -83,17 +88,25 @@ const UploadFile = () => {
       if (fsMb > MAX_FILE_SIZE) {
         return 'Max file size 10MB';
       }
+      if (!isFileSelected) {
+        setIsFileSelected(true);
+      }
     }
     return true;
   };
 
   const handleFilesSelected = (files: FileList) => {
     setSelectedFiles(files);
+    setIsFileSelected(true);
   };
+
+  useEffect(() => {
+    console.log("Is file selected? ", isFileSelected);
+  }, [isFileSelected])
 
   return (
     <>
-      <Flex justifyItems="center" direction="column" >
+      <Flex justifyItems="center" direction="column">
         <form onSubmit={onSubmit}>
           <FormControl isInvalid={!!errors.file_} isRequired>
             <FileUpload
@@ -108,20 +121,34 @@ const UploadFile = () => {
               {errors.file_ && errors?.file_.message}
             </FormErrorMessage>
           </FormControl>
-          {/* {selectedFiles && selectedFiles.length > 0 && ( */}
-          <button type="submit">Confirm</button>
-          {/* )} */}
+          {/* {isFileSelected && */}
+          <Flex pt={5} w="100%">
+            <Button type="submit">Confirm</Button>
+          </Flex>
+          {/* } */}
         </form>
         {selectedFiles && selectedFiles.length > 0 && (
           <Flex w="100%" justifyItems="center" direction="column" pt={4}>
             <Text mb={2}>Selected Files:</Text>
-            {Array.from(selectedFiles).map((file: File, index: number) => (
-              <Flex key={index} align="center" border="1px solid" bg="white" borderRadius="lg" p={2} gap={1}>
-                <IconDocument />
-                <Text >{file.name}</Text>
-                <Button variant="ghost" p={0}><IoMdClose fontSize="x-large" /></Button>
-              </Flex>
-            ))}
+            <Flex gap={2} direction="column">
+              {Array.from(selectedFiles).map((file: File, index: number) => (
+                <Flex
+                  key={index}
+                  align="center"
+                  border="1px solid"
+                  bg="white"
+                  borderRadius="lg"
+                  p={2}
+                  gap={1}
+                >
+                  <IconDocument />
+                  <Text flex="1">{file.name}</Text>
+                  <Button variant="ghost" p={0}>
+                    <IoMdClose fontSize="x-large" />
+                  </Button>
+                </Flex>
+              ))}
+            </Flex>
           </Flex>
         )}
       </Flex>

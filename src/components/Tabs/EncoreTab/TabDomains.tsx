@@ -221,7 +221,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       pathname: '/discover',
       query: updatedQuery,
     });
-  }
+  };
 
   const onClickDiagram = async (selection: any) => {
     // This to disabilitate section that has zero elems
@@ -275,7 +275,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       //   }
       // );
       // setFiltered(filteredObjects);
-
     }
   };
 
@@ -310,7 +309,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       const domains = convertedData['domains'] || [''];
       setFirstDomains(domains);
     }
-  }, [])
+  }, []);
 
   // update metrics
   useEffect(() => {
@@ -332,6 +331,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
         const audience = convertedData['audience'];
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
+        const isDomainsFilter = convertedData['isDomainsFilter']
 
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
         const resp_metrics: any = await API.getMetricsTabDomains(
@@ -340,7 +340,8 @@ export const TabDomains = ({ }: TabDomainsProps) => {
           types,
           audience,
           operator,
-          concepts
+          concepts,
+          isDomainsFilter
         );
         console.log(
           'Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers)
