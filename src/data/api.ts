@@ -360,178 +360,22 @@ export class APIV2 {
     audienceIds?: string[],
     operator?: string,
     concepts?: string[],
-    isDomainsFilter?: boolean
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean
   ): Promise<MetricsOers[]> {
     try {
-      const queryParams = new URLSearchParams();
-      // TODO: check if this is useful. If All is selected all the options of the field should be also selected
-      const ID_ALL = '0';
+      let queryParams = new URLSearchParams();
 
-      // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
-
-      if (keywords && keywords.length > 0) {
-        if (operator) {
-          keywords?.forEach((keyword: string) => {
-            queryParams.append('and_keywords', keyword);
-          });
-        } else {
-          const queryParamsKeywords = keywords.join('|');
-          queryParams.append('and_keywords', queryParamsKeywords);
-        }
-      }
-      if (domainIds !== undefined && domainIds.length > 0) {
-        // if (domainIds.length === 1) {
-        //   queryParams.append(
-        //     'and_digital_domain',
-        //     `${domainIds[0] === 37 ? 'True' : 'False'}`
-        //   );
-
-        //   queryParams.append(
-        //     'and_green_domain',
-        //     `${domainIds[0] === 38 ? 'True' : 'False'}`
-        //   );
-
-        //   queryParams.append(
-        //     'and_entrepreneurship_domain',
-        //     `${domainIds[0] === 39 ? 'True' : 'False'}`
-        //   );
-        // } else {
-        console.log(isDomainsFilter);
-        // This means User is not applying any filter, he's not using Tab Domains
-        if (!isDomainsFilter) {
-          // We apply OR operator if the selected are more than 1
-          const domainsQueryParams = domainIds
-            .map((domainId: string | number) => {
-              if (domainId === 37) {
-                return 'digital';
-              } else if (domainId === 38) {
-                return 'green';
-              } else if (domainId === 39) {
-                return 'entrepreneurship';
-              }
-            })
-            .join('|');
-          queryParams.append('and_skill_domains', domainsQueryParams);
-
-          // To avoid to return OERs that contains also the not selected domains we have to specify that
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 37)
-          ) {
-            queryParams.append('and_digital_domain', 'False');
-          }
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 38)
-          ) {
-            queryParams.append('and_green_domain', 'False');
-          }
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 39)
-          ) {
-            queryParams.append('and_entrepreneurship_domain', 'False');
-          }
-
-          // queryParams.append(
-          //   'and_digital_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 37)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-          // queryParams.append(
-          //   'and_green_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 38)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-          // queryParams.append(
-          //   'and_entrepreneurship_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 39)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-        } else {
-          // Here if the User use the Tab Domains
-          queryParams.append(
-            'and_digital_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 37)
-                ? 'True'
-                : 'False'
-            }`
-          );
-
-          queryParams.append(
-            'and_green_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 38)
-                ? 'True'
-                : 'False'
-            }`
-          );
-
-          queryParams.append(
-            'and_entrepreneurship_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 39)
-                ? 'True'
-                : 'False'
-            }`
-          );
-        }
-      }
-      // }
-      // if (green_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_green_domain`,
-      //     green_domain
-      //   );
-      // }
-      // if (digital_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_digital_domain`,
-      //     digital_domain
-      //   );
-      // }
-      // if (entrepreneurhip_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_entrepreneurship_domain`,
-      //     entrepreneurhip_domain
-      //   );
-      // }
-
-      // TODO: is check to the ID_ALL useful? If "all" is selected the array should be empty.
-      if (
-        resourceTypeIds &&
-        !resourceTypeIds?.includes(ID_ALL) &&
-        resourceTypeIds?.length > 0
-      ) {
-        if (resourceTypeIds?.length === 1) {
-          queryParams.append('and_media_type', resourceTypeIds[0]);
-        } else {
-          const resourceTypeIdsQuery = resourceTypeIds.join('|');
-          queryParams.append('and_media_type', resourceTypeIdsQuery);
-        }
-      }
-      if (
-        audienceIds &&
-        !audienceIds?.includes(ID_ALL) &&
-        audienceIds.length > 0
-      ) {
-        if (audienceIds?.length === 1) {
-          queryParams.append('and_coverage', audienceIds[0]);
-        } else {
-          const audienceIdsQuery = audienceIds?.join('|');
-          queryParams.append('and_coverage', audienceIdsQuery);
-        }
-      }
-      concepts?.forEach((concept: string) => {
-        queryParams.append('and_concepts', concept);
-      });
+      queryParams = await this.discoveryQueryParams(
+        keywords,
+        domainIds,
+        resourceTypeIds,
+        audienceIds,
+        operator,
+        concepts,
+        isDomainsFilter,
+        isTypesFilter
+      );
 
       const resp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/metrics/oers/?${queryParams}`
@@ -801,6 +645,206 @@ export class APIV2 {
     }
   }
 
+  discoveryQueryParams = async (
+    keywords?: string[],
+    domainIds?: string[] | number[], // at the moment the filterig by domain is not implemented by the API
+    // green_domain?: string,
+    // digital_domain?: string,
+    // entrepreneurhip_domain?: string,
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    operator?: string,
+    concepts?: string[],
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean,
+    page?: number,
+    order_by?: string,
+    order_asc?: string
+  ): Promise<URLSearchParams> => {
+    // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
+    const queryParams = new URLSearchParams();
+
+    // TODO: check if this is useful. If All is selected all the options of the field should be also selected
+    const ID_ALL = '0';
+
+    if (page !== undefined && page > 0) {
+      queryParams.append('page', page.toString());
+    }
+
+    if (keywords && keywords.length > 0) {
+      // "operator" is set by user selecting on "All keywords" or "Any keywords"
+      if (operator) {
+        keywords?.forEach((keyword: string) => {
+          queryParams.append('and_keywords', keyword);
+        });
+      } else {
+        const queryParamsKeywords = keywords.join('|');
+        queryParams.append('and_keywords', queryParamsKeywords);
+      }
+    }
+    if (domainIds !== undefined && domainIds.length > 0) {
+      // if (domainIds.length === 1) {
+      //   queryParams.append(
+      //     'and_digital_domain',
+      //     `${domainIds[0] === 37 ? 'True' : 'False'}`
+      //   );
+
+      //   queryParams.append(
+      //     'and_green_domain',
+      //     `${domainIds[0] === 38 ? 'True' : 'False'}`
+      //   );
+
+      //   queryParams.append(
+      //     'and_entrepreneurship_domain',
+      //     `${domainIds[0] === 39 ? 'True' : 'False'}`
+      //   );
+      // } else {
+      console.log(isDomainsFilter);
+      // This means User is not applying any filter, he's not using Tab Domains
+      if (!isDomainsFilter) {
+        // We apply OR operator if the selected are more than 1
+        const domainsQueryParams = domainIds
+          .map((domainId: string | number) => {
+            if (domainId === 37) {
+              return 'digital';
+            } else if (domainId === 38) {
+              return 'green';
+            } else if (domainId === 39) {
+              return 'entrepreneurship';
+            }
+          })
+          .join('|');
+        queryParams.append('and_skill_domains', domainsQueryParams);
+
+        // To avoid to return OERs that contains also the not selected domains we have to specify that
+        if (!domainIds?.some((domainId: string | number) => domainId === 37)) {
+          queryParams.append('and_digital_domain', 'False');
+        }
+        if (!domainIds?.some((domainId: string | number) => domainId === 38)) {
+          queryParams.append('and_green_domain', 'False');
+        }
+        if (!domainIds?.some((domainId: string | number) => domainId === 39)) {
+          queryParams.append('and_entrepreneurship_domain', 'False');
+        }
+
+        // queryParams.append(
+        //   'and_digital_domain',
+        //   `${
+        //     domainIds?.some((domainId: string | number) => domainId === 37)
+        //       ? 'True'
+        //       : 'False'
+        //   }`
+        // );
+        // queryParams.append(
+        //   'and_green_domain',
+        //   `${
+        //     domainIds?.some((domainId: string | number) => domainId === 38)
+        //       ? 'True'
+        //       : 'False'
+        //   }`
+        // );
+        // queryParams.append(
+        //   'and_entrepreneurship_domain',
+        //   `${
+        //     domainIds?.some((domainId: string | number) => domainId === 39)
+        //       ? 'True'
+        //       : 'False'
+        //   }`
+        // );
+      } else {
+        // Here if the User use the Tab Domains
+        queryParams.append(
+          'and_digital_domain',
+          `${
+            domainIds?.some((domainId: string | number) => domainId === 37)
+              ? 'True'
+              : 'False'
+          }`
+        );
+
+        queryParams.append(
+          'and_green_domain',
+          `${
+            domainIds?.some((domainId: string | number) => domainId === 38)
+              ? 'True'
+              : 'False'
+          }`
+        );
+
+        queryParams.append(
+          'and_entrepreneurship_domain',
+          `${
+            domainIds?.some((domainId: string | number) => domainId === 39)
+              ? 'True'
+              : 'False'
+          }`
+        );
+      }
+    }
+    // }
+    // if (green_domain !== undefined) {
+    //   queryParams.append(
+    //     `${operator ? operator : 'and'}_green_domain`,
+    //     green_domain
+    //   );
+    // }
+    // if (digital_domain !== undefined) {
+    //   queryParams.append(
+    //     `${operator ? operator : 'and'}_digital_domain`,
+    //     digital_domain
+    //   );
+    // }
+    // if (entrepreneurhip_domain !== undefined) {
+    //   queryParams.append(
+    //     `${operator ? operator : 'and'}_entrepreneurship_domain`,
+    //     entrepreneurhip_domain
+    //   );
+    // }
+
+    // TODO: is check to the ID_ALL useful? If "all" is selected the array should be empty.
+    if (
+      resourceTypeIds &&
+      !resourceTypeIds?.includes(ID_ALL) &&
+      resourceTypeIds?.length > 0
+    ) {
+      if (resourceTypeIds?.length === 1 || isTypesFilter === true) {
+        resourceTypeIds.map((resourceTypeId: string) => {
+          queryParams.append('and_media_type', resourceTypeId);
+        });
+      } else {
+        const resourceTypeIdsQuery = resourceTypeIds.join('|');
+        queryParams.append('and_media_type', resourceTypeIdsQuery);
+      }
+    }
+    if (
+      audienceIds &&
+      !audienceIds?.includes(ID_ALL) &&
+      audienceIds.length > 0
+    ) {
+      if (audienceIds?.length === 1) {
+        queryParams.append('and_coverage', audienceIds[0]);
+      } else {
+        const audienceIdsQuery = audienceIds?.join('|');
+        queryParams.append('and_coverage', audienceIdsQuery);
+      }
+    }
+    concepts?.forEach((concept: string) => {
+      queryParams.append('and_concepts', concept);
+    });
+
+    if (order_by !== undefined) {
+      queryParams.append(
+        'order_by',
+        order_by === 'search_rank' ? 'title' : order_by // 'search_rank' is not a field for this API
+      );
+    }
+    if (order_asc !== undefined) {
+      queryParams.append('order_asc', order_asc);
+    }
+
+    return queryParams;
+  };
+
   async searchBooleanOERs(
     page: number,
     keywords?: string[],
@@ -814,199 +858,25 @@ export class APIV2 {
     order_asc?: string,
     operator?: string,
     concepts?: string[],
-    isDomainsFilter?: boolean
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean
   ): Promise<RespDataProps> {
     try {
-      const queryParams = new URLSearchParams();
-      // TODO: check if this is useful. If All is selected all the options of the field should be also selected
-      const ID_ALL = '0';
+      let queryParams = new URLSearchParams();
 
-      /*skillIds?.forEach((skillId: any) => {
-        queryParams.append('skills', skillId);
-      });*/
-
-      if (page > 0) {
-        queryParams.append('page', page.toString());
-      }
-
-      // LOGIC: if the 'All' checkbox is checked we don't consider it in the URL
-
-      if (keywords && keywords.length > 0) {
-        if (operator) {
-          keywords?.forEach((keyword: string) => {
-            queryParams.append('and_keywords', keyword);
-          });
-        } else {
-          const queryParamsKeywords = keywords.join('|');
-          queryParams.append('and_keywords', queryParamsKeywords);
-        }
-      }
-      if (domainIds !== undefined && domainIds.length > 0) {
-        // if (domainIds.length === 1) {
-        //   queryParams.append(
-        //     'and_digital_domain',
-        //     `${domainIds[0] === 37 ? 'True' : 'False'}`
-        //   );
-
-        //   queryParams.append(
-        //     'and_green_domain',
-        //     `${domainIds[0] === 38 ? 'True' : 'False'}`
-        //   );
-
-        //   queryParams.append(
-        //     'and_entrepreneurship_domain',
-        //     `${domainIds[0] === 39 ? 'True' : 'False'}`
-        //   );
-        // } else {
-        console.log(isDomainsFilter);
-        // This means User is not applying any filter, he's not using Tab Domains
-        if (!isDomainsFilter) {
-          // We apply OR operator if the selected are more than 1
-          const domainsQueryParams = domainIds
-            .map((domainId: string | number) => {
-              if (domainId === 37) {
-                return 'digital';
-              } else if (domainId === 38) {
-                return 'green';
-              } else if (domainId === 39) {
-                return 'entrepreneurship';
-              }
-            })
-            .join('|');
-          queryParams.append('and_skill_domains', domainsQueryParams);
-
-          // To avoid to return OERs that contains also the not selected domains we have to specify that
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 37)
-          ) {
-            queryParams.append('and_digital_domain', 'False');
-          }
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 38)
-          ) {
-            queryParams.append('and_green_domain', 'False');
-          }
-          if (
-            !domainIds?.some((domainId: string | number) => domainId === 39)
-          ) {
-            queryParams.append('and_entrepreneurship_domain', 'False');
-          }
-
-          // queryParams.append(
-          //   'and_digital_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 37)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-          // queryParams.append(
-          //   'and_green_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 38)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-          // queryParams.append(
-          //   'and_entrepreneurship_domain',
-          //   `${
-          //     domainIds?.some((domainId: string | number) => domainId === 39)
-          //       ? 'True'
-          //       : 'False'
-          //   }`
-          // );
-        } else {
-          // Here if the User use the Tab Domains
-          queryParams.append(
-            'and_digital_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 37)
-                ? 'True'
-                : 'False'
-            }`
-          );
-
-          queryParams.append(
-            'and_green_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 38)
-                ? 'True'
-                : 'False'
-            }`
-          );
-
-          queryParams.append(
-            'and_entrepreneurship_domain',
-            `${
-              domainIds?.some((domainId: string | number) => domainId === 39)
-                ? 'True'
-                : 'False'
-            }`
-          );
-        }
-      }
-      // }
-      // if (green_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_green_domain`,
-      //     green_domain
-      //   );
-      // }
-      // if (digital_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_digital_domain`,
-      //     digital_domain
-      //   );
-      // }
-      // if (entrepreneurhip_domain !== undefined) {
-      //   queryParams.append(
-      //     `${operator ? operator : 'and'}_entrepreneurship_domain`,
-      //     entrepreneurhip_domain
-      //   );
-      // }
-
-      // TODO: is check to the ID_ALL useful? If "all" is selected the array should be empty.
-      if (
-        resourceTypeIds &&
-        !resourceTypeIds?.includes(ID_ALL) &&
-        resourceTypeIds?.length > 0
-      ) {
-        if (resourceTypeIds?.length === 1) {
-          queryParams.append('and_media_type', resourceTypeIds[0]);
-        } else {
-          const resourceTypeIdsQuery = resourceTypeIds.join('|');
-          queryParams.append('and_media_type', resourceTypeIdsQuery);
-        }
-      }
-      if (
-        audienceIds &&
-        !audienceIds?.includes(ID_ALL) &&
-        audienceIds.length > 0
-      ) {
-        if (audienceIds?.length === 1) {
-          queryParams.append('and_coverage', audienceIds[0]);
-        } else {
-          const audienceIdsQuery = audienceIds?.join('|');
-          queryParams.append('and_coverage', audienceIdsQuery);
-        }
-      }
-      if (order_by !== undefined) {
-        queryParams.append(
-          'order_by',
-          order_by === 'search_rank' ? 'title' : order_by // 'search_rank' is not a field for this API
-        );
-      }
-      if (order_asc !== undefined) {
-        queryParams.append('order_asc', order_asc);
-      }
-      // concepts?.forEach((concept: string) => {
-      //   queryParams.append(`${operator ? operator : 'and'}_concepts`, concept);
-      // });
-      concepts?.forEach((concept: string) => {
-        queryParams.append('and_concepts', concept);
-      });
-
+      queryParams = await this.discoveryQueryParams(
+        keywords,
+        domainIds,
+        resourceTypeIds,
+        audienceIds,
+        operator,
+        concepts,
+        isDomainsFilter,
+        isTypesFilter,
+        page,
+        order_by,
+        order_asc
+      );
       //const url = `https://encore-db.grial.eu/api/no_pagination/boolean/oers/?${queryParams}`;
       const url = `https://encore-db.grial.eu/api/boolean/oers/?${queryParams}`;
 
@@ -1170,51 +1040,27 @@ export class APIV2 {
   // Returns the list of concepts (OerConceptInfo[]) involved in the filtered query.
   async getConceptsFreeSearch(
     keywords?: string[],
-    domainIds?: string[],
+    domainIds?: string[], // at the moment the filterig by domain is not implemented by the API
     resourceTypeIds?: string[],
     audienceIds?: string[],
     operator?: string,
-    concepts?: string[]
+    concepts?: string[],
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean
   ): Promise<OerConceptInfo[]> {
     try {
-      /*const pageParams = page ? `page=${page.toString()}&` : '';
-      const queryParams = keywords
-        .map((keyword) => `keywords=${keyword}`)
-        .join('&');*/
+      let queryParams = new URLSearchParams();
 
-      const queryParams = new URLSearchParams();
-      const ID_ALL = '0';
-
-      if (keywords !== undefined && keywords.length > 0) {
-        const queryParamsKeywords = keywords.join(',');
-        queryParams.append('keywords', queryParamsKeywords);
-      }
-
-      // ------------------------------------------
-      // domainIds, resourceTypeIds, audienceIds added to try to guarantee advanced search without selected keywords (only with filters)
-      if (!domainIds?.includes(ID_ALL)) {
-        domainIds?.forEach((domainId: string) => {
-          queryParams.append('skill_domain', domainId);
-        });
-      }
-
-      if (!resourceTypeIds?.includes(ID_ALL)) {
-        resourceTypeIds?.forEach((resourceTypeId: string) => {
-          queryParams.append('media_type', resourceTypeId);
-        });
-      }
-      if (!audienceIds?.includes(ID_ALL)) {
-        audienceIds?.forEach((audienceId: string) => {
-          queryParams.append('coverage', audienceId);
-        });
-      }
-      if (operator !== undefined) {
-        queryParams.append('operator', operator);
-      }
-      concepts?.forEach((conceptId: string) => {
-        queryParams.append('concepts', conceptId);
-      });
-
+      queryParams = await this.discoveryQueryParams(
+        keywords,
+        domainIds,
+        resourceTypeIds,
+        audienceIds,
+        operator,
+        concepts,
+        isDomainsFilter,
+        isTypesFilter
+      );
       // ------------------------------------------
       // These API returns the list of concepts involved in the filtered queryset.
       // They use the same sintax of '/api/free-search/oers/?'
@@ -1226,7 +1072,48 @@ export class APIV2 {
       const apiUrl = `https://encore-db.grial.eu/api/no_pagination/free-search/oer-concepts/?${queryParams}`;
       const resp = await axiosNoCookie.get(apiUrl);
 
-      return resp.data?.data || [];
+      return resp.data?.data?.concepts || [];
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Returns the list of resurce types (OerMediaTypeInfo[]) involved in the filtered query.
+  async getTypesFreeSearch(
+    keywords?: string[],
+    domainIds?: string[], // at the moment the filterig by domain is not implemented by the API
+    resourceTypeIds?: string[],
+    audienceIds?: string[],
+    operator?: string,
+    concepts?: string[],
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean
+  ): Promise<OerMediaTypeInfo[]> {
+    try {
+      let queryParams = new URLSearchParams();
+
+      queryParams = await this.discoveryQueryParams(
+        keywords,
+        domainIds,
+        resourceTypeIds,
+        audienceIds,
+        operator,
+        concepts,
+        isDomainsFilter,
+        isTypesFilter
+      );
+
+      // ------------------------------------------
+      // These API returns the list of resource types involved in the filtered queryset.
+      // '/api/no_pagination/free-search/oer-types/? '
+      // '/api/free-search/oer-types/?'
+
+      // At the moment we use the API without pagination, beacuse we want to retrieve all the types involved in the filtered queryset, not only the one page at time.
+
+      const apiUrl = `https://encore-db.grial.eu/api/no_pagination/free-search/oer-types/?${queryParams}`;
+      const resp = await axiosNoCookie.get(apiUrl);
+
+      return resp.data?.data?.media_types || [];
     } catch (error) {
       throw error;
     }

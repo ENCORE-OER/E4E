@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { TagCloud } from 'react-tagcloud';
@@ -16,14 +16,14 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptInfo[]>([]);
   const {
-    //  filtered,
+    filtered,
     setCurrentPage,
   } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -72,12 +72,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
    };
  */
 
-  const handleResetClick = async (/*event: any*/) => {
-    //if (event.target === event.currentTarget) {
-    // Handle click on the white space
-    // Reload the current page
-    //setCurrentPage(1);
-    setConceptsSelected([]);
+  const updateQuery = async (newConcepts: number | number[]) => {
     const searchData = localStorage.getItem('searchData');
     if (!searchData) {
       console.error('searchData not found in localStorage');
@@ -88,15 +83,33 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       return;
     }
     const convertedData = JSON.parse(searchData);
-    if (convertedData['concepts'].length > 0) {
-      convertedData['concepts'] = [];
+    let concepts = convertedData['concepts'] || [''];
+
+    if (concepts.length > 0 && Array.isArray(newConcepts)) {
+      concepts = newConcepts;
+    } else {
+      const updatedConcepts = [...concepts, newConcepts.toString()];
+      // Update the concepts array in the searchData object
+      concepts = updatedConcepts;
     }
+
+    console.log(concepts);
+    convertedData['concepts'] = concepts;
     localStorage.setItem('searchData', JSON.stringify(convertedData));
 
     await router.push({
       pathname: '/discover',
-      query: { ...router.query, concepts: [] },
+      query: { ...router.query, concepts: concepts },
     });
+  }
+
+  const handleResetClick = async (/*event: any*/) => {
+    //if (event.target === event.currentTarget) {
+    // Handle click on the white space
+    // Reload the current page
+    //setCurrentPage(1);
+    setConceptsSelected([]);
+    await updateQuery([]);
     //window.location.reload();
 
     //}
@@ -111,49 +124,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       selectedTag.label,
     ]);
     setCurrentPage(1);
-
-    // Get search data from the localStorage
-    const searchData = localStorage.getItem('searchData');
-
-    if (!searchData) {
-      console.error('searchData not found in localStorage');
-      // TODO: handle redirect
-      router.push({
-        pathname: '/',
-      });
-      return;
-    }
-
-    // Convert the data in a JSON format
-    const convertedData = JSON.parse(searchData);
-    const concepts = convertedData['concepts'] || [''];
-    const updatedConcepts = [...concepts, selectedTag.id.toString()];
-
-    // Update the concepts array in the searchData object
-    convertedData['concepts'] = updatedConcepts;
-
-    console.log('convertedData - concepts', convertedData['concepts']);
-
-    // Update the searchData in the localStorage
-    localStorage.setItem('searchData', JSON.stringify(convertedData));
-    // // Extract the labels and ids from the response of getConceptsFreeSearch
-    // const conceptLabels = tags.map(tag => tag.label);
-    // const conceptIds = tags.map(tag => tag.id);
-
-    // // Find the index of the selected concept in the labels array
-    // const selectedIndex = conceptLabels.indexOf(selectedTag.label);
-
-    // // Get the id of the selected concept
-    // const selectedConceptId = conceptIds[selectedIndex];
-
-    // localStorage.setItem('searchData', JSON.stringify(selectedConceptId));
-
-    // Update the query with the selected concept id
-    const updatedQuery = { ...router.query, concepts: updatedConcepts };
-    await router.push({
-      pathname: '/discover',
-      query: updatedQuery,
-    });
+    await updateQuery(selectedTag.id);
   };
 
   // ====================================================================================================
@@ -179,6 +150,8 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         const audience = convertedData['audience'];
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
+        const isDomainsFilter = convertedData['isDomainsFilter'];
+        const isTypesFilter = convertedData['isTypesFilter'];
 
         const respAPI = await API.getConceptsFreeSearch(
           keywords,
@@ -186,7 +159,9 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
           types,
           audience,
           operator,
-          concepts
+          concepts,
+          isDomainsFilter,
+          isTypesFilter,
         );
         // At the moment is useless 'cause the API return every concept only one time and the count is always 1
         // respAPI.forEach(({ id }) => {
@@ -265,9 +240,9 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
           the concept.
         </Text>
         {conceptsSelected.length > 0 && (
-          <Box textAlign="center" pt={5} pb={0}>
+          <Flex direction="column" textAlign="center" pt={5} pb={0}>
             <Text variant="label">
-              Concepts selected: {conceptsSelected.join(', ')}
+              {`Concepts selected: ${conceptsSelected.join(', ')}`}
             </Text>
             <Button
               variant="ghost"
@@ -282,10 +257,9 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
                 Reset concepts
               </Text>
             </Button>
-          </Box>
+          </Flex>
         )}
       </Stack>
-      <br />
       <br />
       {isLoading && (
         <div className="loading-spinner">
@@ -295,9 +269,12 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       )}
       {!isLoading &&
         tags.length > 0 &&
-        //filtered?.length > 0 &&
+        filtered?.length > 0 &&
         hydrated && (
-          <div>
+          <Flex direction="column" p={0} m={0}>
+            <Text color="gray.500" fontWeight="bold" pb={2}>
+              {`${tags.length} concepts found`}
+            </Text>
             <TagCloud
               tags={tags.slice(0, visibleTags) ?? []}
               minSize={12}
@@ -351,7 +328,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
                 </Button>
               </Flex>
             )}
-          </div>
+          </Flex>
         )}
       {!isLoading && tags.length === 0 && (
         <Flex justifyContent="center">

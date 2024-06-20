@@ -41,6 +41,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   const {
     filtered,
+    setCurrentPage
     // setFiltered
   } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -208,7 +209,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     // Update the concepts array in the searchData object
     convertedData['domains'] = updatedDomains;
 
-    console.log('convertedData - media types', convertedData['domains']);
+    console.log('convertedData - domains', convertedData['domains']);
 
     convertedData['isDomainsFilter'] = isFilter;
 
@@ -246,14 +247,16 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
     // console.log("INVOLVED DOMAINS: ", involvedDomainIds);
 
-    // Check if the selected IDs are equal to the currently selected IDs
+    // Check whether the selected portion shouldn't be execute
     if (domainIds.length === 0) {
       return;
+      // Check if the selected IDs are equal to the currently selected IDs
     } else if (arraysEqual(domainIds, selectedOERIds)) {
       // Second click on the same slice, reset to initial state
       // Reset the query
 
-      updateQuery(firstDomains, false);
+      setCurrentPage(1);
+      await updateQuery(firstDomains, false);
 
       // setSelectedOERIds([]);
       // setFiltered(previousContent);
@@ -262,7 +265,8 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     } else {
       // First click on a slice, update the query
       setSelectedOERIds(domainIds);
-      updateQuery(domainIds, true);
+      setCurrentPage(1);
+      await updateQuery(domainIds, true);
 
       // setPreviousContent(filtered);
 
@@ -331,7 +335,8 @@ export const TabDomains = ({ }: TabDomainsProps) => {
         const audience = convertedData['audience'];
         const operator = convertedData['operator'];
         const concepts = convertedData['concepts'];
-        const isDomainsFilter = convertedData['isDomainsFilter']
+        const isDomainsFilter = convertedData['isDomainsFilter'];
+        const isTypesFilter = convertedData['isTypesFilter'];
 
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
         const resp_metrics: any = await API.getMetricsTabDomains(
@@ -341,7 +346,8 @@ export const TabDomains = ({ }: TabDomainsProps) => {
           audience,
           operator,
           concepts,
-          isDomainsFilter
+          isDomainsFilter,
+          isTypesFilter
         );
         console.log(
           'Metrics -----------> ' + JSON.stringify(resp_metrics?.total_oers)

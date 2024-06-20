@@ -1,57 +1,35 @@
-import { Stack, Text } from '@chakra-ui/react';
-
-import { useContext, useState } from 'react';
-
+import { Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
-
-import { OerMediaTypeInfo, OerProps } from '../../../types/encoreElements';
-
-import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
+import { APIV2 } from '../../../data/api';
+import { OerMediaTypeInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export type TabTypesOfResourcesProps = {};
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
-  const { filtered, setFiltered } = useContext(DiscoveryContext);
-  const [previousContent, setPreviousContent] = useState<
-    (OerProps | undefined | OerFreeSearchProps)[]
-  >([]);
+type DataObjectProps = {
+  id: number[];
+  labels: string[];
+  datasets: {
+    data: (number | undefined)[]; // count
+    backgroundColor: string[];
+  }[];
+};
+
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+  const { filtered, setCurrentPage } = useContext(DiscoveryContext);
   const hydrated = useHasHydrated();
-
-  const resourceTypes: any[] = [];
-
-  //retrieve resourse types
-  filtered?.forEach(
-    (
-      oer:
-        | { media_type: OerMediaTypeInfo[] }
-        | OerProps
-        | undefined
-        | OerFreeSearchProps
-    ) =>
-      oer?.media_type?.map((item: OerMediaTypeInfo) =>
-        resourceTypes.push(item.name)
-      )
-  );
-
-  const transformedObject = resourceTypes.reduce((result, element) => {
-    result[element] = (result[element] || 0) + 1;
-    return result;
-  }, {});
-
-  const newData = Object.entries(transformedObject).map(
-    ([name, size], index) => ({
-      id: index + 1,
-      name: name,
-      size: Number(size as string),
-    })
-  );
+  const router = useRouter();
+  const API = useMemo(() => new APIV2(undefined), []);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
+  const [filteredDataObject, setFilteredDataObject] = useState<DataObjectProps | undefined>(undefined);
+  const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
+  const [typesSelected, setTypesSelected] = useState<string[]>([])
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -62,114 +40,172 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     return color;
   };
 
-  // Sort newData array by size in descending order
-  newData.sort((a, b) => b.size - a.size);
+  const updateQuery = async (newType: number | number[], isFilter?: boolean) => {
+    // Get search data from the localStorage
+    const searchData = localStorage.getItem('searchData');
+    if (!searchData) {
+      console.error('searchData not found in localStorage');
+      router.push({ pathname: '/' });
+      return;
+    }
 
-  // Create an array of datasets
-  const datasets = newData.map((item) => ({
-    label: `${item.name} (Size: ${item.size})`, // Add the size value to the label
-    data: [
-      {
-        r: item.size,
-        type: item.name,
-      },
-    ],
-    backgroundColor: getRandomColor(), // Set a color for each dataset
-  }));
+    // Convert the data in a JSON format
+    const convertedData = JSON.parse(searchData);
+    let types = convertedData['types'] || [''];
+    if (types.length > 0 && Array.isArray(newType)) {
+      types = newType;
+    } else {
+      const updatedTypes = [...types, newType.toString()];
+      types = updatedTypes;
+    }
+    convertedData['types'] = types;
+    convertedData['isTypesFilter'] = isFilter;
+    localStorage.setItem('searchData', JSON.stringify(convertedData));
 
-  const jsonData = {
-    datasets: datasets,
+    // Update the query with the selected domains
+    const updatedQuery = { ...router.query, domains: types, isTypesFilter: isFilter };
+    await router.push({
+      pathname: '/discover',
+      query: updatedQuery,
+    });
   };
 
-  // Transform the JSON data into a format suitable for a pie chart
-  const transformedData = jsonData.datasets.flatMap((dataset) =>
-    dataset.data.map((item) => ({
-      label: item.type,
-      value: item.r,
-      backgroundColor: dataset.backgroundColor,
-    }))
-  );
-
-  const data = {
-    labels: transformedData.map((item) => item.label),
-    datasets: [
-      {
-        data: transformedData.map((item) => item.value),
-        backgroundColor: transformedData.map((item) => item.backgroundColor),
-      },
-    ],
+  const handleResetClick = async () => {
+    setSelectedSlice(null);
+    setTypesSelected([]);
+    setCurrentPage(1);
+    await updateQuery([], false);
   };
 
-  const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
-
-  const handleSliceClick = (event: any, elements: any) => {
+  const handleSliceClick = async (event: any, elements: any) => {
     if (elements.length > 0 && elements[0].index !== undefined) {
       const clickedIndex = elements[0].index;
-      console.log('Clicked Index:', clickedIndex);
-
-      if (clickedIndex >= 0 && clickedIndex < transformedData.length) {
-        const clickedSliceLabel = transformedData[clickedIndex].label;
-        console.log('Clicked Slice Label:', clickedSliceLabel);
-
-        if (selectedSlice === clickedIndex || selectedSlice !== null) {
-          setSelectedSlice(null);
-          setFiltered(previousContent);
-        } else {
+      if (clickedIndex >= 0 && clickedIndex < resourceTypes.length) {
+        const clickedSliceId = resourceTypes[clickedIndex].id;
+        const clickedSliceLabel = resourceTypes[clickedIndex].name;
+        if (selectedSlice === clickedIndex || (typesSelected.length === 1 && typesSelected[0] === clickedSliceLabel)) {
+          await handleResetClick();
+        } else if (typesSelected.includes(clickedSliceLabel)) {
+          return;
+        } else if (clickedSliceId) {
           setSelectedSlice(clickedIndex);
-          updateOers(clickedSliceLabel);
+          setTypesSelected((prevTypes: string[]) => [
+            ...prevTypes,
+            clickedSliceLabel
+          ]);
+          setCurrentPage(1);
+          await updateQuery(clickedSliceId, true);
         }
-      } else {
-        console.log('Invalid Clicked Index:' + clickedIndex);
       }
     }
   };
 
-  const filterData = () => {
-    if (selectedSlice !== null && transformedData[selectedSlice]) {
-      const { label, value } = transformedData[selectedSlice];
+  const filterData = (data: DataObjectProps) => {
+    if (selectedSlice !== null && resourceTypes[selectedSlice]) {
+      const { id, name, count } = resourceTypes[selectedSlice];
       return {
-        labels: [label],
+        id: [id],
+        labels: [name],
         datasets: [
           {
-            data: [value],
+            data: [count],
             backgroundColor: data.datasets[0].backgroundColor,
           },
         ],
       };
     } else {
-      return {
-        labels: data.labels,
-        datasets: [
-          {
-            data: data.datasets[0].data,
-            backgroundColor: data.datasets[0].backgroundColor,
-          },
-        ],
-      };
+      return data;
     }
   };
 
-  const filteredDataObject = filterData();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Get the search data from the localStorage
+        const searchData = localStorage.getItem('searchData');
+        if (!searchData) {
+          router.push({ pathname: '/' });
+          return;
+        }
+        const convertedData = JSON.parse(searchData);
+        const keywords = convertedData['keywords'];
+        const domains = convertedData['domains'];
+        const types = convertedData['types'];
+        const audience = convertedData['audience'];
+        const operator = convertedData['operator'];
+        const concepts = convertedData['concepts'];
+        const isDomainsFilter = convertedData['isDomainsFilter'];
+        // TODO: Check if this is useful (20/06/2024 => the API doesn't work differently adding this logic)
+        const isTypesFilter = convertedData['isTypesFilter'];
 
-  const updateOers = (label: string) => {
-    const resources: any[] = [];
-    setPreviousContent(filtered);
-    filtered?.forEach(
-      (
-        oer:
-          | { media_type: OerMediaTypeInfo[] }
-          | OerProps
-          | undefined
-          | OerFreeSearchProps
-      ) =>
-        oer?.media_type?.some((item: OerMediaTypeInfo) => {
-          if (item.name === label) {
-            resources.push(oer);
-          }
-        })
-    );
-    setFiltered(resources);
-  };
+        const respAPI = await API.getTypesFreeSearch(
+          keywords,
+          domains,
+          types,
+          audience,
+          operator,
+          concepts,
+          isDomainsFilter,
+          isTypesFilter
+        );
+
+        if (respAPI.length > 0) {
+          setResourceTypes(respAPI);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    setIsLoading(true);
+    fetchData();
+  }, [API,
+    router.query.concepts,
+    router.query.keywords,
+    router.query.domains,
+    router.query.types,
+    router.query.audience,
+  ]);
+
+  useEffect(() => {
+    if (resourceTypes.length > 0) {
+
+      resourceTypes.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
+
+      const datasets = resourceTypes.map((item: OerMediaTypeInfo) => ({
+        label: `${item.name} (Size: ${item.count})`,
+        data: [{ id: item.id, r: item.count, type: item.name }],
+        backgroundColor: getRandomColor(),
+      }));
+
+      const jsonData = { datasets: datasets };
+
+      const transformedData = jsonData.datasets.flatMap((dataset) =>
+        dataset.data.map((item) => ({
+          id: item.id,
+          label: item.type,
+          value: item.r,
+          backgroundColor: dataset.backgroundColor,
+        }))
+      );
+
+      const data: DataObjectProps = {
+        id: transformedData.map((item) => item.id),
+        labels: transformedData.map((item) => item.label),
+        datasets: [
+          {
+            data: transformedData.map((item) => item.value),
+            backgroundColor: transformedData.map((item) => item.backgroundColor),
+          },
+        ],
+      };
+
+      const newData = filterData(data);
+      setFilteredDataObject(newData);
+    }
+  }, [resourceTypes]);
 
   return (
     <>
@@ -180,14 +216,39 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
           selected types.
         </Text>
       </Stack>
-
-      {filtered.length > 0 && hydrated && (
+      {isLoading && (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Loading...</p>
+        </div>
+      )}
+      {!isLoading && filtered.length > 0 && hydrated && (
         <Stack spacing={0}>
           <Doughnut
-            data={filteredDataObject}
+            data={filteredDataObject || { id: [], labels: [], datasets: [] }}
             options={{ onClick: handleSliceClick }}
           />
         </Stack>
+      )}
+      {filtered.length > 0 && typesSelected.length > 0 && (
+        <Flex direction="column" textAlign="center" pt={5} pb={0}>
+          <Text variant="label">
+            Types selected: {typesSelected.join(', ')}
+          </Text>
+          <Button
+            variant="ghost"
+            _hover={{ bg: 'none' }}
+            onClick={handleResetClick}
+          >
+            <Text
+              color="gray.500"
+              borderBottom="1px"
+              borderBottomColor="gray.500"
+            >
+              Reset resource types
+            </Text>
+          </Button>
+        </Flex>
       )}
     </>
   );

@@ -207,7 +207,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     order_asc: string,
     operator: string,
     concepts?: string[],
-    isDomainsFilter?: boolean
+    isDomainsFilter?: boolean,
+    isTypesFilter?: boolean,
   ) => {
     setIsLoading(true);
     setEndSearch(false);
@@ -251,7 +252,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           order_asc,
           operator,
           concepts ?? [],
-          isDomainsFilter
+          isDomainsFilter,
+          isTypesFilter,
         );
         // Set number of OERs found with the search
         setOersLengthTotal(resp?.recordsFiltered);
@@ -442,6 +444,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const operator = convertedData['operator'];
       const concepts = convertedData['concepts'];
       const isDomainsFilter = convertedData['isDomainsFilter'];
+      const isTypesFilter = convertedData['isTypesFilter'];
 
       await freeSearchOERs(
         currentPage,
@@ -453,7 +456,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         isAscending?.toString(),
         operator,
         concepts,
-        isDomainsFilter
+        isDomainsFilter,
+        isTypesFilter
       );
       // .then((oers: OerFreeSearchProps | OerProps | undefined) => {
       //   console.log('New value oers: ', oers);
@@ -576,7 +580,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -617,7 +621,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

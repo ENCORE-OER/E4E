@@ -4,7 +4,7 @@ import {
   FormControl,
   FormErrorMessage,
   InputGroup,
-  Text
+  Text,
 } from '@chakra-ui/react';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useForm, UseFormRegisterReturn } from 'react-hook-form';
@@ -101,8 +101,8 @@ const UploadFile = () => {
   };
 
   useEffect(() => {
-    console.log("Is file selected? ", isFileSelected);
-  }, [isFileSelected])
+    console.log('Is file selected? ', isFileSelected);
+  }, [isFileSelected]);
 
   return (
     <>
