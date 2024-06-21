@@ -208,7 +208,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     operator: string,
     concepts?: string[],
     isDomainsFilter?: boolean,
-    isTypesFilter?: boolean,
+    isTypesFilter?: boolean
   ) => {
     setIsLoading(true);
     setEndSearch(false);
@@ -253,7 +253,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           operator,
           concepts ?? [],
           isDomainsFilter,
-          isTypesFilter,
+          isTypesFilter
         );
         // Set number of OERs found with the search
         setOersLengthTotal(resp?.recordsFiltered);
@@ -580,7 +580,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -621,7 +621,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

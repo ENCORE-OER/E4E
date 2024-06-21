@@ -16,16 +16,13 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptInfo[]>([]);
-  const {
-    filtered,
-    setCurrentPage,
-  } = useContext(DiscoveryContext);
+  const { filtered, setCurrentPage } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
   //const [conceptCounts, setConceptCounts] = useState<Record<number, number>>({});
@@ -101,7 +98,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
       pathname: '/discover',
       query: { ...router.query, concepts: concepts },
     });
-  }
+  };
 
   const handleResetClick = async (/*event: any*/) => {
     //if (event.target === event.currentTarget) {
@@ -161,7 +158,7 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
           operator,
           concepts,
           isDomainsFilter,
-          isTypesFilter,
+          isTypesFilter
         );
         // At the moment is useless 'cause the API return every concept only one time and the count is always 1
         // respAPI.forEach(({ id }) => {
@@ -267,69 +264,66 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
           <p>Loading...</p>
         </div>
       )}
-      {!isLoading &&
-        tags.length > 0 &&
-        filtered?.length > 0 &&
-        hydrated && (
-          <Flex direction="column" p={0} m={0}>
-            <Text color="gray.500" fontWeight="bold" pb={2}>
-              {`${tags.length} concepts found`}
-            </Text>
-            <TagCloud
-              tags={tags.slice(0, visibleTags) ?? []}
-              minSize={12}
-              maxSize={30}
-              colorOptions={{ luminosity: 'light' }}
-              onClick={(tag: OerConceptInfo) => {
-                handleTagClick(tag);
-                // // Filter the `filtered` array based on the selected word
-                // const newFilteredObjects = filtered.filter(
-                //   (oer: { concepts: OerConceptInfo[] } | undefined | OerProps | OerFreeSearchProps) => {
-                //     return oer?.concepts?.some(
-                //       (concept) => concept?.label === tag.value
-                //     );
-                //   }
-                // );
+      {!isLoading && tags.length > 0 && filtered?.length > 0 && hydrated && (
+        <Flex direction="column" p={0} m={0}>
+          <Text color="gray.500" fontWeight="bold" pb={2}>
+            {`${tags.length} concepts found`}
+          </Text>
+          <TagCloud
+            tags={tags.slice(0, visibleTags) ?? []}
+            minSize={12}
+            maxSize={30}
+            colorOptions={{ luminosity: 'light' }}
+            onClick={(tag: OerConceptInfo) => {
+              handleTagClick(tag);
+              // // Filter the `filtered` array based on the selected word
+              // const newFilteredObjects = filtered.filter(
+              //   (oer: { concepts: OerConceptInfo[] } | undefined | OerProps | OerFreeSearchProps) => {
+              //     return oer?.concepts?.some(
+              //       (concept) => concept?.label === tag.value
+              //     );
+              //   }
+              // );
 
-                // // Update the main DiscoveryContext with the new filtered OERs
-                // setFiltered(newFilteredObjects);
-                // // Handle tag click event here
-              }}
-              renderer={(tag: OerConceptInfo, size: number) => (
-                <span
-                  style={{
-                    fontSize: size,
-                    padding: '4px 8px',
-                    margin: 4,
-                    // backgroundColor: getBackgroundColor(tag.count),
-                    //backgroundColor: getBackgroundColor(conceptCounts[tag.id]),
-                    backgroundColor: getBackgroundColor(1),
-                    color: '#51366e',
-                    borderRadius: '4px',
-                    display: 'inline-block',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {tag?.label}
-                </span>
-              )}
-            />
-            {visibleTags < tags.length && (
-              <Flex justifyContent={'center'} p={5}>
-                <Button
-                  variant="ghost"
-                  _hover={{ bg: 'none' }}
-                  color={'gray.400'}
-                  onClick={() => setVisibleTags((prev) => prev + loadMoreStep)}
-                >
-                  <Text borderBottom={1} borderBottomStyle="solid">
-                    View More
-                  </Text>
-                </Button>
-              </Flex>
+              // // Update the main DiscoveryContext with the new filtered OERs
+              // setFiltered(newFilteredObjects);
+              // // Handle tag click event here
+            }}
+            renderer={(tag: OerConceptInfo, size: number) => (
+              <span
+                style={{
+                  fontSize: size,
+                  padding: '4px 8px',
+                  margin: 4,
+                  // backgroundColor: getBackgroundColor(tag.count),
+                  //backgroundColor: getBackgroundColor(conceptCounts[tag.id]),
+                  backgroundColor: getBackgroundColor(1),
+                  color: '#51366e',
+                  borderRadius: '4px',
+                  display: 'inline-block',
+                  cursor: 'pointer',
+                }}
+              >
+                {tag?.label}
+              </span>
             )}
-          </Flex>
-        )}
+          />
+          {visibleTags < tags.length && (
+            <Flex justifyContent={'center'} p={5}>
+              <Button
+                variant="ghost"
+                _hover={{ bg: 'none' }}
+                color={'gray.400'}
+                onClick={() => setVisibleTags((prev) => prev + loadMoreStep)}
+              >
+                <Text borderBottom={1} borderBottomStyle="solid">
+                  View More
+                </Text>
+              </Button>
+            </Flex>
+          )}
+        </Flex>
+      )}
       {!isLoading && tags.length === 0 && (
         <Flex justifyContent="center">
           <Text variant="navbar_label">No concepts found</Text>

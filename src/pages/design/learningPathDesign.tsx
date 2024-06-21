@@ -12,7 +12,7 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
-import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import InfoGenAITextBox from '../../components/TextBox/InfoTextBox/InfoGenAITextBox';
 import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
@@ -199,7 +199,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -209,7 +209,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -304,7 +304,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

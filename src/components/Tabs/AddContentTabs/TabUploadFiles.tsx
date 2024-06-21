@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import UploadFile from '../../FileUpload/UploadFile';
+import FileUpload from '../../Inputs/FileUpload/FileUpload';
 
 export default function TabUploadFiles() {
   // const [uploading, setUploading] = useState(false);
@@ -47,7 +47,8 @@ export default function TabUploadFiles() {
         />
         {uploading && <Text>File Uploading...</Text>}
       </Flex> */}
-      <UploadFile />
+      {/* <UploadFile /> */}
+      <FileUpload />
     </Flex>
   );
 }

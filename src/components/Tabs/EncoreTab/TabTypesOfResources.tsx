@@ -12,7 +12,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 export type TabTypesOfResourcesProps = {};
 
 type DataObjectProps = {
-  id: number[];
+  ids: number[];
   labels: string[];
   datasets: {
     data: (number | undefined)[]; // count
@@ -27,9 +27,11 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
-  const [filteredDataObject, setFilteredDataObject] = useState<DataObjectProps | undefined>(undefined);
+  const [filteredDataObject, setFilteredDataObject] = useState<
+    DataObjectProps | undefined
+  >(undefined);
   const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
-  const [typesSelected, setTypesSelected] = useState<string[]>([])
+  const [typesSelected, setTypesSelected] = useState<string[]>([]);
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -40,7 +42,10 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     return color;
   };
 
-  const updateQuery = async (newType: number | number[], isFilter?: boolean) => {
+  const updateQuery = async (
+    newType: number | number[],
+    isFilter?: boolean
+  ) => {
     // Get search data from the localStorage
     const searchData = localStorage.getItem('searchData');
     if (!searchData) {
@@ -63,7 +68,11 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     localStorage.setItem('searchData', JSON.stringify(convertedData));
 
     // Update the query with the selected domains
-    const updatedQuery = { ...router.query, domains: types, isTypesFilter: isFilter };
+    const updatedQuery = {
+      ...router.query,
+      domains: types,
+      isTypesFilter: isFilter,
+    };
     await router.push({
       pathname: '/discover',
       query: updatedQuery,
@@ -81,9 +90,13 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     if (elements.length > 0 && elements[0].index !== undefined) {
       const clickedIndex = elements[0].index;
       if (clickedIndex >= 0 && clickedIndex < resourceTypes.length) {
+        console.log(resourceTypes);
         const clickedSliceId = resourceTypes[clickedIndex].id;
         const clickedSliceLabel = resourceTypes[clickedIndex].name;
-        if (selectedSlice === clickedIndex || (typesSelected.length === 1 && typesSelected[0] === clickedSliceLabel)) {
+        if (
+          selectedSlice === clickedIndex ||
+          (typesSelected.length === 1 && typesSelected[0] === clickedSliceLabel)
+        ) {
           await handleResetClick();
         } else if (typesSelected.includes(clickedSliceLabel)) {
           return;
@@ -91,7 +104,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
           setSelectedSlice(clickedIndex);
           setTypesSelected((prevTypes: string[]) => [
             ...prevTypes,
-            clickedSliceLabel
+            clickedSliceLabel,
           ]);
           setCurrentPage(1);
           await updateQuery(clickedSliceId, true);
@@ -100,23 +113,50 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
     }
   };
 
-  const filterData = (data: DataObjectProps) => {
-    if (selectedSlice !== null && resourceTypes[selectedSlice]) {
-      const { id, name, count } = resourceTypes[selectedSlice];
-      return {
-        id: [id],
-        labels: [name],
-        datasets: [
-          {
-            data: [count],
-            backgroundColor: data.datasets[0].backgroundColor,
-          },
-        ],
-      };
-    } else {
-      return data;
-    }
-  };
+  // const filterData = (data: DataObjectProps) => {
+  //   if (selectedSlice !== null && resourceTypes[selectedSlice]) {
+  //     console.log(resourceTypes[selectedSlice]);
+  //     const { id, name, count } = resourceTypes[selectedSlice];
+  //     return {
+  //       ids: [id],
+  //       labels: [name],
+  //       datasets: [
+  //         {
+  //           data: [count],
+  //           backgroundColor: data.datasets[0].backgroundColor,
+  //         },
+  //       ],
+  //     };
+  //   } else {
+  //     return data;
+  //   }
+
+  //   if (selectedSlice !== null && resourceTypes[selectedSlice]) {
+  //     const { id, name, count } = resourceTypes[selectedSlice];
+  //     return {
+  //       ids: [id],
+  //       labels: [name],
+  //       datasets: [
+  //         {
+  //           data: [count],
+  //           backgroundColor: data.datasets[0].backgroundColor,
+  //         },
+  //       ],
+  //     };
+  //   } else {
+  //     return {
+  //       ids: data.ids,
+  //       labels: data.labels,
+  //       datasets: [
+  //         {
+  //           data: data.datasets[0].data,
+  //           backgroundColor: data.datasets[0].backgroundColor,
+  //         },
+  //       ],
+  //     };
+  //   }
+
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,7 +201,8 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
 
     setIsLoading(true);
     fetchData();
-  }, [API,
+  }, [
+    API,
     router.query.concepts,
     router.query.keywords,
     router.query.domains,
@@ -171,7 +212,6 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
 
   useEffect(() => {
     if (resourceTypes.length > 0) {
-
       resourceTypes.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
 
       const datasets = resourceTypes.map((item: OerMediaTypeInfo) => ({
@@ -192,18 +232,20 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
       );
 
       const data: DataObjectProps = {
-        id: transformedData.map((item) => item.id),
+        ids: transformedData.map((item) => item.id),
         labels: transformedData.map((item) => item.label),
         datasets: [
           {
             data: transformedData.map((item) => item.value),
-            backgroundColor: transformedData.map((item) => item.backgroundColor),
+            backgroundColor: transformedData.map(
+              (item) => item.backgroundColor
+            ),
           },
         ],
       };
 
-      const newData = filterData(data);
-      setFilteredDataObject(newData);
+      // const newData = filterData(data);
+      setFilteredDataObject(data);
     }
   }, [resourceTypes]);
 
@@ -225,7 +267,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
       {!isLoading && filtered.length > 0 && hydrated && (
         <Stack spacing={0}>
           <Doughnut
-            data={filteredDataObject || { id: [], labels: [], datasets: [] }}
+            data={filteredDataObject || { ids: [], labels: [], datasets: [] }}
             options={{ onClick: handleSliceClick }}
           />
         </Stack>

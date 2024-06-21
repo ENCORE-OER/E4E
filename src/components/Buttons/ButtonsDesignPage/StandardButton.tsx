@@ -18,10 +18,11 @@ export default function StandardButton({
       // w={'100%'}
       // leftIcon={iconButton && iconButton}
       colorScheme="yellow"
-      onClick={(e) => {
-        e.preventDefault();
-        handleClick();
-      }}
+      // onClick={(e) => {
+      //   e.preventDefault();
+      //   handleClick();
+      // }}
+      onClick={handleClick}
       borderRadius={10}
     >
       <Text fontWeight="bold" fontSize="lg">

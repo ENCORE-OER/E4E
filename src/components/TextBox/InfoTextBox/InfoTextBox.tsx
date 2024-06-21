@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react';
-import IconInfoCircle from '../Icons/IconInfoCircle/IconInfoCircle';
+import IconInfoCircle from '../../Icons/IconInfoCircle/IconInfoCircle';
 
 type InfoTextBoxProps = {
   textInfo: string;

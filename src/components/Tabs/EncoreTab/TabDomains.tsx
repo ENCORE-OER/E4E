@@ -4,7 +4,7 @@ import {
   ISetLike,
   VennDiagram,
   asSets,
-  mergeColors,
+  mergeColors
 } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import {
   useHasHydrated,
   useIsSmallerScreen,
 } from '../../../utils/utils';
+import InfoTabDomainsTextBox from '../../TextBox/InfoTextBox/InfoTabDomainsTextBox';
 export type TabDomainsProps = {};
 
 // const baseSets = [
@@ -41,7 +42,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
 
   const {
     filtered,
-    setCurrentPage
+    setCurrentPage,
     // setFiltered
   } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -439,7 +440,6 @@ export const TabDomains = ({ }: TabDomainsProps) => {
       <br />
       <Flex justify="center">
         <br />
-        <br />
         {isLoading && (
           <div className="loading-spinner">
             <div className="spinner"></div>
@@ -447,28 +447,31 @@ export const TabDomains = ({ }: TabDomainsProps) => {
           </div>
         )}
         {!isLoading && filtered.length > 0 && hydrated && (
-          <VennDiagram
-            className="venn-diagram"
-            sets={metrics}
-            //style={{ maxWidth: 600 }}
-            width={Number(vennDiagramWidth)}
-            height={Number(vennDiagramHeight)}
-            selection={selection}
-            onHover={setSelection}
-            combinations={combinations}
-            hasSelectionOpacity={0.2}
-            selectionColor=""
-            onClick={onClickDiagram}
-            fontSizes={
-              isSmallerScreen
-                ? {
-                  setLabel: '12px',
-                }
-                : {
-                  setLabel: '15px',
-                }
-            }
-          />
+          <Flex direction={"column"} p={0} m={0}>
+            <InfoTabDomainsTextBox />
+            <VennDiagram
+              className="venn-diagram"
+              sets={metrics}
+              //style={{ maxWidth: 600 }}
+              width={Number(vennDiagramWidth)}
+              height={Number(vennDiagramHeight)}
+              selection={selection}
+              onHover={setSelection}
+              combinations={combinations}
+              hasSelectionOpacity={0.2}
+              selectionColor=""
+              onClick={onClickDiagram}
+              fontSizes={
+                isSmallerScreen
+                  ? {
+                    setLabel: '12px',
+                  }
+                  : {
+                    setLabel: '15px',
+                  }
+              }
+            />
+          </Flex>
         )}
       </Flex>
     </>

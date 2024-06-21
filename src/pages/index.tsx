@@ -138,7 +138,7 @@ const Home = (props: DiscoverPageProps) => {
         operator: operator,
         concepts: [],
         isDomainsFilter: false,
-        isTypesFilter: false
+        isTypesFilter: false,
       };
       // }
 
@@ -412,11 +412,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                      setLabel: '12px',
-                    }
+                        setLabel: '12px',
+                      }
                     : {
-                      setLabel: '15px',
-                    }
+                        setLabel: '15px',
+                      }
                 }
               />
             ) : (

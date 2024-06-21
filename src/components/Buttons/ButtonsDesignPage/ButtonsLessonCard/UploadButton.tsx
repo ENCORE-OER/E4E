@@ -1,14 +1,17 @@
+import { ReactNode } from 'react';
 import IconUpload from '../../../Icons/IconUpload/IconUpload';
 import StandardButton from '../StandardButton';
 
 interface UploadButtonProps {
-  handleUploadFile?: (file: File) => Promise<void>;
+  handleUploadFile?: () => void;
   disabled?: boolean;
+  children?: ReactNode;
 }
 
 export default function UploadButton({
-  // handleUploadFile,
+  handleUploadFile,
   disabled,
+  children
 }: UploadButtonProps) {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -31,11 +34,12 @@ export default function UploadButton({
       {/* <input type="file" onChange={handleChange} style={{ display: 'none' }} /> */}
       <StandardButton
         buttonText={'Upload From Your Computer'}
-        handleClick={() => console.log('Uploading...')}
+        handleClick={handleUploadFile ? handleUploadFile : () => console.log("Uploading...")}
         w="fit-content"
         leftIcon={<IconUpload />}
         isDisabled={disabled}
       />
+      {children}
     </>
   );
 }
