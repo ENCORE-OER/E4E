@@ -53,7 +53,7 @@ interface CollectionViewProps extends BoxProps {
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean; // Used for the view of the REsources Page in Add Content Modal
   resourcesSelected: OerInCollectionProps[];
-  addSelectedResources: (
+  addSelectedResourcesAddContent: (
     Oers: OerInCollectionProps | OerInCollectionProps[]
   ) => void;
   // updateResourcesSelected: SelectedResourcesFunction;
@@ -87,7 +87,7 @@ export default function CollectionView({
   isSmallerScreen,
   isAddContentModal,
   resourcesSelected,
-  addSelectedResources,
+  addSelectedResourcesAddContent,
   // updateResourcesSelected,
   // addSelectedResource,
   // removeSelectedResource,
@@ -202,7 +202,7 @@ export default function CollectionView({
         resourcesSelectedTemp.includes(index)
     );
     console.log('Attaching Resources...', resourcesToAdd);
-    addSelectedResources(resourcesToAdd);
+    addSelectedResourcesAddContent(resourcesToAdd);
     setResourcesSelectedTemp([]);
   };
 
@@ -333,7 +333,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                  //setIsLoading={setIsLoading}
+                //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

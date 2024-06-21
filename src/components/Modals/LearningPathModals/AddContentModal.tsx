@@ -15,9 +15,11 @@ import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesi
 import {
   AddContentModalProps,
   OerInCollectionProps,
+  UploadedFilesProps,
 } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import IconAttach from '../../Icons/IconAttach/IconAttach';
+import IconDocument from '../../Icons/IconDocuments/IconDocument';
 import IconSave from '../../Icons/IconSave/IconSave';
 import AddContentTabs from '../../Tabs/AddContentTabs';
 import TagSelectedResource from '../../Tags/TagsAddContent/TagSelectedResource';
@@ -29,19 +31,32 @@ export default function AddContentModal({
 }: AddContentModalProps) {
   const hydrated = useHasHydrated();
   const {
-    resourcesSelectedAddContent: resourcesSelected,
-    addSelectedResourcesAddContent: addSelectedResources,
+    // AddContent - Oers
+    resourcesSelectedAddContent,
+    addSelectedResourcesAddContent,
     lessonActivities,
-    resetSelectedResourcesAddContent: resetSelectedResources,
+    resetSelectedResourcesAddContent,
+    // AddContent - files
+    uploadedFilesAddContent,
+    addUploadedFilesAddContent,
+    resetUploadedFilesAddContent,
     handleUpdateLessonContent,
   } = useLearningPathDesignContext();
 
   const handleSaveClick = () => {
     try {
-      handleUpdateLessonContent(
-        indexLesson !== undefined ? indexLesson : -1,
-        resourcesSelected
-      );
+      if (resourcesSelectedAddContent?.length > 0) {
+        handleUpdateLessonContent(
+          indexLesson !== undefined ? indexLesson : -1,
+          resourcesSelectedAddContent
+        );
+      }
+      if (uploadedFilesAddContent.length > 0) {
+        handleUpdateLessonContent(
+          indexLesson !== undefined ? indexLesson : -1,
+          uploadedFilesAddContent
+        );
+      }
       onClose();
     } catch (error) {
       console.error(error);
@@ -49,15 +64,19 @@ export default function AddContentModal({
   };
 
   useEffect(() => {
-    console.log(resourcesSelected);
-  }, [resourcesSelected]);
+    console.log(resourcesSelectedAddContent);
+  }, [resourcesSelectedAddContent]);
 
+  // Opening the modal I have to take the get the already selected resources
   useEffect(() => {
     if (isOpen) {
       console.log('PRENDO');
-      addSelectedResources(
+      addSelectedResourcesAddContent(
         lessonActivities[indexLesson ?? -1]?.content?.oers ?? []
       );
+      addUploadedFilesAddContent(
+        lessonActivities[indexLesson ?? -1]?.content?.uploadedFiles ?? []
+      )
     }
   }, [isOpen]);
 
@@ -66,7 +85,8 @@ export default function AddContentModal({
       isOpen={isOpen}
       onClose={() => {
         onClose();
-        resetSelectedResources();
+        resetSelectedResourcesAddContent();
+        resetUploadedFilesAddContent();
       }}
       size={'100%'}
     >
@@ -75,7 +95,7 @@ export default function AddContentModal({
         <ModalHeader>
           <Flex direction="row" align="center" w="95%" gap={3}>
             <Heading>Add Content</Heading>
-            {hydrated && resourcesSelected.length > 0 && (
+            {hydrated && (resourcesSelectedAddContent.length > 0 || uploadedFilesAddContent.length > 0) && (
               <Flex
                 direction="row"
                 align="center"
@@ -83,13 +103,23 @@ export default function AddContentModal({
                 gap={1}
                 wrap="wrap"
               >
-                {resourcesSelected?.map(
+                {resourcesSelectedAddContent.length > 0 && resourcesSelectedAddContent?.map(
                   (resource: OerInCollectionProps, index: number) => (
                     <TagSelectedResource
+                      key={`oer-${index}`}
                       label={resource.title}
                       IconTag={IconAttach}
-                      key={index}
                       oer={resource}
+                    />
+                  )
+                )}
+                {uploadedFilesAddContent.length > 0 && uploadedFilesAddContent?.map(
+                  (resource: UploadedFilesProps, index: number) => (
+                    <TagSelectedResource
+                      key={`file-${index}`}
+                      label={resource.fileUploaded.name}
+                      IconTag={IconDocument}
+                      file={resource}
                     />
                   )
                 )}
@@ -116,7 +146,7 @@ export default function AddContentModal({
                 {hydrated && (
                   <Button
                     isDisabled={
-                      resourcesSelected.length === 0 &&
+                      resourcesSelectedAddContent.length === 0 &&
                       lessonActivities[indexLesson ?? -1]?.content?.oers
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.

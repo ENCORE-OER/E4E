@@ -1,25 +1,29 @@
 import { Button, Flex, Icon, Tag, TagLabel, Tooltip } from '@chakra-ui/react';
 import { MdOutlineCancel } from 'react-icons/md';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import { OerInCollectionProps } from '../../../types/encoreElements';
+import { OerInCollectionProps, UploadedFilesProps } from '../../../types/encoreElements';
 
 export type TagSelectedResourceProps = {
   label: string;
   IconTag: React.ElementType;
   oer?: OerInCollectionProps;
+  file?: UploadedFilesProps;
 };
 
 export default function TagSelectedResource({
   label,
   IconTag,
   oer,
+  file
 }: TagSelectedResourceProps) {
-  const { removeSelectedResourceAddContent: removeSelectedResource } =
+  const { removeSelectedResourceAddContent, removeUploadedFileAddContent } =
     useLearningPathDesignContext();
 
   const handleClick = () => {
     if (oer) {
-      removeSelectedResource(oer);
+      removeSelectedResourceAddContent(oer);
+    } else if (file) {
+      removeUploadedFileAddContent(file)
     }
   };
 

@@ -11,7 +11,7 @@ interface UploadButtonProps {
 export default function UploadButton({
   handleUploadFile,
   disabled,
-  children
+  children,
 }: UploadButtonProps) {
   // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -34,7 +34,11 @@ export default function UploadButton({
       {/* <input type="file" onChange={handleChange} style={{ display: 'none' }} /> */}
       <StandardButton
         buttonText={'Upload From Your Computer'}
-        handleClick={handleUploadFile ? handleUploadFile : () => console.log("Uploading...")}
+        handleClick={
+          handleUploadFile
+            ? handleUploadFile
+            : () => console.log('Uploading...')
+        }
         w="fit-content"
         leftIcon={<IconUpload />}
         isDisabled={disabled}

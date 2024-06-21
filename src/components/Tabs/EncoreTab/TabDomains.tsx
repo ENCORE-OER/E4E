@@ -4,7 +4,7 @@ import {
   ISetLike,
   VennDiagram,
   asSets,
-  mergeColors
+  mergeColors,
 } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -34,7 +34,7 @@ type baseSetsProps = {
   domainId: number;
 };
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -102,11 +102,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     (
       oer:
         | {
-          green_domain: boolean;
-          digital_domain: boolean;
-          entrepreneurship_domain: boolean;
-          id: number;
-        }
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -447,7 +447,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
           </div>
         )}
         {!isLoading && filtered.length > 0 && hydrated && (
-          <Flex direction={"column"} p={0} m={0}>
+          <Flex direction={'column'} p={0} m={0}>
             <InfoTabDomainsTextBox />
             <VennDiagram
               className="venn-diagram"
@@ -464,11 +464,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
               fontSizes={
                 isSmallerScreen
                   ? {
-                    setLabel: '12px',
-                  }
+                      setLabel: '12px',
+                    }
                   : {
-                    setLabel: '15px',
-                  }
+                      setLabel: '15px',
+                    }
               }
             />
           </Flex>

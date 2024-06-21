@@ -20,7 +20,7 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const { filtered, setCurrentPage } = useContext(DiscoveryContext);
   const hydrated = useHasHydrated();
   const router = useRouter();

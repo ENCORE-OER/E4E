@@ -1,14 +1,17 @@
-import { Flex, Input } from "@chakra-ui/react";
-import React, { useRef, useState } from "react";
-import { CustomToast } from "../../../utils/Toast/CustomToast";
-import BoxUploadedFile from "../../Boxes/BoxUploadedFile";
-import UploadButton from "../../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton";
+import { Flex, Input } from '@chakra-ui/react';
+import React, { useRef } from 'react';
+import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+import { UploadedFilesProps } from '../../../types/encoreElements';
+import { CustomToast } from '../../../utils/Toast/CustomToast';
+import BoxUploadedFile from '../../Boxes/BoxUploadedFile';
+import UploadButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
 // import "./FileUpload.css";
 
 const FileUpload: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-    const { addToast } = CustomToast()
+    // const [selectedFiles, setSelectedFiles] = useState<UploadedFilesProps[]>([]);
+    const { uploadedFilesAddContent, addUploadedFilesAddContent, removeUploadedFileAddContent } = useLearningPathDesignContext();
+    const { addToast } = CustomToast();
 
     // Validation function
     const validateFiles = (files: File[]): string | undefined => {
@@ -31,11 +34,16 @@ const FileUpload: React.FC = () => {
             if (validationError) {
                 // Handle error appropriately
                 addToast({
-                    message: "The selected files are too big!",
-                    type: "error"
-                })
+                    message: 'The selected files are too big!',
+                    type: 'error',
+                });
             } else {
-                setSelectedFiles((prevFiles: File[]) => [...prevFiles, ...filesArray]);
+                const newFiles: UploadedFilesProps[] = filesArray.map((file: File) => ({
+                    fileUploaded: file,
+                    urlFile: URL.createObjectURL(file)
+                }));
+                // setSelectedFiles((prevFiles: UploadedFilesProps[]) => [...prevFiles, ...newFiles]);
+                addUploadedFilesAddContent(newFiles);
             }
         }
     };
@@ -56,9 +64,15 @@ const FileUpload: React.FC = () => {
     //     }
     // }
 
-    const removeFile = (fileName: string) => {
-        setSelectedFiles((prevFiles: File[]) => prevFiles.filter((file: File) => fileName !== file.name));
-    };
+    // const removeFile = (fileName: string) => {
+    //     setSelectedFiles((prevFiles: UploadedFilesProps[]) => {
+    //         const fileToRemove = prevFiles.find(file => file.fileUploaded.name === fileName);
+    //         if (fileToRemove) {
+    //             URL.revokeObjectURL(fileToRemove.urlFile);
+    //         }
+    //         return prevFiles.filter(file => file.fileUploaded.name !== fileName);
+    //     });
+    // };
 
     return (
         <Flex direction="column" justify="center" gap={2} pt={5}>
@@ -85,14 +99,14 @@ const FileUpload: React.FC = () => {
             {/* Button to trigger the file input dialog */}
             <UploadButton handleUploadFile={onChooseFile} />
 
-
-            {selectedFiles && (
+            {uploadedFilesAddContent && (
                 <Flex gap={2} direction="column">
-                    {Array.from(selectedFiles).map((file: File, index: number) => (
+                    {uploadedFilesAddContent.map((file: UploadedFilesProps, index: number) => (
                         <BoxUploadedFile
                             key={index}
-                            fileName={file.name}
-                            handleRemoveClick={() => removeFile(file.name)}
+                            fileName={file.fileUploaded.name}
+                            urlFile={file.urlFile}
+                            handleRemoveClick={() => removeUploadedFileAddContent(file)}
                         />
                     ))}
                 </Flex>

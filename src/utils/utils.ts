@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import {
   ArrayProps,
   GeneratedExerciseProps,
+  OerInCollectionProps,
   Option,
   OptionsData,
 } from '../types/encoreElements';
@@ -324,4 +325,16 @@ export const extractSetIds = (name: string) => {
     // Selection of only digital, green or entrepreneurship
     return [mapOptionToNumber({ name: name.toLowerCase() }, DomainsEnum)];
   }
+};
+
+export const isOerInCollectionProps = (
+  arr: any[]
+): arr is OerInCollectionProps[] => {
+  return arr.length === 0 || 'concepts' in arr[0];
+};
+
+export const isUploadedFilesProps = (
+  arr: any[]
+): arr is OerInCollectionProps[] => {
+  return arr.length === 0 || 'concepts' in arr[0];
 };

@@ -7,7 +7,7 @@ export default function IconDocument({ fontSize, ...rest }: IconProps) {
       {...rest}
       as={IoDocumentTextSharp}
       fontSize={fontSize || 'x-large'}
-    // fontWeight={'bold'}
+      // fontWeight={'bold'}
     />
   );
 }
