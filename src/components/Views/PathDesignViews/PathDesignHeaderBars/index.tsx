@@ -32,8 +32,11 @@ export default function PathDesignHeaderBars({
   handleResourceChange,
   isNextButtonClicked,
 }: PathDesignHeaderBarsProps) {
-  const { selectedCollectionIndex: collectionIndex, resourcesIndex, step } =
-    useLearningPathDesignContext();
+  const {
+    selectedCollectionIndex: collectionIndex,
+    resourcesIndex,
+    step,
+  } = useLearningPathDesignContext();
 
   return (
     <Flex direction="column" w="100%">
@@ -54,10 +57,10 @@ export default function PathDesignHeaderBars({
             <Text
               fontSize="sm"
               fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            // w={`${DIMENSION - SPACING}%`}
-            // flex='1'
-            // w="50%"
+              // paddingRight={`${SPACING}%`}
+              // w={`${DIMENSION - SPACING}%`}
+              // flex='1'
+              // w="50%"
             >
               Select the resources within the collection
             </Text>

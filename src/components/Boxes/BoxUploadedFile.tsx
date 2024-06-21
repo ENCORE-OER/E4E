@@ -51,10 +51,14 @@ export default function BoxUploadedFile({
       <Flex direction="column" w="100%" p={0}>
         <Flex align="center" direction="row" gap={1}>
           <Text flex="1">{fileName}</Text>
-          <Button variant="ghost" p={0} onClick={(e) => {
-            e.stopPropagation();
-            handleRemoveClick();
-          }}>
+          <Button
+            variant="ghost"
+            p={0}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveClick();
+            }}
+          >
             <IoMdClose fontSize="x-large" />
           </Button>
         </Flex>

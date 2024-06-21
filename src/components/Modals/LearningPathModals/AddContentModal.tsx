@@ -76,7 +76,7 @@ export default function AddContentModal({
       );
       addUploadedFilesAddContent(
         lessonActivities[indexLesson ?? -1]?.content?.uploadedFiles ?? []
-      )
+      );
     }
   }, [isOpen]);
 
@@ -95,36 +95,40 @@ export default function AddContentModal({
         <ModalHeader>
           <Flex direction="row" align="center" w="95%" gap={3}>
             <Heading>Add Content</Heading>
-            {hydrated && (resourcesSelectedAddContent.length > 0 || uploadedFilesAddContent.length > 0) && (
-              <Flex
-                direction="row"
-                align="center"
-                justifyContent="flex-start"
-                gap={1}
-                wrap="wrap"
-              >
-                {resourcesSelectedAddContent.length > 0 && resourcesSelectedAddContent?.map(
-                  (resource: OerInCollectionProps, index: number) => (
-                    <TagSelectedResource
-                      key={`oer-${index}`}
-                      label={resource.title}
-                      IconTag={IconAttach}
-                      oer={resource}
-                    />
-                  )
-                )}
-                {uploadedFilesAddContent.length > 0 && uploadedFilesAddContent?.map(
-                  (resource: UploadedFilesProps, index: number) => (
-                    <TagSelectedResource
-                      key={`file-${index}`}
-                      label={resource.fileUploaded.name}
-                      IconTag={IconDocument}
-                      file={resource}
-                    />
-                  )
-                )}
-              </Flex>
-            )}
+            {hydrated &&
+              (resourcesSelectedAddContent.length > 0 ||
+                uploadedFilesAddContent.length > 0) && (
+                <Flex
+                  direction="row"
+                  align="center"
+                  justifyContent="flex-start"
+                  gap={1}
+                  wrap="wrap"
+                >
+                  {resourcesSelectedAddContent.length > 0 &&
+                    resourcesSelectedAddContent?.map(
+                      (resource: OerInCollectionProps, index: number) => (
+                        <TagSelectedResource
+                          key={`oer-${index}`}
+                          label={resource.title}
+                          IconTag={IconAttach}
+                          oer={resource}
+                        />
+                      )
+                    )}
+                  {uploadedFilesAddContent.length > 0 &&
+                    uploadedFilesAddContent?.map(
+                      (resource: UploadedFilesProps, index: number) => (
+                        <TagSelectedResource
+                          key={`file-${index}`}
+                          label={resource.fileUploaded.name}
+                          IconTag={IconDocument}
+                          file={resource}
+                        />
+                      )
+                    )}
+                </Flex>
+              )}
             <Flex flex="1" justify="flex-end">
               <Tooltip
                 hasArrow

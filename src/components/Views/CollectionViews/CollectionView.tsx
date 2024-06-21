@@ -208,7 +208,7 @@ export default function CollectionView({
 
   useEffect(() => {
     //alert("CollectionView");
-    if (collectionIndex > -1) {
+    if (collectionIndex > -1 && !isAddContentModal) {
       console.log('Use effect of CollectionIndex');
 
       setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx

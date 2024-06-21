@@ -20,7 +20,10 @@ import {
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { isOerInCollectionProps, isUploadedFilesProps } from '../../utils/utils';
+import {
+  isOerInCollectionProps,
+  isUploadedFilesProps,
+} from '../../utils/utils';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -115,7 +118,7 @@ type LearnignPathDesignContextProps = {
   removeLessonActivity: (index: number) => void;
   handleUpdateLessonContent: (
     index: number,
-    newContent: OerInCollectionProps[] | UploadedFilesProps[],
+    newContent: OerInCollectionProps[] | UploadedFilesProps[]
   ) => void;
 
   // Add Content - Selected Oers
@@ -715,7 +718,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const handleUpdateLessonContent = (
     lessonIndex: number,
-    newContent: OerInCollectionProps[] | UploadedFilesProps[],
+    newContent: OerInCollectionProps[] | UploadedFilesProps[]
     // newUploadedFilesContent?: UploadedFilesProps[],
   ) => {
     console.log('Updating lesson content');
@@ -783,9 +786,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ========================================================
 
   // Add Content - Selected oers
-  const [resourcesSelectedAddContent, setResourcesSelectedAddContent] = useState<
-    OerInCollectionProps[]
-  >([]);
+  const [resourcesSelectedAddContent, setResourcesSelectedAddContent] =
+    useState<OerInCollectionProps[]>([]);
 
   // Add the selected resource to the array
   const addSelectedResourcesAddContent = (
@@ -805,10 +807,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
         // If NO, add all the resources
         if (isAllNewResources) {
-          setResourcesSelectedAddContent((prevResources: OerInCollectionProps[]) => [
-            ...prevResources,
-            ...newResources,
-          ]);
+          setResourcesSelectedAddContent(
+            (prevResources: OerInCollectionProps[]) => [
+              ...prevResources,
+              ...newResources,
+            ]
+          );
           // Otherwise check on each resource and add only the ones not already selected
         } else {
           newResources.forEach((resource: OerInCollectionProps) => {
@@ -818,10 +822,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
                   resourceSelected.id === resource.id
               );
             if (!isResourceIndexAlreadyAdded) {
-              setResourcesSelectedAddContent((prevResources: OerInCollectionProps[]) => [
-                ...prevResources,
-                resource,
-              ]);
+              setResourcesSelectedAddContent(
+                (prevResources: OerInCollectionProps[]) => [
+                  ...prevResources,
+                  resource,
+                ]
+              );
               // Update the UI or show a success notification
             } else {
               console.error('Resource already selected');
@@ -831,10 +837,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
         // If is only one resource
       } else {
-        setResourcesSelectedAddContent((prevResources: OerInCollectionProps[]) => [
-          ...prevResources,
-          newResources,
-        ]);
+        setResourcesSelectedAddContent(
+          (prevResources: OerInCollectionProps[]) => [
+            ...prevResources,
+            newResources,
+          ]
+        );
       }
     } catch (error) {
       // Handle errors or show an error notification
@@ -882,7 +890,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
           (resourceSelected: UploadedFilesProps) =>
             newFiles.forEach(
               (resource: UploadedFilesProps) =>
-                resourceSelected.fileUploaded.name === resource.fileUploaded.name
+                resourceSelected.fileUploaded.name ===
+                resource.fileUploaded.name
             )
         );
 
@@ -895,8 +904,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
           // Otherwise check on each files and add only the ones not already present in the array
         } else {
           newFiles.forEach((file: UploadedFilesProps) => {
-            const isFileAlreadyAdded =
-              uploadedFilesAddContent.includes(file);
+            const isFileAlreadyAdded = uploadedFilesAddContent.includes(file);
             if (!isFileAlreadyAdded) {
               setUploadedFilesAddContent((prevFiles: UploadedFilesProps[]) => [
                 ...prevFiles,
