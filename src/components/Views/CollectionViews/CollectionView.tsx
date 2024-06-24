@@ -120,8 +120,9 @@ export default function CollectionView({
     const uniqueConceptsArray = Array.from(uniqueConceptsSet.values());
 
     setUniqueConcepts(
-      uniqueConceptsArray.sort((a: OerConceptInfo, b: OerConceptInfo) =>
-        a?.name?.localeCompare(b?.name)
+      uniqueConceptsArray.sort(
+        (a: OerConceptInfo, b: OerConceptInfo) =>
+          a?.name?.localeCompare(b?.name)
       )
     );
   };
@@ -333,7 +334,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+                  //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

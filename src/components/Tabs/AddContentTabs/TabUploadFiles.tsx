@@ -3,7 +3,7 @@ import FileUpload from '../../Inputs/FileUpload/FileUpload';
 
 export type TabUploadFilesProps = {
   activityIndex: number;
-}
+};
 
 export default function TabUploadFiles({ activityIndex }: TabUploadFilesProps) {
   // const [uploading, setUploading] = useState(false);

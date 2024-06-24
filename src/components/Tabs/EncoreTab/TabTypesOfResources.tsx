@@ -20,13 +20,13 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
     originalTypesQueryParams,
     typesSelected,
-    setTypesSelected
+    setTypesSelected,
   } = useContext(DiscoveryContext);
   const hydrated = useHasHydrated();
   const router = useRouter();
@@ -50,7 +50,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const updateQuery = async (
     newType: number | number[],
     isRemovingType: boolean,
-    isFilter: boolean,
+    isFilter: boolean
   ) => {
     // Get search data from the localStorage
     const searchData = localStorage.getItem('searchData');
@@ -70,7 +70,9 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         const updatedTypes = [...types, newType.toString()];
         types = updatedTypes;
       } else {
-        const updatedTypes = [...types].filter((type: string) => type !== newType.toString());
+        const updatedTypes = [...types].filter(
+          (type: string) => type !== newType.toString()
+        );
         types = updatedTypes;
       }
     }
@@ -111,15 +113,15 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
         // If a type is selected again, and it was the only one selected before, reset the filter
         if (
           // lastSelectedTypeId === clickedSliceId || // If i clicked again the last slice selected before, I reset the search
-          (typesSelected.length === 1 && typesSelected[0] === clickedSliceLabel)
+          typesSelected.length === 1 &&
+          typesSelected[0] === clickedSliceLabel
         ) {
           await handleResetClick();
           // If a type is selected again, remove it
         } else if (typesSelected.includes(clickedSliceLabel)) {
           setTypesSelected((prevTypes: string[]) =>
-            prevTypes.filter((type: string) =>
-              type !== clickedSliceLabel
-            ));
+            prevTypes.filter((type: string) => type !== clickedSliceLabel)
+          );
           setCurrentPage(1);
           await updateQuery(clickedSliceId, true, true);
           // Add the selected type to filter OERs

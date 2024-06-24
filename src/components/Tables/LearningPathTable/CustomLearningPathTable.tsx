@@ -6,7 +6,7 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { forwardRef, useEffect, useState } from 'react';
 import {
@@ -20,8 +20,9 @@ import {
 import {
   LessonProps,
   TableLearningPathProps,
-  activityTypesObjectsProps
+  activityTypesObjectsProps,
 } from '../../../types/encoreElements';
+import { reorderActivitiesAndFiles } from '../../../utils/indexedDB';
 import { useHasHydrated } from '../../../utils/utils';
 import EditDescriptionModal from '../../Modals/LearningPathModals/EditDescriptionModal';
 import LearningPathTableRow from './LearningPathTableRow';
@@ -42,14 +43,14 @@ const CustomLearningPathTable = forwardRef<
     editRowIndex,
     handleEditLesson, // handleSaveLesson
     isPrinting,
-    loadUploadedFiles
+    loadUploadedFiles,
   } = props;
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [currentDescription, setCurrentDescription] = useState('');
   const [currentEditIndex, setCurrentEditIndex] = useState<number | null>(null);
 
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(data);
@@ -57,6 +58,8 @@ const CustomLearningPathTable = forwardRef<
     items.splice(result.destination.index, 0, reorderedItem);
 
     handleData(items);
+
+    await reorderActivitiesAndFiles(result);
   };
 
   const handleLessonTypeChange = (index: number, selectedTypeIndex: number) => {
@@ -124,14 +127,26 @@ const CustomLearningPathTable = forwardRef<
     }
   };
 
+  // useEffect(() => {
+  //   if (editRowIndex !== null) {
+  //     const activityTypeIndex = activityTypes?.findIndex(
+  //       (type) => type?.activityType === data[editRowIndex]?.activityType
+  //     );
+  //     handleActivityTypeChange(editRowIndex, activityTypeIndex);
+  //   }
+  // }, [editRowIndex, activityTypes, data]);
+
   useEffect(() => {
     if (editRowIndex !== null) {
-      const activityTypeIndex = activityTypes.findIndex(
-        (type) => type.activityType === data[editRowIndex].activityType
+      const activityTypeIndex = activityTypes?.findIndex(
+        (type) => type?.activityType === data[editRowIndex]?.activityType
       );
-      handleActivityTypeChange(editRowIndex, activityTypeIndex);
+
+      if (activityTypeIndex !== -1) {
+        handleActivityTypeChange(editRowIndex, activityTypeIndex);
+      }
     }
-  }, [editRowIndex, activityTypes, data, handleActivityTypeChange]);
+  }, [editRowIndex]);
 
   useEffect(() => {
     console.log('DATA: ', data);
@@ -188,27 +203,36 @@ const CustomLearningPathTable = forwardRef<
                           draggableId={`draggable-${indexRow}`}
                           index={indexRow}
                         >
-                          {(provided: DraggableProvided) => (
-                            hydrated &&
-                            <LearningPathTableRow
-                              indexRow={indexRow}
-                              row={row}
-                              activityTypes={activityTypes}
-                              editRowIndex={editRowIndex}
-                              handleAddContentClick={handleAddContentClick}
-                              handleEditLesson={handleEditLesson}
-                              handleLessonTypeChange={handleLessonTypeChange}
-                              isEditLessonPlanClicked={isEditLessonPlanClicked}
-                              isPrinting={isPrinting}
-                              loadUploadedFiles={loadUploadedFiles}
-                              optionsTypeOfAssignment={optionsTypeOfAssignment}
-                              providedDraggable={provided}
-                              removeLessonActivity={removeLessonActivity}
-                              handleActivityTypeChange={handleActivityTypeChange}
-                              handleTimeDurationChange={handleTimeDurationChange}
-                              openDescriptionModal={openDescriptionModal}
-                            />
-                          )}
+                          {(provided: DraggableProvided) =>
+                            hydrated && (
+                              <LearningPathTableRow
+                                indexRow={indexRow}
+                                row={row}
+                                activityTypes={activityTypes}
+                                editRowIndex={editRowIndex}
+                                handleAddContentClick={handleAddContentClick}
+                                handleEditLesson={handleEditLesson}
+                                handleLessonTypeChange={handleLessonTypeChange}
+                                isEditLessonPlanClicked={
+                                  isEditLessonPlanClicked
+                                }
+                                isPrinting={isPrinting}
+                                loadUploadedFiles={loadUploadedFiles}
+                                optionsTypeOfAssignment={
+                                  optionsTypeOfAssignment
+                                }
+                                providedDraggable={provided}
+                                removeLessonActivity={removeLessonActivity}
+                                handleActivityTypeChange={
+                                  handleActivityTypeChange
+                                }
+                                handleTimeDurationChange={
+                                  handleTimeDurationChange
+                                }
+                                openDescriptionModal={openDescriptionModal}
+                              />
+                            )
+                          }
                         </Draggable>
                       ))}
                     {provided.placeholder}

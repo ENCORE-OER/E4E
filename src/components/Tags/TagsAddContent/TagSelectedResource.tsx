@@ -10,9 +10,8 @@ export type TagSelectedResourceProps = {
 export default function TagSelectedResource({
   label,
   IconTag,
-  handleDeleteClick
+  handleDeleteClick,
 }: TagSelectedResourceProps) {
-
   return (
     <Tag
       bg="white"

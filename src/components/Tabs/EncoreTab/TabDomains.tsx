@@ -34,7 +34,7 @@ type baseSetsProps = {
   domainId: number;
 };
 
-export const TabDomains = ({ }: TabDomainsProps) => {
+export const TabDomains = ({}: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -45,7 +45,7 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     setCurrentPage,
     originalDomainsQueryParams,
     domainsSelected,
-    setDomainsSelected
+    setDomainsSelected,
     // setFiltered
   } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -101,11 +101,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
     (
       oer:
         | {
-          green_domain: boolean;
-          digital_domain: boolean;
-          entrepreneurship_domain: boolean;
-          id: number;
-        }
+            green_domain: boolean;
+            digital_domain: boolean;
+            entrepreneurship_domain: boolean;
+            id: number;
+          }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -426,11 +426,11 @@ export const TabDomains = ({ }: TabDomainsProps) => {
               fontSizes={
                 isSmallerScreen
                   ? {
-                    setLabel: '12px',
-                  }
+                      setLabel: '12px',
+                    }
                   : {
-                    setLabel: '15px',
-                  }
+                      setLabel: '15px',
+                    }
               }
             />
           </Flex>

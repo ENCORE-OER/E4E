@@ -1,7 +1,6 @@
 import { Flex, Tooltip } from '@chakra-ui/react';
 import { useLearningPathDesignContext } from '../../../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { LessonPlanTabButtonProps } from '../../../../../types/encoreElements';
-import { useHasHydrated } from '../../../../../utils/utils';
 import IconPlus from '../../../../Icons/IconPlus/IconPlus';
 import UnderlinedButton from '../UnderlinedButton';
 
@@ -10,18 +9,15 @@ export default function AddActivityLessonPlanButton({
   isDisabled,
   isSmallerScreen,
 }: LessonPlanTabButtonProps) {
-  const { addEmptyLessonActivity, handleEditLesson, lessonActivities } =
+  const { addEmptyLessonActivity, handleEditActivityLesson, lessonActivities } =
     useLearningPathDesignContext();
-  const hydrated = useHasHydrated();
-
-  const indexNewActivity = lessonActivities.length;
 
   const handleClickAddActivity = () => {
     addEmptyLessonActivity();
-    if (hydrated) {
-      handleEditLesson(indexNewActivity);
-    }
+    const activityIndex = lessonActivities?.length;
+    handleEditActivityLesson(activityIndex);
   };
+
   return (
     <Tooltip
       hasArrow

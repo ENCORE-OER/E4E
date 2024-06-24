@@ -353,29 +353,32 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${generatedLesson.Type
-            ? `${mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )}`
-            : 'Frontal Lecture'
-            } activity`,
+          lessonTitle: `${
+            generatedLesson.Type
+              ? `${mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )}`
+              : 'Frontal Lecture'
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : 'Frontal Lecture'
-            }`,
-          activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
-            }`,
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : 'Frontal Lecture'
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
-          content: { oers: [], uploadedFiles: [] }
+          content: { oers: [], uploadedFiles: [] },
         })) || []
       );
 
@@ -672,7 +675,7 @@ export default function PathDesignGenLessonPlan({
         topic: '',
         timeDuration: 0,
         passFailConditions: [],
-        content: { oers: [], uploadedFiles: [] }
+        content: { oers: [], uploadedFiles: [] },
       });
     }
     for (let i = 0; i < numberOfAssessmentActivities; i++) {
@@ -684,7 +687,7 @@ export default function PathDesignGenLessonPlan({
         topic: '',
         timeDuration: 0,
         passFailConditions: [],
-        content: { oers: [], uploadedFiles: [] }
+        content: { oers: [], uploadedFiles: [] },
       });
     }
     setLessonActivities(tempLessonsActivities);

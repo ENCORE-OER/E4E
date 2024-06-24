@@ -30,7 +30,7 @@ export default function LessonDropDownMenu({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleSelect = (index: number) => {
-    setSelectedOption(options[index].name);
+    setSelectedOption(options[index]?.name);
     onChange(index); // Chiamata alla funzione di callback con l'indice selezionato
   };
 
@@ -54,7 +54,7 @@ export default function LessonDropDownMenu({
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'lightblue' }}
           textAlign="center"
-          // border={'1px solid #CED4DA'}
+        // border={'1px solid #CED4DA'}
         >
           {selectedOption || title || (
             <Text color="gray.400" fontWeight={'light'}>

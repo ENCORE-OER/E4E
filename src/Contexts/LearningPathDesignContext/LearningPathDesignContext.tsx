@@ -19,11 +19,11 @@ import {
   UploadedFilesProps,
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
-import { getAllFilesByActivityIndex } from '../../utils/indexedDB';
+import { deleteActivityAndUpdateFiles, getAllFilesByActivityIndex } from '../../utils/indexedDB';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import {
   isOerInCollectionProps,
-  isUploadedFilesProps
+  isUploadedFilesProps,
 } from '../../utils/utils';
 
 // Context props
@@ -97,8 +97,8 @@ type LearnignPathDesignContextProps = {
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
   handleSaveLessonPlanClick: () => void;
-  editLessonIndex: number | null;
-  handleEditLesson: (index: number) => void;
+  editActivityLessonIndex: number | null;
+  handleEditActivityLesson: (index: number) => void;
   handleSaveLesson: () => void;
 
   activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
@@ -116,7 +116,7 @@ type LearnignPathDesignContextProps = {
   lessonActivities: LessonProps[];
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
-  removeLessonActivity: (index: number) => void;
+  removeLessonActivity: (index: number) => Promise<void>;
   resetOersContent: (index: number) => void;
   resetFilesContent: (index: number) => void;
   handleUpdateActivityContent: (
@@ -137,7 +137,10 @@ type LearnignPathDesignContextProps = {
   addUploadedFilesAddContent: (
     files: UploadedFilesProps | UploadedFilesProps[]
   ) => void;
-  loadUploadedFiles: (activityIndex: number, isLessonView: boolean) => Promise<void>;
+  loadUploadedFiles: (
+    activityIndex: number,
+    isLessonView: boolean
+  ) => Promise<void>;
   removeUploadedFileAddContent: (file: UploadedFilesProps) => void;
   resetUploadedFilesAddContent: () => void;
 
@@ -516,33 +519,33 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setIsEditLessonPlanClicked(isClicked);
   };
 
-  const handleSaveLessonPlanClick = () => {
-    if (editLessonIndex !== null && !isEditLessonPlanClicked) {
-      handleSaveLesson();
-    } else if (isEditLessonPlanClicked) {
-      if (editLessonIndex !== null) {
-        handleSaveLesson();
-      }
-      setIsEditLessonPlanClicked(false);
-    }
-  };
-
   // State to track the index of the row currently in edit mode
-  const [editLessonIndex, setEditLessonIndex] = useLocalStorage<number | null>(
-    'editLessonIndex',
+  const [editActivityLessonIndex, setEditActivityLessonIndex] = useLocalStorage<number | null>(
+    'editActivityLessonIndex',
     null
   );
 
   // Function to handle initiating edit mode for a row
-  const handleEditLesson = (index: number) => {
+  const handleEditActivityLesson = (index: number) => {
     // Set the index of the row in edit mode
-    setEditLessonIndex(index);
+    setEditActivityLessonIndex(index);
   };
 
   // Function to handle saving changes and exit edit mode
   const handleSaveLesson = () => {
     // Save changes and disable edit mode
-    setEditLessonIndex(null);
+    setEditActivityLessonIndex(null);
+  };
+
+  const handleSaveLessonPlanClick = () => {
+    if (editActivityLessonIndex !== null && !isEditLessonPlanClicked) {
+      handleSaveLesson();
+    } else if (isEditLessonPlanClicked) {
+      if (editActivityLessonIndex !== null) {
+        handleSaveLesson();
+      }
+      setIsEditLessonPlanClicked(false);
+    }
   };
 
   // Lesson
@@ -701,8 +704,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       passFailConditions: [],
       content: {
         oers: [],
-        uploadedFiles: []
-      }
+        uploadedFiles: [],
+      },
     };
     setLessonActivities((prevLessonActivities: LessonProps[]) => [
       ...prevLessonActivities,
@@ -711,7 +714,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // Function to remove a lessonActivity from the lessonActivities array given the index
-  const removeLessonActivity = (indexToRemove: number) => {
+  const removeLessonActivity = async (indexToRemove: number) => {
+    await deleteActivityAndUpdateFiles(indexToRemove, lessonActivities.length);
     setLessonActivities((prevLessonActivities: LessonProps[]) => {
       // Copy the array of lessonActivities excluding the element to remove
       const updatedLessonActivities = [...prevLessonActivities];
@@ -724,25 +728,25 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //     return arr.length === 0 || 'concepts' in arr[0];
   // }
 
-  const resetOersContent = (activityIndex: number,) => {
+  const resetOersContent = (activityIndex: number) => {
     setLessonActivities((prevLessons: LessonProps[]) => {
       const updatedLessons = [...prevLessons];
       if (updatedLessons[activityIndex]) {
-        updatedLessons[activityIndex].content.oers = []
+        updatedLessons[activityIndex].content.oers = [];
       }
       return updatedLessons;
     });
-  }
+  };
 
-  const resetFilesContent = (activityIndex: number,) => {
+  const resetFilesContent = (activityIndex: number) => {
     setLessonActivities((prevLessons: LessonProps[]) => {
       const updatedLessons = [...prevLessons];
       if (updatedLessons[activityIndex]) {
-        updatedLessons[activityIndex].content.uploadedFiles = []
+        updatedLessons[activityIndex].content.uploadedFiles = [];
       }
       return updatedLessons;
     });
-  }
+  };
 
   const handleUpdateActivityContent = async (
     activityIndex: number,
@@ -756,7 +760,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities((prevLessons: LessonProps[]) => {
           const updatedLessons = [...prevLessons];
           if (updatedLessons[activityIndex]) {
-            updatedLessons[activityIndex].content.oers = newContent
+            updatedLessons[activityIndex].content.oers = newContent;
           }
           return updatedLessons;
         });
@@ -776,8 +780,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
               ...newContent.map((content: UploadedFilesProps) => ({
                 fileUploaded: content.fileUploaded,
                 fileName: content.fileUploaded.name,
-                urlFile: content.urlFile
-              }))
+                urlFile: content.urlFile,
+              })),
             ];
           }
           return updatedLessons;
@@ -1002,12 +1006,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   };
 
-
-  const loadUploadedFiles = async (activityIndex: number, isLessonView: boolean) => {
-    console.log("LOAD FILES...");
+  const loadUploadedFiles = async (
+    activityIndex: number,
+    isLessonView: boolean
+  ) => {
+    console.log('LOAD FILES...');
     try {
       const validFiles = await getAllFilesByActivityIndex(activityIndex);
-      console.log("VALID FILES", validFiles);
+      console.log('VALID FILES', validFiles);
 
       // We are in AddContent
       if (!isLessonView) {
@@ -1025,10 +1031,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     } catch (error) {
       addToast({
         message: `Error loading the files from database. ${error}`,
-        type: 'error'
-      })
+        type: 'error',
+      });
     }
-  }
+  };
 
   // Remove the selected file from the array
   const removeUploadedFileAddContent = (
@@ -1059,7 +1065,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
 
   useEffect(() => {
-    console.log("Lesson activities", lessonActivities);
+    console.log('Lesson activities', lessonActivities);
   }, [lessonActivities]);
 
   useEffect(() => {
@@ -1242,8 +1248,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         isEditLessonPlanClicked,
         handleEditLessonPlanClick,
         handleSaveLessonPlanClick,
-        editLessonIndex,
-        handleEditLesson,
+        editActivityLessonIndex,
+        handleEditActivityLesson,
         handleSaveLesson,
 
         activityTypes,

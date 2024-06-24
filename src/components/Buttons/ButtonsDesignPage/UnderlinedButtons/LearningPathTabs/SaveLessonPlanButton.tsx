@@ -12,7 +12,7 @@ export default function SaveLessonPlanButton({
 }: LessonPlanTabButtonProps) {
   const {
     isEditLessonPlanClicked,
-    editLessonIndex: editRowIndex,
+    editActivityLessonIndex,
     handleSaveLessonPlanClick,
   } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
@@ -48,7 +48,7 @@ export default function SaveLessonPlanButton({
           color="primary"
           fontWeight="normal"
           isDisabled={
-            (!isEditLessonPlanClicked && editRowIndex === null) || isDisabled
+            (!isEditLessonPlanClicked && editActivityLessonIndex === null) || isDisabled
           }
           _hover={{ bg: 'gray.200' }}
         />

@@ -6,7 +6,11 @@ type TagContentProps = {
   handleClick?: () => void;
 };
 
-export default function TagContent({ label, bg, handleClick }: TagContentProps) {
+export default function TagContent({
+  label,
+  bg,
+  handleClick,
+}: TagContentProps) {
   return (
     <Tag
       // colorScheme='#FFCC49'
@@ -17,8 +21,7 @@ export default function TagContent({ label, bg, handleClick }: TagContentProps) 
       borderRadius={5}
       onClick={(e) => {
         e.preventDefault();
-        if (handleClick)
-          handleClick();
+        if (handleClick) handleClick();
       }}
       cursor={handleClick ? 'pointer' : 'default'}
     >

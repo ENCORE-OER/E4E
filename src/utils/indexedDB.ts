@@ -1,7 +1,8 @@
+import { DropResult } from 'react-beautiful-dnd';
 import { UploadedFilesProps } from '../types/encoreElements';
 
 const DB_NAME = 'UploadedFilesStorage';
-const DB_VERSION = 5; // Specify the version of the database. // TODO: upgrade it every time you have to change the database structure
+const DB_VERSION = 6; // Specify the version of the database. // TODO: upgrade it every time you have to change the database structure
 const STORE_NAME = 'UploadedFiles';
 
 interface FileRecordProps {
@@ -289,6 +290,229 @@ export const resetIndexedDB = async (): Promise<void> => {
   } catch (error) {
     throw new Error(`Failed to reset IndexedDB: ${error}`);
   }
+};
+
+export const deleteActivityAndUpdateFiles = async (
+  activityIndex: number,
+  totalActivities: number
+) => {
+  const db = await openDB();
+  const transaction = db.transaction([STORE_NAME], 'readwrite');
+  const objectStore = transaction.objectStore(STORE_NAME);
+
+  // Delete files associated with the deleted activity
+  const deleteRequest = objectStore
+    .index('activityIndex')
+    .openCursor(IDBKeyRange.only(activityIndex));
+  deleteRequest.onsuccess = (event) => {
+    const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+    if (cursor) {
+      objectStore.delete(cursor.primaryKey);
+      cursor.continue();
+    }
+  };
+
+  // Wait for delete operation to complete
+  await new Promise((resolve, reject) => {
+    transaction.oncomplete = resolve;
+    transaction.onerror = reject;
+  });
+
+  // Update indices of subsequent activities and their associated files
+  for (let i = activityIndex + 1; i < totalActivities; i++) {
+    const newActivityIndex = i - 1;
+
+    // Update the associated files in the database
+    const updateTransaction = db.transaction([STORE_NAME], 'readwrite');
+    const updateObjectStore = updateTransaction.objectStore(STORE_NAME);
+    const updateRequest = updateObjectStore
+      .index('activityIndex')
+      .openCursor(IDBKeyRange.only(i));
+
+    updateRequest.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+      if (cursor) {
+        const fileRecord: FileRecordProps = cursor.value;
+        fileRecord.activityIndex = newActivityIndex;
+        fileRecord.id = `${newActivityIndex}_${fileRecord.name}`;
+        updateObjectStore.put(fileRecord);
+        cursor.continue();
+      }
+    };
+
+    await new Promise((resolve, reject) => {
+      updateTransaction.oncomplete = resolve;
+      updateTransaction.onerror = reject;
+    });
+  }
+
+  console.log('Indices successfully updated');
+};
+
+export const reorderActivitiesAndFiles = async (
+  result: DropResult
+  // totalActivities: number
+): Promise<void> => {
+  if (!result.destination) return;
+
+  const db = await openDB();
+  const transaction = db.transaction([STORE_NAME], 'readwrite');
+  const objectStore = transaction.objectStore(STORE_NAME);
+
+  const sourceIndex = result.source.index;
+  const destinationIndex = result.destination.index;
+
+  try {
+    // 1. Save the file records of the row being moved temporarily
+    const tempFiles = await getFileRecordsByActivityIndex(
+      objectStore,
+      sourceIndex
+    );
+
+    // 2. Remove the file records of the row being moved from the database
+    await removeFileRecordsByActivityIndex(objectStore, sourceIndex);
+
+    // 3. Shift the other rows to fill the gap
+    if (sourceIndex < destinationIndex) {
+      // Move item down: process from sourceIndex+1 to destinationIndex
+      for (let i = sourceIndex + 1; i <= destinationIndex; i++) {
+        await shiftFileRecord(objectStore, i, i - 1);
+      }
+    } else {
+      // Move item up: process from sourceIndex-1 to destinationIndex
+      for (let i = sourceIndex - 1; i >= destinationIndex; i--) {
+        await shiftFileRecord(objectStore, i, i + 1);
+      }
+    }
+
+    // 4. Insert the saved file records into the new position
+    for (const fileRecord of tempFiles) {
+      fileRecord.activityIndex = destinationIndex;
+      fileRecord.id = `${destinationIndex}_${fileRecord.name}`;
+      await addFileRecord(objectStore, fileRecord);
+    }
+
+    console.log('Order successfully updated');
+  } catch (error) {
+    console.error('Error updating file records:', error);
+  }
+
+  transaction.oncomplete = () => {
+    console.log('Transaction completed successfully');
+  };
+
+  transaction.onerror = () => {
+    console.error('Transaction error');
+  };
+};
+
+const getFileRecordsByActivityIndex = (
+  objectStore: IDBObjectStore,
+  activityIndex: number
+): Promise<FileRecordProps[]> => {
+  return new Promise((resolve, reject) => {
+    const index = objectStore.index('activityIndex');
+    const request = index.openCursor(IDBKeyRange.only(activityIndex));
+    const fileRecords: FileRecordProps[] = [];
+
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+      if (cursor) {
+        fileRecords.push(cursor.value);
+        cursor.continue();
+      } else {
+        resolve(fileRecords);
+      }
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to get file records by activity index'));
+    };
+  });
+};
+
+const removeFileRecordsByActivityIndex = (
+  objectStore: IDBObjectStore,
+  activityIndex: number
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const index = objectStore.index('activityIndex');
+    const request = index.openCursor(IDBKeyRange.only(activityIndex));
+
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+      if (cursor) {
+        objectStore.delete(cursor.primaryKey);
+        cursor.continue();
+      } else {
+        resolve();
+      }
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to remove file records by activity index'));
+    };
+  });
+};
+
+const shiftFileRecord = (
+  objectStore: IDBObjectStore,
+  oldIndex: number,
+  newIndex: number
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const index = objectStore.index('activityIndex');
+    const request = index.openCursor(IDBKeyRange.only(oldIndex));
+
+    request.onsuccess = (event) => {
+      const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
+      if (cursor) {
+        const fileRecord: FileRecordProps = cursor.value;
+        const updatedRecord: FileRecordProps = {
+          ...fileRecord,
+          activityIndex: newIndex,
+          id: `${newIndex}_${fileRecord.name}`,
+        };
+
+        const deleteRequest = objectStore.delete(cursor.primaryKey);
+
+        deleteRequest.onsuccess = () => {
+          const addRequest = objectStore.add(updatedRecord);
+          addRequest.onsuccess = () => {
+            cursor.continue();
+          };
+          addRequest.onerror = () => {
+            reject(new Error('Failed to add shifted file record'));
+          };
+        };
+
+        deleteRequest.onerror = () => {
+          reject(new Error('Failed to delete old file record'));
+        };
+      } else {
+        resolve();
+      }
+    };
+
+    request.onerror = () => {
+      reject(new Error('Failed to open cursor for shifting file records'));
+    };
+  });
+};
+
+const addFileRecord = (
+  objectStore: IDBObjectStore,
+  fileRecord: FileRecordProps
+): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const addRequest = objectStore.add(fileRecord);
+    addRequest.onsuccess = () => {
+      resolve();
+    };
+    addRequest.onerror = () => {
+      reject(new Error('Failed to add file record'));
+    };
+  });
 };
 
 // export const getPersistentFileURL = async (

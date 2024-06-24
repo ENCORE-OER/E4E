@@ -55,12 +55,15 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   // Discover tabs utilities
-  const [originalTypesQueryParams, setOriginalTypesQueryParams] = useState<number[]>([]);
-  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] = useState<number[]>([]);
+  const [originalTypesQueryParams, setOriginalTypesQueryParams] = useState<
+    number[]
+  >([]);
+  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] = useState<
+    number[]
+  >([]);
   const [typesSelected, setTypesSelected] = useState<string[]>([]);
   const [domainsSelected, setDomainsSelected] = useState<number[]>([]);
   const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
-
 
   // ============================ VENN DIAGRAM ============================
 
@@ -270,13 +273,16 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const isTypesFilter = convertedData['isTypesFilter'];
 
       if (!isDomainsFilter && domains !== originalDomainsQueryParams) {
-        console.log("IS DOMAINS FILTER", isDomainsFilter);
-        console.log("DIFFERENT DOMAINS: ", domains !== originalDomainsQueryParams)
+        console.log('IS DOMAINS FILTER', isDomainsFilter);
+        console.log(
+          'DIFFERENT DOMAINS: ',
+          domains !== originalDomainsQueryParams
+        );
         setOriginalDomainsQueryParams(domains);
       }
       if (!isTypesFilter && types !== originalTypesQueryParams) {
-        console.log("IS TYPES FILTER", isTypesFilter);
-        console.log("DIFFERENT TYPES:", types !== originalTypesQueryParams)
+        console.log('IS TYPES FILTER', isTypesFilter);
+        console.log('DIFFERENT TYPES:', types !== originalTypesQueryParams);
         setOriginalTypesQueryParams(types);
       }
 
@@ -318,13 +324,12 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     }
   }, [router.query]);
 
-
   useEffect(() => {
     console.log(originalDomainsQueryParams);
   }, [originalDomainsQueryParams]);
   useEffect(() => {
     console.log(originalTypesQueryParams);
-  }, [originalTypesQueryParams])
+  }, [originalTypesQueryParams]);
 
   // redirect to home page if no resources are found
   useEffect(() => {
@@ -396,7 +401,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -437,7 +442,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -460,7 +465,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
             domainsSelected,
             setDomainsSelected,
             conceptsSelected,
-            setConceptsSelected
+            setConceptsSelected,
           }}
         >
           <EncoreTab

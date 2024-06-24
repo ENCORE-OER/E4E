@@ -13,7 +13,11 @@ import { TabUploadFilesProps } from '../../Tabs/AddContentTabs/TabUploadFiles';
 const FileUpload: React.FC<TabUploadFilesProps> = (props) => {
   const { activityIndex } = props;
   const inputRef = useRef<HTMLInputElement>(null);
-  const { uploadedFilesAddContent, addUploadedFilesAddContent, removeUploadedFileAddContent } = useLearningPathDesignContext();
+  const {
+    uploadedFilesAddContent,
+    addUploadedFilesAddContent,
+    removeUploadedFileAddContent,
+  } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
   const hydrated = useHasHydrated();
 
@@ -30,20 +34,20 @@ const FileUpload: React.FC<TabUploadFilesProps> = (props) => {
 
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    console.log("FILES: ", files);
+    console.log('FILES: ', files);
     if (files && files.length > 0) {
       const filesArray = Array.from(files);
       const validationError = validateFiles(filesArray);
       if (validationError) {
         addToast({ message: 'The selected files are too big!', type: 'error' });
       } else {
-        const newFiles: UploadedFilesProps[] = filesArray.map((file: File) => (
+        const newFiles: UploadedFilesProps[] = filesArray.map((file: File) =>
           // file
-          {
+          ({
             fileUploaded: file,
-            urlFile: URL.createObjectURL(file)
-          }
-        ));
+            urlFile: URL.createObjectURL(file),
+          })
+        );
 
         // Save files to IndexedDB and update the state
         // newFiles.forEach(file => saveFileToIndexedDB(file.fileUploaded));
@@ -59,15 +63,16 @@ const FileUpload: React.FC<TabUploadFilesProps> = (props) => {
   const handleRemoveClick = async (file: UploadedFilesProps) => {
     try {
       removeUploadedFileAddContent(file);
-      await removeFileFromIndexedDB(`${activityIndex}_${file.fileUploaded.name}`);
+      await removeFileFromIndexedDB(
+        `${activityIndex}_${file.fileUploaded.name}`
+      );
     } catch (error) {
       addToast({
         message: 'Error removing a file.',
-        type: 'error'
-      })
+        type: 'error',
+      });
     }
-  }
-
+  };
 
   // useEffect(() => {
   //   // Load previously saved files from IndexedDB when the component mounts
@@ -76,21 +81,30 @@ const FileUpload: React.FC<TabUploadFilesProps> = (props) => {
 
   return (
     <Flex direction="column" justify="center" gap={2} pt={5}>
-      <Input type="file" ref={inputRef} onChange={handleOnChange} hidden multiple accept="application/*" />
+      <Input
+        type="file"
+        ref={inputRef}
+        onChange={handleOnChange}
+        hidden
+        multiple
+        accept="application/*"
+      />
       <UploadButton handleUploadFile={onChooseFile} />
 
       {hydrated && uploadedFilesAddContent && (
         <Flex gap={2} direction="column">
-          {uploadedFilesAddContent.map((file: UploadedFilesProps, index: number) => (
-            <BoxUploadedFile
-              key={index}
-              fileName={file.fileUploaded.name}
-              urlFile={file.urlFile ?? ''}
-              handleRemoveClick={async () => {
-                await handleRemoveClick(file);
-              }}
-            />
-          ))}
+          {uploadedFilesAddContent.map(
+            (file: UploadedFilesProps, index: number) => (
+              <BoxUploadedFile
+                key={index}
+                fileName={file.fileUploaded.name}
+                urlFile={file.urlFile ?? ''}
+                handleRemoveClick={async () => {
+                  await handleRemoveClick(file);
+                }}
+              />
+            )
+          )}
         </Flex>
       )}
     </Flex>

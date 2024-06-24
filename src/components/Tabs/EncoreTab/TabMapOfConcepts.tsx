@@ -16,16 +16,12 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
-  const {
-    filtered,
-    setCurrentPage,
-    conceptsSelected,
-    setConceptsSelected
-  } = useContext(DiscoveryContext);
+  const { filtered, setCurrentPage, conceptsSelected, setConceptsSelected } =
+    useContext(DiscoveryContext);
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptInfo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);

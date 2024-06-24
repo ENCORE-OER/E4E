@@ -17,8 +17,15 @@ import {
   OerInCollectionProps,
   UploadedFilesProps,
 } from '../../../types/encoreElements';
-import { removeFileFromIndexedDB, saveMultipleFilesToIndexedDB } from '../../../utils/indexedDB';
-import { isOerInCollectionProps, isUploadedFilesProps, useHasHydrated } from '../../../utils/utils';
+import {
+  removeFileFromIndexedDB,
+  saveMultipleFilesToIndexedDB,
+} from '../../../utils/indexedDB';
+import {
+  isOerInCollectionProps,
+  isUploadedFilesProps,
+  useHasHydrated,
+} from '../../../utils/utils';
 import IconAttach from '../../Icons/IconAttach/IconAttach';
 import IconDocument from '../../Icons/IconDocuments/IconDocument';
 import IconSave from '../../Icons/IconSave/IconSave';
@@ -46,7 +53,7 @@ export default function AddContentModal({
     removeSelectedResourceAddContent,
     removeUploadedFileAddContent,
     resetOersContent,
-    resetFilesContent
+    resetFilesContent,
   } = useLearningPathDesignContext();
 
   const handleSaveClick = async () => {
@@ -56,28 +63,37 @@ export default function AddContentModal({
           activityIndex !== undefined ? activityIndex : -1,
           resourcesSelectedAddContent
         );
-      } else if (resourcesSelectedAddContent?.length === 0 &&
+      } else if (
+        resourcesSelectedAddContent?.length === 0 &&
         lessonActivities[activityIndex].content.oers.length > 0
       ) {
         resetOersContent(activityIndex);
       }
       if (uploadedFilesAddContent.length > 0) {
-        console.log("UPDATE FILES...");
+        console.log('UPDATE FILES...');
         // await handleUpdateActivityContent(
         //   activityIndex !== undefined ? activityIndex : -1,
         //   uploadedFilesAddContent.map((file: UploadedFilesProps) => file.fileUploaded)  // Passing only File[] I'm saving on the DB
         // );(
-        const filesToSave = uploadedFilesAddContent.filter((uploadedFile: UploadedFilesProps) =>
-          !lessonActivities[activityIndex].content.uploadedFiles.some((fileLessonActivity: UploadedFilesProps) =>
-            fileLessonActivity.fileName === uploadedFile.fileName
-          )
+        const filesToSave = uploadedFilesAddContent.filter(
+          (uploadedFile: UploadedFilesProps) =>
+            !lessonActivities[activityIndex].content.uploadedFiles.some(
+              (fileLessonActivity: UploadedFilesProps) =>
+                fileLessonActivity.fileName === uploadedFile.fileName
+            )
         );
-        console.log("FILES TO SAVE", filesToSave);
+        console.log('FILES TO SAVE', filesToSave);
         if (filesToSave.length > 0) {
-          await saveMultipleFilesToIndexedDB(filesToSave.map((file: UploadedFilesProps) => file.fileUploaded), activityIndex);
+          await saveMultipleFilesToIndexedDB(
+            filesToSave.map((file: UploadedFilesProps) => file.fileUploaded),
+            activityIndex
+          );
           await loadUploadedFiles(activityIndex, true);
         }
-      } else if (uploadedFilesAddContent.length === 0 && lessonActivities[activityIndex].content.uploadedFiles.length > 0) {
+      } else if (
+        uploadedFilesAddContent.length === 0 &&
+        lessonActivities[activityIndex].content.uploadedFiles.length > 0
+      ) {
         resetFilesContent(activityIndex);
       }
       onClose();
@@ -86,12 +102,16 @@ export default function AddContentModal({
     }
   };
 
-  const handleDeleteTagClick = async (item: OerInCollectionProps | UploadedFilesProps) => {
+  const handleDeleteTagClick = async (
+    item: OerInCollectionProps | UploadedFilesProps
+  ) => {
     if (isOerInCollectionProps(item)) {
       removeSelectedResourceAddContent(item);
     } else if (isUploadedFilesProps(item)) {
       removeUploadedFileAddContent(item);
-      await removeFileFromIndexedDB(`${activityIndex}_${item.fileUploaded.name}`);
+      await removeFileFromIndexedDB(
+        `${activityIndex}_${item.fileUploaded.name}`
+      );
     }
   };
 
@@ -108,7 +128,7 @@ export default function AddContentModal({
         );
         await loadUploadedFiles(activityIndex, false);
       }
-    }
+    };
     fetch();
   }, [isOpen]);
 
@@ -137,25 +157,31 @@ export default function AddContentModal({
                   gap={1}
                   wrap="wrap"
                 >
-                  {hydrated && resourcesSelectedAddContent.length > 0 &&
+                  {hydrated &&
+                    resourcesSelectedAddContent.length > 0 &&
                     resourcesSelectedAddContent?.map(
                       (resource: OerInCollectionProps, index: number) => (
                         <TagSelectedResource
                           key={`oer-${index}`}
                           label={resource.title}
                           IconTag={IconAttach}
-                          handleDeleteClick={() => handleDeleteTagClick(resource)}
+                          handleDeleteClick={() =>
+                            handleDeleteTagClick(resource)
+                          }
                         />
                       )
                     )}
-                  {hydrated && uploadedFilesAddContent.length > 0 &&
+                  {hydrated &&
+                    uploadedFilesAddContent.length > 0 &&
                     uploadedFilesAddContent?.map(
                       (resource: UploadedFilesProps, index: number) => (
                         <TagSelectedResource
                           key={`file-${index}`}
                           label={resource.fileUploaded.name}
                           IconTag={IconDocument}
-                          handleDeleteClick={() => handleDeleteTagClick(resource)}
+                          handleDeleteClick={() =>
+                            handleDeleteTagClick(resource)
+                          }
                         />
                       )
                     )}
@@ -186,8 +212,8 @@ export default function AddContentModal({
                       uploadedFilesAddContent.length === 0 &&
                       activityIndex !== undefined &&
                       // lessonActivities[indexLesson]?.content?.oers &&
-                      lessonActivities[activityIndex]?.content?.oers
-                        ?.length === 0 &&
+                      lessonActivities[activityIndex]?.content?.oers?.length ===
+                        0 &&
                       lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
@@ -212,6 +238,6 @@ export default function AddContentModal({
           </Flex>
         </ModalBody>
       </ModalContent>
-    </Modal >
+    </Modal>
   );
 }

@@ -26,9 +26,9 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       activityTypes,
       removeLessonActivity,
       optionsTypeOfAssignment,
-      editLessonIndex: editRowIndex,
-      handleEditLesson,
-      loadUploadedFiles
+      editActivityLessonIndex,
+      handleEditActivityLesson,
+      loadUploadedFiles,
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
@@ -44,9 +44,8 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
 
     const handleCloseAddContentModal = async () => {
       setIsAddContentModalOpen(false);
-      await loadUploadedFiles(activityIndex, true);
+      // await loadUploadedFiles(activityIndex, true);
     };
-
 
     return (
       <Flex direction="column" overflow={'auto'}>
@@ -60,8 +59,8 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             activityTypes={activityTypes}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
-            editRowIndex={editRowIndex}
-            handleEditLesson={handleEditLesson}
+            editRowIndex={editActivityLessonIndex}
+            handleEditLesson={handleEditActivityLesson}
             ref={ref}
             isPrinting={isPrinting}
             loadUploadedFiles={loadUploadedFiles}

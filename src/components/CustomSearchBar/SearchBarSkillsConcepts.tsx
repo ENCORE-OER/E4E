@@ -97,12 +97,10 @@ export default function SearchBarSkillsConcepts({
       });
       concepts.forEach((concept: SkillItemProps | OerConceptInfo) => {
         if (isOerConcept(concept) && !itemsMap.has(concept.name)) {
-          itemsMap.set(concept.name,
-            {
-              id: concept.id,
-              label: concept.name
-            }
-          );
+          itemsMap.set(concept.name, {
+            id: concept.id,
+            label: concept.name,
+          });
         } else if (!isOerConcept(concept) && !itemsMap.has(concept.label)) {
           itemsMap.set(concept.label, concept);
         }
