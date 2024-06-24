@@ -1,6 +1,6 @@
 type domainProps = {
   total: number;
-  idS: number[];
+  ids: number[];
 };
 
 export type MetricsOers = {

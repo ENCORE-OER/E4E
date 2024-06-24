@@ -10,5 +10,5 @@ export type LessonProps = {
   timeDuration: number;
   passFailConditions: PassFailConditionsProps[]; // At the moment only useful for the cards(tiles)
   compulsory?: boolean;
-  content?: ContentProps; // Links to the OERs?
+  content: ContentProps; // Links to the OERs?
 };

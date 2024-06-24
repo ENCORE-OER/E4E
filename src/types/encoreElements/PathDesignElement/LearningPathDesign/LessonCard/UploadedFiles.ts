@@ -1,4 +1,5 @@
 export type UploadedFilesProps = {
   fileUploaded: File;
-  urlFile: string;
+  fileName?: string;
+  urlFile?: string;
 };

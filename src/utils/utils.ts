@@ -8,9 +8,12 @@ import { useEffect, useState } from 'react';
 import {
   ArrayProps,
   GeneratedExerciseProps,
+  OerConceptInfo,
   OerInCollectionProps,
   Option,
   OptionsData,
+  SkillItemProps,
+  UploadedFilesProps,
 } from '../types/encoreElements';
 import { DomainsEnum } from '../types/encoreElements/oer/enums/Domains';
 
@@ -327,14 +330,40 @@ export const extractSetIds = (name: string) => {
   }
 };
 
+// Check if the varaible is OerInCollectionProps type
 export const isOerInCollectionProps = (
-  arr: any[]
-): arr is OerInCollectionProps[] => {
+  arr: any[] | any
+): arr is OerInCollectionProps[] | OerInCollectionProps => {
+  if (!Array.isArray(arr)) {
+    return 'concepts' in arr;
+  }
   return arr.length === 0 || 'concepts' in arr[0];
 };
 
+// Check if the varaible is UploadedFilesProps type
 export const isUploadedFilesProps = (
-  arr: any[]
-): arr is OerInCollectionProps[] => {
-  return arr.length === 0 || 'concepts' in arr[0];
+  arr: any | any[]
+): arr is UploadedFilesProps | UploadedFilesProps[] => {
+  if (!Array.isArray(arr)) {
+    return 'fileUploaded' in arr;
+  }
+  return arr.length === 0 || 'fileUploaded' in arr[0];
+};
+
+export const isOerConcept = (
+  arr: any | any[]
+): arr is OerConceptInfo | OerConceptInfo[] => {
+  if (!Array.isArray(arr)) {
+    return 'name' in arr;
+  }
+  return arr.length === 0 || 'name' in arr[0];
+};
+
+export const isSkillItem = (
+  arr: any | any[]
+): arr is SkillItemProps | SkillItemProps[] => {
+  if (!Array.isArray(arr)) {
+    return 'label' in arr;
+  }
+  return arr.length === 0 || 'label' in arr[0];
 };

@@ -1,34 +1,17 @@
 import { Button, Flex, Icon, Tag, TagLabel, Tooltip } from '@chakra-ui/react';
 import { MdOutlineCancel } from 'react-icons/md';
-import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import {
-  OerInCollectionProps,
-  UploadedFilesProps,
-} from '../../../types/encoreElements';
 
 export type TagSelectedResourceProps = {
   label: string;
   IconTag: React.ElementType;
-  oer?: OerInCollectionProps;
-  file?: UploadedFilesProps;
+  handleDeleteClick: () => void;
 };
 
 export default function TagSelectedResource({
   label,
   IconTag,
-  oer,
-  file,
+  handleDeleteClick
 }: TagSelectedResourceProps) {
-  const { removeSelectedResourceAddContent, removeUploadedFileAddContent } =
-    useLearningPathDesignContext();
-
-  const handleClick = () => {
-    if (oer) {
-      removeSelectedResourceAddContent(oer);
-    } else if (file) {
-      removeUploadedFileAddContent(file);
-    }
-  };
 
   return (
     <Tag
@@ -57,7 +40,7 @@ export default function TagSelectedResource({
           <TagLabel w="fit-content" maxW="100px" noOfLines={1}>
             {label}
           </TagLabel>
-          <Button size={'sm'} p={0} variant="ghost" onClick={handleClick}>
+          <Button size={'sm'} p={0} variant="ghost" onClick={handleDeleteClick}>
             <MdOutlineCancel fontSize={'x-large'} color="grey" />
           </Button>
         </Flex>

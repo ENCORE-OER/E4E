@@ -1,5 +1,5 @@
 export type AddContentModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  indexLesson?: number;
+  activityIndex: number;
 };

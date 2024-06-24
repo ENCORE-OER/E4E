@@ -47,13 +47,20 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const [filtered, setFiltered] = useState<
     (OerProps | OerFreeSearchProps | undefined)[]
   >([]); // used for the list of resourcess to show
-  const [byResourceType, setByResourceType] = useState<any>(null);
+  // const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
 
   const [isAscending, setAscending] = useState<boolean>(true);
   const [selectedSorting, setSelectedSorting] = useState<string>('title'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  // Discover tabs utilities
+  const [originalTypesQueryParams, setOriginalTypesQueryParams] = useState<number[]>([]);
+  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] = useState<number[]>([]);
+  const [typesSelected, setTypesSelected] = useState<string[]>([]);
+  const [domainsSelected, setDomainsSelected] = useState<number[]>([]);
+  const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
+
 
   // ============================ VENN DIAGRAM ============================
 
@@ -73,128 +80,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   //const isSmallerThan600px = useMediaQuery('(max-width: 600px)');
 
   // =======================================================================
-
-  //const [isCardInfoModalOpen, setCardInfoModalOpen] = useState<boolean>(false);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  /*const searchOERs = async (
-    skills: string[],
-    andOption: boolean,
-    orOption: boolean,
-    domains: string[],
-    types: string[],
-    audience: string[]
-  ) => {
-    setIsLoading(true);
-
-    const ID_ALL = '0';
-
-    //here we search the OERS using the query parameters
-
-    //const isArraySkills = Array.isArray(skills);
-    const isArrayDomains = Array.isArray(domains);
-    const isArrayTypes = Array.isArray(types);
-    const isArrayAudience = Array.isArray(audience);
-
-    const api = new APIV2(props.accessToken);
-
-    try {
-      let oers;
-
-      if (skills.length > 0) {
-        if (andOption) {
-          oers = await api.getOersInAND(skills);
-        } else if (orOption) {
-          oers = await api.getOersInOR(skills);
-        } else {
-          //console.log('I am here');
-          oers = await api.searchOERbySkillNoPages(skills);
-        }
-
-        console.log('oers: ', oers);
-
-        if (domains.length > 0 || types.length > 0 || audience.length > 0) {
-          // Filter based on domains, types, and audience
-          const filteredOers = oers?.filter((oer: OerProps) => {
-            const domain_Ids = Array.from(
-              new Set(
-                oer.skills?.flatMap((skill: OerSkillInfo) =>
-                  skill.domain.map(
-                    (dom: OerDomainInfo) => dom.id as unknown as string
-                  )
-                )
-              )
-            ); // list of domains in a single oer
-            console.log('domain_Ids: ', domain_Ids);
-            const type_Ids = oer.media_type?.map(
-              (mediaType: OerMediaTypeInfo) => mediaType.id as unknown as string
-            ); // list of type in a single oer
-            console.log('type_Ids: ', type_Ids);
-            const audience_Ids = oer.coverage?.map(
-              (aud: OerAudienceInfo) => aud.id as unknown as string
-            ); // list of audience in a single oer
-            console.log('audience_Ids: ', audience_Ids);
-
-            let domainMatch = false;
-            let typeMatch = false;
-            let audienceMatch = false;
-
-            // if 'All' is selected we don't filter by that parameter
-            if (isArrayDomains && !domain_Ids?.includes(ID_ALL)) {
-              domainMatch = andOption
-                ? domains.every((dom: string) => domain_Ids.includes(dom))
-                : domains.some((dom: string) => domain_Ids.includes(dom));
-            }
-
-            if (isArrayTypes && !domain_Ids?.includes(ID_ALL)) {
-              typeMatch = andOption
-                ? types.every((type: string) => type_Ids.includes(type))
-                : types.some((type: string) => type_Ids.includes(type));
-            }
-
-            if (isArrayAudience && !domain_Ids?.includes(ID_ALL)) {
-              audienceMatch = andOption
-                ? audience.every((aud: string) => audience_Ids.includes(aud))
-                : audience.some((aud: string) => audience_Ids.includes(aud));
-            }
-
-            if (andOption) {
-              return domainMatch && typeMatch && audienceMatch;
-            } else {
-              return domainMatch || typeMatch || audienceMatch;
-            }
-          });
-
-          console.log('filteredOers: ', filteredOers);
-
-          setFiltered(filteredOers);
-        } else {
-          setFiltered(oers);
-        }
-
-        //
-      } else if (
-        domains.length > 0 ||
-        audience.length > 0 ||
-        types.length > 0
-      ) {
-        // It's not an efficient solution, but it's the best for now
-        // TODO: return only the first 10 OERs. Recall the API on click on the next page button
-        oers = await api.searchOERbySkillNoPages(
-          skills,
-          domains,
-          types,
-          audience
-        );
-        setFiltered(oers);
-      }
-    } catch (error) {
-      throw error;
-    }
-
-    setEndSearch(true);
-    setIsLoading(false);
-  };*/
 
   // Method to run the search request
   const freeSearchOERs = async (
@@ -227,25 +112,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         audience.length > 0
       ) {
         // Search request
-        // const resp = await api.freeSearchKeywordsOers(
-        //   page,
-        //   keywords,
-        //   domains,
-        //   types,
-        //   audience,
-        //   order_by,
-        //   order_asc,
-        //   operator,
-        //   concepts ?? []
-        // );
-
         const resp = await api.searchBooleanOERs(
           page,
           keywords,
-          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 37) ? "True" : "False"), // If ALL is selected the array is empty. See "DropDownMenu" component
-          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 38) ? "True" : "False"),
-          // (domains.length === 0) ? undefined : (domains.some((domain: string | number) => domain === 39) ? "True" : "False"),
-          domains, // at the moment filtering by domain is not implemented by the API
+          domains,
           types,
           audience,
           order_by,
@@ -289,20 +159,9 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const searchCallbackEncoreTab = async (domainIds?: number[]) => {
-    alert('qui call back');
-  };
-
-  /*const getDataOerById = async (id_oer: number, signal?: AbortSignal) => {
-    const api = new APIV2(props.accessToken);
-
-    try {
-      const oer = await api.getOerById(id_oer, signal);
-      return oer[0];
-    } catch (error) {
-      throw error;
-    }
-  };*/
+  // const searchCallbackEncoreTab = async (domainIds?: number[]) => {
+  //   alert('qui call back');
+  // };
 
   // ==================================================================
   // --------------------------- API WITH PAGINATION ---------------------------
@@ -373,34 +232,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
   // ==================================================================
 
-  // const handlePageChange = (newPage: number) => {
-  //   setCurrentPage(newPage);
-  // };
-
-  // const handleSortingChange = (sortingName: string) => {
-  //   setSelectedSorting(sortingName);
-  // }
-
-  // const handleItemSortingClick = (sortingName: string) => {
-  //   if (sortingName === selectedSorting) {
-  //     setAscending(!isAscending);
-  //   } else {
-  //     handleSortingChange(sortingName);
-  //     setAscending(true);
-  //   }
-  // };
-
-  /*useEffect(() => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, page: 1, order_asc: isAscending.toString() },
-    });
-  }, [isAscending])*/
-
-  /*useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedSorting]);*/
-
   useEffect(() => {
     console.log('filtered: ', filtered);
   }, [filtered]);
@@ -424,14 +255,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const convertedData = JSON.parse(searchData);
 
       // TODO: add check if null
-      /*const skills = convertedData['selectedSkills'];
-      const andOption = convertedData['andOption'];
-      const orOption = convertedData['orOption'];
-      const domains = convertedData['domains'];
-      const types = convertedData['types'];
-      const audience = convertedData['audience'];
-  
-      searchOERs(skills, andOption, orOption, domains, types, audience);*/
 
       const keywords = convertedData['keywords'];
       //const andOption = convertedData['andOption'];
@@ -445,6 +268,17 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const concepts = convertedData['concepts'];
       const isDomainsFilter = convertedData['isDomainsFilter'];
       const isTypesFilter = convertedData['isTypesFilter'];
+
+      if (!isDomainsFilter && domains !== originalDomainsQueryParams) {
+        console.log("IS DOMAINS FILTER", isDomainsFilter);
+        console.log("DIFFERENT DOMAINS: ", domains !== originalDomainsQueryParams)
+        setOriginalDomainsQueryParams(domains);
+      }
+      if (!isTypesFilter && types !== originalTypesQueryParams) {
+        console.log("IS TYPES FILTER", isTypesFilter);
+        console.log("DIFFERENT TYPES:", types !== originalTypesQueryParams)
+        setOriginalTypesQueryParams(types);
+      }
 
       await freeSearchOERs(
         currentPage,
@@ -484,38 +318,20 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     }
   }, [router.query]);
 
-  /*useEffect(() => {
-    const searchData = localStorage.getItem('searchData');
 
-    if (!searchData) {
-      // TODO: handle redirect
-      router.push({
-        pathname: '/',
-      });
-      return;
-    }
-
-    const updatedSearchData = JSON.parse(searchData);
-
-    updatedSearchData.page = currentPage.toString();
-
-    localStorage.setItem('searchData', JSON.stringify(updatedSearchData));
-
-    router.push({
-      pathname: '/discover',
-      query: {
-        searchData: updatedSearchData,
-      },
-    });
-
-
-  }, [currentPage]);*/
+  useEffect(() => {
+    console.log(originalDomainsQueryParams);
+  }, [originalDomainsQueryParams]);
+  useEffect(() => {
+    console.log(originalTypesQueryParams);
+  }, [originalTypesQueryParams])
 
   // redirect to home page if no resources are found
   useEffect(() => {
     //setIsLoading(false);
 
     // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
+
     if (endSearch && OersLengthTotal === 0) {
       addToast({
         message: 'No resources found! You will be redirected to the home page.',
@@ -528,7 +344,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       }, 1000);
     } else if (endSearch) {
       addToast({
-        message: 'Search completed!',
+        message: 'Search successfully completed!',
         type: 'success',
       });
     }
@@ -580,7 +396,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -621,7 +437,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
@@ -632,9 +448,19 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           value={{
             filtered,
             setFiltered,
-            byResourceType,
-            setByResourceType,
+            // byResourceType,
+            // setByResourceType,
             setCurrentPage,
+            originalTypesQueryParams,
+            // setOriginalTypesQueryParams,
+            originalDomainsQueryParams,
+            // setOriginalDomainsQueryParams
+            typesSelected,
+            setTypesSelected,
+            domainsSelected,
+            setDomainsSelected,
+            conceptsSelected,
+            setConceptsSelected
           }}
         >
           <EncoreTab

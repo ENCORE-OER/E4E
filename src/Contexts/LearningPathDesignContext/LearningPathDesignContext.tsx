@@ -19,10 +19,11 @@ import {
   UploadedFilesProps,
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
+import { getAllFilesByActivityIndex } from '../../utils/indexedDB';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import {
   isOerInCollectionProps,
-  isUploadedFilesProps,
+  isUploadedFilesProps
 } from '../../utils/utils';
 
 // Context props
@@ -116,10 +117,12 @@ type LearnignPathDesignContextProps = {
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
   removeLessonActivity: (index: number) => void;
-  handleUpdateLessonContent: (
+  resetOersContent: (index: number) => void;
+  resetFilesContent: (index: number) => void;
+  handleUpdateActivityContent: (
     index: number,
     newContent: OerInCollectionProps[] | UploadedFilesProps[]
-  ) => void;
+  ) => Promise<void>;
 
   // Add Content - Selected Oers
   resourcesSelectedAddContent: OerInCollectionProps[];
@@ -134,6 +137,7 @@ type LearnignPathDesignContextProps = {
   addUploadedFilesAddContent: (
     files: UploadedFilesProps | UploadedFilesProps[]
   ) => void;
+  loadUploadedFiles: (activityIndex: number, isLessonView: boolean) => Promise<void>;
   removeUploadedFileAddContent: (file: UploadedFilesProps) => void;
   resetUploadedFilesAddContent: () => void;
 
@@ -688,13 +692,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Function to add a new activity
   const addEmptyLessonActivity = () => {
-    const newLessonActivity = {
+    const newLessonActivity: LessonProps = {
       lessonTitle: '',
       lessonType: '',
       activityType: '',
       activityDescription: '',
       timeDuration: 0,
       passFailConditions: [],
+      content: {
+        oers: [],
+        uploadedFiles: []
+      }
     };
     setLessonActivities((prevLessonActivities: LessonProps[]) => [
       ...prevLessonActivities,
@@ -716,31 +724,124 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   //     return arr.length === 0 || 'concepts' in arr[0];
   // }
 
-  const handleUpdateLessonContent = (
-    lessonIndex: number,
-    newContent: OerInCollectionProps[] | UploadedFilesProps[]
-    // newUploadedFilesContent?: UploadedFilesProps[],
-  ) => {
-    console.log('Updating lesson content');
+  const resetOersContent = (activityIndex: number,) => {
     setLessonActivities((prevLessons: LessonProps[]) => {
       const updatedLessons = [...prevLessons];
-      if (updatedLessons[lessonIndex]) {
-        // Add new selected OERs
-        if (isOerInCollectionProps(newContent)) {
-          updatedLessons[lessonIndex].content = {
-            ...updatedLessons[lessonIndex].content,
-            oers: newContent,
-          };
-          // Add new uploaded files
-        } else if (isUploadedFilesProps(newContent)) {
-          updatedLessons[lessonIndex].content = {
-            ...updatedLessons[lessonIndex].content,
-            uploadedFiles: newContent,
-          };
-        }
+      if (updatedLessons[activityIndex]) {
+        updatedLessons[activityIndex].content.oers = []
       }
       return updatedLessons;
     });
+  }
+
+  const resetFilesContent = (activityIndex: number,) => {
+    setLessonActivities((prevLessons: LessonProps[]) => {
+      const updatedLessons = [...prevLessons];
+      if (updatedLessons[activityIndex]) {
+        updatedLessons[activityIndex].content.uploadedFiles = []
+      }
+      return updatedLessons;
+    });
+  }
+
+  const handleUpdateActivityContent = async (
+    activityIndex: number,
+    newContent: OerInCollectionProps[] | UploadedFilesProps[]
+  ) => {
+    console.log('Updating lesson content');
+    // Add new selected OERs
+    if (isOerInCollectionProps(newContent)) {
+      console.log('NEW CONTENT - Oers', newContent);
+      try {
+        setLessonActivities((prevLessons: LessonProps[]) => {
+          const updatedLessons = [...prevLessons];
+          if (updatedLessons[activityIndex]) {
+            updatedLessons[activityIndex].content.oers = newContent
+          }
+          return updatedLessons;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      // Add new uploaded files
+    } else if (isUploadedFilesProps(newContent)) {
+      console.log('Upload the file...');
+      console.log('NEW CONTENT - Files', newContent);
+      try {
+        setLessonActivities((prevLessons: LessonProps[]) => {
+          const updatedLessons = [...prevLessons];
+          if (updatedLessons[activityIndex]) {
+            updatedLessons[activityIndex].content.uploadedFiles = [
+              // ...(updatedLessons[activityIndex].content.uploadedFiles || []),
+              ...newContent.map((content: UploadedFilesProps) => ({
+                fileUploaded: content.fileUploaded,
+                fileName: content.fileUploaded.name,
+                urlFile: content.urlFile
+              }))
+            ];
+          }
+          return updatedLessons;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // else if (newContent.every((file) => file instanceof File)) {
+    //   console.log('Upload the file...');
+    //   console.log('NEW CONTENT', newContent);
+    //   try {
+    //     const newFiles: UploadedFilesProps[] = await saveMultipleFilesToIndexedDB(newContent, activityIndex);
+    //     setLessonActivities((prevLessons: LessonProps[]) => {
+    //       const updatedLessons = [...prevLessons];
+    //       if (updatedLessons[activityIndex]) {
+    //         updatedLessons[activityIndex].content.uploadedFiles = [
+    //           // ...(updatedLessons[activityIndex].content.uploadedFiles || []),
+    //           ...newFiles,
+    //         ];
+    //       }
+    //       return updatedLessons;
+    //     });
+    //   } catch (error) {
+    //     addToast({
+    //       message: `Error saving the files in the database. ${error}`,
+    //       type: 'error'
+    //     })
+    //   }
+    // }
+    // setLessonActivities((prevLessons: LessonProps[]) => {
+    //   const updatedLessons = [...prevLessons];
+    //   if (updatedLessons[lessonIndex]) {
+    //     if (isOerInCollectionProps(newContent)) {
+    //       updatedLessons[lessonIndex].content.oers = newContent
+
+    //     } else if (isUploadedFilesProps(newContent)) {
+    //       console.log('Upload the file...');
+    //       console.log('NEW CONTENT', newContent);
+    //       // updatedLessons[lessonIndex].content = {
+    //       //   ...updatedLessons[lessonIndex].content,
+    //       //   uploadedFiles: newContent.map((uploadedFile: UploadedFilesProps) => {
+    //       //     const content: UploadedFilesProps[] = [];
+    //       //     content.push({
+    //       //       fileUploaded: uploadedFile.fileUploaded,
+    //       //       urlFile: uploadedFile.urlFile
+    //       //     })
+    //       //   })
+    //       // };
+
+    //       // // Append new uploaded files
+    //       // updatedLessons[lessonIndex].content.uploadedFiles = [
+    //       //   ...updatedLessons[lessonIndex].content.uploadedFiles,
+    //       //   ...newContent.map((uploadedFile: UploadedFilesProps) => ({
+    //       //     fileUploaded: uploadedFile.fileUploaded,
+    //       //     urlFile: uploadedFile.urlFile
+    //       //   }))
+    //       // ];
+    //       updatedLessons[lessonIndex].content.uploadedFiles = newContent;
+    //       console.log("UPDATED LESSONS - UPLOADED FILE", updatedLessons[lessonIndex].content.uploadedFiles);
+    //     }
+    //   }
+    //   return updatedLessons;
+    // });
   };
 
   // TO_CHECK: useful?
@@ -789,63 +890,44 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [resourcesSelectedAddContent, setResourcesSelectedAddContent] =
     useState<OerInCollectionProps[]>([]);
 
-  // Add the selected resource to the array
+  // Add selected resources to the temp view
   const addSelectedResourcesAddContent = (
     newResources: OerInCollectionProps | OerInCollectionProps[]
   ): void => {
     try {
-      // If are more resources
-      if (Array.isArray(newResources)) {
-        // Check if there is a new resource already selected
-        const isAllNewResources = resourcesSelectedAddContent.some(
-          (resourceSelected: OerInCollectionProps) =>
-            newResources.forEach(
-              (resource: OerInCollectionProps) =>
-                resourceSelected.id === resource.id
+      // Helper function to add resources to the resourcesSelectedAddContent array
+      const addResources = (resourcesToAdd: OerInCollectionProps[]) => {
+        // Filter out any resources that are already in the resourcesSelectedAddContent array
+        const uniqueNewResources = resourcesToAdd.filter(
+          (resource) =>
+            !resourcesSelectedAddContent.some(
+              (resourceSelected) => resourceSelected.id === resource.id
             )
         );
 
-        // If NO, add all the resources
-        if (isAllNewResources) {
-          setResourcesSelectedAddContent(
-            (prevResources: OerInCollectionProps[]) => [
-              ...prevResources,
-              ...newResources,
-            ]
-          );
-          // Otherwise check on each resource and add only the ones not already selected
-        } else {
-          newResources.forEach((resource: OerInCollectionProps) => {
-            const isResourceIndexAlreadyAdded =
-              resourcesSelectedAddContent.some(
-                (resourceSelected: OerInCollectionProps) =>
-                  resourceSelected.id === resource.id
-              );
-            if (!isResourceIndexAlreadyAdded) {
-              setResourcesSelectedAddContent(
-                (prevResources: OerInCollectionProps[]) => [
-                  ...prevResources,
-                  resource,
-                ]
-              );
-              // Update the UI or show a success notification
-            } else {
-              console.error('Resource already selected');
-            }
-          });
-        }
-
-        // If is only one resource
-      } else {
-        setResourcesSelectedAddContent(
-          (prevResources: OerInCollectionProps[]) => [
+        // If there are unique new resources, add them to the resourcesSelectedAddContent array
+        if (uniqueNewResources.length > 0) {
+          setResourcesSelectedAddContent((prevResources) => [
             ...prevResources,
-            newResources,
-          ]
-        );
+            ...uniqueNewResources,
+          ]);
+        } else {
+          // Log an error if all new resources are already selected
+          console.error('All new resources are already selected');
+        }
+      };
+
+      // Check if newResources is an array
+      if (Array.isArray(newResources)) {
+        // If it is an array, call addResources with the array
+        addResources(newResources);
+      } else {
+        // If it is a single resource, wrap it in an array and call addResources
+        addResources([newResources]);
       }
     } catch (error) {
-      // Handle errors or show an error notification
+      // Log any errors that occur during the process
+      console.error('An error occurred while adding resources:', error);
     }
   };
 
@@ -883,51 +965,70 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     newFiles: UploadedFilesProps | UploadedFilesProps[]
   ): void => {
     try {
-      // If are more resources
-      if (Array.isArray(newFiles)) {
-        // Check if there is a new file already uploaded
-        const isAllNewResources = uploadedFilesAddContent.some(
-          (resourceSelected: UploadedFilesProps) =>
-            newFiles.forEach(
-              (resource: UploadedFilesProps) =>
-                resourceSelected.fileUploaded.name ===
-                resource.fileUploaded.name
+      // Helper function to add files to the uploadedFilesAddContent array
+      const addFiles = (filesToAdd: UploadedFilesProps[]) => {
+        // Filter out any files that are already in the uploadedFilesAddContent array
+        const uniqueNewFiles = filesToAdd.filter(
+          (newFile) =>
+            !uploadedFilesAddContent.some(
+              (existingFile) =>
+                existingFile.fileUploaded.name === newFile.fileUploaded.name
             )
         );
 
-        // If NO, add all the files
-        if (isAllNewResources) {
-          setUploadedFilesAddContent((prevFiles: UploadedFilesProps[]) => [
+        // If there are unique new files, add them to the uploadedFilesAddContent array
+        if (uniqueNewFiles.length > 0) {
+          setUploadedFilesAddContent((prevFiles) => [
             ...prevFiles,
-            ...newFiles,
+            ...uniqueNewFiles,
           ]);
-          // Otherwise check on each files and add only the ones not already present in the array
         } else {
-          newFiles.forEach((file: UploadedFilesProps) => {
-            const isFileAlreadyAdded = uploadedFilesAddContent.includes(file);
-            if (!isFileAlreadyAdded) {
-              setUploadedFilesAddContent((prevFiles: UploadedFilesProps[]) => [
-                ...prevFiles,
-                file,
-              ]);
-              // Update the UI or show a success notification
-            } else {
-              console.error('File already added');
-            }
-          });
+          // Log an error if all new files are already added
+          console.error('All new files are already added');
         }
+      };
 
-        // If is only one resource
+      // Check if newFiles is an array
+      if (Array.isArray(newFiles)) {
+        // If it is an array, call addFiles with the array
+        addFiles(newFiles);
       } else {
-        setUploadedFilesAddContent((prevFiles: UploadedFilesProps[]) => [
-          ...prevFiles,
-          newFiles,
-        ]);
+        // If it is a single file, wrap it in an array and call addFiles
+        addFiles([newFiles]);
       }
     } catch (error) {
-      // Handle errors or show an error notification
+      // Log any errors that occur during the process
+      console.error('An error occurred while adding files:', error);
     }
   };
+
+
+  const loadUploadedFiles = async (activityIndex: number, isLessonView: boolean) => {
+    console.log("LOAD FILES...");
+    try {
+      const validFiles = await getAllFilesByActivityIndex(activityIndex);
+      console.log("VALID FILES", validFiles);
+
+      // We are in AddContent
+      if (!isLessonView) {
+        if (validFiles.length > 0) {
+          addUploadedFilesAddContent(validFiles);
+        }
+        // We are displaying the content in the table or tiles
+      } else {
+        if (validFiles.length > 0) {
+          await handleUpdateActivityContent(activityIndex, validFiles);
+        } else {
+          resetFilesContent(activityIndex);
+        }
+      }
+    } catch (error) {
+      addToast({
+        message: `Error loading the files from database. ${error}`,
+        type: 'error'
+      })
+    }
+  }
 
   // Remove the selected file from the array
   const removeUploadedFileAddContent = (
@@ -956,6 +1057,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // =============================================================================================================
 
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
+
+  useEffect(() => {
+    console.log("Lesson activities", lessonActivities);
+  }, [lessonActivities]);
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -1155,7 +1260,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities,
         addEmptyLessonActivity,
         removeLessonActivity,
-        handleUpdateLessonContent,
+        resetOersContent,
+        resetFilesContent,
+        handleUpdateActivityContent,
 
         // Add content - Oers
         resourcesSelectedAddContent,
@@ -1166,6 +1273,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         // Add content - files
         uploadedFilesAddContent,
         addUploadedFilesAddContent,
+        loadUploadedFiles,
         removeUploadedFileAddContent,
         resetUploadedFilesAddContent,
 

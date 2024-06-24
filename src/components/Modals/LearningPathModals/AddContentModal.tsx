@@ -17,7 +17,8 @@ import {
   OerInCollectionProps,
   UploadedFilesProps,
 } from '../../../types/encoreElements';
-import { useHasHydrated } from '../../../utils/utils';
+import { removeFileFromIndexedDB, saveMultipleFilesToIndexedDB } from '../../../utils/indexedDB';
+import { isOerInCollectionProps, isUploadedFilesProps, useHasHydrated } from '../../../utils/utils';
 import IconAttach from '../../Icons/IconAttach/IconAttach';
 import IconDocument from '../../Icons/IconDocuments/IconDocument';
 import IconSave from '../../Icons/IconSave/IconSave';
@@ -27,35 +28,57 @@ import TagSelectedResource from '../../Tags/TagsAddContent/TagSelectedResource';
 export default function AddContentModal({
   isOpen,
   onClose,
-  indexLesson,
+  activityIndex,
 }: AddContentModalProps) {
   const hydrated = useHasHydrated();
   const {
+    lessonActivities,
     // AddContent - Oers
     resourcesSelectedAddContent,
     addSelectedResourcesAddContent,
-    lessonActivities,
     resetSelectedResourcesAddContent,
     // AddContent - files
     uploadedFilesAddContent,
-    addUploadedFilesAddContent,
+    // addUploadedFilesAddContent,
     resetUploadedFilesAddContent,
-    handleUpdateLessonContent,
+    handleUpdateActivityContent,
+    loadUploadedFiles,
+    removeSelectedResourceAddContent,
+    removeUploadedFileAddContent,
+    resetOersContent,
+    resetFilesContent
   } = useLearningPathDesignContext();
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     try {
       if (resourcesSelectedAddContent?.length > 0) {
-        handleUpdateLessonContent(
-          indexLesson !== undefined ? indexLesson : -1,
+        await handleUpdateActivityContent(
+          activityIndex !== undefined ? activityIndex : -1,
           resourcesSelectedAddContent
         );
+      } else if (resourcesSelectedAddContent?.length === 0 &&
+        lessonActivities[activityIndex].content.oers.length > 0
+      ) {
+        resetOersContent(activityIndex);
       }
       if (uploadedFilesAddContent.length > 0) {
-        handleUpdateLessonContent(
-          indexLesson !== undefined ? indexLesson : -1,
-          uploadedFilesAddContent
+        console.log("UPDATE FILES...");
+        // await handleUpdateActivityContent(
+        //   activityIndex !== undefined ? activityIndex : -1,
+        //   uploadedFilesAddContent.map((file: UploadedFilesProps) => file.fileUploaded)  // Passing only File[] I'm saving on the DB
+        // );(
+        const filesToSave = uploadedFilesAddContent.filter((uploadedFile: UploadedFilesProps) =>
+          !lessonActivities[activityIndex].content.uploadedFiles.some((fileLessonActivity: UploadedFilesProps) =>
+            fileLessonActivity.fileName === uploadedFile.fileName
+          )
         );
+        console.log("FILES TO SAVE", filesToSave);
+        if (filesToSave.length > 0) {
+          await saveMultipleFilesToIndexedDB(filesToSave.map((file: UploadedFilesProps) => file.fileUploaded), activityIndex);
+          await loadUploadedFiles(activityIndex, true);
+        }
+      } else if (uploadedFilesAddContent.length === 0 && lessonActivities[activityIndex].content.uploadedFiles.length > 0) {
+        resetFilesContent(activityIndex);
       }
       onClose();
     } catch (error) {
@@ -63,21 +86,30 @@ export default function AddContentModal({
     }
   };
 
-  useEffect(() => {
-    console.log(resourcesSelectedAddContent);
-  }, [resourcesSelectedAddContent]);
+  const handleDeleteTagClick = async (item: OerInCollectionProps | UploadedFilesProps) => {
+    if (isOerInCollectionProps(item)) {
+      removeSelectedResourceAddContent(item);
+    } else if (isUploadedFilesProps(item)) {
+      removeUploadedFileAddContent(item);
+      await removeFileFromIndexedDB(`${activityIndex}_${item.fileUploaded.name}`);
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(resourcesSelectedAddContent);
+  // }, [resourcesSelectedAddContent]);
 
   // Opening the modal I have to take the get the already selected resources
   useEffect(() => {
-    if (isOpen) {
-      console.log('PRENDO');
-      addSelectedResourcesAddContent(
-        lessonActivities[indexLesson ?? -1]?.content?.oers ?? []
-      );
-      addUploadedFilesAddContent(
-        lessonActivities[indexLesson ?? -1]?.content?.uploadedFiles ?? []
-      );
+    const fetch = async () => {
+      if (isOpen) {
+        addSelectedResourcesAddContent(
+          lessonActivities[activityIndex ?? -1]?.content?.oers ?? []
+        );
+        await loadUploadedFiles(activityIndex, false);
+      }
     }
+    fetch();
   }, [isOpen]);
 
   return (
@@ -105,25 +137,25 @@ export default function AddContentModal({
                   gap={1}
                   wrap="wrap"
                 >
-                  {resourcesSelectedAddContent.length > 0 &&
+                  {hydrated && resourcesSelectedAddContent.length > 0 &&
                     resourcesSelectedAddContent?.map(
                       (resource: OerInCollectionProps, index: number) => (
                         <TagSelectedResource
                           key={`oer-${index}`}
                           label={resource.title}
                           IconTag={IconAttach}
-                          oer={resource}
+                          handleDeleteClick={() => handleDeleteTagClick(resource)}
                         />
                       )
                     )}
-                  {uploadedFilesAddContent.length > 0 &&
+                  {hydrated && uploadedFilesAddContent.length > 0 &&
                     uploadedFilesAddContent?.map(
                       (resource: UploadedFilesProps, index: number) => (
                         <TagSelectedResource
                           key={`file-${index}`}
                           label={resource.fileUploaded.name}
                           IconTag={IconDocument}
-                          file={resource}
+                          handleDeleteClick={() => handleDeleteTagClick(resource)}
                         />
                       )
                     )}
@@ -151,7 +183,12 @@ export default function AddContentModal({
                   <Button
                     isDisabled={
                       resourcesSelectedAddContent.length === 0 &&
-                      lessonActivities[indexLesson ?? -1]?.content?.oers
+                      uploadedFilesAddContent.length === 0 &&
+                      activityIndex !== undefined &&
+                      // lessonActivities[indexLesson]?.content?.oers &&
+                      lessonActivities[activityIndex]?.content?.oers
+                        ?.length === 0 &&
+                      lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
                     w="fit-content"
@@ -171,10 +208,10 @@ export default function AddContentModal({
 
         <ModalBody overflowY={'auto'}>
           <Flex w="100%" justify={'center'}>
-            {hydrated && <AddContentTabs />}
+            {hydrated && <AddContentTabs activityIndex={activityIndex} />}
           </Flex>
         </ModalBody>
       </ModalContent>
-    </Modal>
+    </Modal >
   );
 }

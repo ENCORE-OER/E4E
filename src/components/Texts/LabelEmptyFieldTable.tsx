@@ -10,7 +10,7 @@ export default function LabelEmptyFieldTable({
   fontSize,
 }: LabelEmptyFieldTableProps) {
   return (
-    <Text fontWeight="light" fontSize={fontSize || 'small'} color={'gray.400'}>
+    <Text fontWeight="light" fontSize={fontSize || 'small'} color={'gray.400'} cursor="default">
       {label}
     </Text>
   );

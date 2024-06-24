@@ -1,5 +1,5 @@
 export type OerConceptInfo = {
   id: number;
-  label: string;
+  name: string;
   count?: number;
 };

@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
-import { OerProps } from '../../../types/encoreElements';
+import { MetricsOers, OerProps } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import {
   extractSetIds,
@@ -34,7 +34,7 @@ type baseSetsProps = {
   domainId: number;
 };
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -43,6 +43,9 @@ export const TabDomains = ({}: TabDomainsProps) => {
   const {
     filtered,
     setCurrentPage,
+    originalDomainsQueryParams,
+    domainsSelected,
+    setDomainsSelected
     // setFiltered
   } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,10 +57,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
   // const [previousContent, setPreviousContent] = useState<
   //   (OerProps | undefined | OerFreeSearchProps)[]
   // >([]);
-
-  const [firstDomains, setFirstDomains] = useState<number[]>([]);
-
-  const [selectedOERIds, setSelectedOERIds] = useState<number[]>([]);
 
   // ============================ VENN DIAGRAM ============================
   // To make the venn diagram responsive
@@ -102,11 +101,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (
       oer:
         | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -173,22 +172,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
   const combinations = useMemo(() => ({ mergeColors }), []);
 
-  /* const onClickDiagram = async (selection: any) => {
- 
-     if (!selection) return;
-     const oerIds = selection.elems;
-     updateOers(oerIds);
- 
-   };
- 
- 
-   const updateOers = (ids: string[]) => {
-     // 'filtered' is an array of OER objects
-     // Filter the 'filtered' array to include only OERs with matching IDs
-     const filteredOERs = filtered?.filter((oer: any) => ids.includes(oer.id.toString()));
-     setFiltered(filteredOERs);
-   };*/
-
   const updateQuery = async (newDomainIds: number[], isFilter: boolean) => {
     // Get search data from the localStorage
     const searchData = localStorage.getItem('searchData');
@@ -252,12 +235,12 @@ export const TabDomains = ({}: TabDomainsProps) => {
     if (domainIds.length === 0) {
       return;
       // Check if the selected IDs are equal to the currently selected IDs
-    } else if (arraysEqual(domainIds, selectedOERIds)) {
+    } else if (arraysEqual(domainIds, domainsSelected)) {
       // Second click on the same slice, reset to initial state
       // Reset the query
 
       setCurrentPage(1);
-      await updateQuery(firstDomains, false);
+      await updateQuery(originalDomainsQueryParams, false);
 
       // setSelectedOERIds([]);
       // setFiltered(previousContent);
@@ -265,7 +248,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
       // TODO: initial API call
     } else {
       // First click on a slice, update the query
-      setSelectedOERIds(domainIds);
+      setDomainsSelected(domainIds);
       setCurrentPage(1);
       await updateQuery(domainIds, true);
 
@@ -295,27 +278,6 @@ export const TabDomains = ({}: TabDomainsProps) => {
     return true;
   };
 
-  useEffect(() => {
-    if (firstDomains.length === 0) {
-      // Get search data from the localStorage
-      const searchData = localStorage.getItem('searchData');
-
-      if (!searchData) {
-        console.error('searchData not found in localStorage');
-        // TODO: handle redirect
-        router.push({
-          pathname: '/',
-        });
-        return;
-      }
-
-      // Convert the data in a JSON format
-      const convertedData = JSON.parse(searchData);
-      const domains = convertedData['domains'] || [''];
-      setFirstDomains(domains);
-    }
-  }, []);
-
   // update metrics
   useEffect(() => {
     // inside useEffect is not allowed to use async directly. You have to create a function inside useEffect and call it immediately.
@@ -340,7 +302,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
         const isTypesFilter = convertedData['isTypesFilter'];
 
         // api get the Encore Metrics (Num of Oers and IDs for each Skill)
-        const resp_metrics: any = await API.getMetricsTabDomains(
+        const resp_metrics: MetricsOers = await API.getMetricsTabDomains(
           keywords,
           domains,
           types,
@@ -464,11 +426,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
               fontSizes={
                 isSmallerScreen
                   ? {
-                      setLabel: '12px',
-                    }
+                    setLabel: '12px',
+                  }
                   : {
-                      setLabel: '15px',
-                    }
+                    setLabel: '15px',
+                  }
               }
             />
           </Flex>

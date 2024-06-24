@@ -16,15 +16,19 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
+  const {
+    filtered,
+    setCurrentPage,
+    conceptsSelected,
+    setConceptsSelected
+  } = useContext(DiscoveryContext);
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptInfo[]>([]);
-  const { filtered, setCurrentPage } = useContext(DiscoveryContext);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
   //const [conceptCounts, setConceptCounts] = useState<Record<number, number>>({});
   const [visibleTags, setVisibleTags] = useState<number>(50); // Initial number of tags to show
   const loadMoreStep = 50; // Number of tags to load when clicking on "View More"
@@ -118,7 +122,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     //setConceptSelected(true);
     setConceptsSelected((prevConceptsSelected: string[]) => [
       ...prevConceptsSelected,
-      selectedTag.label,
+      selectedTag.name,
     ]);
     setCurrentPage(1);
     await updateQuery(selectedTag.id);
@@ -191,11 +195,11 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         // const tagsArray = resultArray
 
         // Populate concepts tags
-        const tagsArray = respAPI.map(({ id, label }) => ({
+        const tagsArray = respAPI.map(({ id, name }) => ({
           //value: String(text),
           //count: Number(value),
           id,
-          label,
+          name,
         }));
         // Filter out the concepts that appear less than N times
         //.filter((tag) => tag.count > 2); // here we set the minimum number of times a concept should appear in the OERs to be considered relevant to be shown in the map of concepts
@@ -304,7 +308,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
                   cursor: 'pointer',
                 }}
               >
-                {tag?.label}
+                {tag?.name}
               </span>
             )}
           />

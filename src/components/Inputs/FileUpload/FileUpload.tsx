@@ -1,23 +1,22 @@
 import { Flex, Input } from '@chakra-ui/react';
 import React, { useRef } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
+// import { UploadedFilesProps } from '../../../types/encoreElements';
 import { UploadedFilesProps } from '../../../types/encoreElements';
+import { removeFileFromIndexedDB } from '../../../utils/indexedDB';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
+import { useHasHydrated } from '../../../utils/utils';
 import BoxUploadedFile from '../../Boxes/BoxUploadedFile';
 import UploadButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
-// import "./FileUpload.css";
+import { TabUploadFilesProps } from '../../Tabs/AddContentTabs/TabUploadFiles';
 
-const FileUpload: React.FC = () => {
+const FileUpload: React.FC<TabUploadFilesProps> = (props) => {
+  const { activityIndex } = props;
   const inputRef = useRef<HTMLInputElement>(null);
-  // const [selectedFiles, setSelectedFiles] = useState<UploadedFilesProps[]>([]);
-  const {
-    uploadedFilesAddContent,
-    addUploadedFilesAddContent,
-    removeUploadedFileAddContent,
-  } = useLearningPathDesignContext();
+  const { uploadedFilesAddContent, addUploadedFilesAddContent, removeUploadedFileAddContent } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
+  const hydrated = useHasHydrated();
 
-  // Validation function
   const validateFiles = (files: File[]): string | undefined => {
     const MAX_FILE_SIZE_MB = 10;
     for (const file of files) {
@@ -29,24 +28,25 @@ const FileUpload: React.FC = () => {
     return undefined;
   };
 
-  // Handle the change event when a file is selected
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
+    console.log("FILES: ", files);
     if (files && files.length > 0) {
       const filesArray = Array.from(files);
       const validationError = validateFiles(filesArray);
       if (validationError) {
-        // Handle error appropriately
-        addToast({
-          message: 'The selected files are too big!',
-          type: 'error',
-        });
+        addToast({ message: 'The selected files are too big!', type: 'error' });
       } else {
-        const newFiles: UploadedFilesProps[] = filesArray.map((file: File) => ({
-          fileUploaded: file,
-          urlFile: URL.createObjectURL(file),
-        }));
-        // setSelectedFiles((prevFiles: UploadedFilesProps[]) => [...prevFiles, ...newFiles]);
+        const newFiles: UploadedFilesProps[] = filesArray.map((file: File) => (
+          // file
+          {
+            fileUploaded: file,
+            urlFile: URL.createObjectURL(file)
+          }
+        ));
+
+        // Save files to IndexedDB and update the state
+        // newFiles.forEach(file => saveFileToIndexedDB(file.fileUploaded));
         addUploadedFilesAddContent(newFiles);
       }
     }
@@ -56,65 +56,41 @@ const FileUpload: React.FC = () => {
     inputRef.current?.click();
   };
 
-  // function arrayToFileList(array: File[] | null): FileList | null {
-  //     if (array !== null && array.length > 0) {
-  //         const dataTransfer = new DataTransfer();
-  //         array.forEach(file => {
-  //             dataTransfer.items.add(file);
-  //         });
-  //         return dataTransfer.files;
-  //     } else {
-  //         return null;
-  //     }
-  // }
+  const handleRemoveClick = async (file: UploadedFilesProps) => {
+    try {
+      removeUploadedFileAddContent(file);
+      await removeFileFromIndexedDB(`${activityIndex}_${file.fileUploaded.name}`);
+    } catch (error) {
+      addToast({
+        message: 'Error removing a file.',
+        type: 'error'
+      })
+    }
+  }
 
-  // const removeFile = (fileName: string) => {
-  //     setSelectedFiles((prevFiles: UploadedFilesProps[]) => {
-  //         const fileToRemove = prevFiles.find(file => file.fileUploaded.name === fileName);
-  //         if (fileToRemove) {
-  //             URL.revokeObjectURL(fileToRemove.urlFile);
-  //         }
-  //         return prevFiles.filter(file => file.fileUploaded.name !== fileName);
-  //     });
-  // };
+
+  // useEffect(() => {
+  //   // Load previously saved files from IndexedDB when the component mounts
+  //   loadUploadedFiles(activityIndex, false);
+  // }, []);
 
   return (
     <Flex direction="column" justify="center" gap={2} pt={5}>
-      {/* Hidden file input element */}
-      {/* <input
-                type="file"
-                ref={inputRef}
-                onChange={handleOnChange}
-                // style={{ display: "none" }}
-                hidden
-                multiple
-                accept="application/*"
-            /> */}
-      <Input
-        type="file"
-        ref={inputRef}
-        onChange={handleOnChange}
-        // style={{ display: "none" }}
-        hidden
-        multiple
-        accept="application/*"
-      />
-
-      {/* Button to trigger the file input dialog */}
+      <Input type="file" ref={inputRef} onChange={handleOnChange} hidden multiple accept="application/*" />
       <UploadButton handleUploadFile={onChooseFile} />
 
-      {uploadedFilesAddContent && (
+      {hydrated && uploadedFilesAddContent && (
         <Flex gap={2} direction="column">
-          {uploadedFilesAddContent.map(
-            (file: UploadedFilesProps, index: number) => (
-              <BoxUploadedFile
-                key={index}
-                fileName={file.fileUploaded.name}
-                urlFile={file.urlFile}
-                handleRemoveClick={() => removeUploadedFileAddContent(file)}
-              />
-            )
-          )}
+          {uploadedFilesAddContent.map((file: UploadedFilesProps, index: number) => (
+            <BoxUploadedFile
+              key={index}
+              fileName={file.fileUploaded.name}
+              urlFile={file.urlFile ?? ''}
+              handleRemoveClick={async () => {
+                await handleRemoveClick(file);
+              }}
+            />
+          ))}
         </Flex>
       )}
     </Flex>

@@ -20,4 +20,8 @@ export interface TableLearningPathProps {
   handleAddContentClick: (index: number) => void;
   removeLessonActivity: (index: number) => void;
   isPrinting: boolean;
+  loadUploadedFiles: (
+    activityIndex: number,
+    isLessonView: boolean
+  ) => Promise<void>;
 }

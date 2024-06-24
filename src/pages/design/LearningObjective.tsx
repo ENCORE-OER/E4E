@@ -14,6 +14,7 @@ import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGe
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { resetIndexedDB } from '../../utils/indexedDB';
 import { useIsSmallerScreen } from '../../utils/utils';
 
 const Home = (/*props: DiscoverPageProps*/) => {
@@ -42,6 +43,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     lessonActivities,
     resourcesSelectedAddContent,
     resetSelectedResourcesAddContent,
+    uploadedFilesAddContent,
+    resetUploadedFilesAddContent,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -188,12 +191,20 @@ const Home = (/*props: DiscoverPageProps*/) => {
         handleDefaultLearningContext();
       }
 
-      // Reset the variable
+      // Reset the variables
       if (resourcesSelectedAddContent.length > 0) {
         resetSelectedResourcesAddContent();
       }
+      if (uploadedFilesAddContent.length > 0) {
+        resetUploadedFilesAddContent();
+      }
+
+
 
       if (handleGenerationFunction) {
+
+        resetIndexedDB();
+
         console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan
         const isPossibleToContinue = await handleGenerationFunction();
@@ -341,7 +352,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -350,7 +361,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -436,7 +447,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             SPACING={SPACING}
             handleResetAll={handleResetAll}
             handleNextClick={handleNextClick}
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>

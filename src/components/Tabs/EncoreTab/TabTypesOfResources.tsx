@@ -20,8 +20,14 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
-  const { filtered, setCurrentPage } = useContext(DiscoveryContext);
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+  const {
+    filtered,
+    setCurrentPage,
+    originalTypesQueryParams,
+    typesSelected,
+    setTypesSelected
+  } = useContext(DiscoveryContext);
   const hydrated = useHasHydrated();
   const router = useRouter();
   const API = useMemo(() => new APIV2(undefined), []);
@@ -30,8 +36,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const [filteredDataObject, setFilteredDataObject] = useState<
     DataObjectProps | undefined
   >(undefined);
-  const [selectedSlice, setSelectedSlice] = useState<number | null>(null);
-  const [typesSelected, setTypesSelected] = useState<string[]>([]);
+  // const [lastSelectedTypeId, setLastSelectedTypeId] = useState<number | null>(null);  // Id of the last type selected
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -44,7 +49,8 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
 
   const updateQuery = async (
     newType: number | number[],
-    isFilter?: boolean
+    isRemovingType: boolean,
+    isFilter: boolean,
   ) => {
     // Get search data from the localStorage
     const searchData = localStorage.getItem('searchData');
@@ -60,8 +66,13 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     if (types.length > 0 && Array.isArray(newType)) {
       types = newType;
     } else {
-      const updatedTypes = [...types, newType.toString()];
-      types = updatedTypes;
+      if (!isRemovingType) {
+        const updatedTypes = [...types, newType.toString()];
+        types = updatedTypes;
+      } else {
+        const updatedTypes = [...types].filter((type: string) => type !== newType.toString());
+        types = updatedTypes;
+      }
     }
     convertedData['types'] = types;
     convertedData['isTypesFilter'] = isFilter;
@@ -80,34 +91,46 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   };
 
   const handleResetClick = async () => {
-    setSelectedSlice(null);
+    // setLastSelectedTypeId(null);
     setTypesSelected([]);
     setCurrentPage(1);
-    await updateQuery([], false);
+    await updateQuery(originalTypesQueryParams, false, false);
   };
 
   const handleSliceClick = async (event: any, elements: any) => {
     if (elements.length > 0 && elements[0].index !== undefined) {
       const clickedIndex = elements[0].index;
-      if (clickedIndex >= 0 && clickedIndex < resourceTypes.length) {
-        console.log(resourceTypes);
+      // If there is only one type to select do nothing
+      if (resourceTypes.length === 1 && typesSelected.length === 0) {
+        return;
+        // Check if the selected slice is valid
+      } else if (clickedIndex >= 0 && clickedIndex < resourceTypes.length) {
+        // console.log(resourceTypes);
         const clickedSliceId = resourceTypes[clickedIndex].id;
         const clickedSliceLabel = resourceTypes[clickedIndex].name;
+        // If a type is selected again, and it was the only one selected before, reset the filter
         if (
-          selectedSlice === clickedIndex ||
+          // lastSelectedTypeId === clickedSliceId || // If i clicked again the last slice selected before, I reset the search
           (typesSelected.length === 1 && typesSelected[0] === clickedSliceLabel)
         ) {
           await handleResetClick();
+          // If a type is selected again, remove it
         } else if (typesSelected.includes(clickedSliceLabel)) {
-          return;
+          setTypesSelected((prevTypes: string[]) =>
+            prevTypes.filter((type: string) =>
+              type !== clickedSliceLabel
+            ));
+          setCurrentPage(1);
+          await updateQuery(clickedSliceId, true, true);
+          // Add the selected type to filter OERs
         } else if (clickedSliceId) {
-          setSelectedSlice(clickedIndex);
+          // setLastSelectedTypeId(clickedSliceId);
           setTypesSelected((prevTypes: string[]) => [
             ...prevTypes,
             clickedSliceLabel,
           ]);
           setCurrentPage(1);
-          await updateQuery(clickedSliceId, true);
+          await updateQuery(clickedSliceId, false, true);
         }
       }
     }
@@ -212,6 +235,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
 
   useEffect(() => {
     if (resourceTypes.length > 0) {
+      // Sort the array
       resourceTypes.sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
 
       const datasets = resourceTypes.map((item: OerMediaTypeInfo) => ({

@@ -10,7 +10,7 @@ export default function InfoTabDomainsTextBox({
   return (
     <InfoTextBox
       // textInfo="The number of OERs displayed in the Venn Diagram might be less than the total number of OERs found in the search, which means that some OERs do not cover any domains."
-      textInfo="OERs that do not cover any domains will not be visualized."
+      textInfo="OERs that do not cover any domains will not be visualized in the diagram."
       // isSmallerScreen={isSmallerScreen}
       bg="accent.200"
       isSmallerScreen={isSmallerScreen}

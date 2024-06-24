@@ -338,7 +338,7 @@ export class APIV2 {
     }
   }
 
-  async getMetrics(): Promise<MetricsOers[]> {
+  async getMetrics(): Promise<MetricsOers> {
     try {
       const resp = await axiosNoCookie.get(
         `https://encore-db.grial.eu/api/metrics/oers/`
@@ -362,7 +362,7 @@ export class APIV2 {
     concepts?: string[],
     isDomainsFilter?: boolean,
     isTypesFilter?: boolean
-  ): Promise<MetricsOers[]> {
+  ): Promise<MetricsOers> {
     try {
       let queryParams = new URLSearchParams();
 

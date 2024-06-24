@@ -1,7 +1,11 @@
 import { Flex } from '@chakra-ui/react';
 import FileUpload from '../../Inputs/FileUpload/FileUpload';
 
-export default function TabUploadFiles() {
+export type TabUploadFilesProps = {
+  activityIndex: number;
+}
+
+export default function TabUploadFiles({ activityIndex }: TabUploadFilesProps) {
   // const [uploading, setUploading] = useState(false);
   // const { addToast } = CustomToast();
 
@@ -48,7 +52,7 @@ export default function TabUploadFiles() {
         {uploading && <Text>File Uploading...</Text>}
       </Flex> */}
       {/* <UploadFile /> */}
-      <FileUpload />
+      <FileUpload activityIndex={activityIndex} />
     </Flex>
   );
 }

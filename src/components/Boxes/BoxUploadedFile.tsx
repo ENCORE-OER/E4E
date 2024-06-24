@@ -43,6 +43,7 @@ export default function BoxUploadedFile({
       w="100%"
       onClick={(e) => {
         e.preventDefault();
+        console.log("url_file", urlFile);
         window?.open(urlFile, '_blank');
       }}
       cursor="pointer"

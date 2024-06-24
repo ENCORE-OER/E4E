@@ -159,11 +159,11 @@ const Home = (props: DiscoverPageProps) => {
           pathname: '/discover',
           query: searchData,
         });
+        localStorage.setItem('searchData', JSON.stringify(searchData));
+        console.log(
+          'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
+        );
       }
-      localStorage.setItem('searchData', JSON.stringify(searchData));
-      console.log(
-        'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
-      );
     } catch (error) {
       addToast({
         message: `${error}`,
@@ -269,6 +269,7 @@ const Home = (props: DiscoverPageProps) => {
 
   useEffect(() => {
     console.log('SELECTED RESOURCE TYPES: ' + selectedResourceTypes);
+
   }, [selectedResourceTypes]);
 
   useEffect(() => {
@@ -412,11 +413,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

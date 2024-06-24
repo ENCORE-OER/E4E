@@ -33,7 +33,7 @@ export default function ConceptButtonsList({
         collections[collectionIndex]?.conceptsSelected?.map(
           (concept: OerConceptInfo, index: number) => (
             <ConceptButton
-              item={concept.label}
+              item={concept.name}
               key={index}
               index={index}
               setConceptSelectedIndex={setConceptSelectedIndex}
