@@ -9,14 +9,14 @@ type LabelEmptyFieldTableProps = {
 export default function LabelEmptyFieldTable({
   label,
   fontSize,
-  cursor
+  cursor,
 }: LabelEmptyFieldTableProps) {
   return (
     <Text
       fontWeight="light"
       fontSize={fontSize || 'small'}
       color={'gray.400'}
-      cursor={cursor || "default"}
+      cursor={cursor || 'default'}
     >
       {label}
     </Text>

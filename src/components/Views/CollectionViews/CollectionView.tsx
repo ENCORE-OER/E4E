@@ -122,7 +122,7 @@ export default function CollectionView({
     setUniqueConcepts(
       uniqueConceptsArray.sort(
         (a: OerConceptInfo, b: OerConceptInfo) =>
-          a?.name?.localeCompare(b?.name)
+          a?.label?.localeCompare(b?.label)
       )
     );
   };
@@ -260,7 +260,7 @@ export default function CollectionView({
 
           if (remainingConcepts.length > 0) {
             remainingConcepts?.forEach((concept: OerConceptInfo) => {
-              console.log('Remaining concepts: ' + concept.name);
+              console.log('Remaining concepts: ' + concept.label);
             });
           } else console.log('No remaining concepts');
 

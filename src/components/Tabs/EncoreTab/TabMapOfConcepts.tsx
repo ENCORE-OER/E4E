@@ -6,7 +6,8 @@ import { TagCloud } from 'react-tagcloud';
 import 'reactflow/dist/style.css';
 import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
-import { OerConceptInfo } from '../../../types/encoreElements';
+// import { OerConceptInfo } from '../../../types/encoreElements';
+import { OerConceptGetAPIInfo } from '../../../types/encoreElements/oer/OerConceptGetAPI';
 import { useHasHydrated } from '../../../utils/utils';
 
 export type TabMapOfConceptsProps = {};
@@ -16,14 +17,14 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
   const { filtered, setCurrentPage, conceptsSelected, setConceptsSelected } =
     useContext(DiscoveryContext);
   //const [tags, setTags] = useState<Tag[]>([]);
-  const [tags, setTags] = useState<OerConceptInfo[]>([]);
+  const [tags, setTags] = useState<OerConceptGetAPIInfo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   //const [conceptCounts, setConceptCounts] = useState<Record<number, number>>({});
   const [visibleTags, setVisibleTags] = useState<number>(50); // Initial number of tags to show
@@ -114,7 +115,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
 
   // ====================================================================================================
   // ------------------------------  Handle tag click event  --------------------------------------------
-  const handleTagClick = async (selectedTag: OerConceptInfo) => {
+  const handleTagClick = async (selectedTag: OerConceptGetAPIInfo) => {
     //setConceptSelected(true);
     setConceptsSelected((prevConceptsSelected: string[]) => [
       ...prevConceptsSelected,
@@ -217,11 +218,13 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     fetchData();
   }, [
     API,
-    router.query.concepts,
-    router.query.keywords,
-    router.query.domains,
-    router.query.types,
-    router.query.audience,
+    JSON.stringify({
+      concepts: router.query.concepts,
+      keywords: router.query.keywords,
+      domains: router.query.domains,
+      types: router.query.types,
+      audience: router.query.audience,
+    }),
   ]);
 
   // useEffect(() => {
@@ -274,7 +277,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
             minSize={12}
             maxSize={30}
             colorOptions={{ luminosity: 'light' }}
-            onClick={(tag: OerConceptInfo) => {
+            onClick={(tag: OerConceptGetAPIInfo) => {
               handleTagClick(tag);
               // // Filter the `filtered` array based on the selected word
               // const newFilteredObjects = filtered.filter(
@@ -289,7 +292,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
               // setFiltered(newFilteredObjects);
               // // Handle tag click event here
             }}
-            renderer={(tag: OerConceptInfo, size: number) => (
+            renderer={(tag: OerConceptGetAPIInfo, size: number) => (
               <span
                 style={{
                   fontSize: size,

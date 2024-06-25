@@ -56,7 +56,7 @@ export const saveFileToIndexedDB = async (
   activityIndex: number
 ): Promise<UploadedFilesProps> => {
   try {
-    console.log('SAVING FILE...');
+    // console.log('SAVING FILE...');
 
     const db = await openDB();
     const id = `${activityIndex}_${file.name}`; // Combined key
@@ -83,7 +83,7 @@ export const saveFileToIndexedDB = async (
           addRequest.onsuccess = async () => {
             try {
               const url = await getPersistentFileURL(fileRecord);
-              console.log('GENERATED URL', url);
+              // console.log('GENERATED URL', url);
               if (url) {
                 fileRecord.urlFile = url; // Update the urlFile in the object with the generated URL
                 const updateRequest = objectStore.put(fileRecord); // Update the record with the URL
@@ -186,7 +186,7 @@ export const getAllFilesByActivityIndex = async (
   activityIndex: number
 ): Promise<UploadedFilesProps[]> => {
   try {
-    console.log('GET FILES FROM DB...');
+    // console.log('GET FILES FROM DB...');
     const db = await openDB();
     const uploadedFiles: UploadedFilesProps[] = [];
 
@@ -262,7 +262,7 @@ export const getPersistentFileURL = async (
   fileRecord: FileRecordProps
 ): Promise<string | undefined> => {
   try {
-    console.log('GETTING URL...');
+    // console.log('GETTING URL...');
     if (!fileRecord.data) {
       throw new Error('File not found in IndexedDB');
     }
@@ -365,7 +365,7 @@ export const deleteActivityAndUpdateFiles = async (
     });
   }
 
-  console.log('Indices successfully updated');
+  // console.log('Indices successfully updated');
 };
 
 export const reorderActivitiesAndFiles = async (
@@ -411,7 +411,7 @@ export const reorderActivitiesAndFiles = async (
       await addFileRecord(objectStore, fileRecord);
     }
 
-    console.log('Order successfully updated');
+    // console.log('Order successfully updated');
   } catch (error) {
     console.error('Error updating file records:', error);
   }

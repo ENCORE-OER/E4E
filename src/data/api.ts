@@ -5,7 +5,6 @@ import {
   LearningScenarioProps,
   MetricsOers,
   OerAudienceInfo,
-  OerConceptInfo,
   OerDomainInfo,
   OerFreeSearchProps,
   OerMediaTypeInfo,
@@ -15,6 +14,7 @@ import {
   OerSubjectInfo,
   RespDataProps,
 } from '../types/encoreElements';
+import { OerConceptGetAPIInfo } from '../types/encoreElements/oer/OerConceptGetAPI';
 import { PolyglotFlow, PolyglotFlowInfo } from '../types/polyglot/PolyglotFlow';
 
 const axios = axiosCreate.create({
@@ -1047,7 +1047,7 @@ export class APIV2 {
     concepts?: string[],
     isDomainsFilter?: boolean,
     isTypesFilter?: boolean
-  ): Promise<OerConceptInfo[]> {
+  ): Promise<OerConceptGetAPIInfo[]> {
     try {
       let queryParams = new URLSearchParams();
 

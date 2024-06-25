@@ -15,7 +15,7 @@ import {
   OerSkillInfo,
   SkillItemProps,
 } from '../../types/encoreElements';
-import { isOerConcept, useHasHydrated } from '../../utils/utils';
+import { useHasHydrated } from '../../utils/utils';
 
 interface Tag {
   label: string;
@@ -96,12 +96,7 @@ export default function SearchBarSkillsConcepts({
         }
       });
       concepts.forEach((concept: SkillItemProps | OerConceptInfo) => {
-        if (isOerConcept(concept) && !itemsMap.has(concept.name)) {
-          itemsMap.set(concept.name, {
-            id: concept.id,
-            label: concept.name,
-          });
-        } else if (!isOerConcept(concept) && !itemsMap.has(concept.label)) {
+        if (!itemsMap.has(concept.label)) {
           itemsMap.set(concept.label, concept);
         }
       });

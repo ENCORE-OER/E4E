@@ -22,7 +22,7 @@ export default function SelectConcepts({
       options={uniqueConcepts}
       value={conceptsSelected}
       onChange={handleConceptsChange}
-      getOptionLabel={(option) => option.name} // Specify how to get the label
+      getOptionLabel={(option) => option.label} // Specify how to get the label
       getOptionValue={(option) => option.id.toString()} // Specify how to get the value
       placeholder="Select Concepts"
       menuPortalTarget={document.body} // Different portal for the menu

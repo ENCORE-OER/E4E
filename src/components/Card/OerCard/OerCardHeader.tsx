@@ -112,11 +112,10 @@ export default function OerCardHeader({
               <Checkbox
                 as="button"
                 colorScheme="yellow"
-                onClick={
-                  (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
                 onChange={(e) => {
                   e.preventDefault();
                   e.stopPropagation();

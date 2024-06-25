@@ -204,7 +204,7 @@ export default function CardInfoModal({
             ) || ['Unknown']
           );
           setConcepts(
-            oer.concepts?.map((concept: OerConceptInfo) => concept.name) || []
+            oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
           );
           setQualityScore(oer?.overall_score || 0);
           setTimes_used((await getCount(oer?.id)) ?? 0);

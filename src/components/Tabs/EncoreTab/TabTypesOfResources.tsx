@@ -20,7 +20,7 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
@@ -228,11 +228,15 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     fetchData();
   }, [
     API,
-    router.query.concepts,
-    router.query.keywords,
-    router.query.domains,
-    router.query.types,
-    router.query.audience,
+    JSON.stringify({
+      concepts: router.query.concepts,
+      keywords: router.query.keywords,
+      domains: router.query.domains,
+      types: router.query.types,
+      audience: router.query.audience,
+      isTypesFilter: router.query.isTypesFilter
+    }),
+    // !router.query.isTypesFilter
   ]);
 
   useEffect(() => {
