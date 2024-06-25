@@ -187,19 +187,22 @@ const Home = (/*props: DiscoverPageProps*/) => {
         <Box
           py="115px"
           pl={isSmallerScreen ? '90px' : '240px'}
-          w="full"
+          w="100%"
           minH="100vh"
           bg="background"
+          overflowX="auto"
+          overflowY="hidden"
         >
           <Box
             // w="100%"
             w={isSmallerScreen ? '95%' : '80%'}
             h="100%"
+          // overflowX="auto"
           >
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -209,7 +212,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -304,7 +307,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

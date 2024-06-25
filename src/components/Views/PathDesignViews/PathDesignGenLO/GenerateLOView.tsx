@@ -285,11 +285,13 @@ export default function GenerateLOView({
             //   type: 'error',
             // });
             addToast({
-              message: 'If the error persists, try changing some concepts or parameters.',
-              type: 'warning'
+              message:
+                'If the error persists, try changing some concepts or parameters.',
+              type: 'warning',
             });
             addToast({
-              message: 'Error during learning objectives generation. Try again.',
+              message:
+                'Error during learning objectives generation. Try again.',
               type: 'error',
             });
           } else if (isLessGeneratedLO) {
@@ -371,10 +373,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-      learningObjectiveObjects.filter(
-        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-      ).length >
-      0
+        learningObjectiveObjects.filter(
+          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+        ).length >
+        0
     ) {
       setIsLoading(false);
     }

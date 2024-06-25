@@ -57,7 +57,7 @@ export default function AddContentModal({
   } = useLearningPathDesignContext();
 
   const handleCloseModal = () => {
-    console.log("CLOSING MODAL...");
+    console.log('CLOSING MODAL...');
     if (addSelectedResourcesAddContent.length > 0) {
       resetSelectedResourcesAddContent();
     }
@@ -65,7 +65,7 @@ export default function AddContentModal({
       resetUploadedFilesAddContent();
     }
     onClose();
-  }
+  };
 
   const handleSaveClick = async () => {
     try {
@@ -144,11 +144,7 @@ export default function AddContentModal({
   }, [isOpen]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleCloseModal}
-      size={'100%'}
-    >
+    <Modal isOpen={isOpen} onClose={handleCloseModal} size={'100%'}>
       <ModalOverlay />
       <ModalContent w="90%" h="90%" bg="background">
         <ModalHeader>
@@ -220,7 +216,7 @@ export default function AddContentModal({
                       activityIndex !== undefined &&
                       // lessonActivities[indexLesson]?.content?.oers &&
                       lessonActivities[activityIndex]?.content?.oers?.length ===
-                      0 &&
+                        0 &&
                       lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
