@@ -48,7 +48,8 @@ export default function SaveLessonPlanButton({
           color="primary"
           fontWeight="normal"
           isDisabled={
-            (!isEditLessonPlanClicked && editActivityLessonIndex === null) || isDisabled
+            (!isEditLessonPlanClicked && editActivityLessonIndex === null) ||
+            isDisabled
           }
           _hover={{ bg: 'gray.200' }}
         />

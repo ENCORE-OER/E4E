@@ -19,7 +19,10 @@ import {
   UploadedFilesProps,
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
-import { deleteActivityAndUpdateFiles, getAllFilesByActivityIndex } from '../../utils/indexedDB';
+import {
+  deleteActivityAndUpdateFiles,
+  getAllFilesByActivityIndex,
+} from '../../utils/indexedDB';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import {
   isOerInCollectionProps,
@@ -520,10 +523,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // State to track the index of the row currently in edit mode
-  const [editActivityLessonIndex, setEditActivityLessonIndex] = useLocalStorage<number | null>(
-    'editActivityLessonIndex',
-    null
-  );
+  const [editActivityLessonIndex, setEditActivityLessonIndex] = useLocalStorage<
+    number | null
+  >('editActivityLessonIndex', null);
 
   // Function to handle initiating edit mode for a row
   const handleEditActivityLesson = (index: number) => {

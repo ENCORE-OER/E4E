@@ -228,7 +228,7 @@ export default function GenerateLOView({
                 learningTextContext || defaultLearningContext, // learningContext
                 selectedSkillConceptsTags
                   .map((skill: SkillItemProps) => skill.label)
-                  .join(', '), // skills
+                  .join(' & '), // skills
                 mapStringToString(selectedBloomLevel, BloomLevelString) // bloomLevel // TODO: before to call the API, check if the options are not null
               );
             } catch (error) {
@@ -285,13 +285,17 @@ export default function GenerateLOView({
             //   type: 'error',
             // });
             addToast({
-              message: 'Error during learning objectives generation.',
+              message: 'If the error persists, try changing some concepts or parameters.',
+              type: 'warning'
+            });
+            addToast({
+              message: 'Error during learning objectives generation. Try again.',
               type: 'error',
             });
           } else if (isLessGeneratedLO) {
             addToast({
               message:
-                'Sorry, but we were unable to generate the requested number of learning objectives.',
+                'Sorry, but the AI is not capable of generating the required number of different learning objectives.',
               type: 'warning',
             });
           } else {
@@ -367,10 +371,10 @@ export default function GenerateLOView({
     if (
       isLoading &&
       learningObjectiveObjects.length -
-        learningObjectiveObjects.filter(
-          (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
-        ).length >
-        0
+      learningObjectiveObjects.filter(
+        (objectLO: ObjectLearningObjectiveProps) => !objectLO.isGenerated
+      ).length >
+      0
     ) {
       setIsLoading(false);
     }
