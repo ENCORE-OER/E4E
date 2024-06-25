@@ -698,7 +698,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Function to add a new activity
   const addEmptyLessonActivity = () => {
     const newLessonActivity: LessonProps = {
-      lessonTitle: '',
+      activityTitle: '',
       lessonType: '',
       activityType: '',
       activityDescription: '',

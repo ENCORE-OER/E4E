@@ -65,9 +65,9 @@ export default function LessonCard({
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
           ? {
-              ...item,
-              lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-            }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
           : item
       )
     );
@@ -79,6 +79,14 @@ export default function LessonCard({
         idx === indexCard
           ? { ...item, timeDuration: parseInt(value, 10) || 0 }
           : item
+      )
+    );
+  };
+
+  const handleActivityTitleChange = (value: string) => {
+    handleData((previousData: LessonProps[]) =>
+      previousData.map((item: LessonProps, idx: number) =>
+        idx === indexCard ? { ...item, activityTitle: value } : item
       )
     );
   };
@@ -103,9 +111,9 @@ export default function LessonCard({
       prevLessons.map((item, idx) =>
         idx === indexCard
           ? {
-              ...item,
-              activityType: selectedActivityType,
-            }
+            ...item,
+            activityType: selectedActivityType,
+          }
           : item
       )
     );
@@ -195,7 +203,7 @@ export default function LessonCard({
                 isEditClicked={
                   editLessonIndex === indexCard || isEditLessonPlanClicked
                 }
-                // isDisabled={true}
+              // isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}
@@ -207,24 +215,36 @@ export default function LessonCard({
 
         <CardBody justifyContent="flex-start" display="flex" w="100%" py={0}>
           <Flex w="100%" direction="column">
+            {/* Activity Title */}
             <Flex p={3}>
-              <ShowHideButton
-                showBox={showBox}
-                setShowBox={setShowBox}
-                showButtonName={`${indexCard + 1}. ${lesson.lessonTitle}`}
-                isUpDown={false}
-                fontWeight="bold"
-                color="primary"
-                border="none"
-                fontSize="x-large"
-              />
+              {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
+                <Textarea
+                  value={lesson.activityTitle}
+                  onChange={(e) => handleActivityTitleChange(e.target.value)}
+                  placeholder="Title of the activity"
+                // size="sm"
+                // fontSize="small"
+                />
+              ) : (
+                <ShowHideButton
+                  showBox={showBox}
+                  setShowBox={setShowBox}
+                  showButtonName={`${indexCard + 1}. ${lesson.activityTitle}`}
+                  isUpDown={false}
+                  fontWeight="bold"
+                  color="primary"
+                  border="none"
+                  fontSize="x-large"
+                />
+              )}
+              {/* Description */}
             </Flex>
             {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
               <Textarea
                 value={lesson.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
-                // fontSize="small"
+              // fontSize="small"
               />
             ) : (
               <Text

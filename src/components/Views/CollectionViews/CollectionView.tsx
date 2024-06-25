@@ -334,7 +334,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+                  //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

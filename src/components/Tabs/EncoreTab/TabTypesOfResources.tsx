@@ -20,7 +20,7 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
@@ -234,7 +234,7 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
       domains: router.query.domains,
       types: router.query.types,
       audience: router.query.audience,
-      isTypesFilter: router.query.isTypesFilter
+      isTypesFilter: router.query.isTypesFilter,
     }),
     // !router.query.isTypesFilter
   ]);
