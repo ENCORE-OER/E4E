@@ -50,6 +50,7 @@ export default function HeaderCardInfoModal({
 }: HeaderCardInfoModalProps) {
   const hydrated = useHasHydrated();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // event.preventDefault();
     event.stopPropagation();
     if (handleCheckboxClick) {
       handleCheckboxClick();
@@ -68,7 +69,7 @@ export default function HeaderCardInfoModal({
         {hydrated && isAddContentModal ? (
           <Checkbox
             colorScheme="yellow"
-            onClick={(e: any) => {
+            onChange={(e: any) => {
               // e.stopPropagation();
               handleCheckboxChange(e);
             }}

@@ -1,3 +1,10 @@
+/*
+ * View documentation: https://javascript.info/indexeddb
+ * Other possibility is https://dexie.org/
+ */
+
+// TODO: move all the data of the lesson plan from LocalStorage to IndexedDB?
+
 import { DropResult } from 'react-beautiful-dnd';
 import { UploadedFilesProps } from '../types/encoreElements';
 
@@ -292,22 +299,25 @@ export const resetIndexedDB = async (): Promise<void> => {
   }
 };
 
+// Delete files from the index specified and updates each rows with the right files from the row after
 export const deleteActivityAndUpdateFiles = async (
   activityIndex: number,
   totalActivities: number
 ) => {
   const db = await openDB();
-  const transaction = db.transaction([STORE_NAME], 'readwrite');
-  const objectStore = transaction.objectStore(STORE_NAME);
 
-  // Delete files associated with the deleted activity
+  // Step 1: Delete files associated with the deleted activity
+  let transaction = db.transaction([STORE_NAME], 'readwrite');
+  let objectStore = transaction.objectStore(STORE_NAME);
+
   const deleteRequest = objectStore
     .index('activityIndex')
     .openCursor(IDBKeyRange.only(activityIndex));
-  deleteRequest.onsuccess = (event) => {
+
+  deleteRequest.onsuccess = async (event) => {
     const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
     if (cursor) {
-      objectStore.delete(cursor.primaryKey);
+      await cursor.delete();
       cursor.continue();
     }
   };
@@ -318,31 +328,40 @@ export const deleteActivityAndUpdateFiles = async (
     transaction.onerror = reject;
   });
 
-  // Update indices of subsequent activities and their associated files
+  // Step 2: Update indices of subsequent activities and their associated files
   for (let i = activityIndex + 1; i < totalActivities; i++) {
     const newActivityIndex = i - 1;
 
     // Update the associated files in the database
-    const updateTransaction = db.transaction([STORE_NAME], 'readwrite');
-    const updateObjectStore = updateTransaction.objectStore(STORE_NAME);
-    const updateRequest = updateObjectStore
+    transaction = db.transaction([STORE_NAME], 'readwrite');
+    objectStore = transaction.objectStore(STORE_NAME);
+
+    const tempFiles: FileRecordProps[] = [];
+
+    const updateRequest = objectStore
       .index('activityIndex')
       .openCursor(IDBKeyRange.only(i));
 
-    updateRequest.onsuccess = (event) => {
+    updateRequest.onsuccess = async (event) => {
       const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
       if (cursor) {
         const fileRecord: FileRecordProps = cursor.value;
-        fileRecord.activityIndex = newActivityIndex;
-        fileRecord.id = `${newActivityIndex}_${fileRecord.name}`;
-        updateObjectStore.put(fileRecord);
+        tempFiles.push(fileRecord);
+        await cursor.delete();
         cursor.continue();
+      } else {
+        // Move the temporary saved files to the new activity index
+        for (const fileRecord of tempFiles) {
+          fileRecord.activityIndex = newActivityIndex;
+          fileRecord.id = `${newActivityIndex}_${fileRecord.name}`;
+          await addFileRecord(objectStore, fileRecord);
+        }
       }
     };
 
     await new Promise((resolve, reject) => {
-      updateTransaction.oncomplete = resolve;
-      updateTransaction.onerror = reject;
+      transaction.oncomplete = resolve;
+      transaction.onerror = reject;
     });
   }
 

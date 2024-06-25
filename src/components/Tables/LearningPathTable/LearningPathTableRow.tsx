@@ -139,7 +139,7 @@ export default function LearningPathTableRow({
               size="sm"
             />
           ) : (
-            <Text cursor="default">{row.activityType}</Text> || (
+            (row.activityType && <Text cursor="default">{row.activityType}</Text>) || (
               <LabelEmptyFieldTable label="Type of Activity" />
             )
           )}
@@ -192,13 +192,14 @@ export default function LearningPathTableRow({
               w="100%"
               textAlign="left"
               // display="block"
+              cursor="pointer"
             >
-              {<Text cursor="default">{row.activityDescription}</Text> || (
-                <LabelEmptyFieldTable label="Short summary of the activity" />
+              {row.activityDescription || (
+                <LabelEmptyFieldTable label="Short summary of the activity" cursor='pointer' />
               )}
             </Box>
           ) : (
-            <Text cursor="default">{row.activityDescription}</Text> || (
+            (row.activityDescription && <Text cursor="default">{row.activityDescription}</Text>) || (
               <LabelEmptyFieldTable label="Short summary of the activity" />
             )
           )}
@@ -213,9 +214,9 @@ export default function LearningPathTableRow({
       >
         <Flex w="100%" justify="center" px={0}>
           {hydrated &&
-          ((row.content?.oers?.length ?? 0) > 0 ||
-            (row.content?.uploadedFiles?.length ?? 0) > 0) &&
-          !isPrinting ? (
+            ((row.content?.oers?.length ?? 0) > 0 ||
+              (row.content?.uploadedFiles?.length ?? 0) > 0) &&
+            !isPrinting ? (
             <Flex direction="column" gap={0.5}>
               {hydrated &&
                 row.content?.oers?.map(
@@ -287,14 +288,14 @@ export default function LearningPathTableRow({
                   <Text
                     key={`file-${index}`}
                     whiteSpace="pre-wrap"
-                    // as="link"
-                    // onClick={(e) => {
-                    //     e.preventDefault();
-                    //     window?.open(
-                    //         content.urlFile,
-                    //         '_blank'
-                    //     );
-                    // }}
+                  // as="link"
+                  // onClick={(e) => {
+                  //     e.preventDefault();
+                  //     window?.open(
+                  //         content.urlFile,
+                  //         '_blank'
+                  //     );
+                  // }}
                   >
                     {`${content.fileName};\n`}
                   </Text>

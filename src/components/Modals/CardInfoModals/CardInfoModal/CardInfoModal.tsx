@@ -126,7 +126,7 @@ export default function CardInfoModal({
 
   const handleOpenAddCollectionModal = () => {
     setAddCollectionModalOpen(true);
-    console.log(isAddCollectionModalOpen);
+    // console.log(isAddCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
@@ -150,7 +150,7 @@ export default function CardInfoModal({
     const api = new APIV2(undefined);
     const resp = await api.getCount(id);
 
-    console.log('count: ' + resp);
+    // console.log('count: ' + resp);
 
     return resp;
   };
@@ -214,7 +214,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-              []
+            []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -306,8 +306,9 @@ export default function CardInfoModal({
             handleViewResource={handleViewResource}
             isAddContentModal={isAddContentModal}
             handleCheckboxClick={() => {
-              if (handleCheckboxClick)
+              if (handleCheckboxClick) {
                 handleCheckboxClick(indexOerOpened ?? -1);
+              }
             }}
             isChecked={isChecked}
             isDisabled={isDisabled}
@@ -349,9 +350,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-          //times_used={times_used}
-          //setTimes_used={setTimes_used}
-          //getCount={getCount}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
       <ExerciseInfoModal

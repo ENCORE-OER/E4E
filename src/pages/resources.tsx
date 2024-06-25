@@ -185,7 +185,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         setResourcesIndex([]);
       }
 
-      console.log("I'm triggering oersById deleting a resource");
+      // console.log("I'm triggering oersById deleting a resource");
     } catch (error) {
       addToast({
         message: `${error}`,
@@ -202,7 +202,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
       if (idOer === undefined) {
         throw new Error('idOer is undefined');
       }
-      console.log('Delete button clicked');
+      // console.log('Delete button clicked');
       const hasResourceAtLeastOneConceptSelected = oersById
         ?.find(
           (oer: OerProps | undefined | OerFreeSearchProps) => oer?.id === idOer
@@ -240,8 +240,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   // recover all the oers of a collection
   useEffect(() => {
     //alert("Resources")
-    console.log('Collection index: ' + collectionIndex);
-    console.log(collections[collectionIndex]?.conceptsSelected);
+    // console.log('Collection index: ' + collectionIndex);
+    // console.log(collections[collectionIndex]?.conceptsSelected);
 
     if (collections?.length > 0 && collectionIndex >= 0 && hydrated) {
       try {
@@ -251,12 +251,12 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         //console.log("I'm triggering isNewDataLoaded to false");
         const fetchOerData = async () => {
           if (collections[collectionIndex]?.oers !== undefined) {
-            console.log('sono qua');
+            // console.log('sono qua');
             // check if the obj is undefined before to access in it
             const oerData = await Promise.all(
               collections[collectionIndex]?.oers?.map(
                 async (oer: OerInCollectionProps) => {
-                  console.log(oer);
+                  // console.log(oer);
                   const oerFound = await getDataOerById(
                     oer?.id,
                     abortController.signal
@@ -266,9 +266,9 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               )
             );
             setOersById(oerData);
-            console.log("I'm triggering oersById");
+            // console.log("I'm triggering oersById");
             setIsNewDataLoaded(true);
-            console.log('End fetchOerData()');
+            // console.log('End fetchOerData()');
           } else {
             setIsLoading(false);
           }
@@ -311,12 +311,13 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         flex="1"
         minH="100vh"
         bg="background"
+        overflowY={isAddContentModal ? 'hidden' : 'auto'}
       >
         <Flex
           //w="full"
           justifyContent="left"
-          //minH="0px"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -432,10 +433,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               isAddContentModal={isAddContentModal}
               resourcesSelected={resourcesSelectedAddContent}
               addSelectedResourcesAddContent={addSelectedResourcesAddContent}
-              // updateResourcesSelected={updateResourcesSelected}
-              // addSelectedResource={addSelectedResource}
-              // removeSelectedResource={removeSelectedResource}
-              // resetSelectedResources={resetSelectedResources}
+            // updateResourcesSelected={updateResourcesSelected}
+            // addSelectedResource={addSelectedResource}
+            // removeSelectedResource={removeSelectedResource}
+            // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>

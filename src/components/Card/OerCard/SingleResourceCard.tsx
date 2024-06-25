@@ -76,7 +76,7 @@ export default function SingleResourceCard({
       const fetchData = async () => {
         const count = await getCount(oer.id);
         setTimes_used(count);
-        console.log('count: ' + count);
+        // console.log('count: ' + count);
       };
       fetchData();
     }
@@ -88,14 +88,14 @@ export default function SingleResourceCard({
         const likes = await getLikes(oer.id);
         setTotal_likes(likes);
         setIsFirstRender(false);
-        console.log('likes: ' + likes);
+        // console.log('likes: ' + likes);
       };
       fetchData();
     } else if (oer !== undefined && updateLikeOER) {
       const fetchData = async () => {
         const likes = await getLikes(oer.id);
         setTotal_likes(likes);
-        console.log('likes: ' + likes);
+        // console.log('likes: ' + likes);
       };
       fetchData();
     }
