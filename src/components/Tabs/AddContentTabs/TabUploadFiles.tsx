@@ -1,54 +1,58 @@
-import { Flex, Text } from '@chakra-ui/react';
-import { useState } from 'react';
-import { CustomToast } from '../../../utils/Toast/CustomToast';
-import UploadButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/UploadButton';
+import { Flex } from '@chakra-ui/react';
+import FileUpload from '../../Inputs/FileUpload/FileUpload';
 
-export default function TabUploadFiles() {
-  const [uploading, setUploading] = useState(false);
-  const { addToast } = CustomToast();
+export type TabUploadFilesProps = {
+  activityIndex: number;
+};
 
-  const handleUploadFile = async (file: File) => {
-    try {
-      setUploading(true);
-      const formData = new FormData();
-      formData.append('file', file);
+export default function TabUploadFiles({ activityIndex }: TabUploadFilesProps) {
+  // const [uploading, setUploading] = useState(false);
+  // const { addToast } = CustomToast();
 
-      const response = await fetch('SERVER_URL', {
-        method: 'POST',
-        body: formData,
-      });
+  // const handleUploadFile = async (file: File) => {
+  //   try {
+  //     setUploading(true);
+  //     const formData = new FormData();
+  //     formData.append('file', file);
 
-      if (response.ok) {
-        addToast({
-          message: 'File uploaded successfully!',
-          type: 'success',
-        });
-      } else {
-        addToast({
-          message: `Error during the file uploading: ${response.statusText}`,
-          type: 'error',
-        });
-      }
-    } catch (error) {
-      addToast({
-        message: `Error during the file uploading: ${error}`,
-        type: 'error',
-      });
-    } finally {
-      setUploading(false);
-    }
-  };
+  //     const response = await fetch('SERVER_URL', {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+
+  //     if (response.ok) {
+  //       addToast({
+  //         message: 'File uploaded successfully!',
+  //         type: 'success',
+  //       });
+  //     } else {
+  //       addToast({
+  //         message: `Error during the file uploading: ${response.statusText}`,
+  //         type: 'error',
+  //       });
+  //     }
+  //   } catch (error) {
+  //     addToast({
+  //       message: `Error during the file uploading: ${error}`,
+  //       type: 'error',
+  //     });
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
 
   return (
     <Flex w="100%" justify="center">
-      <Flex direction="column">
+      {/* <Flex direction="column">
         <UploadButton
           handleUploadFile={handleUploadFile}
           // disabled={uploading}
           disabled={true}
         />
         {uploading && <Text>File Uploading...</Text>}
-      </Flex>
+      </Flex> */}
+      {/* <UploadFile /> */}
+      <FileUpload activityIndex={activityIndex} />
     </Flex>
   );
 }

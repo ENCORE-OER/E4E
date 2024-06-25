@@ -12,12 +12,13 @@ import TabGenerateAI from './TabGenerateAI';
 import TabUploadFiles from './TabUploadFiles';
 
 export type AddContentTabsProps = {
+  activityIndex: number;
   isSmallerScreen?: boolean;
 } & CustomTabStyleProps;
 
 export default function AddContentTabs(props: AddContentTabsProps) {
-  const { ...rest } = props;
-  const config = getConfig();
+  const { activityIndex, ...rest } = props;
+  const config = getConfig(activityIndex);
 
   return (
     <CustomTab
@@ -37,7 +38,7 @@ export default function AddContentTabs(props: AddContentTabsProps) {
   );
 }
 
-const getConfig = () => {
+const getConfig = (activityIndex: number) => {
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
   const config: CustomTabConfigProps = [
@@ -60,7 +61,7 @@ const getConfig = () => {
           name="Upload files"
         />
       ),
-      child: <TabUploadFiles />,
+      child: <TabUploadFiles activityIndex={activityIndex} />,
       pt: '3%',
     },
     {

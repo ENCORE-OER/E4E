@@ -53,7 +53,7 @@ interface CollectionViewProps extends BoxProps {
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean; // Used for the view of the REsources Page in Add Content Modal
   resourcesSelected: OerInCollectionProps[];
-  addSelectedResources: (
+  addSelectedResourcesAddContent: (
     Oers: OerInCollectionProps | OerInCollectionProps[]
   ) => void;
   // updateResourcesSelected: SelectedResourcesFunction;
@@ -87,7 +87,7 @@ export default function CollectionView({
   isSmallerScreen,
   isAddContentModal,
   resourcesSelected,
-  addSelectedResources,
+  addSelectedResourcesAddContent,
   // updateResourcesSelected,
   // addSelectedResource,
   // removeSelectedResource,
@@ -107,7 +107,7 @@ export default function CollectionView({
   const extractUniqueConcepts = (collection: CollectionProps) => {
     // extracting concepts only for the selected collection
 
-    console.log("I'm extracting unique concepts");
+    // console.log("I'm extracting unique concepts");
 
     const uniqueConceptsSet = new Map<number, OerConceptInfo>();
 
@@ -120,8 +120,9 @@ export default function CollectionView({
     const uniqueConceptsArray = Array.from(uniqueConceptsSet.values());
 
     setUniqueConcepts(
-      uniqueConceptsArray.sort((a: OerConceptInfo, b: OerConceptInfo) =>
-        a.label.localeCompare(b.label)
+      uniqueConceptsArray.sort(
+        (a: OerConceptInfo, b: OerConceptInfo) =>
+          a?.label?.localeCompare(b?.label)
       )
     );
   };
@@ -159,7 +160,7 @@ export default function CollectionView({
   };
 
   const addResourceSelectedTemp = (newResourceSelected: number) => {
-    console.log('ADD RESOURCE!');
+    // console.log('ADD RESOURCE!');
     setResourcesSelectedTemp((prev: number[]) => {
       if (!prev.includes(newResourceSelected)) {
         return [...prev, newResourceSelected];
@@ -169,7 +170,7 @@ export default function CollectionView({
   };
 
   const removeResourceSelectedTemp = (ResourceSelectedToRemove: number) => {
-    console.log('REMOVE RESOURCE');
+    // console.log('REMOVE RESOURCE');
     setResourcesSelectedTemp(
       resourcesSelectedTemp.filter(
         (resource: number) => resource !== ResourceSelectedToRemove
@@ -187,7 +188,7 @@ export default function CollectionView({
     //     addSelectedResource(collectionIndex, indexOer);
     //   }
     // }
-    console.log('CLICK CHECKBOX!');
+    // console.log('CLICK CHECKBOX!');
     if (resourcesSelectedTemp.includes(indexOer)) {
       removeResourceSelectedTemp(indexOer);
     } else {
@@ -201,15 +202,15 @@ export default function CollectionView({
       (oer: OerInCollectionProps, index: number) =>
         resourcesSelectedTemp.includes(index)
     );
-    console.log('Attaching Resources...', resourcesToAdd);
-    addSelectedResources(resourcesToAdd);
+    // console.log('Attaching Resources...', resourcesToAdd);
+    addSelectedResourcesAddContent(resourcesToAdd);
     setResourcesSelectedTemp([]);
   };
 
   useEffect(() => {
     //alert("CollectionView");
-    if (collectionIndex > -1) {
-      console.log('Use effect of CollectionIndex');
+    if (collectionIndex > -1 && !isAddContentModal) {
+      // console.log('Use effect of CollectionIndex');
 
       setViewChanged(true); // to trigger the OerCardsSorting useEffect. Read also comment in resource.tsx
 
@@ -239,7 +240,7 @@ export default function CollectionView({
 
   useEffect(() => {
     if (isFirstRender.current < 1) {
-      console.log('First rendering');
+      // console.log('First rendering');
       isFirstRender.current++;
     }
     try {
@@ -276,7 +277,7 @@ export default function CollectionView({
         updatedConceptsSelected();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -292,7 +293,7 @@ export default function CollectionView({
   // to reset pagination when the collection is changed in 'Your resources' page
   useEffect(() => {
     if (currentPage !== 1) {
-      console.log('Setting current page to 1');
+      // console.log('Setting current page to 1');
       setCurrentPage(1);
     }
   }, [viewChanged, isAscending]);

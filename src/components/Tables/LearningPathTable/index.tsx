@@ -26,11 +26,12 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       activityTypes,
       removeLessonActivity,
       optionsTypeOfAssignment,
-      editLessonIndex: editRowIndex,
-      handleEditLesson,
+      editActivityLessonIndex,
+      handleEditActivityLesson,
+      loadUploadedFiles,
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
-    const [indexLesson, setIndexLesson] = useState<number>(-1);
+    const [activityIndex, setActivityIndex] = useState<number>(-1);
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
@@ -38,11 +39,12 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
 
     const handleAddContentClick = (index: number) => {
       setIsAddContentModalOpen(true);
-      setIndexLesson(index);
+      setActivityIndex(index);
     };
 
-    const handleCloseAddContentModal = () => {
+    const handleCloseAddContentModal = async () => {
       setIsAddContentModalOpen(false);
+      // await loadUploadedFiles(activityIndex, true);
     };
 
     return (
@@ -57,16 +59,17 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             activityTypes={activityTypes}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
-            editRowIndex={editRowIndex}
-            handleEditLesson={handleEditLesson}
+            editRowIndex={editActivityLessonIndex}
+            handleEditLesson={handleEditActivityLesson}
             ref={ref}
             isPrinting={isPrinting}
+            loadUploadedFiles={loadUploadedFiles}
           />
         )}
         <AddContentModal
           isOpen={isAddContentModalOpen}
           onClose={handleCloseAddContentModal}
-          indexLesson={indexLesson}
+          activityIndex={activityIndex}
         />
       </Flex>
     );

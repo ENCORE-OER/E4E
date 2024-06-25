@@ -2,17 +2,28 @@ import { Tag, TagLabel, Tooltip } from '@chakra-ui/react';
 
 type TagContentProps = {
   label: string;
+  bg: string;
+  handleClick?: () => void;
 };
 
-export default function TagContent({ label }: TagContentProps) {
+export default function TagContent({
+  label,
+  bg,
+  handleClick,
+}: TagContentProps) {
   return (
     <Tag
       // colorScheme='#FFCC49'
-      bg="#FFCC49"
+      bg={bg}
       // border="1px solid lightgrey"
       w="fit-content"
       gap={1}
       borderRadius={5}
+      onClick={(e) => {
+        e.preventDefault();
+        if (handleClick) handleClick();
+      }}
+      cursor={handleClick ? 'pointer' : 'default'}
     >
       <Tooltip
         hasArrow

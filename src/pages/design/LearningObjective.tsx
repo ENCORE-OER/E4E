@@ -14,6 +14,7 @@ import PathDesignGenLO from '../../components/Views/PathDesignViews/PathDesignGe
 import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/PathDesignGenLessonPlan';
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import { resetIndexedDB } from '../../utils/indexedDB';
 import { useIsSmallerScreen } from '../../utils/utils';
 
 const Home = (/*props: DiscoverPageProps*/) => {
@@ -23,7 +24,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     bloomLevelIndex,
     //learningTextContext: text,
     step,
-    collectionIndex,
+    selectedCollectionIndex: collectionIndex,
     resourcesIndex,
     selectedSkillConceptTags,
     handleStepChange,
@@ -42,6 +43,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     lessonActivities,
     resourcesSelectedAddContent,
     resetSelectedResourcesAddContent,
+    uploadedFilesAddContent,
+    resetUploadedFilesAddContent,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -188,12 +191,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
         handleDefaultLearningContext();
       }
 
-      // Reset the variable
+      // Reset the variables
       if (resourcesSelectedAddContent.length > 0) {
         resetSelectedResourcesAddContent();
       }
+      if (uploadedFilesAddContent.length > 0) {
+        resetUploadedFilesAddContent();
+      }
 
       if (handleGenerationFunction) {
+        resetIndexedDB();
+
         console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan
         const isPossibleToContinue = await handleGenerationFunction();
@@ -295,10 +303,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
     handleResourceSelection();
   }, [resourcesIndex]);
 
-  useEffect(() => {
-    console.log('Selected Collection: ', isCollectionSelected);
-    console.log('Selected Resource: ', isResourceSelected);
-  }, [isCollectionSelected, isResourceSelected]);
+  // useEffect(() => {
+  //   console.log('Selected Collection: ', isCollectionSelected);
+  //   console.log('Selected Resource: ', isResourceSelected);
+  // }, [isCollectionSelected, isResourceSelected]);
 
   useEffect(() => {
     setIsEmptyLearningObjectivesPresent(

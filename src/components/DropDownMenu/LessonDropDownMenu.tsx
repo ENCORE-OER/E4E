@@ -30,7 +30,7 @@ export default function LessonDropDownMenu({
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleSelect = (index: number) => {
-    setSelectedOption(options[index].name);
+    setSelectedOption(options[index]?.name);
     onChange(index); // Chiamata alla funzione di callback con l'indice selezionato
   };
 

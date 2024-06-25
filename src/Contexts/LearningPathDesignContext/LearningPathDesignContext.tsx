@@ -16,9 +16,18 @@ import {
   Option,
   OptionsTypeOfAssignmentProps,
   SkillItemProps,
+  UploadedFilesProps,
   activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
+import {
+  deleteActivityAndUpdateFiles,
+  getAllFilesByActivityIndex,
+} from '../../utils/indexedDB';
 import { CustomToast } from '../../utils/Toast/CustomToast';
+import {
+  isOerInCollectionProps,
+  isUploadedFilesProps,
+} from '../../utils/utils';
 
 // Context props
 type LearnignPathDesignContextProps = {
@@ -40,7 +49,7 @@ type LearnignPathDesignContextProps = {
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
-  collectionIndex: number; // Index of the selected collection in the "Learning Objective" page
+  selectedCollectionIndex: number; // Index of the selected collection in the "Learning Objective" page
   resourcesIndex: number[]; // Indexes of the selected resources in the collection
   learningObjectiveObjects: ObjectLearningObjectiveProps[];
   // selectedLearningObjectiveIndex: number; // Indexes of the selected learning
@@ -91,8 +100,8 @@ type LearnignPathDesignContextProps = {
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
   handleSaveLessonPlanClick: () => void;
-  editLessonIndex: number | null;
-  handleEditLesson: (index: number) => void;
+  editActivityLessonIndex: number | null;
+  handleEditActivityLesson: (index: number) => void;
   handleSaveLesson: () => void;
 
   activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
@@ -110,19 +119,33 @@ type LearnignPathDesignContextProps = {
   lessonActivities: LessonProps[];
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
-  removeLessonActivity: (index: number) => void;
-  handleUpdateLessonContent: (
+  removeLessonActivity: (index: number) => Promise<void>;
+  resetOersContent: (index: number) => void;
+  resetFilesContent: (index: number) => void;
+  handleUpdateActivityContent: (
     index: number,
-    newContent: OerInCollectionProps[]
-  ) => void;
+    newContent: OerInCollectionProps[] | UploadedFilesProps[]
+  ) => Promise<void>;
 
-  // Add Content
+  // Add Content - Selected Oers
   resourcesSelectedAddContent: OerInCollectionProps[];
   addSelectedResourcesAddContent: (
     oers: OerInCollectionProps | OerInCollectionProps[]
   ) => void;
   removeSelectedResourceAddContent: (oer: OerInCollectionProps) => void;
   resetSelectedResourcesAddContent: () => void;
+
+  // Add Content - Uploaded files
+  uploadedFilesAddContent: UploadedFilesProps[];
+  addUploadedFilesAddContent: (
+    files: UploadedFilesProps | UploadedFilesProps[]
+  ) => void;
+  loadUploadedFiles: (
+    activityIndex: number,
+    isLessonView: boolean
+  ) => Promise<void>;
+  removeUploadedFileAddContent: (file: UploadedFilesProps) => void;
+  resetUploadedFilesAddContent: () => void;
 
   // Lessons Cards
   lessonCards: LessonCardProps[];
@@ -257,7 +280,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Function to create/add a custom learning objective
   const handleAddLearningObjective = () => {
-    console.log('Add new learning objective');
+    console.log('Adding new learning objective...');
     try {
       setLearningObjectiveObjects(
         (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
@@ -499,33 +522,32 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setIsEditLessonPlanClicked(isClicked);
   };
 
-  const handleSaveLessonPlanClick = () => {
-    if (editLessonIndex !== null && !isEditLessonPlanClicked) {
-      handleSaveLesson();
-    } else if (isEditLessonPlanClicked) {
-      if (editLessonIndex !== null) {
-        handleSaveLesson();
-      }
-      setIsEditLessonPlanClicked(false);
-    }
-  };
-
   // State to track the index of the row currently in edit mode
-  const [editLessonIndex, setEditLessonIndex] = useLocalStorage<number | null>(
-    'editLessonIndex',
-    null
-  );
+  const [editActivityLessonIndex, setEditActivityLessonIndex] = useLocalStorage<
+    number | null
+  >('editActivityLessonIndex', null);
 
   // Function to handle initiating edit mode for a row
-  const handleEditLesson = (index: number) => {
+  const handleEditActivityLesson = (index: number) => {
     // Set the index of the row in edit mode
-    setEditLessonIndex(index);
+    setEditActivityLessonIndex(index);
   };
 
   // Function to handle saving changes and exit edit mode
   const handleSaveLesson = () => {
     // Save changes and disable edit mode
-    setEditLessonIndex(null);
+    setEditActivityLessonIndex(null);
+  };
+
+  const handleSaveLessonPlanClick = () => {
+    if (editActivityLessonIndex !== null && !isEditLessonPlanClicked) {
+      handleSaveLesson();
+    } else if (isEditLessonPlanClicked) {
+      if (editActivityLessonIndex !== null) {
+        handleSaveLesson();
+      }
+      setIsEditLessonPlanClicked(false);
+    }
   };
 
   // Lesson
@@ -675,13 +697,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Function to add a new activity
   const addEmptyLessonActivity = () => {
-    const newLessonActivity = {
-      lessonTitle: '',
+    const newLessonActivity: LessonProps = {
+      activityTitle: '',
       lessonType: '',
       activityType: '',
       activityDescription: '',
       timeDuration: 0,
       passFailConditions: [],
+      content: {
+        oers: [],
+        uploadedFiles: [],
+      },
     };
     setLessonActivities((prevLessonActivities: LessonProps[]) => [
       ...prevLessonActivities,
@@ -690,7 +716,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   };
 
   // Function to remove a lessonActivity from the lessonActivities array given the index
-  const removeLessonActivity = (indexToRemove: number) => {
+  const removeLessonActivity = async (indexToRemove: number) => {
+    await deleteActivityAndUpdateFiles(indexToRemove, lessonActivities.length);
     setLessonActivities((prevLessonActivities: LessonProps[]) => {
       // Copy the array of lessonActivities excluding the element to remove
       const updatedLessonActivities = [...prevLessonActivities];
@@ -699,21 +726,128 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     });
   };
 
-  const handleUpdateLessonContent = (
-    lessonIndex: number,
-    newContent: OerInCollectionProps[]
-  ) => {
-    console.log('Updating lesson content');
+  //   function isOerInCollectionPropsArray(arr: any[]): arr is OerInCollectionProps[] {
+  //     return arr.length === 0 || 'concepts' in arr[0];
+  // }
+
+  const resetOersContent = (activityIndex: number) => {
     setLessonActivities((prevLessons: LessonProps[]) => {
       const updatedLessons = [...prevLessons];
-      if (updatedLessons[lessonIndex]) {
-        updatedLessons[lessonIndex].content = {
-          ...updatedLessons[lessonIndex].content,
-          oers: newContent,
-        };
+      if (updatedLessons[activityIndex]) {
+        updatedLessons[activityIndex].content.oers = [];
       }
       return updatedLessons;
     });
+  };
+
+  const resetFilesContent = (activityIndex: number) => {
+    setLessonActivities((prevLessons: LessonProps[]) => {
+      const updatedLessons = [...prevLessons];
+      if (updatedLessons[activityIndex]) {
+        updatedLessons[activityIndex].content.uploadedFiles = [];
+      }
+      return updatedLessons;
+    });
+  };
+
+  const handleUpdateActivityContent = async (
+    activityIndex: number,
+    newContent: OerInCollectionProps[] | UploadedFilesProps[]
+  ) => {
+    console.log('Updating lesson content');
+    // Add new selected OERs
+    if (isOerInCollectionProps(newContent)) {
+      console.log('NEW CONTENT - Oers', newContent);
+      try {
+        setLessonActivities((prevLessons: LessonProps[]) => {
+          const updatedLessons = [...prevLessons];
+          if (updatedLessons[activityIndex]) {
+            updatedLessons[activityIndex].content.oers = newContent;
+          }
+          return updatedLessons;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      // Add new uploaded files
+    } else if (isUploadedFilesProps(newContent)) {
+      console.log('Upload the file...');
+      console.log('NEW CONTENT - Files', newContent);
+      try {
+        setLessonActivities((prevLessons: LessonProps[]) => {
+          const updatedLessons = [...prevLessons];
+          if (updatedLessons[activityIndex]) {
+            updatedLessons[activityIndex].content.uploadedFiles = [
+              // ...(updatedLessons[activityIndex].content.uploadedFiles || []),
+              ...newContent.map((content: UploadedFilesProps) => ({
+                fileUploaded: content.fileUploaded,
+                fileName: content.fileUploaded.name,
+                urlFile: content.urlFile,
+              })),
+            ];
+          }
+          return updatedLessons;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    // else if (newContent.every((file) => file instanceof File)) {
+    //   console.log('Upload the file...');
+    //   console.log('NEW CONTENT', newContent);
+    //   try {
+    //     const newFiles: UploadedFilesProps[] = await saveMultipleFilesToIndexedDB(newContent, activityIndex);
+    //     setLessonActivities((prevLessons: LessonProps[]) => {
+    //       const updatedLessons = [...prevLessons];
+    //       if (updatedLessons[activityIndex]) {
+    //         updatedLessons[activityIndex].content.uploadedFiles = [
+    //           // ...(updatedLessons[activityIndex].content.uploadedFiles || []),
+    //           ...newFiles,
+    //         ];
+    //       }
+    //       return updatedLessons;
+    //     });
+    //   } catch (error) {
+    //     addToast({
+    //       message: `Error saving the files in the database. ${error}`,
+    //       type: 'error'
+    //     })
+    //   }
+    // }
+    // setLessonActivities((prevLessons: LessonProps[]) => {
+    //   const updatedLessons = [...prevLessons];
+    //   if (updatedLessons[lessonIndex]) {
+    //     if (isOerInCollectionProps(newContent)) {
+    //       updatedLessons[lessonIndex].content.oers = newContent
+
+    //     } else if (isUploadedFilesProps(newContent)) {
+    //       console.log('Upload the file...');
+    //       console.log('NEW CONTENT', newContent);
+    //       // updatedLessons[lessonIndex].content = {
+    //       //   ...updatedLessons[lessonIndex].content,
+    //       //   uploadedFiles: newContent.map((uploadedFile: UploadedFilesProps) => {
+    //       //     const content: UploadedFilesProps[] = [];
+    //       //     content.push({
+    //       //       fileUploaded: uploadedFile.fileUploaded,
+    //       //       urlFile: uploadedFile.urlFile
+    //       //     })
+    //       //   })
+    //       // };
+
+    //       // // Append new uploaded files
+    //       // updatedLessons[lessonIndex].content.uploadedFiles = [
+    //       //   ...updatedLessons[lessonIndex].content.uploadedFiles,
+    //       //   ...newContent.map((uploadedFile: UploadedFilesProps) => ({
+    //       //     fileUploaded: uploadedFile.fileUploaded,
+    //       //     urlFile: uploadedFile.urlFile
+    //       //   }))
+    //       // ];
+    //       updatedLessons[lessonIndex].content.uploadedFiles = newContent;
+    //       console.log("UPDATED LESSONS - UPLOADED FILE", updatedLessons[lessonIndex].content.uploadedFiles);
+    //     }
+    //   }
+    //   return updatedLessons;
+    // });
   };
 
   // TO_CHECK: useful?
@@ -758,62 +892,48 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // ========================================================
 
-  // Add Content
-  const [resourcesSelectedAddContent, setResourcesSelected] = useState<
-    OerInCollectionProps[]
-  >([]);
+  // Add Content - Selected oers
+  const [resourcesSelectedAddContent, setResourcesSelectedAddContent] =
+    useState<OerInCollectionProps[]>([]);
 
-  // Add the selected resource to the array
+  // Add selected resources to the temp view
   const addSelectedResourcesAddContent = (
     newResources: OerInCollectionProps | OerInCollectionProps[]
   ): void => {
     try {
-      // If are more resources
-      if (Array.isArray(newResources)) {
-        // Check if there is a new resource already selected
-        const isAllNewResources = resourcesSelectedAddContent.some(
-          (resourceSelected: OerInCollectionProps) =>
-            newResources.forEach(
-              (resource: OerInCollectionProps) =>
-                resourceSelected.id === resource.id
+      // Helper function to add resources to the resourcesSelectedAddContent array
+      const addResources = (resourcesToAdd: OerInCollectionProps[]) => {
+        // Filter out any resources that are already in the resourcesSelectedAddContent array
+        const uniqueNewResources = resourcesToAdd.filter(
+          (resource) =>
+            !resourcesSelectedAddContent.some(
+              (resourceSelected) => resourceSelected.id === resource.id
             )
         );
 
-        // If NO, add all the resources
-        if (isAllNewResources) {
-          setResourcesSelected((prevResources: OerInCollectionProps[]) => [
+        // If there are unique new resources, add them to the resourcesSelectedAddContent array
+        if (uniqueNewResources.length > 0) {
+          setResourcesSelectedAddContent((prevResources) => [
             ...prevResources,
-            ...newResources,
+            ...uniqueNewResources,
           ]);
-          // Otherwise check on each resource and add only the ones not already selected
         } else {
-          newResources.forEach((resource: OerInCollectionProps) => {
-            const isResourceIndexAlreadyAdded =
-              resourcesSelectedAddContent.some(
-                (resourceSelected: OerInCollectionProps) =>
-                  resourceSelected.id === resource.id
-              );
-            if (!isResourceIndexAlreadyAdded) {
-              setResourcesSelected((prevResources: OerInCollectionProps[]) => [
-                ...prevResources,
-                resource,
-              ]);
-              // Update the UI or show a success notification
-            } else {
-              console.error('Resource already selected');
-            }
-          });
+          // Log an error if all new resources are already selected
+          console.error('All new resources are already selected');
         }
+      };
 
-        // If is only one resource
+      // Check if newResources is an array
+      if (Array.isArray(newResources)) {
+        // If it is an array, call addResources with the array
+        addResources(newResources);
       } else {
-        setResourcesSelected((prevResources: OerInCollectionProps[]) => [
-          ...prevResources,
-          newResources,
-        ]);
+        // If it is a single resource, wrap it in an array and call addResources
+        addResources([newResources]);
       }
     } catch (error) {
-      // Handle errors or show an error notification
+      // Log any errors that occur during the process
+      console.error('An error occurred while adding resources:', error);
     }
   };
 
@@ -822,7 +942,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     resourceToRemove: OerInCollectionProps
   ): void => {
     try {
-      setResourcesSelected((prevResources: OerInCollectionProps[]) =>
+      setResourcesSelectedAddContent((prevResources: OerInCollectionProps[]) =>
         prevResources.filter(
           (resource: OerInCollectionProps) =>
             resource.id !== resourceToRemove.id
@@ -837,13 +957,118 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const resetSelectedResourcesAddContent = () => {
     if (resourcesSelectedAddContent.length > 0) {
-      setResourcesSelected([]);
+      setResourcesSelectedAddContent([]);
+    }
+  };
+
+  // Add Content - Uploaded filed
+  const [uploadedFilesAddContent, setUploadedFilesAddContent] = useState<
+    UploadedFilesProps[]
+  >([]);
+
+  // Add the uploaded file to the array
+  const addUploadedFilesAddContent = (
+    newFiles: UploadedFilesProps | UploadedFilesProps[]
+  ): void => {
+    try {
+      // Helper function to add files to the uploadedFilesAddContent array
+      const addFiles = (filesToAdd: UploadedFilesProps[]) => {
+        // Filter out any files that are already in the uploadedFilesAddContent array
+        const uniqueNewFiles = filesToAdd.filter(
+          (newFile) =>
+            !uploadedFilesAddContent.some(
+              (existingFile) =>
+                existingFile.fileUploaded.name === newFile.fileUploaded.name
+            )
+        );
+
+        // If there are unique new files, add them to the uploadedFilesAddContent array
+        if (uniqueNewFiles.length > 0) {
+          setUploadedFilesAddContent((prevFiles) => [
+            ...prevFiles,
+            ...uniqueNewFiles,
+          ]);
+        } else {
+          // Log an error if all new files are already added
+          console.error('All new files are already added');
+        }
+      };
+
+      // Check if newFiles is an array
+      if (Array.isArray(newFiles)) {
+        // If it is an array, call addFiles with the array
+        addFiles(newFiles);
+      } else {
+        // If it is a single file, wrap it in an array and call addFiles
+        addFiles([newFiles]);
+      }
+    } catch (error) {
+      // Log any errors that occur during the process
+      console.error('An error occurred while adding files:', error);
+    }
+  };
+
+  const loadUploadedFiles = async (
+    activityIndex: number,
+    isLessonView: boolean
+  ) => {
+    console.log('LOAD FILES...');
+    try {
+      const validFiles = await getAllFilesByActivityIndex(activityIndex);
+      console.log('VALID FILES', validFiles);
+
+      // We are in AddContent
+      if (!isLessonView) {
+        if (validFiles.length > 0) {
+          addUploadedFilesAddContent(validFiles);
+        }
+        // We are displaying the content in the table or tiles
+      } else {
+        if (validFiles.length > 0) {
+          await handleUpdateActivityContent(activityIndex, validFiles);
+        } else {
+          resetFilesContent(activityIndex);
+        }
+      }
+    } catch (error) {
+      addToast({
+        message: `Error loading the files from database. ${error}`,
+        type: 'error',
+      });
+    }
+  };
+
+  // Remove the selected file from the array
+  const removeUploadedFileAddContent = (
+    fileToRemove: UploadedFilesProps
+  ): void => {
+    try {
+      setUploadedFilesAddContent((prevFiles: UploadedFilesProps[]) =>
+        prevFiles.filter(
+          (resource: UploadedFilesProps) =>
+            resource.fileUploaded.name !== fileToRemove.fileUploaded.name
+        )
+      );
+      // Update the UI or show a success notification
+    } catch (error) {
+      // Handle errors or show an error notification
+      console.error(error);
+    }
+  };
+
+  const resetUploadedFilesAddContent = () => {
+    if (uploadedFilesAddContent.length > 0) {
+      setUploadedFilesAddContent([]);
     }
   };
 
   // =============================================================================================================
 
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
+
+  useEffect(() => {
+    console.log('Lesson activities', lessonActivities);
+  }, [lessonActivities]);
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -877,6 +1102,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ]);
 
   useEffect(() => {
+    // console.log("Provo")
     if (collectionIndex > -1) {
       setStep(2);
     }
@@ -932,14 +1158,17 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       const newNumberOfLO = learningObjectiveObjects.length - count;
       setLearningObjectiveObjects(updatedObjectives);
       setNumberOfLO(newNumberOfLO);
-    } else if (learningObjectiveObjects.length === 0) {
-      // setIsAtLeastOneLOGenerated(false);
-      handleAddLearningObjective();
     }
+    // With the first "if", thispart is now useless
+    // else if (learningObjectiveObjects.length === 0) {
+    //   // setIsAtLeastOneLOGenerated(false);
+    //   handleAddLearningObjective();
+    // }
   }, [numberOfLO, learningObjectiveObjects.length]);
-  useEffect(() => {
-    console.log(lessonActivities);
-  }, [lessonActivities]);
+
+  // useEffect(() => {
+  //   console.log(lessonActivities);
+  // }, [lessonActivities]);
 
   useEffect(() => {
     if (defaultLearningContext.trim() !== '') {
@@ -947,9 +1176,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     }
   }, [defaultLearningContext]);
 
-  useEffect(() => {
-    console.log('SELECTED RESOURCES: ', resourcesSelectedAddContent);
-  }, [resourcesSelectedAddContent]);
+  // useEffect(() => {
+  //   console.log('SELECTED RESOURCES: ', resourcesSelectedAddContent);
+  // }, [resourcesSelectedAddContent]);
 
   return (
     <LearningPathDesignContext.Provider
@@ -974,7 +1203,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         step,
         selectedOptions,
         resetCheckBoxOptions,
-        collectionIndex,
+        selectedCollectionIndex: collectionIndex,
         resourcesIndex,
         MAX_LO,
         MIN_LO,
@@ -1021,8 +1250,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         isEditLessonPlanClicked,
         handleEditLessonPlanClick,
         handleSaveLessonPlanClick,
-        editLessonIndex,
-        handleEditLesson,
+        editActivityLessonIndex,
+        handleEditActivityLesson,
         handleSaveLesson,
 
         activityTypes,
@@ -1039,13 +1268,22 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         setLessonActivities,
         addEmptyLessonActivity,
         removeLessonActivity,
-        handleUpdateLessonContent,
+        resetOersContent,
+        resetFilesContent,
+        handleUpdateActivityContent,
 
-        // Add content
+        // Add content - Oers
         resourcesSelectedAddContent,
         addSelectedResourcesAddContent,
         removeSelectedResourceAddContent,
         resetSelectedResourcesAddContent,
+
+        // Add content - files
+        uploadedFilesAddContent,
+        addUploadedFilesAddContent,
+        loadUploadedFiles,
+        removeUploadedFileAddContent,
+        resetUploadedFilesAddContent,
 
         // LESSONS CARDS
         lessonCards,

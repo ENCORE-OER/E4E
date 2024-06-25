@@ -7,7 +7,7 @@ import { useHasHydrated } from '../../../../utils/utils';
 import BoxLearningObjective from '../../../Boxes/BoxLearningObjective';
 import LoadingSpinner from '../../../LoadingSpinner/LoadingSpinner';
 import DeleteLOAlertDialog from '../../../Modals/AlertDialogs/DeleteAlertDialog/DeleteLOAlertDialog';
-import InfoGenAITextBox from '../../../TextBox/InfoGenAITextBox';
+import InfoGenAITextBox from '../../../TextBox/InfoTextBox/InfoGenAITextBox';
 import GenerateLOView from './GenerateLOView';
 
 export interface PathDesignGenLOProps {

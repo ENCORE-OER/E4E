@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 
 // import { useUser } from '@auth0/nextjs-auth0/client';
-import { asSets, mergeColors, VennDiagram } from '@upsetjs/react';
+import { asSets, ISet, mergeColors, VennDiagram } from '@upsetjs/react';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import AdvancedSearch from '../components/AdvancedSearch/AdvancedSearch';
@@ -44,7 +44,7 @@ const Home = (props: DiscoverPageProps) => {
   const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
   const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
-  const [metrics, setMetrics] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<ISet[]>([]);
   const [totalOers, setTotalOers] = useState<string[]>([]);
   const [selectedDomains, setSelectedDomains] = useState<string[] | number[]>(
     []
@@ -137,6 +137,8 @@ const Home = (props: DiscoverPageProps) => {
         order_asc: 'true',
         operator: operator,
         concepts: [],
+        isDomainsFilter: false,
+        isTypesFilter: false,
       };
       // }
 
@@ -157,11 +159,11 @@ const Home = (props: DiscoverPageProps) => {
           pathname: '/discover',
           query: searchData,
         });
+        localStorage.setItem('searchData', JSON.stringify(searchData));
+        console.log(
+          'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
+        );
       }
-      localStorage.setItem('searchData', JSON.stringify(searchData));
-      console.log(
-        'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
-      );
     } catch (error) {
       addToast({
         message: `${error}`,

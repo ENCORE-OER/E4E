@@ -14,8 +14,9 @@ import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 const Home = () => {
   const router = useRouter();
   // const { user } = useUser();
-  const [areOptionsComplete, setAreOptionsComplete] = useState(false);
-  const [isNextButtonClicked, setIsNextButtonClicked] = useState(false);
+  const [areOptionsComplete, setAreOptionsComplete] = useState<boolean>(false);
+  const [isNextButtonClicked, setIsNextButtonClicked] =
+    useState<boolean>(false);
   const { addToast } = CustomToast();
   const hydrated = useHasHydrated();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page

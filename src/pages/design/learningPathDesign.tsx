@@ -12,7 +12,7 @@ import Navbar from '../../components/NavBars/NavBarEncore';
 import SideBar from '../../components/SideBar/SideBar';
 import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
-import InfoGenAITextBox from '../../components/TextBox/InfoGenAITextBox';
+import InfoGenAITextBox from '../../components/TextBox/InfoTextBox/InfoGenAITextBox';
 import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
@@ -187,14 +187,17 @@ const Home = (/*props: DiscoverPageProps*/) => {
         <Box
           py="115px"
           pl={isSmallerScreen ? '90px' : '240px'}
-          w="full"
+          w="100%"
           minH="100vh"
           bg="background"
+          overflowX="auto"
+          overflowY="hidden"
         >
           <Box
             // w="100%"
             w={isSmallerScreen ? '95%' : '80%'}
             h="100%"
+            // overflowX="auto"
           >
             <Flex
               w="100%"

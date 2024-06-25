@@ -8,9 +8,14 @@ import { useEffect, useState } from 'react';
 import {
   ArrayProps,
   GeneratedExerciseProps,
+  OerConceptInfo,
+  OerInCollectionProps,
   Option,
   OptionsData,
+  SkillItemProps,
+  UploadedFilesProps,
 } from '../types/encoreElements';
+import { DomainsEnum } from '../types/encoreElements/oer/enums/Domains';
 
 // fix zust persist issue https://github.com/pmndrs/zustand/issues/324
 // if an error like Extra attributes from the server appear use this hook
@@ -291,4 +296,74 @@ export const getCurrentDate = () => {
   const year = currentDate.getFullYear();
   const formattedDate = `${day}/${month}/${year}`; // Puoi personalizzare il formato della data secondo le tue esigenze
   return formattedDate;
+};
+
+// To extract the name of the domains when a intersection of the venn diagram is selected
+export const extractSetIds = (name: string) => {
+  // Regex to extract names within parentheses
+  const regex = /\((.*?)\)/g;
+  const matches = name.match(regex);
+  console.log(matches);
+
+  if (matches && matches.length > 0) {
+    // The first match contains the text within parentheses
+    const matchText = matches[0];
+
+    // Extract names by splitting with the intersection symbol "∩"
+    const setNames = matchText
+      .slice(1, -1) // Remove initial and final parentheses
+      .split(' ∩ ') // Split by intersection symbol
+      .map((name) => name.toLowerCase()); // Convert all names to lowercase
+
+    console.log(setNames);
+
+    // Map domains to IDs
+    const domainIds = setNames.map((domainName: string) =>
+      mapOptionToNumber({ name: domainName }, DomainsEnum)
+    );
+
+    // Return list of the domains' IDs
+    return domainIds;
+  } else {
+    // Selection of only digital, green or entrepreneurship
+    return [mapOptionToNumber({ name: name.toLowerCase() }, DomainsEnum)];
+  }
+};
+
+// Check if the varaible is OerInCollectionProps type
+export const isOerInCollectionProps = (
+  arr: any[] | any
+): arr is OerInCollectionProps[] | OerInCollectionProps => {
+  if (!Array.isArray(arr)) {
+    return 'concepts' in arr;
+  }
+  return arr.length === 0 || 'concepts' in arr[0];
+};
+
+// Check if the varaible is UploadedFilesProps type
+export const isUploadedFilesProps = (
+  arr: any | any[]
+): arr is UploadedFilesProps | UploadedFilesProps[] => {
+  if (!Array.isArray(arr)) {
+    return 'fileUploaded' in arr;
+  }
+  return arr.length === 0 || 'fileUploaded' in arr[0];
+};
+
+export const isOerConcept = (
+  arr: any | any[]
+): arr is OerConceptInfo | OerConceptInfo[] => {
+  if (!Array.isArray(arr)) {
+    return 'name' in arr;
+  }
+  return arr.length === 0 || 'name' in arr[0];
+};
+
+export const isSkillItem = (
+  arr: any | any[]
+): arr is SkillItemProps | SkillItemProps[] => {
+  if (!Array.isArray(arr)) {
+    return 'label' in arr;
+  }
+  return arr.length === 0 || 'label' in arr[0];
 };

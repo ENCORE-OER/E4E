@@ -34,8 +34,8 @@ export default function LessonCardsList({
     lessonActivities,
     setLessonActivities,
     isEditLessonPlanClicked,
-    editLessonIndex,
-    handleEditLesson,
+    editActivityLessonIndex,
+    handleEditActivityLesson,
     optionsTypeOfAssignment,
     activityTypes,
   } = useLearningPathDesignContext();
@@ -209,8 +209,8 @@ export default function LessonCardsList({
                               handleData={setLessonActivities}
                               isSmallerScreen={isSmallerScreen}
                               handleOpenModal={handleOpenModal}
-                              editLessonIndex={editLessonIndex}
-                              handleEditLesson={handleEditLesson}
+                              editLessonIndex={editActivityLessonIndex}
+                              handleEditLesson={handleEditActivityLesson}
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
                               activityTypes={activityTypes}

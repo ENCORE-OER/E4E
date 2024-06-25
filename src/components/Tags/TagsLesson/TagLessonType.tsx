@@ -7,7 +7,13 @@ type TagLessonTypeProps = {
 
 export default function TagLessonType({ labelTag }: TagLessonTypeProps) {
   return (
-    <Tag bg={'blue.100'} borderRadius="lg" w="fit-content" px={3}>
+    <Tag
+      bg={'blue.100'}
+      borderRadius="lg"
+      w="fit-content"
+      px={3}
+      cursor="default"
+    >
       {/* <Text variant="label_tag_genAI">{labelTag}</Text> */}
       <TagLabel display="flex" w="fit-content">
         {labelTag || <LabelEmptyFieldTable label="Type of Assignment" />}

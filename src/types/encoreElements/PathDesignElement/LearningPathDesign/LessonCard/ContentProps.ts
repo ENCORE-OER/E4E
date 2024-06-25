@@ -1,6 +1,8 @@
+import { UploadedFilesProps } from '.';
 import { OerInCollectionProps } from '../../../oer';
 
 export type ContentProps = {
-  oers?: OerInCollectionProps[];
-  uploadedFile?: string[]; // TODO: study which type is better
+  oers: OerInCollectionProps[];
+  uploadedFiles: UploadedFilesProps[];
+  // uploadedFiles: string[];
 };

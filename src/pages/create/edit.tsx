@@ -57,12 +57,12 @@ const Edit = ({
   } = useCreateOERsContext();
 
   // This is the collection selected in "Learning Objective" page
-  const { collectionIndex: selectedCollectionIndex } =
+  const { selectedCollectionIndex: selectedCollectionIndex } =
     useLearningPathDesignContext();
 
   const [response, setResponse] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [areOptionsComplete, setAreOptionsComplete] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [areOptionsComplete, setAreOptionsComplete] = useState<boolean>(true);
   const [collectionIndex, setCollectionIndex] = useState<number>(
     isAddContentModal ? selectedCollectionIndex : -1
   );

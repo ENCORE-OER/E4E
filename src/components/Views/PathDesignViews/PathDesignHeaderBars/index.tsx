@@ -32,8 +32,11 @@ export default function PathDesignHeaderBars({
   handleResourceChange,
   isNextButtonClicked,
 }: PathDesignHeaderBarsProps) {
-  const { collectionIndex, resourcesIndex, step } =
-    useLearningPathDesignContext();
+  const {
+    selectedCollectionIndex: collectionIndex,
+    resourcesIndex,
+    step,
+  } = useLearningPathDesignContext();
 
   return (
     <Flex direction="column" w="100%">

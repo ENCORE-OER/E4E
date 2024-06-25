@@ -38,7 +38,7 @@ export default function PathDesignGenLessonPlan({
   // const { chosenTargetLevel } = useCreateOERsContext();
 
   const {
-    collectionIndex,
+    selectedCollectionIndex: collectionIndex,
     resourcesIndex,
     learningObjectiveObjects,
     bloomLevelIndex,
@@ -46,7 +46,7 @@ export default function PathDesignGenLessonPlan({
     learningTextContext,
     defaultLearningContext,
     handleTitleLearningPath,
-    lessonActivities,
+    // lessonActivities,
     setLessonActivities,
     setTitleLearningPath,
     handleEditLessonPlanClick,
@@ -353,7 +353,7 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          lessonTitle: `${
+          activityTitle: `${
             generatedLesson.Type
               ? `${mapStringToString(
                   TypeOfActivityEnum[Number(generatedLesson.Details)],
@@ -378,6 +378,7 @@ export default function PathDesignGenLessonPlan({
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
+          content: { oers: [], uploadedFiles: [] },
         })) || []
       );
 
@@ -402,10 +403,10 @@ export default function PathDesignGenLessonPlan({
 
       console.log(analyzedMaterial);
 
-      // In the case the material analyzer had worked
+      // If the material analyzer worked
       if (analyzedMaterial !== undefined) {
         tempIsPossibleToContinue = await generationLessonPlan(analyzedMaterial);
-        console.log(tempIsPossibleToContinue);
+        console.log('Continue: ', tempIsPossibleToContinue);
       } else {
         throw console.error('Error with the analyzed material.');
       }
@@ -667,24 +668,26 @@ export default function PathDesignGenLessonPlan({
     const tempLessonsActivities: LessonProps[] = [];
     for (let i = 0; i < numberOfLearningActivities; i++) {
       tempLessonsActivities.push({
-        lessonTitle: '',
+        activityTitle: '',
         lessonType: 'Learning',
         activityType: '',
         activityDescription: '',
         topic: '',
         timeDuration: 0,
         passFailConditions: [],
+        content: { oers: [], uploadedFiles: [] },
       });
     }
     for (let i = 0; i < numberOfAssessmentActivities; i++) {
       tempLessonsActivities.push({
-        lessonTitle: '',
+        activityTitle: '',
         lessonType: 'Assessment',
         activityType: '',
         activityDescription: '',
         topic: '',
         timeDuration: 0,
         passFailConditions: [],
+        content: { oers: [], uploadedFiles: [] },
       });
     }
     setLessonActivities(tempLessonsActivities);
@@ -838,9 +841,9 @@ export default function PathDesignGenLessonPlan({
     }
   }, [numberOfAssessmentActivities, numberOfLearningActivities]);
 
-  useEffect(() => {
-    console.log(lessonActivities);
-  }, [lessonActivities]);
+  // useEffect(() => {
+  //   console.log(lessonActivities);
+  // }, [lessonActivities]);
 
   return (
     <Flex direction="column" rowGap={3} pt="3rem" w="100%">

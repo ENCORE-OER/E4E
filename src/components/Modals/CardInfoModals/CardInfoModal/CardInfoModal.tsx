@@ -126,7 +126,7 @@ export default function CardInfoModal({
 
   const handleOpenAddCollectionModal = () => {
     setAddCollectionModalOpen(true);
-    console.log(isAddCollectionModalOpen);
+    // console.log(isAddCollectionModalOpen);
   };
 
   const handleCloseCollectionModal = () => {
@@ -150,7 +150,7 @@ export default function CardInfoModal({
     const api = new APIV2(undefined);
     const resp = await api.getCount(id);
 
-    console.log('count: ' + resp);
+    // console.log('count: ' + resp);
 
     return resp;
   };
@@ -306,8 +306,9 @@ export default function CardInfoModal({
             handleViewResource={handleViewResource}
             isAddContentModal={isAddContentModal}
             handleCheckboxClick={() => {
-              if (handleCheckboxClick)
+              if (handleCheckboxClick) {
                 handleCheckboxClick(indexOerOpened ?? -1);
+              }
             }}
             isChecked={isChecked}
             isDisabled={isDisabled}

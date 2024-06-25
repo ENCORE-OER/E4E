@@ -52,7 +52,7 @@ const CollectionNavItem = ({
   const {
     handleCollectionIndexChange,
     setResourcesIndex,
-    collectionIndex: selectedCollectionIndex,
+    selectedCollectionIndex: selectedCollectionIndex,
   } = useLearningPathDesignContext();
 
   // handle the click on the collection

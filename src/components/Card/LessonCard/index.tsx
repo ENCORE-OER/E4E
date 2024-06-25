@@ -83,6 +83,14 @@ export default function LessonCard({
     );
   };
 
+  const handleActivityTitleChange = (value: string) => {
+    handleData((previousData: LessonProps[]) =>
+      previousData.map((item: LessonProps, idx: number) =>
+        idx === indexCard ? { ...item, activityTitle: value } : item
+      )
+    );
+  };
+
   const handleDescriptionChange = (value: string) => {
     handleData((previousData: LessonProps[]) =>
       previousData.map((item: LessonProps, idx: number) =>
@@ -207,17 +215,29 @@ export default function LessonCard({
 
         <CardBody justifyContent="flex-start" display="flex" w="100%" py={0}>
           <Flex w="100%" direction="column">
+            {/* Activity Title */}
             <Flex p={3}>
-              <ShowHideButton
-                showBox={showBox}
-                setShowBox={setShowBox}
-                showButtonName={`${indexCard + 1}. ${lesson.lessonTitle}`}
-                isUpDown={false}
-                fontWeight="bold"
-                color="primary"
-                border="none"
-                fontSize="x-large"
-              />
+              {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
+                <Textarea
+                  value={lesson.activityTitle}
+                  onChange={(e) => handleActivityTitleChange(e.target.value)}
+                  placeholder="Title of the activity"
+                  // size="sm"
+                  // fontSize="small"
+                />
+              ) : (
+                <ShowHideButton
+                  showBox={showBox}
+                  setShowBox={setShowBox}
+                  showButtonName={`${indexCard + 1}. ${lesson.activityTitle}`}
+                  isUpDown={false}
+                  fontWeight="bold"
+                  color="primary"
+                  border="none"
+                  fontSize="x-large"
+                />
+              )}
+              {/* Description */}
             </Flex>
             {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
               <Textarea
@@ -341,6 +361,7 @@ export default function LessonCard({
       <AddContentModal
         isOpen={isAddContentModalOpen}
         onClose={handleCloseAddContentModal}
+        activityIndex={indexCard}
       />
     </>
   );
