@@ -65,9 +65,9 @@ export default function LessonCard({
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
           ? {
-            ...item,
-            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-          }
+              ...item,
+              lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+            }
           : item
       )
     );
@@ -111,9 +111,9 @@ export default function LessonCard({
       prevLessons.map((item, idx) =>
         idx === indexCard
           ? {
-            ...item,
-            activityType: selectedActivityType,
-          }
+              ...item,
+              activityType: selectedActivityType,
+            }
           : item
       )
     );
@@ -203,7 +203,7 @@ export default function LessonCard({
                 isEditClicked={
                   editLessonIndex === indexCard || isEditLessonPlanClicked
                 }
-              // isDisabled={true}
+                // isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}
@@ -222,8 +222,8 @@ export default function LessonCard({
                   value={lesson.activityTitle}
                   onChange={(e) => handleActivityTitleChange(e.target.value)}
                   placeholder="Title of the activity"
-                // size="sm"
-                // fontSize="small"
+                  // size="sm"
+                  // fontSize="small"
                 />
               ) : (
                 <ShowHideButton
@@ -244,7 +244,7 @@ export default function LessonCard({
                 value={lesson.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
-              // fontSize="small"
+                // fontSize="small"
               />
             ) : (
               <Text
