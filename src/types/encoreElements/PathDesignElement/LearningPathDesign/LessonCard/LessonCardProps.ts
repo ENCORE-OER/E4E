@@ -22,4 +22,5 @@ export type LessonCardProps = {
   isEditLessonPlanClicked: boolean;
   optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[];
   activityTypes: activityTypesObjectsProps[];
+  activityRef: (el: HTMLDivElement | null) => void;
 };

@@ -1,5 +1,5 @@
 import { Flex, useDisclosure } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -39,7 +39,11 @@ export default function LessonCardsList({
     handleEditActivityLesson,
     optionsTypeOfAssignment,
     activityTypes,
+    scrollToIndex,
+    setScrollToIndex,
   } = useLearningPathDesignContext();
+
+  const activityRefs = useRef<(null | HTMLDivElement)[]>([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [condition, setCondition] = useState<string>('');
@@ -156,13 +160,26 @@ export default function LessonCardsList({
   //   setLessonCards(newLessonCards);
   // }, [lessonActivities]);
 
-  useEffect(() => {
-    console.log(lessonCards);
-  }, [lessonCards]);
+  // useEffect(() => {
+  //   console.log(lessonCards);
+  // }, [lessonCards]);
+
+  // useEffect(() => {
+  //   console.log(selectedCardIndex);
+  // }, [selectedCardIndex]);
 
   useEffect(() => {
-    console.log(selectedCardIndex);
-  }, [selectedCardIndex]);
+    if (
+      scrollToIndex !== null &&
+      activityRefs !== null &&
+      activityRefs?.current[scrollToIndex]
+    ) {
+      activityRefs?.current[scrollToIndex]?.scrollIntoView({
+        behavior: 'auto',
+      });
+      setScrollToIndex(null);
+    }
+  }, [scrollToIndex]);
 
   return (
     <>
@@ -215,6 +232,9 @@ export default function LessonCardsList({
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
                               activityTypes={activityTypes}
+                              activityRef={(el) =>
+                                (activityRefs.current[indexCard] = el)
+                              }
                             />
                           )}
                         </Flex>

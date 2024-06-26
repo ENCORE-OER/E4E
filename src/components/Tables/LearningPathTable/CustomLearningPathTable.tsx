@@ -44,6 +44,7 @@ const CustomLearningPathTable = forwardRef<
     handleEditLesson, // handleSaveLesson
     isPrinting,
     loadUploadedFiles,
+    activityRefs,
   } = props;
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -95,7 +96,7 @@ const CustomLearningPathTable = forwardRef<
         : item
     );
 
-    console.log(updatedData);
+    // console.log(updatedData);
     handleData(updatedData);
   };
 
@@ -148,9 +149,9 @@ const CustomLearningPathTable = forwardRef<
     }
   }, [editRowIndex]);
 
-  useEffect(() => {
-    console.log('DATA: ', data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log('DATA: ', data);
+  // }, [data]);
 
   return (
     <Flex ref={ref}>
@@ -230,6 +231,9 @@ const CustomLearningPathTable = forwardRef<
                                   handleTimeDurationChange
                                 }
                                 openDescriptionModal={openDescriptionModal}
+                                activityRef={(el) =>
+                                  (activityRefs.current[indexRow] = el)
+                                }
                               />
                             )
                           }

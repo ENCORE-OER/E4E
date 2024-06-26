@@ -22,6 +22,7 @@ type ActivityTypeDropDownMenuProps = {
   title: string;
   onChange: (selectedIndex: number) => void;
   size?: ResponsiveValue<string>;
+  isDisabled?: boolean;
 };
 
 type selectedOptionProps = {
@@ -36,6 +37,7 @@ export default function ActivityTypeDropDownMenu({
   title,
   onChange,
   size,
+  isDisabled,
 }: ActivityTypeDropDownMenuProps) {
   const hydrated = useHasHydrated();
   const [selectedOption, setSelectedOption] =
@@ -79,6 +81,7 @@ export default function ActivityTypeDropDownMenu({
           rightIcon={<ChevronDownIcon />}
           _expanded={{ bg: 'gray.200' }}
           textAlign="center"
+          isDisabled={isDisabled}
         >
           {selectedOption ? (
             <Flex direction="row" gap={1} align="center">

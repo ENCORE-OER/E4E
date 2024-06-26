@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 import {
   LessonProps,
   OptionsTypeOfAssignmentProps,
@@ -24,4 +24,7 @@ export interface TableLearningPathProps {
     activityIndex: number,
     isLessonView: boolean
   ) => Promise<void>;
+  activityRefs: MutableRefObject<
+    (HTMLDivElement | null | HTMLTableRowElement)[]
+  >;
 }

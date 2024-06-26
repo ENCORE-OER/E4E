@@ -41,6 +41,7 @@ interface TableLearningPathRowProps {
   handleActivityTypeChange: (index: number, selectedTypeIndex: number) => void;
   handleTimeDurationChange: (index: number, value: string) => void;
   openDescriptionModal: (index: number, description: string) => void;
+  activityRef: (el: HTMLDivElement | HTMLTableRowElement | null) => void;
 }
 
 export default function LearningPathTableRow({
@@ -60,6 +61,7 @@ export default function LearningPathTableRow({
   handleActivityTypeChange,
   handleTimeDurationChange,
   openDescriptionModal,
+  activityRef,
 }: TableLearningPathRowProps) {
   const hydrated = useHasHydrated();
 
@@ -76,7 +78,13 @@ export default function LearningPathTableRow({
   }, []);
 
   return (
-    <Tr ref={providedDraggable.innerRef} {...providedDraggable.draggableProps}>
+    <Tr
+      ref={(el) => {
+        providedDraggable.innerRef(el);
+        activityRef(el);
+      }}
+      {...providedDraggable.draggableProps}
+    >
       {/* Drag item */}
       {isEditLessonPlanClicked && (
         <Td
@@ -137,6 +145,7 @@ export default function LearningPathTableRow({
                 handleActivityTypeChange(indexRow, selectedTypeIndex)
               }
               size="sm"
+              isDisabled={row.lessonType ? false : true}
             />
           ) : (
             (row.activityType && (
@@ -259,9 +268,9 @@ export default function LearningPathTableRow({
                     <TagContent
                       key={index}
                       label={content?.fileName ?? ''}
-                      bg={'lightyellow'}
+                      bg={'yellow.100'}
                       handleClick={() => {
-                        console.log('NAME', content);
+                        // console.log('NAME', content);
                         window?.open(content.urlFile, '_blank');
                       }}
                     />

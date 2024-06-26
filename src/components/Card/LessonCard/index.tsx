@@ -45,6 +45,7 @@ export default function LessonCard({
   isEditLessonPlanClicked,
   optionsTypeOfAssignment,
   activityTypes,
+  activityRef,
 }: LessonCardProps) {
   const hydrated = useHasHydrated();
 
@@ -137,25 +138,45 @@ export default function LessonCard({
 
   // const [passFailConditions, setPassFailConditions] = useState<PassFailConditionsProps[]>([]);
 
+  // useEffect(() => {
+  //   if (editLessonIndex === indexCard) {
+  //     handleActivityTypeChange(
+  //       activityTypes.findIndex(
+  //         (type) => type.activityType === data.activityType
+  //       )
+  //     );
+  //   }
+  // }, [
+  //   editLessonIndex,
+  //   indexCard,
+  //   data.activityType,
+  //   handleActivityTypeChange,
+  //   activityTypes,
+  // ]);
+
   useEffect(() => {
-    if (editLessonIndex === indexCard) {
-      handleActivityTypeChange(
-        activityTypes.findIndex(
-          (type) => type.activityType === data.activityType
-        )
+    if (editLessonIndex !== null) {
+      const activityTypeIndex = activityTypes?.findIndex(
+        (type) => type?.activityType === data.activityType
       );
+
+      if (activityTypeIndex !== -1) {
+        handleActivityTypeChange(activityTypeIndex);
+      }
     }
-  }, [
-    editLessonIndex,
-    indexCard,
-    data.activityType,
-    handleActivityTypeChange,
-    activityTypes,
-  ]);
+  }, [editLessonIndex]);
 
   return (
     <>
-      <Card display="flex" borderRadius={'10px'} border={'1px'} w="100%">
+      <Card
+        display="flex"
+        borderRadius={'10px'}
+        border={'1px'}
+        w="100%"
+        ref={(el) => {
+          activityRef(el);
+        }}
+      >
         <CardHeader pb={0}>
           <Flex w="100%" direction="row">
             <Flex
@@ -264,6 +285,7 @@ export default function LessonCard({
                 )}
               </Text>
             )}
+            {/* Pass/Fail Conditions */}
             <Flex direction="column" gap={0.5} pt={1}>
               {showBox &&
                 hydrated &&
@@ -306,7 +328,8 @@ export default function LessonCard({
                   )
                 )}
             </Flex>
-            <Flex direction="row" gap={1} pt={1}>
+            {/* Content Tags*/}
+            <Flex direction="row" gap={1} pt={1} wrap="wrap">
               {hydrated &&
                 data.content?.oers?.map(
                   (content: OerInCollectionProps, index: number) => (
@@ -345,9 +368,9 @@ export default function LessonCard({
                     <TagContent
                       key={index}
                       label={content?.fileName ?? ''}
-                      bg={'lightyellow'}
+                      bg={'yellow.100'}
                       handleClick={() => {
-                        console.log('NAME', content);
+                        // console.log('NAME', content);
                         window?.open(content.urlFile, '_blank');
                       }}
                     />
@@ -377,6 +400,7 @@ export default function LessonCard({
                     handleActivityTypeChange(selectedTypeIndex)
                   }
                   size="md"
+                  isDisabled={data.lessonType ? false : true}
                 />
               ) : data.activityType ? (
                 <Flex align="center" gap={2}>
@@ -405,6 +429,9 @@ export default function LessonCard({
                     handleOpenModal(indexCard, null);
                 }}
                 isSmallerScreen={isSmallerScreen}
+                editIndex={
+                  editLessonIndex === indexCard || isEditLessonPlanClicked
+                }
               />
               <AddContentButton
                 onClick={handleAddContentClick}
