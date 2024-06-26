@@ -27,7 +27,6 @@ export default function ResetButton({
       message: 'All values have been reset.',
       type: 'info',
     });
-
   };
 
   return (

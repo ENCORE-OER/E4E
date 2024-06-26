@@ -68,9 +68,9 @@ export default function LessonCard({
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
           ? {
-            ...item,
-            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-          }
+              ...item,
+              lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+            }
           : item
       )
     );
@@ -114,9 +114,9 @@ export default function LessonCard({
       prevLessons.map((item, idx) =>
         idx === indexCard
           ? {
-            ...item,
-            activityType: selectedActivityType,
-          }
+              ...item,
+              activityType: selectedActivityType,
+            }
           : item
       )
     );
@@ -206,7 +206,7 @@ export default function LessonCard({
                 isEditClicked={
                   editLessonIndex === indexCard || isEditLessonPlanClicked
                 }
-              // isDisabled={true}
+                // isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}
@@ -225,14 +225,16 @@ export default function LessonCard({
                   value={data?.activityTitle}
                   onChange={(e) => handleActivityTitleChange(e.target.value)}
                   placeholder="Title of the activity"
-                // size="sm"
-                // fontSize="small"
+                  // size="sm"
+                  // fontSize="small"
                 />
               ) : (
                 <ShowHideButton
                   showBox={showBox}
                   setShowBox={setShowBox}
-                  showButtonName={`${indexCard + 1}. ${data?.activityTitle ?? 'Activity Title'}`}
+                  showButtonName={`${indexCard + 1}. ${
+                    data?.activityTitle ?? 'Activity Title'
+                  }`}
                   isUpDown={false}
                   fontWeight="bold"
                   color="primary"
@@ -247,7 +249,7 @@ export default function LessonCard({
                 value={data.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
-              // fontSize="small"
+                // fontSize="small"
               />
             ) : (
               <Text
@@ -406,12 +408,12 @@ export default function LessonCard({
               />
               <AddContentButton
                 onClick={handleAddContentClick}
-              // nameButton={
-              //   data.content.oers.length ||
-              //     data.content.uploadedFiles.length > 0 ?
-              //     "View Content" :
-              //     "Add Content"
-              // }
+                // nameButton={
+                //   data.content.oers.length ||
+                //     data.content.uploadedFiles.length > 0 ?
+                //     "View Content" :
+                //     "Add Content"
+                // }
               />
             </Flex>
           </Flex>

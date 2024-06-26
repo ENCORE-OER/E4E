@@ -61,9 +61,7 @@ export default function LessonCardsList({
       prevLessonCards.map((card: LessonCardProps, idxCard: number) => {
         // Check i'm working on the right card
         if (idxCard === indexLesson) {
-          const updatedConditions = [
-            ...(card.data?.passFailConditions || []),
-          ];
+          const updatedConditions = [...(card.data?.passFailConditions || [])];
           // Check if the index of the condition is passed by parameter, that means i'm changing his value
           if (selectedConditionIndex !== null) {
             updatedConditions[selectedConditionIndex] = newCondition;

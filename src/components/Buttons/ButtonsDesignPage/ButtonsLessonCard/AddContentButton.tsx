@@ -4,7 +4,10 @@ interface AddContentButtonProps extends ButtonProps {
   nameButton?: string;
 }
 
-export default function AddContentButton({ nameButton, ...rest }: AddContentButtonProps) {
+export default function AddContentButton({
+  nameButton,
+  ...rest
+}: AddContentButtonProps) {
   return (
     <Button
       {...rest}
@@ -13,8 +16,8 @@ export default function AddContentButton({ nameButton, ...rest }: AddContentButt
       bg="gray.300"
       // onClick={handleAddContentClick}
       borderRadius="lg"
-    // fontSize="small"
-    // size={'sm'}
+      // fontSize="small"
+      // size={'sm'}
     >
       {nameButton || 'Add Content'}
     </Button>
