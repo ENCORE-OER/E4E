@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import IconAnalytics from '../../components/Icons/IconAnalytics/IconAnalytics';
 import IconFrontalLecture from '../../components/Icons/IconFrontalLecture/IconFrontalLecture';
@@ -8,6 +8,7 @@ import IconPenToSquare from '../../components/Icons/IconPenToSquare/IconPenToSqu
 import IconProject from '../../components/Icons/IconProject/IconProject';
 import IconQuiz from '../../components/Icons/IconQuiz/IconQuiz';
 import {
+  activityTypesObjectsProps,
   ArrayProps,
   LessonCardProps,
   LessonProps,
@@ -17,7 +18,6 @@ import {
   OptionsTypeOfAssignmentProps,
   SkillItemProps,
   UploadedFilesProps,
-  activityTypesObjectsProps,
 } from '../../types/encoreElements/index';
 import {
   deleteActivityAndUpdateFiles,
@@ -119,6 +119,8 @@ type LearnignPathDesignContextProps = {
   lessonActivities: LessonProps[];
   setLessonActivities: React.Dispatch<React.SetStateAction<LessonProps[]>>;
   addEmptyLessonActivity: () => void;
+  scrollToIndex: number | null;
+  setScrollToIndex: Dispatch<SetStateAction<number | null>>;
   removeLessonActivity: (index: number) => Promise<void>;
   resetOersContent: (index: number) => void;
   resetFilesContent: (index: number) => void;
@@ -280,7 +282,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Function to create/add a custom learning objective
   const handleAddLearningObjective = () => {
-    console.log('Adding new learning objective...');
     try {
       setLearningObjectiveObjects(
         (prevObjectLOs: ObjectLearningObjectiveProps[]) => [
@@ -293,14 +294,13 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         ]
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (updatedText: string, index?: number) => {
     if (index !== undefined) {
-      console.log('Update learning objective');
 
       // const updatedGeneratedLOs = [...totalLearningObjectives];
       // // console.log('GeneratedLOs', updatedGeneratedLOs);
@@ -313,8 +313,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       if (updatedObjectLOs[index].isGenerated) {
         updatedObjectLOs[index].isGenerated = false;
       }
-      // console.log('OBJECTS UPDATED: ', updatedObjectLOs);
-      // console.log('updatedGeneratedLOs', updatedGeneratedLOs);
       setLearningObjectiveObjects(updatedObjectLOs);
     }
   };
@@ -695,6 +693,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     LessonProps[]
   >('lessonsActivities', []);
 
+  const [scrollToIndex, setScrollToIndex] = useState<number | null>(null);
+
   // Function to add a new activity
   const addEmptyLessonActivity = () => {
     const newLessonActivity: LessonProps = {
@@ -754,10 +754,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     activityIndex: number,
     newContent: OerInCollectionProps[] | UploadedFilesProps[]
   ) => {
-    console.log('Updating lesson content');
     // Add new selected OERs
     if (isOerInCollectionProps(newContent)) {
-      console.log('NEW CONTENT - Oers', newContent);
       try {
         setLessonActivities((prevLessons: LessonProps[]) => {
           const updatedLessons = [...prevLessons];
@@ -771,8 +769,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       }
       // Add new uploaded files
     } else if (isUploadedFilesProps(newContent)) {
-      console.log('Upload the file...');
-      console.log('NEW CONTENT - Files', newContent);
+      // console.log('Upload the file...');
+      // console.log('NEW CONTENT - Files', newContent);
       try {
         setLessonActivities((prevLessons: LessonProps[]) => {
           const updatedLessons = [...prevLessons];
@@ -792,62 +790,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         console.error(error);
       }
     }
-    // else if (newContent.every((file) => file instanceof File)) {
-    //   console.log('Upload the file...');
-    //   console.log('NEW CONTENT', newContent);
-    //   try {
-    //     const newFiles: UploadedFilesProps[] = await saveMultipleFilesToIndexedDB(newContent, activityIndex);
-    //     setLessonActivities((prevLessons: LessonProps[]) => {
-    //       const updatedLessons = [...prevLessons];
-    //       if (updatedLessons[activityIndex]) {
-    //         updatedLessons[activityIndex].content.uploadedFiles = [
-    //           // ...(updatedLessons[activityIndex].content.uploadedFiles || []),
-    //           ...newFiles,
-    //         ];
-    //       }
-    //       return updatedLessons;
-    //     });
-    //   } catch (error) {
-    //     addToast({
-    //       message: `Error saving the files in the database. ${error}`,
-    //       type: 'error'
-    //     })
-    //   }
-    // }
-    // setLessonActivities((prevLessons: LessonProps[]) => {
-    //   const updatedLessons = [...prevLessons];
-    //   if (updatedLessons[lessonIndex]) {
-    //     if (isOerInCollectionProps(newContent)) {
-    //       updatedLessons[lessonIndex].content.oers = newContent
-
-    //     } else if (isUploadedFilesProps(newContent)) {
-    //       console.log('Upload the file...');
-    //       console.log('NEW CONTENT', newContent);
-    //       // updatedLessons[lessonIndex].content = {
-    //       //   ...updatedLessons[lessonIndex].content,
-    //       //   uploadedFiles: newContent.map((uploadedFile: UploadedFilesProps) => {
-    //       //     const content: UploadedFilesProps[] = [];
-    //       //     content.push({
-    //       //       fileUploaded: uploadedFile.fileUploaded,
-    //       //       urlFile: uploadedFile.urlFile
-    //       //     })
-    //       //   })
-    //       // };
-
-    //       // // Append new uploaded files
-    //       // updatedLessons[lessonIndex].content.uploadedFiles = [
-    //       //   ...updatedLessons[lessonIndex].content.uploadedFiles,
-    //       //   ...newContent.map((uploadedFile: UploadedFilesProps) => ({
-    //       //     fileUploaded: uploadedFile.fileUploaded,
-    //       //     urlFile: uploadedFile.urlFile
-    //       //   }))
-    //       // ];
-    //       updatedLessons[lessonIndex].content.uploadedFiles = newContent;
-    //       console.log("UPDATED LESSONS - UPLOADED FILE", updatedLessons[lessonIndex].content.uploadedFiles);
-    //     }
-    //   }
-    //   return updatedLessons;
-    // });
   };
 
   // TO_CHECK: useful?
@@ -1012,10 +954,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     activityIndex: number,
     isLessonView: boolean
   ) => {
-    console.log('LOAD FILES...');
     try {
       const validFiles = await getAllFilesByActivityIndex(activityIndex);
-      console.log('VALID FILES', validFiles);
 
       // We are in AddContent
       if (!isLessonView) {
@@ -1066,9 +1006,9 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
 
-  useEffect(() => {
-    console.log('Lesson activities', lessonActivities);
-  }, [lessonActivities]);
+  // useEffect(() => {
+  //   console.log('Lesson activities', lessonActivities);
+  // }, [lessonActivities]);
 
   useEffect(() => {
     if (resetCheckBoxOptions) {
@@ -1267,6 +1207,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         lessonActivities,
         setLessonActivities,
         addEmptyLessonActivity,
+        scrollToIndex,
+        setScrollToIndex,
         removeLessonActivity,
         resetOersContent,
         resetFilesContent,

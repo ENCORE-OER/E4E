@@ -57,8 +57,11 @@ export const DiscoveryProvider = ({ children }: any) => {
   const [domainsSelected, setDomainsSelected] = useState<number[]>([]);
   const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
 
+  // const [originalSearchData, setOriginalSearchData] =
+  //   useLocalStorage<SearchDataProps | null>('originalSearchData', null);
+
   const [originalSearchData, setOriginalSearchData] =
-    useLocalStorage<SearchDataProps | null>('originalSearchData', null);
+    useState<SearchDataProps | null>(null);
 
   useEffect(() => {
     console.log(originalSearchData);

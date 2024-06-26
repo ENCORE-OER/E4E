@@ -31,8 +31,8 @@ export default function TagContent({
         label={label}
         aria-label={label}
         //ml="1px"
-        bg="white"
-        color="primary"
+        color="black"
+        bg={bg}
         p={2}
         fontSize={'sm'}
         borderRadius={5}

@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { useHasHydrated } from '../../../utils/utils';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
@@ -29,9 +29,12 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       editActivityLessonIndex,
       handleEditActivityLesson,
       loadUploadedFiles,
+      scrollToIndex,
+      setScrollToIndex
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
+    const activityRefs = useRef<(null | HTMLDivElement | HTMLTableRowElement)[]>([]);
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
@@ -46,6 +49,13 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       setIsAddContentModalOpen(false);
       // await loadUploadedFiles(activityIndex, true);
     };
+
+    useEffect(() => {
+      if (scrollToIndex !== null && activityRefs !== null && activityRefs?.current[scrollToIndex]) {
+        activityRefs?.current[scrollToIndex]?.scrollIntoView({ behavior: 'auto' });
+        setScrollToIndex(null);
+      }
+    }, [scrollToIndex]);
 
     return (
       <Flex direction="column" overflow={'auto'}>
@@ -64,6 +74,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             ref={ref}
             isPrinting={isPrinting}
             loadUploadedFiles={loadUploadedFiles}
+            activityRefs={activityRefs}
           />
         )}
         <AddContentModal
