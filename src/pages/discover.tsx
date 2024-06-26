@@ -272,7 +272,9 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
     // Check if some filter parameters are setted. If YES reset all.
     if (
-      (isDomainsFilter || isTypesFilter || concepts.length > 0)
+      isDomainsFilter ||
+      isTypesFilter ||
+      concepts.length > 0
       // && originalSearchData !== null
     ) {
       if (isDomainsFilter) {
@@ -449,7 +451,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -490,7 +492,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
