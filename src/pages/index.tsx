@@ -16,7 +16,6 @@ import ShowHideButton from '../components/Buttons/ShowHideButton';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import SearchView from '../components/Views/SearchView';
-import { useDiscoveryContext } from '../Contexts/discoveryContext';
 import { APIV2 } from '../data/api';
 import {
   OerAudienceInfo,
@@ -37,11 +36,11 @@ const Home = (props: DiscoverPageProps) => {
   const { addToast } = CustomToast();
   const [searchValue, setSearchValue] = useState<string[]>([]);
 
-  const {
-    // setOriginalDomainsQueryParams,
-    // setOriginalTypesQueryParams,
-    setOriginalSearchData,
-  } = useDiscoveryContext();
+  // const {
+  //   // setOriginalDomainsQueryParams,
+  //   // setOriginalTypesQueryParams,
+  //   setOriginalSearchData,
+  // } = useDiscoveryContext();
   //const [page] = useState(true);
   //const [respSearchOers] = useState<OerProps[]>([]);
   //const [oerById] = useState<OerProps | null>(null);
@@ -165,7 +164,8 @@ const Home = (props: DiscoverPageProps) => {
       } else {
         // setOriginalDomainsQueryParams(selectedDomains.map((domain: string | number) => Number(domain)));
         // setOriginalTypesQueryParams(selectedResourceTypes.map((type: string | number) => Number(type)));
-        setOriginalSearchData(searchData);
+        // setOriginalSearchData(searchData);
+        localStorage.setItem('originalSearchData', JSON.stringify(searchData));
         router.push({
           pathname: '/discover',
           query: searchData,
@@ -411,11 +411,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

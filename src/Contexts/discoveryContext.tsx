@@ -3,11 +3,10 @@ import {
   Dispatch,
   SetStateAction,
   useContext,
-  useEffect,
-  useState,
+  useState
 } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
-import { OerProps, SearchDataProps } from '../types/encoreElements';
+import { OerProps } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
 
 type DiscoveryContextProps = {
@@ -31,8 +30,8 @@ type DiscoveryContextProps = {
   setDomainsSelected: Dispatch<SetStateAction<number[]>>;
   conceptsSelected: string[];
   setConceptsSelected: Dispatch<SetStateAction<string[]>>;
-  originalSearchData: SearchDataProps | null;
-  setOriginalSearchData: Dispatch<SetStateAction<SearchDataProps | null>>;
+  // originalSearchData: SearchDataProps | null;
+  // setOriginalSearchData: Dispatch<SetStateAction<SearchDataProps | null>>;
 };
 
 export const DiscoveryContext = createContext<DiscoveryContextProps>(
@@ -60,12 +59,12 @@ export const DiscoveryProvider = ({ children }: any) => {
   // const [originalSearchData, setOriginalSearchData] =
   //   useLocalStorage<SearchDataProps | null>('originalSearchData', null);
 
-  const [originalSearchData, setOriginalSearchData] =
-    useState<SearchDataProps | null>(null);
+  // const [originalSearchData, setOriginalSearchData] =
+  //   useState<SearchDataProps | null>(null);
 
-  useEffect(() => {
-    console.log(originalSearchData);
-  }, [originalSearchData]);
+  // useEffect(() => {
+  //   console.log(originalSearchData);
+  // }, [originalSearchData]);
 
   return (
     <DiscoveryContext.Provider
@@ -77,7 +76,7 @@ export const DiscoveryProvider = ({ children }: any) => {
         typesSelected,
         originalDomainsQueryParams,
         originalTypesQueryParams,
-        originalSearchData,
+        // originalSearchData,
         setFiltered,
         setCurrentPage,
         setConceptsSelected,
@@ -85,7 +84,7 @@ export const DiscoveryProvider = ({ children }: any) => {
         setTypesSelected,
         setOriginalDomainsQueryParams,
         setOriginalTypesQueryParams,
-        setOriginalSearchData,
+        // setOriginalSearchData,
       }}
     >
       {children}
