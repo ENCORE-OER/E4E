@@ -20,7 +20,7 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
@@ -39,20 +39,20 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   // const [lastSelectedTypeId, setLastSelectedTypeId] = useState<number | null>(null);  // Id of the last type selected
 
   const predefinedColors: { [key: string]: string } = {
-    "Activity/Lab": "#FF6384",
-    "Assessment": "#36A2EB",
-    "Assignment": "#FFCE56",
-    "Audio": "#4BC0C0",
-    "Case studies": "#9966FF",
-    "Dataset": "#FF9F40",
-    "Full course": "#FFCD56",
-    "Images": "#36A2EB",
-    "Instructional Material": "#4BC0C0",
-    "Interactive": "#FF6384",
-    "Presentations": "#9966FF",
-    "Reading": "#FF9F40",
-    "Social networks": "#FFCD56",
-    "Software": "#36A2EB"
+    'Activity/Lab': '#FF6384',
+    Assessment: '#36A2EB',
+    Assignment: '#FFCE56',
+    Audio: '#4BC0C0',
+    'Case studies': '#9966FF',
+    Dataset: '#FF9F40',
+    'Full course': '#FFCD56',
+    Images: '#36A2EB',
+    'Instructional Material': '#4BC0C0',
+    Interactive: '#FF6384',
+    Presentations: '#9966FF',
+    Reading: '#FF9F40',
+    'Social networks': '#FFCD56',
+    Software: '#36A2EB',
     // Add more types if needed
   };
 
@@ -73,21 +73,20 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   };
 
   const getColor = (type: string | null): string => {
-    if (type === null || type === "null") return '#000000'; // Default color for null types
+    if (type === null || type === 'null') return '#000000'; // Default color for null types
     // Check if the color is already stored in localStorage
     const storedColors = JSON.parse(localStorage.getItem('colorsMap') || '{}');
 
     if (predefinedColors[type]) {
       return predefinedColors[type];
-    } else
-      if (storedColors[type]) {
-        return storedColors[type];
-      } else {
-        const newColor = getRandomColor();
-        storedColors[type] = newColor;
-        localStorage.setItem('colorsMap', JSON.stringify(storedColors));
-        return newColor;
-      }
+    } else if (storedColors[type]) {
+      return storedColors[type];
+    } else {
+      const newColor = getRandomColor();
+      storedColors[type] = newColor;
+      localStorage.setItem('colorsMap', JSON.stringify(storedColors));
+      return newColor;
+    }
   };
 
   const updateQuery = async (

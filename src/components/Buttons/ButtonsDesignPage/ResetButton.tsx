@@ -1,4 +1,5 @@
 import { ButtonProps } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import CustomButton from '../CustomButton';
 
@@ -14,20 +15,25 @@ export default function ResetButton({
   handleResetAll, //...rest
 }: ResetButtonProps) {
   const { addToast } = CustomToast();
+  const router = useRouter();
 
   const handleResetClick = () => {
     console.log('Reset clicked');
+    router.replace({
+      pathname: pathname,
+    });
     handleResetAll(true);
     addToast({
       message: 'All values have been reset.',
       type: 'info',
     });
+
   };
 
   return (
     <CustomButton
       //{...rest}
-      pathname={pathname}
+      // pathname={pathname}
       text={textButton}
       handleCustomClick={handleResetClick}
       colorScheme="gray"

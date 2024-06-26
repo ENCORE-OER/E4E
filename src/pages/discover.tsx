@@ -249,19 +249,23 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     const isTypesFilter = convertedData['isTypesFilter'];
 
     // Check if some filter parameters are setted. If YES reset all.
-    if ((isDomainsFilter || isTypesFilter || concepts.length > 0) &&
-      originalSearchData !== null) {
+    if (
+      (isDomainsFilter || isTypesFilter || concepts.length > 0) &&
+      originalSearchData !== null
+    ) {
       if (isDomainsFilter) {
         setDomainsSelected([]);
-      } if (isTypesFilter) {
+      }
+      if (isTypesFilter) {
         setTypesSelected([]);
-      } if (concepts.length > 0) {
+      }
+      if (concepts.length > 0) {
         setConceptsSelected([]);
       }
       // Push the original query
       router.replace({
         pathname: router.pathname,
-        query: originalSearchData
+        query: originalSearchData,
       });
       // Update data on localStorage
       localStorage.setItem('searchData', JSON.stringify(originalSearchData));
@@ -270,7 +274,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
   // Do the search request when the query is setted or updated
   useEffect(() => {
-
     const fetchOers = async () => {
       setIsLoading(true);
 
@@ -357,7 +360,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         addToast({
           message: 'No resources found with these concepts.',
           type: 'error',
-        })
+        });
         setTimeout(() => {
           router.replace({
             pathname: '/discover',
@@ -365,7 +368,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         }, 1000);
       } else {
         addToast({
-          message: 'No resources found! You will be redirected to the home page.',
+          message:
+            'No resources found! You will be redirected to the home page.',
           type: 'error',
         });
         setTimeout(() => {
@@ -428,7 +432,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -469,7 +473,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

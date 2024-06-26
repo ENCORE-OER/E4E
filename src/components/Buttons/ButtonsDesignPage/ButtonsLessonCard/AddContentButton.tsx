@@ -1,6 +1,10 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
 
-export default function AddContentButton({ ...rest }: ButtonProps) {
+interface AddContentButtonProps extends ButtonProps {
+  nameButton?: string;
+}
+
+export default function AddContentButton({ nameButton, ...rest }: AddContentButtonProps) {
   return (
     <Button
       {...rest}
@@ -9,10 +13,10 @@ export default function AddContentButton({ ...rest }: ButtonProps) {
       bg="gray.300"
       // onClick={handleAddContentClick}
       borderRadius="lg"
-      // fontSize="small"
-      // size={'sm'}
+    // fontSize="small"
+    // size={'sm'}
     >
-      Add Content
+      {nameButton || 'Add Content'}
     </Button>
   );
 }

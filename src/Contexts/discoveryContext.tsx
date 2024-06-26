@@ -1,4 +1,11 @@
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { OerProps, SearchDataProps } from '../types/encoreElements';
 import { OerFreeSearchProps } from '../types/encoreElements/oer/OerFreeSearch';
@@ -15,13 +22,9 @@ type DiscoveryContextProps = {
   currentPage: number;
   setCurrentPage: Dispatch<SetStateAction<number>>;
   originalTypesQueryParams: number[];
-  setOriginalTypesQueryParams: Dispatch<
-    SetStateAction<number[]>
-  >;
+  setOriginalTypesQueryParams: Dispatch<SetStateAction<number[]>>;
   originalDomainsQueryParams: number[];
-  setOriginalDomainsQueryParams: Dispatch<
-    SetStateAction<number[]>
-  >;
+  setOriginalDomainsQueryParams: Dispatch<SetStateAction<number[]>>;
   typesSelected: string[];
   setTypesSelected: Dispatch<SetStateAction<string[]>>;
   domainsSelected: number[];
@@ -30,7 +33,7 @@ type DiscoveryContextProps = {
   setConceptsSelected: Dispatch<SetStateAction<string[]>>;
   originalSearchData: SearchDataProps | null;
   setOriginalSearchData: Dispatch<SetStateAction<SearchDataProps | null>>;
-}
+};
 
 export const DiscoveryContext = createContext<DiscoveryContextProps>(
   {} as DiscoveryContextProps
@@ -39,7 +42,6 @@ export const DiscoveryContext = createContext<DiscoveryContextProps>(
 export const useDiscoveryContext = () => useContext(DiscoveryContext);
 
 export const DiscoveryProvider = ({ children }: any) => {
-
   const [filtered, setFiltered] = useState<
     (OerProps | OerFreeSearchProps | undefined)[]
   >([]); // used for the list of resourcess to show
@@ -47,24 +49,20 @@ export const DiscoveryProvider = ({ children }: any) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   // Discover tabs utilities
-  const [originalTypesQueryParams, setOriginalTypesQueryParams] = useLocalStorage<
-    number[]
-  >('originalTypesQueryParams', []);
-  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] = useLocalStorage<
-    number[]
-  >('originalDomainsQueryParams', []);
+  const [originalTypesQueryParams, setOriginalTypesQueryParams] =
+    useLocalStorage<number[]>('originalTypesQueryParams', []);
+  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] =
+    useLocalStorage<number[]>('originalDomainsQueryParams', []);
   const [typesSelected, setTypesSelected] = useState<string[]>([]);
   const [domainsSelected, setDomainsSelected] = useState<number[]>([]);
   const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
 
-  const [originalSearchData, setOriginalSearchData] = useLocalStorage<SearchDataProps | null>(
-    'originalSearchData',
-    null
-  )
+  const [originalSearchData, setOriginalSearchData] =
+    useLocalStorage<SearchDataProps | null>('originalSearchData', null);
 
   useEffect(() => {
     console.log(originalSearchData);
-  }, [originalSearchData])
+  }, [originalSearchData]);
 
   return (
     <DiscoveryContext.Provider
@@ -84,10 +82,10 @@ export const DiscoveryProvider = ({ children }: any) => {
         setTypesSelected,
         setOriginalDomainsQueryParams,
         setOriginalTypesQueryParams,
-        setOriginalSearchData
+        setOriginalSearchData,
       }}
     >
       {children}
     </DiscoveryContext.Provider>
-  )
-}
+  );
+};

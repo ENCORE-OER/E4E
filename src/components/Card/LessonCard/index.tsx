@@ -13,7 +13,9 @@ import {
   activityTypesObjectsProps,
   LessonCardProps,
   LessonProps,
+  OerInCollectionProps,
   PassFailConditionsProps,
+  UploadedFilesProps,
 } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
@@ -26,13 +28,14 @@ import ActivityTypeDropDownMenu from '../../DropDownMenu/ActivityTypeDropDownMen
 import LessonDropDownMenu from '../../DropDownMenu/LessonDropDownMenu';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
 import CustomNumberInput from '../../NumberInput/CustomNumberInput';
+import TagContent from '../../Tags/TagsAddContent/TagContent';
 import TagLessonCompulsory from '../../Tags/TagsLesson/TagLessonCompulsory';
 import TagLessonDuration from '../../Tags/TagsLesson/TagLessonDuration';
 import TagLessonType from '../../Tags/TagsLesson/TagLessonType';
 import LabelEmptyFieldTable from '../../Texts/LabelEmptyFieldTable';
 
 export default function LessonCard({
-  lesson,
+  data,
   handleData,
   indexCard,
   isSmallerScreen,
@@ -65,9 +68,9 @@ export default function LessonCard({
       previousLessons.map((item: LessonProps, idx: number) =>
         idx === indexCard
           ? {
-              ...item,
-              lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-            }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
           : item
       )
     );
@@ -101,7 +104,7 @@ export default function LessonCard({
 
   const handleActivityTypeChange = (selectedTypeIndex: number) => {
     const filteredActivityTypes = activityTypes.filter(
-      (type: activityTypesObjectsProps) => type.lessonType === lesson.lessonType
+      (type: activityTypesObjectsProps) => type.lessonType === data.lessonType
     );
 
     const selectedActivityType =
@@ -111,9 +114,9 @@ export default function LessonCard({
       prevLessons.map((item, idx) =>
         idx === indexCard
           ? {
-              ...item,
-              activityType: selectedActivityType,
-            }
+            ...item,
+            activityType: selectedActivityType,
+          }
           : item
       )
     );
@@ -128,8 +131,8 @@ export default function LessonCard({
   };
 
   const selectedActivityIcon = getActivityIcon(
-    lesson.lessonType,
-    lesson.activityType
+    data.lessonType,
+    data.activityType
   );
 
   // const [passFailConditions, setPassFailConditions] = useState<PassFailConditionsProps[]>([]);
@@ -138,14 +141,14 @@ export default function LessonCard({
     if (editLessonIndex === indexCard) {
       handleActivityTypeChange(
         activityTypes.findIndex(
-          (type) => type.activityType === lesson.activityType
+          (type) => type.activityType === data.activityType
         )
       );
     }
   }, [
     editLessonIndex,
     indexCard,
-    lesson.activityType,
+    data.activityType,
     handleActivityTypeChange,
     activityTypes,
   ]);
@@ -165,17 +168,17 @@ export default function LessonCard({
               {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <LessonDropDownMenu
                   options={optionsTypeOfAssignment}
-                  title={lesson.lessonType}
+                  title={data.lessonType}
                   onChange={(selectedTypeIndex) =>
                     handleLessonTypeChange(selectedTypeIndex)
                   }
                 />
               ) : (
-                <TagLessonType labelTag={lesson.lessonType} />
+                <TagLessonType labelTag={data.lessonType} />
               )}
               {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <CustomNumberInput
-                  valueNumber={lesson.timeDuration ?? 0}
+                  valueNumber={data.timeDuration ?? 0}
                   handleChangeValue={(value: string) =>
                     handleTimeDurationChange(value)
                   }
@@ -186,7 +189,7 @@ export default function LessonCard({
                   maxW="100px"
                 />
               ) : (
-                <TagLessonDuration time={lesson.timeDuration} />
+                <TagLessonDuration time={data.timeDuration} />
               )}
               <TagLessonCompulsory isChecked={true} isDisabled={true} />
             </Flex>
@@ -203,7 +206,7 @@ export default function LessonCard({
                 isEditClicked={
                   editLessonIndex === indexCard || isEditLessonPlanClicked
                 }
-                // isDisabled={true}
+              // isDisabled={true}
               />
               <RegenerateButtonLessonCard
                 isDisabled={true}
@@ -219,17 +222,17 @@ export default function LessonCard({
             <Flex p={3}>
               {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <Textarea
-                  value={lesson.activityTitle}
+                  value={data?.activityTitle}
                   onChange={(e) => handleActivityTitleChange(e.target.value)}
                   placeholder="Title of the activity"
-                  // size="sm"
-                  // fontSize="small"
+                // size="sm"
+                // fontSize="small"
                 />
               ) : (
                 <ShowHideButton
                   showBox={showBox}
                   setShowBox={setShowBox}
-                  showButtonName={`${indexCard + 1}. ${lesson.activityTitle}`}
+                  showButtonName={`${indexCard + 1}. ${data?.activityTitle ?? 'Activity Title'}`}
                   isUpDown={false}
                   fontWeight="bold"
                   color="primary"
@@ -241,17 +244,17 @@ export default function LessonCard({
             </Flex>
             {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
               <Textarea
-                value={lesson.activityDescription}
+                value={data.activityDescription}
                 onChange={(e) => handleDescriptionChange(e.target.value)}
                 placeholder="Short summary of the activity"
-                // fontSize="small"
+              // fontSize="small"
               />
             ) : (
               <Text
                 noOfLines={showBox ? undefined : 1}
                 variant="description_card"
               >
-                {lesson.activityDescription || (
+                {data.activityDescription || (
                   <LabelEmptyFieldTable
                     label="Short summary of the activity"
                     fontSize="auto"
@@ -262,8 +265,8 @@ export default function LessonCard({
             <Flex direction="column" gap={0.5} pt={1}>
               {showBox &&
                 hydrated &&
-                lesson.passFailConditions?.length > 0 &&
-                lesson.passFailConditions?.map(
+                data.passFailConditions?.length > 0 &&
+                data.passFailConditions?.map(
                   (
                     condition: PassFailConditionsProps,
                     indexCondition: number
@@ -301,6 +304,54 @@ export default function LessonCard({
                   )
                 )}
             </Flex>
+            <Flex direction="row" gap={1} pt={1}>
+              {hydrated &&
+                data.content?.oers?.map(
+                  (content: OerInCollectionProps, index: number) => (
+                    // <Text
+                    //   key={index}
+                    //   whiteSpace="pre-wrap"
+                    // >
+                    //   {content.title}
+                    // </Text>
+                    <TagContent
+                      key={index}
+                      label={content.title}
+                      bg={'#FFCC49'}
+                    />
+                  )
+                )}
+              {hydrated &&
+                data.content?.uploadedFiles?.map(
+                  (content: UploadedFilesProps, index: number) => (
+                    // <Text
+                    //     key={`file-${index}`}
+                    //     whiteSpace="pre-wrap"
+                    //     // as="link"
+                    //     cursor="pointer"
+                    //     onClick={(e) => {
+                    //         e.preventDefault();
+                    //         console.log('NAME', content);
+                    //         window?.open(
+                    //             content.urlFile,
+                    //             '_blank'
+                    //         );
+                    //     }}
+                    // >
+                    //     {`${content?.fileName ?? ''};\n`}
+                    // </Text>
+                    <TagContent
+                      key={index}
+                      label={content?.fileName ?? ''}
+                      bg={'lightyellow'}
+                      handleClick={() => {
+                        console.log('NAME', content);
+                        window?.open(content.urlFile, '_blank');
+                      }}
+                    />
+                  )
+                )}
+            </Flex>
           </Flex>
         </CardBody>
 
@@ -317,17 +368,17 @@ export default function LessonCard({
               {isEditLessonPlanClicked || indexCard === editLessonIndex ? (
                 <ActivityTypeDropDownMenu
                   activityTypes={activityTypes}
-                  title={lesson.activityType}
+                  title={data.activityType}
                   //selectedOption={row.activityType}
-                  lessonType={lesson.lessonType}
+                  lessonType={data.lessonType}
                   onChange={(selectedTypeIndex) =>
                     handleActivityTypeChange(selectedTypeIndex)
                   }
                   size="md"
                 />
-              ) : lesson.activityType ? (
+              ) : data.activityType ? (
                 <Flex align="center" gap={2}>
-                  <Text>{lesson.activityType}</Text>
+                  <Text>{data.activityType}</Text>
                   {selectedActivityIcon && <Icon>{selectedActivityIcon}</Icon>}
                 </Flex>
               ) : (
@@ -353,7 +404,15 @@ export default function LessonCard({
                 }}
                 isSmallerScreen={isSmallerScreen}
               />
-              <AddContentButton onClick={handleAddContentClick} />
+              <AddContentButton
+                onClick={handleAddContentClick}
+              // nameButton={
+              //   data.content.oers.length ||
+              //     data.content.uploadedFiles.length > 0 ?
+              //     "View Content" :
+              //     "Add Content"
+              // }
+              />
             </Flex>
           </Flex>
         </CardFooter>

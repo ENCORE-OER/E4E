@@ -15,6 +15,7 @@ import {
   LessonProps,
   PassFailConditionsProps,
 } from '../../../types/encoreElements';
+import { reorderActivitiesAndFiles } from '../../../utils/indexedDB';
 import { useHasHydrated } from '../../../utils/utils';
 import IconDrag from '../../Icons/IconDrag/IconDrag';
 import AddPassFailConditionModal from '../../Modals/LearningPathModals/AddPassFailConditionModal';
@@ -61,7 +62,7 @@ export default function LessonCardsList({
         // Check i'm working on the right card
         if (idxCard === indexLesson) {
           const updatedConditions = [
-            ...(card.lesson?.passFailConditions || []),
+            ...(card.data?.passFailConditions || []),
           ];
           // Check if the index of the condition is passed by parameter, that means i'm changing his value
           if (selectedConditionIndex !== null) {
@@ -72,8 +73,8 @@ export default function LessonCardsList({
           }
           return {
             ...card,
-            lesson: {
-              ...card.lesson,
+            data: {
+              ...card.data,
               passFailConditions: updatedConditions,
             },
           };
@@ -115,7 +116,7 @@ export default function LessonCardsList({
 
     if (conditionIndex !== null) {
       const conditionToEdit =
-        lessonCards[indexCard].lesson.passFailConditions[conditionIndex];
+        lessonCards[indexCard].data.passFailConditions[conditionIndex];
       setCondition(conditionToEdit.condition);
       setIsPass(conditionToEdit.isPass);
     } else {
@@ -125,7 +126,7 @@ export default function LessonCardsList({
     onOpen();
   };
 
-  const handleDragEnd = (result: DropResult) => {
+  const handleDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(lessonActivities);
@@ -133,6 +134,8 @@ export default function LessonCardsList({
     items.splice(result.destination.index, 0, reorderedItem);
 
     setLessonActivities(items);
+
+    await reorderActivitiesAndFiles(result);
   };
 
   // // Function to convert a LessonProps object to LessonCardProps
@@ -205,7 +208,7 @@ export default function LessonCardsList({
                             <LessonCard
                               key={indexCard}
                               indexCard={indexCard}
-                              lesson={lessonActivity}
+                              data={lessonActivity}
                               handleData={setLessonActivities}
                               isSmallerScreen={isSmallerScreen}
                               handleOpenModal={handleOpenModal}

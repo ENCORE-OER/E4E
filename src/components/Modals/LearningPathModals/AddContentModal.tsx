@@ -168,7 +168,11 @@ export default function AddContentModal({
                         <TagSelectedResource
                           key={`oer-${index}`}
                           label={resource.title}
-                          IconTag={resource.generated_by_ai ? IconGenerateAI : IconAttach}
+                          IconTag={
+                            resource.generated_by_ai
+                              ? IconGenerateAI
+                              : IconAttach
+                          }
                           handleDeleteClick={() =>
                             handleDeleteTagClick(resource)
                           }
@@ -217,7 +221,7 @@ export default function AddContentModal({
                       activityIndex !== undefined &&
                       // lessonActivities[indexLesson]?.content?.oers &&
                       lessonActivities[activityIndex]?.content?.oers?.length ===
-                      0 &&
+                        0 &&
                       lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.

@@ -353,28 +353,25 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          activityTitle: `${
-            generatedLesson.Type
-              ? `${mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )}`
-              : 'Frontal Lecture'
-          } activity`,
+          activityTitle: `${generatedLesson.Type
+            ? `${mapStringToString(
+              TypeOfActivityEnum[Number(generatedLesson?.Details)],
+              TypeOfActivityStringEnum
+            ) ?? 'Title'}`
+            : 'Frontal Lecture'
+            } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${
-            generatedLesson.Type
-              ? mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )
-              : 'Frontal Lecture'
-          }`,
-          activityDescription: `${
-            generatedLesson.Type
-              ? generatedLesson.Topic
-              : generatedLesson.Details
-          }`,
+          activityType: `${generatedLesson.Type
+            ? mapStringToString(
+              TypeOfActivityEnum[Number(generatedLesson.Details)],
+              TypeOfActivityStringEnum
+            )
+            : 'Frontal Lecture'
+            }`,
+          activityDescription: `${generatedLesson.Type
+            ? generatedLesson.Topic
+            : generatedLesson.Details
+            }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -680,7 +677,7 @@ export default function PathDesignGenLessonPlan({
     }
     for (let i = 0; i < numberOfAssessmentActivities; i++) {
       tempLessonsActivities.push({
-        activityTitle: '',
+        activityTitle: 'Title Activity',
         lessonType: 'Assessment',
         activityType: '',
         activityDescription: '',
