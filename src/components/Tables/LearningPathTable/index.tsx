@@ -30,11 +30,13 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       handleEditActivityLesson,
       loadUploadedFiles,
       scrollToIndex,
-      setScrollToIndex
+      setScrollToIndex,
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
-    const activityRefs = useRef<(null | HTMLDivElement | HTMLTableRowElement)[]>([]);
+    const activityRefs = useRef<
+      (null | HTMLDivElement | HTMLTableRowElement)[]
+    >([]);
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
@@ -51,8 +53,14 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
     };
 
     useEffect(() => {
-      if (scrollToIndex !== null && activityRefs !== null && activityRefs?.current[scrollToIndex]) {
-        activityRefs?.current[scrollToIndex]?.scrollIntoView({ behavior: 'auto' });
+      if (
+        scrollToIndex !== null &&
+        activityRefs !== null &&
+        activityRefs?.current[scrollToIndex]
+      ) {
+        activityRefs?.current[scrollToIndex]?.scrollIntoView({
+          behavior: 'auto',
+        });
         setScrollToIndex(null);
       }
     }, [scrollToIndex]);

@@ -44,7 +44,7 @@ const CustomLearningPathTable = forwardRef<
     handleEditLesson, // handleSaveLesson
     isPrinting,
     loadUploadedFiles,
-    activityRefs
+    activityRefs,
   } = props;
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -67,9 +67,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item: LessonProps, idx: number) =>
       idx === index
         ? {
-          ...item,
-          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-        }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
         : item
     );
     handleData(updatedData);
@@ -90,9 +90,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
-          ...item,
-          activityType: selectedActivityType,
-        }
+            ...item,
+            activityType: selectedActivityType,
+          }
         : item
     );
 
@@ -231,7 +231,9 @@ const CustomLearningPathTable = forwardRef<
                                   handleTimeDurationChange
                                 }
                                 openDescriptionModal={openDescriptionModal}
-                                activityRef={(el) => activityRefs.current[indexRow] = el}
+                                activityRef={(el) =>
+                                  (activityRefs.current[indexRow] = el)
+                                }
                               />
                             )
                           }

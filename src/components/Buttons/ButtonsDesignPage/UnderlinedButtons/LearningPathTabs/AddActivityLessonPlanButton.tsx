@@ -9,8 +9,12 @@ export default function AddActivityLessonPlanButton({
   isDisabled,
   isSmallerScreen,
 }: LessonPlanTabButtonProps) {
-  const { addEmptyLessonActivity, handleEditActivityLesson, lessonActivities, setScrollToIndex: setScrollIndex } =
-    useLearningPathDesignContext();
+  const {
+    addEmptyLessonActivity,
+    handleEditActivityLesson,
+    lessonActivities,
+    setScrollToIndex: setScrollIndex,
+  } = useLearningPathDesignContext();
 
   const handleClickAddActivity = () => {
     addEmptyLessonActivity();

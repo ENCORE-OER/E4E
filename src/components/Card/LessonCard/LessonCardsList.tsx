@@ -40,7 +40,7 @@ export default function LessonCardsList({
     optionsTypeOfAssignment,
     activityTypes,
     scrollToIndex,
-    setScrollToIndex
+    setScrollToIndex,
   } = useLearningPathDesignContext();
 
   const activityRefs = useRef<(null | HTMLDivElement)[]>([]);
@@ -169,8 +169,14 @@ export default function LessonCardsList({
   // }, [selectedCardIndex]);
 
   useEffect(() => {
-    if (scrollToIndex !== null && activityRefs !== null && activityRefs?.current[scrollToIndex]) {
-      activityRefs?.current[scrollToIndex]?.scrollIntoView({ behavior: 'auto' });
+    if (
+      scrollToIndex !== null &&
+      activityRefs !== null &&
+      activityRefs?.current[scrollToIndex]
+    ) {
+      activityRefs?.current[scrollToIndex]?.scrollIntoView({
+        behavior: 'auto',
+      });
       setScrollToIndex(null);
     }
   }, [scrollToIndex]);
@@ -226,7 +232,9 @@ export default function LessonCardsList({
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
                               activityTypes={activityTypes}
-                              activityRef={(el) => activityRefs.current[indexCard] = el}
+                              activityRef={(el) =>
+                                (activityRefs.current[indexCard] = el)
+                              }
                             />
                           )}
                         </Flex>

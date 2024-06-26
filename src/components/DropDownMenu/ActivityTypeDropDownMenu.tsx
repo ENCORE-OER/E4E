@@ -37,7 +37,7 @@ export default function ActivityTypeDropDownMenu({
   title,
   onChange,
   size,
-  isDisabled
+  isDisabled,
 }: ActivityTypeDropDownMenuProps) {
   const hydrated = useHasHydrated();
   const [selectedOption, setSelectedOption] =

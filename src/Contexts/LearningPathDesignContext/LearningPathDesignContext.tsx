@@ -1,4 +1,11 @@
-import React, { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import IconAnalytics from '../../components/Icons/IconAnalytics/IconAnalytics';
 import IconFrontalLecture from '../../components/Icons/IconFrontalLecture/IconFrontalLecture';
@@ -301,7 +308,6 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Function to update the learning objective when the user edits it
   const handleUpdateLO = (updatedText: string, index?: number) => {
     if (index !== undefined) {
-
       // const updatedGeneratedLOs = [...totalLearningObjectives];
       // // console.log('GeneratedLOs', updatedGeneratedLOs);
       // updatedGeneratedLOs[index] = updatedText; // Update the learning objective
