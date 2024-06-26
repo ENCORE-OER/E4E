@@ -1,9 +1,9 @@
 import { Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { useDiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
 import { OerMediaTypeInfo } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
@@ -20,14 +20,14 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
     originalTypesQueryParams,
     typesSelected,
     setTypesSelected,
-  } = useContext(DiscoveryContext);
+  } = useDiscoveryContext();
   const hydrated = useHasHydrated();
   const router = useRouter();
   const API = useMemo(() => new APIV2(undefined), []);
@@ -38,13 +38,56 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   >(undefined);
   // const [lastSelectedTypeId, setLastSelectedTypeId] = useState<number | null>(null);  // Id of the last type selected
 
-  const getRandomColor = () => {
+  const predefinedColors: { [key: string]: string } = {
+    "Activity/Lab": "#FF6384",
+    "Assessment": "#36A2EB",
+    "Assignment": "#FFCE56",
+    "Audio": "#4BC0C0",
+    "Case studies": "#9966FF",
+    "Dataset": "#FF9F40",
+    "Full course": "#FFCD56",
+    "Images": "#36A2EB",
+    "Instructional Material": "#4BC0C0",
+    "Interactive": "#FF6384",
+    "Presentations": "#9966FF",
+    "Reading": "#FF9F40",
+    "Social networks": "#FFCD56",
+    "Software": "#36A2EB"
+    // Add more types if needed
+  };
+
+  const getRandomColor = (): string => {
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
+
+    // Check if the generated color is already in predefinedColors
+    if (Object.values(predefinedColors).includes(color)) {
+      // If it matches a predefined color, generate a new one recursively
+      return getRandomColor();
+    }
+
     return color;
+  };
+
+  const getColor = (type: string | null): string => {
+    if (type === null || type === "null") return '#000000'; // Default color for null types
+    // Check if the color is already stored in localStorage
+    const storedColors = JSON.parse(localStorage.getItem('colorsMap') || '{}');
+
+    if (predefinedColors[type]) {
+      return predefinedColors[type];
+    } else
+      if (storedColors[type]) {
+        return storedColors[type];
+      } else {
+        const newColor = getRandomColor();
+        storedColors[type] = newColor;
+        localStorage.setItem('colorsMap', JSON.stringify(storedColors));
+        return newColor;
+      }
   };
 
   const updateQuery = async (
@@ -56,7 +99,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
     const searchData = localStorage.getItem('searchData');
     if (!searchData) {
       console.error('searchData not found in localStorage');
-      router.push({ pathname: '/' });
+      router.replace({ pathname: '/' });
       return;
     }
 
@@ -86,7 +129,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
       domains: types,
       isTypesFilter: isFilter,
     };
-    await router.push({
+    await router.replace({
       pathname: '/discover',
       query: updatedQuery,
     });
@@ -189,7 +232,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
         // Get the search data from the localStorage
         const searchData = localStorage.getItem('searchData');
         if (!searchData) {
-          router.push({ pathname: '/' });
+          router.replace({ pathname: '/' });
           return;
         }
         const convertedData = JSON.parse(searchData);
@@ -247,7 +290,7 @@ export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
       const datasets = resourceTypes.map((item: OerMediaTypeInfo) => ({
         label: `${item.name} (Size: ${item.count})`,
         data: [{ id: item.id, r: item.count, type: item.name }],
-        backgroundColor: getRandomColor(),
+        backgroundColor: getColor(item.name),
       }));
 
       const jsonData = { datasets: datasets };

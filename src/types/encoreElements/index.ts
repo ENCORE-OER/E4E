@@ -7,4 +7,5 @@ export * from './MetricsOers';
 export * from './oer/index';
 export * from './PathDesignElement';
 export * from './ResourceCardProps';
+export * from './SearchDataProps';
 export * from './SortingDropDownMenu';

@@ -11,7 +11,7 @@ import { APIV2 } from '../data/api';
 
 import OerCardsSorting from '../components/Sorting/OerCardsSorting';
 import { useCollectionsContext } from '../Contexts/CollectionsContext/CollectionsContext';
-import { DiscoveryContext } from '../Contexts/discoveryContext';
+import { useDiscoveryContext } from '../Contexts/discoveryContext';
 
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
@@ -33,6 +33,17 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
   const { collections } = useCollectionsContext();
+  const {
+    filtered,
+    setFiltered,
+    conceptsSelected,
+    currentPage,
+    setCurrentPage,
+    originalSearchData,
+    setTypesSelected,
+    setDomainsSelected,
+    setConceptsSelected,
+  } = useDiscoveryContext();
   //const abortController = new AbortController();
   // const [respSearchOers, setRespSearchOers] = useState<any[]>([]);
   //const [oerById, setOerById] = useState<OerProps | null>(null); // used for CardInfoModal
@@ -44,27 +55,12 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   //const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
 
-  const [filtered, setFiltered] = useState<
-    (OerProps | OerFreeSearchProps | undefined)[]
-  >([]); // used for the list of resourcess to show
   // const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
 
   const [isAscending, setAscending] = useState<boolean>(true);
   const [selectedSorting, setSelectedSorting] = useState<string>('title'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  // Discover tabs utilities
-  const [originalTypesQueryParams, setOriginalTypesQueryParams] = useState<
-    number[]
-  >([]);
-  const [originalDomainsQueryParams, setOriginalDomainsQueryParams] = useState<
-    number[]
-  >([]);
-  const [typesSelected, setTypesSelected] = useState<string[]>([]);
-  const [domainsSelected, setDomainsSelected] = useState<number[]>([]);
-  const [conceptsSelected, setConceptsSelected] = useState<string[]>([]);
-
   // ============================ VENN DIAGRAM ============================
 
   // To make the venn diagram responsive
@@ -170,12 +166,11 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   // --------------------------- API WITH PAGINATION ---------------------------
 
   // This code is used to manage the pagination of the resources
-
   const handlePageChange = (newPage: number) => {
     // Update query parameter 'page'
     setCurrentPage(newPage);
 
-    router.push({
+    router.replace({
       pathname: router.pathname,
       query: { ...router.query, page: newPage || 1 },
     });
@@ -187,7 +182,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     setSelectedSorting(newSorting);
     setCurrentPage(1);
 
-    router.push({
+    router.replace({
       pathname: router.pathname,
       query: {
         ...router.query,
@@ -235,12 +230,47 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
   // ==================================================================
 
+  // Run the original discovery if the page is reloaded
   useEffect(() => {
-    console.log('filtered: ', filtered);
-  }, [filtered]);
+    const searchData = localStorage.getItem('searchData');
+
+    if (!searchData) {
+      // TODO: handle redirect
+      router.replace({
+        pathname: '/',
+      });
+      return;
+    }
+
+    // convert the string to JSON
+    const convertedData = JSON.parse(searchData);
+    const concepts = convertedData['concepts'];
+    const isDomainsFilter = convertedData['isDomainsFilter'];
+    const isTypesFilter = convertedData['isTypesFilter'];
+
+    // Check if some filter parameters are setted. If YES reset all.
+    if ((isDomainsFilter || isTypesFilter || concepts.length > 0) &&
+      originalSearchData !== null) {
+      if (isDomainsFilter) {
+        setDomainsSelected([]);
+      } if (isTypesFilter) {
+        setTypesSelected([]);
+      } if (concepts.length > 0) {
+        setConceptsSelected([]);
+      }
+      // Push the original query
+      router.replace({
+        pathname: router.pathname,
+        query: originalSearchData
+      });
+      // Update data on localStorage
+      localStorage.setItem('searchData', JSON.stringify(originalSearchData));
+    }
+  }, []);
 
   // Do the search request when the query is setted or updated
   useEffect(() => {
+
     const fetchOers = async () => {
       setIsLoading(true);
 
@@ -248,7 +278,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
       if (!searchData) {
         // TODO: handle redirect
-        router.push({
+        router.replace({
           pathname: '/',
         });
         return;
@@ -271,20 +301,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const concepts = convertedData['concepts'];
       const isDomainsFilter = convertedData['isDomainsFilter'];
       const isTypesFilter = convertedData['isTypesFilter'];
-
-      if (!isDomainsFilter && domains !== originalDomainsQueryParams) {
-        console.log('IS DOMAINS FILTER', isDomainsFilter);
-        console.log(
-          'DIFFERENT DOMAINS: ',
-          domains !== originalDomainsQueryParams
-        );
-        setOriginalDomainsQueryParams(domains);
-      }
-      if (!isTypesFilter && types !== originalTypesQueryParams) {
-        console.log('IS TYPES FILTER', isTypesFilter);
-        console.log('DIFFERENT TYPES:', types !== originalTypesQueryParams);
-        setOriginalTypesQueryParams(types);
-      }
 
       await freeSearchOERs(
         currentPage,
@@ -320,33 +336,44 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     try {
       fetchOers();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, [router.query]);
 
-  useEffect(() => {
-    console.log(originalDomainsQueryParams);
-  }, [originalDomainsQueryParams]);
-  useEffect(() => {
-    console.log(originalTypesQueryParams);
-  }, [originalTypesQueryParams]);
+  // useEffect(() => {
+  //   console.log(originalDomainsQueryParams);
+  // }, [originalDomainsQueryParams]);
+  // useEffect(() => {
+  //   console.log(originalTypesQueryParams);
+  // }, [originalTypesQueryParams]);
 
   // redirect to home page if no resources are found
   useEffect(() => {
     //setIsLoading(false);
-
     // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
 
     if (endSearch && OersLengthTotal === 0) {
-      addToast({
-        message: 'No resources found! You will be redirected to the home page.',
-        type: 'error',
-      });
-      setTimeout(() => {
-        router.push({
-          pathname: '/',
+      if (conceptsSelected.length === 0) {
+        addToast({
+          message: 'No resources found with these concepts.',
+          type: 'error',
+        })
+        setTimeout(() => {
+          router.replace({
+            pathname: '/discover',
+          });
+        }, 1000);
+      } else {
+        addToast({
+          message: 'No resources found! You will be redirected to the home page.',
+          type: 'error',
         });
-      }, 1000);
+        setTimeout(() => {
+          router.replace({
+            pathname: '/',
+          });
+        }, 1000);
+      }
     } else if (endSearch) {
       addToast({
         message: 'Search successfully completed!',
@@ -401,7 +428,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -442,48 +469,27 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
 
         {/*<DrawerCard isOpen={isOpen} onClose={onClose} oer={oerById} />*/}
-
-        <DiscoveryContext.Provider
-          value={{
-            filtered,
-            setFiltered,
-            // byResourceType,
-            // setByResourceType,
-            setCurrentPage,
-            originalTypesQueryParams,
-            // setOriginalTypesQueryParams,
-            originalDomainsQueryParams,
-            // setOriginalDomainsQueryParams
-            typesSelected,
-            setTypesSelected,
-            domainsSelected,
-            setDomainsSelected,
-            conceptsSelected,
-            setConceptsSelected,
-          }}
-        >
-          <EncoreTab
-            oers={filtered}
-            // setOers={setFiltered}
-            domains={domain}
-            // searchCallBack={searchCallbackEncoreTab}
-            flex="1" // "flex='1'" fill the rest of the page
-            py={isSmallerScreen ? '15px' : '30px'}
-            px={isSmallerScreen ? '15px' : '30px'}
-            w="full"
-            h="full"
-            bg="background"
-            borderLeft="0.5px"
-            borderLeftColor={'secondary'}
-            borderLeftStyle={'solid'}
-          />
-        </DiscoveryContext.Provider>
+        <EncoreTab
+          oers={filtered}
+          // setOers={setFiltered}
+          domains={domain}
+          // searchCallBack={searchCallbackEncoreTab}
+          flex="1" // "flex='1'" fill the rest of the page
+          py={isSmallerScreen ? '15px' : '30px'}
+          px={isSmallerScreen ? '15px' : '30px'}
+          w="full"
+          h="full"
+          bg="background"
+          borderLeft="0.5px"
+          borderLeftColor={'secondary'}
+          borderLeftStyle={'solid'}
+        />
       </Flex>
     </Flex>
   );

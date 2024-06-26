@@ -10,6 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import { CollectionsProvider } from '../Contexts/CollectionsContext/CollectionsContext';
 import { CreateOERsProvider } from '../Contexts/CreateOERsContext';
+import { DiscoveryProvider } from '../Contexts/discoveryContext';
 import { GeneralContextProvider } from '../Contexts/GeneralContext';
 import { LearningPathDesignProvider } from '../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import reportWebVitals from '../reportWebVitals';
@@ -33,8 +34,10 @@ export default function App({ Component, pageProps }: AppProps) {
         <CollectionsProvider>
           <LearningPathDesignProvider>
             <CreateOERsProvider>
-              <Component {...pageProps} />
-              <Analytics />
+              <DiscoveryProvider>
+                <Component {...pageProps} />
+                <Analytics />
+              </DiscoveryProvider>
             </CreateOERsProvider>
           </LearningPathDesignProvider>
         </CollectionsProvider>

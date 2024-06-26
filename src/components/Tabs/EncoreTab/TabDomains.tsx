@@ -7,8 +7,8 @@ import {
   mergeColors,
 } from '@upsetjs/react';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
-import { DiscoveryContext } from '../../../Contexts/discoveryContext';
+import { useEffect, useMemo, useState } from 'react';
+import { useDiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
 import { MetricsOers, OerProps } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
@@ -34,7 +34,7 @@ type baseSetsProps = {
   domainId: number;
 };
 
-export const TabDomains = ({}: TabDomainsProps) => {
+export const TabDomains = ({ }: TabDomainsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -47,7 +47,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
     domainsSelected,
     setDomainsSelected,
     // setFiltered
-  } = useContext(DiscoveryContext);
+  } = useDiscoveryContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [metrics, setMetrics] = useState<ISet[]>([]);
   // const [totalOers, setTotalOers] = useState<string[]>([]);
@@ -101,11 +101,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
     (
       oer:
         | {
-            green_domain: boolean;
-            digital_domain: boolean;
-            entrepreneurship_domain: boolean;
-            id: number;
-          }
+          green_domain: boolean;
+          digital_domain: boolean;
+          entrepreneurship_domain: boolean;
+          id: number;
+        }
         | OerProps
         | undefined
         | OerFreeSearchProps
@@ -179,7 +179,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
     if (!searchData) {
       console.error('searchData not found in localStorage');
       // TODO: handle redirect
-      router.push({
+      router.replace({
         pathname: '/',
       });
       return;
@@ -193,7 +193,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
     // Update the concepts array in the searchData object
     convertedData['domains'] = updatedDomains;
 
-    console.log('convertedData - domains', convertedData['domains']);
+    // console.log('convertedData - domains', convertedData['domains']);
 
     convertedData['isDomainsFilter'] = isFilter;
 
@@ -202,7 +202,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
 
     // Update the query with the selected domains
     const updatedQuery = { ...router.query, domains: updatedDomains };
-    await router.push({
+    await router.replace({
       pathname: '/discover',
       query: updatedQuery,
     });
@@ -220,10 +220,10 @@ export const TabDomains = ({}: TabDomainsProps) => {
     // const selectedDomains = temp?.map((domain: any, index: number) => domain.get(index));
     // console.log("Filtered OER IDs", selectedDomains);
     // console.log(selection);
-    console.log('SET NAME:', selection?.name);
+    // console.log('SET NAME:', selection?.name);
     const nameSelection = selection?.name;
     const domainIds = extractSetIds(nameSelection);
-    console.log(domainIds);
+    // console.log(domainIds);
     // const involvedDomainIds = selection.sets.map((setId: number) => {
     //   const set = metrics.find((s: IExtendedSet) => s.id === setId);
     //   return set ? set.domainId : null;
@@ -287,7 +287,7 @@ export const TabDomains = ({}: TabDomainsProps) => {
         const searchData = localStorage.getItem('searchData');
         if (!searchData) {
           // TODO: handle redirect
-          router.push({
+          router.replace({
             pathname: '/',
           });
           return;
@@ -432,11 +432,11 @@ export const TabDomains = ({}: TabDomainsProps) => {
               fontSizes={
                 isSmallerScreen
                   ? {
-                      setLabel: '12px',
-                    }
+                    setLabel: '12px',
+                  }
                   : {
-                      setLabel: '15px',
-                    }
+                    setLabel: '15px',
+                  }
               }
             />
           </Flex>

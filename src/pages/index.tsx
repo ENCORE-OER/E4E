@@ -16,11 +16,13 @@ import ShowHideButton from '../components/Buttons/ShowHideButton';
 import Navbar from '../components/NavBars/NavBarEncore';
 import SideBar from '../components/SideBar/SideBar';
 import SearchView from '../components/Views/SearchView';
+import { useDiscoveryContext } from '../Contexts/discoveryContext';
 import { APIV2 } from '../data/api';
 import {
   OerAudienceInfo,
   OerDomainInfo,
   OerMediaTypeInfo,
+  SearchDataProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
@@ -34,6 +36,12 @@ const Home = (props: DiscoverPageProps) => {
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
   const [searchValue, setSearchValue] = useState<string[]>([]);
+
+  const {
+    // setOriginalDomainsQueryParams,
+    // setOriginalTypesQueryParams,
+    setOriginalSearchData,
+  } = useDiscoveryContext();
   //const [page] = useState(true);
   //const [respSearchOers] = useState<OerProps[]>([]);
   //const [oerById] = useState<OerProps | null>(null);
@@ -97,7 +105,7 @@ const Home = (props: DiscoverPageProps) => {
   };
 
   const searchCallback1 = async () => {
-    let searchData = {};
+    let searchData: SearchDataProps = {} as SearchDataProps;
 
     try {
       // if (
@@ -155,14 +163,17 @@ const Home = (props: DiscoverPageProps) => {
         });
         throw new Error('Error: you must set at least one skill or parameter!');
       } else {
+        // setOriginalDomainsQueryParams(selectedDomains.map((domain: string | number) => Number(domain)));
+        // setOriginalTypesQueryParams(selectedResourceTypes.map((type: string | number) => Number(type)));
+        setOriginalSearchData(searchData);
         router.push({
           pathname: '/discover',
           query: searchData,
         });
         localStorage.setItem('searchData', JSON.stringify(searchData));
-        console.log(
-          'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
-        );
+        // console.log(
+        //   'LOCAL STORAGE - SEARCH DATA: ' + JSON.stringify(localStorage)
+        // );
       }
     } catch (error) {
       addToast({
@@ -262,18 +273,6 @@ const Home = (props: DiscoverPageProps) => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    console.log('SELECTED DOMAINS: ' + selectedDomains);
-  }, [selectedDomains]);
-
-  useEffect(() => {
-    console.log('SELECTED RESOURCE TYPES: ' + selectedResourceTypes);
-  }, [selectedResourceTypes]);
-
-  useEffect(() => {
-    console.log('SELECTED AUDIENCE: ' + selectedAudience);
-  }, [selectedAudience]);
 
   // update suggestions while texting
   /*useEffect(() => {
@@ -412,11 +411,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (
