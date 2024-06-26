@@ -20,7 +20,7 @@ type DataObjectProps = {
   }[];
 };
 
-export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
+export const TabTypesOfResources = ({}: TabTypesOfResourcesProps) => {
   const {
     filtered,
     setCurrentPage,
@@ -39,20 +39,20 @@ export const TabTypesOfResources = ({ }: TabTypesOfResourcesProps) => {
   // const [lastSelectedTypeId, setLastSelectedTypeId] = useState<number | null>(null);  // Id of the last type selected
 
   const predefinedColors: { [key: string]: string } = {
-    'Activity/Lab': '#E57373',      // Light Red
-    'Assessment': '#64B5F6',        // Light Blue
-    'Assignment': '#FFD54F',        // Amber
-    'Audio': '#4DB6AC',             // Teal
-    'Case studies': '#BA68C8',      // Light Purple
-    'Dataset': '#FF8A65',           // Deep Orange
-    'Full course': '#FFD700',       // Gold
-    'Images': '#42A5F5',            // Blue
+    'Activity/Lab': '#E57373', // Light Red
+    Assessment: '#64B5F6', // Light Blue
+    Assignment: '#FFD54F', // Amber
+    Audio: '#4DB6AC', // Teal
+    'Case studies': '#BA68C8', // Light Purple
+    Dataset: '#FF8A65', // Deep Orange
+    'Full course': '#FFD700', // Gold
+    Images: '#42A5F5', // Blue
     'Instructional Material': '#26A69A', // Teal
-    'Interactive': '#EF5350',       // Red
-    'Presentations': '#AB47BC',     // Purple
-    'Reading': '#FF7043',           // Orange
-    'Social networks': '#FFC107',   // Amber
-    'Software': '#29B6F6',          // Light Blue
+    Interactive: '#EF5350', // Red
+    Presentations: '#AB47BC', // Purple
+    Reading: '#FF7043', // Orange
+    'Social networks': '#FFC107', // Amber
+    Software: '#29B6F6', // Light Blue
     // Add more types if needed
   };
 
