@@ -7,7 +7,7 @@ import {
 } from '.';
 
 export type LessonCardProps = {
-  lesson: LessonProps;
+  data: LessonProps;
   handleData: Dispatch<SetStateAction<LessonProps[]>>;
   indexCard: number; // Specifies the order of the lessons
   isSmallerScreen?: boolean;

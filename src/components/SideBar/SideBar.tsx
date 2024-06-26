@@ -72,7 +72,7 @@ interface SidebarProps extends BoxProps {
 }
 
 const SidebarContent = ({
-  selectedLink: selectedLink,
+  selectedLink,
   setIsSelected,
   ...rest
 }: SidebarProps) => {

@@ -212,24 +212,28 @@ const Home = (/*props: DiscoverPageProps*/) => {
             message: `Lesson plan successfully generated.`,
             type: 'success',
           });
-          router.push({
-            pathname: '/design/learningPathDesign',
-          });
+          // router.push({
+          //   pathname: '/design/learningPathDesign',
+          // });
           // Plan not generated
         } else {
           addToast({
             message: `Impossible to generate a Lesson Plan with the AI. An empty Lesson Plan will be provided.`,
             type: 'error',
           });
-          router.push({
-            pathname: '/design/learningPathDesign',
-          });
+          // router.push({
+          //   pathname: '/design/learningPathDesign',
+          // });
         }
-      } else {
-        router.push({
-          pathname: '/design/learningPathDesign',
-        });
+        // router.push({
+        //   pathname: '/design/learningPathDesign',
+        // });
       }
+      // else {
+      router.push({
+        pathname: '/design/learningPathDesign',
+      });
+      // }
     } else {
       setIsNextButtonClicked(true);
       if (collectionIndex < 0) {
@@ -270,7 +274,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
   const handlePrevButtonClick = () => {
     //handleResetStep0();
-    router.push({
+    router.replace({
       pathname: '/design',
     });
   };

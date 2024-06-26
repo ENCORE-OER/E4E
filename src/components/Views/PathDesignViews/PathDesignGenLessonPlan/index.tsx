@@ -355,10 +355,12 @@ export default function PathDesignGenLessonPlan({
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
           activityTitle: `${
             generatedLesson.Type
-              ? `${mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )}`
+              ? `${
+                  mapStringToString(
+                    TypeOfActivityEnum[Number(generatedLesson?.Details)],
+                    TypeOfActivityStringEnum
+                  ) ?? 'Title'
+                }`
               : 'Frontal Lecture'
           } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
@@ -680,7 +682,7 @@ export default function PathDesignGenLessonPlan({
     }
     for (let i = 0; i < numberOfAssessmentActivities; i++) {
       tempLessonsActivities.push({
-        activityTitle: '',
+        activityTitle: 'Title Activity',
         lessonType: 'Assessment',
         activityType: '',
         activityDescription: '',

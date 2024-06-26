@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Flex, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { TagCloud } from 'react-tagcloud';
 import 'reactflow/dist/style.css';
-import { DiscoveryContext } from '../../../Contexts/discoveryContext';
 import { APIV2 } from '../../../data/api';
 // import { OerConceptInfo } from '../../../types/encoreElements';
+import { useDiscoveryContext } from '../../../Contexts/discoveryContext';
 import { OerConceptGetAPIInfo } from '../../../types/encoreElements/oer/OerConceptGetAPI';
 import { useHasHydrated } from '../../../utils/utils';
 
@@ -22,7 +22,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const router = useRouter();
   const hydrated = useHasHydrated();
   const { filtered, setCurrentPage, conceptsSelected, setConceptsSelected } =
-    useContext(DiscoveryContext);
+    useDiscoveryContext();
   //const [tags, setTags] = useState<Tag[]>([]);
   const [tags, setTags] = useState<OerConceptGetAPIInfo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -75,7 +75,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
     if (!searchData) {
       console.error('searchData not found in localStorage');
       // TODO: handle redirect
-      router.push({
+      router.replace({
         pathname: '/',
       });
       return;
@@ -91,11 +91,11 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
       concepts = updatedConcepts;
     }
 
-    console.log(concepts);
+    // console.log(concepts);
     convertedData['concepts'] = concepts;
     localStorage.setItem('searchData', JSON.stringify(convertedData));
 
-    await router.push({
+    await router.replace({
       pathname: '/discover',
       query: { ...router.query, concepts: concepts },
     });
@@ -136,7 +136,7 @@ export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
         const searchData = localStorage.getItem('searchData');
         if (!searchData) {
           // TODO: handle redirect
-          router.push({
+          router.replace({
             pathname: '/',
           });
           return;
