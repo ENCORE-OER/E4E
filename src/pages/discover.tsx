@@ -39,7 +39,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     conceptsSelected,
     currentPage,
     setCurrentPage,
-    originalSearchData,
+    // originalSearchData,
     setTypesSelected,
     setDomainsSelected,
     setConceptsSelected,
@@ -157,6 +157,28 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     }
   };
 
+  const setOriginalQuery = async () => {
+    // Get search data from the localStorage
+    const originalSearchData = localStorage.getItem('originalSearchData');
+
+    if (!originalSearchData) {
+      console.error('originalSearchData not found in localStorage.');
+      // TODO: handle redirect
+      router.replace({
+        pathname: '/',
+      });
+      return;
+    }
+
+    // Update the searchData in the localStorage
+    localStorage.setItem('searchData', originalSearchData);
+
+    await router.replace({
+      pathname: '/discover',
+      query: originalSearchData,
+    });
+  };
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const searchCallbackEncoreTab = async (domainIds?: number[]) => {
   //   alert('qui call back');
@@ -250,8 +272,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
     // Check if some filter parameters are setted. If YES reset all.
     if (
-      (isDomainsFilter || isTypesFilter || concepts.length > 0) &&
-      originalSearchData !== null
+      isDomainsFilter ||
+      isTypesFilter ||
+      concepts.length > 0
+      // && originalSearchData !== null
     ) {
       if (isDomainsFilter) {
         setDomainsSelected([]);
@@ -262,13 +286,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       if (concepts.length > 0) {
         setConceptsSelected([]);
       }
-      // Push the original query
-      router.replace({
-        pathname: router.pathname,
-        query: originalSearchData,
-      });
-      // Update data on localStorage
-      localStorage.setItem('searchData', JSON.stringify(originalSearchData));
+
+      setOriginalQuery();
     }
   }, []);
 

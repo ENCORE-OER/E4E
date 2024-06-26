@@ -380,11 +380,14 @@ export const TabDomains = ({}: TabDomainsProps) => {
     };
 
     setIsLoading(true);
-    fetchData();
+    // Given the time to set/update localStorage, otherwise, if setOriginalSearchData is called the getMetrics would not see the updated localStorage.
+    setTimeout(async () => {
+      await fetchData();
+    }, 10);
   }, [
-    // API,
+    API,
+    // With these hack the useEffect should be trigger only one time if the parameters change in the same moment
     JSON.stringify({
-      // With these hack the useEffect should be trigger only one time if the parameters change in the same moment
       concepts: router.query.concepts,
       keywords: router.query.keywords,
       domains: router.query.domains,
@@ -392,6 +395,12 @@ export const TabDomains = ({}: TabDomainsProps) => {
       audience: router.query.audience,
       isDomainsFilter: router.query.isDomainsFilter,
     }),
+    // router.query.concepts,
+    // router.query.keywords,
+    // router.query.domains,
+    // router.query.types,
+    // router.query.audience,
+    // router.query.isDomainsFilter
     // router.query.isTypesFilter,
   ]);
 
