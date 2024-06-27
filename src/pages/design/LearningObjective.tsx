@@ -263,7 +263,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     } else {
       addToast({
         message:
-          'You have do generate a lesson plan before to can navigate to the next page without generate a new lesson plan.',
+          'You need to create a lesson plan first before you can navigate to the following page.',
         type: 'warning',
       });
     }
@@ -353,7 +353,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -362,7 +362,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -447,8 +447,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            handleNextClick={handleNextClick}
-            // handlePrevButtonClick={handlePrevButtonClick}
+            handleNextClick={lessonActivities.length > 0 ? handleNextClick : undefined}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>
