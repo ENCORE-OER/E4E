@@ -435,12 +435,12 @@ export default function LessonCard({
               />
               <AddContentButton
                 onClick={handleAddContentClick}
-                // nameButton={
-                //   data.content.oers.length ||
-                //     data.content.uploadedFiles.length > 0 ?
-                //     "View Content" :
-                //     "Add Content"
-                // }
+                nameButton={
+                  data.content.oers.length ||
+                  data.content.uploadedFiles.length > 0
+                    ? 'View Content'
+                    : 'Add Content'
+                }
               />
             </Flex>
           </Flex>

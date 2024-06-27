@@ -263,7 +263,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     } else {
       addToast({
         message:
-          'You have do generate a lesson plan before to can navigate to the next page without generate a new lesson plan.',
+          'You need to create a lesson plan first before you can navigate to the following page.',
         type: 'warning',
       });
     }
@@ -447,7 +447,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            handleNextClick={handleNextClick}
+            handleNextClick={
+              lessonActivities.length > 0 ? handleNextClick : undefined
+            }
             // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>

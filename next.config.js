@@ -23,6 +23,8 @@ const ENCORE_OERS_DB =
 const ENCORE_API_URL =
   process.env.ENCORE_API_URL || 'https://encore-api.polyglot-edu.com';
 
+// TODO: remove these variables and set them on GitHub Env as a Secret (Update also the pipeline)
+// At the moment these variables are visible from frontend if someone inspects the browser.
 const SK_API_KEY = process.env.SK_API_KEY || 'Kdzwa9xxu_jW]LjkPaxX1;H;kUuU;0';
 const SETUP_MODEL =
   process.env.SETUP_MODEL ||

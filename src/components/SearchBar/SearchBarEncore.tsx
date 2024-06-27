@@ -137,6 +137,7 @@ export default function SearchBarEncore({
           <AutoCompleteInput
             variant="filled"
             placeholder={placeholder || 'Search...'}
+            textTransform="capitalize"
             onChange={(e) => {
               e.preventDefault();
               const currentValue = e.currentTarget.value
@@ -241,7 +242,10 @@ export default function SearchBarEncore({
 
             {
               // could be possibile comment this part if we don't want text that appear like suggestion under the searchbar
-              <AutoCompleteItem value={freeText ? freeText : ''}>
+              <AutoCompleteItem
+                value={freeText ? freeText : ''}
+                textTransform="capitalize"
+              >
                 {freeText}
               </AutoCompleteItem>
             }
