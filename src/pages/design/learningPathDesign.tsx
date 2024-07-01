@@ -19,7 +19,6 @@ import { handleSaveLearningScenarioClick } from '../../utils/learningScenarioUti
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
 
-
 // type DiscoverPageProps = {
 //   accessToken: string | undefined;
 // };
@@ -61,7 +60,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     isEditLessonPlanClicked,
     editActivityLessonIndex,
     handleIdLearningScenario,
-    handleSaveLessonPlanClick
+    handleSaveLessonPlanClick,
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -94,7 +93,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //     }
   //   }
   // };
-
 
   const handleSave = async () => {
     await handleSaveLearningScenarioClick(
@@ -130,7 +128,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
     const handleRouteChange = (url: string) => {
       // console.log("ROUTE CHANGE");
       // Check if we are leaving the LearningPathDesign page and if we are in edit mode
-      if (router.pathname === '/design/learningPathDesign' && url !== router.pathname && (isEditLessonPlanClicked || editActivityLessonIndex !== null)) {
+      if (
+        router.pathname === '/design/learningPathDesign' &&
+        url !== router.pathname &&
+        (isEditLessonPlanClicked || editActivityLessonIndex !== null)
+      ) {
         handleSaveLessonPlanClick();
         handleSave();
       }
@@ -166,12 +168,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
             // w="100%"
             w={isSmallerScreen ? '95%' : '80%'}
             h="100%"
-          // overflowX="auto"
+            // overflowX="auto"
           >
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -181,7 +183,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -279,7 +281,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-          // handlePrevButtonClick={handlePrevButtonClick}
+            // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

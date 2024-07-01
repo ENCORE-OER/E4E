@@ -138,8 +138,8 @@ export default function AddContentModal({
         titleLearningPath,
         macroSubject,
         lessonActivities,
-        handleIdLearningScenario,
-      )
+        handleIdLearningScenario
+      );
       handleCloseModal();
     } catch (error) {
       console.error(error);
@@ -253,7 +253,7 @@ export default function AddContentModal({
                       activityIndex !== undefined &&
                       // lessonActivities[indexLesson]?.content?.oers &&
                       lessonActivities[activityIndex]?.content?.oers?.length ===
-                      0 &&
+                        0 &&
                       lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.

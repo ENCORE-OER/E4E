@@ -13,7 +13,7 @@ export default function SaveLessonPlanButton({
   name,
   isDisabled,
   isSmallerScreen,
-  handleSaveOnDB
+  handleSaveOnDB,
 }: SaveLessonPlanButtonProps) {
   const {
     isEditLessonPlanClicked,

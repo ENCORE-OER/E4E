@@ -13,9 +13,8 @@ const TabTable = forwardRef<HTMLDivElement, TabTableProps>((props, ref) => {
   const {
     //  handleSaveLessonPlanClick,
     isEditLessonPlanClicked,
-    //  idLearningScenario 
-  } =
-    useLearningPathDesignContext();
+    //  idLearningScenario
+  } = useLearningPathDesignContext();
 
   // TODO: Should be a good choise update or save even if one does not click "Save" before changing tab or page? A good idead shoud be to show a message before?
 

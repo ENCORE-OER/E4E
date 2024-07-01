@@ -22,7 +22,6 @@ const NavItem = ({
   setIsSelected,
   ...rest
 }: NavItemProps) => {
-
   const router = useRouter();
 
   const handleClick = () => {
@@ -37,10 +36,7 @@ const NavItem = ({
     //   style={{ textDecoration: 'none' }}
     //   //_focus={{ boxShadow: 'none' }}
     // >
-    <Flex
-      onClick={handleClick}
-      {...rest}
-    >
+    <Flex onClick={handleClick} {...rest}>
       {icon && (
         <Icon
           // ALL THIS PARAMETERS ARE USELESS FOR SVG ICON IMPORTED MANUALLY

@@ -129,7 +129,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-        // isDisabled={true}
+          // isDisabled={true}
         />
       ),
       isButton: true,
@@ -159,7 +159,11 @@ const getConfig = (
     },
     {
       label: (
-        <SaveLessonPlanButton name="Save" isSmallerScreen={isSmallerScreen} handleSaveOnDB={handleSaveOnDB} />
+        <SaveLessonPlanButton
+          name="Save"
+          isSmallerScreen={isSmallerScreen}
+          handleSaveOnDB={handleSaveOnDB}
+        />
       ),
       isButton: true,
       pt: '3%',
