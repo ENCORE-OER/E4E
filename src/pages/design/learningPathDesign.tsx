@@ -1,6 +1,6 @@
 import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LearningPathProvider } from '../../Contexts/LearningPathDesignContext/learningPathContext';
 //import ConceptButtonsList from '../../components/Buttons/ConceptButtonsList';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
@@ -15,8 +15,10 @@ import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import InfoGenAITextBox from '../../components/TextBox/InfoTextBox/InfoGenAITextBox';
 import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
+import { handleSaveLearningScenarioClick } from '../../utils/learningScenarioUtils';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
+
 
 // type DiscoverPageProps = {
 //   accessToken: string | undefined;
@@ -29,16 +31,18 @@ const Home = (/*props: DiscoverPageProps*/) => {
   const {
     SPACING,
     // collectionIndex,
-    // selectedCustomLearningObjective,
-    // handleSelectedCustomLearningObjectiveChange,
-    // storedLearningObjective,
-    // // Used for updateLearningScenario API call
-    // idLearningScenario,
-    // bloomLevels,
-    // bloomLevelIndex,
-    // selectedSkillConceptsTags,
-    // learningTextContext,
-    // selectedOptions, // verbsBloomLevel
+    // Used for updateLearningScenario API call
+    idLearningScenario,
+    selectedEducatorExperience,
+    selectedContext,
+    selectedGroupDimension,
+    selectedLearnerExperience,
+    bloomLevels,
+    bloomLevelIndex,
+    selectedSkillConceptTags,
+    learningTextContext,
+    selectedOptions, // verbsBloomLevel
+    lessonActivities,
     // ----------------------------------------
     // This are used with <ThreeTextBoxes /> component
     // handleUseLearningObjectives,
@@ -53,7 +57,11 @@ const Home = (/*props: DiscoverPageProps*/) => {
     learningObjectiveObjects,
     titleLearningPath,
     handleTitleLearningPath,
+    macroSubject,
     isEditLessonPlanClicked,
+    editActivityLessonIndex,
+    handleIdLearningScenario,
+    handleSaveLessonPlanClick
   } = useLearningPathDesignContext();
 
   const router = useRouter();
@@ -87,86 +95,26 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
-  // // update the learning objective in the learning scenario on the database
-  // const updateLearningScenario = async () => {
-  //   // const api = new APIV2(props.accessToken);
 
-  //   try {
-  //     // await api.updateLearningScenario(
-  //     //   idLearningScenario,
-  //     //   bloomLevels[bloomLevelIndex]?.name ?? '',
-  //     //   selectedOptions ?? [],
-  //     //   selectedSkillConceptsTags?.map((item: SkillItemProps) => item.id) ?? [],
-  //     //   learningTextContext ?? '',
-  //     //   selectedCustomLearningObjective ?? ''
-  //     // );
-
-  //     await axios.put(
-  //       `/api/encore/updateLearningObjective/${idLearningScenario}`,
-  //       {
-  //         BloomLevel: {
-  //           name: bloomLevels[bloomLevelIndex]?.name,
-  //           verbs: selectedOptions,
-  //         },
-  //         Skills: selectedSkillConceptsTags?.map(
-  //           (item: SkillItemProps) => item.id
-  //         ),
-  //         LearningContext: learningTextContext,
-  //         textLearningObjective: selectedCustomLearningObjective,
-  //       }
-  //     );
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-
-  // const handleSaveLearningObjectiveButtonClick = () => {
-  //   //handleNewStoredLearningObjectives();
-
-  //   // Check if all the required fields are filled out.
-  //   // This also for the handleStoredLearningObjective() function to hav the same data locally and on the database
-  //   if (
-  //     idLearningScenario?.trim() !== '' &&
-  //     bloomLevelIndex !== null &&
-  //     bloomLevelIndex > -1 &&
-  //     selectedSkillConceptsTags.length > 0 &&
-  //     learningTextContext?.trim() !== '' &&
-  //     selectedOptions.length > 0 &&
-  //     selectedCustomLearningObjective?.trim() !== ''
-  //   ) {
-  //     handleStoredLearningObjective(); // store the actual selected learning objective in the context
-
-  //     // update the learning objective in the learning scenario on the database
-  //     updateLearningScenario();
-  //     setIsLearningObjectiveChanged(false);
-  //     addToast({
-  //       message: 'Learning objective saved!',
-  //       type: 'success',
-  //     });
-  //   } else if (selectedCustomLearningObjective?.trim() === '') {
-  //     addToast({
-  //       message: "The learning objective can't be empty! ",
-  //       type: 'error',
-  //     });
-  //   } else {
-  //     addToast({
-  //       message:
-  //         'Please ensure all required fields are filled out before saving new updates.',
-  //       type: 'warning',
-  //     });
-  //   }
-  // };
-
-  // const handleUndoLearningObjectiveButtonClick = () => {
-  //   //handleUseLearningObjectives();
-  //   handleLearningObjective(); // restore the last stored learning objective
-  //   setIsLearningObjectiveChanged(false);
-
-  //   addToast({
-  //     message: 'Learning objective restored',
-  //     type: 'info',
-  //   });
-  // };
+  const handleSave = async () => {
+    await handleSaveLearningScenarioClick(
+      idLearningScenario,
+      selectedEducatorExperience,
+      selectedContext,
+      selectedGroupDimension,
+      selectedLearnerExperience,
+      bloomLevels,
+      bloomLevelIndex,
+      selectedOptions,
+      selectedSkillConceptTags,
+      learningTextContext,
+      learningObjectiveObjects,
+      titleLearningPath,
+      macroSubject,
+      lessonActivities,
+      handleIdLearningScenario
+    );
+  };
 
   const handlePrevButtonClick = () => {
     //handleResetStep1();
@@ -174,6 +122,27 @@ const Home = (/*props: DiscoverPageProps*/) => {
       pathname: '/design/LearningObjective',
     });
   };
+
+  // EASY WAY: save always on DB when change page (change the route).
+  // TODO: handle data saving in a better way. Maybe using an API to get the lessonPlan from DB, and checking if there are differences between data stored in localStorage and data stored on DB. Then handle an alert page if the User change page before saving, and if the user doesn't save retrieve the old data from DB.
+  useEffect(() => {
+    // console.log("USE EFFECT ROUTE!")
+    const handleRouteChange = (url: string) => {
+      // console.log("ROUTE CHANGE");
+      // Check if we are leaving the LearningPathDesign page and if we are in edit mode
+      if (router.pathname === '/design/learningPathDesign' && url !== router.pathname && (isEditLessonPlanClicked || editActivityLessonIndex !== null)) {
+        handleSaveLessonPlanClick();
+        handleSave();
+      }
+    };
+
+    // Trigger the event
+    router.events.on('routeChangeStart', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.pathname, isEditLessonPlanClicked, editActivityLessonIndex]);
 
   return (
     <LearningPathProvider>
@@ -197,12 +166,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
             // w="100%"
             w={isSmallerScreen ? '95%' : '80%'}
             h="100%"
-            // overflowX="auto"
+          // overflowX="auto"
           >
             <Flex
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -212,7 +181,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-              //justify="space-between"
+            //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -283,7 +252,10 @@ const Home = (/*props: DiscoverPageProps*/) => {
             </Flex>
             <Flex paddingTop="1rem" w="100%">
               {hydrated && (
-                <LearningPathTabs isSmallerScreen={isSmallerScreen} />
+                <LearningPathTabs
+                  isSmallerScreen={isSmallerScreen}
+                  handleSaveOnDB={async () => await handleSave()}
+                />
               )}
             </Flex>
             <Flex paddingTop={'1.5rem'}>
@@ -307,7 +279,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

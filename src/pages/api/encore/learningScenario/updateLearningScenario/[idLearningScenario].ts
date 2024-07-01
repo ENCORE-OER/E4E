@@ -9,30 +9,27 @@ const axiosUpdateLearningScenario = axiosCreate.create({
 });
 
 // Server side call
-export default async function updateLearningObjectiveIdScenario(
+export default async function updateLearningScenario(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   console.log('updating learning scenario...');
   if (req.method === 'PUT') {
-    const { BloomLevel, Skills, LearningContext, textLearningObjective } =
-      req.body;
+    const { Context, Objective, Path } = req.body;
     const { idLearningScenario } = req.query;
     console.log('idLearningScenario', idLearningScenario);
 
-    const url = `/api/updateLearningObjective/${idLearningScenario}`;
+    const url = `/api/updateLearningPath/${idLearningScenario}`;
 
-    console.log(BloomLevel);
-    console.log(Skills);
-    console.log(LearningContext);
-    console.log(textLearningObjective);
+    console.log(Context);
+    console.log(Objective);
+    console.log(Path);
 
     try {
       const resp = await axiosUpdateLearningScenario.put(url, {
-        BloomLevel: BloomLevel,
-        Skills: Skills,
-        LearningContext: LearningContext,
-        textLearningObjective: textLearningObjective,
+        Context: Context,
+        Objective: Objective,
+        Path: Path,
       });
       console.log('resp', resp);
       res.status(200).json(resp?.data);

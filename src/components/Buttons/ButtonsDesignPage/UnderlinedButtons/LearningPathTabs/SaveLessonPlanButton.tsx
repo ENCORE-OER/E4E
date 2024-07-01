@@ -5,11 +5,16 @@ import { CustomToast } from '../../../../../utils/Toast/CustomToast';
 import IconSave from '../../../../Icons/IconSave/IconSave';
 import UnderlinedButton from '../UnderlinedButton';
 
+type SaveLessonPlanButtonProps = {
+  handleSaveOnDB?: () => Promise<void>;
+} & LessonPlanTabButtonProps;
+
 export default function SaveLessonPlanButton({
   name,
   isDisabled,
   isSmallerScreen,
-}: LessonPlanTabButtonProps) {
+  handleSaveOnDB
+}: SaveLessonPlanButtonProps) {
   const {
     isEditLessonPlanClicked,
     editActivityLessonIndex,
@@ -17,8 +22,12 @@ export default function SaveLessonPlanButton({
   } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     handleSaveLessonPlanClick();
+
+    if (handleSaveOnDB) {
+      await handleSaveOnDB();
+    }
 
     addToast({
       message: 'Lesson Plan succesfully saved',

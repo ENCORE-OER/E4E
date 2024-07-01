@@ -55,23 +55,6 @@ const Home = () => {
     }
   };
 
-  // We put this in the ReserButton component
-  // const handleResetClick = () => {
-  //   console.log('Reset clicked');
-
-  //   handleEducatorExperienceChange(null);
-  //   handleLearnerExperienceChange(null);
-  //   handleGroupDimensionChange(null);
-  //   handleContextChange(null);
-  //   handleCollectionIndexChange(-1);
-  //   setResetAll(true);
-
-  // }
-
-  // useEffect(() => {
-  //   //console.log('cambiato qualcosa');
-  // }, [areOptionsComplete]);
-
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />
@@ -95,7 +78,7 @@ const Home = () => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -104,7 +87,7 @@ const Home = () => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Flex
               // w={isSmallerScreen ? '95%' : '90%'}

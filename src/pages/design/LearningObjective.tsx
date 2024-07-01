@@ -45,6 +45,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     resetSelectedResourcesAddContent,
     uploadedFilesAddContent,
     resetUploadedFilesAddContent,
+    handleEditLessonPlanClick,
+    handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -201,6 +203,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
       if (handleGenerationFunction) {
         resetIndexedDB();
+        handleIdLearningScenario("");
+        handleEditLessonPlanClick(true);
 
         console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan
@@ -353,7 +357,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -362,7 +366,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -450,7 +454,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             handleNextClick={
               lessonActivities.length > 0 ? handleNextClick : undefined
             }
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>
