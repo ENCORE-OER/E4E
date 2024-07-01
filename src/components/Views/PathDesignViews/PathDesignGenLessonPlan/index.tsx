@@ -46,10 +46,12 @@ export default function PathDesignGenLessonPlan({
     learningTextContext,
     defaultLearningContext,
     handleTitleLearningPath,
+    handleMacroSubject,
     // lessonActivities,
     setLessonActivities,
     setTitleLearningPath,
     handleEditLessonPlanClick,
+    handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -305,20 +307,21 @@ export default function PathDesignGenLessonPlan({
 
     // Set the title of the lesson plan
     handleTitleLearningPath(analyzedMaterial.Title || '');
+    handleMacroSubject(analyzedMaterial.MacroSubject || '');
 
     // Generate a lesson plan based on the selected resources
-    const learninObjective = learningObjectiveObjects
+    const learningObjectives = learningObjectiveObjects
       .map(
         (objectLO: ObjectLearningObjectiveProps) => objectLO.learningObjective
       )
       .join(' & ');
-    console.log(learninObjective);
+    // console.log(learningObjectives);
 
     const bloomLevel = mapOptionToNumber(
       bloomLevels[bloomLevelIndex],
       BloomLevelsEnum
     );
-    console.log(bloomLevel);
+    // console.log(bloomLevel);
 
     const generatedLessonPlan: OutputLessonPlanProps[] =
       (await postGenerateLessonPlan(
@@ -329,7 +332,7 @@ export default function PathDesignGenLessonPlan({
         analyzedMaterial.MacroSubject, // macroSubject
         analyzedMaterial.Title, // title
         analyzedMaterial.PerceivedDifficulty, // level
-        learninObjective, // learning objective
+        learningObjectives, // learning objective
         bloomLevel, // bloom level enum
         learningTextContext || defaultLearningContext, // learning context
         0.3 // temperature
@@ -694,6 +697,7 @@ export default function PathDesignGenLessonPlan({
     }
     setLessonActivities(tempLessonsActivities);
     setTitleLearningPath('');
+    handleIdLearningScenario('');
     handleEditLessonPlanClick(true);
   };
 

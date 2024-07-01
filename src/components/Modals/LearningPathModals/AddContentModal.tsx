@@ -21,6 +21,7 @@ import {
   removeFileFromIndexedDB,
   saveMultipleFilesToIndexedDB,
 } from '../../../utils/indexedDB';
+import { handleSaveLearningScenarioClick } from '../../../utils/learningScenarioUtils';
 import {
   isOerInCollectionProps,
   isUploadedFilesProps,
@@ -55,6 +56,20 @@ export default function AddContentModal({
     removeUploadedFileAddContent,
     resetOersContent,
     resetFilesContent,
+    idLearningScenario,
+    selectedEducatorExperience,
+    selectedContext,
+    selectedGroupDimension,
+    selectedLearnerExperience,
+    bloomLevels,
+    bloomLevelIndex,
+    selectedSkillConceptTags,
+    learningTextContext,
+    learningObjectiveObjects,
+    selectedOptions, // verbsBloomLevel
+    titleLearningPath,
+    macroSubject,
+    handleIdLearningScenario,
   } = useLearningPathDesignContext();
 
   const handleCloseModal = () => {
@@ -108,6 +123,23 @@ export default function AddContentModal({
       ) {
         resetFilesContent(activityIndex);
       }
+      await handleSaveLearningScenarioClick(
+        idLearningScenario,
+        selectedEducatorExperience,
+        selectedContext,
+        selectedGroupDimension,
+        selectedLearnerExperience,
+        bloomLevels,
+        bloomLevelIndex,
+        selectedOptions, // verbsBloomLevel
+        selectedSkillConceptTags,
+        learningTextContext,
+        learningObjectiveObjects,
+        titleLearningPath,
+        macroSubject,
+        lessonActivities,
+        handleIdLearningScenario
+      );
       handleCloseModal();
     } catch (error) {
       console.error(error);

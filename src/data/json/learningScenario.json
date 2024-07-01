@@ -1,0 +1,66 @@
+{
+  "Context": {
+    "EducatorExperience": "string",
+    "EducationContext": "string",
+    "Dimension": "string",
+    "LearnerExperience": "string"
+  },
+  "Objective": {
+    "BloomLevel": {
+      "name": "string",
+      "verbs": ["string"]
+    },
+    "SkillsConcepts": [0],
+    "LearningContext": "string",
+    "TextLearningObjectives": ["string"]
+  },
+  "Path": {
+    "TitleLearningPath": "string",
+    "MacroSubject": "string",
+    "LessonPlan": [
+      {
+        "ActivityTitle": "string",
+        "TypeOfAssignment": "string",
+        "TypeOfActivity": "string",
+        "Time": 0,
+        "Description": "string",
+        "Topic": "string",
+        "Content": {
+          "OERs": [
+            {
+              "id_oer": 0,
+              "Title": "string"
+            }
+          ],
+          "Files": [
+            {
+              "Name": "string",
+              "File": "string"
+            }
+          ]
+        },
+        "Compulsory": true,
+        "Conditions": {
+          "Pass": ["string"],
+          "Fail": ["string"]
+        }
+      }
+    ],
+    "Graph": {
+      "Nodes": [
+        {
+          "ID": 0,
+          "Title": "string",
+          "Type": "string"
+        }
+      ],
+      "Edges": [
+        {
+          "SourceID": 0,
+          "TargetID": 0,
+          "Type": "string"
+        }
+      ]
+    }
+  }
+}

@@ -311,7 +311,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         flex="1"
         minH="100vh"
         bg="background"
-        overflowY={isAddContentModal ? 'hidden' : 'auto'}
+        overflowY="hidden"
       >
         <Flex
           //w="full"

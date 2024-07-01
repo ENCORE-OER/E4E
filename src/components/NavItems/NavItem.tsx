@@ -1,6 +1,7 @@
 /* NavItems for the SideBar */
 
-import { Flex, FlexProps, Icon, Link, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Icon, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 import { ReactText } from 'react';
 import { IconType } from 'react-icons';
@@ -21,34 +22,37 @@ const NavItem = ({
   setIsSelected,
   ...rest
 }: NavItemProps) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    setIsSelected(!isSelected);
+    if (link) {
+      router.push(link);
+    }
+  };
   return (
-    <Link
-      href={link}
-      style={{ textDecoration: 'none' }}
-      //_focus={{ boxShadow: 'none' }}
-    >
-      <Flex
-        onClick={() => {
-          setIsSelected(!isSelected);
-        }}
-        {...rest}
-      >
-        {icon && (
-          <Icon
-            // ALL THIS PARAMETERS ARE USELESS FOR SVG ICON IMPORTED MANUALLY
-            //width="20px"
-            //height="20px"
-            //mr="3"
-            //fontSize="16"
-            /*_hover={{
-              color: 'accent.900',
-            }}*/
-            as={icon}
-          />
-        )}
-        <Text variant="navItem_sidebar_label">{children}</Text>
-      </Flex>
-    </Link>
+    // <Link
+    //   href={link}
+    //   style={{ textDecoration: 'none' }}
+    //   //_focus={{ boxShadow: 'none' }}
+    // >
+    <Flex onClick={handleClick} {...rest}>
+      {icon && (
+        <Icon
+          // ALL THIS PARAMETERS ARE USELESS FOR SVG ICON IMPORTED MANUALLY
+          //width="20px"
+          //height="20px"
+          //mr="3"
+          //fontSize="16"
+          /*_hover={{
+            color: 'accent.900',
+          }}*/
+          as={icon}
+        />
+      )}
+      <Text variant="navItem_sidebar_label">{children}</Text>
+    </Flex>
+    // </Link>
   );
 };
 

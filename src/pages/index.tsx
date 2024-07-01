@@ -35,19 +35,7 @@ const Home = (props: DiscoverPageProps) => {
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
   const [searchValue, setSearchValue] = useState<string[]>([]);
-
-  // const {
-  //   // setOriginalDomainsQueryParams,
-  //   // setOriginalTypesQueryParams,
-  //   setOriginalSearchData,
-  // } = useDiscoveryContext();
-  //const [page] = useState(true);
-  //const [respSearchOers] = useState<OerProps[]>([]);
-  //const [oerById] = useState<OerProps | null>(null);
-
-  //const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]); // list of the skill ids selected in the searchbar
   const [suggestions, setSuggestions] = useState<string[]>([]); // list of the skill selectable in the searchbar
-
   const [domain, setDomain] = useState<OerDomainInfo[]>([]); // to save each type of domain of the resources
   const [resourceTypes, setResourceTypes] = useState<OerMediaTypeInfo[]>([]);
   const [audience, setAudience] = useState<OerAudienceInfo[]>([]);
@@ -273,23 +261,6 @@ const Home = (props: DiscoverPageProps) => {
       }
     })();
   }, []);
-
-  // update suggestions while texting
-  /*useEffect(() => {
-    console.log('SEARCH VALUE: ' + searchValue);
-
-    if (searchValue.length > 0) {
-      const api = new APIV2(props.accessToken);
-      (async () => {
-        try {
-          const skills = await api.getSkillsByText(searchValue.toString());
-          setSuggestions(skills);
-        } catch (error) {
-          console.error(error);
-        }
-      })();
-    }
-  }, [searchValue]);*/
 
   return (
     <Flex w="100%" h="100%">

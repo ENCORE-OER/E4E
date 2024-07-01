@@ -55,23 +55,6 @@ const Home = () => {
     }
   };
 
-  // We put this in the ReserButton component
-  // const handleResetClick = () => {
-  //   console.log('Reset clicked');
-
-  //   handleEducatorExperienceChange(null);
-  //   handleLearnerExperienceChange(null);
-  //   handleGroupDimensionChange(null);
-  //   handleContextChange(null);
-  //   handleCollectionIndexChange(-1);
-  //   setResetAll(true);
-
-  // }
-
-  // useEffect(() => {
-  //   //console.log('cambiato qualcosa');
-  // }, [areOptionsComplete]);
-
   return (
     <Flex w="100%" h="100%">
       <SideBar pagePath={router.pathname} />

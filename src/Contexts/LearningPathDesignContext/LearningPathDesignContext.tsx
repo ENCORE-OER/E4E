@@ -104,6 +104,8 @@ type LearnignPathDesignContextProps = {
   titleLearningPath: string;
   setTitleLearningPath: React.Dispatch<React.SetStateAction<string>>;
   handleTitleLearningPath: (newTitle: string) => void;
+  macroSubject: string;
+  handleMacroSubject: (newMacroSubject: string) => void;
   isEditLessonPlanClicked: boolean;
   handleEditLessonPlanClick: (isClicked: boolean) => void;
   handleSaveLessonPlanClick: () => void;
@@ -391,6 +393,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     setLearningObjectiveObjects([]);
     setNumberOfLO(MIN_LO);
     setLessonActivities([]);
+    handleIdLearningScenario('');
   };
 
   // Reset all the parameters. Use this with resetAll button
@@ -513,6 +516,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   const handleTitleLearningPath = (newTitle: string) => {
     setTitleLearningPath(newTitle);
+  };
+
+  const [macroSubject, setMacroSubject] = useLocalStorage<string>(
+    'macroSubject',
+    ''
+  );
+
+  const handleMacroSubject = (newMacroSubject: string) => {
+    setMacroSubject(newMacroSubject);
   };
 
   // Lesson plan Edit button click
@@ -1048,7 +1060,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // ]);
 
   useEffect(() => {
-    // console.log("Provo")
+    // console.log("Provo");
     if (collectionIndex > -1) {
       setStep(2);
     }
@@ -1193,6 +1205,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         titleLearningPath,
         setTitleLearningPath,
         handleTitleLearningPath,
+        macroSubject,
+        handleMacroSubject,
         isEditLessonPlanClicked,
         handleEditLessonPlanClick,
         handleSaveLessonPlanClick,

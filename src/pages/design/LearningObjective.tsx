@@ -45,6 +45,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
     resetSelectedResourcesAddContent,
     uploadedFilesAddContent,
     resetUploadedFilesAddContent,
+    handleEditLessonPlanClick,
+    handleIdLearningScenario,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const router = useRouter(); // router è un hook di next.js che fornisce l'oggetto della pagina corrente
@@ -201,6 +203,8 @@ const Home = (/*props: DiscoverPageProps*/) => {
 
       if (handleGenerationFunction) {
         resetIndexedDB();
+        handleIdLearningScenario('');
+        handleEditLessonPlanClick(true);
 
         console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan

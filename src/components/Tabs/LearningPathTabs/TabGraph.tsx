@@ -1,17 +1,14 @@
 import { Flex } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import LearningPathEditor from '../../Layout/LearningPathEditor';
 
 export default function TabGraph() {
-  const { handleEditLessonPlanClick, isEditLessonPlanClicked } =
-    useLearningPathDesignContext();
+  // const { handleSaveLessonPlanClick } =
+  //   useLearningPathDesignContext();
 
-  useEffect(() => {
-    if (isEditLessonPlanClicked) {
-      handleEditLessonPlanClick(false);
-    }
-  }, []);
+  // Save Lesson Plan when the user change Tab
+  // useEffect(() => {
+  //   handleSaveLessonPlanClick();
+  // }, []);
   return (
     <Flex w="100%" h="100%">
       <LearningPathEditor

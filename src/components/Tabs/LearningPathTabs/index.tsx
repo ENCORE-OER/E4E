@@ -22,11 +22,12 @@ import { default as TabTable } from './TabTable';
 import TabTiles from './TabTiles';
 
 export type LearningPathTabsProps = {
+  handleSaveOnDB?: () => Promise<void>;
   // isSmallerScreen?: boolean;
 } & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
-  const { isSmallerScreen, ...rest } = props;
+  const { isSmallerScreen, handleSaveOnDB, ...rest } = props;
   const { titleLearningPath } = useLearningPathDesignContext();
   // const { addToast } = CustomToast();
   const [isPrinting, setIsPrinting] = useState(false); // State to know if we're exporting data
@@ -55,7 +56,8 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
     exportLearningPath,
     tableRef,
     isPrinting,
-    isSmallerScreen
+    isSmallerScreen,
+    handleSaveOnDB
   );
 
   return (
@@ -91,7 +93,8 @@ const getConfig = (
   exportToPDF: () => void,
   tableRef: RefObject<HTMLDivElement>,
   isPrinting: boolean,
-  isSmallerScreen?: boolean
+  isSmallerScreen?: boolean,
+  handleSaveOnDB?: () => Promise<void>
 ) => {
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
@@ -156,7 +159,11 @@ const getConfig = (
     },
     {
       label: (
-        <SaveLessonPlanButton name="Save" isSmallerScreen={isSmallerScreen} />
+        <SaveLessonPlanButton
+          name="Save"
+          isSmallerScreen={isSmallerScreen}
+          handleSaveOnDB={handleSaveOnDB}
+        />
       ),
       isButton: true,
       pt: '3%',
