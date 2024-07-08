@@ -83,6 +83,26 @@ export default function AddContentModal({
     onClose();
   };
 
+  const handleSave = async () => {
+    await handleSaveLearningScenarioClick(
+      idLearningScenario,
+      selectedEducatorExperience,
+      selectedContext,
+      selectedGroupDimension,
+      selectedLearnerExperience,
+      bloomLevels,
+      bloomLevelIndex,
+      selectedOptions,
+      selectedSkillConceptTags,
+      learningTextContext,
+      learningObjectiveObjects,
+      titleLearningPath,
+      macroSubject,
+      lessonActivities,
+      handleIdLearningScenario
+    );
+  };
+
   const handleSaveClick = async () => {
     try {
       if (resourcesSelectedAddContent?.length > 0) {
@@ -123,23 +143,7 @@ export default function AddContentModal({
       ) {
         resetFilesContent(activityIndex);
       }
-      await handleSaveLearningScenarioClick(
-        idLearningScenario,
-        selectedEducatorExperience,
-        selectedContext,
-        selectedGroupDimension,
-        selectedLearnerExperience,
-        bloomLevels,
-        bloomLevelIndex,
-        selectedOptions, // verbsBloomLevel
-        selectedSkillConceptTags,
-        learningTextContext,
-        learningObjectiveObjects,
-        titleLearningPath,
-        macroSubject,
-        lessonActivities,
-        handleIdLearningScenario
-      );
+      await handleSave();
       handleCloseModal();
     } catch (error) {
       console.error(error);
@@ -253,7 +257,7 @@ export default function AddContentModal({
                       activityIndex !== undefined &&
                       // lessonActivities[indexLesson]?.content?.oers &&
                       lessonActivities[activityIndex]?.content?.oers?.length ===
-                        0 &&
+                      0 &&
                       lessonActivities[activityIndex]?.content?.uploadedFiles
                         ?.length === 0
                     } // It is disabled if no resources are selected and if there aren't resources in the specific lesson activity: This means that no changes are done.
