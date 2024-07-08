@@ -87,50 +87,88 @@ interface BodyParams {
 }
 
 // Convert a File in a base64
-export const fileToBase64 = (file: File): Promise<string> => {
-  return new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
+export const fileToBase64 = (file: File | Blob): Promise<string> => {
+  console.log('converting file to base 64');
+  try {
+    return new Promise<string>((resolve, reject) => {
+      if (!(file instanceof Blob)) {
+        console.log("It's not a Blob");
+        reject(new TypeError("Parameter is not of type 'Blob'"));
+        return;
+      }
+      console.log('converting file...');
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const ensureBlob = (file: File): Blob => {
+  if (file instanceof Blob) {
+    return file;
+  }
+  // Assumes file is a string or similar, convert to Blob
+  return new Blob([file]);
 };
 
 export const convertFilesToBase64 = async (files: UploadedFilesProps[]) => {
   return await Promise.all(
-    files.map(async (file: UploadedFilesProps) => ({
-      name: file.fileName ?? file.fileUploaded.name ?? '',
-      file: await fileToBase64(file.fileUploaded),
-    }))
+    files.map(async (file: UploadedFilesProps) => {
+      try {
+        const blob = ensureBlob(file.fileUploaded);
+        const base64File = await fileToBase64(blob);
+        console.log(`File converted: ${base64File}`);
+        return {
+          name: file.fileName ?? file.fileUploaded.name ?? '',
+          file: base64File,
+        };
+      } catch (error) {
+        console.error('Error converting file to base64', error);
+        throw error;
+      }
+    })
   );
 };
 
 export const createLessonPlans = async (lessonActivities: LessonProps[]) => {
+  console.log('creating lesson plan');
   const lessonPlans: LessonPlan[] = await Promise.all(
     lessonActivities.map(async (activity: LessonProps) => {
-      const files = await convertFilesToBase64(activity.content.uploadedFiles);
+      try {
+        const files = await convertFilesToBase64(
+          activity.content.uploadedFiles
+        );
 
-      return {
-        ActivityTitle: activity.activityTitle ?? '',
-        TypeOfAssignment: activity.lessonType ?? '',
-        TypeOfActivity: activity.activityType ?? '',
-        Time: activity.timeDuration ?? 0,
-        Description: activity.activityDescription ?? '',
-        Topic: activity.topic ?? '',
-        Content: {
-          OERs:
-            activity.content.oers.map((oer: OerInCollectionProps) => ({
-              id_oer: oer.id,
-              title: oer.title,
-            })) ?? [],
-          Files: files,
-        },
-        Compulsory: activity.compulsory ?? true,
-        Conditions: {
-          Pass: [],
-          Fail: [],
-        },
-      };
+        return {
+          ActivityTitle: activity.activityTitle ?? '',
+          TypeOfAssignment: activity.lessonType ?? '',
+          TypeOfActivity: activity.activityType ?? '',
+          Time: activity.timeDuration ?? 0,
+          Description: activity.activityDescription ?? '',
+          Topic: activity.topic ?? '',
+          Content: {
+            OERs:
+              activity.content.oers.map((oer: OerInCollectionProps) => ({
+                id_oer: oer.id,
+                title: oer.title,
+              })) ?? [],
+            Files: files ?? [],
+          },
+          Compulsory: activity.compulsory ?? true,
+          Conditions: {
+            Pass: [],
+            Fail: [],
+          },
+        };
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     })
   );
 
@@ -153,36 +191,42 @@ export const createBodyParams = async (
   graphNodes: any[],
   graphEdges: any[]
 ) => {
-  const lessonPlans = await createLessonPlans(lessonActivities);
+  try {
+    console.log('Creating body params');
+    const lessonPlans = await createLessonPlans(lessonActivities);
 
-  const bodyParams: BodyParams = {
-    Context: {
-      EducatorExperience: educatorExperience,
-      EducationContext: educationContext,
-      Dimension: dimension,
-      LearnerExperience: learnerExperience,
-    },
-    Objective: {
-      BloomLevel: {
-        name: nameBloomLevel,
-        verbs: verbsBloomLevel,
+    const bodyParams: BodyParams = {
+      Context: {
+        EducatorExperience: educatorExperience,
+        EducationContext: educationContext,
+        Dimension: dimension,
+        LearnerExperience: learnerExperience,
       },
-      SkillsConcepts: skillsConcepts,
-      LearningContext: learningContext,
-      TextLearningObjectives: textLearningObjectives,
-    },
-    Path: {
-      TitleLearningPath: titleLearningPath,
-      MacroSubject: macroSubject,
-      LessonPlan: lessonPlans,
-      Graph: {
-        Nodes: graphNodes,
-        Edges: graphEdges,
+      Objective: {
+        BloomLevel: {
+          name: nameBloomLevel,
+          verbs: verbsBloomLevel,
+        },
+        SkillsConcepts: skillsConcepts,
+        LearningContext: learningContext,
+        TextLearningObjectives: textLearningObjectives,
       },
-    },
-  };
+      Path: {
+        TitleLearningPath: titleLearningPath,
+        MacroSubject: macroSubject,
+        LessonPlan: lessonPlans,
+        Graph: {
+          Nodes: graphNodes,
+          Edges: graphEdges,
+        },
+      },
+    };
 
-  return bodyParams;
+    return bodyParams;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 // TODO: Should be a good choise update or save even if one does not click "Save" before changing tab or page? A good idead shoud be to show a message before?
@@ -205,6 +249,9 @@ export const saveUpdateLearningScenario = async (
   graphEdges: any[],
   handleIdLearningScenario: (id: string) => void
 ): Promise<void> => {
+  console.log('Save or Update.');
+  console.log('ID SCENARIO', idScenario);
+
   // Create body for the API call
   const bodyParams = await createBodyParams(
     educatorExperience,
@@ -222,6 +269,8 @@ export const saveUpdateLearningScenario = async (
     graphNodes,
     graphEdges
   );
+
+  console.log('ID SCENARIO', idScenario);
 
   // Save for the first time this learning path
   if (idScenario === '') {

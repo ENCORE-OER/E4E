@@ -27,7 +27,13 @@ const NavItem = ({
   const handleClick = () => {
     setIsSelected(!isSelected);
     if (link) {
-      router.push(link);
+      // Change page
+      link !== router.pathname
+        ? router.replace({
+            pathname: link,
+          })
+        : // Reload actual page to re-rendering the page and re-fetch the query params
+          router.reload();
     }
   };
   return (

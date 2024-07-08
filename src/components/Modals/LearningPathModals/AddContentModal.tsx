@@ -83,6 +83,26 @@ export default function AddContentModal({
     onClose();
   };
 
+  const handleSave = async () => {
+    await handleSaveLearningScenarioClick(
+      idLearningScenario,
+      selectedEducatorExperience,
+      selectedContext,
+      selectedGroupDimension,
+      selectedLearnerExperience,
+      bloomLevels,
+      bloomLevelIndex,
+      selectedOptions,
+      selectedSkillConceptTags,
+      learningTextContext,
+      learningObjectiveObjects,
+      titleLearningPath,
+      macroSubject,
+      lessonActivities,
+      handleIdLearningScenario
+    );
+  };
+
   const handleSaveClick = async () => {
     try {
       if (resourcesSelectedAddContent?.length > 0) {
@@ -123,23 +143,7 @@ export default function AddContentModal({
       ) {
         resetFilesContent(activityIndex);
       }
-      await handleSaveLearningScenarioClick(
-        idLearningScenario,
-        selectedEducatorExperience,
-        selectedContext,
-        selectedGroupDimension,
-        selectedLearnerExperience,
-        bloomLevels,
-        bloomLevelIndex,
-        selectedOptions, // verbsBloomLevel
-        selectedSkillConceptTags,
-        learningTextContext,
-        learningObjectiveObjects,
-        titleLearningPath,
-        macroSubject,
-        lessonActivities,
-        handleIdLearningScenario
-      );
+      await handleSave();
       handleCloseModal();
     } catch (error) {
       console.error(error);

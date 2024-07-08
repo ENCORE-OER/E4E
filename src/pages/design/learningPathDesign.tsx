@@ -256,7 +256,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               {hydrated && (
                 <LearningPathTabs
                   isSmallerScreen={isSmallerScreen}
-                  handleSaveOnDB={async () => await handleSave()}
+                  handleSaveOnDB={handleSave}
                 />
               )}
             </Flex>
