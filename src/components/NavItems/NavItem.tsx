@@ -28,12 +28,12 @@ const NavItem = ({
     setIsSelected(!isSelected);
     if (link) {
       // Change page
-      link !== router.pathname ?
-        router.replace({
-          pathname: link
-        }) :
-        // Reload actual page to re-rendering the page and re-fetch the query params
-        router.reload();
+      link !== router.pathname
+        ? router.replace({
+            pathname: link,
+          })
+        : // Reload actual page to re-rendering the page and re-fetch the query params
+          router.reload();
     }
   };
   return (
