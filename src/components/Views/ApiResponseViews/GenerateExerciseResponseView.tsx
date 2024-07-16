@@ -2,31 +2,48 @@ import {
   Box,
   Card,
   CardBody,
-  CardHeader,
+  //CardHeader,
   Heading,
   Stack,
-  StackDivider,
+  //StackDivider,
   Text,
 } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
-import { GeneratedExerciseProps } from '../../../types/encoreElements';
+import { GeneratedExerciseProps, ExerciseDescriptionData } from '../../../types/encoreElements';
 
 type GenerateExerciseResonseViewProps = {
-  response: GeneratedExerciseProps | null;
+  response?: GeneratedExerciseProps | null;
+  topic?: string;
+  oerId?: string;
 };
 
-export default function GenerateExerciseResponseView({} //response,
+export default function GenerateExerciseResponseView({
+  //oerId,
+} //response,
 : GenerateExerciseResonseViewProps) {
-  const { apiGeneratedExerciseData: apiData, title } = useCreateOERsContext();
+  const { apiGeneratedExerciseData: apiData, chosenTopic, chosenTypeOfExercise } = useCreateOERsContext();
 
   return (
     <>
-      <Card>
-        <CardHeader>
-          <Heading size="md">{title}</Heading>
-        </CardHeader>
+      <Card variant='outline'>
         <CardBody>
-          <Stack divider={<StackDivider />} spacing="4">
+          <Stack  spacing="4">
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Title
+              </Heading>
+              <Text pt="2" fontSize="sm">
+                {chosenTopic}
+              </Text>
+            </Box>
+            <Box>
+              <Heading size="xs" textTransform="uppercase">
+                Task
+              </Heading>
+              <Text pt="2" fontSize="sm">
+                {ExerciseDescriptionData[chosenTypeOfExercise]}
+              </Text>
+            </Box>
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 Assignment

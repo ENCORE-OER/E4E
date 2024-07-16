@@ -188,36 +188,7 @@ export default function SharedParameterTab({
           placeholder="choose a topic or write it manually."
         />
       </Box>
-      <Flex w={'100%'} paddingTop={'2rem'}>
-        <Box w={'40%'}>
-          <Flex paddingBottom="0.5rem">
-            <Text as="b">Assignment Type</Text>
-          </Flex>
-          <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && assignmentType === null}
-            options={assignmentTypeOptions}
-            selected={assignmentType}
-            preselectedTitle={assignmentType?.title}
-            onChange={handleAssignmentType}
-            isSmallerScreen={isSmallerScreen || false}
-            fontSize={'md'}
-          />
-        </Box>
-        <Box w={'40%'} paddingLeft={'2%'}>
-          <Flex paddingBottom="0.5rem">
-            <Text as="b">Creativity of AI</Text>
-          </Flex>
-          <SegmentedButton
-            isHighlighted={isGenerateButtonClicked && temperature == null}
-            options={temperatureOptions}
-            selected={temperature}
-            preselectedTitle={temperature?.title}
-            onChange={handleTemperature}
-            isSmallerScreen={isSmallerScreen || false}
-            fontSize={'md'}
-          />
-        </Box>
-      </Flex>
+      
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
@@ -251,6 +222,36 @@ export default function SharedParameterTab({
             selected={bloomLevelExercise}
             preselectedTitle={bloomLevelExercise?.title}
             onChange={handleBloomLevelExercise}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+      </Flex>
+      <Flex w={'100%'} paddingTop={'2rem'}>
+        <Box w={'40%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Assignment Type</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={isGenerateButtonClicked && assignmentType === null}
+            options={assignmentTypeOptions}
+            selected={assignmentType}
+            preselectedTitle={assignmentType?.title}
+            onChange={handleAssignmentType}
+            isSmallerScreen={isSmallerScreen || false}
+            fontSize={'md'}
+          />
+        </Box>
+        <Box w={'40%'} paddingLeft={'2%'}>
+          <Flex paddingBottom="0.5rem">
+            <Text as="b">Creativity of AI</Text>
+          </Flex>
+          <SegmentedButton
+            isHighlighted={isGenerateButtonClicked && temperature == null}
+            options={temperatureOptions}
+            selected={temperature}
+            preselectedTitle={temperature?.title}
+            onChange={handleTemperature}
             isSmallerScreen={isSmallerScreen || false}
             fontSize={'md'}
           />
