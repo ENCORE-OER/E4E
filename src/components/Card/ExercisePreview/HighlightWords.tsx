@@ -2,27 +2,26 @@ import React from 'react';
 import { Box } from '@chakra-ui/react';
 
 type HighlightWordsProps = {
-    text: string;
-    words: string[];
-    color?: string;
+  text: string;
+  words: string[];
+  color?: string;
 };
 
-
 // Componente per evidenziare parole
-const HighlightWords = ({ text, words, color }:HighlightWordsProps) => {
+const HighlightWords = ({ text, words, color }: HighlightWordsProps) => {
   // Funzione per suddividere il testo in parole e contornare le parole da evidenziare
   const getHighlightedText = () => {
     const regex = new RegExp(`(${words.join('|')})`, 'gi');
     const parts = text.split(regex);
 
-    return parts.map((part, index) => 
+    return parts.map((part, index) =>
       words.includes(part.toLowerCase()) ? (
-        <Box 
-          key={index} 
-          as="span" 
-          border={`1px solid ${color}`} 
-          borderRadius="xl" 
-          padding="2px 5px" 
+        <Box
+          key={index}
+          as="span"
+          border={`1px solid ${color}`}
+          borderRadius="xl"
+          padding="2px 5px"
           mx="1"
           display="inline-block"
         >
@@ -34,11 +33,7 @@ const HighlightWords = ({ text, words, color }:HighlightWordsProps) => {
     );
   };
 
-  return (
-    <Box lineHeight="1.6">
-      {getHighlightedText()}
-    </Box>
-  );
+  return <Box lineHeight="1.6">{getHighlightedText()}</Box>;
 };
 
 export default HighlightWords;

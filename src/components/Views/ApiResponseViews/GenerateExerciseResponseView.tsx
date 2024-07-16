@@ -75,7 +75,7 @@ export default function GenerateExerciseResponseView({} //oerId,
                 </Text>
               </Box>
             )}
-            {chosenTypeOfExercise > 3 && ( 
+            {chosenTypeOfExercise > 3 && (
               <Box>
                 <Heading size="sm">
                   {/*spiegazione della soluzione nel multiple choice e testo nel fill gaps */}
@@ -88,9 +88,7 @@ export default function GenerateExerciseResponseView({} //oerId,
             )}
             {chosenTypeOfExercise > 3 && (
               <Box>
-                <Heading size="sm">
-                  Exercise
-                </Heading>
+                <Heading size="sm">Exercise</Heading>
                 <CheckboxDisabledMenu
                   solutions={apiData.Solutions}
                   distractors={[
@@ -102,36 +100,46 @@ export default function GenerateExerciseResponseView({} //oerId,
             )}
             {chosenTypeOfExercise == 3 && (
               <Box>
-                <Heading size="sm" paddingBottom={'0.5rem'}> 
+                <Heading size="sm" paddingBottom={'0.5rem'}>
                   Target words
                 </Heading>
-                <BorderedWords words={apiData.Solutions} color={'green'}/>
+                <BorderedWords words={apiData.Solutions} color={'green'} />
               </Box>
             )}
-             {apiData.Distractors.join(' -|- ') !== '' && chosenTypeOfExercise == 3 && (
-              <Box>
-                <Heading size="sm" paddingBottom={'0.5rem'}> 
-                  Regular Distractors
-                </Heading>
-                <BorderedWords words={apiData.Distractors} color={'lightgrey'} />
-              </Box>
-            )}
-            {apiData.EasilyDiscardableDistractors.join(' -|- ') !== '' && chosenTypeOfExercise == 3 && (
-              <Box>
-                <Heading size="sm" paddingBottom={'0.5rem'}> 
-                  Easy Distractors
-                </Heading>
-                <BorderedWords words={apiData.EasilyDiscardableDistractors} color={'lightgrey'} />
-              </Box>
-            )} 
+            {apiData.Distractors.join(' -|- ') !== '' &&
+              chosenTypeOfExercise == 3 && (
+                <Box>
+                  <Heading size="sm" paddingBottom={'0.5rem'}>
+                    Regular Distractors
+                  </Heading>
+                  <BorderedWords
+                    words={apiData.Distractors}
+                    color={'lightgrey'}
+                  />
+                </Box>
+              )}
+            {apiData.EasilyDiscardableDistractors.join(' -|- ') !== '' &&
+              chosenTypeOfExercise == 3 && (
+                <Box>
+                  <Heading size="sm" paddingBottom={'0.5rem'}>
+                    Easy Distractors
+                  </Heading>
+                  <BorderedWords
+                    words={apiData.EasilyDiscardableDistractors}
+                    color={'lightgrey'}
+                  />
+                </Box>
+              )}
             {chosenTypeOfExercise == 3 && (
               <Box>
-                <Heading size="sm"> 
-                  Text to be filled
-                </Heading>
-                <HighlightWords text={apiData.Plus} words={apiData.Solutions} color={'green'}/>
+                <Heading size="sm">Text to be filled</Heading>
+                <HighlightWords
+                  text={apiData.Plus}
+                  words={apiData.Solutions}
+                  color={'green'}
+                />
               </Box>
-            )}           
+            )}
 
             {/* <Box>
               <Heading size="xs" textTransform="uppercase">
