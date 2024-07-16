@@ -9,7 +9,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
-import { GeneratedExerciseProps, ExerciseDescriptionData } from '../../../types/encoreElements';
+import {
+  GeneratedExerciseProps,
+  ExerciseDescriptionData,
+} from '../../../types/encoreElements';
 
 type GenerateExerciseResonseViewProps = {
   response?: GeneratedExerciseProps | null;
@@ -17,17 +20,20 @@ type GenerateExerciseResonseViewProps = {
   oerId?: string;
 };
 
-export default function GenerateExerciseResponseView({
-  //oerId,
-} //response,
+export default function GenerateExerciseResponseView({} //oerId,
+//response,
 : GenerateExerciseResonseViewProps) {
-  const { apiGeneratedExerciseData: apiData, chosenTopic, chosenTypeOfExercise } = useCreateOERsContext();
+  const {
+    apiGeneratedExerciseData: apiData,
+    chosenTopic,
+    chosenTypeOfExercise,
+  } = useCreateOERsContext();
 
   return (
     <>
-      <Card variant='outline'>
+      <Card variant="outline">
         <CardBody>
-          <Stack  spacing="4">
+          <Stack spacing="4">
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 Title

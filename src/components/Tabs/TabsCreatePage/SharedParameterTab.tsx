@@ -188,7 +188,7 @@ export default function SharedParameterTab({
           placeholder="choose a topic or write it manually."
         />
       </Box>
-      
+
       <Flex w={'100%'} paddingTop={'2rem'}>
         <Box w={'80%'}>
           <Flex paddingBottom="0.5rem">
