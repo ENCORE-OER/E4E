@@ -11,7 +11,6 @@ import LearningStepper from '../../components/Stepper/Stepper';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
-
 //todo da eliminare
 //import ExercisePreviewCard from '../../components/Card/ExercisePreview/ExercisePreviewCard';
 
@@ -154,9 +153,7 @@ const Home = () => {
             {/* <ExercisePreviewCard /> */}
           </Box>
         </Box>
-        
       </Box>
-      
     </Flex>
   );
 };

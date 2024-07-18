@@ -116,7 +116,8 @@ export default function CreateExerciseButton({
     try {
       // Esegui la chiamata API
       const apiResponse = await axios.post(
-        `${isAddContentModal !== undefined && isAddContentModal ? '..' : ''
+        `${
+          isAddContentModal !== undefined && isAddContentModal ? '..' : ''
         }/api/encore/genAI/generateActivity`,
         requestData,
         {

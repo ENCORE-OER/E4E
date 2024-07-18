@@ -21,8 +21,7 @@ type GenerateExerciseResonseViewProps = {
   response?: GeneratedExerciseProps | null;
 };
 
-export default function GenerateExerciseResponseView({}
-: GenerateExerciseResonseViewProps) {
+export default function GenerateExerciseResponseView({}: GenerateExerciseResonseViewProps) {
   const {
     apiGeneratedExerciseData: apiData,
     chosenTopic,
@@ -35,25 +34,19 @@ export default function GenerateExerciseResponseView({}
         <CardBody>
           <Stack spacing="6">
             <Box>
-              <Heading size="sm">
-                Title
-              </Heading>
+              <Heading size="sm">Title</Heading>
               <Text pt="2" fontSize="sm">
                 {chosenTopic}
               </Text>
             </Box>
             <Box>
-              <Heading size="sm">
-                Task
-              </Heading>
+              <Heading size="sm">Task</Heading>
               <Text pt="2" fontSize="sm">
                 {ExerciseDescriptionData[chosenTypeOfExercise]}
               </Text>
             </Box>
             <Box>
-              <Heading size="sm">
-                Assignment
-              </Heading>
+              <Heading size="sm">Assignment</Heading>
               <Text pt="2" fontSize="sm">
                 {apiData.Assignment}
               </Text>
