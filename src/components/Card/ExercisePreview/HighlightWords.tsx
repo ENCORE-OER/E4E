@@ -9,31 +9,38 @@ type HighlightWordsProps = {
 
 // Componente per evidenziare parole
 const HighlightWords = ({ text, words, color }: HighlightWordsProps) => {
-  // Funzione per suddividere il testo in parole e contornare le parole da evidenziare
-  const getHighlightedText = () => {
-    const regex = new RegExp(`(${words.join('|')})`, 'gi');
-    const parts = text.split(regex);
-
-    return parts.map((part, index) =>
-      words.includes(part.toLowerCase()) ? (
-        <Box
-          key={index}
-          as="span"
-          border={`1px solid ${color}`}
-          borderRadius="xl"
-          padding="2px 5px"
-          mx="1"
-          display="inline-block"
-        >
-          {part}
-        </Box>
-      ) : (
-        <span key={index}>{part}</span>
-      )
+  // Ordina le parole/frasi per lunghezza decrescente per gestire correttamente le frasi prima delle parole singole
+  const sortedWords = words.sort((a, b) => b.length - a.length);
+  // Crea una espressione regolare che cattura tutte le parole/frasi da evidenziare
+  const regex = new RegExp(`(${sortedWords.join('|')})`, 'gi');
+  
+    // Suddivide il testo utilizzando l'espressione regolare e mappa le parti per evidenziarle
+    const getHighlightedText = () => {
+      const parts = text.split(regex);
+      return parts.map((part, index) =>
+        sortedWords.some(word => word.toLowerCase() === part.toLowerCase()) ? (
+          <Box
+            key={index}
+            as="span"
+            border={`1px solid ${color}`}
+            borderRadius="xl"
+            padding="2px 5px"
+            mx="1"
+            display="inline-block"
+          >
+            {part}
+          </Box>
+        ) : (
+          <span key={index}>{part}</span>
+        )
+      );
+    };
+  
+    return (
+      <Box lineHeight="1.6">
+        {getHighlightedText()}
+      </Box>
     );
-  };
-
-  return <Box lineHeight="1.6">{getHighlightedText()}</Box>;
 };
 
 export default HighlightWords;

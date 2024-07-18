@@ -19,12 +19,9 @@ import HighlightWords from '../../Card/ExercisePreview/HighlightWords';
 
 type GenerateExerciseResonseViewProps = {
   response?: GeneratedExerciseProps | null;
-  topic?: string;
-  oerId?: string;
 };
 
-export default function GenerateExerciseResponseView({} //oerId,
-//response,
+export default function GenerateExerciseResponseView({}
 : GenerateExerciseResonseViewProps) {
   const {
     apiGeneratedExerciseData: apiData,
@@ -39,8 +36,6 @@ export default function GenerateExerciseResponseView({} //oerId,
           <Stack spacing="6">
             <Box>
               <Heading size="sm">
-                {' '}
-                {/* comune a tutti */}
                 Title
               </Heading>
               <Text pt="2" fontSize="sm">
@@ -49,8 +44,6 @@ export default function GenerateExerciseResponseView({} //oerId,
             </Box>
             <Box>
               <Heading size="sm">
-                {' '}
-                {/* comune a tutti */}
                 Task
               </Heading>
               <Text pt="2" fontSize="sm">
@@ -59,8 +52,6 @@ export default function GenerateExerciseResponseView({} //oerId,
             </Box>
             <Box>
               <Heading size="sm">
-                {' '}
-                {/* comune a tutti */}
                 Assignment
               </Heading>
               <Text pt="2" fontSize="sm">
@@ -71,7 +62,7 @@ export default function GenerateExerciseResponseView({} //oerId,
               <Box>
                 <Heading size="sm">Solutions</Heading>
                 <Text pt="2" fontSize="sm">
-                  {apiData.Solutions.join(' -|- ')}
+                  {apiData.Solutions}
                 </Text>
               </Box>
             )}
