@@ -37,7 +37,7 @@ export default function HeaderExerciseInfoModal({
             showTagEntrepreneurial ? showTagEntrepreneurial : false
           }
           showTagGreen={showTagGreen ? showTagGreen : false}
-        // showTagGenAI={isGeneratedByAI ? isGeneratedByAI : false}
+          // showTagGenAI={isGeneratedByAI ? isGeneratedByAI : false}
         />
         {collectionsColor?.length &&
           collectionsColor?.map(
@@ -80,11 +80,13 @@ export default function HeaderExerciseInfoModal({
           <Text variant="label_drawer">by</Text>
         </Box>
         <Flex>
-          {!isGeneratedByAI ?
+          {!isGeneratedByAI ? (
             <Text variant="author_card" noOfLines={1}>
               {authors?.join(', ')}
-            </Text> :
-            <TagGenAI />}
+            </Text>
+          ) : (
+            <TagGenAI />
+          )}
         </Flex>
       </Flex>
     </ModalHeader>

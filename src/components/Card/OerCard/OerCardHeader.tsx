@@ -65,7 +65,7 @@ export default function OerCardHeader({
             showTagDigital={showTagDigital}
             showTagEntrepreneurial={showTagEntrepreneurial}
             showTagGreen={showTagGreen}
-          // showTagGenAI={isGeneratedByAI}
+            // showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
           {!isAddContentModal ? (
@@ -163,11 +163,13 @@ export default function OerCardHeader({
             </Text>
           </Box>
           <Flex>
-            {!isGeneratedByAI ?
+            {!isGeneratedByAI ? (
               <Text variant="author_card" noOfLines={1}>
                 {authors.join(', ')}
-              </Text> :
-              <TagGenAI />}
+              </Text>
+            ) : (
+              <TagGenAI />
+            )}
           </Flex>
         </Flex>
       </Flex>

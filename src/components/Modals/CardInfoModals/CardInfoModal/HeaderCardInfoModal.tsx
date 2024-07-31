@@ -65,7 +65,7 @@ export default function HeaderCardInfoModal({
           showTagDigital={showTagDigital}
           showTagEntrepreneurial={showTagEntrepreneurial}
           showTagGreen={showTagGreen}
-        // showTagGenAI={isGeneratedByAI}
+          // showTagGenAI={isGeneratedByAI}
         />
         {hydrated && isAddContentModal ? (
           <Checkbox
@@ -119,11 +119,13 @@ export default function HeaderCardInfoModal({
         {/* </Text> */}
         {/* </Box> */}
         <Flex>
-          {!isGeneratedByAI ?
+          {!isGeneratedByAI ? (
             <Text variant="author_card" noOfLines={1}>
               {authors}
-            </Text> :
-            <TagGenAI />}
+            </Text>
+          ) : (
+            <TagGenAI />
+          )}
         </Flex>
       </Flex>
     </ModalHeader>
