@@ -63,8 +63,8 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    // flex="1"
-    //mb={mbCard || '5'}
+      // flex="1"
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         ptCardHeader={ptCardHeader}
@@ -99,7 +99,7 @@ export default function OerCard({
           assessment_oer_type ? [assessment_oer_type] : resourceType || []
         }
         gapGrid={gapGridCardFooter}
-      //maxResTypeTags={isSmallerScreen ? 2 : 3}
+        //maxResTypeTags={isSmallerScreen ? 2 : 3}
       />
     </Card>
   );

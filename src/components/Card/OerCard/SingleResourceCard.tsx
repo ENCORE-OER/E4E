@@ -125,7 +125,7 @@ export default function SingleResourceCard({
           //pxCard={isSmallerScreen ? '5px' : undefined}
           //minWCard={isSmallerScreen ? '0px' : '550px'}
           //wCard={isSmallerScreen ? undefined : '550px'}
-          maxWCard={isSmallerScreen ? "400px" : "550px"}
+          maxWCard={isSmallerScreen ? '400px' : '550px'}
           isSmallerScreen={isSmallerScreen}
           oer_url={linkOer}
           isAddContentModal={isAddContentModal}

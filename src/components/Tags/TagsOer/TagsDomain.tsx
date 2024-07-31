@@ -5,7 +5,7 @@ type TagsDomainProps = {
   showTagDigital: boolean;
   showTagEntrepreneurial: boolean;
   showTagGreen: boolean;
-  showTagGenAI: boolean;
+  showTagGenAI?: boolean;
   mb?: string | number;
 };
 

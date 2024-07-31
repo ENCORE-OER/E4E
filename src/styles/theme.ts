@@ -223,9 +223,9 @@ const config = {
           color: 'entrepreneurial_dark',
         },
         label_tag_genAI: {
-          fontSize: '14px',
+          fontSize: '13px',
           fontWeight: '600',
-          lineHeight: '19px',
+          lineHeight: '14px',
           textAlign: 'center',
           color: 'genAI_dark',
         },

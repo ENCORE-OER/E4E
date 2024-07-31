@@ -13,11 +13,18 @@ export default function OerCardBody({
   noOfLinesText,
   minHCardBody,
 }: OerCardBodyProps) {
-
   // const isScreenSmaller = useIsSmallerScreen();
 
   return (
-    <CardBody py={pyCardBody || '1.5'} minH={minHCardBody || '0px'} display="flex" flexDirection={"column"} overflow="hidden" flex="1" w="100%">
+    <CardBody
+      py={pyCardBody || '1.5'}
+      minH={minHCardBody || '0px'}
+      display="flex"
+      flexDirection={'column'}
+      overflow="hidden"
+      flex="1"
+      w="100%"
+    >
       <Flex justifyContent="flex-start" w="100%">
         <Text noOfLines={noOfLinesText || 2} variant="description_card">
           {`${description}`}
