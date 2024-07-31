@@ -38,7 +38,7 @@ export default function OerCard({
   checkBookmark,
   times_used,
   total_likes,
-  //minWCard,
+  minWCard,
   //wCard,
   //isSmallerScreen,
   maxWCard,
@@ -54,7 +54,8 @@ export default function OerCard({
       h={maxHCard || '195px'}
       //w={wCard}
       maxW={maxWCard || '550px'}
-      //minW={minWCard || '550px'}
+      // maxW={isSmallerScreen ? "400px" : "550px"}
+      minW={minWCard || '400px'}
       px={pxCard || '20px'}
       py={0}
       //p={0}
@@ -62,6 +63,7 @@ export default function OerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
+      // flex="1"
       //mb={mbCard || '5'}
     >
       <OerCardHeader

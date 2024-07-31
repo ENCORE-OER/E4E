@@ -13,6 +13,7 @@ import SaveResourceButton from '../../../Buttons/ResourceButtons/SaveResourceBut
 import ViewResourceButton from '../../../Buttons/ResourceButtons/ViewResourceButton';
 import IconBookmarkCheckCollections from '../../../Icons/IconBookmarkCheck/IconBookmarkCheckCollections';
 import IconCopyUrl from '../../../Icons/IconCopy/IconCopyUrl';
+import TagGenAI from '../../../Tags/TagsOer/TagGenAI';
 import TagsDomain from '../../../Tags/TagsOer/TagsDomain';
 
 export interface HeaderCardInfoModalProps {
@@ -64,7 +65,7 @@ export default function HeaderCardInfoModal({
           showTagDigital={showTagDigital}
           showTagEntrepreneurial={showTagEntrepreneurial}
           showTagGreen={showTagGreen}
-          showTagGenAI={isGeneratedByAI}
+          // showTagGenAI={isGeneratedByAI}
         />
         {hydrated && isAddContentModal ? (
           <Checkbox
@@ -108,15 +109,24 @@ export default function HeaderCardInfoModal({
         />
       </HStack>
 
-      <Flex>
+      <Flex direction="row" align="center">
         <Box pr={1}>
           <Text variant="label_drawer">by</Text>
         </Box>
-        <Box>
-          <Text color="grey" fontWeight="semibold" fontSize="sm">
-            {authors} {/* Print the names with the commas*/}
-          </Text>
-        </Box>
+        {/* <Box> */}
+        {/* <Text color="grey" fontWeight="semibold" fontSize="sm"> */}
+        {/* {authors} Print the names with the commas */}
+        {/* </Text> */}
+        {/* </Box> */}
+        <Flex>
+          {!isGeneratedByAI ? (
+            <Text variant="author_card" noOfLines={1}>
+              {authors}
+            </Text>
+          ) : (
+            <TagGenAI />
+          )}
+        </Flex>
       </Flex>
     </ModalHeader>
   );
