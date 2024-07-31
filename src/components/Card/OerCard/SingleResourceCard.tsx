@@ -123,10 +123,9 @@ export default function SingleResourceCard({
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
           //pxCard={isSmallerScreen ? '5px' : undefined}
-          //maxWCard={isSmallerScreen ? '550px' : undefined}
           //minWCard={isSmallerScreen ? '0px' : '550px'}
           //wCard={isSmallerScreen ? undefined : '550px'}
-          //maxWCard='550px'
+          maxWCard={isSmallerScreen ? "400px" : "550px"}
           isSmallerScreen={isSmallerScreen}
           oer_url={linkOer}
           isAddContentModal={isAddContentModal}
