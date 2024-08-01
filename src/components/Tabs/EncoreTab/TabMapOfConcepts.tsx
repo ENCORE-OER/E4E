@@ -117,10 +117,14 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
   // ------------------------------  Handle tag click event  --------------------------------------------
   const handleTagClick = async (selectedTag: OerConceptGetAPIInfo) => {
     //setConceptSelected(true);
-    setConceptsSelected((prevConceptsSelected: string[]) => [
-      ...prevConceptsSelected,
-      selectedTag.name,
-    ]);
+
+    setConceptsSelected((prevConceptsSelected: string[]) => {
+      // Ensure the concept is not already selected
+      if (prevConceptsSelected.includes(selectedTag.name)) {
+        return prevConceptsSelected;
+      }
+      return [...prevConceptsSelected, selectedTag.name];
+    });
     setCurrentPage(1);
     await updateQuery(selectedTag.id);
   };
@@ -201,7 +205,10 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         // Filter out the concepts that appear less than N times
         //.filter((tag) => tag.count > 2); // here we set the minimum number of times a concept should appear in the OERs to be considered relevant to be shown in the map of concepts
 
-        setTags(tagsArray);
+        // Filter out selected concepts
+        const filteredTags = tagsArray.filter(tag => !conceptsSelected.includes(tag.name));
+
+        setTags(filteredTags);
       } catch (err) {
         console.error(err);
       } finally {

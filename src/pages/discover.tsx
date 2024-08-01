@@ -374,7 +374,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     //setIsLoading(false);
     // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
 
-    console.log("ENDSEARCH")
+    console.log('ENDSEARCH');
 
     if (endSearch && OersLengthTotal === 0) {
       if (conceptsSelected.length !== 0) {
@@ -453,7 +453,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -494,7 +494,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
