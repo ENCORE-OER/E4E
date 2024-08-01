@@ -17,7 +17,6 @@ import HighlightWords from '../../Card/ExercisePreview/HighlightWords';
 
 type ExercisePreviewCardProps = {
   topic: string;
-
 };
 
 export default function ExercisePreviewCard({}: ExercisePreviewCardProps) {

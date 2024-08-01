@@ -17,15 +17,14 @@ import ExerciseCard from './ExerciseCard';
 import TheoreticalOerInfo from './TheoreticalOerInfo';
 import { OerData, OerProps } from '../../../types/encoreElements';
 
-type PdfOerDataProps = {
-};
+type PdfOerDataProps = {};
 
-export default function PdfOerData({ }: PdfOerDataProps) {
-  const {
-  } = useCreateOERsContext();
+export default function PdfOerData({}: PdfOerDataProps) {
+  const {} = useCreateOERsContext();
 
   const { collections } = useCollectionsContext();
-  const { selectedCollectionIndex: collectionIndex, } = useLearningPathDesignContext();
+  const { selectedCollectionIndex: collectionIndex } =
+    useLearningPathDesignContext();
 
   const [exerciseOerData, setExerciseOerData] = useState<OerData[]>();
   const [lessonOerData, setLessonOerData] = useState<OerProps[]>();
@@ -39,16 +38,23 @@ export default function PdfOerData({ }: PdfOerDataProps) {
       const oerIds = collection.oers.map((oer: any) => oer.id);
       if (oerIds.length > 0) {
         try {
-          const responses = await Promise.all(oerIds.map(async (id: string) => {
-            const response = await axios.get('/api/encore/getOerById', { params: { id } });
-            return response.data;
-          }));
+          const responses = await Promise.all(
+            oerIds.map(async (id: string) => {
+              const response = await axios.get('/api/encore/getOerById', {
+                params: { id },
+              });
+              return response.data;
+            })
+          );
           console.log(responses);
-          const allData = responses.flatMap(response => response.data);
+          const allData = responses.flatMap((response) => response.data);
 
-          const exercises = allData.filter((item: OerData) => item.assessment_oer === true);
-          const lesson = allData.filter((item: OerData) => item.assessment_oer === false);
-
+          const exercises = allData.filter(
+            (item: OerData) => item.assessment_oer === true
+          );
+          const lesson = allData.filter(
+            (item: OerData) => item.assessment_oer === false
+          );
 
           console.log(exercises);
           console.log(lesson);
@@ -72,30 +78,30 @@ export default function PdfOerData({ }: PdfOerDataProps) {
         <CardBody>
           <Stack spacing="6">
             <Box>
-              {dataLoaded && lessonOerData && lessonOerData.length > 0 && (
+              {dataLoaded &&
+                lessonOerData &&
+                lessonOerData.length > 0 &&
                 lessonOerData?.map((oer: any) => (
                   <TheoreticalOerInfo key={oer.id} oerData={oer} />
-                ))
-              )}
+                ))}
               {dataLoaded && lessonOerData?.length === 0 && (
                 <Text>No lessons available</Text>
               )}
             </Box>
             <Box>
-              {dataLoaded && exerciseOerData && exerciseOerData.length > 0 && (
+              {dataLoaded &&
+                exerciseOerData &&
+                exerciseOerData.length > 0 &&
                 exerciseOerData?.map((oer: any) => (
                   <ExerciseCard key={oer.id} oerData={oer} />
-                ))
-              )}
+                ))}
               {dataLoaded && exerciseOerData?.length === 0 && (
                 <Text>No exercises available</Text>
               )}
-            
             </Box>
           </Stack>
         </CardBody>
       </Card>
-      
     </>
   );
 }

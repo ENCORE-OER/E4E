@@ -4,7 +4,6 @@ import brandLogo from '../../public/logo_encore.png';
 import TabTable from '../Tabs/LearningPathTabs/TabTable';
 import PdfOerData from '../../components/Card/ExercisePreview/PdfOersData';
 
-
 type PDFContentProps = {
   titleLearningPath: string;
   isPrinting: boolean;
