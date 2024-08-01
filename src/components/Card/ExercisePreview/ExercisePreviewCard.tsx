@@ -16,7 +16,8 @@ import BorderedWords from '../../Card/ExercisePreview/BorderedWords';
 import HighlightWords from '../../Card/ExercisePreview/HighlightWords';
 
 type ExercisePreviewCardProps = {
-  oerId?: string;
+  topic: string;
+
 };
 
 export default function ExercisePreviewCard({}: ExercisePreviewCardProps) {
@@ -25,15 +26,6 @@ export default function ExercisePreviewCard({}: ExercisePreviewCardProps) {
     chosenTopic,
     chosenTypeOfExercise,
   } = useCreateOERsContext();
-
-  // const { collections } = useCollectionsContext();
-
-  /*
-    devo accedere alla collezione
-    da li prendere l'id dell'oer
-    e ancora da li prendere i dati della preview
-    oke oke
-    */
 
   return (
     <>

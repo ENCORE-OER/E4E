@@ -105,7 +105,7 @@ const Create = ({
               step={step}
               isAddContentModal={isAddContentModal}
             />
-            {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo finde a better way to check if the exercise is generated
+            {(apiGeneratedExerciseData.Assignment !== '' || step > 1) && ( //todo find a better way to check if the exercise is generated
               <Box paddingTop={'2rem'}>
                 <SharedParameterTab
                   isSmallerScreen={isSmallerScreen}
