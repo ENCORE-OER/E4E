@@ -374,8 +374,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     //setIsLoading(false);
     // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
 
+    console.log('ENDSEARCH');
+
     if (endSearch && OersLengthTotal === 0) {
-      if (conceptsSelected.length === 0) {
+      if (conceptsSelected.length !== 0) {
         addToast({
           message: 'No resources found with these concepts.',
           type: 'error',
