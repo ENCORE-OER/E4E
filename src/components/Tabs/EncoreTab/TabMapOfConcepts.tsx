@@ -17,7 +17,7 @@ export type TabMapOfConceptsProps = {};
 //   count: number;
 // };
 
-export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
+export const TabMapOfConcepts = ({}: TabMapOfConceptsProps) => {
   const API = useMemo(() => new APIV2(undefined), []);
   const router = useRouter();
   const hydrated = useHasHydrated();
@@ -206,7 +206,9 @@ export const TabMapOfConcepts = ({ }: TabMapOfConceptsProps) => {
         //.filter((tag) => tag.count > 2); // here we set the minimum number of times a concept should appear in the OERs to be considered relevant to be shown in the map of concepts
 
         // Filter out selected concepts
-        const filteredTags = tagsArray.filter(tag => !conceptsSelected.includes(tag.name));
+        const filteredTags = tagsArray.filter(
+          (tag) => !conceptsSelected.includes(tag.name)
+        );
 
         setTags(filteredTags);
       } catch (err) {
