@@ -12,6 +12,7 @@ import {
 //import { BsBookmark } from 'react-icons/bs';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
+import TagGenAI from '../../Tags/TagsOer/TagGenAI';
 import TagsDomain from '../../Tags/TagsOer/TagsDomain';
 
 type OerCardHeaderProps = {
@@ -64,7 +65,7 @@ export default function OerCardHeader({
             showTagDigital={showTagDigital}
             showTagEntrepreneurial={showTagEntrepreneurial}
             showTagGreen={showTagGreen}
-            showTagGenAI={isGeneratedByAI}
+            // showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
           {!isAddContentModal ? (
@@ -148,8 +149,8 @@ export default function OerCardHeader({
             <FaCopy size='15px' />
           </Button> */}
         </Flex>
-        <Flex>
-          <Box mr={1}>
+        <Flex direction="row" align="center">
+          <Box pr={1}>
             <Text
               fontSize="14px"
               fontWeight="300"
@@ -161,11 +162,15 @@ export default function OerCardHeader({
               by
             </Text>
           </Box>
-          <Box>
-            <Text variant="author_card" noOfLines={1}>
-              {authors.join(', ')}
-            </Text>
-          </Box>
+          <Flex>
+            {!isGeneratedByAI ? (
+              <Text variant="author_card" noOfLines={1}>
+                {authors.join(', ')}
+              </Text>
+            ) : (
+              <TagGenAI />
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </CardHeader>

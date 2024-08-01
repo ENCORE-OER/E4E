@@ -12,6 +12,7 @@ import {
   ColorCollectionProps,
   ExerciseInfoModalProps,
 } from '../../../../types/encoreElements';
+import TagGenAI from '../../../Tags/TagsOer/TagGenAI';
 import TagsDomain from '../../../Tags/TagsOer/TagsDomain';
 // import { HeaderCardInfoModalProps } from '../CardInfoModal/HeaderCardInfoModal';
 
@@ -36,7 +37,7 @@ export default function HeaderExerciseInfoModal({
             showTagEntrepreneurial ? showTagEntrepreneurial : false
           }
           showTagGreen={showTagGreen ? showTagGreen : false}
-          showTagGenAI={isGeneratedByAI ? isGeneratedByAI : false}
+          // showTagGenAI={isGeneratedByAI ? isGeneratedByAI : false}
         />
         {collectionsColor?.length &&
           collectionsColor?.map(
@@ -74,15 +75,19 @@ export default function HeaderExerciseInfoModal({
         {title}
       </Heading>
 
-      <Flex>
+      <Flex direction="row" align="center">
         <Box pr={1}>
           <Text variant="label_drawer">by</Text>
         </Box>
-        <Box>
-          <Text color="grey" fontWeight="semibold" fontSize="sm">
-            {authors?.join(', ')} {/* Print the names with the commas*/}
-          </Text>
-        </Box>
+        <Flex>
+          {!isGeneratedByAI ? (
+            <Text variant="author_card" noOfLines={1}>
+              {authors?.join(', ')}
+            </Text>
+          ) : (
+            <TagGenAI />
+          )}
+        </Flex>
       </Flex>
     </ModalHeader>
   );
