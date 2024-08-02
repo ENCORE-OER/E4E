@@ -110,7 +110,7 @@ const Home = (props: DiscoverPageProps) => {
       //     domains: selectedDomains,
       //     types: selectedResourceTypes,
       //     audience: selectedAudience,
-      //     order_by: 'title',
+      //     order_by: 'overall_score',
       //     order_asc: 'true',
       //     operator: operator,
       //     concepts: [],
@@ -128,8 +128,8 @@ const Home = (props: DiscoverPageProps) => {
         domains: selectedDomains,
         types: selectedResourceTypes,
         audience: selectedAudience,
-        order_by: 'title',
-        order_asc: 'true',
+        order_by: 'overall_score',
+        order_asc: 'false',
         operator: operator,
         concepts: [],
         isDomainsFilter: false,
@@ -382,11 +382,11 @@ const Home = (props: DiscoverPageProps) => {
                 fontSizes={
                   isSmallerScreen
                     ? {
-                        setLabel: '12px',
-                      }
+                      setLabel: '12px',
+                    }
                     : {
-                        setLabel: '15px',
-                      }
+                      setLabel: '15px',
+                    }
                 }
               />
             ) : (

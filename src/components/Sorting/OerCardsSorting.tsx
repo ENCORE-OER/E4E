@@ -9,6 +9,7 @@ import {
   OerProps,
   SortingDropDownMenuItemProps,
 } from '../../types/encoreElements';
+import { sortOers, useHasHydrated } from '../../utils/utils';
 import SortingDropDownMenu from '../DropDownMenu/SortingDropDownMenu';
 
 type OerCardsSortingProps = {
@@ -43,27 +44,60 @@ export default function OerCardsSorting({
   //const [isAscending, setAscending] = useState<boolean>(true);
 
   const isFirstRender = useRef<number>(0); // used to avoid the useEffect to be triggered at the first render
+  const hydrated = useHasHydrated();
 
   // items for Sorting DropDown menu
   const menuItemsSorting: Array<SortingDropDownMenuItemProps> = [
     //{ icon: IconBezierCurve, name: 'Suggested' },
     //{ icon: IconBezierCurve, name: 'Relevance' },
-    { icon: TiSortAlphabetically, name: 'Title' },
-    { icon: IconCalendarCheck, name: 'Last Update' },
     { icon: IconMedal, name: 'Quality Score' },
     { icon: IconThumbsUp, name: 'Likes' },
     { icon: IconBezierCurve, name: 'Times Used' },
+    { icon: TiSortAlphabetically, name: 'Title' },
+    { icon: IconCalendarCheck, name: 'Last Update' },
   ];
+
+  // useEffect(() => {
+  //   if (filtered !== undefined) {
+  //     try {
+  //       //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
+  //       if (setIsLoading !== undefined) {
+  //         setIsLoading(true);
+  //       }
+  //       // if (setViewChanged !== undefined) {
+  //       //   setViewChanged(true);
+  //       // }
+  //       const sortedData = sortOers(filtered, selectedSorting, isAscending);
+
+  //       //console.log(filtered);
+  //       //console.log(sortedData);
+
+  //       if (setFiltered !== undefined) {
+  //         setFiltered(sortedData);
+  //       }
+  //       console.log("I'm triggering oersById/filtered");
+  //     } catch (error) {
+  //       console.error(error);
+  //     } finally {
+  //       if (setIsLoading !== undefined) {
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   }
+  // }, [])
 
   // sorting of the OERs
   useEffect(() => {
+    console.log("RENDERRRRRRRRRRRRRRRRRRRRR")
+    console.log("SELECTED SORTING: ", selectedSorting);
+    console.log("IS ASCENDING: ", isAscending);
+
     if (isFirstRender.current < 2) {
       console.log('Render OerCardsSorting.tsx');
       isFirstRender.current++;
     }
     // LOGIC: if filtered is passed as a prop, that means that the user is in the 'Your resources' page
     else if (filtered !== undefined) {
-      console.log("OerCardsSorting: I'm in 'Your resources' page");
       try {
         //alert(`selectedSorting: ${selectedSorting} \n isAscending: ${isAscending}`)
         if (setIsLoading !== undefined) {
@@ -72,71 +106,7 @@ export default function OerCardsSorting({
         // if (setViewChanged !== undefined) {
         //   setViewChanged(true);
         // }
-        const sortedData = [...(filtered ?? [])];
-        sortedData?.sort(
-          (
-            a: OerProps | undefined | OerFreeSearchProps,
-            b: OerProps | undefined | OerFreeSearchProps
-          ) => {
-            if (a !== undefined && b !== undefined) {
-              // handling null retrieval_date values
-              const dateA =
-                a.retrieval_date === null
-                  ? a.publication_date
-                  : a.retrieval_date;
-              const dateB =
-                b.retrieval_date === null
-                  ? b.publication_date
-                  : b.retrieval_date;
-
-              switch (selectedSorting) {
-                case 'Relevance':
-                  return isAscending
-                    ? a.title.localeCompare(b.title)
-                    : b.title.localeCompare(a.title);
-                case 'Title':
-                  return isAscending
-                    ? a.title.localeCompare(b.title)
-                    : b.title.localeCompare(a.title);
-                case 'Last Update':
-                  return isAscending
-                    ? dateA.localeCompare(dateB)
-                    : dateB.localeCompare(dateA);
-                case 'Quality Score':
-                  return isAscending
-                    ? (a.overall_score ?? 0) - (b.overall_score ?? 0)
-                    : (b.overall_score ?? 0) - (a.overall_score ?? 0);
-                case 'Likes':
-                  return isAscending
-                    ? (a.total_likes ?? 0) - b.total_likes ?? 0
-                    : (b.total_likes ?? 0) - (a.total_likes ?? 0);
-                case 'Times Used':
-                  return isAscending
-                    ? (a.times_used ?? 0) - (b.times_used ?? 0)
-                    : (b.times_used ?? 0) - (a.times_used ?? 0);
-                default:
-                  return 0;
-              }
-            } else {
-              return 0;
-            }
-            // if (selectedSorting === 'Last Update') {
-            //   return isAscending
-            //     ? a.retrieval_date.localeCompare(b.retrieval_date)
-            //     : b.retrieval_date.localeCompare(a.retrieval_date);
-            // } else if (selectedSorting === 'Title') {
-            //   return isAscending
-            //     ? a.title.localeCompare(b.title)
-            //     : b.title.localeCompare(a.title);
-            // } else if (selectedSorting === 'Quality Score') {
-            //   return isAscending
-            //     ? a.overall_score - b.overall_score
-            //     : b.overall_score - a.overall_score;
-            // } else {
-            //   return 0;
-            // }
-          }
-        );
+        const sortedData = sortOers(filtered, selectedSorting, isAscending);
 
         //console.log(filtered);
         //console.log(sortedData);
@@ -161,20 +131,23 @@ export default function OerCardsSorting({
     //console.log('viewChanged: ' + viewChanged);
     if (viewChanged && setViewChanged !== undefined) {
       //setSelectedSorting('Relevance');
-      setAscending(true);
+      setAscending(false);
       setViewChanged(false);
       //console.log("I'm triggering viewChanged to false");
     }
   }, [viewChanged]);
 
   return (
-    <SortingDropDownMenu
-      menuItemsSorting={menuItemsSorting}
-      handleItemSortingClick={handleItemSortingClick}
-      isAscending={isAscending}
-      wMenu="250px"
-      viewChanged={viewChanged}
-      setViewChanged={setViewChanged}
-    />
+    <>
+      {hydrated &&
+        <SortingDropDownMenu
+          menuItemsSorting={menuItemsSorting}
+          handleItemSortingClick={handleItemSortingClick}
+          isAscending={isAscending}
+          wMenu="250px"
+          viewChanged={viewChanged}
+          setViewChanged={setViewChanged}
+        />}
+    </>
   );
 }

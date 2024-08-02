@@ -97,9 +97,9 @@ export default function CollectionView({
   const hydrated = useHasHydrated();
   const isFirstRender = useRef<number>(0); // used to avoid the useEffect to be triggered at the first render
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
-  const [selectedSorting, setSelectedSorting] = useState<string>('search_rank'); // used for the sorting of the resources
+  const [selectedSorting, setSelectedSorting] = useState<string>('Quality Score'); // used for the sorting of the resources
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isAscending, setAscending] = useState<boolean>(true);
+  const [isAscending, setAscending] = useState<boolean>(false);
   const [resourcesSelectedTemp, setResourcesSelectedTemp] = useState<number[]>(
     []
   );
@@ -155,7 +155,11 @@ export default function CollectionView({
       setAscending(!isAscending);
     } else {
       handleSortingChange(sortingName);
-      setAscending(true);
+      if (sortingName === "Title") {
+        setAscending(true);
+      } else {
+        setAscending(false);
+      }
     }
   };
 
@@ -321,7 +325,7 @@ export default function CollectionView({
               fontSize="small"
               color="grey"
             >{`${collections[collectionIndex]?.oers?.length} resources`}</Text>
-            {!isAddContentModal && (
+            {!isAddContentModal && hydrated && (
               <Flex flex="1" w="full" justifyContent="flex-end">
                 <OerCardsSorting
                   filtered={oersById}
@@ -334,7 +338,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                  //setIsLoading={setIsLoading}
+                //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

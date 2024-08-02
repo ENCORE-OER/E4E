@@ -31,7 +31,7 @@ import {
   OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
+import { sortOers, useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 interface DiscoverPageProps {
   // accessToken: string | undefined;
@@ -265,7 +265,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                 }
               )
             );
-            setOersById(oerData);
+            console.log("Sorting data");
+            const sortedData = sortOers(oerData, 'Quality Score', false);
+            setOersById(sortedData);
+            // setOersById(oerData);
             // console.log("I'm triggering oersById");
             setIsNewDataLoaded(true);
             // console.log('End fetchOerData()');
@@ -290,8 +293,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   }, [collectionIndex]);
 
   useEffect(() => {
-    setCollectionIndex(selectedCollectionIndex);
-    setCollectionClicked(true);
+    if (isAddContentModal) {
+      setCollectionIndex(selectedCollectionIndex);
+      setCollectionClicked(true);
+    }
   }, [isAddContentModal]);
 
   return (
@@ -316,8 +321,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-          //minH="0px"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -433,10 +438,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               isAddContentModal={isAddContentModal}
               resourcesSelected={resourcesSelectedAddContent}
               addSelectedResourcesAddContent={addSelectedResourcesAddContent}
-              // updateResourcesSelected={updateResourcesSelected}
-              // addSelectedResource={addSelectedResource}
-              // removeSelectedResource={removeSelectedResource}
-              // resetSelectedResources={resetSelectedResources}
+            // updateResourcesSelected={updateResourcesSelected}
+            // addSelectedResource={addSelectedResource}
+            // removeSelectedResource={removeSelectedResource}
+            // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>
