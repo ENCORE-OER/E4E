@@ -88,9 +88,9 @@ export default function OerCardsSorting({
 
   // sorting of the OERs
   useEffect(() => {
-    console.log("RENDERRRRRRRRRRRRRRRRRRRRR")
-    console.log("SELECTED SORTING: ", selectedSorting);
-    console.log("IS ASCENDING: ", isAscending);
+    console.log('RENDERRRRRRRRRRRRRRRRRRRRR');
+    console.log('SELECTED SORTING: ', selectedSorting);
+    console.log('IS ASCENDING: ', isAscending);
 
     if (isFirstRender.current < 2) {
       console.log('Render OerCardsSorting.tsx');
@@ -139,7 +139,7 @@ export default function OerCardsSorting({
 
   return (
     <>
-      {hydrated &&
+      {hydrated && (
         <SortingDropDownMenu
           menuItemsSorting={menuItemsSorting}
           handleItemSortingClick={handleItemSortingClick}
@@ -147,7 +147,8 @@ export default function OerCardsSorting({
           wMenu="250px"
           viewChanged={viewChanged}
           setViewChanged={setViewChanged}
-        />}
+        />
+      )}
     </>
   );
 }

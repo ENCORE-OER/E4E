@@ -265,7 +265,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                 }
               )
             );
-            console.log("Sorting data");
+            console.log('Sorting data');
             const sortedData = sortOers(oerData, 'Quality Score', false);
             setOersById(sortedData);
             // setOersById(oerData);
@@ -321,8 +321,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-        //minH="0px"
-        //justify="space-between"
+          //minH="0px"
+          //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -438,10 +438,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               isAddContentModal={isAddContentModal}
               resourcesSelected={resourcesSelectedAddContent}
               addSelectedResourcesAddContent={addSelectedResourcesAddContent}
-            // updateResourcesSelected={updateResourcesSelected}
-            // addSelectedResource={addSelectedResource}
-            // removeSelectedResource={removeSelectedResource}
-            // resetSelectedResources={resetSelectedResources}
+              // updateResourcesSelected={updateResourcesSelected}
+              // addSelectedResource={addSelectedResource}
+              // removeSelectedResource={removeSelectedResource}
+              // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>

@@ -36,7 +36,7 @@ export default function SmallOerCard({
   assessment_oer_type,
   oer_url,
 }: //dataOer
-SmallOerCardProps) {
+  SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -48,7 +48,7 @@ SmallOerCardProps) {
       key={idOer}
       borderColor="secondary"
       bg="white"
-      //mb={mbCard || '5'}
+    //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
@@ -63,6 +63,7 @@ SmallOerCardProps) {
         collection_color={collection_color}
         checkBookmark={checkBookmark}
         linkOer={oer_url}
+        handleOpenAddCollectionModal={() => console.log("")}
       />
       <OerCardBody
         description={description}

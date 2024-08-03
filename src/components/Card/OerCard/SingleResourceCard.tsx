@@ -1,4 +1,6 @@
+import { useDisclosure } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { APIV2 } from '../../../data/api';
 import {
   OerAuthorsInfo,
@@ -8,6 +10,7 @@ import {
 } from '../../../types/encoreElements';
 import { OerFreeSearchProps } from '../../../types/encoreElements/oer/OerFreeSearch';
 import { useHasHydrated } from '../../../utils/utils';
+import CollectionModal from '../../Modals/CollectionModals';
 import OerCard from './OerCard';
 
 interface SingleResourceCardProps {
@@ -39,6 +42,13 @@ export default function SingleResourceCard({
   //const [isSaved, setIsSaved] = useState(false);
 
   const hydrated = useHasHydrated();
+  const {
+    isOpen: isCollectionModalOpen,
+    onOpen: onCollectionModalOpen,
+    onClose: onCollectionModalClose,
+  } = useDisclosure();
+
+  const { addCollection, addResource, collections } = useCollectionsContext();
 
   const creators = oer?.creator?.map(
     (item: OerAuthorsInfo) => item.full_name
@@ -69,6 +79,25 @@ export default function SingleResourceCard({
     const resp = await api.getLikes(id);
 
     return resp;
+  };
+
+  // const [isAddCollectionModalOpen, setAddCollectionModalOpen] =
+  //   useState<boolean>(false);
+
+  // const handleOpenAddCollectionModal = () => {
+  //   // onOpen();
+  //   setAddCollectionModalOpen(true);
+  //   // console.log(isAddCollectionModalOpen);
+  // };
+
+  // const handleCloseAddCollectionModal = () => {
+  //   // onClose();
+  //   setAddCollectionModalOpen(false);
+  // };
+
+  // Ensure closing collection modal does not open card info modal
+  const handleCollectionModalClose = () => {
+    onCollectionModalClose();
   };
 
   useEffect(() => {
@@ -132,6 +161,25 @@ export default function SingleResourceCard({
           handleCheckboxClick={handleCheckboxClick}
           isChecked={isChecked}
           isDisabled={isDisabled}
+          handleOpenAddCollectionModal={onCollectionModalOpen}
+        />
+      )}
+
+
+      {isCollectionModalOpen && (
+        <CollectionModal
+          isOpen={isCollectionModalOpen}
+          onClose={handleCollectionModalClose}
+          oerToSave={oer}
+          isNewCollection={false}
+          isFromFolderButton={false}
+          maxLength={30}
+          collections={collections}
+          addResource={addResource}
+          addCollection={addCollection}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
     </>

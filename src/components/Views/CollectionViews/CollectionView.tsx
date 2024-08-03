@@ -97,7 +97,8 @@ export default function CollectionView({
   const hydrated = useHasHydrated();
   const isFirstRender = useRef<number>(0); // used to avoid the useEffect to be triggered at the first render
   const [uniqueConcepts, setUniqueConcepts] = useState<OerConceptInfo[]>([]);
-  const [selectedSorting, setSelectedSorting] = useState<string>('Quality Score'); // used for the sorting of the resources
+  const [selectedSorting, setSelectedSorting] =
+    useState<string>('Quality Score'); // used for the sorting of the resources
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isAscending, setAscending] = useState<boolean>(false);
   const [resourcesSelectedTemp, setResourcesSelectedTemp] = useState<number[]>(
@@ -155,7 +156,7 @@ export default function CollectionView({
       setAscending(!isAscending);
     } else {
       handleSortingChange(sortingName);
-      if (sortingName === "Title") {
+      if (sortingName === 'Title') {
         setAscending(true);
       } else {
         setAscending(false);
@@ -338,7 +339,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                //setIsLoading={setIsLoading}
+                  //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

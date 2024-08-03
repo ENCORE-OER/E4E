@@ -30,6 +30,7 @@ type OerCardHeaderProps = {
   handleCheckboxClick?: () => void;
   isChecked?: boolean;
   isDisabled?: boolean;
+  handleOpenAddCollectionModal: () => void;
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
 };
@@ -49,6 +50,7 @@ export default function OerCardHeader({
   handleCheckboxClick,
   isChecked,
   isDisabled,
+  handleOpenAddCollectionModal
 }: OerCardHeaderProps) {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -65,7 +67,7 @@ export default function OerCardHeader({
             showTagDigital={showTagDigital}
             showTagEntrepreneurial={showTagEntrepreneurial}
             showTagGreen={showTagGreen}
-            // showTagGenAI={isGeneratedByAI}
+          // showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
           {!isAddContentModal ? (
@@ -80,6 +82,7 @@ export default function OerCardHeader({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                handleOpenAddCollectionModal();
                 //setIsSaved(!isSaved);
                 // addCollection(idCollection, nameCollection);
                 // addResource(idCollection, idOer);
