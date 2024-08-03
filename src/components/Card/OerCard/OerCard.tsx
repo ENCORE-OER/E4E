@@ -1,4 +1,5 @@
 import { Card } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 import { ResourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
 import OerCardFooter from './OerCardFooter';
@@ -12,6 +13,8 @@ interface OerCardProps extends ResourceCardProps {
   isChecked?: boolean;
   isDisabled?: boolean;
   handleOpenAddCollectionModal: () => void;
+  isBookmark: boolean;
+  setIsBookmark: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function OerCard({
@@ -48,7 +51,9 @@ export default function OerCard({
   handleCheckboxClick,
   isChecked,
   isDisabled,
-  handleOpenAddCollectionModal
+  handleOpenAddCollectionModal,
+  isBookmark,
+  setIsBookmark
 }: OerCardProps) {
   return (
     <Card
@@ -86,6 +91,8 @@ export default function OerCard({
         isChecked={isChecked}
         isDisabled={isDisabled}
         handleOpenAddCollectionModal={handleOpenAddCollectionModal}
+        isBookmark={isBookmark}
+        setIsBookmark={setIsBookmark}
       />
       <OerCardBody
         description={description}

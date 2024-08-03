@@ -19,7 +19,6 @@ import {
   OerInCollectionProps,
 } from '../../../types/encoreElements';
 
-
 interface AddCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
   setIsNewCollection: Dispatch<SetStateAction<boolean>>;

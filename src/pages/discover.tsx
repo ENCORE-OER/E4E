@@ -63,7 +63,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   const [selectedSorting, setSelectedSorting] =
     useState<string>('Quality Score'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
-  const [keywordsSearch, setKeywordsSearch] = useState<string[]>([])
+  const [keywordsSearch, setKeywordsSearch] = useState<string[]>([]);
   // ============================ VENN DIAGRAM ============================
 
   // To make the venn diagram responsive
@@ -113,7 +113,6 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         types.length > 0 ||
         audience.length > 0
       ) {
-
         setKeywordsSearch(keywords);
 
         // Search request
@@ -459,7 +458,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -485,10 +484,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
             </Flex>
           </HStack>
 
-          <SearchBarEncoreDisplay
-            inputValue={keywordsSearch}
-            pb="5"
-          />
+          <SearchBarEncoreDisplay inputValue={keywordsSearch} pb="5" />
 
           {isLoading && <LoadingSpinner textLoading="Loading..." />}
 
@@ -505,7 +501,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>

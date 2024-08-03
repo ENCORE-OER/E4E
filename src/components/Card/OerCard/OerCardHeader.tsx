@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 //import { Dispatch, SetStateAction } from 'react';
 //import { BsBookmark } from 'react-icons/bs';
+import { Dispatch, SetStateAction } from 'react';
 import { IconBookmarkCheck } from '../../../public/Icons/svgToIcons/iconBookmarkCheck';
 import IconCopyUrl from '../../Icons/IconCopy/IconCopyUrl';
 import TagGenAI from '../../Tags/TagsOer/TagGenAI';
@@ -33,6 +34,8 @@ type OerCardHeaderProps = {
   handleOpenAddCollectionModal: () => void;
   //isSaved?: boolean;
   //setIsSaved?: Dispatch<SetStateAction<boolean>>;
+  isBookmark: boolean;
+  setIsBookmark: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function OerCardHeader({
@@ -50,7 +53,9 @@ export default function OerCardHeader({
   handleCheckboxClick,
   isChecked,
   isDisabled,
-  handleOpenAddCollectionModal
+  handleOpenAddCollectionModal,
+  isBookmark,
+  setIsBookmark
 }: OerCardHeaderProps) {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -83,6 +88,8 @@ export default function OerCardHeader({
                 e.preventDefault();
                 e.stopPropagation();
                 handleOpenAddCollectionModal();
+                if (!isBookmark)
+                  setIsBookmark(true);
                 //setIsSaved(!isSaved);
                 // addCollection(idCollection, nameCollection);
                 // addResource(idCollection, idOer);

@@ -1,5 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
 import { APIV2 } from '../../../data/api';
 import {
@@ -24,6 +24,8 @@ interface SingleResourceCardProps {
   handleCheckboxClick?: () => void;
   isChecked?: boolean;
   isDisabled?: boolean;
+  isBookmark: boolean;
+  setIsBookmark: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SingleResourceCard({
@@ -37,6 +39,8 @@ export default function SingleResourceCard({
   handleCheckboxClick,
   isChecked,
   isDisabled,
+  isBookmark,
+  setIsBookmark
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -98,6 +102,7 @@ export default function SingleResourceCard({
   // Ensure closing collection modal does not open card info modal
   const handleCollectionModalClose = () => {
     onCollectionModalClose();
+    setIsBookmark(false);
   };
 
   useEffect(() => {
@@ -162,9 +167,10 @@ export default function SingleResourceCard({
           isChecked={isChecked}
           isDisabled={isDisabled}
           handleOpenAddCollectionModal={onCollectionModalOpen}
+          isBookmark={isBookmark}
+          setIsBookmark={setIsBookmark}
         />
       )}
-
 
       {isCollectionModalOpen && (
         <CollectionModal
