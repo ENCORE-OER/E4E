@@ -1,4 +1,5 @@
 import { Card } from '@chakra-ui/react';
+import { Dispatch, SetStateAction } from 'react';
 import { ResourceCardProps } from '../../../types/encoreElements';
 import OerCardBody from './OerCardBody';
 import OerCardHeader from './OerCardHeader';
@@ -6,6 +7,8 @@ import SmallOerCardFooter from './SmallOerCardFooter';
 
 interface SmallOerCardProps extends ResourceCardProps {
   checkBookmark?: boolean;
+  isBookmark: boolean;
+  setIsBookmark: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function SmallOerCard({
@@ -35,6 +38,8 @@ export default function SmallOerCard({
   total_likes,
   assessment_oer_type,
   oer_url,
+  isBookmark,
+  setIsBookmark,
 }: //dataOer
 SmallOerCardProps) {
   return (
@@ -63,6 +68,9 @@ SmallOerCardProps) {
         collection_color={collection_color}
         checkBookmark={checkBookmark}
         linkOer={oer_url}
+        handleOpenAddCollectionModal={() => console.log('')}
+        isBookmark={isBookmark}
+        setIsBookmark={setIsBookmark}
       />
       <OerCardBody
         description={description}

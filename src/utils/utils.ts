@@ -9,7 +9,9 @@ import {
   ArrayProps,
   GeneratedExerciseProps,
   OerConceptInfo,
+  OerFreeSearchProps,
   OerInCollectionProps,
+  OerProps,
   Option,
   OptionsData,
   SkillItemProps,
@@ -366,4 +368,54 @@ export const isSkillItem = (
     return 'label' in arr;
   }
   return arr.length === 0 || 'label' in arr[0];
+};
+
+// Sorting the array
+export const sortOers = (
+  data: (OerProps | undefined | OerFreeSearchProps)[],
+  selectedSorting: string | undefined,
+  isAscending: boolean
+) => {
+  const sortedData = [...(data ?? [])];
+  console.log(sortedData);
+  sortedData?.sort((a, b) => {
+    if (a !== undefined && b !== undefined) {
+      const dateA =
+        a.retrieval_date === null ? a.publication_date : a.retrieval_date;
+      const dateB =
+        b.retrieval_date === null ? b.publication_date : b.retrieval_date;
+
+      switch (selectedSorting) {
+        case 'Relevance':
+          return isAscending
+            ? a.title.localeCompare(b.title)
+            : b.title.localeCompare(a.title);
+        case 'Title':
+          return isAscending
+            ? a.title.localeCompare(b.title)
+            : b.title.localeCompare(a.title);
+        case 'Last Update':
+          return isAscending
+            ? dateA.localeCompare(dateB)
+            : dateB.localeCompare(dateA);
+        case 'Quality Score':
+          return isAscending
+            ? (a.overall_score ?? 0) - (b.overall_score ?? 0)
+            : (b.overall_score ?? 0) - (a.overall_score ?? 0);
+        case 'Likes':
+          return isAscending
+            ? (a.total_likes ?? 0) - (b.total_likes ?? 0)
+            : (b.total_likes ?? 0) - (a.total_likes ?? 0);
+        case 'Times Used':
+          return isAscending
+            ? (a.times_used ?? 0) - (b.times_used ?? 0)
+            : (b.times_used ?? 0) - (a.times_used ?? 0);
+        default:
+          return 0;
+      }
+    } else {
+      return 0;
+    }
+  });
+  return sortedData;
 };

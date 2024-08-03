@@ -194,6 +194,7 @@ export default function SearchBarEncore({
                 <AutoCompleteTag
                   key={tid}
                   label={tag.label}
+                  cursor="default"
                   onRemove={async () => {
                     /*const tagId = await skillsSelected?.find(
                       // items here is empty
