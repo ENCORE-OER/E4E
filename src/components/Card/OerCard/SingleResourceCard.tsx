@@ -40,7 +40,7 @@ export default function SingleResourceCard({
   isChecked,
   isDisabled,
   isBookmark,
-  setIsBookmark
+  setIsBookmark,
 }: SingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
   //const [isSaved, setIsSaved] = useState(false);
@@ -183,9 +183,9 @@ export default function SingleResourceCard({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //times_used={times_used}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //times_used={times_used}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
     </>

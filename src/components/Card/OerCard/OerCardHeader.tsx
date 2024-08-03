@@ -55,7 +55,7 @@ export default function OerCardHeader({
   isDisabled,
   handleOpenAddCollectionModal,
   isBookmark,
-  setIsBookmark
+  setIsBookmark,
 }: OerCardHeaderProps) {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
@@ -72,7 +72,7 @@ export default function OerCardHeader({
             showTagDigital={showTagDigital}
             showTagEntrepreneurial={showTagEntrepreneurial}
             showTagGreen={showTagGreen}
-          // showTagGenAI={isGeneratedByAI}
+            // showTagGenAI={isGeneratedByAI}
           />
           <Spacer />
           {!isAddContentModal ? (
@@ -88,8 +88,7 @@ export default function OerCardHeader({
                 e.preventDefault();
                 e.stopPropagation();
                 handleOpenAddCollectionModal();
-                if (!isBookmark)
-                  setIsBookmark(true);
+                if (!isBookmark) setIsBookmark(true);
                 //setIsSaved(!isSaved);
                 // addCollection(idCollection, nameCollection);
                 // addResource(idCollection, idOer);

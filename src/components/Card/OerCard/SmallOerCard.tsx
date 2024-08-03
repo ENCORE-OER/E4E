@@ -39,9 +39,9 @@ export default function SmallOerCard({
   assessment_oer_type,
   oer_url,
   isBookmark,
-  setIsBookmark
+  setIsBookmark,
 }: //dataOer
-  SmallOerCardProps) {
+SmallOerCardProps) {
   return (
     <Card
       display="flex"
@@ -53,7 +53,7 @@ export default function SmallOerCard({
       key={idOer}
       borderColor="secondary"
       bg="white"
-    //mb={mbCard || '5'}
+      //mb={mbCard || '5'}
     >
       <OerCardHeader
         title={title}
