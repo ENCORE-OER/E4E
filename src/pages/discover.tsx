@@ -61,7 +61,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
 
   const [isAscending, setAscending] = useState<boolean>(false);
   const [selectedSorting, setSelectedSorting] =
-    useState<string>('Quality Score'); // used for the sorting of the resources
+    useState<string>('overall_score'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
   const [keywordsSearch, setKeywordsSearch] = useState<string[]>([]);
   // ============================ VENN DIAGRAM ============================
@@ -250,7 +250,11 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       handleSortingChange(order_item, !isAscending);
     } else {
       //setSelectedSorting(sortingName);
-      setAscending(true);
+      if (sortingName === "Title") {
+        setAscending(true);
+      } else {
+        setAscending(false);
+      }
       handleSortingChange(order_item, true);
     }
   };
@@ -322,8 +326,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const domains = convertedData['domains'];
       const types = convertedData['types'];
       const audience = convertedData['audience'];
-      const order_by = convertedData['order_by'];
-      const order_asc = convertedData['order_asc'];
+      // const order_by = convertedData['order_by'];
+      // const order_asc = convertedData['order_asc'];
       const operator = convertedData['operator'];
       const concepts = convertedData['concepts'];
       const isDomainsFilter = convertedData['isDomainsFilter'];
@@ -335,8 +339,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         domains,
         types,
         audience,
-        order_by, // selectedSorting,
-        order_asc, // isAscending?.toString(),
+        selectedSorting,  // order_by,
+        isAscending?.toString(), // order_asc, 
         operator,
         concepts,
         isDomainsFilter,
@@ -458,7 +462,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -501,7 +505,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-              //isSmallerThan600px={isSmallerThan600px}
+            //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
