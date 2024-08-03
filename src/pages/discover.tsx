@@ -250,7 +250,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       handleSortingChange(order_item, !isAscending);
     } else {
       //setSelectedSorting(sortingName);
-      if (sortingName === "Title") {
+      if (sortingName === 'Title') {
         setAscending(true);
       } else {
         setAscending(false);
@@ -339,8 +339,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         domains,
         types,
         audience,
-        selectedSorting,  // order_by,
-        isAscending?.toString(), // order_asc, 
+        selectedSorting, // order_by,
+        isAscending?.toString(), // order_asc,
         operator,
         concepts,
         isDomainsFilter,
@@ -462,7 +462,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-          //justify="space-between"
+            //justify="space-between"
           >
             <Heading fontFamily="title">
               <Text>Discover</Text>
@@ -505,7 +505,7 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               setCurrentPage={setCurrentPage}
               handlePageChange={handlePageChange}
               isSmallerScreen={isSmallerScreen}
-            //isSmallerThan600px={isSmallerThan600px}
+              //isSmallerThan600px={isSmallerThan600px}
             />
           )}
         </Box>
