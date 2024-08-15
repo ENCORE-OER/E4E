@@ -14,7 +14,9 @@ const HighlightWords = ({ text = '', words, color }: HighlightWordsProps) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
   // Ordina le parole/frasi per lunghezza decrescente per gestire correttamente le frasi prima delle parole singole
-  const sortedWords = words.map(escapeRegExp).sort((a, b) => b.length - a.length);
+  const sortedWords = words
+    .map(escapeRegExp)
+    .sort((a, b) => b.length - a.length);
   // Crea una espressione regolare che cattura tutte le parole/frasi da evidenziare
   const regex = new RegExp(`(${sortedWords.join('|')})`, 'gi');
 
