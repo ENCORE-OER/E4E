@@ -8,15 +8,19 @@ type HighlightWordsProps = {
 };
 
 // Componente per evidenziare parole
-const HighlightWords = ({ text, words, color }: HighlightWordsProps) => {
+const HighlightWords = ({ text = '', words, color }: HighlightWordsProps) => {
+  // Funzione per "escapare" i caratteri speciali
+  const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
   // Ordina le parole/frasi per lunghezza decrescente per gestire correttamente le frasi prima delle parole singole
-  const sortedWords = words.sort((a, b) => b.length - a.length);
+  const sortedWords = words.map(escapeRegExp).sort((a, b) => b.length - a.length);
   // Crea una espressione regolare che cattura tutte le parole/frasi da evidenziare
   const regex = new RegExp(`(${sortedWords.join('|')})`, 'gi');
 
   // Suddivide il testo utilizzando l'espressione regolare e mappa le parti per evidenziarle
   const getHighlightedText = () => {
-    const parts = text.split(regex);
+    const parts = text.split(regex).filter((part) => part !== undefined);
     return parts.map((part, index) =>
       sortedWords.some((word) => word.toLowerCase() === part.toLowerCase()) ? (
         <Box
