@@ -9,19 +9,17 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
-import {
-  GeneratedExerciseProps,
-  ExerciseDescriptionData,
-} from '../../../types/encoreElements';
+// import { useCollectionsContext } from '../../../Contexts/CollectionsContext/CollectionsContext';
+import { ExerciseDescriptionData } from '../../../types/encoreElements';
 import CheckboxDisabledMenu from '../../CheckboxMenu/CheckboxDisabledMenu';
 import BorderedWords from '../../Card/ExercisePreview/BorderedWords';
 import HighlightWords from '../../Card/ExercisePreview/HighlightWords';
 
-type GenerateExerciseResonseViewProps = {
-  response?: GeneratedExerciseProps | null;
+type ExercisePreviewCardProps = {
+  topic: string;
 };
 
-export default function GenerateExerciseResponseView({}: GenerateExerciseResonseViewProps) {
+export default function ExercisePreviewCard({}: ExercisePreviewCardProps) {
   const {
     apiGeneratedExerciseData: apiData,
     chosenTopic,
@@ -126,13 +124,13 @@ export default function GenerateExerciseResponseView({}: GenerateExerciseResonse
             )}
 
             {/* <Box>
-              <Heading size="xs" textTransform="uppercase">
-                Response
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                {JSON.stringify(response)}
-              </Text>
-            </Box> */}
+                <Heading size="xs" textTransform="uppercase">
+                  Collections
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  {JSON.stringify(collections)}
+                </Text>
+              </Box> */}
           </Stack>
         </CardBody>
       </Card>

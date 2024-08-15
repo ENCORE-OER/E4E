@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useCreateOERsContext } from '../../../Contexts/CreateOERsContext';
 import { useGeneralContext } from '../../../Contexts/GeneralContext';
-import GenerateExerciseResponseView from '../../../components/Views/ApiResponseViews/GenerateExerciseResponseView';
 import {
   BloomLevelsEnum,
   GeneratedExerciseProps,
 } from '../../../types/encoreElements';
 import { CustomToast } from '../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../utils/utils';
+import GenerateExerciseResponseView from '../../Views/ApiResponseViews/GenerateExerciseResponseView';
 
 type CreateExerciseButtonProps = {
   isSmallerScreen?: boolean;

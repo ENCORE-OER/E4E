@@ -2,6 +2,7 @@ import { Flex, Image, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import brandLogo from '../../public/logo_encore.png';
 import TabTable from '../Tabs/LearningPathTabs/TabTable';
+import PdfOerData from '../../components/Card/ExercisePreview/PdfOersData';
 
 type PDFContentProps = {
   titleLearningPath: string;
@@ -23,15 +24,18 @@ export default function PDFContent({
   }, []);
 
   return (
-    <Flex direction="column" p={3} gap={3} className="pdf-content">
-      <Flex justify="space-between" align="center">
-        <Image src={brandLogo.src} alt="Encore Logo" h="70px" w="150px" />
-        <Text>{currentDate}</Text>
+    <>
+      <Flex direction="column" p={3} gap={3} className="pdf-content">
+        <Flex justify="space-between" align="center">
+          <Image src={brandLogo.src} alt="Encore Logo" h="70px" w="150px" />
+          <Text>{currentDate}</Text>
+        </Flex>
+        <Text fontSize="x-large" fontWeight="bold" textAlign="center" mt={3}>
+          {titleLearningPath}
+        </Text>
+        <TabTable isPrinting={isPrinting} />
       </Flex>
-      <Text fontSize="x-large" fontWeight="bold" textAlign="center" mt={3}>
-        {titleLearningPath}
-      </Text>
-      <TabTable isPrinting={isPrinting} />
-    </Flex>
+      <PdfOerData />
+    </>
   );
 }
