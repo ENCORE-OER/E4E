@@ -31,7 +31,7 @@ import {
   OerProps,
 } from '../types/encoreElements';
 import { CustomToast } from '../utils/Toast/CustomToast';
-import { useHasHydrated, useIsSmallerScreen } from '../utils/utils';
+import { sortOers, useHasHydrated, useIsSmallerScreen } from '../utils/utils';
 
 interface DiscoverPageProps {
   // accessToken: string | undefined;
@@ -265,7 +265,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                 }
               )
             );
-            setOersById(oerData);
+            console.log('Sorting data');
+            const sortedData = sortOers(oerData, 'Quality Score', false);
+            setOersById(sortedData);
+            // setOersById(oerData);
             // console.log("I'm triggering oersById");
             setIsNewDataLoaded(true);
             // console.log('End fetchOerData()');
@@ -290,8 +293,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   }, [collectionIndex]);
 
   useEffect(() => {
-    setCollectionIndex(selectedCollectionIndex);
-    setCollectionClicked(true);
+    if (isAddContentModal) {
+      setCollectionIndex(selectedCollectionIndex);
+      setCollectionClicked(true);
+    }
   }, [isAddContentModal]);
 
   return (

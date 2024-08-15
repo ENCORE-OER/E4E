@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { APIV2 } from '../../../data/api';
 import {
   OerAuthorsInfo,
@@ -16,6 +16,8 @@ type SmallSingleResourceCardProps = {
   checkBookmark?: boolean;
   collectionsColor: string[] | string;
   updateLikeOER: boolean;
+  isBookmark: boolean;
+  setIsBookmark: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function SmallSingleResourceCard({
@@ -24,6 +26,8 @@ export default function SmallSingleResourceCard({
   collectionColor,
   collectionsColor,
   updateLikeOER,
+  isBookmark,
+  setIsBookmark,
 }: //dataOer
 SmallSingleResourceCardProps) {
   //const { addResource, addCollection } = useCollectionsContext();
@@ -117,6 +121,8 @@ SmallSingleResourceCardProps) {
           times_used={times_used ?? 0}
           total_likes={total_likes ?? 0}
           oer_url={linkOer}
+          isBookmark={isBookmark}
+          setIsBookmark={setIsBookmark}
         />
       )}
     </>

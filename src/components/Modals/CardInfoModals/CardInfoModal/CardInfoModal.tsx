@@ -129,7 +129,7 @@ export default function CardInfoModal({
     // console.log(isAddCollectionModalOpen);
   };
 
-  const handleCloseCollectionModal = () => {
+  const handleCloseAddCollectionModal = () => {
     setAddCollectionModalOpen(false);
   };
 
@@ -342,7 +342,7 @@ export default function CardInfoModal({
       {isAddCollectionModalOpen && (
         <CollectionModal
           isOpen={isCardInfoOpen}
-          onClose={handleCloseCollectionModal}
+          onClose={handleCloseAddCollectionModal}
           oerToSave={oer}
           isNewCollection={false}
           isFromFolderButton={false}

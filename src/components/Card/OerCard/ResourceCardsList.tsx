@@ -66,6 +66,7 @@ export default function ResourceCardsList({
 }: ResourceCardsListProps) {
   const hydrated = useHasHydrated();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isBookmark, setIsBookmark] = useState<boolean>(false);
   const [oerById, setOerById] = useState<
     OerProps | OerFreeSearchProps | undefined
   >(undefined);
@@ -115,7 +116,8 @@ export default function ResourceCardsList({
                       <Box
                         onClick={(e: any) => {
                           e.preventDefault();
-                          onOpen();
+                          e.stopPropagation();
+                          if (!isBookmark) onOpen();
                           // handleOpenCardInfoModal();
                           setOerById(oer);
                           setIndexOerOpen(index);
@@ -163,6 +165,8 @@ export default function ResourceCardsList({
                             (resource: OerInCollectionProps) =>
                               resource.id === oer?.id
                           )}
+                          isBookmark={isBookmark}
+                          setIsBookmark={setIsBookmark}
                         />
                       </Box>
                       {isResourcePage && !isAddContentModal && (
@@ -171,6 +175,7 @@ export default function ResourceCardsList({
                           _hover={{ bg: 'gray.300' }}
                           onClick={(e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             //alert("Click su delete");
                             //console.log("I'm triggering delete resource button");
                             if (
@@ -249,6 +254,8 @@ export default function ResourceCardsList({
                           oer={oer}
                           collectionsColor={collectionsColor}
                           updateLikeOER={updateLikeOER}
+                          isBookmark={isBookmark}
+                          setIsBookmark={setIsBookmark}
                         />
                       </Box>
                       {isResourcePage && (

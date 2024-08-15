@@ -11,15 +11,13 @@ import {
   ModalOverlay,
   Text,
 } from '@chakra-ui/react';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import {
   AddResourceFunction,
   CollectionModalProps,
   CollectionProps,
   OerInCollectionProps,
 } from '../../../types/encoreElements';
-
-import { useHasHydrated } from '../../../utils/utils';
 
 interface AddCollectionModalProps extends CollectionModalProps {
   oerToAddCollection: OerInCollectionProps; // this is the oer with only the info needed to add it to the collection
@@ -38,16 +36,16 @@ export default function AddResourceToCollectionModal({
   collections,
   addResource,
 }: AddCollectionModalProps) {
-  const hydrated = useHasHydrated();
-  const [indexCollectionClicked, setIndexCollectionClicked] =
-    useState<number>(-1);
+  // const hydrated = useHasHydrated();
+  // const [indexCollectionClicked, setIndexCollectionClicked] =
+  //   useState<number>(-1);
 
   const handleSaveResource = async (idCollectionSelected: number) => {
-    setIndexCollectionClicked(
-      collections.findIndex(
-        (collection: CollectionProps) => collection.id === idCollectionSelected
-      )
-    );
+    // setIndexCollectionClicked(
+    //   collections.findIndex(
+    //     (collection: CollectionProps) => collection.id === idCollectionSelected
+    //   )
+    // );
     await addResource(idCollectionSelected, oerToAddCollection);
 
     // TODO: see if this is useful
@@ -62,15 +60,15 @@ export default function AddResourceToCollectionModal({
     onClose();
   };
 
-  useEffect(() => {
-    if (hydrated) {
-      //alert(`Resource added to "${collections[indexCollectionClicked]?.name}" collection`)
-      /*addToast({
-        message: `Resource added to "${collections[indexCollectionClicked]?.name}" collection`,
-        status: 'success'
-      })*/
-    }
-  }, [indexCollectionClicked]);
+  // useEffect(() => {
+  //   if (hydrated) {
+  //     //alert(`Resource added to "${collections[indexCollectionClicked]?.name}" collection`)
+  //     /*addToast({
+  //       message: `Resource added to "${collections[indexCollectionClicked]?.name}" collection`,
+  //       status: 'success'
+  //     })*/
+  //   }
+  // }, [indexCollectionClicked]);
 
   return (
     <Modal isOpen={isOpen} onClose={handleCloseCollectionModal}>

@@ -15,6 +15,7 @@ import { useDiscoveryContext } from '../Contexts/discoveryContext';
 
 import ResourceCardsList from '../components/Card/OerCard/ResourceCardsList';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
+import SearchBarEncoreDisplay from '../components/SearchBar/SearchBarEncoreDisplay';
 import {
   CollectionProps,
   OerInCollectionProps,
@@ -58,9 +59,11 @@ const Discover = (/*props: DiscoverPageProps*/) => {
   // const [byResourceType, setByResourceType] = useState<any>(null);
   const [IconBookmarkColor, setIconBookmarkColor] = useState<string[]>([]);
 
-  const [isAscending, setAscending] = useState<boolean>(true);
-  const [selectedSorting, setSelectedSorting] = useState<string>('title'); // used for the sorting of the resources
+  const [isAscending, setAscending] = useState<boolean>(false);
+  const [selectedSorting, setSelectedSorting] =
+    useState<string>('overall_score'); // used for the sorting of the resources
   const [OersLengthTotal, setOersLengthTotal] = useState<number | undefined>(0);
+  const [keywordsSearch, setKeywordsSearch] = useState<string[]>([]);
   // ============================ VENN DIAGRAM ============================
 
   // To make the venn diagram responsive
@@ -110,6 +113,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         types.length > 0 ||
         audience.length > 0
       ) {
+        setKeywordsSearch(keywords);
+
         // Search request
         const resp = await api.searchBooleanOERs(
           page,
@@ -245,7 +250,11 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       handleSortingChange(order_item, !isAscending);
     } else {
       //setSelectedSorting(sortingName);
-      setAscending(true);
+      if (sortingName === 'Title') {
+        setAscending(true);
+      } else {
+        setAscending(false);
+      }
       handleSortingChange(order_item, true);
     }
   };
@@ -317,8 +326,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
       const domains = convertedData['domains'];
       const types = convertedData['types'];
       const audience = convertedData['audience'];
-      //const order_by = convertedData['order_by'];
-      //const order_asc = convertedData['order_asc'];
+      // const order_by = convertedData['order_by'];
+      // const order_asc = convertedData['order_asc'];
       const operator = convertedData['operator'];
       const concepts = convertedData['concepts'];
       const isDomainsFilter = convertedData['isDomainsFilter'];
@@ -330,8 +339,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
         domains,
         types,
         audience,
-        selectedSorting,
-        isAscending?.toString(),
+        selectedSorting, // order_by,
+        isAscending?.toString(), // order_asc,
         operator,
         concepts,
         isDomainsFilter,
@@ -374,8 +383,10 @@ const Discover = (/*props: DiscoverPageProps*/) => {
     //setIsLoading(false);
     // TODO: handle if it is endSearch but after a concept filter: I could check if there are concepts in the query.
 
+    console.log('ENDSEARCH');
+
     if (endSearch && OersLengthTotal === 0) {
-      if (conceptsSelected.length === 0) {
+      if (conceptsSelected.length !== 0) {
         addToast({
           message: 'No resources found with these concepts.',
           type: 'error',
@@ -476,6 +487,8 @@ const Discover = (/*props: DiscoverPageProps*/) => {
               />
             </Flex>
           </HStack>
+
+          <SearchBarEncoreDisplay inputValue={keywordsSearch} pb="5" />
 
           {isLoading && <LoadingSpinner textLoading="Loading..." />}
 
