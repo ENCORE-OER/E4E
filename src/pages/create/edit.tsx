@@ -28,7 +28,8 @@ import {
   OerInCollectionProps,
   domainOptions,
   licenseOption,
-  tyopeOfResourcesOption,
+  //tyopeOfResourcesOption,
+  AudienceOption,
 } from '../../types/encoreElements/index';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
@@ -68,9 +69,9 @@ const Edit = ({
   );
   const [selectedLicence, setSelectedLicence] = useState<string[]>([]);
   const [selectedDomain, setSelectedDomain] = useState<string[]>([]);
-  const [selectedTypeOfResource, setSelectedTypeOfResource] = useState<
-    string[]
-  >([]);
+  // const [selectedTypeOfResource, setSelectedTypeOfResource] = useState<
+  //   string[]
+  // >([]);
   const [selectedAudience, setSelectedAudience] = useState<string[]>([]);
   const [toastDisplayed, setToastDisplayed] = useState(false);
 
@@ -80,9 +81,9 @@ const Edit = ({
   const handleSelectedDomain = (selectedDomain: string[]) => {
     setSelectedDomain(selectedDomain);
   };
-  const handleSelectedTypeOfResource = (selectedTypeOfResource: string[]) => {
-    setSelectedTypeOfResource(selectedTypeOfResource);
-  };
+  // const handleSelectedTypeOfResource = (selectedTypeOfResource: string[]) => {
+  //   setSelectedTypeOfResource(selectedTypeOfResource);
+  // };
   const handleSelectedAudience = (selectedAudience: string[]) => {
     setSelectedAudience(selectedAudience);
   };
@@ -200,7 +201,7 @@ const Edit = ({
   }, [
     selectedLicence,
     selectedDomain,
-    selectedTypeOfResource,
+    // selectedTypeOfResource,
     selectedAudience,
   ]);
 
@@ -235,7 +236,7 @@ const Edit = ({
             </Box>
             <Box w="80%">
               <Flex>
-                <Box w="30%">
+                <Box w="48%">
                   <Flex paddingBottom="0.5rem" paddingTop="1rem">
                     <Text as="b">License</Text>
                   </Flex>
@@ -246,7 +247,7 @@ const Edit = ({
                   />
                 </Box>
                 <Spacer />
-                <Box w="65%">
+                <Box w="48%">
                   <Flex paddingBottom="0.5rem" paddingTop="1rem">
                     <Text as="b">
                       Select a collection to save the exercise to
@@ -262,18 +263,18 @@ const Edit = ({
                 </Box>
               </Flex>
               <Flex>
-                <Box w="30%">
+                <Box w="48%">
                   <Flex paddingBottom="0.5rem" paddingTop="1rem">
                     <Text as="b">Domain</Text>
                   </Flex>
                   <CheckboxDropdown
                     options={domainOptions}
                     onChange={handleSelectedDomain}
-                    title="Select"
+                    title="Domain"
                   />
                 </Box>
                 <Spacer />
-                <Box w="30%">
+                {/* <Box w="30%">
                   <Flex paddingBottom="0.5rem" paddingTop="1rem">
                     <Text as="b">Type of resources</Text>
                   </Flex>
@@ -282,16 +283,16 @@ const Edit = ({
                     onChange={handleSelectedTypeOfResource}
                     title="Select"
                   />
-                </Box>
+                </Box> */}
                 <Spacer />
-                <Box w="30%">
+                <Box w="48%">
                   <Flex paddingBottom="0.5rem" paddingTop="1rem">
                     <Text as="b">Audience</Text>
                   </Flex>
                   <CheckboxDropdown
-                    options={licenseOption}
+                    options={AudienceOption}
                     onChange={handleSelectedAudience}
-                    title="Select"
+                    title="Audience"
                   />
                 </Box>
               </Flex>
