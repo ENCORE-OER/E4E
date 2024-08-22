@@ -12,3 +12,12 @@ export const licenseOption: string[] = [
   'Creative Commons Aributtion Non-Commercial Share Alike',
   'Other',
 ];
+
+export const AudienceOption: string[] = [
+  'Primary School',
+  'Middle School',
+  'high school',
+  'College',
+  'Academy',
+  'Professional',
+];
