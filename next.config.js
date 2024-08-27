@@ -28,7 +28,7 @@ const ENCORE_API_URL =
 const SK_API_KEY = process.env.SK_API_KEY || 'Kdzwa9xxu_jW]LjkPaxX1;H;kUuU;0';
 const SETUP_MODEL =
   process.env.SETUP_MODEL ||
-  '{"secretKey": "72ad445a32ad4b899c9a90cb496aae20","modelName": "gpt35Turbo","endpoint": "https://ai4edu.openai.azure.com/"}';
+  '{"secretKey": "9d0c99f57dc748488db3d39bf4a0a1c9","modelName": "gpt35Turbo","endpoint": "https://ai4edu.openai.azure.com/"}';
 
 module.exports = {
   env: {
