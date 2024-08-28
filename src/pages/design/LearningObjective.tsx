@@ -15,7 +15,7 @@ import PathDesignGenLessonPlan from '../../components/Views/PathDesignViews/Path
 import PathDesignHeaderBars from '../../components/Views/PathDesignViews/PathDesignHeaderBars';
 import { CustomToast } from '../../utils/Toast/CustomToast';
 import { resetIndexedDB } from '../../utils/indexedDB';
-import { useIsSmallerScreen } from '../../utils/utils';
+import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 
 const Home = (/*props: DiscoverPageProps*/) => {
   const {
@@ -53,6 +53,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
   // const { user } = useUser();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
   const { addToast } = CustomToast();
+  const hydrated = useHasHydrated();
 
   // ==================================================================
 
@@ -357,7 +358,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -366,7 +367,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -415,7 +416,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             isNextButtonClicked={isNextButtonClicked}
           />
 
-          {step >= 1 && (
+          {hydrated && step >= 1 && (
             <Flex direction="column">
               {/*  This component contains the SkillsSearchBar, the BloomLevel DropDownMenu, The VerbsBloomLevel Checkbox and the LearningContext TextBox */}
               <PathDesignCentralBars
@@ -454,7 +455,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             handleNextClick={
               lessonActivities.length > 0 ? handleNextClick : undefined
             }
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>
