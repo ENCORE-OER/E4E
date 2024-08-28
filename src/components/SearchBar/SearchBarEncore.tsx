@@ -108,7 +108,7 @@ export default function SearchBarEncore({
         });
       }*/
     }
-  }
+  };
 
   // useEffect(() => {
   //   console.log('INPUT VALUE: ' + inputValue);
@@ -154,42 +154,42 @@ export default function SearchBarEncore({
               }
             }}
 
-          // Selection of a suggestion pressing the "Enter" on the keyboard works
-          // onKeyDown={(e) => {
-          //   if (e.key === 'Enter') {
-          //     e.preventDefault();
-          //     const currentValue = e.currentTarget.value
-          //       .trim()
-          //       .replace(/\s+/g, ' ');
+            // Selection of a suggestion pressing the "Enter" on the keyboard works
+            // onKeyDown={(e) => {
+            //   if (e.key === 'Enter') {
+            //     e.preventDefault();
+            //     const currentValue = e.currentTarget.value
+            //       .trim()
+            //       .replace(/\s+/g, ' ');
 
-          //     if (currentValue !== '' && /\S/.test(currentValue)) {
-          //       console.log("Selected Value: ", currentValue);
-          //       // setInputValue((prev) => [
-          //       //   ...new Set([...prev, currentValue]),
-          //       // ]); // to avoid duplicate // Set() is more efficient than filter()
-          //       //setKeywordsSelected((prev) => [...new Set([...prev, currentValue])]);
-          //       e.currentTarget.value = '';
-          //       setFreeText('');
+            //     if (currentValue !== '' && /\S/.test(currentValue)) {
+            //       console.log("Selected Value: ", currentValue);
+            //       // setInputValue((prev) => [
+            //       //   ...new Set([...prev, currentValue]),
+            //       // ]); // to avoid duplicate // Set() is more efficient than filter()
+            //       //setKeywordsSelected((prev) => [...new Set([...prev, currentValue])]);
+            //       e.currentTarget.value = '';
+            //       setFreeText('');
 
-          //       /*setInputValue((prev) => {
-          //         const updatedValues = prev.filter(
-          //           (value: string) => value !== currentValue
-          //         );  // to avoid duplicate
-          //         return [...updatedValues, currentValue];
-          //       });
+            //       /*setInputValue((prev) => {
+            //         const updatedValues = prev.filter(
+            //           (value: string) => value !== currentValue
+            //         );  // to avoid duplicate
+            //         return [...updatedValues, currentValue];
+            //       });
 
-          //       e.currentTarget.value = '';
+            //       e.currentTarget.value = '';
 
-          //       setKeywordsSelected((prev) => {
-          //         const isKeywordSelected = prev?.includes(currentValue);
-          //         if (!isKeywordSelected) {
-          //           return [...prev, currentValue];
-          //         }
-          //         return prev;
-          //       });*/
-          //     }
-          //   }
-          // }}
+            //       setKeywordsSelected((prev) => {
+            //         const isKeywordSelected = prev?.includes(currentValue);
+            //         if (!isKeywordSelected) {
+            //           return [...prev, currentValue];
+            //         }
+            //         return prev;
+            //       });*/
+            //     }
+            //   }
+            // }}
           >
             {({ tags }) =>
               tags?.map((tag, tid) => (

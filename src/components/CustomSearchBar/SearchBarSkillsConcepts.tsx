@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import {
   AutoComplete,
   AutoCompleteInput,
@@ -66,7 +66,9 @@ export default function SearchBarSkillsConcepts({
       // If the selected item exists in the list, add it to the selected tags
       if (selectedItem) {
         if (
-          !prev.some((item: SkillItemProps) => item.label === selectedItem.label)
+          !prev.some(
+            (item: SkillItemProps) => item.label === selectedItem.label
+          )
         ) {
           return [...prev, selectedItem];
         }
@@ -94,7 +96,7 @@ export default function SearchBarSkillsConcepts({
           // Add the tag to the freeTextTags array
           setTimeout(() => {
             setFreeTextTags((prevFreeTags) => [...prevFreeTags, newItem]);
-          }, 10)
+          }, 10);
           localStorage.setItem('freeTextTags', JSON.stringify(freeTextTags));
           // Add the new free text tag also to the selectedSkillConceptTags array
           return [...prev, newItem];
@@ -114,7 +116,9 @@ export default function SearchBarSkillsConcepts({
     );
 
     // Check if the deleted tag is a freeTextTag
-    if (freeTextTags.some((prevTag: SkillItemProps) => prevTag.label === tagLabel)) {
+    if (
+      freeTextTags.some((prevTag: SkillItemProps) => prevTag.label === tagLabel)
+    ) {
       // console.log('Tag deleted!');
       setFreeTextTags((prevFreeTags: SkillItemProps[]) => {
         const updatedFreeTags = prevFreeTags.filter(
@@ -176,8 +180,13 @@ export default function SearchBarSkillsConcepts({
     // const tempFilteredTags = selectedSkillConceptTags.filter(
     //   (tag: SkillItemProps) => validItems.has(tag.label)
     // );
-    const tempFilteredTags = selectedSkillConceptTags.filter( // Filter the tags from validItems and freeTextTags
-      (tag: SkillItemProps) => validItems.has(tag.label) || freeTextTags.some((freeTag: SkillItemProps) => freeTag.label === tag.label)
+    const tempFilteredTags = selectedSkillConceptTags.filter(
+      // Filter the tags from validItems and freeTextTags
+      (tag: SkillItemProps) =>
+        validItems.has(tag.label) ||
+        freeTextTags.some(
+          (freeTag: SkillItemProps) => freeTag.label === tag.label
+        )
     );
 
     // Remove tags not covered by the selected resources
@@ -195,7 +204,7 @@ export default function SearchBarSkillsConcepts({
 
   //   // Filtra selectedSkillConceptTags in base agli uniqueItems
   //   const tempFilteredTags = selectedSkillConceptTags.filter(
-  //     (tag: SkillItemProps) => validItems.has(tag.label) || 
+  //     (tag: SkillItemProps) => validItems.has(tag.label) ||
   //     freeTextTags.some((freeTag: SkillItemProps) => freeTag.label === tag.label)
   //   );
 
@@ -210,12 +219,14 @@ export default function SearchBarSkillsConcepts({
     }
   }, []);
 
-
   useEffect(() => {
     setSelectedSkillConceptTags((prevTags: SkillItemProps[]) => {
       // Filter out the tags from freeTextTags that are not already present in prevTags
-      const newTags = freeTextTags.filter((tag: SkillItemProps) =>
-        !prevTags.some((prevTag: SkillItemProps) => prevTag.label === tag.label)
+      const newTags = freeTextTags.filter(
+        (tag: SkillItemProps) =>
+          !prevTags.some(
+            (prevTag: SkillItemProps) => prevTag.label === tag.label
+          )
       );
 
       // If there are new tags, append them to prevTags
@@ -269,7 +280,23 @@ export default function SearchBarSkillsConcepts({
           []
         }
         onSelectOption={(e) => handleSelectOption(e.item.value)}
-        creatable={inputValue !== '' && /\S/.test(inputValue) && !uniqueItems.some(item => item.label === inputValue)} // Enable tag creation
+        creatable={
+          inputValue !== '' &&
+          /\S/.test(inputValue) &&
+          !uniqueItems.some((item) => item.label === inputValue)
+        } // Enable tag creation
+        // emptyState="No options found! - Add yourself atleast one concept."
+        emptyState={
+          <Flex align="center" justify="center" direction="column">
+            <Text fontWeight="bold" fontSize={14}>
+              No options found!
+            </Text>
+            <Text fontWeight="bold" fontSize={14}>
+              Add at least one skill or concept by free text.
+            </Text>
+          </Flex>
+        }
+      // freeSolo
       >
         {hydrated && (
           <AutoCompleteInput
@@ -299,29 +326,31 @@ export default function SearchBarSkillsConcepts({
         )}
         {hydrated && (
           <AutoCompleteList>
-            {hydrated && uniqueItems.map(
-              (uniqueItem: SkillItemProps) =>
-                !selectedSkillConceptTags?.some(
-                  (item: SkillItemProps) => item.label === uniqueItem.label
-                ) && (
-                  <AutoCompleteItem
-                    key={`item-${uniqueItem.id}`}
-                    value={uniqueItem.label}
-                    textTransform="capitalize"
-                  >
-                    {uniqueItem.label}
-                  </AutoCompleteItem>
-                )
-            )}
+            {hydrated &&
+              uniqueItems.map(
+                (uniqueItem: SkillItemProps) =>
+                  !selectedSkillConceptTags?.some(
+                    (item: SkillItemProps) => item.label === uniqueItem.label
+                  ) && (
+                    <AutoCompleteItem
+                      key={`item-${uniqueItem.id}`}
+                      value={uniqueItem.label}
+                      textTransform="capitalize"
+                    >
+                      {uniqueItem.label}
+                    </AutoCompleteItem>
+                  )
+              )}
             {inputValue.length > 0 &&
               inputValue !== '' &&
-              /\S/.test(inputValue) &&
-              <AutoCompleteItem
-                value={inputValue ? inputValue : ''}
-                textTransform="capitalize"
-              >
-                {inputValue}
-              </AutoCompleteItem>}
+              /\S/.test(inputValue) && (
+                <AutoCompleteItem
+                  value={inputValue ? inputValue : ''}
+                  textTransform="capitalize"
+                >
+                  {inputValue}
+                </AutoCompleteItem>
+              )}
           </AutoCompleteList>
         )}
       </AutoComplete>

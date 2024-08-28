@@ -147,7 +147,7 @@ export default function CentralBars({
           flexDirection="column"
           w="50%"
         >
-          {hydrated &&
+          {hydrated && (
             <Flex direction={'row'} align={'center'} gap={1}>
               <CustomDropDownMenu
                 data={bloomLevels}
@@ -160,7 +160,8 @@ export default function CentralBars({
               <IconInfoCircleTooltip
                 label_tooltip={`Bloom's Revised Taxonomy is a framework for classifying learning objectives (i.e., what an educator expects or intends students to learn). It distinguishes six categories that differ in cognitive complexity, from the least complex 'remember' to the most complex 'create'.`}
               />
-            </Flex>}
+            </Flex>
+          )}
           {isNextButtonClicked &&
             (bloomLevelIndex === null || bloomLevelIndex < 0) && (
               <Text color="error_label" fontSize="sm">
@@ -198,8 +199,8 @@ export default function CentralBars({
           <Text
             fontSize="sm"
             fontWeight="bold"
-          // paddingRight={`${SPACING}%`}
-          //w={`${DIMENSION - SPACING}%`}
+            // paddingRight={`${SPACING}%`}
+            //w={`${DIMENSION - SPACING}%`}
           >
             {contextTitleTextBox}
           </Text>
