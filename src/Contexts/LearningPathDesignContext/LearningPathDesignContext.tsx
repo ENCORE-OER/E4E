@@ -53,6 +53,7 @@ type LearnignPathDesignContextProps = {
   learningTextContext: string;
   defaultLearningContext: string; // Default learning context build with a prompt using selectedEducatorExperience, selectedContext, selectedGroupDimension, selectedLearnerExperience
   selectedSkillConceptTags: SkillItemProps[];
+  freeTextTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
@@ -78,6 +79,9 @@ type LearnignPathDesignContextProps = {
   handleDefaultLearningContext: () => void;
   handleBloomLevelChange: (bloomLevelIndex: number) => void;
   setSelectedSkillConceptTags: React.Dispatch<
+    React.SetStateAction<SkillItemProps[]>
+  >;
+  setFreeTextTags: React.Dispatch<
     React.SetStateAction<SkillItemProps[]>
   >;
   handleSkillsChange: (newSkills: SkillItemProps[]) => void;
@@ -263,6 +267,10 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const [selectedSkillConceptTags, setSelectedSkillConceptTags] =
     useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
 
+  // Tags from free text in the searchBar for the skills and concepts
+  const [freeTextTags, setFreeTextTags] =
+    useLocalStorage<SkillItemProps[]>('freeTextTags', []);
+
   // Use for storage of the text in the text input
   const [learningTextContext, setLearningTextContext] = useLocalStorage<string>(
     'learningTextContext',
@@ -387,6 +395,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // handleResourceIndexChange(-1);
     setResourcesIndex([]);
     setBloomLevelIndex(-1);
+    setFreeTextTags([]);
     setSelectedSkillConceptTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
@@ -1156,6 +1165,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         defaultLearningContext,
         selectedSkillConceptTags,
         setSelectedSkillConceptTags,
+        freeTextTags,
+        setFreeTextTags,
         bloomLevelIndex,
         currentBloomOptions,
         step,
