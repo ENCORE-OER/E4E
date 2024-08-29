@@ -189,27 +189,33 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const bloomLevels = [
     {
       name: 'Remember',
-      description: 'Recalling facts and basic concepts, such as recognizing terms, definitions, or specific details.',
+      description:
+        'Recalling facts and basic concepts, such as recognizing terms, definitions, or specific details.',
     },
     {
       name: 'Understand',
-      description: 'Comprehending information, interpreting meaning, and explaining ideas in your own words.',
+      description:
+        'Comprehending information, interpreting meaning, and explaining ideas in your own words.',
     },
     {
       name: 'Apply',
-      description: 'Using knowledge in new situations to solve problems, execute procedures, or perform tasks.',
+      description:
+        'Using knowledge in new situations to solve problems, execute procedures, or perform tasks.',
     },
     {
       name: 'Analyze',
-      description: 'Breaking information into parts to explore patterns and relationships, and drawing logical connections.',
+      description:
+        'Breaking information into parts to explore patterns and relationships, and drawing logical connections.',
     },
     {
       name: 'Evaluate',
-      description: 'Making judgments based on criteria and standards, assessing the value of ideas, or choosing between alternatives.',
+      description:
+        'Making judgments based on criteria and standards, assessing the value of ideas, or choosing between alternatives.',
     },
     {
       name: 'Create',
-      description: 'Combining elements to form new structures or ideas, generating original products, or developing new approaches.',
+      description:
+        'Combining elements to form new structures or ideas, generating original products, or developing new approaches.',
     },
   ];
 
