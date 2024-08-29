@@ -37,8 +37,12 @@ export default function SearchBarSkillsConcepts({
   isHighlighted,
 }: SearchBarV2Props) {
   const { collections } = useCollectionsContext();
-  const { selectedSkillConceptTags, setSelectedSkillConceptTags, freeTextTags, setFreeTextTags } =
-    useLearningPathDesignContext();
+  const {
+    selectedSkillConceptTags,
+    setSelectedSkillConceptTags,
+    freeTextTags,
+    setFreeTextTags,
+  } = useLearningPathDesignContext();
   const hydrated = useHasHydrated();
   const [inputValue, setInputValue] = useState<string>('');
   const [uniqueItems, setUniqueItems] = useState<SkillItemProps[]>([]);
@@ -54,8 +58,6 @@ export default function SearchBarSkillsConcepts({
   const oers = useMemo(() => {
     return collection?.oers || [];
   }, [collection]); // useMemo helps in optimizing performance by preventing expensive computations from being executed on every render if their dependencies haven't changed.
-
-
 
   const handleInputChange = debounce((value: string) => {
     setInputValue(value);
@@ -80,7 +82,9 @@ export default function SearchBarSkillsConcepts({
     if (!alreadySelected) {
       if (selectedItem) {
         // If the selected item exists in the list, add it to the selected tags
-        setSelectedSkillConceptTags((prev: SkillItemProps[]) => prev.concat(selectedItem));
+        setSelectedSkillConceptTags((prev: SkillItemProps[]) =>
+          prev.concat(selectedItem)
+        );
       } else {
         // Create a new tag with the free text
         let newItem: SkillItemProps = { id: 0, label: selectedValue };
@@ -115,18 +119,22 @@ export default function SearchBarSkillsConcepts({
     // Update selected tags
     setSelectedSkillConceptTags((prev: SkillItemProps[]) =>
       prev.filter(
-        (value: SkillItemProps) => value.label.toLowerCase() !== normalizedTagLabel
+        (value: SkillItemProps) =>
+          value.label.toLowerCase() !== normalizedTagLabel
       )
     );
 
     // Check if the deleted tag is a freeTextTag
-    if (freeTextTags.some(
-      (prevTag: SkillItemProps) => prevTag.label.toLowerCase() === normalizedTagLabel
-    )
+    if (
+      freeTextTags.some(
+        (prevTag: SkillItemProps) =>
+          prevTag.label.toLowerCase() === normalizedTagLabel
+      )
     ) {
       setFreeTextTags((prevFreeTags: SkillItemProps[]) => {
         const updatedFreeTags = prevFreeTags.filter(
-          (value: SkillItemProps) => value.label.toLowerCase() !== normalizedTagLabel
+          (value: SkillItemProps) =>
+            value.label.toLowerCase() !== normalizedTagLabel
         );
         return updatedFreeTags;
       });
@@ -203,7 +211,8 @@ export default function SearchBarSkillsConcepts({
       const newTags = freeTextTags.filter(
         (freeTag) =>
           !selectedSkillConceptTags.some(
-            (prevTag) => prevTag.label.toLowerCase() === freeTag.label.toLowerCase()
+            (prevTag) =>
+              prevTag.label.toLowerCase() === freeTag.label.toLowerCase()
           )
       );
 
@@ -215,7 +224,7 @@ export default function SearchBarSkillsConcepts({
 
   useEffect(() => {
     if (filteredTags.length < selectedSkillConceptTags.length) {
-      setFilteredTags(selectedSkillConceptTags)
+      setFilteredTags(selectedSkillConceptTags);
     }
   }, [selectedSkillConceptTags]);
 
@@ -233,7 +242,7 @@ export default function SearchBarSkillsConcepts({
         // If some tags were removed update the selectedSkillConceptTags array
         setTimeout(() => {
           setSelectedSkillConceptTags(filteredTags);
-        }, 10)
+        }, 10);
       }
       setDeleteTag(false);
     }
@@ -264,7 +273,9 @@ export default function SearchBarSkillsConcepts({
         creatable={
           inputValue !== '' &&
           /\S/.test(inputValue) &&
-          !uniqueItems.some((item) => item.label.toLowerCase() === inputValue?.toLowerCase())
+          !uniqueItems.some(
+            (item) => item.label.toLowerCase() === inputValue?.toLowerCase()
+          )
         }
         emptyState={
           <Flex align="center" justify="center" direction="column">
@@ -305,9 +316,7 @@ export default function SearchBarSkillsConcepts({
           </AutoCompleteInput>
         )}
         {hydrated && (
-          <AutoCompleteList
-            textTransform="capitalize"
-          >
+          <AutoCompleteList textTransform="capitalize">
             {hydrated &&
               uniqueItems.map(
                 (uniqueItem: SkillItemProps) =>

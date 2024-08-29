@@ -9,6 +9,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -68,8 +69,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-                data[itemIndex]?.title ||
-                defaultMenuTitle
+            data[itemIndex]?.title ||
+            defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -251,44 +252,58 @@ export default function CustomDropDownMenu({
           <MenuOptionGroup>
             {hydrated &&
               data?.map((item: ArrayProps, index: number) => (
-                <Flex p={0.5} key={index}>
-                  <MenuItem
-                    onClick={
-                      !isCheckBoxNeeded
-                        ? () => handleMenuItemClick(item, index)
-                        : undefined
-                    }
-                    bg={
-                      Array.isArray(itemIndex)
-                        ? itemIndex.includes(index)
-                          ? 'accent.200'
+                <Tooltip
+                  key={index}
+                  hasArrow
+                  placement="right"
+                  label={item.description} // Tooltip text
+                  aria-label={`Tooltip for ${item.name || item.title}`}
+                  //ml="1px"
+                  bg="gray.200"
+                  color="primary"
+                  p={2}
+                  fontSize={'sm'}
+                  borderRadius={5}
+                >
+                  <Flex p={0.5} >
+                    <MenuItem
+                      onClick={
+                        !isCheckBoxNeeded
+                          ? () => handleMenuItemClick(item, index)
                           : undefined
-                        : itemIndex === index
-                          ? 'accent.200'
-                          : undefined
-                    }
-                    borderRadius={5}
-                  >
-                    <Flex direction={'row'} w="100%">
-                      <Text flex="1">{item.name || item.title}</Text>
-                      {isCheckBoxNeeded && (
-                        <Flex flex="1" justify={'flex-end'}>
-                          <Checkbox
-                            key={index}
-                            value={item.name || item.title}
-                            colorScheme="yellow"
-                            onChange={() => handleMenuItemClick(item, index)}
-                            isChecked={
-                              Array.isArray(itemIndex)
-                                ? itemIndex.includes(index)
-                                : itemIndex === index
-                            }
-                          />
-                        </Flex>
-                      )}
-                    </Flex>
-                  </MenuItem>
-                </Flex>
+                      }
+                      bg={
+                        Array.isArray(itemIndex)
+                          ? itemIndex.includes(index)
+                            ? 'accent.200'
+                            : undefined
+                          : itemIndex === index
+                            ? 'accent.200'
+                            : undefined
+                      }
+                      borderRadius={5}
+                    >
+                      <Flex direction={'row'} w="100%">
+                        <Text flex="1">{item.name || item.title}</Text>
+                        {isCheckBoxNeeded && (
+                          <Flex flex="1" justify={'flex-end'}>
+                            <Checkbox
+                              key={index}
+                              value={item.name || item.title}
+                              colorScheme="yellow"
+                              onChange={() => handleMenuItemClick(item, index)}
+                              isChecked={
+                                Array.isArray(itemIndex)
+                                  ? itemIndex.includes(index)
+                                  : itemIndex === index
+                              }
+                            />
+                          </Flex>
+                        )}
+                      </Flex>
+                    </MenuItem>
+                  </Flex>
+                </Tooltip>
               ))}
           </MenuOptionGroup>
         </MenuList>
