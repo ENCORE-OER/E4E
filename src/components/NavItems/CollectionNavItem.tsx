@@ -1,7 +1,6 @@
 /* NavItems for the SideBar */
 
-import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, Flex, HStack, Heading, Icon } from '@chakra-ui/react';
+import { Flex, HStack, Heading, Icon } from '@chakra-ui/react';
 import {
   Dispatch,
   ReactText,
@@ -13,6 +12,7 @@ import { FcFolder } from 'react-icons/fc';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
+import ActionButtonCollections from '../Buttons/ActionButtonCollections/ActionButtonCollections';
 import DeleteAlertDialog from '../Modals/AlertDialogs/DeleteAlertDialog/DeleteAlertDialog';
 
 interface CollectionNavItemProps {
@@ -24,6 +24,7 @@ interface CollectionNavItemProps {
   collectionClicked: boolean;
   setCollectionIndex: Dispatch<SetStateAction<number>>;
   collectionIndex: number;
+  duplicateCollection: (idCollection: number) => Promise<void>;
   deleteCollection: (id: number, name: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
@@ -44,6 +45,7 @@ const CollectionNavItem = ({
   collectionClicked,
   collectionIndex,
   setCollectionIndex,
+  duplicateCollection,
   deleteCollection,
   isSmallerScreen,
   isAddContentModal,
@@ -93,24 +95,40 @@ const CollectionNavItem = ({
     setItemToDelete({ collection_id, collection_name });
   };
 
-  const handleDeleteCollection = (idColl: number, nameColl: string) => {
+
+
+  const handleDeleteCollection = async (idColl: number, nameColl: string) => {
     if (collectionClicked) {
       setCollectionClicked(false);
     }
-    deleteCollection(idColl, nameColl);
+    await deleteCollection(idColl, nameColl);
     if (selectedCollectionIndex === collectionIndex) {
       handleCollectionIndexChange(-1);
       setResourcesIndex([]);
     }
   };
 
-  const handleDeleteButtonClick = (idColl: number, nameColl: string) => {
+  const handleDeleteButtonClick = async (idColl: number, nameColl: string) => {
     if (collection.oers.length > 0 && collection.oers !== null) {
       onOpenDeleteAlertDialog(idColl, nameColl);
     } else {
-      handleDeleteCollection(idColl, nameColl);
+      await handleDeleteCollection(idColl, nameColl);
     }
   };
+
+  const handleDuplicateButtonClick = async (
+    idCollection: number,
+  ) => {
+    try {
+      await duplicateCollection(idCollection);
+    } catch (error) {
+      console.error(error);
+      // addToast({
+      //   message: `${error}`,
+      //   type: 'error',
+      // });
+    }
+  }
 
   return (
     <>
@@ -127,7 +145,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -156,27 +174,31 @@ const CollectionNavItem = ({
           )}
         </Flex>
         {!isAddContentModal && (
-          <Button
-            variant="ghost"
-            _hover={{ bg: 'gray.300' }}
-            onClick={(e) => {
-              e.preventDefault();
-              handleDeleteButtonClick(collection.id, collection.name);
-            }}
-            position="absolute"
-            right={'0px'}
-          >
-            <DeleteIcon />
-          </Button>
+          // <Button
+          //   variant="ghost"
+          //   _hover={{ bg: 'gray.300' }}
+          //   onClick={(e) => {
+          //     e.preventDefault();
+          //     handleDeleteButtonClick(collection.id, collection.name);
+          //   }}
+          //   position="absolute"
+          //   right={'0px'}
+          // >
+          //   <DeleteIcon />
+          // </Button>
+          <ActionButtonCollections
+            handleDuplicateButtonClick={async () => await handleDuplicateButtonClick(collection.id)}
+            handleDeleteButtonClick={async () => await handleDeleteButtonClick(collection.id, collection.name)}
+          />
         )}
       </HStack>
 
       <DeleteAlertDialog
         isOpen={isDeleteAlertDialogOpen}
         onClose={onCloseDeleteAlertDialog}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (itemToDelete) {
-            handleDeleteCollection(
+            await handleDeleteCollection(
               itemToDelete.collection_id,
               itemToDelete.collection_name
             );
@@ -185,9 +207,8 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${
-          itemToDelete ? itemToDelete.collection_name : ''
-        }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
+          }`}
       />
     </>
   );

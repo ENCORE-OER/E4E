@@ -69,8 +69,8 @@ export default function CustomDropDownMenu({
         setMenuTitle(
           itemIndex > -1
             ? data[itemIndex]?.name ||
-            data[itemIndex]?.title ||
-            defaultMenuTitle
+                data[itemIndex]?.title ||
+                defaultMenuTitle
             : defaultMenuTitle
         );
       }
@@ -128,18 +128,22 @@ export default function CustomDropDownMenu({
             isBloomLevel
               ? Array.isArray(itemIndex)
                 ? // Se itemIndex è un array, mostra la descrizione del primo elemento selezionato
-                data[itemIndex[0]]?.description
+                  data[itemIndex[0]]?.description
                 : itemIndex !== undefined
                   ? // Se itemIndex è un numero, mostra la descrizione corrispondente
-                  data[itemIndex]?.description
+                    data[itemIndex]?.description
                   : null // Altrimenti non mostrare nulla
               : null
           }
           aria-label={
             Array.isArray(itemIndex)
-              ? `Tooltip for ${data[itemIndex[0]]?.name || data[itemIndex[0]]?.title}`
+              ? `Tooltip for ${
+                  data[itemIndex[0]]?.name || data[itemIndex[0]]?.title
+                }`
               : itemIndex !== undefined
-                ? `Tooltip for ${data[itemIndex]?.name || data[itemIndex]?.title}`
+                ? `Tooltip for ${
+                    data[itemIndex]?.name || data[itemIndex]?.title
+                  }`
                 : ''
           }
           //ml="1px"
@@ -261,7 +265,9 @@ export default function CustomDropDownMenu({
                       borderRadius={5}
                     >
                       <Flex direction={'row'} w="100%">
-                        <Text flex="1" pr={5}>{item.name || item.title}</Text>
+                        <Text flex="1" pr={5}>
+                          {item.name || item.title}
+                        </Text>
                         {isCheckBoxNeeded && (
                           <Flex justify={'flex-end'}>
                             <Checkbox

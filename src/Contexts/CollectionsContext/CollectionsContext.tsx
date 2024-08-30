@@ -8,17 +8,19 @@ import {
   CollectionProps,
   DeleteCollectionFunction,
   DeleteResourceFunction,
+  DuplicateCollectionFunction,
   OerConceptInfo,
   OerInCollectionProps,
   SelectedConceptsFunction,
   ToggleLikeFunction,
 } from '../../types/encoreElements';
 import { CustomToast } from '../../utils/Toast/CustomToast';
-import { useHasHydrated } from '../../utils/utils';
+import { randomColorGenerator, useHasHydrated } from '../../utils/utils';
 
 type CollectionContextProps = {
   collections: CollectionProps[];
   addCollection: AddCollectionFunction;
+  duplicateCollection: DuplicateCollectionFunction;
   deleteCollection: DeleteCollectionFunction;
   addResource: AddResourceFunction;
   deleteResourceFromCollection: DeleteResourceFunction;
@@ -50,10 +52,25 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const hydrated = useHasHydrated();
 
+  const generateUniqueColor = async (): Promise<string> => {
+    // Generate random color
+    let collectionColor = "";
+    let uniqueColor = false;
+    // Generate an unique different color
+    while (!uniqueColor) {
+      collectionColor = randomColorGenerator();
+      // Check if the color is already present in other collections
+      const sameColorCollection = collections?.some((collection: CollectionProps) => collection.color === collectionColor);
+      if (!sameColorCollection) {
+        uniqueColor = true
+      }
+    }
+    return collectionColor;
+  };
+
   const addCollection = async (
     id: number,
     name: string,
-    color: string
   ): Promise<void> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
@@ -75,23 +92,26 @@ export const CollectionsProvider = ({ children }: any) => {
             type: 'error',
           });
         } else {
+          const collectionColor = await generateUniqueColor();
+          // Create new collection object
           const newCollection: CollectionProps = {
             id: id,
             name: name,
             oers: [],
             conceptsSelected: [],
-            color: color,
+            color: collectionColor,
           };
-
-          addToast({
-            message: `Collection "${name}" created successfully!`,
-            type: 'success',
-          });
 
           //console.log('NEW COLLECTION: ' + newCollection.name);
           return new Promise((resolve) => {
             setCollections([...collections, newCollection]);
             //console.log("I'm triggering collections");
+
+            addToast({
+              message: `Collection "${name}" created successfully!`,
+              type: 'success',
+            });
+
             resolve();
           });
         }
@@ -104,15 +124,71 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
+  const duplicateCollection = async (collectionId: number): Promise<void> => {
+    try {
+
+      console.log("//////////////////////")
+
+      // Find the collection to duplicate by its ID
+      const collectionToDuplicate = collections.find(
+        (collection: CollectionProps) => collection.id === collectionId
+      );
+
+      // If the collection is not found, throw an error
+      if (!collectionToDuplicate) {
+        throw new Error('Collection not found');
+      }
+
+      if (collectionToDuplicate.oers.length > 0) {
+        // Create a new collection by duplicating the original with a new ID and a modified name
+        const newId = Math.max(...collections.map((col) => col.id)) + 1; // Generate a new unique ID
+        const collectionColor = await generateUniqueColor(); // Generate new color
+        const duplicatedCollection: CollectionProps = {
+          ...collectionToDuplicate, // Copy all properties from the original collection
+          id: newId, // Assign the new unique ID
+          name: `${collectionToDuplicate.name} (copy)`, // Append "(copy)" to the name
+          color: collectionColor,  // Assign the new color
+        };
+
+        // // Add the duplicated collection to the state
+        // setCollections(collections.concat(duplicatedCollection));
+
+        // // Display a success toast notification
+        // addToast({
+        //   message: `Collection "${duplicatedCollection.name}" duplicated successfully!`,
+        //   type: 'success',
+        // });
+
+        return new Promise((resolve) => {
+          // Add the duplicated collection to the state
+          setCollections(collections.concat(duplicatedCollection));
+
+          // Display a success toast notification
+          addToast({
+            message: `Collection "${duplicatedCollection.name}" duplicated successfully!`,
+            type: 'success',
+          });
+
+          resolve();
+        });
+      } else {
+        throw new Error('Cannot duplicate an empty collection. Please add at least one resource before proceeding.');
+      }
+    } catch (error) {
+      // Display an error toast notification if duplication fails
+      addToast({
+        message: `Error duplicating collection: ${error}`,
+        type: 'error',
+      });
+    }
+  };
+
   const deleteCollection = async (id: number, name: string): Promise<void> => {
     try {
       const updatedCollections = collections.filter(
         (collection: CollectionProps) => collection.id !== id
       );
-      addToast({
-        message: `Collection "${name}" delated succesfully!`,
-        type: 'success',
-      });
+
       return new Promise((resolve) => {
         collections
           ?.find((collection: CollectionProps) => collection.id === id)
@@ -121,6 +197,11 @@ export const CollectionsProvider = ({ children }: any) => {
             await api.updateCount(oer.id);
           });
         setCollections(updatedCollections);
+
+        addToast({
+          message: `Collection "${name}" delated succesfully!`,
+          type: 'success',
+        });
         //console.log("I'm triggering collections");
         resolve();
       });
@@ -239,15 +320,15 @@ export const CollectionsProvider = ({ children }: any) => {
           console.log('Waiting for hydration...');
         }
 
-        addToast({
-          message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
-          type: 'success',
-        });
-
         return new Promise(async (resolve) => {
           const api = new APIV2(undefined);
           await api.updateCount(idOer);
           setCollections(updatedCollections);
+
+          addToast({
+            message: `OER succesfully deleted from "${collections[collectionIndex]?.name}" collection.`,
+            type: 'success',
+          });
           //setSelectedConceptsForCollection(collections[collectionIndex].id, updatedConceptsSelected);
           resolve();
         });
@@ -329,6 +410,7 @@ export const CollectionsProvider = ({ children }: any) => {
       value={{
         collections,
         addCollection,
+        duplicateCollection,
         deleteCollection,
         addResource,
         deleteResourceFromCollection,

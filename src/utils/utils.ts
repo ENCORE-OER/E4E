@@ -419,3 +419,11 @@ export const sortOers = (
   });
   return sortedData;
 };
+
+// random color generator
+export const randomColorGenerator = () => {
+  const randomColor =
+    '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).slice(1, 7);
+
+  return randomColor;
+};
