@@ -6,11 +6,13 @@ import ActionButtonsListCollection from './ActionButtonsListCollection';
 type ActionButtonCollectionsProps = {
   handleDuplicateButtonClick: () => Promise<void>;
   handleDeleteButtonClick: () => Promise<void>;
+  handleRenameButtonClick: () => void;
 };
 
 export default function ActionButtonCollections({
   handleDuplicateButtonClick,
   handleDeleteButtonClick,
+  handleRenameButtonClick
 }: ActionButtonCollectionsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -20,6 +22,11 @@ export default function ActionButtonCollections({
 
   const handleClose = () => {
     if (isOpen) setIsOpen(false);
+  };
+
+  const handleRenameClick = async () => {
+    handleClose();
+    await handleRenameButtonClick();
   };
 
   const handleDeleteClick = async () => {
@@ -48,6 +55,7 @@ export default function ActionButtonCollections({
       </MenuButton>
       <ActionButtonsListCollection
         handleClose={handleClose}
+        handleRenameButtonClick={handleRenameClick}
         handleDuplicateButtonClick={handleDuplicateClick}
         handleDeleteButtonClick={handleDeleteClick}
       />

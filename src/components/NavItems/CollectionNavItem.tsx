@@ -14,6 +14,7 @@ import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
 import ActionButtonCollections from '../Buttons/ActionButtonCollections/ActionButtonCollections';
 import DeleteAlertDialog from '../Modals/AlertDialogs/DeleteAlertDialog/DeleteAlertDialog';
+import RenameCollectionModal from '../Modals/CollectionModals/RenameCollectionModal';
 
 interface CollectionNavItemProps {
   collection: CollectionProps;
@@ -26,6 +27,7 @@ interface CollectionNavItemProps {
   collectionIndex: number;
   duplicateCollection: (idCollection: number) => Promise<void>;
   deleteCollection: (id: number, name: string) => Promise<void>;
+  renameCollection: (id: number, newName: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean;
@@ -47,6 +49,7 @@ const CollectionNavItem = ({
   setCollectionIndex,
   duplicateCollection,
   deleteCollection,
+  renameCollection,
   isSmallerScreen,
   isAddContentModal,
 }: CollectionNavItemProps) => {
@@ -95,6 +98,18 @@ const CollectionNavItem = ({
     setItemToDelete({ collection_id, collection_name });
   };
 
+  const [isRenameCollectionModalOpen, setRenameCollectionModalOpen] =
+    useState<boolean>(false);
+
+  const handleOpenRenameCollectionModal = () => {
+    setRenameCollectionModalOpen(true);
+  };
+
+  const handleCloseRenameCollectionModal = () => {
+    setRenameCollectionModalOpen(false);
+  };
+
+
   const handleDeleteCollection = async (idColl: number, nameColl: string) => {
     if (collectionClicked) {
       setCollectionClicked(false);
@@ -141,7 +156,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -189,6 +204,7 @@ const CollectionNavItem = ({
             handleDeleteButtonClick={async () =>
               await handleDeleteButtonClick(collection.id, collection.name)
             }
+            handleRenameButtonClick={handleOpenRenameCollectionModal}
           />
         )}
       </HStack>
@@ -207,10 +223,18 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${
-          itemToDelete ? itemToDelete.collection_name : ''
-        }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
+          }`}
       />
+
+      <RenameCollectionModal
+        isOpen={isRenameCollectionModalOpen}
+        onClose={handleCloseRenameCollectionModal}
+        collection={collection}
+        renameCollection={renameCollection}
+        maxLength={30}
+      />
+
     </>
   );
 };

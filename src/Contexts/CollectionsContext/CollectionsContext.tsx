@@ -11,6 +11,7 @@ import {
   DuplicateCollectionFunction,
   OerConceptInfo,
   OerInCollectionProps,
+  RenameCollectionFunction,
   SelectedConceptsFunction,
   ToggleLikeFunction,
 } from '../../types/encoreElements';
@@ -22,6 +23,7 @@ type CollectionContextProps = {
   addCollection: AddCollectionFunction;
   duplicateCollection: DuplicateCollectionFunction;
   deleteCollection: DeleteCollectionFunction;
+  renameCollection: RenameCollectionFunction;
   addResource: AddResourceFunction;
   deleteResourceFromCollection: DeleteResourceFunction;
   indexCollectionClicked: number;
@@ -60,7 +62,6 @@ export const CollectionsProvider = ({ children }: any) => {
     return maxId + 1;
   };
 
-
   const generateUniqueColor = async (): Promise<string> => {
     let collectionColor = '';
     let uniqueColor = false;
@@ -88,11 +89,10 @@ export const CollectionsProvider = ({ children }: any) => {
         //   message: 'Write a name for the collection!',
         //   type: 'error',
         // });
-        throw new Error("Write a name for the collection!");
+        throw new Error('Write a name for the collection!');
       } else {
         const isCollectionPresent = collections.find(
-          (collection: CollectionProps) =>
-            collection.name === name
+          (collection: CollectionProps) => collection.name === name
         );
         if (isCollectionPresent) {
           throw new Error(`Collection "${name}" already exists!`);
@@ -155,7 +155,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
       if (collectionToDuplicate.oers.length > 0) {
         // Create a new collection by duplicating the original with a new ID and a modified name
-        const newId = await generateUniqueId();// Generate a new unique ID
+        const newId = await generateUniqueId(); // Generate a new unique ID
         const collectionColor = await generateUniqueColor(); // Generate new color
         const duplicatedCollection: CollectionProps = {
           ...collectionToDuplicate, // Copy all properties from the original collection
@@ -228,6 +228,56 @@ export const CollectionsProvider = ({ children }: any) => {
       });
     }
   };
+
+  const renameCollection = async (id: number, newName: string): Promise<void> => {
+    try {
+      if (newName.trim() === '') {
+        // addToast({
+        //   message: 'Write a name for the collection!',
+        //   type: 'error',
+        // });
+        throw new Error('Write a name for the collection!');
+      }
+
+      const collectionToRename = collections.find(
+        (collection: CollectionProps) => collection.id === id
+      );
+
+      if (!collectionToRename) {
+        throw new Error('Collection not found');
+      }
+
+      // Check if a collection with the new name already exists
+      const isCollectionPresent = collections.some(
+        (collection: CollectionProps) => collection.name === newName
+      );
+
+      if (isCollectionPresent) {
+        throw new Error(`Collection "${newName}" already exists!`);
+      }
+
+      // Update the collection name
+      const updatedCollections = collections.map((collection) =>
+        collection.id === id
+          ? { ...collection, name: newName }
+          : collection
+      );
+
+      // Update the collections array
+      setCollections(updatedCollections);
+
+      addToast({
+        message: `Collection renamed to "${newName}" successfully!`,
+        type: 'success',
+      });
+    } catch (error) {
+      addToast({
+        message: `Renaming failed. ${error}`,
+        type: 'error',
+      });
+    }
+  };
+
 
   const addResource = async (
     collectionId: number,
@@ -428,6 +478,7 @@ export const CollectionsProvider = ({ children }: any) => {
         addCollection,
         duplicateCollection,
         deleteCollection,
+        renameCollection,
         addResource,
         deleteResourceFromCollection,
         indexCollectionClicked, //used in CollectionMenu component

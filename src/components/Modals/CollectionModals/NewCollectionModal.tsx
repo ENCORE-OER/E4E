@@ -51,7 +51,6 @@ export default function NewCollectionModal({
 
   const handleSaveResource = async () => {
     if (nameCollection) {
-
       // Create the new collection
       await addCollection(nameCollection);
       // const id_new = await addCollection(nameCollection);
@@ -77,15 +76,18 @@ export default function NewCollectionModal({
       const fetchData = async () => {
         // console.log("adding resource////")
         // Add resource to the new collection
-        await addResource(collections[collections.length - 1].id, oerToAddCollection);  // The new collection is the last of the array
+        await addResource(
+          collections[collections.length - 1].id,
+          oerToAddCollection
+        ); // The new collection is the last of the array
       };
 
       // Call the function when the collection is really created
-      if (hydrated)
+      if (hydrated) {
         fetchData();
+      }
     }
   }, [collections.length]); // Trigger when the collections change
-
 
   return (
     <Modal isOpen={isOpen} onClose={handleCloseCollectionModal}>

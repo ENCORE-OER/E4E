@@ -51,6 +51,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
     collections,
     duplicateCollection,
     deleteCollection,
+    renameCollection,
     deleteResourceFromCollection,
     setSelectedConceptsForCollection,
     addCollection, // for InfoCardModal
@@ -322,8 +323,8 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
         <Flex
           //w="full"
           justifyContent="left"
-          //minH="0px"
-          //justify="space-between"
+        //minH="0px"
+        //justify="space-between"
         >
           <Heading>Your resources</Heading>
         </Flex>
@@ -380,6 +381,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                         setCollectionIndex={setCollectionIndex}
                         duplicateCollection={duplicateCollection}
                         deleteCollection={deleteCollection}
+                        renameCollection={renameCollection}
                         isSmallerScreen={isSmallerScreen}
                         isAddContentModal={isAddContentModal}
                       >
@@ -398,6 +400,7 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                     setCollectionIndex={setCollectionIndex}
                     duplicateCollection={duplicateCollection}
                     deleteCollection={deleteCollection}
+                    renameCollection={renameCollection}
                     isSmallerScreen={isSmallerScreen}
                     isAddContentModal={isAddContentModal}
                   >
@@ -441,10 +444,10 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
               isAddContentModal={isAddContentModal}
               resourcesSelected={resourcesSelectedAddContent}
               addSelectedResourcesAddContent={addSelectedResourcesAddContent}
-              // updateResourcesSelected={updateResourcesSelected}
-              // addSelectedResource={addSelectedResource}
-              // removeSelectedResource={removeSelectedResource}
-              // resetSelectedResources={resetSelectedResources}
+            // updateResourcesSelected={updateResourcesSelected}
+            // addSelectedResource={addSelectedResource}
+            // removeSelectedResource={removeSelectedResource}
+            // resetSelectedResources={resetSelectedResources}
             />
           )}
         </Flex>
