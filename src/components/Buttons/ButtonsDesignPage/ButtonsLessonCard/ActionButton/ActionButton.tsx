@@ -1,8 +1,4 @@
-import {
-  Button,
-  Menu,
-  MenuButton
-} from '@chakra-ui/react';
+import { Button, Menu, MenuButton } from '@chakra-ui/react';
 import { useState } from 'react';
 import { CustomToast } from '../../../../../utils/Toast/CustomToast';
 import IconVerticalPoints from '../../../../Icons/IconVerticalPoints/IconVerticalPoints';

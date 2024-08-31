@@ -226,9 +226,9 @@ export default function LearningPathTableRow({
       >
         <Flex w="100%" justify="center" px={0}>
           {hydrated &&
-            ((row.content?.oers?.length ?? 0) > 0 ||
-              (row.content?.uploadedFiles?.length ?? 0) > 0) &&
-            !isPrinting ? (
+          ((row.content?.oers?.length ?? 0) > 0 ||
+            (row.content?.uploadedFiles?.length ?? 0) > 0) &&
+          !isPrinting ? (
             <Flex direction="column" gap={0.5}>
               {hydrated &&
                 row.content?.oers?.map(
@@ -300,14 +300,14 @@ export default function LearningPathTableRow({
                   <Text
                     key={`file-${index}`}
                     whiteSpace="pre-wrap"
-                  // as="link"
-                  // onClick={(e) => {
-                  //     e.preventDefault();
-                  //     window?.open(
-                  //         content.urlFile,
-                  //         '_blank'
-                  //     );
-                  // }}
+                    // as="link"
+                    // onClick={(e) => {
+                    //     e.preventDefault();
+                    //     window?.open(
+                    //         content.urlFile,
+                    //         '_blank'
+                    //     );
+                    // }}
                   >
                     {`${content.fileName};\n`}
                   </Text>

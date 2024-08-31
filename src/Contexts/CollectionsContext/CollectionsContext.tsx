@@ -52,50 +52,62 @@ export const CollectionsProvider = ({ children }: any) => {
 
   const hydrated = useHasHydrated();
 
+  const generateUniqueId = async (): Promise<number> => {
+    // Find the maximum ID already present in the collection
+    const maxId = Math.max(...collections.map((col) => col.id), 0); // Prevents Math.max(-Infinity)
+
+    // Return an incremented ID based on the maximum ID
+    return maxId + 1;
+  };
+
+
   const generateUniqueColor = async (): Promise<string> => {
-    // Generate random color
-    let collectionColor = "";
+    let collectionColor = '';
     let uniqueColor = false;
     // Generate an unique different color
     while (!uniqueColor) {
+      // Generate random color
       collectionColor = randomColorGenerator();
       // Check if the color is already present in other collections
-      const sameColorCollection = collections?.some((collection: CollectionProps) => collection.color === collectionColor);
+      const sameColorCollection = collections?.some(
+        (collection: CollectionProps) => collection.color === collectionColor
+      );
       if (!sameColorCollection) {
-        uniqueColor = true
+        uniqueColor = true;
       }
     }
     return collectionColor;
   };
 
-  const addCollection = async (
-    id: number,
-    name: string,
-  ): Promise<void> => {
+  const addCollection = async (name: string): Promise<number> => {
     //console.log('ID passato addCollection: ' + id);
     //console.log('Name passato addCollection: ' + name);
     try {
       if (name.trim() === '') {
-        addToast({
-          message: 'Write a name for the collection!',
-          type: 'error',
-        });
-        return;
+        // addToast({
+        //   message: 'Write a name for the collection!',
+        //   type: 'error',
+        // });
+        throw new Error("Write a name for the collection!");
       } else {
         const isCollectionPresent = collections.find(
           (collection: CollectionProps) =>
-            collection.name === name || collection.id === id
+            collection.name === name
         );
         if (isCollectionPresent) {
-          addToast({
-            message: `Collection "${name}" already exists!`,
-            type: 'error',
-          });
+          throw new Error(`Collection "${name}" already exists!`);
+          // addToast({
+          //   message: `Collection "${name}" already exists!`,
+          //   type: 'error',
+          // });
         } else {
+          // Generate new Id
+          const newId = await generateUniqueId();
+          // Generate new color
           const collectionColor = await generateUniqueColor();
           // Create new collection object
           const newCollection: CollectionProps = {
-            id: id,
+            id: newId,
             name: name,
             oers: [],
             conceptsSelected: [],
@@ -104,30 +116,32 @@ export const CollectionsProvider = ({ children }: any) => {
 
           //console.log('NEW COLLECTION: ' + newCollection.name);
           return new Promise((resolve) => {
-            setCollections([...collections, newCollection]);
-            //console.log("I'm triggering collections");
+            setCollections((prevCollections) => {
+              const updatedCollections = [...prevCollections, newCollection];
 
-            addToast({
-              message: `Collection "${name}" created successfully!`,
-              type: 'success',
+              addToast({
+                message: `Collection "${name}" created successfully!`,
+                type: 'success',
+              });
+
+              resolve(newId);
+              return updatedCollections;
             });
-
-            resolve();
           });
         }
       }
     } catch (error) {
       addToast({
-        message: `Error: ${error}`,
+        message: `${error}`,
         type: 'error',
       });
+      return -1;
     }
   };
 
   const duplicateCollection = async (collectionId: number): Promise<void> => {
     try {
-
-      console.log("//////////////////////")
+      console.log('//////////////////////');
 
       // Find the collection to duplicate by its ID
       const collectionToDuplicate = collections.find(
@@ -141,13 +155,13 @@ export const CollectionsProvider = ({ children }: any) => {
 
       if (collectionToDuplicate.oers.length > 0) {
         // Create a new collection by duplicating the original with a new ID and a modified name
-        const newId = Math.max(...collections.map((col) => col.id)) + 1; // Generate a new unique ID
+        const newId = await generateUniqueId();// Generate a new unique ID
         const collectionColor = await generateUniqueColor(); // Generate new color
         const duplicatedCollection: CollectionProps = {
           ...collectionToDuplicate, // Copy all properties from the original collection
           id: newId, // Assign the new unique ID
           name: `${collectionToDuplicate.name} (copy)`, // Append "(copy)" to the name
-          color: collectionColor,  // Assign the new color
+          color: collectionColor, // Assign the new color
         };
 
         // // Add the duplicated collection to the state
@@ -172,7 +186,9 @@ export const CollectionsProvider = ({ children }: any) => {
           resolve();
         });
       } else {
-        throw new Error('Cannot duplicate an empty collection. Please add at least one resource before proceeding.');
+        throw new Error(
+          'Cannot duplicate an empty collection. Please add at least one resource before proceeding.'
+        );
       }
     } catch (error) {
       // Display an error toast notification if duplication fails

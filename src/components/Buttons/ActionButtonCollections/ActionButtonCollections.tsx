@@ -1,12 +1,7 @@
-import {
-  Button,
-  Menu,
-  MenuButton
-} from '@chakra-ui/react';
+import { Button, Menu, MenuButton } from '@chakra-ui/react';
 import { useState } from 'react';
 import IconVerticalPoints from '../../Icons/IconVerticalPoints/IconVerticalPoints';
 import ActionButtonsListCollection from './ActionButtonsListCollection';
-
 
 type ActionButtonCollectionsProps = {
   handleDuplicateButtonClick: () => Promise<void>;
@@ -15,7 +10,7 @@ type ActionButtonCollectionsProps = {
 
 export default function ActionButtonCollections({
   handleDuplicateButtonClick,
-  handleDeleteButtonClick
+  handleDeleteButtonClick,
 }: ActionButtonCollectionsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -35,7 +30,7 @@ export default function ActionButtonCollections({
   const handleDuplicateClick = async () => {
     handleClose();
     await handleDuplicateButtonClick();
-  }
+  };
 
   return (
     <Menu>

@@ -95,8 +95,6 @@ const CollectionNavItem = ({
     setItemToDelete({ collection_id, collection_name });
   };
 
-
-
   const handleDeleteCollection = async (idColl: number, nameColl: string) => {
     if (collectionClicked) {
       setCollectionClicked(false);
@@ -116,9 +114,7 @@ const CollectionNavItem = ({
     }
   };
 
-  const handleDuplicateButtonClick = async (
-    idCollection: number,
-  ) => {
+  const handleDuplicateButtonClick = async (idCollection: number) => {
     try {
       await duplicateCollection(idCollection);
     } catch (error) {
@@ -128,7 +124,7 @@ const CollectionNavItem = ({
       //   type: 'error',
       // });
     }
-  }
+  };
 
   return (
     <>
@@ -145,7 +141,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -187,8 +183,12 @@ const CollectionNavItem = ({
           //   <DeleteIcon />
           // </Button>
           <ActionButtonCollections
-            handleDuplicateButtonClick={async () => await handleDuplicateButtonClick(collection.id)}
-            handleDeleteButtonClick={async () => await handleDeleteButtonClick(collection.id, collection.name)}
+            handleDuplicateButtonClick={async () =>
+              await handleDuplicateButtonClick(collection.id)
+            }
+            handleDeleteButtonClick={async () =>
+              await handleDeleteButtonClick(collection.id, collection.name)
+            }
           />
         )}
       </HStack>
@@ -207,8 +207,9 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
-          }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${
+          itemToDelete ? itemToDelete.collection_name : ''
+        }`}
       />
     </>
   );
