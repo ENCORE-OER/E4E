@@ -253,23 +253,23 @@ export const CollectionsProvider = ({ children }: any) => {
       // Check if a collection with the new name already exists and it's not the same collection
       const isCollectionPresent = collections.some(
         (collection: CollectionProps) =>
-          collection.name === newName && collection.id !== id
+          collection.name.trim() === newName.trim() && collection.id !== id
       );
 
       if (isCollectionPresent) {
-        throw new Error(`Collection "${newName}" already exists!`);
+        throw new Error(`Collection "${newName.trim()}" already exists!`);
       }
 
       // Update the collection name
       const updatedCollections = collections.map((collection) =>
-        collection.id === id ? { ...collection, name: newName } : collection
+        collection.id === id ? { ...collection, name: newName.trim() } : collection
       );
 
       // Update the collections array
       setCollections(updatedCollections);
 
       addToast({
-        message: `Collection renamed to "${newName}" successfully!`,
+        message: `Collection renamed to "${newName.trim()}" successfully!`,
         type: 'success',
       });
     } catch (error) {

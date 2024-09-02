@@ -33,7 +33,8 @@ export default function HeaderCollectionView({
     <Flex w="100%" pb="3" bg="background">
       <Flex direction="row" align="center" gap={3}>
         <Icon as={FcFolder} w="30px" h="30px" />
-        <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'}>
+        <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'} whiteSpace="nowrap"
+          textOverflow="ellipsis">
           {collectionName}
         </Heading>
         {!isAddContentModal && <RenameButton onClick={onOpen} />}

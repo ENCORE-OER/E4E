@@ -1,12 +1,12 @@
 /* NavItems for the SideBar */
 
-import { Flex, HStack, Heading, Icon } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import {
   Dispatch,
   ReactText,
   RefObject,
   SetStateAction,
-  useState,
+  useState
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
@@ -142,10 +142,10 @@ const CollectionNavItem = ({
 
   return (
     <>
-      <HStack
+      <Flex
+        direction="row"
         ref={collectionRef}
         mb="2"
-        w="100%"
         minW={isSmallerScreen ? '100px' : '0px'}
         position="relative"
         borderLeft="5px"
@@ -155,7 +155,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-        //overflow="hidden"
+      //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -169,18 +169,22 @@ const CollectionNavItem = ({
             }
           }}
           cursor={'pointer'}
+          direction="row"
         >
           <Icon as={FcFolder} w="30px" h="30px" mr="3" />
           {!isSmallerScreen && (
-            <Heading
+            <Text
               fontSize="22px"
               fontWeight="semibold"
               noOfLines={1}
-              //overflow={"hidden"}
-              w={'65%'}
+              flexWrap="nowrap"
+              // whiteSpace="nowrap"
+              // overflow="hidden"
+              // textOverflow="ellisis"
+              w='70%'
             >
               {children}
-            </Heading>
+            </Text>
           )}
         </Flex>
         {!isAddContentModal && (
@@ -206,7 +210,7 @@ const CollectionNavItem = ({
             handleRenameButtonClick={handleOpenRenameCollectionModal}
           />
         )}
-      </HStack>
+      </Flex>
 
       <DeleteAlertDialog
         isOpen={isDeleteAlertDialogOpen}
@@ -222,9 +226,8 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${
-          itemToDelete ? itemToDelete.collection_name : ''
-        }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
+          }`}
       />
 
       <RenameCollectionModal
