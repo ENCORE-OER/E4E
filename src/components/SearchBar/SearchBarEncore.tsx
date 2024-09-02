@@ -32,7 +32,7 @@ type SearchBarProps = {
 /* For multi selected tag see https://github.com/anubra266/choc-autocomplete#multi-select-with-tags */
 
 export default function SearchBarEncore({
-  inputValue,
+  // inputValue,
   setInputValue,
   //inputValueIds,
   //setInputValueIds,
@@ -50,9 +50,69 @@ export default function SearchBarEncore({
   // TODO: check if this is essential
   const [freeText, setFreeText] = useState<string>('');
 
-  useEffect(() => {
-    console.log('INPUT VALUE: ' + inputValue);
-  }, [inputValue]);
+  const handleSelectOption = (e: any) => {
+    const selectedValue = e.item
+      ? e.item.value.trim().replace(/\s+/g, ' ')
+      : freeText;
+    /*const selectedValueId = items?.find(
+      (item: OerSkillInfo) => item.label === selectedValue
+    )?.id;*/
+
+    if (selectedValue.trim() !== '' && /\S/.test(selectedValue)) {
+      // '/\S/.test(selectedValue)' to avoid empty string
+      console.log('SELECTED VALUE: ' + selectedValue);
+
+      setInputValue((prev) => [...new Set([...prev, selectedValue])]);
+      //setKeywordsSelected((prev) => [...new Set([...prev, selectedValue])]);
+      setFreeText('');
+
+      /*setInputValue((prev) => {
+        const updatedValues = prev.filter(
+          // to avoid duplicate
+          (value: string) => value !== selectedValue
+        );
+        return [...updatedValues, selectedValue];
+      });
+
+      setFreeText('');*/
+
+      /*setKeywordsSelected((prev) => {
+        const isKeywordSelected = prev?.includes(selectedValue);
+        if (!isKeywordSelected) {
+          return [...prev, selectedValue];
+        }
+        return prev;
+      });*/
+
+      // This part part with selection of skills
+      /*if (selectedValueId) {
+        setInputValueIds((prev) => {
+          const updatedValueIds = prev.filter(
+            (value: number) => value !== selectedValueId
+          );
+          return [...updatedValueIds, selectedValueId];
+        });
+
+        setSkillsSelected((prev) => {
+          const newSkill: SkillsSelectedProps = {
+            id: selectedValueId,
+            label: selectedValue,
+          };
+          const isSkillSelected = prev?.some(
+            (item: SkillsSelectedProps) => item.id === selectedValueId
+          );
+          if (!isSkillSelected) {
+            return [...prev, newSkill];
+          }
+          return prev;
+        });
+      }*/
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log('INPUT VALUE: ' + inputValue);
+  // }, [inputValue]);
 
   /*useEffect(() => {
     console.log('SELECTED SKILL IDs: ' + inputValueIds);
@@ -72,65 +132,7 @@ export default function SearchBarEncore({
         creatable={freeText !== '' && /\S/.test(freeText) ? true : false}
         multiple
         //value={inputValue}
-        onSelectOption={(e) => {
-          const selectedValue = e.item
-            ? e.item.value.trim().replace(/\s+/g, ' ')
-            : freeText;
-          /*const selectedValueId = items?.find(
-            (item: OerSkillInfo) => item.label === selectedValue
-          )?.id;*/
-
-          if (selectedValue.trim() !== '' && /\S/.test(selectedValue)) {
-            // '/\S/.test(selectedValue)' to avoid empty string
-            console.log('SELECTED VALUE: ' + selectedValue);
-
-            setInputValue((prev) => [...new Set([...prev, selectedValue])]);
-            //setKeywordsSelected((prev) => [...new Set([...prev, selectedValue])]);
-            setFreeText('');
-
-            /*setInputValue((prev) => {
-              const updatedValues = prev.filter(
-                // to avoid duplicate
-                (value: string) => value !== selectedValue
-              );
-              return [...updatedValues, selectedValue];
-            });
-
-            setFreeText('');*/
-
-            /*setKeywordsSelected((prev) => {
-              const isKeywordSelected = prev?.includes(selectedValue);
-              if (!isKeywordSelected) {
-                return [...prev, selectedValue];
-              }
-              return prev;
-            });*/
-
-            // This part part with selection of skills
-            /*if (selectedValueId) {
-              setInputValueIds((prev) => {
-                const updatedValueIds = prev.filter(
-                  (value: number) => value !== selectedValueId
-                );
-                return [...updatedValueIds, selectedValueId];
-              });
-  
-              setSkillsSelected((prev) => {
-                const newSkill: SkillsSelectedProps = {
-                  id: selectedValueId,
-                  label: selectedValue,
-                };
-                const isSkillSelected = prev?.some(
-                  (item: SkillsSelectedProps) => item.id === selectedValueId
-                );
-                if (!isSkillSelected) {
-                  return [...prev, newSkill];
-                }
-                return prev;
-              });
-            }*/
-          }
-        }}
+        onSelectOption={(e) => handleSelectOption(e)}
       >
         <Flex align="center" minW="20%">
           <SearchIcon color="gray.300" mr="3" />

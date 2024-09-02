@@ -9,6 +9,7 @@ import {
   MenuList,
   MenuOptionGroup,
   Text,
+  Tooltip,
 } from '@chakra-ui/react';
 
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
@@ -38,7 +39,7 @@ export default function CustomDropDownMenu({
   // onData,
   onSelectionChange,
   isHighlighted,
-  // isBloomLevel,
+  isBloomLevel,
   isYellowOnFocus,
   itemIndex,
   defaultMenuTitle,
@@ -76,12 +77,6 @@ export default function CustomDropDownMenu({
     }
   }, [itemIndex, data, defaultMenuTitle]);
 
-  // const handleData = () => {
-  //   if (onData) {
-  //     // onData(selectedOptions);
-  //     onData()
-  //   }
-  // };
   const handleMenuItemClick = (item: ArrayProps, index: number) => {
     //setSelectedItem(item.name);
     if (onSelectionChange) {
@@ -89,12 +84,8 @@ export default function CustomDropDownMenu({
       // handleData();
     }
     setMenuTitle(item.name || item.title || '');
-    handleToggleMenu(); // Chiudi il menu dopo la selezione, se necessario
-
-    //TODO: fix this, the problem is that idk how to delete the tags without refreshing the page => FIXED: use .clear() method
-    // if (!isBloomLevel && selectedSkillConceptsTags.length > 0) {
-    //   // Refresha la pagina
-    //   window.location.reload();
+    // if (!isCheckBoxNeeded) {
+    //   handleToggleMenu(); // Close menu after the selection if necessary
     // }
   };
 
@@ -102,7 +93,6 @@ export default function CustomDropDownMenu({
     if (onSelectionChange) {
       onSelectionChange(-1);
     }
-
     //setMenuTitle(defaultMenuTitle);
   };
 
@@ -114,12 +104,6 @@ export default function CustomDropDownMenu({
     // If the index is -1, it means that the item is not selected
     return itemIndex === -1 ? true : false;
   };
-
-  // useEffect(() => {
-  //   handleData();
-  //   // console.log(bloomLevelIndex);
-  //   // console.log(collectionIndex);1
-  // }, [selectedOptions]);
 
   return (
     <Box
@@ -137,43 +121,76 @@ export default function CustomDropDownMenu({
         onClose={handleToggleMenu}
         closeOnSelect={isCheckBoxNeeded ? false : true}
       >
-        <MenuButton
-          as={Button}
-          rightIcon={
-            isOpen ? (
-              <ChevronUpIcon fontSize="x-large" />
-            ) : (
-              <ChevronDownIcon fontSize="x-large" />
-            )
+        <Tooltip
+          hasArrow
+          // placement="bottom"
+          label={
+            isBloomLevel
+              ? Array.isArray(itemIndex)
+                ? // Se itemIndex è un array, mostra la descrizione del primo elemento selezionato
+                  data[itemIndex[0]]?.description
+                : itemIndex !== undefined
+                  ? // Se itemIndex è un numero, mostra la descrizione corrispondente
+                    data[itemIndex]?.description
+                  : null // Altrimenti non mostrare nulla
+              : null
           }
-          w="100%"
-          title={menuTitle}
-          bg={'white'}
-          _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
-          aria-expanded={isOpen ? 'true' : 'false'}
-          onClick={handleToggleMenu}
+          aria-label={
+            Array.isArray(itemIndex)
+              ? `Tooltip for ${
+                  data[itemIndex[0]]?.name || data[itemIndex[0]]?.title
+                }`
+              : itemIndex !== undefined
+                ? `Tooltip for ${
+                    data[itemIndex]?.name || data[itemIndex]?.title
+                  }`
+                : ''
+          }
+          //ml="1px"
+          bg="gray.200"
+          color="primary"
+          p={2}
+          fontSize={'sm'}
+          borderRadius={5}
+          isDisabled={!isBloomLevel}
         >
-          <Flex direction="row" w="100%" align="center" gap={3}>
-            <Flex
-              flex="1"
-              justifyItems={'flex-start'}
-              overflow="hidden"
-              whiteSpace="nowrap"
-            >
-              {menuTitle === defaultMenuTitle ? (
-                <Text
-                  align="left"
-                  fontWeight={'normal'}
-                  color={'gray.400'}
-                  noOfLines={1}
-                >
-                  {menuTitle}
-                </Text>
+          <MenuButton
+            as={Button}
+            rightIcon={
+              isOpen ? (
+                <ChevronUpIcon fontSize="x-large" />
               ) : (
-                /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
+                <ChevronDownIcon fontSize="x-large" />
+              )
+            }
+            w="100%"
+            title={menuTitle}
+            bg={'white'}
+            _expanded={isYellowOnFocus ? { bg: 'yellow.300' } : undefined}
+            aria-expanded={isOpen ? 'true' : 'false'}
+            onClick={handleToggleMenu}
+          >
+            <Flex direction="row" w="100%" align="center" gap={3}>
+              <Flex
+                flex="1"
+                justifyItems={'flex-start'}
+                overflow="hidden"
+                whiteSpace="nowrap"
+              >
+                {menuTitle === defaultMenuTitle ? (
+                  <Text
+                    align="left"
+                    fontWeight={'normal'}
+                    color={'gray.400'}
+                    noOfLines={1}
+                  >
+                    {menuTitle}
+                  </Text>
+                ) : (
+                  /* Could also use <Text align="left" overflow="hidden" whiteSpace="nowrap"> */
 
-                <Text align="left" noOfLines={1}>
-                  {/* {
+                  <Text align="left" noOfLines={1}>
+                    {/* {
                     selectedOptions.includes('All') &&
                       options?.length === selectedOptions.length
                       ? 'All'
@@ -181,52 +198,16 @@ export default function CustomDropDownMenu({
                         ? selectedOptions.join(', ')
                         : menuTitle // Utilizza il valore memorizzato in menuTitle
                   } */}
-                  {menuTitle}
-                </Text>
-              )}
+                    {menuTitle}
+                  </Text>
+                )}
+              </Flex>
             </Flex>
-
-            {/* TODO: Implementation of X button inside the MENU to deselect all the options selected before. */}
-            {/* PROBLEM: It's not possible to e.stopPropagation() to menu button */}
-            {/* {!isOpen &&
-              isCheckBoxNeeded &&
-              Array.isArray(itemIndex) &&
-              itemIndex.length > 0 &&
-              (
-                <Flex justify={'flex-end'}>
-                  <Button
-                    // position='absolute'
-                    // right={0}
-
-                    bg='none'
-                    _hover={{ backgroundColor: 'blue.300' }}
-                    w='fit-content'
-                    p={0}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteAllClick();
-                    }}
-                  >
-                    <CloseIcon
-                      fontSize='small'
-                    // as="button"
-                    // bg='none'
-                    // _hover={{ backgroundColor: 'gray.300' }}
-                    // w='fit-content'
-                    // p={0}
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   handleDeleteAllClick();
-                    // }}
-                    />
-                  </Button>
-                </Flex>
-              )
-            } */}
-          </Flex>
-        </MenuButton>
+          </MenuButton>
+        </Tooltip>
 
         <MenuList
+          // maxW="80%"
           maxH="25rem"
           overflowY="auto"
           whiteSpace="pre-wrap"
@@ -251,44 +232,61 @@ export default function CustomDropDownMenu({
           <MenuOptionGroup>
             {hydrated &&
               data?.map((item: ArrayProps, index: number) => (
-                <Flex p={0.5} key={index}>
-                  <MenuItem
-                    onClick={
-                      !isCheckBoxNeeded
-                        ? () => handleMenuItemClick(item, index)
-                        : undefined
-                    }
-                    bg={
-                      Array.isArray(itemIndex)
-                        ? itemIndex.includes(index)
-                          ? 'accent.200'
+                <Tooltip
+                  key={index}
+                  hasArrow
+                  placement="right"
+                  label={isBloomLevel ? item.description : null} // Tooltip text
+                  aria-label={`Tooltip for ${item.name || item.title}`}
+                  //ml="1px"
+                  bg="gray.200"
+                  color="primary"
+                  p={2}
+                  fontSize={'sm'}
+                  borderRadius={5}
+                  isDisabled={!isBloomLevel}
+                >
+                  <Flex p={0.5}>
+                    <MenuItem
+                      onClick={
+                        !isCheckBoxNeeded
+                          ? () => handleMenuItemClick(item, index)
                           : undefined
-                        : itemIndex === index
-                          ? 'accent.200'
-                          : undefined
-                    }
-                    borderRadius={5}
-                  >
-                    <Flex direction={'row'} w="100%">
-                      <Text flex="1">{item.name || item.title}</Text>
-                      {isCheckBoxNeeded && (
-                        <Flex flex="1" justify={'flex-end'}>
-                          <Checkbox
-                            key={index}
-                            value={item.name || item.title}
-                            colorScheme="yellow"
-                            onChange={() => handleMenuItemClick(item, index)}
-                            isChecked={
-                              Array.isArray(itemIndex)
-                                ? itemIndex.includes(index)
-                                : itemIndex === index
-                            }
-                          />
-                        </Flex>
-                      )}
-                    </Flex>
-                  </MenuItem>
-                </Flex>
+                      }
+                      bg={
+                        Array.isArray(itemIndex)
+                          ? itemIndex.includes(index)
+                            ? 'accent.200'
+                            : undefined
+                          : itemIndex === index
+                            ? 'accent.200'
+                            : undefined
+                      }
+                      borderRadius={5}
+                    >
+                      <Flex direction={'row'} w="100%">
+                        <Text flex="1" pr={5}>
+                          {item.name || item.title}
+                        </Text>
+                        {isCheckBoxNeeded && (
+                          <Flex justify={'flex-end'}>
+                            <Checkbox
+                              key={index}
+                              value={item.name || item.title}
+                              colorScheme="yellow"
+                              onChange={() => handleMenuItemClick(item, index)}
+                              isChecked={
+                                Array.isArray(itemIndex)
+                                  ? itemIndex.includes(index)
+                                  : itemIndex === index
+                              }
+                            />
+                          </Flex>
+                        )}
+                      </Flex>
+                    </MenuItem>
+                  </Flex>
+                </Tooltip>
               ))}
           </MenuOptionGroup>
         </MenuList>

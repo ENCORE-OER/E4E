@@ -2,6 +2,8 @@ export * from './AddCollectionFunctionProps';
 export * from './AddResourceFunctionProps';
 export * from './DeleteCollectionFunctionProps';
 export * from './DeleteResourceFunctionProps';
+export * from './DuplicateCollectionFunctionProps';
+export * from './RenameCollectionFunctionProps';
 export * from './SelectedConceptsFunctionProps';
 export * from './SelectedResourcesFunctionProps';
 export * from './ToggleLikeFunctionProps';

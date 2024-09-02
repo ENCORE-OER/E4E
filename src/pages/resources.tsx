@@ -49,7 +49,9 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
   // const { user } = useUser();
   const {
     collections,
+    duplicateCollection,
     deleteCollection,
+    renameCollection,
     deleteResourceFromCollection,
     setSelectedConceptsForCollection,
     addCollection, // for InfoCardModal
@@ -377,7 +379,9 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                         setCollectionClicked={setCollectionClicked}
                         collectionIndex={collectionIndex}
                         setCollectionIndex={setCollectionIndex}
+                        duplicateCollection={duplicateCollection}
                         deleteCollection={deleteCollection}
+                        renameCollection={renameCollection}
                         isSmallerScreen={isSmallerScreen}
                         isAddContentModal={isAddContentModal}
                       >
@@ -394,7 +398,9 @@ const ResourcesPage = ({ isAddContentModal }: DiscoverPageProps) => {
                     setCollectionClicked={setCollectionClicked}
                     collectionIndex={collectionIndex}
                     setCollectionIndex={setCollectionIndex}
+                    duplicateCollection={duplicateCollection}
                     deleteCollection={deleteCollection}
+                    renameCollection={renameCollection}
                     isSmallerScreen={isSmallerScreen}
                     isAddContentModal={isAddContentModal}
                   >

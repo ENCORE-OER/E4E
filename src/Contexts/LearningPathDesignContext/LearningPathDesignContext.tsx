@@ -53,6 +53,7 @@ type LearnignPathDesignContextProps = {
   learningTextContext: string;
   defaultLearningContext: string; // Default learning context build with a prompt using selectedEducatorExperience, selectedContext, selectedGroupDimension, selectedLearnerExperience
   selectedSkillConceptTags: SkillItemProps[];
+  freeTextTags: SkillItemProps[];
   selectedOptions: string[];
   bloomLevelIndex: number;
   step: number;
@@ -80,6 +81,7 @@ type LearnignPathDesignContextProps = {
   setSelectedSkillConceptTags: React.Dispatch<
     React.SetStateAction<SkillItemProps[]>
   >;
+  setFreeTextTags: React.Dispatch<React.SetStateAction<SkillItemProps[]>>;
   handleSkillsChange: (newSkills: SkillItemProps[]) => void;
   handleStepChange: (newStep: number) => void;
   handleOptionsChange: (newSelectedOptions: string[]) => void;
@@ -185,12 +187,36 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const LANGUAGE_GEN_LO_API = 'english';
   const TEMPERATURE_GEN_LO_API = 0.8;
   const bloomLevels = [
-    { name: 'Remember' },
-    { name: 'Understand' },
-    { name: 'Apply' },
-    { name: 'Analyze' },
-    { name: 'Evaluate' },
-    { name: 'Create' },
+    {
+      name: 'Remember',
+      description:
+        'Recalling facts and basic concepts, such as recognizing terms, definitions, or specific details.',
+    },
+    {
+      name: 'Understand',
+      description:
+        'Comprehending information, interpreting meaning, and explaining ideas in your own words.',
+    },
+    {
+      name: 'Apply',
+      description:
+        'Using knowledge in new situations to solve problems, execute procedures, or perform tasks.',
+    },
+    {
+      name: 'Analyze',
+      description:
+        'Breaking information into parts to explore patterns and relationships, and drawing logical connections.',
+    },
+    {
+      name: 'Evaluate',
+      description:
+        'Making judgments based on criteria and standards, assessing the value of ideas, or choosing between alternatives.',
+    },
+    {
+      name: 'Create',
+      description:
+        'Combining elements to form new structures or ideas, generating original products, or developing new approaches.',
+    },
   ];
 
   // Data for the checkbox menu
@@ -262,6 +288,12 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Use for storage of the tags in the skill and concept selection
   const [selectedSkillConceptTags, setSelectedSkillConceptTags] =
     useLocalStorage<SkillItemProps[]>('selectedSkillConceptsTags', []);
+
+  // Tags from free text in the searchBar for the skills and concepts
+  const [freeTextTags, setFreeTextTags] = useLocalStorage<SkillItemProps[]>(
+    'freeTextTags',
+    []
+  );
 
   // Use for storage of the text in the text input
   const [learningTextContext, setLearningTextContext] = useLocalStorage<string>(
@@ -387,6 +419,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     // handleResourceIndexChange(-1);
     setResourcesIndex([]);
     setBloomLevelIndex(-1);
+    setFreeTextTags([]);
     setSelectedSkillConceptTags([]);
     setSelectedOptions([]);
     setLearningTextContext('');
@@ -1156,6 +1189,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         defaultLearningContext,
         selectedSkillConceptTags,
         setSelectedSkillConceptTags,
+        freeTextTags,
+        setFreeTextTags,
         bloomLevelIndex,
         currentBloomOptions,
         step,

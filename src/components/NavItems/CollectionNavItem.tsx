@@ -1,7 +1,6 @@
 /* NavItems for the SideBar */
 
-import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, Flex, HStack, Heading, Icon } from '@chakra-ui/react';
+import { Flex, Icon, Text } from '@chakra-ui/react';
 import {
   Dispatch,
   ReactText,
@@ -13,7 +12,9 @@ import { FcFolder } from 'react-icons/fc';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import { CollectionProps } from '../../types/encoreElements';
 import { useHasHydrated } from '../../utils/utils';
+import ActionButtonCollections from '../Buttons/ActionButtonCollections/ActionButtonCollections';
 import DeleteAlertDialog from '../Modals/AlertDialogs/DeleteAlertDialog/DeleteAlertDialog';
+import RenameCollectionModal from '../Modals/CollectionModals/RenameCollectionModal';
 
 interface CollectionNavItemProps {
   collection: CollectionProps;
@@ -24,7 +25,9 @@ interface CollectionNavItemProps {
   collectionClicked: boolean;
   setCollectionIndex: Dispatch<SetStateAction<number>>;
   collectionIndex: number;
+  duplicateCollection: (idCollection: number) => Promise<void>;
   deleteCollection: (id: number, name: string) => Promise<void>;
+  renameCollection: (id: number, newName: string) => Promise<void>;
   setIsNewDataLoaded?: Dispatch<SetStateAction<boolean>>;
   isSmallerScreen?: boolean;
   isAddContentModal?: boolean;
@@ -44,7 +47,9 @@ const CollectionNavItem = ({
   collectionClicked,
   collectionIndex,
   setCollectionIndex,
+  duplicateCollection,
   deleteCollection,
+  renameCollection,
   isSmallerScreen,
   isAddContentModal,
 }: CollectionNavItemProps) => {
@@ -93,31 +98,54 @@ const CollectionNavItem = ({
     setItemToDelete({ collection_id, collection_name });
   };
 
-  const handleDeleteCollection = (idColl: number, nameColl: string) => {
+  const [isRenameCollectionModalOpen, setRenameCollectionModalOpen] =
+    useState<boolean>(false);
+
+  const handleOpenRenameCollectionModal = () => {
+    setRenameCollectionModalOpen(true);
+  };
+
+  const handleCloseRenameCollectionModal = () => {
+    setRenameCollectionModalOpen(false);
+  };
+
+  const handleDeleteCollection = async (idColl: number, nameColl: string) => {
     if (collectionClicked) {
       setCollectionClicked(false);
     }
-    deleteCollection(idColl, nameColl);
+    await deleteCollection(idColl, nameColl);
     if (selectedCollectionIndex === collectionIndex) {
       handleCollectionIndexChange(-1);
       setResourcesIndex([]);
     }
   };
 
-  const handleDeleteButtonClick = (idColl: number, nameColl: string) => {
+  const handleDeleteButtonClick = async (idColl: number, nameColl: string) => {
     if (collection.oers.length > 0 && collection.oers !== null) {
       onOpenDeleteAlertDialog(idColl, nameColl);
     } else {
-      handleDeleteCollection(idColl, nameColl);
+      await handleDeleteCollection(idColl, nameColl);
+    }
+  };
+
+  const handleDuplicateButtonClick = async (idCollection: number) => {
+    try {
+      await duplicateCollection(idCollection);
+    } catch (error) {
+      console.error(error);
+      // addToast({
+      //   message: `${error}`,
+      //   type: 'error',
+      // });
     }
   };
 
   return (
     <>
-      <HStack
+      <Flex
+        direction="row"
         ref={collectionRef}
         mb="2"
-        w="100%"
         minW={isSmallerScreen ? '100px' : '0px'}
         position="relative"
         borderLeft="5px"
@@ -141,42 +169,55 @@ const CollectionNavItem = ({
             }
           }}
           cursor={'pointer'}
+          direction="row"
         >
           <Icon as={FcFolder} w="30px" h="30px" mr="3" />
           {!isSmallerScreen && (
-            <Heading
+            <Text
               fontSize="22px"
               fontWeight="semibold"
               noOfLines={1}
-              //overflow={"hidden"}
-              w={'65%'}
+              flexWrap="nowrap"
+              // whiteSpace="nowrap"
+              // overflow="hidden"
+              // textOverflow="ellisis"
+              w="70%"
             >
               {children}
-            </Heading>
+            </Text>
           )}
         </Flex>
         {!isAddContentModal && (
-          <Button
-            variant="ghost"
-            _hover={{ bg: 'gray.300' }}
-            onClick={(e) => {
-              e.preventDefault();
-              handleDeleteButtonClick(collection.id, collection.name);
-            }}
-            position="absolute"
-            right={'0px'}
-          >
-            <DeleteIcon />
-          </Button>
+          // <Button
+          //   variant="ghost"
+          //   _hover={{ bg: 'gray.300' }}
+          //   onClick={(e) => {
+          //     e.preventDefault();
+          //     handleDeleteButtonClick(collection.id, collection.name);
+          //   }}
+          //   position="absolute"
+          //   right={'0px'}
+          // >
+          //   <DeleteIcon />
+          // </Button>
+          <ActionButtonCollections
+            handleDuplicateButtonClick={async () =>
+              await handleDuplicateButtonClick(collection.id)
+            }
+            handleDeleteButtonClick={async () =>
+              await handleDeleteButtonClick(collection.id, collection.name)
+            }
+            handleRenameButtonClick={handleOpenRenameCollectionModal}
+          />
         )}
-      </HStack>
+      </Flex>
 
       <DeleteAlertDialog
         isOpen={isDeleteAlertDialogOpen}
         onClose={onCloseDeleteAlertDialog}
-        onConfirm={() => {
+        onConfirm={async () => {
           if (itemToDelete) {
-            handleDeleteCollection(
+            await handleDeleteCollection(
               itemToDelete.collection_id,
               itemToDelete.collection_name
             );
@@ -188,6 +229,14 @@ const CollectionNavItem = ({
         modalText={`This collection is not empty. Are you sure you want to delete ${
           itemToDelete ? itemToDelete.collection_name : ''
         }`}
+      />
+
+      <RenameCollectionModal
+        isOpen={isRenameCollectionModalOpen}
+        onClose={handleCloseRenameCollectionModal}
+        collection={collection}
+        renameCollection={renameCollection}
+        maxLength={30}
       />
     </>
   );

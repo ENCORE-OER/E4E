@@ -104,15 +104,6 @@ export default function PathDesignHeaderBars({
             // flex='1'
             w="50%"
           >
-            {/* <Text
-            fontSize="sm"
-            fontWeight="bold"
-            // paddingRight={`${SPACING}%`}
-            // w={`${DIMENSION - SPACING}%`}
-          >
-            Select the resources within the collection*
-          </Text> */}
-
             <CustomDropDownMenu
               data={resources} // When a collection is selected, the resources array is updated with the resources of the selected collection???
               onData={handleResourceSelection}

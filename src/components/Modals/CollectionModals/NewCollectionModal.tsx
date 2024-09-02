@@ -31,8 +31,6 @@ interface NewCollectionModalProps extends CollectionModalProps {
   collections: CollectionProps[];
   addResource: AddResourceFunction;
   addCollection: AddCollectionFunction;
-  //setTimes_used?: Dispatch<SetStateAction<number>>;
-  //getCount?: (id: number) => Promise<number>;
 }
 
 export default function NewCollectionModal({
@@ -46,7 +44,6 @@ export default function NewCollectionModal({
   addCollection,
 }: NewCollectionModalProps) {
   const [nameCollection, setNameCollection] = useState<string>('');
-  const [newIdCollection, setNewIdCollection] = useState<number>(-1);
   const [countClick, setCountClick] = useState<number>(0); // to count click on "done" button
 
   const hydrated = useHasHydrated();
@@ -54,13 +51,10 @@ export default function NewCollectionModal({
 
   const handleSaveResource = async () => {
     if (nameCollection) {
-      const id_new = Math.random();
-      //console.log('Id collection' + id_new);
-      setNewIdCollection(id_new);
-      const collectionColor =
-        '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).slice(1, 7); // random color generator
-      await addCollection(id_new, nameCollection, collectionColor);
-      //await addResource(id_new, oerToAddCollection);
+      // Create the new collection
+      await addCollection(nameCollection);
+      // const id_new = await addCollection(nameCollection);
+      // console.log("id_new", id_new);
 
       onClose();
     } else {
@@ -75,27 +69,25 @@ export default function NewCollectionModal({
     onClose();
   };
 
+  // Add the resource after the new collection is created
   useEffect(() => {
-    // this to know if the collection is created
-    if (hydrated) {
-      if (!isFolderButton) {
-        //console.log("New Collection id: " + collections[collections.length - 1].id)
-        //console.log("newIdCollection: " + newIdCollection);
+    // this to know if the collection is create
+    if (!isFolderButton) {
+      const fetchData = async () => {
+        // console.log("adding resource////")
+        // Add resource to the new collection
+        await addResource(
+          collections[collections.length - 1].id,
+          oerToAddCollection
+        ); // The new collection is the last of the array
+      };
 
-        const fetchData = async () => {
-          await addResource(newIdCollection, oerToAddCollection);
-          // const count = await getCount(oerToAddCollection.id);
-          // setTimes_used(count);
-          // console.log('count: ' + count);
-        };
-
+      // Call the function when the collection is really created
+      if (hydrated) {
         fetchData();
-
-        //addResource(newIdCollection, oerToAddCollection);
-        //alert(`Resource added to "${nameCollection}" collection`)
       }
     }
-  }, [collections]);
+  }, [collections.length]); // Trigger when the collections change
 
   return (
     <Modal isOpen={isOpen} onClose={handleCloseCollectionModal}>

@@ -1,5 +1,5 @@
 export type AddCollectionFunction = (
-  id: number,
-  name: string,
-  color: string
-) => Promise<void>;
+  // id: number,
+  name: string
+  // color: string
+) => Promise<number>;

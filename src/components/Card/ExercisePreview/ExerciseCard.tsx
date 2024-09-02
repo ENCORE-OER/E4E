@@ -8,11 +8,11 @@ import {
   //StackDivider,
   Text,
 } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { OerData } from '../../../types/encoreElements';
 import CheckboxDisabledMenu from '../../CheckboxMenu/CheckboxDisabledMenu';
 import BorderedWords from './BorderedWords';
 import HighlightWords from './HighlightWords';
-import { OerData } from '../../../types/encoreElements';
-import { useEffect, useState } from 'react';
 
 type ExerciseCardProps = {
   oerData: OerData;
@@ -26,7 +26,7 @@ export default function ExerciseCard({ oerData }: ExerciseCardProps) {
   const handleCorrectUncorrect = () => {
     const correct: string[] = [];
     const distractors: string[] = [];
-    oerData.exercise_values?.options.forEach((oer: [string, boolean]) => {
+    oerData.exercise_values?.options?.forEach((oer: [string, boolean]) => {
       const [str, bool] = oer;
       if (bool) {
         correct.push(str);
@@ -39,7 +39,7 @@ export default function ExerciseCard({ oerData }: ExerciseCardProps) {
   };
 
   const handleTypeOfExercise = () => {
-    if (oerData.exercise_values.options.length === 0) {
+    if (oerData.exercise_values.options?.length === 0) {
       setTypeOfExercise(0);
     } else if (oerData.exercise_values.fill_template !== '') {
       setTypeOfExercise(1);

@@ -9,7 +9,7 @@ import {
   UploadedFilesProps,
 } from '../../../types/encoreElements';
 import { useHasHydrated } from '../../../utils/utils';
-import ActionButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/ActionButton';
+import ActionButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/ActionButton/ActionButton';
 import AddContentButton from '../../Buttons/ButtonsDesignPage/ButtonsLessonCard/AddContentButton';
 import UnderlinedButton from '../../Buttons/ButtonsDesignPage/UnderlinedButtons/UnderlinedButton';
 import ActivityTypeDropDownMenu from '../../DropDownMenu/ActivityTypeDropDownMenu';
