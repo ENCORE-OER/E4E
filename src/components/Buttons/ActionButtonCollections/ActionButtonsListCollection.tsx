@@ -27,7 +27,9 @@ export default function ActionButtonsListCollection({
       >
         <Flex direction="row" gap={2}>
           <IconEdit />
-          <Text fontWeight="bold" fontSize={"sm"}>Rename</Text>
+          <Text fontWeight="bold" fontSize={'sm'}>
+            Rename
+          </Text>
         </Flex>
       </MenuItem>
 
@@ -37,11 +39,13 @@ export default function ActionButtonsListCollection({
           handleClose();
           await handleDuplicateButtonClick();
         }}
-      // isDisabled={}
+        // isDisabled={}
       >
         <Flex direction="row" gap={2}>
           <IconDuplicate />
-          <Text fontWeight="bold" fontSize={"sm"}>Duplicate</Text>
+          <Text fontWeight="bold" fontSize={'sm'}>
+            Duplicate
+          </Text>
         </Flex>
       </MenuItem>
 
@@ -54,7 +58,9 @@ export default function ActionButtonsListCollection({
       >
         <Flex direction="row" gap={2}>
           <IconDelete />
-          <Text fontWeight="bold" fontSize={"sm"}>Delete</Text>
+          <Text fontWeight="bold" fontSize={'sm'}>
+            Delete
+          </Text>
         </Flex>
       </MenuItem>
     </MenuList>

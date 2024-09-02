@@ -24,9 +24,8 @@ export default function HeaderCollectionView({
   isAddContentModal,
   handleAttachClick,
   isDisabled,
-  maxLength
+  maxLength,
 }: HeaderCollectionViewProps) {
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { renameCollection } = useCollectionsContext();
 
@@ -34,7 +33,7 @@ export default function HeaderCollectionView({
     <Flex w="100%" pb="3" bg="background">
       <Flex direction="row" align="center" gap={3}>
         <Icon as={FcFolder} w="30px" h="30px" />
-        <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'} >
+        <Heading fontSize="22px" fontWeight="semibold" overflow={'hidden'}>
           {collectionName}
         </Heading>
         {!isAddContentModal && <RenameButton onClick={onOpen} />}
@@ -55,7 +54,6 @@ export default function HeaderCollectionView({
         renameCollection={renameCollection}
         maxLength={maxLength}
       />
-
     </Flex>
   );
 }
