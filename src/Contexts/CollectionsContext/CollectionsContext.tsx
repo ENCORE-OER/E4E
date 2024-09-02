@@ -229,7 +229,10 @@ export const CollectionsProvider = ({ children }: any) => {
     }
   };
 
-  const renameCollection = async (id: number, newName: string): Promise<void> => {
+  const renameCollection = async (
+    id: number,
+    newName: string
+  ): Promise<void> => {
     try {
       if (newName.trim() === '') {
         // addToast({
@@ -247,9 +250,10 @@ export const CollectionsProvider = ({ children }: any) => {
         throw new Error('Collection not found');
       }
 
-      // Check if a collection with the new name already exists
+      // Check if a collection with the new name already exists and it's not the same collection
       const isCollectionPresent = collections.some(
-        (collection: CollectionProps) => collection.name === newName
+        (collection: CollectionProps) =>
+          collection.name === newName && collection.id !== id
       );
 
       if (isCollectionPresent) {
@@ -258,9 +262,7 @@ export const CollectionsProvider = ({ children }: any) => {
 
       // Update the collection name
       const updatedCollections = collections.map((collection) =>
-        collection.id === id
-          ? { ...collection, name: newName }
-          : collection
+        collection.id === id ? { ...collection, name: newName } : collection
       );
 
       // Update the collections array
@@ -277,7 +279,6 @@ export const CollectionsProvider = ({ children }: any) => {
       });
     }
   };
-
 
   const addResource = async (
     collectionId: number,

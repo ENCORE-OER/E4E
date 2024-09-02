@@ -319,6 +319,7 @@ export default function CollectionView({
             isAddContentModal={isAddContentModal}
             isDisabled={resourcesSelectedTemp.length === 0}
             handleAttachClick={handleAttachClick}
+            maxLength={30}
           />
           <HStack pb="3">
             <Text
@@ -339,7 +340,7 @@ export default function CollectionView({
                   isAscending={isAscending}
                   setAscending={setAscending}
                   handleItemSortingClick={handleItemSortingClick}
-                  //setIsLoading={setIsLoading}
+                //setIsLoading={setIsLoading}
                 />
               </Flex>
             )}

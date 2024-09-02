@@ -12,7 +12,7 @@ type ActionButtonCollectionsProps = {
 export default function ActionButtonCollections({
   handleDuplicateButtonClick,
   handleDeleteButtonClick,
-  handleRenameButtonClick
+  handleRenameButtonClick,
 }: ActionButtonCollectionsProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
