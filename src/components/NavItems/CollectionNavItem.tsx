@@ -6,7 +6,7 @@ import {
   ReactText,
   RefObject,
   SetStateAction,
-  useState
+  useState,
 } from 'react';
 import { FcFolder } from 'react-icons/fc';
 import { useLearningPathDesignContext } from '../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
@@ -155,7 +155,7 @@ const CollectionNavItem = ({
         bg={collectionIndex === index ? 'gray.200' : ''}
         p="1"
         _hover={{ bg: 'gray.200', borderRadius: '5px' }}
-      //overflow="hidden"
+        //overflow="hidden"
       >
         <Flex
           w="100%"
@@ -181,7 +181,7 @@ const CollectionNavItem = ({
               // whiteSpace="nowrap"
               // overflow="hidden"
               // textOverflow="ellisis"
-              w='70%'
+              w="70%"
             >
               {children}
             </Text>
@@ -226,8 +226,9 @@ const CollectionNavItem = ({
           onCloseDeleteAlertDialog();
         }}
         // item_name={itemToDelete ? itemToDelete.collection_name : ''}
-        modalText={`This collection is not empty. Are you sure you want to delete ${itemToDelete ? itemToDelete.collection_name : ''
-          }`}
+        modalText={`This collection is not empty. Are you sure you want to delete ${
+          itemToDelete ? itemToDelete.collection_name : ''
+        }`}
       />
 
       <RenameCollectionModal

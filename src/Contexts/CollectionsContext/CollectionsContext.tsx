@@ -262,7 +262,9 @@ export const CollectionsProvider = ({ children }: any) => {
 
       // Update the collection name
       const updatedCollections = collections.map((collection) =>
-        collection.id === id ? { ...collection, name: newName.trim() } : collection
+        collection.id === id
+          ? { ...collection, name: newName.trim() }
+          : collection
       );
 
       // Update the collections array
