@@ -103,10 +103,9 @@ const Home = (/*props: DiscoverPageProps*/) => {
     if (titleLearningPath.trim().length === 0) {
       setIsSavingEmptyTitle(true);
     }
-  }
+  };
 
   const handleSave = async () => {
-
     await handleSaveLearningScenarioClick(
       idLearningScenario,
       selectedEducatorExperience,
@@ -140,7 +139,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
       handleEmptyTitle();
 
       addToast({
-        message: 'The learning path title can\'t be empty!',
+        message: "The learning path title can't be empty!",
         type: 'error',
       });
     }
@@ -199,12 +198,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
             // w="100%"
             w={isSmallerScreen ? '95%' : '80%'}
             h="100%"
-          // overflowX="auto"
+            // overflowX="auto"
           >
             <Flex
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <Heading>Learning path design</Heading>
             </Flex>
@@ -214,7 +213,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
               paddingBottom="1.5rem"
               w="100%"
               justifyContent="left"
-            //justify="space-between"
+              //justify="space-between"
             >
               <LearningStepper
                 activeStep={2}
@@ -278,18 +277,29 @@ const Home = (/*props: DiscoverPageProps*/) => {
                         titleLearningPath={titleLearningPath}
                         handleTitleLearningPath={handleTitleLearningPath}
                         placeholder="Enter a title describing the lesson plan..."
-                        isHighlighted={isSavingEmptyTitle && titleLearningPath.trim().length === 0}
+                        isHighlighted={
+                          isSavingEmptyTitle &&
+                          titleLearningPath.trim().length === 0
+                        }
                       />
-                      {isSavingEmptyTitle && titleLearningPath.trim().length === 0 && (
-                        <Text color="error_label" fontSize="small" fontWeight="normal">
-                          Set a title for this learning path!
-                        </Text>
-                      )}
+                      {isSavingEmptyTitle &&
+                        titleLearningPath.trim().length === 0 && (
+                          <Text
+                            color="error_label"
+                            fontSize="small"
+                            fontWeight="normal"
+                          >
+                            Set a title for this learning path!
+                          </Text>
+                        )}
                     </Flex>
+                  ) : titleLearningPath.trim().length > 0 ? (
+                    <Text fontSize="xx-large">{titleLearningPath}</Text>
                   ) : (
-                    titleLearningPath.trim().length > 0
-                      ? <Text fontSize="xx-large">{titleLearningPath}</Text>
-                      : <LabelEmptyFieldTable label="Title learning path" fontSize=" xx-large" />
+                    <LabelEmptyFieldTable
+                      label="Title learning path"
+                      fontSize=" xx-large"
+                    />
                   ))}
               </Heading>
             </Flex>
@@ -323,7 +333,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <FooterButtonsGroup
             SPACING={SPACING}
             handleResetAll={handleResetAll}
-          // handlePrevButtonClick={handlePrevButtonClick}
+            // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Flex>

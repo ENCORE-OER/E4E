@@ -15,18 +15,17 @@ export default function SaveLessonPlanButton({
   isDisabled,
   isSmallerScreen,
   handleSaveOnDB,
-  handleEmptyTitle
+  handleEmptyTitle,
 }: SaveLessonPlanButtonProps) {
   const {
     isEditLessonPlanClicked,
     editActivityLessonIndex,
     handleSaveLessonPlanClick,
-    titleLearningPath
+    titleLearningPath,
   } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
 
   const handleClick = async () => {
-
     if (titleLearningPath.trim().length !== 0) {
       handleSaveLessonPlanClick();
 
@@ -39,13 +38,12 @@ export default function SaveLessonPlanButton({
         type: 'success',
       });
     } else {
-
       if (handleEmptyTitle) {
         handleEmptyTitle();
       }
 
       addToast({
-        message: 'The learning path title can\'t be empty!',
+        message: "The learning path title can't be empty!",
         type: 'error',
       });
     }
