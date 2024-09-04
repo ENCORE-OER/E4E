@@ -23,11 +23,12 @@ import TabTiles from './TabTiles';
 
 export type LearningPathTabsProps = {
   handleSaveOnDB?: () => Promise<void>;
+  handleEmptyTitle?: () => void;
   // isSmallerScreen?: boolean;
 } & CustomTabStyleProps;
 
 export default function LearningPathTabs(props: LearningPathTabsProps) {
-  const { isSmallerScreen, handleSaveOnDB, ...rest } = props;
+  const { isSmallerScreen, handleSaveOnDB, handleEmptyTitle, ...rest } = props;
   const { titleLearningPath } = useLearningPathDesignContext();
   // const { addToast } = CustomToast();
   const [isPrinting, setIsPrinting] = useState(false); // State to know if we're exporting data
@@ -57,7 +58,8 @@ export default function LearningPathTabs(props: LearningPathTabsProps) {
     tableRef,
     isPrinting,
     isSmallerScreen,
-    handleSaveOnDB
+    handleSaveOnDB,
+    handleEmptyTitle
   );
 
   return (
@@ -94,7 +96,8 @@ const getConfig = (
   tableRef: RefObject<HTMLDivElement>,
   isPrinting: boolean,
   isSmallerScreen?: boolean,
-  handleSaveOnDB?: () => Promise<void>
+  handleSaveOnDB?: () => Promise<void>,
+  handleEmptyTitle?: () => void
 ) => {
   // const digitalIdsoers = oers?.filter((oer) => oer.skills?.some((skill: { domain: any[]; }) => skill.domain.some((domain) => domain.name === "Digital"))).map((oer) => oer.id);
 
@@ -129,7 +132,7 @@ const getConfig = (
         <EditLessonPlanButton
           name="Edit"
           isSmallerScreen={isSmallerScreen}
-          // isDisabled={true}
+        // isDisabled={true}
         />
       ),
       isButton: true,
@@ -163,6 +166,7 @@ const getConfig = (
           name="Save"
           isSmallerScreen={isSmallerScreen}
           handleSaveOnDB={handleSaveOnDB}
+          handleEmptyTitle={handleEmptyTitle}
         />
       ),
       isButton: true,
