@@ -36,7 +36,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     // Used for updateLearningScenario API call
     idLearningScenario,
     selectedEducatorExperience,
-    selectedContext,
+    selectedEducationalContext,
     selectedGroupDimension,
     selectedLearnerExperience,
     bloomLevels,
@@ -109,7 +109,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
     await handleSaveLearningScenarioClick(
       idLearningScenario,
       selectedEducatorExperience,
-      selectedContext,
+      selectedEducationalContext,
       selectedGroupDimension,
       selectedLearnerExperience,
       bloomLevels,

@@ -58,7 +58,7 @@ export default function AddContentModal({
     resetFilesContent,
     idLearningScenario,
     selectedEducatorExperience,
-    selectedContext,
+    selectedEducationalContext: selectedContext,
     selectedGroupDimension,
     selectedLearnerExperience,
     bloomLevels,

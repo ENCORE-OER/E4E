@@ -47,7 +47,7 @@ type LearnignPathDesignContextProps = {
   currentBloomOptions: string[];
   idLearningScenario: string;
   selectedEducatorExperience: Option | null;
-  selectedContext: Option | null;
+  selectedEducationalContext: Option | null;
   selectedGroupDimension: Option | null;
   selectedLearnerExperience: Option | null;
   learningTextContext: string;
@@ -72,7 +72,7 @@ type LearnignPathDesignContextProps = {
   // handleApiKey: (value: string) => void;
   handleIdLearningScenario: (id: string) => void;
   handleEducatorExperienceChange: (selected: Option | null) => void;
-  handleContextChange: (selected: Option | null) => void;
+  handleEducationalContextChange: (selected: Option | null) => void;
   handleGroupDimensionChange: (selected: Option | null) => void;
   handleLearnerExperienceChange: (selected: Option | null) => void;
   handleSetLearningTextContext: (newText: string) => void;
@@ -391,10 +391,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   // Use for storage of the options in the segmented control
   const [selectedEducatorExperience, setSelectedEducatorExperience] =
     useLocalStorage<Option | null>('selectedYourExperience', null);
-  const [selectedContext, setSelectedContext] = useLocalStorage<Option | null>(
-    'selectedContext',
-    null
-  );
+  const [selectedEducationalContext, setSelectedEducationalContext] =
+    useLocalStorage<Option | null>('selectedEducationalContext', null);
   const [selectedGroupDimension, setSelectedGroupDimension] =
     useLocalStorage<Option | null>('selectedGroupDimension', null);
   const [selectedLearnerExperience, setSelectedLearnerExperience] =
@@ -434,7 +432,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     handleEducatorExperienceChange(null);
     handleLearnerExperienceChange(null);
     handleGroupDimensionChange(null);
-    handleContextChange(null);
+    handleEducationalContextChange(null);
     handleCollectionIndexChange(-1); // this trigger resetState() fuction
   };
 
@@ -459,8 +457,8 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   const handleEducatorExperienceChange = (selected: Option | null) => {
     setSelectedEducatorExperience(selected);
   };
-  const handleContextChange = (selected: Option | null) => {
-    setSelectedContext(selected);
+  const handleEducationalContextChange = (selected: Option | null) => {
+    setSelectedEducationalContext(selected);
   };
   const handleGroupDimensionChange = (selected: Option | null) => {
     setSelectedGroupDimension(selected);
@@ -1055,7 +1053,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // =============================================================================================================
 
-  const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
+  const defaultLearningContext = `Create a lesson plan for an educator with ${selectedEducatorExperience?.title} experience, to be used in a ${selectedEducationalContext?.title} context, for a ${selectedGroupDimension?.title} group of learners on a ${selectedLearnerExperience?.title} level.`;
 
   // useEffect(() => {
   //   console.log('Lesson activities', lessonActivities);
@@ -1182,7 +1180,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         // apiKey,
         idLearningScenario,
         selectedEducatorExperience,
-        selectedContext,
+        selectedEducationalContext,
         selectedGroupDimension,
         selectedLearnerExperience,
         learningTextContext,
@@ -1210,7 +1208,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
         // handleApiKey,
         handleIdLearningScenario,
         handleEducatorExperienceChange,
-        handleContextChange,
+        handleEducationalContextChange,
         handleGroupDimensionChange,
         handleLearnerExperienceChange,
         handleSetLearningTextContext,

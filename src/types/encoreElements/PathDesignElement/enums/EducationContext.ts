@@ -1,7 +1,7 @@
 export enum EducationContextEnum {
-  School = 1,
+  School = 2,
   University = 3,
-  VET = 4,
+  Vocational = 4,
 }
 
 // export enum EducationContextEnum {

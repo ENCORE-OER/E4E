@@ -41,7 +41,7 @@ export default function PathDesignGenLO({
     bloomLevelIndex,
     // takes the value of the selected option in "Educational Scenario"
     selectedOptions,
-    selectedContext, // used for the api call
+    selectedEducationalContext, // used for the api call
     selectedSkillConceptTags,
     learningTextContext, // used for the api call (learning context)
     defaultLearningContext,
@@ -140,8 +140,8 @@ export default function PathDesignGenLO({
         handleApiKey={handleApiKey}
         setupModel={setupModel}
         handleSetupModel={handleSetupModel}
-        selectedContext={selectedContext}
-        selectedSkillConceptTags={selectedSkillConceptTags}
+        selectedEducationalContext={selectedEducationalContext}
+        selectedSkillConceptsTags={selectedSkillConceptTags}
         selectedOptions={selectedOptions}
         learningTextContext={learningTextContext}
         // setIsLessGeneratedLO={setIsLessGeneratedLO}
