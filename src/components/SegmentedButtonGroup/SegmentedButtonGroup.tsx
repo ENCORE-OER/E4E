@@ -26,12 +26,12 @@ export default function SegmentedButtonGroup({
 }: SegmentedButtonProps) {
   const {
     SPACING,
-    handleContextChange,
+    handleEducationalContextChange,
     handleEducatorExperienceChange,
     handleGroupDimensionChange,
     handleLearnerExperienceChange,
     selectedEducatorExperience,
-    selectedContext,
+    selectedEducationalContext,
     selectedGroupDimension,
     selectedLearnerExperience,
   } = useLearningPathDesignContext();
@@ -44,7 +44,7 @@ export default function SegmentedButtonGroup({
     { title: 'Senior' },
   ];
 
-  const Context: Option[] = [
+  const EducationalContext: Option[] = [
     { title: 'School' },
     { title: 'Vocational' },
     { title: 'University' },
@@ -56,7 +56,7 @@ export default function SegmentedButtonGroup({
     { title: 'Large', description: '(>50 People)' },
   ];
 
-  const LeanerExperience: Option[] = [
+  const LearnerExperience: Option[] = [
     { title: 'Beginner' },
     { title: 'Intermediate' },
     { title: 'Advanced' },
@@ -67,7 +67,7 @@ export default function SegmentedButtonGroup({
   useEffect(() => {
     const areComplete: boolean =
       selectedEducatorExperience !== null &&
-      selectedContext !== null &&
+      selectedEducationalContext !== null &&
       selectedGroupDimension !== null &&
       selectedLearnerExperience !== null;
 
@@ -85,7 +85,10 @@ export default function SegmentedButtonGroup({
         optionsToHighlight.push('YourExperience');
       }
 
-      if (!selectedContext && !optionsToHighlight.includes('Context')) {
+      if (
+        !selectedEducationalContext &&
+        !optionsToHighlight.includes('Context')
+      ) {
         optionsToHighlight.push('Context');
       }
 
@@ -98,9 +101,9 @@ export default function SegmentedButtonGroup({
 
       if (
         !selectedLearnerExperience &&
-        !optionsToHighlight.includes('LeanerExperience')
+        !optionsToHighlight.includes('LearnerExperience')
       ) {
-        optionsToHighlight.push('LeanerExperience');
+        optionsToHighlight.push('LearnerExperience');
       }
 
       setHighlightedOptions(optionsToHighlight);
@@ -113,7 +116,7 @@ export default function SegmentedButtonGroup({
   }, [
     isNextButtonClicked,
     selectedEducatorExperience,
-    selectedContext,
+    selectedEducationalContext,
     selectedGroupDimension,
     selectedLearnerExperience,
   ]);
@@ -181,14 +184,14 @@ export default function SegmentedButtonGroup({
               <Text as="b">Educational context</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
-                  options={Context}
-                  selected={selectedContext}
-                  onChange={handleContextChange}
-                  preselectedTitle={selectedContext?.title}
+                  options={EducationalContext}
+                  selected={selectedEducationalContext}
+                  onChange={handleEducationalContextChange}
+                  preselectedTitle={selectedEducationalContext?.title}
                   isHighlighted={highlightedOptions.includes('Context')}
                   isSmallerScreen={isSmallerScreen}
                 />
-                {isNextButtonClicked && selectedContext === null && (
+                {isNextButtonClicked && selectedEducationalContext === null && (
                   <Text color="error_label" fontSize="sm">
                     Select an educational context!
                   </Text>
@@ -220,12 +223,12 @@ export default function SegmentedButtonGroup({
               <Text as="b">Learners{"'"} experience</Text>
               <Box paddingTop="0.5rem">
                 <SegmentedButton
-                  options={LeanerExperience}
+                  options={LearnerExperience}
                   selected={selectedLearnerExperience}
                   onChange={handleLearnerExperienceChange}
                   preselectedTitle={selectedLearnerExperience?.title}
                   isHighlighted={highlightedOptions.includes(
-                    'LeanerExperience'
+                    'LearnerExperience'
                   )}
                   isSmallerScreen={isSmallerScreen}
                 />

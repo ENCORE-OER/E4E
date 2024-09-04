@@ -14,7 +14,9 @@ import LearningStepper from '../../components/Stepper/Stepper';
 import LearningPathTabs from '../../components/Tabs/LearningPathTabs';
 import InfoGenAITextBox from '../../components/TextBox/InfoTextBox/InfoGenAITextBox';
 import LearningPathTitleTextBox from '../../components/TextBox/LearningPathTitleTextBox';
+import LabelEmptyFieldTable from '../../components/Texts/LabelEmptyFieldTable';
 import { ObjectLearningObjectiveProps } from '../../types/encoreElements';
+import { CustomToast } from '../../utils/Toast/CustomToast';
 import { handleSaveLearningScenarioClick } from '../../utils/learningScenarioUtils';
 import { useHasHydrated, useIsSmallerScreen } from '../../utils/utils';
 //import { useToast } from '@chakra-ui/react';
@@ -27,13 +29,14 @@ const Home = (/*props: DiscoverPageProps*/) => {
   // const { user } = useUser();
   const hydrated = useHasHydrated();
   const isSmallerScreen = useIsSmallerScreen(); // Use this for the responsive design of the page
+  const { addToast } = CustomToast();
   const {
     SPACING,
     // collectionIndex,
     // Used for updateLearningScenario API call
     idLearningScenario,
     selectedEducatorExperience,
-    selectedContext,
+    selectedEducationalContext,
     selectedGroupDimension,
     selectedLearnerExperience,
     bloomLevels,
@@ -94,11 +97,19 @@ const Home = (/*props: DiscoverPageProps*/) => {
   //   }
   // };
 
+  const [isSavingEmptyTitle, setIsSavingEmptyTitle] = useState<boolean>(false); // Set true if the save button is clicked but the learning path title is empty
+
+  const handleEmptyTitle = () => {
+    if (titleLearningPath.trim().length === 0) {
+      setIsSavingEmptyTitle(true);
+    }
+  };
+
   const handleSave = async () => {
     await handleSaveLearningScenarioClick(
       idLearningScenario,
       selectedEducatorExperience,
-      selectedContext,
+      selectedEducationalContext,
       selectedGroupDimension,
       selectedLearnerExperience,
       bloomLevels,
@@ -112,13 +123,26 @@ const Home = (/*props: DiscoverPageProps*/) => {
       lessonActivities,
       handleIdLearningScenario
     );
+
+    if (isSavingEmptyTitle) {
+      setIsSavingEmptyTitle(false);
+    }
   };
 
   const handlePrevButtonClick = () => {
-    //handleResetStep1();
-    router.replace({
-      pathname: '/design/LearningObjective',
-    });
+    if (!isEditLessonPlanClicked) {
+      //handleResetStep1();
+      router.replace({
+        pathname: '/design/LearningObjective',
+      });
+    } else {
+      handleEmptyTitle();
+
+      addToast({
+        message: "The learning path title can't be empty!",
+        type: 'error',
+      });
+    }
   };
 
   // EASY WAY: save always on DB when change page (change the route).
@@ -145,6 +169,12 @@ const Home = (/*props: DiscoverPageProps*/) => {
       router.events.off('routeChangeStart', handleRouteChange);
     };
   }, [router.pathname, isEditLessonPlanClicked, editActivityLessonIndex]);
+
+  // useEffect(() => {
+  //   if (titleLearningPath.trim().length > 0 && isSavingEmptyTitle) {
+  //     setIsSavingEmptyTitle(!isSavingEmptyTitle);
+  //   }
+  // }, [titleLearningPath])
 
   return (
     <LearningPathProvider>
@@ -242,13 +272,34 @@ const Home = (/*props: DiscoverPageProps*/) => {
               <Heading fontWeight={'bold'} w="100%">
                 {hydrated &&
                   (isEditLessonPlanClicked ? (
-                    <LearningPathTitleTextBox
-                      titleLearningPath={titleLearningPath}
-                      handleTitleLearningPath={handleTitleLearningPath}
-                      placeholder="Enter a title describing the lesson plan..."
-                    />
-                  ) : (
+                    <Flex direction="column" gap={1}>
+                      <LearningPathTitleTextBox
+                        titleLearningPath={titleLearningPath}
+                        handleTitleLearningPath={handleTitleLearningPath}
+                        placeholder="Enter a title describing the lesson plan..."
+                        isHighlighted={
+                          isSavingEmptyTitle &&
+                          titleLearningPath.trim().length === 0
+                        }
+                      />
+                      {isSavingEmptyTitle &&
+                        titleLearningPath.trim().length === 0 && (
+                          <Text
+                            color="error_label"
+                            fontSize="small"
+                            fontWeight="normal"
+                          >
+                            Set a title for this learning path!
+                          </Text>
+                        )}
+                    </Flex>
+                  ) : titleLearningPath.trim().length > 0 ? (
                     <Text fontSize="xx-large">{titleLearningPath}</Text>
+                  ) : (
+                    <LabelEmptyFieldTable
+                      label="Title learning path"
+                      fontSize=" xx-large"
+                    />
                   ))}
               </Heading>
             </Flex>
@@ -257,6 +308,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
                 <LearningPathTabs
                   isSmallerScreen={isSmallerScreen}
                   handleSaveOnDB={handleSave}
+                  handleEmptyTitle={handleEmptyTitle}
                 />
               )}
             </Flex>

@@ -301,7 +301,7 @@ export const saveUpdateLearningScenario = async (
 export const handleSaveLearningScenarioClick = async (
   idLearningScenario: string,
   selectedEducatorExperience: Option | null,
-  selectedContext: Option | null,
+  selectedEducationalContext: Option | null,
   selectedGroupDimension: Option | null,
   selectedLearnerExperience: Option | null,
   bloomLevels: ArrayProps[],
@@ -320,7 +320,7 @@ export const handleSaveLearningScenarioClick = async (
     await saveUpdateLearningScenario(
       idLearningScenario ?? '',
       selectedEducatorExperience?.title ?? '',
-      selectedContext?.title ?? '',
+      selectedEducationalContext?.title ?? '',
       selectedGroupDimension?.title ?? '',
       selectedLearnerExperience?.title ?? '',
       bloomLevels[bloomLevelIndex]?.name ?? '',

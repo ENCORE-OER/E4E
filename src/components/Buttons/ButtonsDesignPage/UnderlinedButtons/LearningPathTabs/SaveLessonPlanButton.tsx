@@ -7,6 +7,7 @@ import UnderlinedButton from '../UnderlinedButton';
 
 type SaveLessonPlanButtonProps = {
   handleSaveOnDB?: () => Promise<void>;
+  handleEmptyTitle?: () => void;
 } & LessonPlanTabButtonProps;
 
 export default function SaveLessonPlanButton({
@@ -14,25 +15,38 @@ export default function SaveLessonPlanButton({
   isDisabled,
   isSmallerScreen,
   handleSaveOnDB,
+  handleEmptyTitle,
 }: SaveLessonPlanButtonProps) {
   const {
     isEditLessonPlanClicked,
     editActivityLessonIndex,
     handleSaveLessonPlanClick,
+    titleLearningPath,
   } = useLearningPathDesignContext();
   const { addToast } = CustomToast();
 
   const handleClick = async () => {
-    handleSaveLessonPlanClick();
+    if (titleLearningPath.trim().length !== 0) {
+      handleSaveLessonPlanClick();
 
-    if (handleSaveOnDB) {
-      await handleSaveOnDB();
+      if (handleSaveOnDB) {
+        await handleSaveOnDB();
+      }
+
+      addToast({
+        message: 'Lesson Plan succesfully saved',
+        type: 'success',
+      });
+    } else {
+      if (handleEmptyTitle) {
+        handleEmptyTitle();
+      }
+
+      addToast({
+        message: "The learning path title can't be empty!",
+        type: 'error',
+      });
     }
-
-    addToast({
-      message: 'Lesson Plan succesfully saved',
-      type: 'success',
-    });
   };
 
   return (

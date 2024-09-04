@@ -25,8 +25,8 @@ interface GenerateLOViewProps extends PathDesignGenLOProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   bloomLevelIndex: number;
   selectedOptions: string[];
-  selectedContext: Option | null;
-  selectedSkillConceptTags: SkillItemProps[];
+  selectedEducationalContext: Option | null;
+  selectedSkillConceptsTags: SkillItemProps[];
   learningTextContext: string;
   defaultLearningContext: string;
   handleDefaultLearningContext: () => void;
@@ -50,8 +50,8 @@ export default function GenerateLOView({
   setupModel,
   bloomLevelIndex,
   selectedBloomLevel,
-  selectedContext,
-  selectedSkillConceptTags: selectedSkillConceptsTags,
+  selectedEducationalContext,
+  selectedSkillConceptsTags,
   selectedOptions,
   learningTextContext,
   isNextButtonClicked,
@@ -104,7 +104,7 @@ export default function GenerateLOView({
       const resp = await axios.post(
         '/api/encore/genAI/generateLearningObjective',
         {
-          topic: skills,
+          topic: `The topics are regarding ${skills}`,
           context: learningContext,
           level: educationContext,
         },
@@ -194,7 +194,7 @@ export default function GenerateLOView({
           // handleSelectedLearningObjectiveIndexChange(-1);
           const learningObjectives: string[] = [];
           console.log('Generate learning objectives');
-          console.log('Education context: ', selectedContext);
+          console.log('Education context: ', selectedEducationalContext);
           console.log('Bloom level: ', selectedBloomLevel);
           console.log(
             'Skills: ',
@@ -224,7 +224,10 @@ export default function GenerateLOView({
               resp = await postGenerateLearningObjective(
                 apiKey, // apiKey
                 setupModel, // setupModel
-                mapOptionToNumber(selectedContext, EducationContextEnum), // educationContext // TODO: before to call the API, check if the options are not null
+                mapOptionToNumber(
+                  selectedEducationalContext,
+                  EducationContextEnum
+                ), // educationContext // TODO: before to call the API, check if the options are not null
                 learningTextContext || defaultLearningContext, // learningContext
                 selectedSkillConceptsTags
                   .map((skill: SkillItemProps) => skill.label)

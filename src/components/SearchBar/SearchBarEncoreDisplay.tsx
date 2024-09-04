@@ -30,6 +30,7 @@ export default function SearchBarEncoreDisplay({
           variant="solid"
           colorScheme="teal"
           cursor="default"
+          textTransform="capitalize"
         >
           <TagLabel>{value}</TagLabel>
           {/* <TagCloseButton
