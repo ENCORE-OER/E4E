@@ -206,7 +206,11 @@ export default function CardInfoModal({
           setConcepts(
             oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
           );
-          setQualityScore(oer?.overall_score || 0);
+          setQualityScore(
+            oer?.overall_score && oer?.overall_score > -1
+              ? oer?.overall_score
+              : 0
+          );
           setTimes_used((await getCount(oer?.id)) ?? 0);
           //setTimes_used(oer?.times_used || 0);
           setTotal_likes((await getLikes(oer?.id)) ?? 0);
