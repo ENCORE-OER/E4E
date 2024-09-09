@@ -206,7 +206,7 @@ export default function CardInfoModal({
           setConcepts(
             oer.concepts?.map((concept: OerConceptInfo) => concept.label) || []
           );
-          setQualityScore(oer?.overall_score || 0);
+          setQualityScore(oer?.overall_score && oer?.overall_score > -1 ? oer?.overall_score : 0);
           setTimes_used((await getCount(oer?.id)) ?? 0);
           //setTimes_used(oer?.times_used || 0);
           setTotal_likes((await getLikes(oer?.id)) ?? 0);
@@ -214,7 +214,7 @@ export default function CardInfoModal({
           setLastUpdate(oer?.retrieval_date || oer?.publication_date || '');
           setCoverage(
             oer.coverage?.map((audience: OerAudienceInfo) => audience.name) ||
-              []
+            []
           );
           setSource_roer(
             oer?.source_roer?.map((item: OerSourceRoerInfo) => item.name) || []
@@ -350,9 +350,9 @@ export default function CardInfoModal({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-          //times_used={times_used}
-          //setTimes_used={setTimes_used}
-          //getCount={getCount}
+        //times_used={times_used}
+        //setTimes_used={setTimes_used}
+        //getCount={getCount}
         />
       )}
       <ExerciseInfoModal
