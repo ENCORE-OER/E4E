@@ -151,7 +151,11 @@ export default function SingleResourceCard({
           description={oer?.description ?? ''}
           retrieval_date={oer?.retrieval_date ?? ''}
           publication_date={oer?.publication_date ?? ''}
-          overall_score={oer?.overall_score && oer?.overall_score > -1 ? oer?.overall_score : 0}
+          overall_score={
+            oer?.overall_score && oer?.overall_score > -1
+              ? oer?.overall_score
+              : 0
+          }
           media_type={(mediaTypes?.length ?? 0) > 0 ? mediaTypes : []}
           assessment_oer_type={oer?.exercise_values.assessment_oer_type ?? ''}
           times_used={times_used ?? 0}
@@ -183,9 +187,9 @@ export default function SingleResourceCard({
           collections={collections}
           addResource={addResource}
           addCollection={addCollection}
-        //times_used={times_used}
-        //setTimes_used={setTimes_used}
-        //getCount={getCount}
+          //times_used={times_used}
+          //setTimes_used={setTimes_used}
+          //getCount={getCount}
         />
       )}
     </>
