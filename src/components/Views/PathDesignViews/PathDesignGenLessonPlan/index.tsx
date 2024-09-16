@@ -7,6 +7,7 @@ import { useLearningPathDesignContext } from '../../../../Contexts/LearningPathD
 import {
   ArrayProps,
   BloomLevelsEnum,
+  BloomLevelString,
   LessonProps,
   MainTopicProps,
   MultipleArrayProps,
@@ -52,6 +53,7 @@ export default function PathDesignGenLessonPlan({
     setTitleLearningPath,
     handleEditLessonPlanClick,
     handleIdLearningScenario,
+    activityTypes,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -353,7 +355,17 @@ export default function PathDesignGenLessonPlan({
     // })
 
     if (generatedLessonPlan !== undefined && generatedLessonPlan?.length > 0) {
-      console.log('GENERATED LESSON PLAN');
+      // console.log('GENERATED LESSON PLAN');
+      const activityType: string =
+        activityTypes[
+          mapStringToString(
+            bloomLevels[bloomLevelIndex].name ||
+              bloomLevels[bloomLevelIndex].title ||
+              '',
+            BloomLevelString
+          )
+        ][0].activityType;
+
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
           activityTitle: `${
@@ -364,7 +376,7 @@ export default function PathDesignGenLessonPlan({
                     TypeOfActivityStringEnum
                   ) ?? 'Title'
                 }`
-              : 'Frontal Lecture'
+              : activityType
           } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
           activityType: `${
@@ -373,7 +385,7 @@ export default function PathDesignGenLessonPlan({
                   TypeOfActivityEnum[Number(generatedLesson.Details)],
                   TypeOfActivityStringEnum
                 )
-              : 'Frontal Lecture'
+              : activityType
           }`,
           activityDescription: `${
             generatedLesson.Type
@@ -637,7 +649,7 @@ export default function PathDesignGenLessonPlan({
 
         // Get the descriptions
         descriptionsTextToAnalyze = getDescriptionOERs(oers);
-        console.log('SONO USCITO DA GET DESCRIPTION');
+        // console.log('SONO USCITO DA GET DESCRIPTION');
 
         // If the getted descriptions string is not empty
         if (
@@ -673,7 +685,7 @@ export default function PathDesignGenLessonPlan({
     const tempLessonsActivities: LessonProps[] = [];
     for (let i = 0; i < numberOfLearningActivities; i++) {
       tempLessonsActivities.push({
-        activityTitle: '',
+        activityTitle: 'Title Activity',
         lessonType: 'Learning',
         activityType: '',
         activityDescription: '',
@@ -702,7 +714,7 @@ export default function PathDesignGenLessonPlan({
   };
 
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
-    console.log('SONO IN HANDLE GENERATE LESSON PLAN');
+    // console.log('SONO IN HANDLE GENERATE LESSON PLAN');
     let isPossibleToContinue = false;
     try {
       const oers = collections[collectionIndex]?.oers;
