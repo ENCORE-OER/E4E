@@ -228,14 +228,59 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   ];
 
   // Data for the checkbox menu
-  const Remember: string[] = ['Define', 'List', 'Recall', 'Identify', 'Recognise', 'Retrieve'];
-  const Understand: string[] = ['Illustrate', 'Explain', 'Summarise', 'Describe', 'Clarify', 'Categorise',];
-  const Apply: string[] = ['Respond', 'Provide', 'Use', 'Demonstrate', 'Solve', 'Apply', 'Implement'];
-  const Analyze: string[] = [
-    'Select', 'Distinguish', 'Analyse', 'Differentiate', 'Compare', 'Contrast', 'Integrate', 'Deconstruct', 'Structure'
+  const Remember: string[] = [
+    'Define',
+    'List',
+    'Recall',
+    'Identify',
+    'Recognise',
+    'Retrieve',
   ];
-  const Evaluate: string[] = ['Judge', 'Critique', 'Justify', 'Determine', 'Monitor', 'Detect', 'Reflect'];
-  const Create: string[] = ['Design', 'Create', 'Formulate', 'Hypothesise', 'Assemble', 'Construct'];
+  const Understand: string[] = [
+    'Illustrate',
+    'Explain',
+    'Summarise',
+    'Describe',
+    'Clarify',
+    'Categorise',
+  ];
+  const Apply: string[] = [
+    'Respond',
+    'Provide',
+    'Use',
+    'Demonstrate',
+    'Solve',
+    'Apply',
+    'Implement',
+  ];
+  const Analyze: string[] = [
+    'Select',
+    'Distinguish',
+    'Analyse',
+    'Differentiate',
+    'Compare',
+    'Contrast',
+    'Integrate',
+    'Deconstruct',
+    'Structure',
+  ];
+  const Evaluate: string[] = [
+    'Judge',
+    'Critique',
+    'Justify',
+    'Determine',
+    'Monitor',
+    'Detect',
+    'Reflect',
+  ];
+  const Create: string[] = [
+    'Design',
+    'Create',
+    'Formulate',
+    'Hypothesise',
+    'Assemble',
+    'Construct',
+  ];
 
   // Use useLocalStorage to declare state variables with persistence
 

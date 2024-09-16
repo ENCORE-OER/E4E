@@ -207,7 +207,6 @@ const Home = (/*props: DiscoverPageProps*/) => {
         handleIdLearningScenario('');
         handleEditLessonPlanClick(true);
 
-        console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan
         const isPossibleToContinue = await handleGenerationFunction();
 
@@ -358,7 +357,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
           <Flex
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Heading>Learning path design</Heading>
           </Flex>
@@ -367,7 +366,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             paddingTop="1.5rem"
             w="100%"
             justifyContent="left"
-            //justify="space-between"
+          //justify="space-between"
           >
             <Box
               //  w={isSmallerScreen ? '95%' : '90%'}
@@ -455,7 +454,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
             handleNextClick={
               lessonActivities.length > 0 ? handleNextClick : undefined
             }
-            // handlePrevButtonClick={handlePrevButtonClick}
+          // handlePrevButtonClick={handlePrevButtonClick}
           />
         </Box>
       </Box>
