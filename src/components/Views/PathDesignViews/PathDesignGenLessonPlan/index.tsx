@@ -53,7 +53,7 @@ export default function PathDesignGenLessonPlan({
     setTitleLearningPath,
     handleEditLessonPlanClick,
     handleIdLearningScenario,
-    activityTypes
+    activityTypes,
   } = useLearningPathDesignContext();
   const { collections } = useCollectionsContext();
   const { apiKey, setupModel, MAX_CHARS_TEXT_TO_ANALYZE } = useGeneralContext();
@@ -354,17 +354,17 @@ export default function PathDesignGenLessonPlan({
     //   setLessonPlan((prevLessons: LessonProps[]) => [...prevLessons, lesson])
     // })
 
-
     if (generatedLessonPlan !== undefined && generatedLessonPlan?.length > 0) {
       // console.log('GENERATED LESSON PLAN');
-      const activityType = activityTypes[
-        mapStringToString(
-          bloomLevels[bloomLevelIndex].name ||
-          bloomLevels[bloomLevelIndex].title ||
-          '',
-          BloomLevelString
-        )
-      ];
+      const activityType: string =
+        activityTypes[
+          mapStringToString(
+            bloomLevels[bloomLevelIndex].name ||
+            bloomLevels[bloomLevelIndex].title ||
+            '',
+            BloomLevelString
+          )
+        ][0].activityType;
 
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
@@ -374,7 +374,7 @@ export default function PathDesignGenLessonPlan({
               TypeOfActivityStringEnum
             ) ?? 'Title'
             }`
-            : activityType[0]
+            : activityType
             } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
           activityType: `${generatedLesson.Type
@@ -382,7 +382,7 @@ export default function PathDesignGenLessonPlan({
               TypeOfActivityEnum[Number(generatedLesson.Details)],
               TypeOfActivityStringEnum
             )
-            : activityType[0]
+            : activityType
             }`,
           activityDescription: `${generatedLesson.Type
             ? generatedLesson.Topic
