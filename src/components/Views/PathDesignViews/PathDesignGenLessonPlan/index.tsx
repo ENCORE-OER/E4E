@@ -360,34 +360,38 @@ export default function PathDesignGenLessonPlan({
         activityTypes[
           mapStringToString(
             bloomLevels[bloomLevelIndex].name ||
-            bloomLevels[bloomLevelIndex].title ||
-            '',
+              bloomLevels[bloomLevelIndex].title ||
+              '',
             BloomLevelString
           )
         ][0].activityType;
 
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          activityTitle: `${generatedLesson.Type
-            ? `${mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson?.Details)],
-              TypeOfActivityStringEnum
-            ) ?? 'Title'
-            }`
-            : activityType
-            } activity`,
+          activityTitle: `${
+            generatedLesson.Type
+              ? `${
+                  mapStringToString(
+                    TypeOfActivityEnum[Number(generatedLesson?.Details)],
+                    TypeOfActivityStringEnum
+                  ) ?? 'Title'
+                }`
+              : activityType
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : activityType
-            }`,
-          activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
-            }`,
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : activityType
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
