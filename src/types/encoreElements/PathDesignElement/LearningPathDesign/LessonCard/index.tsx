@@ -7,4 +7,3 @@ export * from './LessonProps';
 export * from './OptionsTypeOfAssignment';
 export * from './PassFailConditionsProps';
 export * from './UploadedFiles';
-

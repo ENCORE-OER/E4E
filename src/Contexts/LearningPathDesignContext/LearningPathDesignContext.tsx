@@ -228,17 +228,14 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   ];
 
   // Data for the checkbox menu
-  const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
-  const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
-  const Apply: string[] = ['Execute', 'Implement', 'Solve', 'Use'];
+  const Remember: string[] = ['Define', 'List', 'Recall', 'Identify', 'Recognise', 'Retrieve'];
+  const Understand: string[] = ['Illustrate', 'Explain', 'Summarise', 'Describe', 'Clarify', 'Categorise',];
+  const Apply: string[] = ['Respond', 'Provide', 'Use', 'Demonstrate', 'Solve', 'Apply', 'Implement'];
   const Analyze: string[] = [
-    'Differentiate',
-    'Organize',
-    'Relate',
-    'Deconstruct',
+    'Select', 'Distinguish', 'Analyse', 'Differentiate', 'Compare', 'Contrast', 'Integrate', 'Deconstruct', 'Structure'
   ];
-  const Evaluate: string[] = ['Check', 'Judge', 'Review', 'Test'];
-  const Create: string[] = ['Build', 'Compose', 'Design', 'Develop'];
+  const Evaluate: string[] = ['Judge', 'Critique', 'Justify', 'Determine', 'Monitor', 'Detect', 'Reflect'];
+  const Create: string[] = ['Design', 'Create', 'Formulate', 'Hypothesise', 'Assemble', 'Construct'];
 
   // Use useLocalStorage to declare state variables with persistence
 
@@ -677,7 +674,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Remembering',
       icon: <IconPenToSquare />,
     },
-  ]
+  ];
 
   const activityTypesUnderstanding: activityTypesObjectsProps[] = [
     // Learning Activities
@@ -743,7 +740,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Understanding',
       icon: <IconDiagram />,
     },
-  ]
+  ];
 
   const activityTypesApplying: activityTypesObjectsProps[] = [
     // Learning Activities
@@ -809,7 +806,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Applying',
       icon: <IconProject />,
     },
-  ]
+  ];
 
   const activityTypesAnalysing: activityTypesObjectsProps[] = [
     // Learning Activities
@@ -881,7 +878,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Analysing',
       icon: <IconLightbulb />,
     },
-  ]
+  ];
 
   const activityTypesEvaluating: activityTypesObjectsProps[] = [
     // Learning Activities
@@ -947,7 +944,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Evaluating',
       icon: <IconBookOpen />,
     },
-  ]
+  ];
 
   const activityTypesCreating: activityTypesObjectsProps[] = [
     // Learning Activities
@@ -1007,15 +1004,15 @@ export const LearningPathDesignProvider = ({ children }: any) => {
       bloomLevel: 'Creating',
       icon: <IconProject />,
     },
-  ]
+  ];
 
   const activityTypes: activityTypesProps = {
-    "Remembering": activityTypesRemembering,
-    "Understanding": activityTypesUnderstanding,
-    "Applying": activityTypesApplying,
-    "Analyising": activityTypesAnalysing,
-    "Evaluating": activityTypesEvaluating,
-    "Creating": activityTypesCreating,
+    Remembering: activityTypesRemembering,
+    Understanding: activityTypesUnderstanding,
+    Applying: activityTypesApplying,
+    Analyising: activityTypesAnalysing,
+    Evaluating: activityTypesEvaluating,
+    Creating: activityTypesCreating,
   };
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [

@@ -43,7 +43,7 @@ export default function LessonCardsList({
     scrollToIndex,
     setScrollToIndex,
     bloomLevelIndex,
-    bloomLevels
+    bloomLevels,
   } = useLearningPathDesignContext();
 
   const activityRefs = useRef<(null | HTMLDivElement)[]>([]);
@@ -234,7 +234,16 @@ export default function LessonCardsList({
                               handleEditLesson={handleEditActivityLesson}
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
-                              activityTypes={activityTypes[mapStringToString(bloomLevels[bloomLevelIndex].name || bloomLevels[bloomLevelIndex].title || "", BloomLevelString)]}
+                              activityTypes={
+                                activityTypes[
+                                  mapStringToString(
+                                    bloomLevels[bloomLevelIndex].name ||
+                                      bloomLevels[bloomLevelIndex].title ||
+                                      '',
+                                    BloomLevelString
+                                  )
+                                ]
+                              }
                               activityRef={(el) =>
                                 (activityRefs.current[indexCard] = el)
                               }
