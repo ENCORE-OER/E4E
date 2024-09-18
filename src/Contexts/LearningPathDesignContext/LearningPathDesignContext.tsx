@@ -220,17 +220,59 @@ export const LearningPathDesignProvider = ({ children }: any) => {
   ];
 
   // Data for the checkbox menu
-  const Remember: string[] = ['List', 'Recognize', 'Recall', 'Identify'];
-  const Understand: string[] = ['Summarise', 'Exemplify', 'Compare', 'Explain'];
-  const Apply: string[] = ['Execute', 'Implement', 'Solve', 'Use'];
-  const Analyze: string[] = [
-    'Differentiate',
-    'Organize',
-    'Relate',
-    'Deconstruct',
+  const Remember: string[] = [
+    'Define',
+    'List',
+    'Recall',
+    'Identify',
+    'Recognise',
+    'Retrieve',
   ];
-  const Evaluate: string[] = ['Check', 'Judge', 'Review', 'Test'];
-  const Create: string[] = ['Build', 'Compose', 'Design', 'Develop'];
+  const Understand: string[] = [
+    'Illustrate',
+    'Explain',
+    'Summarise',
+    'Describe',
+    'Clarify',
+    'Categorise',
+  ];
+  const Apply: string[] = [
+    'Respond',
+    'Provide',
+    'Use',
+    'Demonstrate',
+    'Solve',
+    'Apply',
+    'Implement',
+  ];
+  const Analyze: string[] = [
+    'Select',
+    'Distinguish',
+    'Analyse',
+    'Differentiate',
+    'Compare',
+    'Contrast',
+    'Integrate',
+    'Deconstruct',
+    'Structure',
+  ];
+  const Evaluate: string[] = [
+    'Judge',
+    'Critique',
+    'Justify',
+    'Determine',
+    'Monitor',
+    'Detect',
+    'Reflect',
+  ];
+  const Create: string[] = [
+    'Design',
+    'Create',
+    'Formulate',
+    'Hypothesise',
+    'Assemble',
+    'Construct',
+  ];
 
   // Use useLocalStorage to declare state variables with persistence
 

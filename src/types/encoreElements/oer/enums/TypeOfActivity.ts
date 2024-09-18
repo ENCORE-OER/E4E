@@ -3,8 +3,8 @@ export enum TypeOfActivityEnum {
   short_answer_question = 1,
   true_or_false = 2,
   fill_in_the_blanks = 3, // information_search
-  single_choice = 4, // multiple_choice
-  multiple_choice = 5, // multiple_select
+  multiple_choice = 4, // multiple choice question with one correct answer
+  multiple_select = 5, // multiple choice question with multiple correct answers
   essay = 6,
   knowledge_exposition = 7,
 
