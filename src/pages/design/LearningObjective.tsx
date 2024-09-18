@@ -207,6 +207,7 @@ const Home = (/*props: DiscoverPageProps*/) => {
         handleIdLearningScenario('');
         handleEditLessonPlanClick(true);
 
+        console.log("SONO NELL'HANDLE GENERATION FUNCTION");
         // Generate Lesson Plan
         const isPossibleToContinue = await handleGenerationFunction();
 

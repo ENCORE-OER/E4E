@@ -1,8 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import { BloomLevelString } from '../../../types/encoreElements';
-import { mapStringToString, useHasHydrated } from '../../../utils/utils';
+import { useHasHydrated } from '../../../utils/utils';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
 import { TabTableProps } from '../../Tabs/LearningPathTabs/TabTable';
 import CustomLearningPathTable from './CustomLearningPathTable';
@@ -21,8 +20,6 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
   (props, ref) => {
     const { isPrinting } = props;
     const {
-      bloomLevelIndex,
-      bloomLevels,
       isEditLessonPlanClicked,
       lessonActivities,
       setLessonActivities,
@@ -77,16 +74,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             titles={titleColumns}
             isEditLessonPlanClicked={isEditLessonPlanClicked}
             handleAddContentClick={handleAddContentClick}
-            activityTypes={
-              activityTypes[
-                mapStringToString(
-                  bloomLevels[bloomLevelIndex].name ||
-                    bloomLevels[bloomLevelIndex].title ||
-                    '',
-                  BloomLevelString
-                )
-              ]
-            }
+            activityTypes={activityTypes}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
             editRowIndex={editActivityLessonIndex}
