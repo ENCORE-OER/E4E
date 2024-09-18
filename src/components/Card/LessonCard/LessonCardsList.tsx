@@ -11,13 +11,12 @@ import {
 import LessonCard from '.';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
 import {
-  BloomLevelString,
   LessonCardProps,
   LessonProps,
   PassFailConditionsProps,
 } from '../../../types/encoreElements';
 import { reorderActivitiesAndFiles } from '../../../utils/indexedDB';
-import { mapStringToString, useHasHydrated } from '../../../utils/utils';
+import { useHasHydrated } from '../../../utils/utils';
 import IconDrag from '../../Icons/IconDrag/IconDrag';
 import AddPassFailConditionModal from '../../Modals/LearningPathModals/AddPassFailConditionModal';
 
@@ -42,8 +41,6 @@ export default function LessonCardsList({
     activityTypes,
     scrollToIndex,
     setScrollToIndex,
-    bloomLevelIndex,
-    bloomLevels,
   } = useLearningPathDesignContext();
 
   const activityRefs = useRef<(null | HTMLDivElement)[]>([]);
@@ -234,16 +231,7 @@ export default function LessonCardsList({
                               handleEditLesson={handleEditActivityLesson}
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
-                              activityTypes={
-                                activityTypes[
-                                  mapStringToString(
-                                    bloomLevels[bloomLevelIndex].name ||
-                                      bloomLevels[bloomLevelIndex].title ||
-                                      '',
-                                    BloomLevelString
-                                  )
-                                ]
-                              }
+                              activityTypes={activityTypes}
                               activityRef={(el) =>
                                 (activityRefs.current[indexCard] = el)
                               }
