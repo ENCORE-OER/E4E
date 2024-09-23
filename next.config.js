@@ -18,6 +18,8 @@ const POLYGLOT_DASHBOARD =
   process.env.POLYGLOT_DASHBOARD || 'https://staging.polyglot-edu.com/';
 const GENERATIVE_AI_URL =
   process.env.GENERATIVE_AI_URL || 'https://skapi.polyglot-edu.com';
+const GEN_LESSON_PLAN_URL =
+  process.env.GEN_LESSON_PLAN_URL || 'https://skapi-giunti.polyglot-edu.com';
 const ENCORE_OERS_DB =
   process.env.ENCORE_OERS_DB || 'https://encore-db.grial.eu';
 const ENCORE_API_URL =
@@ -29,6 +31,9 @@ const SK_API_KEY = process.env.SK_API_KEY || 'Kdzwa9xxu_jW]LjkPaxX1;H;kUuU;0';
 const SETUP_MODEL =
   process.env.SETUP_MODEL ||
   '{"secretKey": "9d0c99f57dc748488db3d39bf4a0a1c9","modelName": "gpt35Turbo","endpoint": "https://ai4edu.openai.azure.com/"}';
+const SETUP_MODEL_LESSON_PLAN =
+  process.env.SETUP_MODEL_LESSON_PLAN ||
+  '{"secretKey": "9d0c99f57dc748488db3d39bf4a0a1c9","modelName": "GPT-4o-MINI","endpoint": "https://ai4edu.openai.azure.com/"}';
 
 module.exports = {
   env: {
@@ -38,9 +43,11 @@ module.exports = {
     POLYGLOT_DASHBOARD: POLYGLOT_DASHBOARD,
     CONCEPT_URL: CONCEPT_URL,
     GENERATIVE_AI_URL: GENERATIVE_AI_URL,
+    GEN_LESSON_PLAN_URL: GEN_LESSON_PLAN_URL,
     ENCORE_OERS_DB: ENCORE_OERS_DB,
     ENCORE_API_URL: ENCORE_API_URL,
     SK_API_KEY: SK_API_KEY,
     SETUP_MODEL: SETUP_MODEL,
+    SETUP_MODEL_LESSON_PLAN: SETUP_MODEL_LESSON_PLAN,
   },
 };

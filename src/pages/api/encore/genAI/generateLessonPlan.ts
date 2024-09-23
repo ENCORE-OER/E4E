@@ -2,7 +2,7 @@ import { default as axiosCreate } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const axiosGenerativeAI = axiosCreate.create({
-  baseURL: process.env.GENERATIVE_AI_URL, // TODO: change to the generative AI URL
+  baseURL: process.env.GEN_LESSON_PLAN_URL, // TODO: change to the generative AI URL
   headers: {
     'Content-Type': 'application/json',
     // SetupModel: process.env.SETUP_MODEL,
@@ -58,7 +58,7 @@ export default async function generateLessonPlan(
         {
           headers: {
             ApiKey: apikey || process.env.SK_API_KEY,
-            SetupModel: setupmodel || process.env.SETUP_MODEL,
+            SetupModel: setupmodel || process.env.SETUP_MODEL_LESSON_PLAN,
           },
         }
         // {

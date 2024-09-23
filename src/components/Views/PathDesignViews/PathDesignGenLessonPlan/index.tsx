@@ -222,6 +222,8 @@ export default function PathDesignGenLessonPlan({
   //   }
   // };
 
+  // 7
+  // POST API request of generateLessonPlan
   const postGenerateLessonPlan = async (
     apiKey: string | undefined,
     setupModel: string | undefined,
@@ -269,6 +271,8 @@ export default function PathDesignGenLessonPlan({
     }
   };
 
+  // # 5
+  // POST request to analyze the material
   const postAnalyzeMaterial = async (
     apiKey: string | undefined,
     setupModel: string | undefined,
@@ -300,6 +304,8 @@ export default function PathDesignGenLessonPlan({
     }
   };
 
+  // # 6
+  // Generation of the lesson plan
   const generationLessonPlan = async (
     analyzedMaterial: RespAnalyzedMaterialProps
   ): Promise<boolean> => {
@@ -393,6 +399,8 @@ export default function PathDesignGenLessonPlan({
     return isPlanGenerated;
   };
 
+  // # 4
+  // Method to analyze the material and run the generation of the lesson plan
   const analyzeAndPlan = async (
     material: string,
     isPossibleToContinue: boolean
@@ -587,6 +595,8 @@ export default function PathDesignGenLessonPlan({
     return tempDescription;
   };
 
+  // # 3
+  // Method to get the material, to analyze it and to generate the lesson plan
   const getUrlAnalyzeAndPlan = async (
     oers: OerInCollectionProps[],
     selectedResources?: number[]
@@ -622,6 +632,7 @@ export default function PathDesignGenLessonPlan({
 
           console.log(urlSource);
 
+          // Call the analyzeAndPlane API
           isPossibleToContinue = await analyzeAndPlan(
             urlSource,
             isPossibleToContinue
@@ -701,8 +712,9 @@ export default function PathDesignGenLessonPlan({
     handleEditLessonPlanClick(true);
   };
 
+  // # 2
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
-    console.log('SONO IN HANDLE GENERATE LESSON PLAN');
+    // console.log('SONO IN HANDLE GENERATE LESSON PLAN');
     let isPossibleToContinue = false;
     try {
       const oers = collections[collectionIndex]?.oers;
@@ -816,6 +828,8 @@ export default function PathDesignGenLessonPlan({
     }
   };
 
+  // # 1
+  // Handle the click of the generate lesson plan button
   const handleGenerateLessonPlanClick = async () => {
     setIsLoading(true);
     try {
