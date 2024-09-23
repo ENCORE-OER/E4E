@@ -13,7 +13,7 @@ import {
   ObjectLearningObjectiveProps,
   OerInCollectionProps,
   OutputLessonPlanProps,
-  RespAnalyzedMaterialProps
+  RespAnalyzedMaterialProps,
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
 import { mapOptionToNumber } from '../../../../utils/utils';
@@ -601,7 +601,7 @@ export default function PathDesignGenLessonPlan({
           oer.urlSource !== undefined
         ) {
           console.log(oer.urlSource);
-          console.log('Oer not undefined!');
+          // console.log('Oer not undefined!');
 
           // If generated, it only has an URL string, otherwhise it may have an array of URL
           const urlSource = Array.isArray(oer.urlSource)
@@ -626,14 +626,14 @@ export default function PathDesignGenLessonPlan({
 
         // Get the descriptions
         descriptionsTextToAnalyze = getDescriptionOERs(oers);
-        console.log('SONO USCITO DA GET DESCRIPTION');
+        // console.log('SONO USCITO DA GET DESCRIPTION');
 
         // If the getted descriptions string is not empty
         if (
           descriptionsTextToAnalyze !== '' &&
           descriptionsTextToAnalyze !== undefined
         ) {
-          console.log('Descriptions Text to Analyze is not EMPTY!');
+          // console.log('Descriptions Text to Analyze is not EMPTY!');
 
           isPossibleToContinue = await analyzeAndPlan(
             descriptionsTextToAnalyze,
@@ -662,7 +662,7 @@ export default function PathDesignGenLessonPlan({
     const tempLessonsActivities: LessonProps[] = [];
     for (let i = 0; i < numberOfLearningActivities; i++) {
       tempLessonsActivities.push({
-        activityTitle: '',
+        activityTitle: 'Title Activity',
         lessonType: 'Learning',
         activityType: '',
         activityDescription: '',

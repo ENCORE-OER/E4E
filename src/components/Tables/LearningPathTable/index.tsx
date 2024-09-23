@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import { useHasHydrated } from '../../../utils/utils';
+import { activityTypesObjectsProps, BloomLevelString } from '../../../types/encoreElements';
+import { mapStringToString, useHasHydrated } from '../../../utils/utils';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
 import { TabTableProps } from '../../Tabs/LearningPathTabs/TabTable';
 import CustomLearningPathTable from './CustomLearningPathTable';
@@ -31,12 +32,23 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       loadUploadedFiles,
       scrollToIndex,
       setScrollToIndex,
+      bloomLevelIndex,
+      bloomLevels
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
     const activityRefs = useRef<
       (null | HTMLDivElement | HTMLTableRowElement)[]
     >([]);
+
+    const activityTypesArray: activityTypesObjectsProps[] = activityTypes[
+      mapStringToString(
+        bloomLevels[bloomLevelIndex].name ||
+        bloomLevels[bloomLevelIndex].title ||
+        '',
+        BloomLevelString
+      )
+    ]
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
@@ -74,7 +86,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             titles={titleColumns}
             isEditLessonPlanClicked={isEditLessonPlanClicked}
             handleAddContentClick={handleAddContentClick}
-            activityTypes={activityTypes}
+            activityTypes={activityTypesArray}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
             editRowIndex={editActivityLessonIndex}

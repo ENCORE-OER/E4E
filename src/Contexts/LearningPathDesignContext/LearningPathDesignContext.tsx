@@ -8,12 +8,19 @@ import React, {
 } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import IconAnalytics from '../../components/Icons/IconAnalytics/IconAnalytics';
+import IconBookOpen from '../../components/Icons/IconBookOpen/IconBookOpen';
+import IconBrain from '../../components/Icons/IconBrain/IconBrain';
+import IconDiagram from '../../components/Icons/IconDiagram/IconDiagram';
+import IconDiscussion from '../../components/Icons/IconDiscussion/IconDiscussion';
+import IconDisplay from '../../components/Icons/IconDisplay/IconDisplay';
 import IconFrontalLecture from '../../components/Icons/IconFrontalLecture/IconFrontalLecture';
 import IconGroup from '../../components/Icons/IconGroups/IconGroup';
-import IconPencilBrush from '../../components/Icons/IconPencilBrush/IconPencilBrush';
+import IconLightbulb from '../../components/Icons/IconLightbulb/IconLightbulb';
+import IconList from '../../components/Icons/IconList/IconList';
 import IconPenToSquare from '../../components/Icons/IconPenToSquare/IconPenToSquare';
 import IconProject from '../../components/Icons/IconProject/IconProject';
 import IconQuiz from '../../components/Icons/IconQuiz/IconQuiz';
+import IconSearch from '../../components/Icons/IconSearch/IconSearch';
 import {
   activityTypesObjectsProps,
   ArrayProps,
@@ -26,6 +33,7 @@ import {
   SkillItemProps,
   UploadedFilesProps,
 } from '../../types/encoreElements/index';
+import { activityTypesProps } from '../../types/encoreElements/PathDesignElement/LearningPathDesign/LessonCard/ActivityTypesProps';
 import {
   deleteActivityAndUpdateFiles,
   getAllFilesByActivityIndex,
@@ -115,7 +123,7 @@ type LearnignPathDesignContextProps = {
   handleEditActivityLesson: (index: number) => void;
   handleSaveLesson: () => void;
 
-  activityTypes: activityTypesObjectsProps[]; // Array of all the activity types
+  activityTypes: activityTypesProps; // Array of all the activity types
   optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[]; // Array of all the lesson types
   // Lessons Activities
   totalNumberLessonActivities: number;
@@ -646,99 +654,278 @@ export const LearningPathDesignProvider = ({ children }: any) => {
 
   // Data activity type
   // const activityTypes: string[] = Object.values(TypeOfActivityStringEnum);
-  const activityTypes: activityTypesObjectsProps[] = [
+  const activityTypesRemembering: activityTypesObjectsProps[] = [
+    // Learning Activities
     {
-      lessonType: 'Assessment',
-      activityType: 'Open Question',
-      icon: <IconPenToSquare />,
+      lessonType: 'Learning',
+      activityType: 'Listening to a lecture',
+      bloomLevel: 'Remembering',
+      icon: <IconFrontalLecture />,
     },
     {
-      lessonType: 'Assessment',
-      activityType: 'Short Answer Question',
-      icon: <IconPenToSquare />,
+      lessonType: 'Learning',
+      activityType: 'Identifying keywords',
+      bloomLevel: 'Remembering',
+      icon: <IconSearch />,
     },
+    {
+      lessonType: 'Learning',
+      activityType: 'Watching material',
+      bloomLevel: 'Remembering',
+      icon: <IconDisplay />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Making lists',
+      bloomLevel: 'Remembering',
+      icon: <IconList />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Reading materials',
+      bloomLevel: 'Remembering',
+      icon: <IconBookOpen />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Memory activity',
+      bloomLevel: 'Remembering',
+      icon: <IconBrain />,
+    },
+
+    // Assessment Activities
     {
       lessonType: 'Assessment',
       activityType: 'True or False',
+      bloomLevel: 'Remembering',
       icon: <IconQuiz />,
     },
     {
       lessonType: 'Assessment',
-      activityType: 'Fill in the Blanks',
+      activityType: 'Fill In The Blanks',
+      bloomLevel: 'Remembering',
       icon: <IconPenToSquare />,
     },
     {
       lessonType: 'Assessment',
-      activityType: 'Single Choice',
+      activityType: 'Matching exercises',
+      bloomLevel: 'Remembering',
+      icon: <IconPenToSquare />,
+    },
+  ];
+
+  const activityTypesUnderstanding: activityTypesObjectsProps[] = [
+    // Learning Activities
+    {
+      lessonType: 'Learning',
+      activityType: 'Summaries',
+      bloomLevel: 'Understanding',
+      icon: <IconBookOpen />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Concept map',
+      bloomLevel: 'Understanding',
+      icon: <IconDiagram />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Exemplifications',
+      bloomLevel: 'Understanding',
+      icon: <IconBookOpen />,
+    },
+
+    // Assessment Activities
+    {
+      lessonType: 'Assessment',
+      activityType: 'Multiple choice',
+      bloomLevel: 'Understanding',
       icon: <IconQuiz />,
     },
     {
       lessonType: 'Assessment',
-      activityType: 'Multiple Choice',
-      icon: <IconQuiz />,
+      activityType: 'Write an essay',
+      bloomLevel: 'Understanding',
+      icon: <IconPenToSquare />,
     },
     {
       lessonType: 'Assessment',
-      activityType: 'Essay',
+      activityType: 'Create a summary',
+      bloomLevel: 'Understanding',
+      icon: <IconBookOpen />,
+    },
+  ];
+
+  const activityTypesApplying: activityTypesObjectsProps[] = [
+    // Learning Activities
+    {
+      lessonType: 'Learning',
+      activityType: 'Exercises',
+      bloomLevel: 'Applying',
       icon: <IconPenToSquare />,
     },
     {
       lessonType: 'Learning',
-      activityType: 'Knowledge Exposition',
-      icon: <IconFrontalLecture />,
-    },
-    { lessonType: 'Learning', activityType: 'Debate', icon: <IconGroup /> },
-    {
-      lessonType: 'Learning',
-      activityType: 'Brainstorming',
+      activityType: 'Role-playing',
+      bloomLevel: 'Applying',
       icon: <IconGroup />,
     },
     {
       lessonType: 'Learning',
-      activityType: 'Group Discussion',
-      icon: <IconGroup />,
+      activityType: 'Case studies',
+      bloomLevel: 'Applying',
+      icon: <IconBookOpen />,
+    },
+
+    // Assessment Activities
+    {
+      lessonType: 'Assessment',
+      activityType: 'Simulations',
+      bloomLevel: 'Applying',
+      icon: <IconBookOpen />,
     },
     {
       lessonType: 'Assessment',
-      activityType: 'Simulation',
-      icon: <IconPenToSquare />,
+      activityType: 'Problem-solving task',
+      bloomLevel: 'Applying',
+      icon: <IconLightbulb />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Make a presentation',
+      bloomLevel: 'Applying',
+      icon: <IconProject />,
+    },
+  ];
+
+  const activityTypesAnalysing: activityTypesObjectsProps[] = [
+    // Learning Activities
+    {
+      lessonType: 'Learning',
+      activityType: 'Problem-solving analysis',
+      bloomLevel: 'Analysing',
+      icon: <IconLightbulb />,
     },
     {
       lessonType: 'Learning',
-      activityType: 'Inquiry-based Learning',
-      icon: <IconGroup />,
+      activityType: 'Debates',
+      bloomLevel: 'Analysing',
+      icon: <IconDiscussion />,
     },
     {
-      lessonType: 'Other',
-      activityType: 'Non-written Material Analysis',
+      lessonType: 'Learning',
+      activityType: 'Projects',
+      bloomLevel: 'Analysing',
+      icon: <IconProject />,
+    },
+
+    // Assessment Activities
+    {
+      lessonType: 'Assessment',
+      activityType: 'Analyse a case study',
+      bloomLevel: 'Analysing',
+      icon: <IconBookOpen />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Data analysis',
+      bloomLevel: 'Analysing',
       icon: <IconAnalytics />,
     },
     {
-      lessonType: 'Other',
-      activityType: 'Non-written Material Production',
-      icon: <IconPencilBrush />,
-    },
-    {
       lessonType: 'Assessment',
-      activityType: 'Case Study Analysis',
-      icon: <IconAnalytics />,
+      activityType: 'Solve a problem',
+      bloomLevel: 'Analysing',
+      icon: <IconLightbulb />,
+    },
+  ];
+
+  const activityTypesEvaluating: activityTypesObjectsProps[] = [
+    // Learning Activities
+    {
+      lessonType: 'Learning',
+      activityType: 'Decision-making tasks',
+      bloomLevel: 'Evaluating',
+      icon: <IconLightbulb />,
     },
     {
       lessonType: 'Learning',
-      activityType: 'Project-based Learning',
+      activityType: 'Peer Review',
+      bloomLevel: 'Evaluating',
+      icon: <IconGroup />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Pros and cons lists',
+      bloomLevel: 'Evaluating',
+      icon: <IconList />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'SWOT analysis',
+      bloomLevel: 'Evaluating',
+      icon: <IconAnalytics />,
+    },
+
+    // Assessment Activities
+    {
+      lessonType: 'Assessment',
+      activityType: 'Argumentative essays',
+      bloomLevel: 'Evaluating',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Assessment',
+      activityType: 'Peer assessments',
+      bloomLevel: 'Evaluating',
+      icon: <IconGroup />,
+    },
+  ];
+
+  const activityTypesCreating: activityTypesObjectsProps[] = [
+    // Learning Activities
+    {
+      lessonType: 'Learning',
+      activityType: 'Creative writing',
+      bloomLevel: 'Creating',
+      icon: <IconPenToSquare />,
+    },
+    {
+      lessonType: 'Learning',
+      activityType: 'Student presentations',
+      bloomLevel: 'Creating',
       icon: <IconProject />,
     },
     {
+      lessonType: 'Learning',
+      activityType: 'Brainstorming',
+      bloomLevel: 'Creating',
+      icon: <IconGroup />,
+    },
+
+    // Assessment Activities
+    {
       lessonType: 'Assessment',
-      activityType: 'Problem-solving Activity',
-      icon: <IconQuiz />,
+      activityType: 'Business plan analysis',
+      bloomLevel: 'Creating',
+      icon: <IconAnalytics />,
     },
     {
-      lessonType: 'Learning',
-      activityType: 'Frontal Lecture',
-      icon: <IconFrontalLecture />,
+      lessonType: 'Assessment',
+      activityType: 'Authentic assessment',
+      bloomLevel: 'Creating',
+      icon: <IconPenToSquare />,
     },
   ];
+
+  const activityTypes: activityTypesProps = {
+    Remembering: activityTypesRemembering,
+    Understanding: activityTypesUnderstanding,
+    Applying: activityTypesApplying,
+    Analyising: activityTypesAnalysing,
+    Evaluating: activityTypesEvaluating,
+    Creating: activityTypesCreating,
+  };
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
     {
