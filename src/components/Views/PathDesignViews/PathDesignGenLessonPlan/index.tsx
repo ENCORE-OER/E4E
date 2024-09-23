@@ -362,26 +362,30 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          activityTitle: `${generatedLesson.Type
-            ? `${mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson?.Details)],
-              TypeOfActivityStringEnum
-            ) ?? 'Title'
-            }`
-            : 'Frontal Lecture'
-            } activity`,
+          activityTitle: `${
+            generatedLesson.Type
+              ? `${
+                  mapStringToString(
+                    TypeOfActivityEnum[Number(generatedLesson?.Details)],
+                    TypeOfActivityStringEnum
+                  ) ?? 'Title'
+                }`
+              : 'Frontal Lecture'
+          } activity`,
           lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${generatedLesson.Type
-            ? mapStringToString(
-              TypeOfActivityEnum[Number(generatedLesson.Details)],
-              TypeOfActivityStringEnum
-            )
-            : 'Frontal Lecture'
-            }`,
-          activityDescription: `${generatedLesson.Type
-            ? generatedLesson.Topic
-            : generatedLesson.Details
-            }`,
+          activityType: `${
+            generatedLesson.Type
+              ? mapStringToString(
+                  TypeOfActivityEnum[Number(generatedLesson.Details)],
+                  TypeOfActivityStringEnum
+                )
+              : 'Frontal Lecture'
+          }`,
+          activityDescription: `${
+            generatedLesson.Type
+              ? generatedLesson.Topic
+              : generatedLesson.Details
+          }`,
           topic: generatedLesson.Topic,
           timeDuration: Number(generatedLesson.Duration),
           passFailConditions: [],
@@ -708,7 +712,6 @@ export default function PathDesignGenLessonPlan({
     handleEditLessonPlanClick(true);
   };
 
-
   // # 2
   const handleGenerateLessonPlan = async (): Promise<boolean> => {
     // console.log('SONO IN HANDLE GENERATE LESSON PLAN');
@@ -824,7 +827,6 @@ export default function PathDesignGenLessonPlan({
       return isPossibleToContinue;
     }
   };
-
 
   // # 1
   // Handle the click of the generate lesson plan button
