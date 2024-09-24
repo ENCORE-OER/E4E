@@ -13,7 +13,7 @@ import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesi
 import {
   LessonCardProps,
   LessonProps,
-  PassFailConditionsProps,
+  PassFailConditionsProps
 } from '../../../types/encoreElements';
 import { reorderActivitiesAndFiles } from '../../../utils/indexedDB';
 import { useHasHydrated } from '../../../utils/utils';
@@ -41,6 +41,7 @@ export default function LessonCardsList({
     activityTypes,
     scrollToIndex,
     setScrollToIndex,
+    bloomLevelIndex,
   } = useLearningPathDesignContext();
 
   const activityRefs = useRef<(null | HTMLDivElement)[]>([]);
@@ -231,7 +232,9 @@ export default function LessonCardsList({
                               handleEditLesson={handleEditActivityLesson}
                               isEditLessonPlanClicked={isEditLessonPlanClicked}
                               optionsTypeOfAssignment={optionsTypeOfAssignment}
-                              activityTypes={activityTypes}
+                              activityTypes={
+                                activityTypes[bloomLevelIndex]
+                              }
                               activityRef={(el) =>
                                 (activityRefs.current[indexCard] = el)
                               }

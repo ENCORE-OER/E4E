@@ -45,7 +45,7 @@ export default function ActivityTypeDropDownMenu({
   // const { activityTypes } = useLearningPathDesignContext();
 
   const handleSelect = (index: number) => {
-    const selected = activityTypes.filter(
+    const selected = activityTypes?.filter(
       (type: activityTypesObjectsProps) => type.lessonType === lessonType
     )[index];
 

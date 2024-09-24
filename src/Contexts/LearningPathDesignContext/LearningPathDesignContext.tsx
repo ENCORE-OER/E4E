@@ -33,7 +33,6 @@ import {
   SkillItemProps,
   UploadedFilesProps,
 } from '../../types/encoreElements/index';
-import { activityTypesProps } from '../../types/encoreElements/PathDesignElement/LearningPathDesign/LessonCard/ActivityTypesProps';
 import {
   deleteActivityAndUpdateFiles,
   getAllFilesByActivityIndex,
@@ -123,7 +122,7 @@ type LearnignPathDesignContextProps = {
   handleEditActivityLesson: (index: number) => void;
   handleSaveLesson: () => void;
 
-  activityTypes: activityTypesProps; // Array of all the activity types
+  activityTypes: activityTypesObjectsProps[][]; // Array of all the activity types
   optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[]; // Array of all the lesson types
   // Lessons Activities
   totalNumberLessonActivities: number;
@@ -798,24 +797,24 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     },
   ];
 
-  const activityTypesAnalysing: activityTypesObjectsProps[] = [
+  const activityTypesAnalyzing: activityTypesObjectsProps[] = [
     // Learning Activities
     {
       lessonType: 'Learning',
       activityType: 'Problem-solving analysis',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconLightbulb />,
     },
     {
       lessonType: 'Learning',
       activityType: 'Debates',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconDiscussion />,
     },
     {
       lessonType: 'Learning',
       activityType: 'Projects',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconProject />,
     },
 
@@ -823,19 +822,19 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     {
       lessonType: 'Assessment',
       activityType: 'Analyse a case study',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconBookOpen />,
     },
     {
       lessonType: 'Assessment',
       activityType: 'Data analysis',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconAnalytics />,
     },
     {
       lessonType: 'Assessment',
       activityType: 'Solve a problem',
-      bloomLevel: 'Analysing',
+      bloomLevel: 'Analyzing',
       icon: <IconLightbulb />,
     },
   ];
@@ -918,14 +917,23 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     },
   ];
 
-  const activityTypes: activityTypesProps = {
-    Remembering: activityTypesRemembering,
-    Understanding: activityTypesUnderstanding,
-    Applying: activityTypesApplying,
-    Analyising: activityTypesAnalysing,
-    Evaluating: activityTypesEvaluating,
-    Creating: activityTypesCreating,
-  };
+  // const activityTypes: activityTypesProps = {
+  //   Remembering: activityTypesRemembering,
+  //   Understanding: activityTypesUnderstanding,
+  //   Applying: activityTypesApplying,
+  //   Analyizing: activityTypesAnalyzing,
+  //   Evaluating: activityTypesEvaluating,
+  //   Creating: activityTypesCreating,
+  // };
+
+  const activityTypes: activityTypesObjectsProps[][] = [
+    activityTypesRemembering,
+    activityTypesUnderstanding,
+    activityTypesApplying,
+    activityTypesAnalyzing,
+    activityTypesEvaluating,
+    activityTypesCreating,
+  ]
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
     {

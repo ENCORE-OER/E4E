@@ -1,8 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useLearningPathDesignContext } from '../../../Contexts/LearningPathDesignContext/LearningPathDesignContext';
-import { activityTypesObjectsProps, BloomLevelString } from '../../../types/encoreElements';
-import { mapStringToString, useHasHydrated } from '../../../utils/utils';
+import { useHasHydrated } from '../../../utils/utils';
 import AddContentModal from '../../Modals/LearningPathModals/AddContentModal';
 import { TabTableProps } from '../../Tabs/LearningPathTabs/TabTable';
 import CustomLearningPathTable from './CustomLearningPathTable';
@@ -33,22 +32,12 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       scrollToIndex,
       setScrollToIndex,
       bloomLevelIndex,
-      bloomLevels
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
     const activityRefs = useRef<
       (null | HTMLDivElement | HTMLTableRowElement)[]
     >([]);
-
-    const activityTypesArray: activityTypesObjectsProps[] = activityTypes[
-      mapStringToString(
-        bloomLevels[bloomLevelIndex].name ||
-        bloomLevels[bloomLevelIndex].title ||
-        '',
-        BloomLevelString
-      )
-    ]
 
     // Handle "Add Content Modal"
     const [isAddContentModalOpen, setIsAddContentModalOpen] =
@@ -77,6 +66,14 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       }
     }, [scrollToIndex]);
 
+    // useEffect(() => {
+    //   console.log("selected bloom level", bloomLevelIndex);
+    //   console.log("list bloom levels", bloomLevels);
+    //   const temp = activityTypes[bloomLevelIndex]
+    //   console.log("temp", temp);
+    //   console.log("activity types", activityTypes);
+    // }, [])
+
     return (
       <Flex direction="column" overflow={'auto'}>
         {hydrated && (
@@ -86,7 +83,9 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             titles={titleColumns}
             isEditLessonPlanClicked={isEditLessonPlanClicked}
             handleAddContentClick={handleAddContentClick}
-            activityTypes={activityTypesArray}
+            activityTypes={
+              activityTypes[bloomLevelIndex]
+            }
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
             editRowIndex={editActivityLessonIndex}
