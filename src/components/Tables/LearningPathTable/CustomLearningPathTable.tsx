@@ -79,7 +79,7 @@ const CustomLearningPathTable = forwardRef<
     index: number, // index row
     selectedTypeIndex: number
   ) => {
-    const filteredActivityTypes = activityTypes.filter(
+    const filteredActivityTypes = activityTypes?.filter(
       (type: activityTypesObjectsProps) =>
         type.lessonType === data[index].lessonType
     );

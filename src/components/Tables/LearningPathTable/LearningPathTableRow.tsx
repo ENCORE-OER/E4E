@@ -174,7 +174,7 @@ export default function LearningPathTableRow({
               minW="75px"
               maxW="100px"
             />
-          ) : row.timeDuration > 0 ? (
+          ) : row.timeDuration !== undefined && row.timeDuration > 0 ? (
             <Text cursor="default">{`${row.timeDuration} min`}</Text>
           ) : (
             <LabelEmptyFieldTable label="Minutes" />

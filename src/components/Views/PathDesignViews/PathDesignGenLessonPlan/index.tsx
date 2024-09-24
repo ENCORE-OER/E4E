@@ -14,11 +14,9 @@ import {
   OerInCollectionProps,
   OutputLessonPlanProps,
   RespAnalyzedMaterialProps,
-  TypeOfActivityEnum,
-  TypeOfActivityStringEnum,
 } from '../../../../types/encoreElements';
 import { CustomToast } from '../../../../utils/Toast/CustomToast';
-import { mapOptionToNumber, mapStringToString } from '../../../../utils/utils';
+import { mapOptionToNumber } from '../../../../utils/utils';
 import GenerateLessonPlanButton from '../../../Buttons/ButtonsDesignPage/GenerateLessoPlanButton';
 import ShowHideButton from '../../../Buttons/ShowHideButton';
 import IconInfoCircleTooltip from '../../../Icons/IconInfoCircle/IconInfoCircleTooltip';
@@ -362,32 +360,12 @@ export default function PathDesignGenLessonPlan({
       console.log('GENERATED LESSON PLAN');
       setLessonActivities(
         generatedLessonPlan?.map((generatedLesson: OutputLessonPlanProps) => ({
-          activityTitle: `${
-            generatedLesson.Type
-              ? `${
-                  mapStringToString(
-                    TypeOfActivityEnum[Number(generatedLesson?.Details)],
-                    TypeOfActivityStringEnum
-                  ) ?? 'Title'
-                }`
-              : 'Frontal Lecture'
-          } activity`,
-          lessonType: generatedLesson.Type ? 'Assessment' : 'Learning',
-          activityType: `${
-            generatedLesson.Type
-              ? mapStringToString(
-                  TypeOfActivityEnum[Number(generatedLesson.Details)],
-                  TypeOfActivityStringEnum
-                )
-              : 'Frontal Lecture'
-          }`,
-          activityDescription: `${
-            generatedLesson.Type
-              ? generatedLesson.Topic
-              : generatedLesson.Details
-          }`,
+          activityTitle: `${generatedLesson.Type} activity`,
+          lessonType: `${generatedLesson.Type}`,
+          activityType: `${generatedLesson.Details}`,
+          activityDescription: `${generatedLesson.Description}`,
           topic: generatedLesson.Topic,
-          timeDuration: Number(generatedLesson.Duration),
+          timeDuration: 0,
           passFailConditions: [],
           content: { oers: [], uploadedFiles: [] },
         })) || []
@@ -623,7 +601,7 @@ export default function PathDesignGenLessonPlan({
           oer.urlSource !== undefined
         ) {
           console.log(oer.urlSource);
-          console.log('Oer not undefined!');
+          // console.log('Oer not undefined!');
 
           // If generated, it only has an URL string, otherwhise it may have an array of URL
           const urlSource = Array.isArray(oer.urlSource)
@@ -648,14 +626,14 @@ export default function PathDesignGenLessonPlan({
 
         // Get the descriptions
         descriptionsTextToAnalyze = getDescriptionOERs(oers);
-        console.log('SONO USCITO DA GET DESCRIPTION');
+        // console.log('SONO USCITO DA GET DESCRIPTION');
 
         // If the getted descriptions string is not empty
         if (
           descriptionsTextToAnalyze !== '' &&
           descriptionsTextToAnalyze !== undefined
         ) {
-          console.log('Descriptions Text to Analyze is not EMPTY!');
+          // console.log('Descriptions Text to Analyze is not EMPTY!');
 
           isPossibleToContinue = await analyzeAndPlan(
             descriptionsTextToAnalyze,
@@ -684,7 +662,7 @@ export default function PathDesignGenLessonPlan({
     const tempLessonsActivities: LessonProps[] = [];
     for (let i = 0; i < numberOfLearningActivities; i++) {
       tempLessonsActivities.push({
-        activityTitle: '',
+        activityTitle: 'Title Activity',
         lessonType: 'Learning',
         activityType: '',
         activityDescription: '',

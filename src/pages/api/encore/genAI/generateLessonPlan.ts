@@ -69,8 +69,8 @@ export default async function generateLessonPlan(
         //   },
         // }
       );
-      res.status(200).json(respLessonPlan?.data);
-      console.log('respLearningObjective', respLessonPlan?.data);
+      res.status(200).json(respLessonPlan?.data?.lesson_plan);
+      console.log('respLearningObjective', respLessonPlan?.data?.lesson_plan);
       //console.log(respLearningObjective);
     } catch (error) {
       console.error('Error: ' + error);

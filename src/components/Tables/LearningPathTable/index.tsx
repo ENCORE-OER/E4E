@@ -31,6 +31,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       loadUploadedFiles,
       scrollToIndex,
       setScrollToIndex,
+      bloomLevelIndex,
     } = useLearningPathDesignContext();
     const hydrated = useHasHydrated();
     const [activityIndex, setActivityIndex] = useState<number>(-1);
@@ -65,6 +66,14 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
       }
     }, [scrollToIndex]);
 
+    // useEffect(() => {
+    //   console.log("selected bloom level", bloomLevelIndex);
+    //   console.log("list bloom levels", bloomLevels);
+    //   const temp = activityTypes[bloomLevelIndex]
+    //   console.log("temp", temp);
+    //   console.log("activity types", activityTypes);
+    // }, [])
+
     return (
       <Flex direction="column" overflow={'auto'}>
         {hydrated && (
@@ -74,7 +83,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             titles={titleColumns}
             isEditLessonPlanClicked={isEditLessonPlanClicked}
             handleAddContentClick={handleAddContentClick}
-            activityTypes={activityTypes}
+            activityTypes={activityTypes[bloomLevelIndex]}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
             editRowIndex={editActivityLessonIndex}
