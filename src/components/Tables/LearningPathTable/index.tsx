@@ -83,9 +83,7 @@ const TableLearningPath = forwardRef<HTMLDivElement, TabTableProps>(
             titles={titleColumns}
             isEditLessonPlanClicked={isEditLessonPlanClicked}
             handleAddContentClick={handleAddContentClick}
-            activityTypes={
-              activityTypes[bloomLevelIndex]
-            }
+            activityTypes={activityTypes[bloomLevelIndex]}
             optionsTypeOfAssignment={optionsTypeOfAssignment}
             removeLessonActivity={removeLessonActivity}
             editRowIndex={editActivityLessonIndex}

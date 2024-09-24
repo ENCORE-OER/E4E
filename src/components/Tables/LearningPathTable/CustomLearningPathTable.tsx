@@ -67,9 +67,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item: LessonProps, idx: number) =>
       idx === index
         ? {
-          ...item,
-          lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
-        }
+            ...item,
+            lessonType: optionsTypeOfAssignment[selectedTypeIndex].name,
+          }
         : item
     );
     handleData(updatedData);
@@ -90,9 +90,9 @@ const CustomLearningPathTable = forwardRef<
     const updatedData = data.map((item, idx) =>
       idx === index
         ? {
-          ...item,
-          activityType: selectedActivityType,
-        }
+            ...item,
+            activityType: selectedActivityType,
+          }
         : item
     );
 

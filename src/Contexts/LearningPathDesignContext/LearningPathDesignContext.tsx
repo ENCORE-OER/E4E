@@ -933,7 +933,7 @@ export const LearningPathDesignProvider = ({ children }: any) => {
     activityTypesAnalyzing,
     activityTypesEvaluating,
     activityTypesCreating,
-  ]
+  ];
 
   const optionsTypeOfAssignment: OptionsTypeOfAssignmentProps[] = [
     {
