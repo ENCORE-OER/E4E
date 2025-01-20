@@ -7,6 +7,7 @@ ARG POLYGLOT_URL=https://polyglot-api-staging.polyglot-edu.com
 ARG BACK_URL=http://localhost:5000
 ARG LESSON_PLAN
 ARG SETUP_MODEL_LESSON_PLAN
+ARG SK_API_KEY
 
 COPY package.json .
 COPY package-lock.json .
@@ -22,6 +23,7 @@ RUN export DEPLOY_URL=${DEPLOY_URL} && \
     export BACK_URL=${BACK_URL} && \
     export LESSON_PLAN=${LESSON_PLAN} && \
     export SETUP_MODEL_LESSON_PLAN=${SETUP_MODEL_LESSON_PLAN} && \
+    export SK_API_KEY=${SK_API_KEY} && \
     npm run build
 
 CMD npm run start

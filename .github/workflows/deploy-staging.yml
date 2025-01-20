@@ -34,6 +34,10 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            "LESSON_PLAN=${{ secrets.LESSON_PLAN }}"
+            "SETUP_MODEL_LESSON_PLAN=${{ secrets.SETUP_MODEL_LESSON_PLAN }}"
+            "SK_API_KEY=${{ secrets.SK_API_KEY }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Push to ghcr.io with retries

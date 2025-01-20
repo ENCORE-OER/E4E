@@ -27,13 +27,11 @@ const ENCORE_API_URL =
 
 // TODO: remove these variables and set them on GitHub Env as a Secret (Update also the pipeline)
 // At the moment these variables are visible from frontend if someone inspects the browser.
-const SK_API_KEY = process.env.SK_API_KEY || 'Kdzwa9xxu_jW]LjkPaxX1;H;kUuU;0';
+const SK_API_KEY = process.env.SK_API_KEY;
 const SETUP_MODEL =
-  process.env.SETUP_MODEL ||
-  '{"secretKey": "9d0c99f57dc748488db3d39bf4a0a1c9","modelName": "gpt35Turbo","endpoint": "https://ai4edu.openai.azure.com/"}';
+  process.env.SETUP_MODEL;
 const SETUP_MODEL_LESSON_PLAN =
-  process.env.SETUP_MODEL_LESSON_PLAN ||
-  '{"secretKey": "9d0c99f57dc748488db3d39bf4a0a1c9","modelName": "GPT-4o-MINI","endpoint": "https://ai4edu.openai.azure.com/"}';
+  process.env.SETUP_MODEL_LESSON_PLAN;
 
 module.exports = {
   env: {
