@@ -37,8 +37,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            "SETUP_MODEL=${{ secrets.SETUP_MODEL }}"
-            "SETUP_MODEL_LESSON_PLAN=${{ secrets.SETUP_MODEL_LESSON_PLAN }}"
+            "OPENAI_SECRETKEY=${{ secrets.OPENAI_SECRETKEY }}"
             "SK_API_KEY=${{ secrets.SK_API_KEY }}"
       - name: Push to ghcr.io with retries
         uses: nick-invision/retry@v2
