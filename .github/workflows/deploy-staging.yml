@@ -34,12 +34,12 @@ jobs:
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           build-args: |
             "SETUP_MODEL=${{ secrets.SETUP_MODEL }}"
             "SETUP_MODEL_LESSON_PLAN=${{ secrets.SETUP_MODEL_LESSON_PLAN }}"
             "SK_API_KEY=${{ secrets.SK_API_KEY }}"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
       - name: Push to ghcr.io with retries
         uses: nick-invision/retry@v2
         with:
